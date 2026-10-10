@@ -16,7 +16,11 @@ spec: "01-tkt-ticket-system"
 
 > Proposals (draft for review):
 > - [`docs/proposals/01-tkt-ticket-system.md`](../docs/proposals/01-tkt-ticket-system.md) (fit + initial gap list)
-> - [`docs/proposals/01b-tkt-gaps-and-verbiage.md`](../docs/proposals/01b-tkt-gaps-and-verbiage.md) (6-gap remediation + verbiage alignment)
+> - [`docs/proposals/01b-tkt-gaps-and-verbiage.md`](../docs/proposals/01b-tkt-gaps-and-verbiage.md) (convention workaround + verbiage alignment)
+> - [`docs/proposals/01c-tkt-native-gap-closure.md`](../docs/proposals/01c-tkt-native-gap-closure.md) **(preferred: native tkt updates; supersedes 01b gaps 1-4)**
+>
+> Implementation tracked in the **tkt repo** (`D:\code\tkt` -> `smileynet/tkt`),
+> tickets 192-199 (all high priority). This ticket depends on their completion.
 
 ## Context
 
