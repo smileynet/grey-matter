@@ -1,7 +1,7 @@
 ---
 id: "01"
 title: "Adapt tkt as the ticket system and define required features"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 env: personal
