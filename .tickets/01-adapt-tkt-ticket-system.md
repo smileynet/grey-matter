@@ -14,7 +14,9 @@ spec: "01-tkt-ticket-system"
 
 # Adapt tkt as the ticket system and define required features
 
-> Proposal (draft for review): [`docs/proposals/01-tkt-ticket-system.md`](../docs/proposals/01-tkt-ticket-system.md)
+> Proposals (draft for review):
+> - [`docs/proposals/01-tkt-ticket-system.md`](../docs/proposals/01-tkt-ticket-system.md) (fit + initial gap list)
+> - [`docs/proposals/01b-tkt-gaps-and-verbiage.md`](../docs/proposals/01b-tkt-gaps-and-verbiage.md) (6-gap remediation + verbiage alignment)
 
 ## Context
 
