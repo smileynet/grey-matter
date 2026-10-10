@@ -14,6 +14,8 @@ spec: "01-tkt-ticket-system"
 
 # Adapt tkt as the ticket system and define required features
 
+> Proposal (draft for review): [`docs/proposals/01-tkt-ticket-system.md`](../docs/proposals/01-tkt-ticket-system.md)
+
 ## Context
 
 This repo (`grey-matter`) is where we adapt a customized set of agent skills
