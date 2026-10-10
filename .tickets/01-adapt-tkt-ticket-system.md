@@ -1,7 +1,7 @@
 ---
 id: "01"
 title: "Adapt tkt as the ticket system and define required features"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 env: personal
@@ -58,6 +58,10 @@ where it falls short.
 
 ## Acceptance criteria
 
-- [ ] Decision recorded on how grey-matter uses tkt to model skill-review and lens work (ticket shape, tags, dependency edges, spec linkage)
-- [ ] A gap list exists naming tkt features we need but that are missing or awkward, each with a concrete use case
-- [ ] A convention doc committed (e.g. `docs/tkt-conventions.md`) describing how we create, tag, and close tickets in this repo
+- [x] Decision recorded on how grey-matter uses tkt to model skill-review and lens work (ticket shape, tags, dependency edges, spec linkage)
+- [x] A gap list exists naming tkt features we need but that are missing or awkward, each with a concrete use case
+- [x] A convention doc committed (e.g. `docs/tkt-conventions.md`) describing how we create, tag, and close tickets in this repo
+
+## Resolution (2026-10-10)
+
+Decided: tkt is grey-matter's tracker. Three proposals recorded (01 fit+gaps, 01b verbiage+workaround, 01c native closure as preferred). Gap list with use cases in 01c. Conventions committed in docs/tkt-conventions.md and GLOSSARY.md, pointed at from CLAUDE.md. Native gap closure tracked in tkt tickets 192-199; grey-matter ticket 04 gates and documents the migration.
