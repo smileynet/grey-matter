@@ -1,3 +1,18 @@
+# grey-matter
+
+A customized, adapted set of agent skills derived from `mattpocock/skills`,
+reshaped for this workflow and for game-centric (not just web-app) development.
+
+## Vocabulary and conventions (read these first)
+
+- [`GLOSSARY.md`](./GLOSSARY.md): the one shared vocabulary. Binding homonym
+  rulings: **frontier** (never bare "ready") vs. **triage:ready-for-agent**;
+  **spec** is the requirements document, the tkt pointer field is the **spec-slug**.
+- [`docs/tkt-conventions.md`](./docs/tkt-conventions.md): how we create, tag, link,
+  and close tickets. Note the **interim** rules (epics-via-tags, single-select tag
+  discipline) that become native once tkt tickets 192-199 land (tracked by
+  grey-matter ticket 04).
+
 <!-- tkt:begin -->
 ## Tickets
 
