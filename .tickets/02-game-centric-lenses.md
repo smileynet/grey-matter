@@ -1,7 +1,7 @@
 ---
 id: "02"
 title: "Create a parallel set of game-centric lenses for the skills"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 env: personal
