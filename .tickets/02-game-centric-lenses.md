@@ -13,6 +13,12 @@ validation_criteria:
 
 # Create a parallel set of game-centric lenses for the skills
 
+> Proposal (draft for review): [`docs/proposals/02-game-centric-lenses.md`](../docs/proposals/02-game-centric-lenses.md)
+>
+> AC1 (web-bias analysis) and AC2 (lens model) are satisfied in the proposal.
+> AC3 (worked example) is outlined there; the committed deliverable is
+> `docs/lenses/tdd-game-lens.md`, still to be drafted.
+
 ## Context
 
 The upstream `mattpocock/skills` set is strongly web-application focused. Many of
