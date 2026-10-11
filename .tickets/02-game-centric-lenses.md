@@ -13,11 +13,14 @@ validation_criteria:
 
 # Create a parallel set of game-centric lenses for the skills
 
-> Proposal (draft for review): [`docs/proposals/02-game-centric-lenses.md`](../docs/proposals/02-game-centric-lenses.md)
+> Proposals (draft for review):
+> - [`docs/proposals/02-game-native-development.md`](../docs/proposals/02-game-native-development.md) **(current: reframed around the real intent, a game-native design philosophy)**
+> - [`docs/proposals/02-game-centric-lenses.md`](../docs/proposals/02-game-centric-lenses.md) (superseded framing; its web-bias analysis + determinism spine are carried forward)
 >
-> AC1 (web-bias analysis) and AC2 (lens model) are satisfied in the proposal.
-> AC3 (worked example) is outlined there; the committed deliverable is
-> `docs/lenses/tdd-game-lens.md`, still to be drafted.
+> Reframe: the intent is not a per-skill `tdd` lens but "what is the right approach
+> to building games that avoid feeling like web applications." AC1 (web-bias) and
+> AC2 (model) are satisfied across both proposals; AC3's worked example is now the
+> `game-native-design` reference skill, still to be drafted.
 
 ## Context
 
