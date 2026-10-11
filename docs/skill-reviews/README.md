@@ -18,10 +18,10 @@ Verdict legend: **keep** (take largely as-is), **adapt** (take, with changes not
 
 | Skill | Bucket | Invocation | Verdict | Note |
 | --- | --- | --- | --- | --- |
-| grilling | productivity | model | keep | [grilling.md](grilling.md) |
-| domain-modeling | engineering | model | keep | [domain-modeling.md](domain-modeling.md) |
-| writing-for-agents | productivity | model | keep | [writing-for-agents.md](writing-for-agents.md) |
-| setup-matt-pocock-skills | engineering | user | adapt | [setup-matt-pocock-skills.md](setup-matt-pocock-skills.md) |
+| grilling | productivity | model | adapt | [grilling.md](grilling.md) |
+| domain-modeling | engineering | model | TBD | |
+| writing-for-agents | productivity | model | TBD | |
+| setup-matt-pocock-skills | engineering | user | TBD | |
 | tdd | engineering | model | TBD | |
 | code-review | engineering | model | TBD | |
 | pr | engineering | model | TBD | |
