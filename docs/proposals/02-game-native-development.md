@@ -6,6 +6,9 @@ Supersedes: the lens-first framing of
 [`02-game-centric-lenses.md`](./02-game-centric-lenses.md). Keeps that proposal's
 web-bias analysis, determinism spine, domain-detection rule, and vertical-slice
 ruling; demotes "lens" from the headline idea to one delivery tactic among three.
+Revised 2026-10-10 to make the guidance explicitly engine-portable: **Godot is the
+default engine, Unreal is the second concrete anchor**, with a neutral core and
+per-engine appendices (section 6).
 Date: 2026-10-10
 
 ## The reframe
@@ -176,6 +179,80 @@ economy/combat math, pathfinding, seeded-procgen golden tests, lockstep state-ha
 recorded-input replay); do not unit-test feel/juice/rendering/timing (validate by
 play). Re-point `tdd`'s seam at a sim service (deep module) or a system/node/actor.
 
+## 6. Engine portability: Godot default, Unreal second anchor
+
+The philosophy is substrate-independent (the game loop, fixed timestep, data-oriented
+design, determinism, frame budget, and game feel are taught cross-engine), but an
+agent cannot act on a purely abstract principle: it needs the engine's real API. So
+the guidance is a **neutral core + per-engine appendices**, following the Diataxis
+split of *explanation* (the stable why/what, neutral) from *reference* (the per-engine
+which-API). **Godot is the default and the primary appendix; Unreal is the second
+anchor** so the structure is proven against two genuinely different engine models
+(an OO scene tree vs an OO actor model with an opt-in ECS). A third engine later
+slots in as another appendix without touching the core.
+
+### Doc structure (the anti-drift discipline)
+
+- **The core is the authority.** Each principle lives once in the neutral core as
+  prose, in role-named vocabulary that smuggles in no engine (say "the simulation's
+  update step", not `_physics_process` or `Tick`; "the simulated thing", not node /
+  actor / entity; "frame budget" is already neutral).
+- **Each principle carries one mapping table**, concept -> Godot -> Unreal, with a
+  **match-quality column** (exact / close / partial / none). Honesty rule from
+  controlled-vocabulary crosswalk practice (SKOS): where an engine lacks a concept,
+  the cell says "no native X; achieved via Y", never a fabricated equivalent.
+- **Appendices mirror the core 1:1** by stable anchor id: `godot.md` and
+  `unreal.md` repeat the same principle headings, cite *up* to the core, and never
+  redefine it. A lint can assert every core principle id exists in every appendix.
+- **Progressive disclosure:** the agent always loads the neutral core; it loads an
+  appendix only when it detects the engine (`project.godot` -> Godot;
+  `*.uproject` -> Unreal). Inlining all engines wastes tokens on the wrong one.
+
+### The per-principle concept map (the heart of the portable doc)
+
+Each row is a tenet from section 5; the match column is honest about how closely
+the two engines' idioms line up.
+
+| Principle (neutral) | Godot (default) | Unreal | Match |
+| --- | --- | --- | --- |
+| Fixed-timestep simulation step | `_physics_process(delta)`, rate = `Engine.physics_ticks_per_second` (default 60), `max_physics_steps_per_frame` floor | fixed step only via **physics substepping** (`bSubstepping`, experimental) or `FApp::UseFixedTimeStep`; gameplay `Tick` is variable by default | **partial**: Godot has a first-class fixed gameplay step; Unreal's fixed step is confined to the physics layer |
+| Variable-rate render / presentation | `_process(delta)`; visual smoothing via `physics_interpolation` (4.3+) | per-frame `Tick`; interpolation is manual | close |
+| The simulated thing (unit of behaviour) | `Node`; reusable module = a **scene** (`.tscn`); data = `Resource` | `AActor` + `UActorComponent`; service = a `USubsystem` | close |
+| Decoupling (events, not re-render) | **signals** ("signal up, call down"), groups, autoload event bus, `call_deferred` | dynamic multicast **delegates** / Blueprint event dispatchers, `UInterface`, **Subsystems** as service locators | exact (both are observer/event models) |
+| Data-oriented design for large-N | **no native ECS**; drop to the **Servers** (`RenderingServer`/`PhysicsServer`) + `MultiMesh` + packed arrays | **Mass Entity** (Fragments + `UMassProcessor`); else Actors/Components | **partial**: Unreal ships an ECS (Mass); Godot has no native ECS, uses servers/MultiMesh |
+| Determinism | fixed `_physics_process` + seeded `RandomNumberGenerator`; float determinism not guaranteed; lockstep/replay is community practice | `FRandomStream` seeded RNG; Chaos physics **not** bit-deterministic; authoritative-server replication, not lockstep | partial (neither guarantees cross-platform float determinism) |
+| Frame budget / allocation | ref-counting (no tracing GC) but node churn costs; **object pooling**, static-typed GDScript, escalate to C#/GDExtension | **UObject GC** pressure; avoid per-frame `SpawnActor`; pooling; C++ over Blueprint in hot paths | close (different memory model, same "pool, don't churn" rule) |
+| Game feel / juice | `create_tween()` easing, `AnimationPlayer`, `GPUParticles2D/3D`, `Camera2D` offset shake, hit-stop via `Engine.time_scale` | Timelines/`UCurveFloat`, Niagara, `UCameraShakeBase`, hit-stop via `SetGlobalTimeDilation` | exact (equivalent toolsets) |
+| Testing: off-world vs needs-runtime | GUT / GdUnit4; pure logic + `Resource` + seeded sim test off-tree; nodes/physics need a running scene (GdUnit4 Scene Runner) | Automation (low-level, no world) / Functional (needs PIE level) / Gauntlet (session) | close |
+
+### The one divergence to teach explicitly
+
+The sharpest engine difference, and a trap for an agent, is the **fixed-timestep
+default**. In Godot, `_physics_process` *is* a first-class fixed gameplay step: the
+engine hands you the continuous-simulation shape for free, and the neutral tenet
+"simulate in the fixed step" lands directly. In Unreal, gameplay `Tick` is
+**variable by default and disabled on new actors**, and a true fixed step exists
+only at the physics-substepping layer. So the same tenet requires *different work*
+per engine: in Godot, put sim logic in `_physics_process`; in Unreal, either accept
+`DeltaTime`-scaled variable tick for most gameplay and reserve substepping for
+physics, or build an explicit accumulator. The appendix must say this out loud, or
+an agent will assume a Godot-shaped fixed loop exists in Unreal when it does not.
+
+Related nuance the Unreal appendix must carry: Unreal culture **warns against
+over-ticking** (Tick is opt-in and costly), so the neutral "always simulate every
+frame" tenet is not "tick everything", it is "the simulation advances every frame;
+tick only what participates in it, event-drive the rest". Godot's `_physics_process`
+is likewise opt-in per node (`set_physics_process`). Both engines agree: continuous
+for the simulation, event-driven for the rest, never tick for tick's sake.
+
+### Where this lives
+
+The neutral core is the `game-native-design` reference skill (section 4). The
+appendices are `appendices/godot.md` (default, authored first) and
+`appendices/unreal.md`, co-located with that skill, loaded on engine detection.
+Engine-specific project settings and class names never appear in the core except
+inside a mapping table.
+
 ## Net effect vs the prior proposal
 
 | Aspect | 02 (lens-first) | 02 reframed (philosophy-first) |
@@ -205,10 +282,21 @@ play). Re-point `tdd`'s seam at a sim service (deep module) or a system/node/act
    data-oriented note to `codebase-design` rather than rewriting it.
 5. Keep the philosophy **engine-neutral** with path-scoped engine appendices; frame
    DOD as "hot paths / large-N," not a blanket mandate.
-6. Keep from the prior proposal: determinism spine, domain-detection rule,
+6. **Godot is the default engine and primary appendix; Unreal is the second anchor.**
+   The core stays neutral (role-named vocabulary, no engine terms outside mapping
+   tables); each principle carries a concept -> Godot -> Unreal table with an honest
+   match-quality column; appendices mirror the core 1:1 by anchor and load on engine
+   detection (`project.godot` / `*.uproject`).
+7. Teach the **fixed-timestep divergence** explicitly: Godot's `_physics_process` is
+   a first-class fixed gameplay step; Unreal's fixed step is physics-substepping only
+   and gameplay `Tick` is variable and opt-in. "Simulate every frame" means the
+   simulation advances continuously and you tick only what participates, not "tick
+   everything" (both engines penalise over-ticking).
+8. Keep from the prior proposal: determinism spine, domain-detection rule,
    one-active-stance, and the `tdd` testability split (now an overlay).
-7. Add the **"vertical slice" false-friend** ruling to `GLOSSARY.md` (web sense:
-   thin path through every layer; game sense: a small chunk at near-final polish).
+9. Add the **"vertical slice" false-friend** ruling and a **"game feel / juice"**
+   entry to `GLOSSARY.md`, plus the neutral core vocabulary (simulation update step,
+   fixed timestep, the simulated thing) with each engine's word as a translation.
 
 ## Follow-ups
 
@@ -219,12 +307,13 @@ play). Re-point `tdd`'s seam at a sim service (deep module) or a system/node/act
       reference skill** (tenets + two-regime + rubric) as the proof, with the `tdd`
       overlay as a secondary artifact, rather than only `tdd-game-lens.md`. Commit
       under `docs/lenses/` (or `skills/.../game-native-design/` when authored as a
-      real skill).
+      real skill). Author the **Godot appendix first** (default engine), then the
+      **Unreal appendix** to prove the portable structure against two engines.
 - [ ] Add the "vertical slice" ruling and a "game feel / juice" entry to `GLOSSARY.md`.
 - [ ] Coordinate with ticket 03: per-skill web-bias flags feed the rubric and the
       overlay list.
-- [ ] Decide the target engine (if any): a worked artifact is far sharper pinned to
-      one engine's loop/test hooks than left neutral.
+- [ ] Engine target decided: **Godot default, Unreal second anchor.** Keep the core
+      neutral so a third engine (e.g. Unity) is a later appendix, not a rewrite.
 
 ## Sources
 
@@ -241,3 +330,17 @@ Existing grey-matter decisions (lens model, determinism spine, GLOSSARY homonym
 rulings, doc layout) were read directly from `docs/proposals/02-*`,
 `docs/tkt-conventions.md`, and `GLOSSARY.md`. Content from external sources was
 rephrased for compliance with licensing restrictions.
+
+The engine-portability revision (section 6) drew on: Godot official docs
+(`_process`/`_physics_process` and physics ticks, physics interpolation, scene
+organization, the Servers API and `MultiMesh`, signals, `Tween`/`AnimationPlayer`,
+GDScript static typing, random number generation, and GUT/GdUnit4); Unreal official
+docs (Actor ticking and tick groups, physics substepping, the Gameplay Framework and
+Subsystems, Mass Entity, delegates/event dispatchers, Niagara and camera shake and
+`SetGlobalTimeDilation`, UObject GC, `FRandomStream`, and the Automation / Functional
+/ Gauntlet testing tiers); and documentation-structure practice (the Diataxis
+explanation-vs-reference split, SKOS match-quality mappings for honest crosswalks,
+.NET/MAUI portable-core-plus-platform-callout patterns, and Agent-Skills progressive
+disclosure). Community-only practices (hit-stop, camera shake, object pooling,
+lockstep/replay, GDScript speed figures) are flagged as idiom-by-convention, not
+official guidance.

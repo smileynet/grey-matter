@@ -18,9 +18,11 @@ validation_criteria:
 > - [`docs/proposals/02-game-centric-lenses.md`](../docs/proposals/02-game-centric-lenses.md) (superseded framing; its web-bias analysis + determinism spine are carried forward)
 >
 > Reframe: the intent is not a per-skill `tdd` lens but "what is the right approach
-> to building games that avoid feeling like web applications." AC1 (web-bias) and
-> AC2 (model) are satisfied across both proposals; AC3's worked example is now the
-> `game-native-design` reference skill, still to be drafted.
+> to building games that avoid feeling like web applications." Engine-portable:
+> **Godot default, Unreal second anchor**, neutral core + per-engine appendices.
+> AC1 (web-bias) and AC2 (model) are satisfied across both proposals; AC3's worked
+> example is now the `game-native-design` reference skill (Godot appendix first),
+> still to be drafted.
 
 ## Context
 
