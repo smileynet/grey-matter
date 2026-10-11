@@ -80,6 +80,40 @@ A free-form `tags` entry on a ticket. grey-matter uses a **namespaced** scheme
 `docs/tkt-conventions.md`. Context: both. _Avoid_: "label" as a distinct feature
 (tkt has only tags).
 
+## Game-native terms
+
+The engine-neutral vocabulary for the game-native-design guidance
+(`docs/lenses/game-native-design/`). Each neutral term lists its per-engine
+translation; the engine word is a translation, never the canonical term.
+
+### simulation update step
+The code that advances the game every frame. Canonical neutral term; _avoid_ naming
+an engine's callback in neutral prose. Translations: Godot `_physics_process` (fixed)
+/ `_process` (render); Unreal `Tick` (and physics substepping for the fixed step).
+
+### fixed timestep
+A simulation step run at a constant rate independent of frame rate (stable,
+reproducible). Distinct from the variable-rate **render step**. Context: both engines.
+
+### the simulated thing
+The neutral unit of behaviour in the loop. _Avoid_ node / actor / entity in neutral
+prose. Translations: Godot `Node` (module = **scene**, data = `Resource`); Unreal
+`AActor`/`UActorComponent` (service = `USubsystem`); ECS "entity" where one exists.
+
+### game feel / juice
+The per-frame audio-visual feedback that makes control feel responsive and alive
+(easing, screenshake, hit-stop, particles). An engineering concern delivered in the
+loop, not a cosmetic afterthought. Context: skills (game-native).
+
+### vertical slice  (false friend - see ruling)
+A **false friend** across domains:
+- **web sense**: a thin path through every architectural layer, demoable end to end.
+  This is the sense the `to-tickets` / `tdd` tracer-bullet language uses.
+- **game sense**: a small chunk of the game built to near-final polish, representative
+  of the shipped look and feel.
+Qualify it ("tracer-bullet slice" vs "polished slice") whenever both domains are in
+play; never let the bare term carry the game meaning in a tracer-bullet context.
+
 ## Crosswalk: tkt <-> skills
 
 Match strength is honest (exact / close / broad / narrow); a blank counterpart is
@@ -106,3 +140,5 @@ a real gap, not forced equivalence.
 - **"spec"**: the **document** keeps the word; tkt's pointer field is the
   **spec-slug**.
 - **"issue" vs "ticket"**: collapsed to **ticket**; "issue" is a skills alias only.
+- **"vertical slice"**: a false friend. Web = thin path through all layers; game = a
+  polished representative chunk. Qualify it when both domains are in play.

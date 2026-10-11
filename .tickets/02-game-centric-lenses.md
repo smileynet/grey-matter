@@ -21,8 +21,9 @@ validation_criteria:
 > to building games that avoid feeling like web applications." Engine-portable:
 > **Godot default, Unreal second anchor**, neutral core + per-engine appendices.
 > AC1 (web-bias) and AC2 (model) are satisfied across both proposals; AC3's worked
-> example is now the `game-native-design` reference skill (Godot appendix first),
-> still to be drafted.
+> example is **drafted**: `docs/lenses/game-native-design/` (neutral `SKILL.md` +
+> `review-rubric.md` + `godot.md` + `unreal.md`), held to the upstream depth bar.
+> Left in_progress for review before closing.
 
 ## Context
 
