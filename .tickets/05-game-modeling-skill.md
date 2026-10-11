@@ -25,6 +25,32 @@ The one DDD idea that transfers wholesale is **ubiquitous language** (a canonica
 glossary), re-rooted here in mechanics/systems/"verbs" and aligned to the engine's
 node/actor/component names.
 
+## Design decisions (from credible-source research)
+
+The lean cut, validated against primary sources (Cook's "Loops and Arcs"; the
+Felder/Riot design-pillars roundtable; Hunicke/LeBlanc/Zubek MDA + Walk's DDE
+critique; Dormans/Machinations; Juul on emergence/progression):
+
+- **Spine (actively maintained):** (1) a mechanics/verbs/systems **glossary** =
+  ubiquitous language retained, aligned to engine symbol names; (2) the **core
+  loop(s) + arcs/progression** as the central structural artifact; (3) a gated
+  **design-decision record** (strict gate, same as domain-modeling), framed as the
+  rationale log native to a living GDD, with the ADR *format* borrowed.
+- **Correction:** not "core loop" alone, "core loop(s) + arcs/progression," with a
+  one-clause genre hedge (loop-heavy vs arc/progression-heavy varies by genre). This
+  is the one real overfitting risk, and Cook's primary source agrees.
+- **Name-only, one line each (reach-for-when, not elaborated):** design pillars (a
+  stack-ranked, mostly-fixed experience *filter*, an input the spine serves, not a
+  churned artifact); Machinations-style economy models (the specialization for
+  economy-driven games, and where domain-modeling re-enters); state machines.
+- **MDA:** invoke only its kernel, framework-agnostic ("tie each mechanic to an
+  intended player experience; design experience-backward to mechanic"), name MDA as
+  lineage and flag the M/D/A taxonomy as critiqued (DDE). Do not adopt M/D/A as
+  structure.
+- **Depth bar:** match the upstream skills (terse, principle-dense); mirror
+  domain-modeling's shape (active behaviours + one maintained artifact + one gated
+  record), not a textbook of frameworks.
+
 ## What to build
 
 A `game-modeling` SKILL.md (and any disclosed siblings), held to the upstream depth

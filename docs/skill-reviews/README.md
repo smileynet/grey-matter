@@ -12,7 +12,8 @@ work record): each note is `docs/skill-reviews/<skill>.md` with sections **What 
 dependencies**, **Web-app bias**.
 
 Verdict legend: **keep** (take largely as-is), **adapt** (take, with changes noted),
-**drop** (leave behind), **defer** (revisit later / beta or frozen).
+**drop** (leave behind), **defer** (revisit later / beta or frozen), **new** (a
+grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 
 ## Index
 
@@ -20,6 +21,7 @@ Verdict legend: **keep** (take largely as-is), **adapt** (take, with changes not
 | --- | --- | --- | --- | --- |
 | grilling | productivity | model | adapt | [grilling.md](grilling.md) |
 | domain-modeling | engineering | model | adapt | [domain-modeling.md](domain-modeling.md) |
+| game-modeling | engineering | model | new | [game-modeling.md](game-modeling.md) |
 | writing-for-agents | productivity | model | TBD | |
 | setup-matt-pocock-skills | engineering | user | TBD | |
 | tdd | engineering | model | TBD | |
