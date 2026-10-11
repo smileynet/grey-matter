@@ -19,7 +19,7 @@ Verdict legend: **keep** (take largely as-is), **adapt** (take, with changes not
 | Skill | Bucket | Invocation | Verdict | Note |
 | --- | --- | --- | --- | --- |
 | grilling | productivity | model | adapt | [grilling.md](grilling.md) |
-| domain-modeling | engineering | model | TBD | |
+| domain-modeling | engineering | model | adapt | [domain-modeling.md](domain-modeling.md) |
 | writing-for-agents | productivity | model | TBD | |
 | setup-matt-pocock-skills | engineering | user | TBD | |
 | tdd | engineering | model | TBD | |
@@ -33,7 +33,7 @@ Verdict legend: **keep** (take largely as-is), **adapt** (take, with changes not
 | codebase-design | engineering | model | TBD | |
 | implement | engineering | user | TBD | |
 | implement-spec | engineering | user | TBD | |
-| grill-with-docs | engineering | user | deferred (needs domain-modeling) | |
+| grill-with-docs | engineering | user | adapt | [grill-with-docs.md](grill-with-docs.md) |
 | retro | engineering | user | TBD | |
 | ask-matt | engineering | user | TBD | |
 | wayfinder | engineering | user | TBD | |
