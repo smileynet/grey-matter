@@ -1,7 +1,7 @@
 ---
 id: "03"
 title: "Walk through each skill one at a time: what it is, what it does for the user, how to customize it"
-status: open
+status: in_progress
 blocked_by: ["01"]
 priority: high
 env: personal
