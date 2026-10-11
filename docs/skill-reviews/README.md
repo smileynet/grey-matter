@@ -33,7 +33,7 @@ Verdict legend: **keep** (take largely as-is), **adapt** (take, with changes not
 | codebase-design | engineering | model | TBD | |
 | implement | engineering | user | TBD | |
 | implement-spec | engineering | user | TBD | |
-| grill-with-docs | engineering | user | TBD | |
+| grill-with-docs | engineering | user | deferred (needs domain-modeling) | |
 | retro | engineering | user | TBD | |
 | ask-matt | engineering | user | TBD | |
 | wayfinder | engineering | user | TBD | |
@@ -42,7 +42,7 @@ Verdict legend: **keep** (take largely as-is), **adapt** (take, with changes not
 | prototype | engineering | model | TBD | |
 | research | engineering | model | TBD | |
 | wizard | engineering | model | TBD | |
-| grill-me | productivity | user | TBD | |
+| grill-me | productivity | user | keep | [grill-me.md](grill-me.md) |
 | teach | productivity | user | TBD | |
 | wait-what | productivity | user | TBD | |
 | chief-of-staff | in-progress | user | TBD | |
