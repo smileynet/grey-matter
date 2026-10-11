@@ -253,6 +253,43 @@ appendices are `appendices/godot.md` (default, authored first) and
 Engine-specific project settings and class names never appear in the core except
 inside a mapping table.
 
+## 7. Depth bar: match the upstream skills, don't overfit
+
+The game-native artifact must have the **same depth as the existing Pocock skills,
+just from a games perspective**, not more. The upstream skills are deliberately lean
+(measured): `tdd/SKILL.md` is 23 lines, `codebase-design` 78, `diagnosing-bugs` 84,
+`prototype` 18 plus two ~40-70 line disclosed files, `code-review` 57. Depth there
+is in *judgment* (the right few seams and anti-patterns), not in *coverage*.
+
+Hold the artifact to that bar:
+
+- **`game-native-design/SKILL.md`: roughly 25-45 lines.** The tenets as terse,
+  reasoning-first principles (the shape of `tdd`'s "what a good test is / seams /
+  anti-patterns / rules of the loop"), the two-regime deep-module/ECS resolution in
+  a sentence or two, determinism as the spine. It names the discipline and is "a
+  reference to consult, not a session to run."
+- **The web-ism rubric** mirrors `code-review`'s Fowler smell baseline: a flat list,
+  one line per smell (what it is, then the fix), not paragraphs.
+- **Engine appendices (`godot.md`, `unreal.md`): roughly 30-60 lines each**, like
+  `prototype`'s `LOGIC.md`/`UI.md`. Carry the *mapping* (neutral principle -> the one
+  or two real primitives) and the single divergence that bites. Not an engine
+  tutorial.
+
+What to leave out, because it overfits and dates fast:
+
+- Collapse the "exact/close-match" principle rows (decoupling, game feel, frame
+  budget) to one line each; spend the room only on the two real divergences
+  (fixed-timestep, data-oriented/ECS).
+- No version-by-version API archaeology (Godot 3.x vs 4.x, Unreal substepping's
+  experimental status): name the current primitive and move on.
+- Community-only recipes (hit-stop, pooling patterns, GDScript speed figures) get
+  one word, "idiom", not an explanation.
+- No tenet-per-nuance. Eight tenets is the ceiling; the agent generalizes from
+  principle, as the upstream skills trust it to.
+
+The maxim: **deep in judgment, shallow in prose.** The research in sections 1-6 is
+the quarry; the artifact ships only the load-bearing stone.
+
 ## Net effect vs the prior proposal
 
 | Aspect | 02 (lens-first) | 02 reframed (philosophy-first) |
@@ -297,6 +334,10 @@ inside a mapping table.
 9. Add the **"vertical slice" false-friend** ruling and a **"game feel / juice"**
    entry to `GLOSSARY.md`, plus the neutral core vocabulary (simulation update step,
    fixed timestep, the simulated thing) with each engine's word as a translation.
+10. **Match the upstream skills' depth, don't overfit** (section 7): core skill
+    ~25-45 lines, appendices ~30-60 each, the rubric one line per smell; principle
+    density over API coverage; collapse the non-divergent engine rows; no
+    version-by-version API detail. Deep in judgment, shallow in prose.
 
 ## Follow-ups
 
