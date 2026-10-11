@@ -1,7 +1,7 @@
 ---
 id: "05"
 title: "Author game-modeling: game-native counterpart to domain-modeling"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
