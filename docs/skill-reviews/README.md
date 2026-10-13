@@ -22,7 +22,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | grilling | productivity | model | adapt | [grilling.md](grilling.md) |
 | domain-modeling | engineering | model | adapt | [domain-modeling.md](domain-modeling.md) |
 | game-modeling | engineering | model | new | [game-modeling.md](game-modeling.md) |
-| writing-for-agents | productivity | model | TBD | |
+| writing-for-agents | productivity | model | keep | [writing-for-agents.md](writing-for-agents.md) |
 | setup-matt-pocock-skills | engineering | user | TBD | |
 | tdd | engineering | model | TBD | |
 | code-review | engineering | model | TBD | |
