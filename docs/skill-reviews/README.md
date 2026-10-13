@@ -24,7 +24,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | game-modeling | engineering | model | new | [game-modeling.md](game-modeling.md) |
 | writing-for-agents | productivity | model | keep | [writing-for-agents.md](writing-for-agents.md) |
 | setup-matt-pocock-skills | engineering | user | TBD | |
-| tdd | engineering | model | TBD | |
+| tdd | engineering | model | adapt | [tdd.md](tdd.md) |
 | code-review | engineering | model | TBD | |
 | pr | engineering | model | TBD | |
 | diagnosing-bugs | engineering | model | TBD | |
