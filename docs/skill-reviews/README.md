@@ -19,6 +19,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 
 | Skill | Bucket | Invocation | Verdict | Note |
 | --- | --- | --- | --- | --- |
+| review-skill | engineering | user | new | [review-skill.md](review-skill.md) |
 | grilling | productivity | model | adapt | [grilling.md](grilling.md) |
 | domain-modeling | engineering | model | adapt | [domain-modeling.md](domain-modeling.md) |
 | game-modeling | engineering | model | new | [game-modeling.md](game-modeling.md) |
