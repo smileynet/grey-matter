@@ -7,3 +7,5 @@ Thumbs.db
 
 # Node (in case tooling lands here later)
 node_modules/
+references/
+.references/
