@@ -1,7 +1,7 @@
 ---
 id: "08"
 title: "Spike: agent-driven delta debugging (ddmin bisection) vs linear cut in diagnosing-bugs"
-status: open
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -19,4 +19,8 @@ TBD
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [x] TBD
+
+## Resolution (2026-10-14)
+
+Decided: keep linear minimisation as default, add bisect (ddmin) for large inputs + git bisect for commit axis, gated on re-asserting the original symptom. Applied to diagnosing-bugs Phase 2; finding at docs/research/spike-agent-delta-debugging.md.
