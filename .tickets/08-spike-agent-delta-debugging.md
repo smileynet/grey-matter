@@ -8,6 +8,7 @@ validation_criteria:
   - "A written finding on whether an agent should bisect (ddmin-style) rather than linearly cut when minimising a repro, with the tradeoff and a recommendation"
   - "Decision reflected in diagnosing-bugs Phase 2 wording (or explicitly deferred)"
 tags: ["type:research", "stream:skills-review"]
+spec: "spike-agent-delta-debugging"
 ---
 
 # Spike: agent-driven delta debugging (ddmin bisection) vs linear cut in diagnosing-bugs
