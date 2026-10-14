@@ -27,7 +27,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | setup-matt-pocock-skills | engineering | user | TBD | |
 | tdd | engineering | model | adapt | [tdd.md](tdd.md) |
 | code-review | engineering | model | adapt | [code-review.md](code-review.md) |
-| pr | engineering | model | TBD | |
+| pr | engineering | model | adapt | [pr.md](pr.md) |
 | diagnosing-bugs | engineering | model | TBD | |
 | to-spec | engineering | user | TBD | |
 | to-tickets | engineering | user | TBD | |
