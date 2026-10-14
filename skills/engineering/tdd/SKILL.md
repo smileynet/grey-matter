@@ -8,9 +8,9 @@ description: Test-driven development. Use when the user wants to build features 
 The red → green loop that gives an agent a tight feedback loop and leaves durable tests
 behind. This skill is the reference that makes the loop produce tests worth keeping:
 what a good test is, where tests go, the anti-patterns, and the rules of the loop.
-Design is settled upstream (grilling, to-spec); cleanup and refactoring happen
-afterwards in `code-review`. This skill owns the middle: make it work, test-first, and
-leave tests that survive the cleanup.
+Design is settled upstream (grilling, to-spec); cleanup and refactoring are surfaced
+afterwards by `code-review` (which files them as tickets to fix). This skill owns the
+middle: make it work, test-first, and leave tests that survive the cleanup.
 
 When exploring the codebase, read `GLOSSARY.md` (if it exists) so test names and
 interface vocabulary match the project's domain language, and respect ADRs in the area
@@ -76,5 +76,6 @@ a session to run.
   Don't anticipate future tests or add speculative features.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
 - **Refactoring is not part of this loop.** Making it work and making it clean are
-  separate stages here: the red → green loop makes it work, and `code-review` makes it
-  clean. Keeping cleanup out of the loop is why the tests above must survive refactors.
+  separate stages here: the red → green loop makes it work, and `code-review` surfaces
+  cleanup as tickets to fix. Keeping cleanup out of the loop is why the tests above must
+  survive refactors.
