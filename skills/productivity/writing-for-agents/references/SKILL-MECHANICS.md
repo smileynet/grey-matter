@@ -1,6 +1,15 @@
 # Skill mechanics
 
-The skill-specific branch of [`writing-for-agents`](SKILL.md): what changes when the document is a skill (frontmatter, the invocation choice, and router skills). Everything else about writing it is the universal reference in `SKILL.md`.
+The skill-specific branch of [`writing-for-agents`](../SKILL.md): what changes when the document is a skill (frontmatter, the invocation choice, and router skills). Everything else about writing it is the universal reference in `../SKILL.md`.
+
+## Frontmatter
+
+Keep frontmatter to the safe core: `name` (matches the folder) and `description`. Put
+inert data only (credits, provenance, version) under `metadata`, never anything a
+harness must read to function. Invocation control is per-harness and is not one
+portable field (Claude Code reads `disable-model-invocation`; Codex reads a sidecar
+`agents/openai.yaml`), so a user-invoked skill sets both, kept in sync. The full cross-harness schema and the metadata rule live
+in `docs/skill-frontmatter.md` at the repo root.
 
 ## Invocation
 

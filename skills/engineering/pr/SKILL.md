@@ -2,11 +2,7 @@
 name: pr
 description: "Use when writing a PR body."
 metadata:
-  credits:
-    skill: show-me
-    author: Dex Horthy
-    organisation: Humanlayer
-    url: "https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md"
+  credits: "Summary visuals adapted from Dex Horthy / HumanLayer 'show-me'; see CREDITS.md"
 ---
 
 Use this template for writing the PR body:

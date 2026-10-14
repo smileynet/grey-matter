@@ -12,7 +12,7 @@ and what is a deliberate non-change.
   (credits), which is in the allowed set.
 - **Required fields present**, YAML frontmatter well-formed: yes.
 
-## One soft-rule fix applied
+## Soft-rule fixes applied
 
 - **`tdd` pointer was a bare "see X"** ("See tests.md for examples and mocking.md for
   mocking guidelines"), the exact anti-pattern the standard flags. Retagged with load
@@ -20,15 +20,18 @@ and what is a deliberate non-change.
   change touches a system boundary". The other skills' pointers were already
   trigger-tagged (code-review by project type, pr by "repo has existing PRs",
   writing-for-agents by "when the document is a skill").
+- **All bare sibling `.md` files moved into `references/`** to follow the standard's
+  layout: code-review (rubric-app, rubric-game), tdd (tests, mocking),
+  writing-for-agents (SKILL-MECHANICS). In-skill links updated to `references/...`;
+  SKILL-MECHANICS's back-link to its core is now `../SKILL.md`. `pr` already used
+  `references/`. New skills default to `references/`.
+- **Frontmatter / metadata cleaned up.** `pr`'s nested `metadata.credits` object was
+  flattened to a one-line string pointing at `CREDITS.md` (metadata is inert string
+  data; attribution prose lives in CREDITS.md). The all-up cross-harness frontmatter
+  schema and the metadata rule are documented in `docs/skill-frontmatter.md`.
 
 ## Deliberate non-changes (soft recommendations we are not mechanically applying)
 
-- **Bare sibling `.md` files vs a `references/` subdirectory.** The standard
-  *recommends* `references/`; `pr` uses it. `code-review` (rubric-app/game), `tdd`
-  (tests/mocking), and `writing-for-agents` (SKILL-MECHANICS) use one-level-deep bare
-  siblings. The validator does not care, all are one level deep, and these mirror the
-  upstream layout we are adapting from. Moving them is low-value churn; new skills
-  default to `references/`, existing ones stay unless touched for another reason.
 - **`disable-model-invocation` frontmatter** (grill-me, grill-with-docs, review-skill)
   is NOT in the standard's six-field allowlist, a strict agentskills validator would
   reject it. It is kept deliberately: it is the Claude-Code mechanism our inherited

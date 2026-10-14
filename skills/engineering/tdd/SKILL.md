@@ -31,7 +31,7 @@ refactors because it doesn't care about internal structure. (This is why tests m
 only at system boundaries, never internal collaborators: a test coupled to internals
 breaks when `code-review` later refactors them, defeating the point.)
 
-See [tests.md](tests.md) for worked good/bad examples when a test's shape is unclear, and [mocking.md](mocking.md) when the change touches a system boundary (external API, DB, time, filesystem) and you need to decide what to mock.
+See [references/tests.md](references/tests.md) for worked good/bad examples when a test's shape is unclear, and [references/mocking.md](references/mocking.md) when the change touches a system boundary (external API, DB, time, filesystem) and you need to decide what to mock.
 
 ## Seams: where tests go
 
