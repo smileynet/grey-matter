@@ -38,6 +38,8 @@ When the repo has existing PRs, first read [references/repo-pr-conventions.md](r
 
 Skip all preambles and keep prose brief: brief means high signal density, not dropping the why. Use the user's domain language from `GLOSSARY.md`.
 
+The reader has the commits and the diff one click away, so the body is not a retelling of them. Don't list files changed, narrate commit-by-commit, or walk the code line by line: that is sausage-making the reviewer can look up. Spend the body on what the diff doesn't show, the why, the shape of the change, the evidence it works, and the merge risk, and leave the line-level detail to the diff itself.
+
 ### Summary
 
 Pick the smallest view that makes the key point clear. Prefer **one** view, and emit a visual only if you can ground it in the actual diff: an agent-drawn call tree or Mermaid that misreads the code is worse than prose.

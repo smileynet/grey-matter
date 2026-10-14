@@ -50,7 +50,12 @@ agent-author filter:
    replay is the behavioural-proof equivalent; else execution evidence is the ceiling.
 4. **Merge Danger surfaces candidate risks for the human**, not a final verdict.
 5. **Brevity = signal density, keep the why.**
-6. **Repo-PR-history research** added as a disclosed reference,
+6. **No sausage-making.** The reader has the commits and diff one click away, so the
+   body doesn't retell them (no file lists, commit-by-commit narration, or line-level
+   walk). Spend it on what the diff can't show (why, shape, evidence, risk). This is
+   writing-for-agents' "don't restate the environment" applied: the diff is the
+   environment.
+7. **Repo-PR-history research** added as a disclosed reference,
    `references/repo-pr-conventions.md` (the four signals, `gh` recipe, sampling,
    guardrails, solo-repo fallback), loaded when the repo has PR history. Conditional +
    bulky, so it lives in `references/` per the standard, not the core.
