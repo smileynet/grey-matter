@@ -28,7 +28,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | tdd | engineering | model | adapt | [tdd.md](tdd.md) |
 | code-review | engineering | model | adapt | [code-review.md](code-review.md) |
 | pr | engineering | model | adapt | [pr.md](pr.md) |
-| diagnosing-bugs | engineering | model | TBD | |
+| diagnosing-bugs | engineering | model | adapt | [diagnosing-bugs.md](diagnosing-bugs.md) |
 | to-spec | engineering | user | TBD | |
 | to-tickets | engineering | user | TBD | |
 | handoff | productivity | user | TBD | |
