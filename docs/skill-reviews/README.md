@@ -36,7 +36,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | to-questionnaire | productivity | user | adapt | [to-questionnaire.md](to-questionnaire.md) |
 | codebase-design | engineering | model | adapt | [codebase-design.md](codebase-design.md) |
 | implement | engineering | user | adapt | [implement.md](implement.md) |
-| implement-spec | engineering | user | TBD | |
+| implement-spec | engineering | user | adapt | [implement-spec.md](implement-spec.md) |
 | grill-with-docs | engineering | user | adapt | [grill-with-docs.md](grill-with-docs.md) |
 | retro | engineering | user | TBD | |
 | ask-matt | engineering | user | TBD | |
