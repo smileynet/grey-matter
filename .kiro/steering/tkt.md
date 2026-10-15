@@ -5,7 +5,7 @@ When .tickets/ exists, work the frontier.
 ## Status lifecycle
 open (frontier, the default) → in_progress → done; backlog = parked, hidden from ready
 New work defaults to open. Use --status backlog only for deliberately deferred work.
-Reach done only via `tkt close` — never hand-edit status to done (skips close gates).
+Reach done only via `tkt close` - never hand-edit status to done (skips close gates).
 
 ## Commands
 tkt ready              # frontier (open + deps done + env match)
@@ -22,5 +22,5 @@ Discovered work: tkt new <slug> --title "..." (open, a separate ticket; --blocke
 Tag new tickets with their work stream (--tags <stream>) in multi-stream projects.
 
 ## Frontier Rule
-Pick the first ticket `tkt ready` lists — it already applies priority sorting
+Pick the first ticket `tkt ready` lists - it already applies priority sorting
 (urgent > high > medium > low) then lowest-number-first.

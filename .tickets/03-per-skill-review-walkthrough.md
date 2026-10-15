@@ -38,14 +38,14 @@ conventions decided there.
 Go through each skill **one at a time**, in discussion with the user, and for
 each produce a committed review note capturing:
 
-1. **What it is** — invocation type (user- vs model-invoked), one-line purpose.
-2. **What it does for the user** — the real mechanics and the problem it solves.
-3. **How we should customize it** — keep / adapt / drop, with reasoning, plus
+1. **What it is** - invocation type (user- vs model-invoked), one-line purpose.
+2. **What it does for the user** - the real mechanics and the problem it solves.
+3. **How we should customize it** - keep / adapt / drop, with reasoning, plus
    concrete adaptation notes (what to strip, rename, or rewire). Watch for the
    Matt-Pocock-specific branding and the "Skill tool" dispatch coupling.
-4. **Cross-skill dependencies** — what it calls or is called by (e.g. the
+4. **Cross-skill dependencies** - what it calls or is called by (e.g. the
    grilling / domain-modeling / writing-for-agents hubs).
-5. **Web-app bias flag** — anything that assumes web development, handed to
+5. **Web-app bias flag** - anything that assumes web development, handed to
    ticket 02 (game-centric lenses).
 
 ### Suggested review order (by leverage)
