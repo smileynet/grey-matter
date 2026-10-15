@@ -30,7 +30,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | pr | engineering | model | adapt | [pr.md](pr.md) |
 | diagnosing-bugs | engineering | model | adapt | [diagnosing-bugs.md](diagnosing-bugs.md) |
 | to-spec | engineering | user | adapt | [to-spec.md](to-spec.md) |
-| to-tickets | engineering | user | TBD | |
+| to-tickets | engineering | user | adapt | [to-tickets.md](to-tickets.md) |
 | handoff | productivity | user | TBD | |
 | to-questionnaire | productivity | user | TBD | |
 | codebase-design | engineering | model | TBD | |
