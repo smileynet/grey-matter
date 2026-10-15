@@ -20,11 +20,12 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | Skill | Bucket | Invocation | Verdict | Note |
 | --- | --- | --- | --- | --- |
 | review-skill | engineering | user | new | [review-skill.md](review-skill.md) |
+| init-project | engineering | user | new (replaces setup-matt-pocock-skills) | [init-project.md](init-project.md) |
 | grilling | productivity | model | adapt | [grilling.md](grilling.md) |
 | domain-modeling | engineering | model | adapt | [domain-modeling.md](domain-modeling.md) |
 | game-modeling | engineering | model | new | [game-modeling.md](game-modeling.md) |
 | writing-for-agents | productivity | model | keep | [writing-for-agents.md](writing-for-agents.md) |
-| setup-matt-pocock-skills | engineering | user | TBD | |
+| setup-matt-pocock-skills | engineering | user | adapt -> replaced by init-project | |
 | tdd | engineering | model | adapt | [tdd.md](tdd.md) |
 | code-review | engineering | model | adapt | [code-review.md](code-review.md) |
 | pr | engineering | model | adapt | [pr.md](pr.md) |
