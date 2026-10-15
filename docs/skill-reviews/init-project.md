@@ -27,8 +27,10 @@ dropped. It also absorbs the new conventions we established while reviewing skil
 - **AGENTS.md primary, CLAUDE.md points to it.** The portable standard: every harness
   reads AGENTS.md; CLAUDE.md is a one-line pointer so Claude Code reads the same source.
   Never two divergent copies.
-- **`.scratch/` + gitignore** as the project-local non-committed working dir, plus
-  `.references/`.
+- **`.scratch/` + gitignore** as the project-local non-committed working dir.
+- **`.references/`** for cloned prior art: contents gitignored, a committed
+  `.references/README.md` as the rehydration index (what to re-clone and how), so a
+  fresh checkout can restore references the gitignore dropped.
 - **tkt** set up via `tkt init` (which writes the tracking block into AGENTS.md), with a
   pointer to `docs/tkt-conventions.md`.
 - **Per-installed-skill conventions**: only set up what is installed; each gets its

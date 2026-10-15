@@ -26,6 +26,13 @@ handoff documents, agent notes, throwaway output. One consistent location per pr
 so a fresh agent knows where to look. Nothing in `.scratch/` is durable or shared;
 anything worth keeping goes in a committed `docs/` file or a tkt ticket.
 
+## References
+
+`.references/` holds cloned prior-art and reference material. Its contents are
+gitignored; only [`.references/README.md`](./.references/README.md) is committed, as the
+rehydration index. On a fresh checkout the dir is empty, re-clone the references listed
+in that README. Add new references there with their clone command.
+
 <!-- tkt:begin -->
 ## Tickets
 

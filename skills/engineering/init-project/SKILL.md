@@ -31,13 +31,19 @@ only one exists, reconcile to this shape; never maintain two divergent copies.
   one-line pointer ("See AGENTS.md.").
 - Both exist: make `AGENTS.md` the source and `CLAUDE.md` the pointer.
 
-### 3. Scratch and gitignore
+### 3. Scratch, references, and gitignore
 
 Create `.scratch/` as the project-local home for non-committed working files (handoffs,
-agent notes, throwaway output) and gitignore it. Also gitignore `.references/` (cloned
-reference material). Add a short `## Scratch` note to `AGENTS.md` stating the rule:
-nothing in `.scratch/` is durable; anything worth keeping goes in committed `docs/` or a
-ticket.
+agent notes, throwaway output) and gitignore it. Add a short `## Scratch` note to
+`AGENTS.md` stating the rule: nothing in `.scratch/` is durable; anything worth keeping
+goes in committed `docs/` or a ticket.
+
+Create `.references/` as the place to clone prior-art and reference material. Gitignore
+its *contents* but commit a `.references/README.md` (`.references/*` then
+`!.references/README.md`). That README is the rehydration index: for each reference, what
+it is, why it's a reference here, and the exact clone command, so a fresh checkout on
+another machine can re-clone what the gitignored dir lost. Nothing in `.references/` is a
+dependency, only material agents read.
 
 ### 4. Track what the installed skills need
 
