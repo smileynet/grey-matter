@@ -57,7 +57,7 @@ If the spec is missing, skip the Spec sub-agent and note this in the final repor
 
 Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings, because the two axes are deliberately separate (see _Why two axes_).
 
-Then file each finding worth acting on as a **ticket** (see the issue-tracker doc for the commands), so the fix is tracked work on the frontier rather than a comment that evaporates. Each ticket carries enough context to understand and address the finding on its own: the axis (Standards or Spec), the file and the quoted hunk, the standard or spec line it breaches, and **clear acceptance criteria** stating what "fixed" means. Tag Standards findings and Spec findings so they stay distinct. A finding the user judges not worth acting on is not filed.
+Then file each finding worth acting on as a **ticket** (see the issue-tracker doc for the commands), so the fix is tracked work on the frontier rather than a comment that evaporates. Each ticket carries enough context to understand and address the finding on its own: the axis (Standards or Spec), the file and the quoted hunk, the standard or spec line it breaches, and **clear acceptance criteria** stating what "fixed" means. Tag Standards findings and Spec findings so they stay distinct. **Before filing, check existing tickets for overlap** (`tkt query`): when a finding matches or extends an open ticket, update that one rather than filing a near-duplicate. A finding the user judges not worth acting on is not filed.
 
 End with a one-line summary: tickets filed per axis, and the worst issue _within each axis_ (if any). Don't pick a single winner across axes: that's the reranking the separation exists to prevent.
 

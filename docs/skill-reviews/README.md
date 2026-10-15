@@ -38,7 +38,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | implement | engineering | user | adapt | [implement.md](implement.md) |
 | implement-spec | engineering | user | adapt | [implement-spec.md](implement-spec.md) |
 | grill-with-docs | engineering | user | adapt | [grill-with-docs.md](grill-with-docs.md) |
-| retro | engineering | user | TBD | |
+| retro | engineering | user | adapt | [retro.md](retro.md) |
 | ask-matt | engineering | user | TBD | |
 | wayfinder | engineering | user | TBD | |
 | triage | engineering | user | TBD | |
