@@ -33,7 +33,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | to-spec | engineering | user | adapt | [to-spec.md](to-spec.md) |
 | to-tickets | engineering | user | adapt | [to-tickets.md](to-tickets.md) |
 | handoff | productivity | user | adapt | [handoff.md](handoff.md) |
-| to-questionnaire | productivity | user | TBD | |
+| to-questionnaire | productivity | user | adapt | [to-questionnaire.md](to-questionnaire.md) |
 | codebase-design | engineering | model | TBD | |
 | implement | engineering | user | TBD | |
 | implement-spec | engineering | user | TBD | |
