@@ -40,7 +40,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | grill-with-docs | engineering | user | adapt | [grill-with-docs.md](grill-with-docs.md) |
 | retro | engineering | user | adapt | [retro.md](retro.md) |
 | ask-matt | engineering | user | TBD | |
-| wayfinder | engineering | user | TBD | |
+| wayfinder | engineering | user | adapt | [wayfinder.md](wayfinder.md) |
 | triage | engineering | user | TBD | |
 | improve-codebase-architecture | engineering | user | TBD | |
 | prototype | engineering | model | TBD | |
