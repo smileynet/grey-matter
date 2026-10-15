@@ -16,6 +16,13 @@ reshaped for this workflow and for game-centric (not just web-app) development.
   frontmatter schema across Claude Code, Codex, and Kiro, the safe core, per-harness
   invocation control, and what belongs in `metadata` (inert data only).
 
+## Scratch
+
+`.scratch/` (gitignored) is the project-local place for non-committed working files:
+handoff documents, agent notes, throwaway output. One consistent location per project
+so a fresh agent knows where to look. Nothing in `.scratch/` is durable or shared;
+anything worth keeping goes in a committed `docs/` file or a tkt ticket.
+
 <!-- tkt:begin -->
 ## Tickets
 
