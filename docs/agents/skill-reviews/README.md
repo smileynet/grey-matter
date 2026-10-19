@@ -48,7 +48,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | prototype | engineering | model | adapt | [prototype.md](prototype.md) |
 | research | engineering | model | adapt | [research.md](research.md) |
 | research-audit | engineering | model | new | [research.md](research.md) |
-| wizard | engineering | model | TBD | |
+| wizard | engineering | model | adapt | [wizard.md](wizard.md) |
 | grill-me | productivity | user | keep | [grill-me.md](grill-me.md) |
 | teach | productivity | user | TBD | |
 | wait-what | productivity | user | TBD | |
