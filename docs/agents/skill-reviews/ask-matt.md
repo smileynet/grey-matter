@@ -68,10 +68,9 @@ skill resolves). The hedge covers drift; a mechanical check covers staleness.
 
 ## Follow-up / open
 
-- **teach and wait-what are omitted** from the map: they are unreviewed and not yet in the
-  grey-matter set, and the staleness invariant forbids listing skills that don't exist
-  here. A one-line note in the Standalone section flags them. **This router must be
-  re-synced once teach/wait-what land.**
+- **teach and wait-what are now in the map** (Standalone section), re-synced when they
+  were reviewed into the set. The staleness invariant holds: the router lists exactly the
+  skills that exist here.
 - **Ticket 17** (maintenance-skills strategy): ratifies the `compass` name, decides whether
   meta skills get a dedicated bucket vs a router section, and sets the sync strategy.
 - **Ticket 18** (agent-focused routing): tests self-routing; may split a lean agent-router

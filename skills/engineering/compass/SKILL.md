@@ -76,7 +76,8 @@ Off the main flow entirely.
 - **wizard**: for the steps only a **human** can take (provisioning, credentials, CI secrets, clicking an unfamiliar dashboard, a one-off migration). It generates an interactive bash script that walks the human through and writes captured values to a **sink** (`.env`, CI secret). Model-invoked, for where a human is genuinely in the loop.
 - **writing-for-agents**: the reference for writing documents agents consume (skills, `AGENTS.md`, pointed-at docs).
 
-(Two upstream standalone skills, **teach** and **wait-what**, are not yet reviewed into this set; add them here when they land.)
+- **teach**: learn a topic over multiple sessions in a stateful workspace, the agent tutors you, grounding lessons in trusted fetched sources and gating mastery on demonstrated retrieval. For acquiring a skill or concept, not shipping code.
+- **wait-what**: a mid-conversation corrective when a message didn't land. Fire it inside any other skill and the agent re-pitches with the context it assumed, in plain active-voice sentences, using the `GLOSSARY.md` vocabulary.
 
 ## Maintaining this set
 
