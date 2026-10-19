@@ -1,6 +1,6 @@
 # HTML Report Format
 
-Per `docs/report-format.md`: the **markdown quick-look is the source**, the **HTML is the first-class final render**. Author the markdown candidate set first, then render this HTML from it. The HTML is a single self-contained file; a durable review lands in a committed `docs/` path, a throwaway per-run report in `.scratch/`. Tailwind and Mermaid come from CDNs; the report must **degrade gracefully** when the network is absent (readable unstyled content, visible ```mermaid``` source, never a blank page), with the markdown quick-look as the reliable fallback. Mermaid handles graph-shaped diagrams; hand-built divs and inline SVG handle editorial visuals. Mix them, or it looks generic.
+Per `docs/report-format.md`, an architecture review is a **full-bodied communicative deliverable**, so HTML is its format: the visual document a user studies. The HTML is the deliverable in its own right, not a render of a markdown source (an optional light markdown summary may sit alongside it as a skim, but it is a sibling, not the source). A single self-contained file; a durable review lands in a committed `docs/` path, a throwaway per-run report in `.scratch/`. Tailwind and Mermaid come from CDNs; the report must **degrade gracefully** when the network is absent (readable content, visible ```mermaid``` source, never a blank page). Mermaid handles graph-shaped diagrams; hand-built divs and inline SVG handle editorial visuals. Mix them, or it looks generic.
 
 ## Scaffold
 

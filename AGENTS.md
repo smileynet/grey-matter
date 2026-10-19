@@ -19,8 +19,9 @@ harness reads one source.
   frontmatter schema across Claude Code, Codex, and Kiro, the safe core, per-harness
   invocation control, and what belongs in `metadata` (inert data only).
 - [`docs/report-format.md`](./docs/report-format.md): generated documents, reports, and
-  dashboards use **HTML as the first-class final format** and **markdown as the
-  quick-look skim** (markdown is the source, HTML renders from it).
+  dashboards pick a format by purpose, **markdown for light, skimmable documents** and
+  **HTML for full-bodied documents that communicate finished ideas to users** (siblings,
+  not source-and-render).
 
 ## Scratch
 

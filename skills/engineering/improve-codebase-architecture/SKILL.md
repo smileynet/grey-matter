@@ -1,6 +1,6 @@
 ---
 name: improve-codebase-architecture
-description: Scan a codebase for deepening opportunities, classify each by regime, present them as a markdown quick-look plus a first-class HTML report, then grill through whichever one you pick.
+description: Scan a codebase for deepening opportunities, classify each by regime, present them as a full-bodied visual HTML report, then grill through whichever one you pick.
 disable-model-invocation: true
 ---
 
@@ -45,13 +45,13 @@ Read `GLOSSARY.md` and any ADRs in the area first. Then spawn a sub-agent to wal
 
 Apply the **deletion test** to anything you suspect is shallow: would deleting it concentrate complexity, or just move it? A "yes, concentrates" is the signal you want. (In the frame-loop regime the deletion test inverts: inlining a system's loop can _improve_ the design. Don't run the service-regime deletion test against frame-loop code.)
 
-### 2. Present candidates: markdown quick-look + HTML report
+### 2. Present candidates as a full-bodied HTML report
 
-Follow `docs/report-format.md`: **author the markdown first** as the source of truth, then **render the HTML** as the first-class final format the user inspects.
+This review is a **full-bodied, visual, communicative deliverable**: it exists to convey architectural ideas to the user with before/after diagrams, so **HTML is the right format** (see `docs/report-format.md`). Write a self-contained HTML file. A durable review goes in a committed `docs/` path; a throwaway per-run report goes in `.scratch/`. Open it for the user (`xdg-open`/`open`/`start`) and tell them the absolute path.
 
-**Markdown quick-look** (the source artifact, written to `.scratch/architecture-review-<timestamp>.md`): one terse block per candidate the agent can re-read to drive the grill. For each candidate: id, **regime**, files/symbols involved, the depth claim (or frame-loop claim), the deletion-test result, recommendation badge, and the before/after as fenced ```mermaid``` or a one-line structural sketch. Skimmable; no prose padding.
+The report uses **Tailwind** for layout and **Mermaid** for graph-shaped diagrams, mixed with hand-built CSS/SVG for editorial visuals (mass diagrams, cross-sections, collapse animations). **Degrade gracefully**: if these load from a CDN and the network is absent, the content stays readable and the diagram source stays visible, never a blank page. Be visual: each candidate gets a **before/after visualisation**.
 
-**HTML report** (the final deliverable, rendered from the markdown): a self-contained file. Durable reviews go in a committed `docs/` path; a throwaway per-run report goes in `.scratch/`. Open it for the user (`xdg-open`/`open`/`start`) and tell them the absolute path. Uses **Tailwind** for layout and **Mermaid** for graph-shaped diagrams, mixed with hand-built CSS/SVG for editorial visuals (mass diagrams, cross-sections, collapse animations). **Degrade gracefully**: if these load from a CDN and the network is absent, the content stays readable and diagram source stays visible, never a blank page, and the markdown quick-look remains the reliable fallback. Be visual: each candidate gets a **before/after visualisation**.
+Optionally also drop a **light markdown summary** alongside it (`.scratch/architecture-review-<timestamp>.md`): one terse line per candidate (id, regime, files, badge) as a quick skim and as a handle the grill can re-read. This is a sibling skimmable doc, not the source the HTML is generated from, the HTML is the deliverable in its own right.
 
 For each candidate card:
 

@@ -68,12 +68,14 @@ Adaptations:
 2. **Grounded diagrams.** Every before/after node/edge must name a real file/symbol;
    inferred edges marked; the grill can challenge the diagram, not just the
    recommendation.
-3. **Markdown source, HTML first-class render.** Per the new repo-wide
-   `docs/report-format.md`: author the terse markdown quick-look first (the re-readable
-   source of truth), render the first-class HTML from it. HTML is the final format a user
-   inspects (not demoted), but it must **degrade gracefully** offline (readable content +
-   visible diagram source, markdown as fallback) and land in-repo (`docs/` durable,
-   `.scratch/` throwaway), not an OS temp dir.
+3. **HTML as the full-bodied deliverable.** Per the new repo-wide
+   `docs/report-format.md`: markdown and HTML are siblings chosen by purpose, markdown
+   for light skimmable docs, HTML for full-bodied communicative ones. An architecture
+   review is full-bodied and visual, so it is authored as HTML (the deliverable in its
+   own right, not a render of a markdown source; an optional light markdown summary may
+   sit alongside as a skim). It must **degrade gracefully** offline (readable content +
+   visible diagram source) and land in-repo (`docs/` durable, `.scratch/` throwaway), not
+   an OS temp dir.
 4. **Blast radius in the badge rubric** (Strong is harder to earn on wide-reaching
    refactors; bias to the smallest seam) and **gate the Speculative tier** (must still
    pass the deletion test).
@@ -87,7 +89,7 @@ catalogue (plus a new SoA/AoS pattern for frame-loop findings).
 - Backlog ticket **12**: deep-dive the primary sources (Ousterhout, Tornhill, Feathers,
   Nygard, Acton/Fabian) to ground our lenses in the originals and catch any paraphrase
   drift.
-- The HTML-first/markdown-skim rule is now a **repo-wide** convention
+- The markdown-for-light / HTML-for-full-bodied rule is now a **repo-wide** convention
   (`docs/report-format.md`, linked from AGENTS.md), not local to this skill.
 
 ## Cross-skill dependencies
