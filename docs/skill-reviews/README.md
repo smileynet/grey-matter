@@ -41,7 +41,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | retro | engineering | user | adapt | [retro.md](retro.md) |
 | ask-matt | engineering | user | TBD | |
 | wayfinder | engineering | user | adapt | [wayfinder.md](wayfinder.md) |
-| triage | engineering | user | TBD | |
+| triage | engineering | user | adapt | [triage.md](triage.md) |
 | improve-codebase-architecture | engineering | user | TBD | |
 | prototype | engineering | model | TBD | |
 | research | engineering | model | TBD | |
