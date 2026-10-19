@@ -98,11 +98,37 @@ cadence, the manifest + install script are the load-bearing parts; versioning is
 The two unverified cells are exactly what ticket 14 (harness-behavior spikes) probes; this
 proposal doesn't block on them (the plugin path is solid for the primary harness today).
 
-## Decision needed
+## Decision (recorded)
 
-- Approve "ship both A + B, keep nesting, generate+check the manifest"? Or plugin-only for
-  now (defer the cross-client script)?
-- Adopt the changesets/npm release flow now, or hand-version until a real cadence exists?
+**Start with B (cross-client install script); A (Claude plugin) deferred.** We ship the
+installer now so all target harnesses can discover the skills; the plugin manifest + its
+marketplace/release machinery is a later ticket.
+
+Installer design (grounded in the agentskills discovery spec + installer prior art):
+
+- **Node script + thin `.sh`/`.ps1`/`.cmd` wrappers.** One cross-platform codebase (no
+  Git-Bash symlink trap, no mklink/ln divergence); the repo can take a Node dep since it's
+  already the natural tooling choice.
+- **Copy by default**, `--link` opt-in (real symlink on macOS/Linux, **junction** on
+  Windows, never a `/D` symlink that forces Developer Mode; degrade to copy if a link needs
+  privilege). Copy is privilege-free everywhere and survives repo moves; staleness is
+  solved by idempotent re-run + prune, not by linking.
+- **Target `~/.agents/skills/` only**, as a **configurable list** (not hardcoded), so the
+  unverified Kiro/OpenCode/Codex user-root support (ticket 14) is a config change, not a
+  rewrite. Not `~/.claude/skills/` too (Claude scans `.agents`; installing to both
+  double-lists).
+- **Flatten buckets on install**: `skills/<bucket>/<name>/` -> `~/.agents/skills/<name>/`
+  (carrying SKILL.md + references/ + agents/ + scripts/). Buckets are source organization
+  only; the scan root wants each skill as a direct child.
+- **Pre-install lint (hard fail)**: skill `name` must be globally unique across buckets
+  (flattening discards buckets) and must equal its leaf dir (the spec's matching rule).
+- **Manifest-driven idempotency**: write `~/.agents/skills/.installed-by-grey-matter.json`
+  recording what we installed; on re-run, prune orphans **scoped to the manifest** (renamed
+  or deleted skills), **never touch a dir we didn't install**, and refuse to clobber a
+  foreign same-name dir (unless `--force`). Provide `--dry-run`, `list`, and `uninstall`.
+
+The name-uniqueness lint is also the seed of the set-equality check the manifest/plugin
+path (A) will reuse.
 
 ## Open follow-ups (ticket)
 
