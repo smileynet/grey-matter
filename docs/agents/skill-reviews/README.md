@@ -50,7 +50,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | research-audit | engineering | model | new | [research.md](research.md) |
 | wizard | engineering | model | adapt | [wizard.md](wizard.md) |
 | grill-me | productivity | user | keep | [grill-me.md](grill-me.md) |
-| teach | productivity | user | TBD | |
+| teach | productivity | user | adapt | [teach.md](teach.md) |
 | wait-what | productivity | user | TBD | |
 | chief-of-staff | in-progress | user | TBD | |
 | claude-handoff | in-progress | user | TBD | |
