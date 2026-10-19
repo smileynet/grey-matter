@@ -1,7 +1,7 @@
 ---
 id: "05"
 title: "Author game-modeling: game-native counterpart to domain-modeling"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -79,6 +79,15 @@ companion to that proposal's *architecture* stance.
 
 ## Acceptance criteria
 
-- [ ] A game-modeling SKILL.md exists capturing: design pillars, core loop + progression arc, a mechanics/systems glossary (ubiquitous language retained), and a design-decision-record ADR analog
-- [ ] It names when Machinations-style economy models and state machines apply, and defers the backend/economy half to domain-modeling (two-regime split)
-- [ ] grill-with-docs's game branch resolves to it; held to the upstream depth bar
+- [x] A game-modeling SKILL.md exists capturing: design pillars, core loop + progression arc, a mechanics/systems glossary (ubiquitous language retained), and a design-decision-record ADR analog
+- [x] It names when Machinations-style economy models and state machines apply, and defers the backend/economy half to domain-modeling (two-regime split)
+- [x] grill-with-docs's game branch resolves to it; held to the upstream depth bar
+
+## Resolution (2026-10-19)
+
+game-modeling authored at skills/engineering/game-modeling/SKILL.md: design pillars (name-only filter), core loop(s) + progression arcs as the central artifact with the genre hedge, mechanics/systems/verbs glossary as retained ubiquitous language, and a gated design-decision record (ADR analog). Names when Machinations-style economy models + state machines apply and defers the backend/economy half to domain-modeling (two-regime split, bidirectional pointer). grill-with-docs routes game systems to it. Held to the upstream depth bar. Review note at docs/agents/skill-reviews/game-modeling.md.
+
+### Verification
+1. ✓ A game-modeling SKILL.md exists capturing: design pillars, core loop + progression arc, a mechanics/systems glossary (ubiquitous language retained), and a design-decision-record ADR analog — "skills/engineering/game-modeling/SKILL.md contains design pillars, core-loop+arcs, mechanics glossary, and the design-decision-record gate"
+2. ✓ It names when Machinations-style economy models and state machines apply, and defers the backend/economy half to domain-modeling (two-regime split) — "SKILL.md names Machinations economy models + state machines as reach-for-when, and defers backend/economy to domain-modeling (the re-entry boundary stated on both sides)"
+3. ✓ grill-with-docs's game branch resolves to it; held to the upstream depth bar — "grill-with-docs routes a game's design model to game-modeling; depth matches the upstream bar"
