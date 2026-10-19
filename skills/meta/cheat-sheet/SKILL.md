@@ -24,7 +24,8 @@ with YAML frontmatter carrying `name` and `description`.
    is **user-invoked**; otherwise **model-invoked**. (This mirrors the bucket READMEs.)
 4. Condense each `description` to **one line**: the lead clause, dropping the trailing
    "Use when..." trigger phrasing. Keep it to roughly a dozen words; don't paste the whole
-   description.
+   description. Use a plain ASCII hyphen ` - ` as the separator between name and
+   description, not an em-dash (matches the repo's house style).
 
 ## Output
 
