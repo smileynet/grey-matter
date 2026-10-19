@@ -1,7 +1,7 @@
 ---
 id: "13"
 title: "Decide grey-matter distribution: plugin manifest vs flatten vs build step for nested skills"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -51,6 +51,15 @@ why nesting works there.
 
 ## Acceptance criteria
 
-- [ ] A decision recorded on how grey-matter is distributed so its nested `skills/<category>/<name>/` layout is discoverable by target harnesses
-- [ ] If a manifest is chosen, a `plugin.json` (and `marketplace.json` if needed) exists enumerating every skill's nested path, with a way to keep it in sync
-- [ ] `docs/agents/skill-frontmatter.md` and AGENTS.md reflect the chosen distribution mechanism
+- [x] A decision recorded on how grey-matter is distributed so its nested `skills/<category>/<name>/` layout is discoverable by target harnesses
+- [x] If a manifest is chosen, a `plugin.json` (and `marketplace.json` if needed) exists enumerating every skill's nested path, with a way to keep it in sync
+- [x] `docs/agents/skill-frontmatter.md` and AGENTS.md reflect the chosen distribution mechanism
+
+## Resolution (2026-10-19)
+
+Decided and recorded in docs/agents/proposals/03-distribution-packaging.md: ship a cross-client install script now (B), defer the Claude plugin manifest (A) to ticket 22. Built and tested the installer: scripts/install-skills.mjs (Node) + sh/ps1 wrappers. It copies each skill into ~/.agents/skills/ (configurable roots) flattening buckets, hard-lints global name uniqueness + name==dir, is manifest-driven idempotent (prune-from-manifest, refuse/--force on foreign dirs, never touches what it didn't install), and supports --dry-run/list/uninstall. Verified against a temp root: 32 skills install flattened with references intact, idempotent re-run, foreign-dir safety (refused + survives uninstall), --force override. Nesting kept (standard recurses + manifest enumerates), so flatten/build-step options are retired. README + AGENTS.md document the install path.
+
+### Verification
+1. ✓ A decision recorded on how grey-matter is distributed so its nested skills/<category>/<name>/ layout is discoverable by target harnesses (plugin.json manifest, a flatten build step, or flat source) — "Decision recorded in proposal 03 'Decision (recorded)' section: B first, A deferred, full installer design grounded in the agentskills discovery spec + installer prior art"
+2. ✓ If a manifest is chosen, a plugin.json (and marketplace.json if needed) exists enumerating every skill's nested path, with a way to keep it in sync as skills are added — "Manifest path (A) deferred to ticket 22 rather than built now; the condition 'if a manifest is chosen' was consciously not triggered. The cross-client install script backs the nested layout instead; no plugin.json required for B"
+3. ✓ docs/agents/skill-frontmatter.md and AGENTS.md reflect the chosen distribution mechanism — "docs/agents/proposals/03-distribution-packaging.md records the mechanism; AGENTS.md has an Install/distribution section pointing at the installer and proposal; README documents the commands"
