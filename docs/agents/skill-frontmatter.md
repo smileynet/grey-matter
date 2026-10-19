@@ -65,7 +65,53 @@ Claude Code also reads `allowed-tools`, `argument-hint`, `user-invocable`, `mode
 Codex/Kiro. Use only when a skill genuinely needs the Claude behavior, and know it is
 non-portable.
 
-## To verify against the locally-installed CLIs (sparse docs)
+## Skill structure: nesting and reference files (portability)
+
+Two layout facts matter for cross-harness portability. The Agent Skills standard defines
+a skill *directory* (`SKILL.md` + optional `references/`, `scripts/`, `assets/`) but is
+**silent on how a client discovers skills on disk or how deep it recurses**, so both of
+these are per-harness/per-distribution concerns, not spec guarantees.
+
+### Nested skill folders (`skills/<category>/<name>/`)
+
+grey-matter nests every skill under a category (`skills/engineering/<name>/`,
+`skills/productivity/<name>/`). This is portable **only when discovery is explicit**:
+
+- A **manifest that enumerates paths** (a Claude Code plugin's `plugin.json` `skills:`
+  array listing `./skills/engineering/<name>`, at any depth) finds nested skills fine.
+  This is how upstream ships, and the layout we inherited.
+- A **flat one-level auto-scan** (treating each immediate child of a skills root as a
+  skill) does **not** recurse into category folders: it would see `engineering/`, find no
+  `SKILL.md`, and skip the real skill one level deeper.
+- The `name` field matches the skill's **immediate parent directory** (`implement/` ->
+  `name: implement`), regardless of nesting depth. Nesting never breaks the name rule; it
+  only risks discovery.
+
+Consequence: if grey-matter is distributed as a plugin, its manifest must list every
+skill's nested path and stay in sync (a stale manifest = a silently unloaded skill). If a
+target harness only flat-scans, the layout must be flattened or projected by a build step.
+Distribution is an open decision (see the tracking ticket).
+
+### Reference files must be additive, not load-bearing
+
+`references/` on-demand loading is native on Claude Code; elsewhere it **degrades to
+behavioral**: wherever the `SKILL.md` body is in context and the agent has a file-read
+tool, it can open `references/foo.md` by relative path, because that is just reading a
+file. The failure mode is tier-1/2 (the skill never being discovered), not the file being
+unreachable. So the portable rule is:
+
+- **SKILL.md must be self-sufficient for correct behavior.** Never make correctness depend
+  on a reference file that a harness might not surface.
+- **`references/` is additive progressive disclosure**: the skill still functions if a
+  reference is never opened. Keep references **one hop** from SKILL.md, with relative paths
+  from the skill root.
+- **Link reference files explicitly in the body** ("read `references/godot.md` when the
+  engine is Godot"); don't rely on a harness auto-scanning `references/`/`scripts/`/
+  `assets/` by directory name.
+- **Scripts**: assume an explicit "run this" instruction plus a shell tool; don't assume
+  auto-execution.
+
+
 
 Open backlog check: whether kiro-cli 2.31.0 and codex-cli 0.162.1 **ignore vs reject**
 unknown `SKILL.md` frontmatter keys, and whether kiro-cli honors
