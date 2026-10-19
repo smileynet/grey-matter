@@ -21,11 +21,12 @@ A second **model-invokable** variant (`probe-open`, no `disable-model-invocation
 policy block) isolates the invocation filter: if the open one is discovered and the
 user-invoked one is not, the harness honors the filter.
 
-## Coverage this pass
+## Coverage
 
-kiro-cli (primary) and codex (secondary) are authenticated and were **driven live**. Claude
-Code and OpenCode (ancillary) were deprioritized per the harness priority order and are
-untested this pass. The standard's reference library (`skills-ref`) was also probed.
+All four harnesses are now characterized. kiro-cli (primary), codex (secondary), and
+Claude Code (ancillary) authenticated and **driven live**. OpenCode (ancillary) is
+authenticated but has **no Agent Skills support** to exercise. The standard's reference
+library (`skills-ref`) was also probed.
 
 ## Scan roots are per-harness (key finding)
 
@@ -36,13 +37,13 @@ actually scan at user level:
 | --- | --- | --- |
 | kiro-cli | **`~/.kiro/skills/`** | already held `cpu-perf-bench`, `tkt`; flat `<name>/SKILL.md` |
 | codex | **`~/.codex/skills/`** | held `tkt`, `codex-primary-runtime`, built-ins; probe-open discovered there |
-| Claude Code | `~/.claude/skills/` (+ `.agents`) | 5 entries present; not driven this pass |
+| Claude Code | **`~/.claude/skills/`** | held 5 user skills; probe auto-discovered and run there |
+| OpenCode | n/a (no skills support) | no skills command/dir/config; unsupported |
 | (convention) | `~/.agents/skills/` | absent on this machine |
 
-**Consequence for the installer**: its default `~/.agents/skills/` target would miss
-kiro-cli and codex. Install into the real root via `--root` (e.g. `--root ~/.kiro/skills`
-and/or `--root ~/.codex/skills`), or give the installer named-harness targets. Follow-up
-ticket filed.
+The installer now defaults to every known harness root present on the machine
+(`~/.kiro/skills`, `~/.codex/skills`, `~/.claude/skills`, `~/.agents/skills`), with
+`--root` overrides.
 
 ## Results
 
@@ -78,11 +79,28 @@ Probes at `~/.codex/skills/`, driven with `codex exec
 | `references/` loading | not a library concern | library surfaces `location`; agent reads references at runtime |
 | Invocation filter | not done by the standard library | `to-prompt` lists a user-invoked skill; filtering is per-harness (confirmed by codex) |
 
-### Claude Code / OpenCode (ancillary) - UNTESTED this pass
+### Claude Code 2.1.303 (ancillary) - PROVEN live
 
-Both installed; Claude Code scan root `~/.claude/skills/` (5 entries present), `-p
---plugin-dir` + `/skill-name` is the documented path. Deprioritized per the harness
-priority order. Re-run with the same probe rig when needed.
+Probes at `~/.claude/skills/` (auto-discovered, no `--plugin-dir` needed), driven with
+`claude -p --allowedTools Read`.
+
+| Behavior | Result | Evidence |
+| --- | --- | --- |
+| Discovery (flat in `~/.claude/skills/`) | works | agent ran `probe-skill` and reported `PROBE: SKILL.md loaded` |
+| `references/` on-demand loading | works | agent read `references/probe.md`, reported token `PROBE-REF-7Q2X` |
+| Flat-install confirmation | works, and the agent noticed | it observed the skill loaded from the one-level `~/.claude/skills/probe-skill/`, not a 2-level nested path, reinforcing that install is flat and the repo's bucket nesting is organizational only |
+| Invocation control | not isolated this pass | both probes reported "available" only when named; the auto-discovered skill list it volunteered did not surface them, consistent with filtering, but codex remains the clean isolation |
+
+### OpenCode (ancillary) - NO AGENT SKILLS SUPPORT
+
+OpenCode is installed and fully authenticated (providers Groq, Z.AI, OpenAI, Anthropic,
+DeepSeek configured), so this is **not** an auth gap. But its CLI exposes **no skill
+concept at all**: no `skills` command, no `skills/` directory, no skill config in
+`~/.config/opencode/opencode.jsonc`, and `--help` never mentions "skill". Its
+extensibility is agents + plugins + MCP. So the Agent Skills format is **unsupported** at
+this version; our skills can't be discovered by OpenCode as skills, they would have to be
+re-expressed in its agent/plugin model (out of scope). Mark OpenCode: unsupported, not
+merely untested.
 
 ## Our installer - PROVEN end-to-end
 

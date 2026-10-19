@@ -40,12 +40,12 @@ package is a later addition (see `docs/agents/proposals/03-distribution-packagin
 ### Harness support
 
 The skills follow the [Agent Skills](https://agentskills.io) open standard (`SKILL.md`
-directories), so any compliant harness that scans `~/.agents/skills/` can discover them.
-Verified against the standard's own reference library (`skills-ref`): nested skills parse,
-unknown frontmatter is ignored (not rejected), `references/` are agent-loaded, and
-user-invoked filtering is a per-harness concern. Live per-harness runs (Claude Code,
-Codex, Kiro, OpenCode) are pending an authenticated session, see
-`docs/agents/research/harness-behavior-probes.md` for the current results matrix.
+directories). **Verified live**: kiro-cli, codex, and Claude Code each discover an
+installed skill, load its `references/` on demand, ignore unknown frontmatter, and honor
+user-invoked invocation control (codex isolates the filter cleanly). Each scans its own
+user root (`~/.kiro/skills`, `~/.codex/skills`, `~/.claude/skills`), which the installer
+targets by default. OpenCode has no Agent Skills support at its current version. Full
+results: `docs/agents/research/harness-behavior-probes.md`.
 
 ## Status
 
