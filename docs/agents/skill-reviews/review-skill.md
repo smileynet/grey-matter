@@ -1,6 +1,6 @@
 # review-skill
 
-- Bucket: engineering. Invocation: user-invoked. **New skill** (no upstream origin).
+- Bucket: meta. Invocation: user-invoked. **New skill** (no upstream origin).
 - Verdict: **new** (codifies grey-matter's own skill-adaptation method).
 
 ## What it is

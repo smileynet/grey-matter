@@ -1,6 +1,6 @@
 # ask-matt -> compass
 
-- Bucket: engineering. Invocation: **model-invoked** (changed from upstream's
+- Bucket: meta. Invocation: **model-invoked** (changed from upstream's
   user-invoked; see Decision).
 - Verdict: **adapt + rename**. Renamed `ask-matt` -> `compass`; repointed the whole map to
   the grey-matter set; made it model-invokable; added a maintenance-skills section.

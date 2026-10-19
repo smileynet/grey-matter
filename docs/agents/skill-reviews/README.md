@@ -19,13 +19,13 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 
 | Skill | Bucket | Invocation | Verdict | Note |
 | --- | --- | --- | --- | --- |
-| review-skill | engineering | user | new | [review-skill.md](review-skill.md) |
-| init-project | engineering | user | new (replaces setup-matt-pocock-skills) | [init-project.md](init-project.md) |
+| review-skill | meta | user | new | [review-skill.md](review-skill.md) |
+| init-project | meta | user | new (replaces setup-matt-pocock-skills) | [init-project.md](init-project.md) |
 | grilling | productivity | model | adapt | [grilling.md](grilling.md) |
 | domain-modeling | engineering | model | adapt | [domain-modeling.md](domain-modeling.md) |
 | game-modeling | engineering | model | new | [game-modeling.md](game-modeling.md) |
 | game-native-design | engineering | model | new | [game-native-design.md](game-native-design.md) |
-| curate-docs | engineering | user | new | [curate-docs.md](curate-docs.md) |
+| curate-docs | meta | user | new | [curate-docs.md](curate-docs.md) |
 | writing-for-agents | productivity | model | keep | [writing-for-agents.md](writing-for-agents.md) |
 | setup-matt-pocock-skills | engineering | user | adapt -> replaced by init-project | |
 | tdd | engineering | model | adapt | [tdd.md](tdd.md) |
@@ -41,7 +41,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | implement-spec | engineering | user | adapt | [implement-spec.md](implement-spec.md) |
 | grill-with-docs | engineering | user | adapt | [grill-with-docs.md](grill-with-docs.md) |
 | retro | engineering | user | adapt | [retro.md](retro.md) |
-| ask-matt | engineering | model | adapt -> renamed to compass | [ask-matt.md](ask-matt.md) |
+| ask-matt | meta | model | adapt -> renamed to compass | [ask-matt.md](ask-matt.md) |
 | wayfinder | engineering | user | adapt | [wayfinder.md](wayfinder.md) |
 | triage | engineering | user | adapt | [triage.md](triage.md) |
 | improve-codebase-architecture | engineering | user | adapt | [improve-codebase-architecture.md](improve-codebase-architecture.md) |

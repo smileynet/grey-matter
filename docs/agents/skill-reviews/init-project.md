@@ -1,6 +1,6 @@
 # init-project
 
-- Bucket: engineering. Invocation: user-invoked. **New skill** (grey-matter's
+- Bucket: meta. Invocation: user-invoked. **New skill** (grey-matter's
   replacement for the upstream `setup-matt-pocock-skills`).
 - Verdict: **new**.
 

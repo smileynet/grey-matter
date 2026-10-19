@@ -1,6 +1,6 @@
 # curate-docs
 
-- Bucket: engineering. Invocation: user-invoked (`disable-model-invocation: true`).
+- Bucket: meta. Invocation: user-invoked (`disable-model-invocation: true`).
 - Verdict: **new** (grey-matter skill, no upstream origin).
 
 ## What it is

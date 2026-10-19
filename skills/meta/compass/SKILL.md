@@ -81,7 +81,7 @@ Off the main flow entirely.
 
 ## Maintaining this set
 
-Meta skills that build and tend the skill set itself, not feature work. (Their overall strategy, grouping, and this router's own name are being settled; see the maintenance-skills strategy ticket.)
+Meta skills that build and tend the skill set itself, not feature work. They live in the `meta` bucket (`skills/meta/`); see `docs/agents/maintenance-skills.md` for the strategy.
 
 - **init-project**: the **precondition**, run before your first flow to configure the tkt tracker, triage tags, and doc layout the other skills assume.
 - **review-skill**: the method for reviewing an upstream skill and deciding keep/adapt/drop/new when adapting it into this set.

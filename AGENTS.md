@@ -27,6 +27,10 @@ harness reads one source.
   docs**, **`docs/agents/` for agent-facing reference** (reviews, lenses, research,
   proposals, conventions), loaded on demand via pointers, never auto-loaded; `.scratch/`
   is ephemeral. Plus the promotion test (note -> skill) and the dot-prefix rule.
+- [`docs/agents/maintenance-skills.md`](./docs/agents/maintenance-skills.md): the three
+  buckets (`engineering` build, `productivity` think/communicate, `meta` maintain the set),
+  why `meta` exists, the `compass` router, per-bucket READMEs, and how the index stays in
+  sync.
 
 ## Scratch
 
