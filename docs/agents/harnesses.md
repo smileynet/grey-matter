@@ -1,0 +1,105 @@
+# Harnesses: deploying and testing skills
+
+The operational reference for each agent harness grey-matter targets: where it reads
+skills from, how to install into it, and how to drive it to test a skill. The dated
+findings behind this live in [`research/harness-behavior-probes.md`](./research/harness-behavior-probes.md);
+this doc is the current how-to.
+
+All harnesses below support the **Agent Skills** `SKILL.md` standard natively, so our
+skills deploy **unchanged**, no conversion, no MCP wrapping. Skills install into a **scan
+root** (user-level, per harness) or a **project root** (`.agents/skills/` is shared). Use
+`scripts/install-skills.mjs` (see the repo README).
+
+## Per-harness reference
+
+Tier reflects the project's priority: primary (kiro-cli), secondary (codex), ancillary
+(the rest).
+
+### kiro-cli (primary)
+
+- Binary `kiro-cli`, probed 2.31.0. Skills exposed via the Skill tool.
+- **User root**: `~/.kiro/skills/`. **Install**: `node scripts/install-skills.mjs` (it is
+  in the default set) or `--root ~/.kiro/skills`.
+- **Test (non-interactive)**: `kiro-cli chat --no-interactive --trust-all-tools "<prompt>"`.
+- **Invocation filter**: consistent with honoring `disable-model-invocation` (not cleanly
+  isolated; see codex for the clean case).
+
+### codex (secondary)
+
+- Binary `codex` (a `.ps1` shim via fnm on this machine), probed 0.163.0. Auto-scans its
+  root. Uses the `agents/openai.yaml` sidecar for invocation policy.
+- **User root**: `~/.codex/skills/`. **Install**: default set, or `--root ~/.codex/skills`.
+- **Test**: `codex exec --dangerously-bypass-approvals-and-sandbox -C <dir> "<prompt>"`
+  (needs the bypass or it hangs on approval). On Windows the shim won't launch via
+  `Start-Process`; run it through a `Start-Job`/pwsh call.
+- **Invocation filter**: **honored, cleanly isolated**, a skill with
+  `policy.allow_implicit_invocation: false` is absent from the model's catalog.
+
+### Claude Code (ancillary)
+
+- Binary `claude`, probed 2.1.303. Auto-discovers its root; also `--plugin-dir` + the
+  `/skill-name` slash command.
+- **User root**: `~/.claude/skills/`. **Project**: `.claude/skills/`, `.agents/skills/`.
+  **Install**: default set, or `--root ~/.claude/skills`, or `--project`.
+- **Test**: `claude -p "<prompt>" --allowedTools Read` (a plain `-p` works;
+  `--plugin-dir` + piped stdin can hang, use a direct `-p` prompt).
+- Confirmed references/ load on demand; install is flat (bucket nesting is repo-only).
+
+### agy (ancillary, Google Antigravity CLI)
+
+- Binary `agy`, probed 1.2.0. Native skills (`--disable-slash-commands` covers "skill
+  expansion"). `--print` is non-interactive.
+- **Project root**: `.agents/skills/` (confirmed live). User root `~/.gemini/...` (verify).
+  **Install**: `--project`, or `--root <its user root>` once confirmed.
+- **Test**: `agy --dangerously-skip-permissions --print "<prompt>"` from the project dir.
+  Gotcha: `-p` grabs the next token as its prompt, put flags first and the prompt last, or
+  use `-p='...'`.
+- **Invocation filter**: lists user-invoked skills in the catalog (does not filter like
+  codex).
+
+### Crush (ancillary, Charm)
+
+- Binary `crush`. Native skills, **no config needed**. Default roots: `.agents/skills`,
+  `.crush/skills`, `.claude/skills`, `.cursor/skills`.
+- **Project root**: `.agents/skills/` (confirmed live). **Install**: `--project`.
+- **Test**: `crush run --cwd <dir> --quiet "<prompt>"`. Gotcha: `--yolo` is rejected under
+  `run` in the probed build; read-only prompts run without it.
+
+### OpenCode (ancillary)
+
+- Binary `opencode`, probed 1.18.21. Native skills **exposed as a runtime tool, not a
+  top-level command** (so `--help` shows no `skills` command, but skills work, probe live,
+  don't conclude from `--help`).
+- **Roots**: user `~/.config/opencode/skills`, `~/.claude/skills`, `~/.agents/skills`;
+  project `.opencode/skills`, `.claude/skills`, `.agents/skills`. **Install**: `--project`,
+  or `--root ~/.config/opencode/skills`.
+- **Test**: `opencode run "<prompt>"` from the project dir.
+
+## How to test a harness (the probe-rig runbook)
+
+Reproducible procedure to validate any harness (or re-check one after an update). This is
+the method behind every row above.
+
+1. **Build two probes** (throwaway, in `.scratch/` or a scratch project under
+   `.agents/skills/`):
+   - `probe-skill`: nested/real skill, `references/probe.md` linked from its SKILL.md with
+     a secret token, an unknown frontmatter key, and `disable-model-invocation: true` +
+     `agents/openai.yaml` `allow_implicit_invocation: false` (user-invoked).
+   - `probe-open`: a model-invokable twin (no `disable-model-invocation`, no policy block),
+     sharp trigger in its description.
+2. **Install** into the harness's root (user root, or `.agents/skills/` for project scope).
+3. **Drive the harness non-interactively** (command per row above) with four prompts /
+   checks:
+   - **Discovery**: "list the skills available to you", does the probe appear?
+   - **References**: "run probe-skill and report the token it points to", does it read
+     `references/probe.md` and return the token?
+   - **Unknown frontmatter**: did the skill load at all despite the unknown key?
+     (ignored = loads; rejected = errors)
+   - **Invocation filter**: does the model catalog list `probe-open` but **not**
+     `probe-skill`? If so, the harness honors user-invoked filtering (codex does; agy/crush
+     list both).
+4. **Record** results in `research/harness-behavior-probes.md` and update the row here.
+5. **Clean up**: remove both probes from the harness root.
+
+Principle: **probe live, don't infer from `--help`** (OpenCode looked unsupported by
+`--help` but fully supports skills at runtime).

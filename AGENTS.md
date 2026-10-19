@@ -50,10 +50,13 @@ in that README. Add new references there with their clone command.
 ## Install / distribution
 
 Skills are installed into a harness scan root with `node scripts/install-skills.mjs`
-(copies each skill into `~/.agents/skills/`, flattening the bucket structure; manifest-
-tracked, idempotent, `--dry-run`/`list`/`uninstall`). The decision and design are in
+(copies each skill into the known harness user roots, flattening the bucket structure;
+`--project` for `<cwd>/.agents/skills`; manifest-tracked, idempotent,
+`--dry-run`/`list`/`uninstall`). The decision and design are in
 [`docs/agents/proposals/03-distribution-packaging.md`](./docs/agents/proposals/03-distribution-packaging.md);
-a Claude Code plugin package is a later addition.
+per-harness deploy + test instructions are in
+[`docs/agents/harnesses.md`](./docs/agents/harnesses.md); a Claude Code plugin package is
+a later addition.
 
 <!-- tkt:begin -->
 ## Tickets
