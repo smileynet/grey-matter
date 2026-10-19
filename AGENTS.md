@@ -18,6 +18,9 @@ harness reads one source.
 - [`docs/skill-frontmatter.md`](./docs/skill-frontmatter.md): the all-up SKILL.md
   frontmatter schema across Claude Code, Codex, and Kiro, the safe core, per-harness
   invocation control, and what belongs in `metadata` (inert data only).
+- [`docs/report-format.md`](./docs/report-format.md): generated documents, reports, and
+  dashboards use **HTML as the first-class final format** and **markdown as the
+  quick-look skim** (markdown is the source, HTML renders from it).
 
 ## Scratch
 
