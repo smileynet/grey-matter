@@ -2,15 +2,14 @@
 
 Empirical results for how skills are discovered, loaded, and filtered, replacing the
 inferred [SPEC]/[LIKELY]/[VERIFY] reasoning in `docs/agents/skill-frontmatter.md` with what
-was actually observed. Re-run the probe rig when a harness can be driven with real
-credentials.
+was actually observed. Re-run the probe rig when an untested harness is available.
 
 ## The probe rig
 
 `.scratch/harness-probe/skills/engineering/probe-skill/` (gitignored, throwaway):
 
 - **Nested** two levels deep (`skills/engineering/probe-skill/SKILL.md`) to test nested
-  discovery.
+  discovery (in the repo layout; harnesses install flat).
 - A `references/probe.md` the SKILL.md links and instructs the agent to read (token
   `PROBE-REF-7Q2X`) to test on-demand reference loading.
 - A known-unknown frontmatter key `probe-unknown-key` to test ignore-vs-reject.
@@ -18,64 +17,89 @@ credentials.
   `policy.allow_implicit_invocation: false` to test user-invoked invocation control.
 - A `.claude-plugin/plugin.json` enumerating the nested skill, for Claude's `--plugin-dir`.
 
-## What was provable here, and what was not
+A second **model-invokable** variant (`probe-open`, no `disable-model-invocation`, no
+policy block) isolates the invocation filter: if the open one is discovered and the
+user-invoked one is not, the harness honors the filter.
 
-This environment has all four CLIs installed (claude, codex, kiro-cli, opencode) but **none
-authenticated**, so a live agent session (which is what actually exercises
-discovery -> catalog -> activation -> reference read) could not be driven for any harness
-(`claude -p ... -> "Not logged in"`). The **reference implementation** (`skills-ref`, the
-agentskills standard's own library) and **static/CLI-surface checks** were runnable and are
-recorded as authoritative for *the standard's* behavior; per-harness live rows are marked
-untested.
+## Coverage this pass
+
+kiro-cli (primary) and codex (secondary) are authenticated and were **driven live**. Claude
+Code and OpenCode (ancillary) were deprioritized per the harness priority order and are
+untested this pass. The standard's reference library (`skills-ref`) was also probed.
+
+## Scan roots are per-harness (key finding)
+
+The `~/.agents/skills/` cross-client convention is **not** what our primary harnesses
+actually scan at user level:
+
+| Harness | User-level scan root | Evidence |
+| --- | --- | --- |
+| kiro-cli | **`~/.kiro/skills/`** | already held `cpu-perf-bench`, `tkt`; flat `<name>/SKILL.md` |
+| codex | **`~/.codex/skills/`** | held `tkt`, `codex-primary-runtime`, built-ins; probe-open discovered there |
+| Claude Code | `~/.claude/skills/` (+ `.agents`) | 5 entries present; not driven this pass |
+| (convention) | `~/.agents/skills/` | absent on this machine |
+
+**Consequence for the installer**: its default `~/.agents/skills/` target would miss
+kiro-cli and codex. Install into the real root via `--root` (e.g. `--root ~/.kiro/skills`
+and/or `--root ~/.codex/skills`), or give the installer named-harness targets. Follow-up
+ticket filed.
 
 ## Results
 
-### Reference implementation (`skills-ref`, the agentskills standard library) - PROVEN
+### kiro-cli 2.31.0 (primary) - PROVEN live
 
-Run via `uv run skills-ref` from `.references/agentskills/skills-ref`.
+Probe at `~/.kiro/skills/probe-skill/`, driven with `kiro-cli chat --no-interactive
+--trust-all-tools`.
 
 | Behavior | Result | Evidence |
 | --- | --- | --- |
-| **Nested discovery** | the leaf dir is the skill; depth is irrelevant to parsing | `read-properties`/`to-prompt` both parse `skills/engineering/probe-skill` (2 levels deep) and a real nested skill (`skills/engineering/tdd`) fine |
-| **Unknown frontmatter** | **ignored, not rejected** | `read-properties` on the probe (with `probe-unknown-key`) exits **0** and returns only `name`+`description`; deliberately broken YAML exits **1**. So unknown keys are dropped, malformed YAML fails |
-| **`references/` loading** | **not a library concern** | tier-3 is behavioral: the library surfaces `location` (the SKILL.md path) so the agent resolves relative links itself; `skills-ref` never reads `references/`. Confirms references are additive, loaded by the agent at runtime, not by the discovery layer |
-| **Invocation control (`disable-model-invocation`)** | **not filtered by the standard library** | `to-prompt` still lists the probe in `<available_skills>` despite `disable-model-invocation: true`. Filtering is a **per-harness** responsibility (the client-impl spec tells *implementers* to hide such skills), not something the standard library does. Confirms our "invocation control is per-harness" rule |
+| Discovery (flat in `~/.kiro/skills/`) | works | agent found `probe-skill`; trace showed `[tool] Reading SKILL.md` |
+| `references/` on-demand loading | works | agent followed the relative link, read `references/probe.md`, reported token `PROBE-REF-7Q2X` |
+| Unknown frontmatter (`probe-unknown-key`) | ignored, not rejected | the skill loaded and ran despite the unknown key |
+| Invocation control (`disable-model-invocation`) | consistent with honoring, not isolated | a trigger-hinting prompt did not auto-fire the user-invoked skill, but the model also declined for other stated reasons, so this run alone doesn't isolate harness-filtering from model-choice. codex isolates it cleanly below |
 
-### Claude Code - UNTESTED (not authenticated)
+### codex 0.163.0 (secondary) - PROVEN live, invocation filter isolated
 
-`claude -p --plugin-dir <probe> ...` returned "Not logged in". The CLI surface confirms the
-mechanism exists: `-p/--print` (non-interactive), `--plugin-dir` (load a plugin by dir),
-`/skill-name` invocation, and `--disable-slash-commands` ("Disable all skills"). A plugin's
-`skills` array enumerating nested paths is the documented load path. Live discovery +
-reference-read + invocation-suppression rows: **untested here**, re-run with auth.
+Probes at `~/.codex/skills/`, driven with `codex exec
+--dangerously-bypass-approvals-and-sandbox`.
 
-### codex-cli 0.162.1 - UNTESTED (not authenticated / no driven session)
+| Behavior | Result | Evidence |
+| --- | --- | --- |
+| Discovery (auto-scan of `~/.codex/skills/`) | works | model-invokable `probe-open` appeared in the skill catalog it listed (beside `tkt` + built-ins) |
+| Invocation control (`policy.allow_implicit_invocation: false`) | honored | the user-invoked `probe-skill` was **absent from the catalog** and reported "skill not found", while `probe-open` (model-invokable) was listed. codex filters user-invoked skills from the model, exactly our sidecar convention |
+| `references/` loading | same tier-3 behavioral mechanism kiro demonstrated | not separately isolated on codex this pass |
 
-Installed. Our skills ship an `agents/openai.yaml` sidecar for its invocation metadata.
-Not exercised live.
+### Reference implementation (`skills-ref`) - PROVEN
 
-### kiro-cli 2.31.0 - UNTESTED
+| Behavior | Result | Evidence |
+| --- | --- | --- |
+| Nested discovery | leaf dir is the skill; depth irrelevant to parsing | `read-properties`/`to-prompt` parse a 2-levels-deep skill fine |
+| Unknown frontmatter | ignored, not rejected | `read-properties` exits **0**, returns only `name`+`description`; broken YAML exits **1** |
+| `references/` loading | not a library concern | library surfaces `location`; agent reads references at runtime |
+| Invocation filter | not done by the standard library | `to-prompt` lists a user-invoked skill; filtering is per-harness (confirmed by codex) |
 
-Installed. Activates skills by name via its own mechanism. Not exercised live.
+### Claude Code / OpenCode (ancillary) - UNTESTED this pass
 
-### OpenCode - UNTESTED
-
-Installed. Not exercised live.
+Both installed; Claude Code scan root `~/.claude/skills/` (5 entries present), `-p
+--plugin-dir` + `/skill-name` is the documented path. Deprioritized per the harness
+priority order. Re-run with the same probe rig when needed.
 
 ## Our installer - PROVEN end-to-end
 
-`scripts/install-skills.mjs` was run against the real 32-skill repo into a temp root:
-flattens `skills/<bucket>/<name>/` -> `<root>/<name>/`, carries `references/` and `agents/`,
-writes a manifest, is idempotent, prunes orphans, refuses to clobber foreign dirs
-(`--force` overrides), and `list`/`uninstall` work. The probe tree is well-formed for the
-same path. (Details in the ticket-13 resolution.)
+`scripts/install-skills.mjs` flattens `skills/<bucket>/<name>/` -> `<root>/<name>/`, carries
+`references/` and `agents/`, writes a manifest, is idempotent, prunes orphans, refuses to
+clobber foreign dirs (`--force` overrides), and `list`/`uninstall` work. (Details in the
+ticket-13 resolution.) Its default root needs updating per the per-harness-roots finding.
 
 ## Conclusions fed back
 
-- `docs/agents/skill-frontmatter.md`: the "unknown frontmatter ignored vs rejected",
-  "references additive / loaded by the agent", and "invocation control per-harness" cells
-  are confirmed **for the standard's reference implementation**. Per-harness runtime rows
-  remain to be filled when a harness is authenticated.
-- Ticket 07's narrow checks (unknown-frontmatter, nested discovery, references loading) are
-  satisfied at the reference-implementation level and can close, pointing here; the
-  per-harness runtime confirmation stays open under this ticket's untested rows.
+- **Invocation control is honored at the harness layer** (proven on codex; consistent on
+  kiro). The `disable-model-invocation` + `allow_implicit_invocation: false` pair does what
+  the convention claims.
+- **Unknown frontmatter is ignored, not rejected** (reference lib + kiro both loaded the
+  skill with an unknown key).
+- **`references/` are agent-loaded at runtime** (kiro read the linked reference live).
+- **Scan roots are per-harness** (`~/.kiro/skills/`, `~/.codex/skills/`), not the
+  `~/.agents/skills/` convention, the installer default must account for this.
+- `docs/agents/skill-frontmatter.md` updated accordingly. Ticket 07's narrow checks are
+  satisfied (closed, superseded by this ticket).

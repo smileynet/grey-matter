@@ -23,17 +23,19 @@ The installer copies each skill there, flattening the bucket structure:
 
 ```sh
 # from the repo root (requires Node):
-node scripts/install-skills.mjs            # copy into ~/.agents/skills/
+node scripts/install-skills.mjs            # copy into each installed harness's skills root
 node scripts/install-skills.mjs --dry-run  # preview, change nothing
 node scripts/install-skills.mjs list       # what's installed
 node scripts/install-skills.mjs uninstall  # remove what we installed
 ```
 
 Wrappers `scripts/install-skills.sh` and `scripts/install-skills.ps1` call the same
-Node script. It copies by default (`--link` opts into symlink/junction), installs only
-into roots it's told about (override with `--root <dir>`), tracks what it installed in a
-manifest, and never touches skills it didn't install. A Claude Code plugin package is a
-later addition (see `docs/agents/proposals/03-distribution-packaging.md`).
+Node script. By default it installs into every known harness root present on the machine
+(`~/.kiro/skills`, `~/.codex/skills`, `~/.claude/skills`, `~/.agents/skills`), since each
+harness scans its own root rather than one shared location. It copies by default (`--link`
+opts into symlink/junction), accepts explicit `--root <dir>` overrides, tracks what it
+installed in a manifest, and never touches skills it didn't install. A Claude Code plugin
+package is a later addition (see `docs/agents/proposals/03-distribution-packaging.md`).
 
 ### Harness support
 

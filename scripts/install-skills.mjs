@@ -33,9 +33,21 @@ import { fileURLToPath } from "node:url";
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_DIR = join(REPO, "skills");
 const MANIFEST_NAME = ".installed-by-grey-matter.json";
-// Default scan root(s). A configurable list, not hardcoded behavior: override
-// with one or more --root flags. ~/.agents/skills is the cross-client convention.
-const DEFAULT_ROOTS = [join(homedir(), ".agents", "skills")];
+// Default scan root(s). Harnesses scan their own user-level root, NOT a single
+// shared one (verified: kiro-cli scans ~/.kiro/skills, codex scans ~/.codex/skills,
+// Claude Code ~/.claude/skills; the ~/.agents/skills convention is not universally
+// honored). Default to every known harness root that exists on this machine, plus the
+// cross-client ~/.agents/skills. Override the whole set with one or more --root flags.
+const KNOWN_ROOTS = [
+  join(homedir(), ".kiro", "skills"),    // kiro-cli
+  join(homedir(), ".codex", "skills"),   // codex
+  join(homedir(), ".claude", "skills"),  // Claude Code
+  join(homedir(), ".agents", "skills"),  // cross-client convention
+];
+function defaultRoots() {
+  const existing = KNOWN_ROOTS.filter((r) => existsSync(dirname(r))); // harness dir present
+  return existing.length ? existing : [join(homedir(), ".agents", "skills")];
+}
 
 function parseArgs(argv) {
   const args = { cmd: "install", link: false, dryRun: false, force: false, roots: [] };
@@ -49,7 +61,7 @@ function parseArgs(argv) {
     else if (a === "--root") args.roots.push(resolve(rest[++i]));
     else { console.error(`unknown argument: ${a}`); process.exit(2); }
   }
-  if (args.roots.length === 0) args.roots = DEFAULT_ROOTS;
+  if (args.roots.length === 0) args.roots = defaultRoots();
   return args;
 }
 
