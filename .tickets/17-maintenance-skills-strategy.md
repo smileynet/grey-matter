@@ -1,7 +1,7 @@
 ---
 id: "17"
 title: "Strategy for maintenance-oriented skills (router, review-skill, curate-docs, future upkeep skills)"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -50,7 +50,17 @@ Blocks ticket 18 (agent-focused routing) since the naming/grouping decision shap
 
 ## Acceptance criteria
 
-- [ ] A recorded strategy for how maintenance/meta skills are organized, named, grouped, and surfaced, distinct from the feature-building flow
-- [ ] A decision on dedicated bucket/section vs mixed into engineering
-- [ ] `ask-matt` renamed to a project-appropriate name, and the router names maintenance skills in their own section
-- [ ] The known + anticipated maintenance skills are listed under the strategy
+- [x] A recorded strategy for how maintenance/meta skills are organized, named, grouped, and surfaced, distinct from the feature-building flow
+- [x] A decision on dedicated bucket/section vs mixed into engineering
+- [x] `ask-matt` renamed to a project-appropriate name, and the router names maintenance skills in their own section
+- [x] The known + anticipated maintenance skills are listed under the strategy
+
+## Resolution (2026-10-19)
+
+Recorded the maintenance-skills strategy in docs/agents/maintenance-skills.md and executed it: created the skills/meta bucket (compass, curate-docs, init-project, review-skill moved via git mv, history preserved), added per-bucket README.md for engineering/productivity/meta grouped by invocation, ratified the ask-matt->compass rename, and set curate-docs + a planned set-equality lint as the sync guard. AGENTS.md and compass updated to point at the strategy; all links resolve; no em-dashes.
+
+### Verification
+1. ✓ A recorded strategy for how maintenance/meta skills (ones that build and tend the skill set itself) are organized, named, grouped, and surfaced, distinct from the feature-building flow — "docs/agents/maintenance-skills.md records the strategy: three-bucket model (engineering/productivity/meta), what counts as maintenance, join/leave rules, sync guard"
+2. ✓ A decision on whether maintenance skills live in a dedicated bucket/section (e.g. skills/meta or a maintenance lane in the router) vs mixed into engineering — "Decision recorded: dedicated meta bucket (not mixed into engineering); executed via git mv to skills/meta/ with review-index bucket columns and review-note Bucket lines updated to meta"
+3. ✓ ask-matt renamed to a project-appropriate name, and the router names the maintenance skills in their own section — "ask-matt renamed to compass (model-invokable, skills/meta/compass), ratified in maintenance-skills.md; compass's Maintaining-this-set section lists init-project/review-skill/curate-docs and points at the strategy doc"
+4. ✓ A list of known + anticipated maintenance skills (review-skill, curate-docs, init-project, the router, model-eval-harness per ticket 06, deep-dive-sources per ticket 12) placed under the strategy — "Known + anticipated maintenance skills listed in maintenance-skills.md: current (init-project, review-skill, curate-docs, compass), anticipated (model-eval-harness ticket 06, primary-source deep-dive ticket 12)"
