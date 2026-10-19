@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cheat Sheet"
+  short_description: "List every skill by category, one line each"
+policy:
+  allow_implicit_invocation: false

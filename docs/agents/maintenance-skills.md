@@ -19,6 +19,8 @@ Current members of `skills/meta/`:
 - **curate-docs**: promote a mature note into a skill, move a skill's private reference
   into its `references/`, prune stale docs. Also owns keeping the router and bucket
   READMEs honest.
+- **cheat-sheet**: list every skill by category with a one-line description (the quick
+  reference card; the flat index to compass's map).
 - **compass**: the router/index over the whole set.
 
 Anticipated members (tracked elsewhere): a model-eval harness (ticket 06), a

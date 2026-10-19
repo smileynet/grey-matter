@@ -86,3 +86,4 @@ Meta skills that build and tend the skill set itself, not feature work. They liv
 - **init-project**: the **precondition**, run before your first flow to configure the tkt tracker, triage tags, and doc layout the other skills assume.
 - **review-skill**: the method for reviewing an upstream skill and deciding keep/adapt/drop/new when adapting it into this set.
 - **curate-docs**: promote/move/prune agent-facing docs (also listed under health above).
+- **cheat-sheet**: list every skill by category with a one-line description, the quick reference card. (This map, `compass`, is the fuller router; cheat-sheet is the flat index.)

@@ -14,6 +14,7 @@ strategy behind this bucket.
 - [init-project](./init-project/SKILL.md): the precondition, configure a repo's tkt tracker, triage tags, and doc layout for the other skills.
 - [review-skill](./review-skill/SKILL.md): review an upstream skill and decide keep/adapt/drop/new when adapting it in.
 - [curate-docs](./curate-docs/SKILL.md): promote mature notes into skills, move docs into a skill's `references/`, prune stale docs.
+- [cheat-sheet](./cheat-sheet/SKILL.md): list every skill by category with a one-line description (the quick reference card).
 
 ## Model-invoked
 
