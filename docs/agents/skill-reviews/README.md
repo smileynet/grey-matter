@@ -24,6 +24,8 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | grilling | productivity | model | adapt | [grilling.md](grilling.md) |
 | domain-modeling | engineering | model | adapt | [domain-modeling.md](domain-modeling.md) |
 | game-modeling | engineering | model | new | [game-modeling.md](game-modeling.md) |
+| game-native-design | engineering | model | new | [../proposals/02-game-native-development.md](../proposals/02-game-native-development.md) |
+| curate-docs | engineering | user | new | [curate-docs.md](curate-docs.md) |
 | writing-for-agents | productivity | model | keep | [writing-for-agents.md](writing-for-agents.md) |
 | setup-matt-pocock-skills | engineering | user | adapt -> replaced by init-project | |
 | tdd | engineering | model | adapt | [tdd.md](tdd.md) |
@@ -44,7 +46,8 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | triage | engineering | user | adapt | [triage.md](triage.md) |
 | improve-codebase-architecture | engineering | user | adapt | [improve-codebase-architecture.md](improve-codebase-architecture.md) |
 | prototype | engineering | model | adapt | [prototype.md](prototype.md) |
-| research | engineering | model | TBD | |
+| research | engineering | model | adapt | [research.md](research.md) |
+| research-audit | engineering | model | new | [research.md](research.md) |
 | wizard | engineering | model | TBD | |
 | grill-me | productivity | user | keep | [grill-me.md](grill-me.md) |
 | teach | productivity | user | TBD | |

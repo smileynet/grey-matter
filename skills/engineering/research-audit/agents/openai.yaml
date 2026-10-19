@@ -1,0 +1,3 @@
+interface:
+  display_name: "Research Audit"
+  short_description: "Validate and score a research findings file"

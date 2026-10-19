@@ -1,0 +1,5 @@
+interface:
+  display_name: "Curate Docs"
+  short_description: "Promote, move, and prune agent-facing docs"
+policy:
+  allow_implicit_invocation: false
