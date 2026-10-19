@@ -35,6 +35,16 @@ into roots it's told about (override with `--root <dir>`), tracks what it instal
 manifest, and never touches skills it didn't install. A Claude Code plugin package is a
 later addition (see `docs/agents/proposals/03-distribution-packaging.md`).
 
+### Harness support
+
+The skills follow the [Agent Skills](https://agentskills.io) open standard (`SKILL.md`
+directories), so any compliant harness that scans `~/.agents/skills/` can discover them.
+Verified against the standard's own reference library (`skills-ref`): nested skills parse,
+unknown frontmatter is ignored (not rejected), `references/` are agent-loaded, and
+user-invoked filtering is a per-harness concern. Live per-harness runs (Claude Code,
+Codex, Kiro, OpenCode) are pending an authenticated session, see
+`docs/agents/research/harness-behavior-probes.md` for the current results matrix.
+
 ## Status
 
 The active engineering + productivity skill sets are reviewed and authored; beta/frozen

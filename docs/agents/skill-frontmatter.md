@@ -118,3 +118,22 @@ unknown `SKILL.md` frontmatter keys, and whether kiro-cli honors
 `disable-model-invocation`. Drop a probe skill with a known-unknown key into each
 harness's skills dir and watch for warn-vs-reject. Until confirmed, keep frontmatter to
 the safe core plus the deliberate invocation fields.
+
+### Confirmed for the standard's reference implementation (ticket 14)
+
+Probed `skills-ref` (the agentskills standard library) directly; results in
+[`research/harness-behavior-probes.md`](./research/harness-behavior-probes.md). These hold
+for the *standard's own parser/catalog*; per-harness runtime behavior still needs an
+authenticated session (the CLIs here were installed but not logged in):
+
+- **Unknown frontmatter is ignored, not rejected**: a skill with an unknown key parses
+  with exit 0 and only `name`+`description` surface; only genuinely malformed YAML exits 1.
+- **Nesting is irrelevant to parsing**: the leaf dir is the skill; a 2-levels-deep skill
+  parses fine. Discovery depth is a per-harness scanner concern, not a parse one.
+- **`references/` are not read by the discovery layer**: the library surfaces the SKILL.md
+  `location` and leaves relative-link reading to the agent at runtime, confirming
+  references are additive and agent-loaded.
+- **`disable-model-invocation` is not filtered by the standard library**: `to-prompt`
+  still lists a user-invoked skill. Filtering is a **per-harness** responsibility, which is
+  exactly why invocation control is expressed per-harness (above), not as one portable
+  field.
