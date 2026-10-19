@@ -1,7 +1,7 @@
 ---
 id: "02"
 title: "Create a parallel set of game-centric lenses for the skills"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 env: personal
@@ -63,6 +63,15 @@ Research and discussion precede authoring; capture findings as committed docs.
 
 ## Acceptance criteria
 
-- [ ] A written analysis exists of where the mattpocock skills assume web-app development and break down for game development (tdd, seams, prototype, deep modules, etc.)
-- [ ] A proposed lens model is documented: what a game-centric lens is, how it attaches to or overrides a base skill, and which skills need one
-- [ ] At least one worked lens example drafted (e.g. a game-centric take on tdd) to prove the model
+- [x] A written analysis exists of where the mattpocock skills assume web-app development and break down for game development (tdd, seams, prototype, deep modules, etc.)
+- [x] A proposed lens model is documented: what a game-centric lens is, how it attaches to or overrides a base skill, and which skills need one
+- [x] At least one worked lens example drafted (e.g. a game-centric take on tdd) to prove the model
+
+## Resolution (2026-10-19)
+
+Game-centric approach delivered as a philosophy (not a per-skill tdd lens, per the reframe): proposal docs/agents/proposals/02-game-native-development.md (+ superseded 02-game-centric-lenses.md carrying the web-bias analysis + determinism spine), and the worked artifact shipped as the game-native-design skill (SKILL.md + godot/unreal/review-rubric references) plus game-modeling. The two-regime split (deep modules vs data-oriented) and the app/game lens pattern are codified across codebase-design, improve-codebase-architecture, tdd, prototype, code-review.
+
+### Verification
+1. ✓ A written analysis exists of where the mattpocock skills assume web-app development and break down for game development (tdd, seams, prototype, deep modules, etc.) — "Web-bias analysis written across proposal 02 and every ticket-03 review note's 'Web-app bias' section"
+2. ✓ A proposed lens model is documented: what a game-centric lens is, how it attaches to or overrides a base skill, and which skills need one — "Lens model documented in proposal 02: game-native-design as the always-on philosophy + the review-skill apps/games split rule (sibling skill / lens pointer / split artifact)"
+3. ✓ At least one worked lens example drafted (e.g. a game-centric take on tdd) to prove the model — "Worked example shipped: skills/engineering/game-native-design/ (neutral SKILL.md + references/godot.md, unreal.md, review-rubric.md), with game-modeling as the modeling companion"
