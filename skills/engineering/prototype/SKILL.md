@@ -14,7 +14,7 @@ A prototype is **throwaway code that answers a question**. The question decides 
 Identify which question is being answered, using the user's prompt, the surrounding code, or by asking if the user is around:
 
 - **"Does this logic / state model feel right?"** -> [LOGIC.md](LOGIC.md). A single shareable HTML file (free-play buttons plus tabbed guided walkthroughs) that pushes the state machine through cases hard to reason about on paper, drivable by a non-developer.
-- **"What should this look like?"** -> [UI.md](UI.md). Several radically different UI variations on a single route, switchable via a URL search param and a floating bottom bar.
+- **"What should this look like?"** -> [UI.md](UI.md). Several radically different UI variations on a single route, switchable via a URL search param and a floating bottom bar. The variants must diverge in **structure** (a different organising principle each: linear flow vs. master/detail vs. dashboard), not in colour or copy; near-duplicate layouts forfeit the whole point.
 - **"Does this mechanic / loop feel right (is it fun)?"** -> [GAME.md](GAME.md). A throwaway Godot scene with greybox art and tuning controls, run and *played* to feel the mechanic, with the loop isolated as a pure simulation step.
 
 The branches produce very different artifacts, so getting this wrong wastes the whole prototype. The **verb** is the tell: *click/inspect* a state model (logic), *look at* a layout (UI), *play/feel* a mechanic (game). If the question is genuinely ambiguous and the user isn't reachable, default by target: a backend module -> logic; a page or component -> UI; anything real-time, loop-driven, or feel-dependent -> game. State the assumption at the top of the prototype.

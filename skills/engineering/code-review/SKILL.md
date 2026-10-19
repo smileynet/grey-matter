@@ -33,7 +33,7 @@ Look for the originating spec, in this order:
 
 Search the repo for every file that documents how code should be written. When `CODING_STANDARDS.md` or `CONTRIBUTING.md` exists, it must be on the list.
 
-On top of whatever the repo documents, the Standards axis carries a **smell baseline**. Pick the rubric by project type: an app/general codebase uses [references/rubric-app.md](references/rubric-app.md); a game (engine markers `project.godot`, `*.uproject`) uses [references/rubric-game.md](references/rubric-game.md). Load the one that fits and pass it to the Standards sub-agent in full.
+On top of whatever the repo documents, the Standards axis carries a **smell baseline**. Pick the rubric by project type: an app/general codebase uses [references/rubric-app.md](references/rubric-app.md); a game (engine markers `project.godot`, `*.uproject`) uses [references/rubric-game.md](references/rubric-game.md). Load the one that fits and pass it to the Standards sub-agent in full. The baseline is the one load-bearing reference here: open the rubric file and read it. If it genuinely can't be reached, say so and run the Standards axis against the repo's documented standards alone (a thinner review, not a blocked one), rather than inventing a baseline from memory.
 
 ### 4. Spawn both sub-agents in parallel
 
