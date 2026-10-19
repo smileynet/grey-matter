@@ -41,7 +41,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | implement-spec | engineering | user | adapt | [implement-spec.md](implement-spec.md) |
 | grill-with-docs | engineering | user | adapt | [grill-with-docs.md](grill-with-docs.md) |
 | retro | engineering | user | adapt | [retro.md](retro.md) |
-| ask-matt | engineering | user | TBD | |
+| ask-matt | engineering | model | adapt -> renamed to compass | [ask-matt.md](ask-matt.md) |
 | wayfinder | engineering | user | adapt | [wayfinder.md](wayfinder.md) |
 | triage | engineering | user | adapt | [triage.md](triage.md) |
 | improve-codebase-architecture | engineering | user | adapt | [improve-codebase-architecture.md](improve-codebase-architecture.md) |
