@@ -47,6 +47,14 @@ gitignored; only [`.references/README.md`](./.references/README.md) is committed
 rehydration index. On a fresh checkout the dir is empty, re-clone the references listed
 in that README. Add new references there with their clone command.
 
+## Install / distribution
+
+Skills are installed into a harness scan root with `node scripts/install-skills.mjs`
+(copies each skill into `~/.agents/skills/`, flattening the bucket structure; manifest-
+tracked, idempotent, `--dry-run`/`list`/`uninstall`). The decision and design are in
+[`docs/agents/proposals/03-distribution-packaging.md`](./docs/agents/proposals/03-distribution-packaging.md);
+a Claude Code plugin package is a later addition.
+
 <!-- tkt:begin -->
 ## Tickets
 
