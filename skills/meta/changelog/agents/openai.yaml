@@ -1,0 +1,5 @@
+interface:
+  display_name: "Changelog"
+  short_description: "Maintain CHANGELOG.md with user-facing entries"
+policy:
+  allow_implicit_invocation: false

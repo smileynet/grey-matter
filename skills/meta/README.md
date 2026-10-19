@@ -15,6 +15,9 @@ strategy behind this bucket.
 - [review-skill](./review-skill/SKILL.md): review an upstream skill and decide keep/adapt/drop/new when adapting it in.
 - [curate-docs](./curate-docs/SKILL.md): promote mature notes into skills, move docs into a skill's `references/`, prune stale docs.
 - [cheat-sheet](./cheat-sheet/SKILL.md): list every skill by category with a one-line description (the quick reference card).
+- [changelog](./changelog/SKILL.md): maintain `CHANGELOG.md` with user-facing entries.
+- [readme](./readme/SKILL.md): keep `README.md` honest and current.
+- [release](./release/SKILL.md): cut a tagged release (orchestrates changelog + readme + version + tag/publish).
 
 ## Model-invoked
 

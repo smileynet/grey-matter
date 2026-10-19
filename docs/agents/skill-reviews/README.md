@@ -27,6 +27,9 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | game-native-design | engineering | model | new | [game-native-design.md](game-native-design.md) |
 | curate-docs | meta | user | new | [curate-docs.md](curate-docs.md) |
 | cheat-sheet | meta | user | new | [cheat-sheet.md](cheat-sheet.md) |
+| changelog | meta | user | new | [release.md](release.md) |
+| readme | meta | user | new | [release.md](release.md) |
+| release | meta | user | new | [release.md](release.md) |
 | writing-for-agents | productivity | model | keep | [writing-for-agents.md](writing-for-agents.md) |
 | setup-matt-pocock-skills | engineering | user | adapt -> replaced by init-project | |
 | tdd | engineering | model | adapt | [tdd.md](tdd.md) |

@@ -22,6 +22,10 @@ Current members of `skills/meta/`:
 - **cheat-sheet**: list every skill by category with a one-line description (the quick
   reference card; the flat index to compass's map).
 - **compass**: the router/index over the whole set.
+- **changelog / readme / release**: the release set. `changelog` maintains `CHANGELOG.md`
+  (user-facing entries); `readme` keeps `README.md` honest; `release` is the single
+  orchestrator that composes both, picks the version, and runs the gated tag/push/publish
+  mechanics (`release/references/release.sh`).
 
 Anticipated members (tracked elsewhere): a model-eval harness (ticket 06), a
 primary-source deep-dive capture (ticket 12). File a maintenance skill under
