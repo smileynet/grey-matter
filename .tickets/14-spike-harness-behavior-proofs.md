@@ -1,7 +1,7 @@
 ---
 id: "14"
 title: "Spikes: prove skill behavior across harnesses (Claude Code, Codex, Kiro, OpenCode)"
-status: backlog
+status: open
 blocked_by: []
 priority: medium
 validation_criteria:
