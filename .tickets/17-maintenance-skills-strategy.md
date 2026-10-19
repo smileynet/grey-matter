@@ -1,7 +1,7 @@
 ---
 id: "17"
 title: "Strategy for maintenance-oriented skills (router, review-skill, curate-docs, future upkeep skills)"
-status: backlog
+status: open
 blocked_by: []
 priority: medium
 validation_criteria:
