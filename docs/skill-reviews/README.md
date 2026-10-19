@@ -43,7 +43,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | wayfinder | engineering | user | adapt | [wayfinder.md](wayfinder.md) |
 | triage | engineering | user | adapt | [triage.md](triage.md) |
 | improve-codebase-architecture | engineering | user | adapt | [improve-codebase-architecture.md](improve-codebase-architecture.md) |
-| prototype | engineering | model | TBD | |
+| prototype | engineering | model | adapt | [prototype.md](prototype.md) |
 | research | engineering | model | TBD | |
 | wizard | engineering | model | TBD | |
 | grill-me | productivity | user | keep | [grill-me.md](grill-me.md) |
