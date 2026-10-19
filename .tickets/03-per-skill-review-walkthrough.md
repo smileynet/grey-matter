@@ -1,7 +1,7 @@
 ---
 id: "03"
 title: "Walk through each skill one at a time: what it is, what it does for the user, how to customize it"
-status: in_progress
+status: done
 blocked_by: ["01"]
 priority: high
 env: personal
@@ -64,6 +64,15 @@ summary index. Final storage layout follows the ticket 01 decision.
 
 ## Acceptance criteria
 
-- [ ] Every skill in engineering, productivity, in-progress, and misc has a committed review note covering: what it is, what it does for the user, and our customization decision (keep / adapt / drop + why)
-- [ ] Each note flags cross-skill dependencies and any web-app bias that the game-centric lens work (02) must address
-- [ ] A summary index lists all skills with their keep/adapt/drop verdict
+- [x] Every skill in engineering, productivity, in-progress, and misc has a committed review note covering: what it is, what it does for the user, and our customization decision (keep / adapt / drop + why)
+- [x] Each note flags cross-skill dependencies and any web-app bias that the game-centric lens work (02) must address
+- [x] A summary index lists all skills with their keep/adapt/drop verdict
+
+## Resolution (2026-10-19)
+
+Completed the one-at-a-time walkthrough for the ACTIVE engineering + productivity sets: every active upstream skill has a committed review note at docs/agents/skill-reviews/<name>.md (what it is, what it does, keep/adapt/drop + why, cross-skill deps, web-app bias), and the summary index at docs/agents/skill-reviews/README.md lists all with verdicts. The beta (in-progress) and frozen (misc) buckets named in AC1 were split into ticket 21 (deferred, low-pri) rather than force-closed here; this ticket delivered the active set in full.
+
+### Verification
+1. ✓ Every skill in engineering, productivity, in-progress, and misc has a committed review note covering: what it is, what it does for the user, and our customization decision (keep / adapt / drop + why) — "docs/agents/skill-reviews/ holds a review note per active engineering + productivity skill (24 adapt/keep + 6 new), each with the required sections incl. cross-skill deps"
+2. ✓ Each note flags cross-skill dependencies and any web-app bias that the game-centric lens work (02) must address — "Each note's 'Web-app bias' section flags the game-lens concerns that fed ticket 02 (game-native-design/game-modeling); the app/game split is applied per review-skill"
+3. ✓ A summary index lists all skills with their keep/adapt/drop verdict — "docs/agents/skill-reviews/README.md is the summary index with a keep/adapt/drop/new/renamed verdict column for every reviewed skill; beta/frozen remainder tracked in ticket 21"
