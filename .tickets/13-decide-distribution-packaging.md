@@ -1,7 +1,7 @@
 ---
 id: "13"
 title: "Decide grey-matter distribution: plugin manifest vs flatten vs build step for nested skills"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
