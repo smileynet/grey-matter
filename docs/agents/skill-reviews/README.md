@@ -24,7 +24,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | grilling | productivity | model | adapt | [grilling.md](grilling.md) |
 | domain-modeling | engineering | model | adapt | [domain-modeling.md](domain-modeling.md) |
 | game-modeling | engineering | model | new | [game-modeling.md](game-modeling.md) |
-| game-native-design | engineering | model | new | [../proposals/02-game-native-development.md](../proposals/02-game-native-development.md) |
+| game-native-design | engineering | model | new | [game-native-design.md](game-native-design.md) |
 | curate-docs | engineering | user | new | [curate-docs.md](curate-docs.md) |
 | writing-for-agents | productivity | model | keep | [writing-for-agents.md](writing-for-agents.md) |
 | setup-matt-pocock-skills | engineering | user | adapt -> replaced by init-project | |

@@ -73,7 +73,7 @@ fact-shaped decisions.
 ## Cross-skill dependencies
 
 Depended on by: grill-me (thin router into it), grill-with-docs, triage, wayfinder,
-improve-codebase-architecture, loop-me. Depends on: optionally a sub-agent for fact
+improve-codebase-architecture. Depends on: optionally a sub-agent for fact
 lookup. No tracker or glossary coupling. The three additions are backward compatible
 with every caller.
 

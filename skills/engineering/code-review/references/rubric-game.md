@@ -21,7 +21,10 @@ Divergent Change, Speculative Generality) still apply.
 ## Web-ism smells
 
 Apply the game-architecture smell list: the ways a game drifts into feeling like a web
-app. Call the Skill tool with `game-native-design` and apply its `review-rubric.md`
-(no loop, re-render drives the sim, store-as-game-state, frame-tied simulation,
-per-frame allocation, blocking in the loop, deep inheritance for large-N, over-ticking,
-non-deterministic by default). Each is a judgement call with its fix.
+app. The nine, each a judgement call with its fix: no loop (event-driven where a frame
+loop belongs), re-render drives the sim, store-as-game-state, frame-tied simulation
+(no fixed timestep), per-frame allocation, blocking in the loop, deep inheritance for
+large-N entities, over-ticking (updating what didn't change), non-deterministic by
+default. For the full reasoning and fixes behind each, the agent may call the Skill tool
+with `game-native-design` (its `review-rubric.md` is the source), but the nine above are
+the checkable baseline, so this rubric stands on its own if that skill isn't reached.

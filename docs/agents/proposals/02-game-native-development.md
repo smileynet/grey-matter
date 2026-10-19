@@ -253,6 +253,13 @@ appendices are `appendices/godot.md` (default, authored first) and
 Engine-specific project settings and class names never appear in the core except
 inside a mapping table.
 
+> **As shipped:** game-native-design was promoted to a model-invokable skill at
+> `skills/engineering/game-native-design/`, and the appendices ship as
+> `references/godot.md` / `references/unreal.md` (plus `references/review-rubric.md`),
+> following the agentskills `references/` convention rather than the `appendices/` name
+> proposed here. See the review note `docs/agents/skill-reviews/game-native-design.md`
+> for the authoritative record.
+
 ## 7. Depth bar: match the upstream skills, don't overfit
 
 The game-native artifact must have the **same depth as the existing Pocock skills,

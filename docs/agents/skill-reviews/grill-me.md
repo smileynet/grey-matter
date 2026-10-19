@@ -7,7 +7,7 @@
 
 A router skill. Its entire body is "Call the Skill tool with grilling." It exists
 so a human can type `grill-me` and be handed to the model-invoked `grilling`
-primitive, which carries no user-facing trigger of its own.
+primitive, giving the interview a clean, memorable user-facing entry point.
 
 ## What it does for the user
 
