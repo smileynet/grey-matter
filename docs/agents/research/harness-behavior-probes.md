@@ -23,27 +23,33 @@ user-invoked one is not, the harness honors the filter.
 
 ## Coverage
 
-All four harnesses are now characterized. kiro-cli (primary), codex (secondary), and
-Claude Code (ancillary) authenticated and **driven live**. OpenCode (ancillary) is
-authenticated but has **no Agent Skills support** to exercise. The standard's reference
-library (`skills-ref`) was also probed.
+Six harnesses characterized, all live except where noted: kiro-cli (primary), codex
+(secondary), Claude Code, agy (Google Antigravity CLI), Crush (Charm), OpenCode. The
+standard's reference library (`skills-ref`) was also probed. **Every one supports the
+Agent Skills SKILL.md format** (OpenCode included, correcting an earlier error).
 
-## Scan roots are per-harness (key finding)
+## Scan roots are per-harness, but `.agents/skills/` is the shared one
 
-The `~/.agents/skills/` cross-client convention is **not** what our primary harnesses
-actually scan at user level:
+User-level roots differ per harness; **project-level `.agents/skills/` is read by agy,
+Crush, and OpenCode** (and Claude via `.claude/skills`), so a single project install
+location serves most tools.
 
-| Harness | User-level scan root | Evidence |
+| Harness | User-level root | Project-level root(s) |
 | --- | --- | --- |
-| kiro-cli | **`~/.kiro/skills/`** | already held `cpu-perf-bench`, `tkt`; flat `<name>/SKILL.md` |
-| codex | **`~/.codex/skills/`** | held `tkt`, `codex-primary-runtime`, built-ins; probe-open discovered there |
-| Claude Code | **`~/.claude/skills/`** | held 5 user skills; probe auto-discovered and run there |
-| OpenCode | n/a (no skills support) | no skills command/dir/config; unsupported |
-| (convention) | `~/.agents/skills/` | absent on this machine |
+| kiro-cli | `~/.kiro/skills/` | (verify) |
+| codex | `~/.codex/skills/` | (verify) |
+| Claude Code | `~/.claude/skills/` | `.claude/skills/`, `.agents/skills/` |
+| agy | `~/.gemini/...` (verify) | **`.agents/skills/`** |
+| Crush | `~/.config/crush/...` | **`.agents/skills/`**, `.crush/skills/`, `.claude/skills/`, `.cursor/skills/` |
+| OpenCode | `~/.config/opencode/skills/`, `~/.claude/skills/`, `~/.agents/skills/` | `.opencode/skills/`, `.claude/skills/`, **`.agents/skills/`** |
+| (convention) | `~/.agents/skills/` | `.agents/skills/` |
 
-The installer now defaults to every known harness root present on the machine
-(`~/.kiro/skills`, `~/.codex/skills`, `~/.claude/skills`, `~/.agents/skills`), with
-`--root` overrides.
+**Deployment consequence**: our skills are consumable **unchanged** (no conversion to a
+proprietary agent/rule format, no MCP wrapping) by all of these. Two install modes:
+- **Project-level**: install into `<project>/.agents/skills/` once, covers agy, Crush,
+  OpenCode, Claude.
+- **User-level**: diverges per harness (`~/.kiro/skills`, `~/.codex/skills`,
+  `~/.claude/skills`, etc.), which is what our installer's default-roots list handles.
 
 ## Results
 
@@ -91,16 +97,40 @@ Probes at `~/.claude/skills/` (auto-discovered, no `--plugin-dir` needed), drive
 | Flat-install confirmation | works, and the agent noticed | it observed the skill loaded from the one-level `~/.claude/skills/probe-skill/`, not a 2-level nested path, reinforcing that install is flat and the repo's bucket nesting is organizational only |
 | Invocation control | not isolated this pass | both probes reported "available" only when named; the auto-discovered skill list it volunteered did not surface them, consistent with filtering, but codex remains the clean isolation |
 
-### OpenCode (ancillary) - NO AGENT SKILLS SUPPORT
+### agy 1.2.0 (Google Antigravity CLI, ancillary) - PROVEN live
 
-OpenCode is installed and fully authenticated (providers Groq, Z.AI, OpenAI, Anthropic,
-DeepSeek configured), so this is **not** an auth gap. But its CLI exposes **no skill
-concept at all**: no `skills` command, no `skills/` directory, no skill config in
-`~/.config/opencode/opencode.jsonc`, and `--help` never mentions "skill". Its
-extensibility is agents + plugins + MCP. So the Agent Skills format is **unsupported** at
-this version; our skills can't be discovered by OpenCode as skills, they would have to be
-re-expressed in its agent/plugin model (out of scope). Mark OpenCode: unsupported, not
-merely untested.
+Probes at a project's `.agents/skills/`, driven with `agy --dangerously-skip-permissions
+--print` from the project dir.
+
+| Behavior | Result | Evidence |
+| --- | --- | --- |
+| Discovery (project `.agents/skills/`) | works | listed both `probe-open` and `probe-skill`, loaded probe-open (`PROBE-OPEN: loaded`) |
+| Invocation control | lists user-invoked skills in the catalog | unlike codex, agy surfaced the user-invoked `probe-skill` too; invocation filtering is per-harness |
+
+### Crush (Charm, ancillary) - PROVEN live
+
+Probes at the project's `.agents/skills/`, driven with `crush run --cwd <proj> --quiet`.
+
+| Behavior | Result | Evidence |
+| --- | --- | --- |
+| Discovery (project `.agents/skills/`, no config) | works | listed `probe-open` + `probe-skill` alongside its built-ins, loaded probe-open (`PROBE-OPEN: loaded`) |
+| Default roots | `.agents/skills`, `.crush/skills`, `.claude/skills`, `.cursor/skills` loaded with no config (per charmbracelet/crush) | confirmed via `.agents/skills` discovery |
+
+### OpenCode 1.18.21 (ancillary) - PROVEN live (corrects an earlier wrong finding)
+
+**Earlier conclusion ("no Agent Skills support") was wrong.** It was based only on the
+CLI's top-level `--help` not showing a `skills` *command*, but OpenCode exposes skills as
+a runtime **tool**, not a subcommand. Driven with `opencode run` from a project with
+`.agents/skills/`:
+
+| Behavior | Result | Evidence |
+| --- | --- | --- |
+| Discovery (project `.agents/skills/`) | works | listed `probe-open` + `probe-skill` under "Skills from SKILL.md files" |
+| Activation | works | invoked probe-open via a `Skill "probe-open"` tool call, returned `PROBE-OPEN: loaded` |
+| Roots (per docs) | `.opencode/skills`, `~/.config/opencode/skills`, `.claude/skills`, `~/.claude/skills`, `.agents/skills`, `~/.agents/skills` | `.agents/skills` confirmed live |
+
+Lesson: probe live, don't conclude from `--help`. A `skills` top-level command is not the
+signal; the runtime `skill` tool is.
 
 ## Our installer - PROVEN end-to-end
 

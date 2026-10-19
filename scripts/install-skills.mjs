@@ -20,6 +20,8 @@
 //   --dry-run   print the plan, change nothing.
 //   --force     overwrite a same-name directory in the scan root that this
 //               installer did not install (default: refuse).
+//   --project   also install into <cwd>/.agents/skills (the shared project-level root
+//               read by agy, Crush, OpenCode, and Claude Code).
 //   --root DIR  install into DIR instead of the default scan root(s). Repeatable.
 
 import {
@@ -50,7 +52,7 @@ function defaultRoots() {
 }
 
 function parseArgs(argv) {
-  const args = { cmd: "install", link: false, dryRun: false, force: false, roots: [] };
+  const args = { cmd: "install", link: false, dryRun: false, force: false, project: false, roots: [] };
   const rest = argv.slice(2);
   for (let i = 0; i < rest.length; i++) {
     const a = rest[i];
@@ -58,9 +60,13 @@ function parseArgs(argv) {
     else if (a === "--link") args.link = true;
     else if (a === "--dry-run") args.dryRun = true;
     else if (a === "--force") args.force = true;
+    else if (a === "--project") args.project = true;
     else if (a === "--root") args.roots.push(resolve(rest[++i]));
     else { console.error(`unknown argument: ${a}`); process.exit(2); }
   }
+  // --project installs into <cwd>/.agents/skills, the shared project-level root read by
+  // agy, Crush, OpenCode, and Claude Code. Combinable with explicit --root flags.
+  if (args.project) args.roots.push(resolve(join(process.cwd(), ".agents", "skills")));
   if (args.roots.length === 0) args.roots = defaultRoots();
   return args;
 }

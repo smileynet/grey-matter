@@ -23,29 +23,32 @@ The installer copies each skill there, flattening the bucket structure:
 
 ```sh
 # from the repo root (requires Node):
-node scripts/install-skills.mjs            # copy into each installed harness's skills root
+node scripts/install-skills.mjs            # copy into each installed harness's user root
+node scripts/install-skills.mjs --project  # copy into <cwd>/.agents/skills (project-level)
 node scripts/install-skills.mjs --dry-run  # preview, change nothing
 node scripts/install-skills.mjs list       # what's installed
 node scripts/install-skills.mjs uninstall  # remove what we installed
 ```
 
 Wrappers `scripts/install-skills.sh` and `scripts/install-skills.ps1` call the same
-Node script. By default it installs into every known harness root present on the machine
-(`~/.kiro/skills`, `~/.codex/skills`, `~/.claude/skills`, `~/.agents/skills`), since each
-harness scans its own root rather than one shared location. It copies by default (`--link`
-opts into symlink/junction), accepts explicit `--root <dir>` overrides, tracks what it
-installed in a manifest, and never touches skills it didn't install. A Claude Code plugin
-package is a later addition (see `docs/agents/proposals/03-distribution-packaging.md`).
+Node script. By default it installs into every known harness user root present on the
+machine (`~/.kiro/skills`, `~/.codex/skills`, `~/.claude/skills`, `~/.agents/skills`),
+since each harness scans its own root. `--project` installs into `<cwd>/.agents/skills`,
+the shared project-level root read by agy, Crush, OpenCode, and Claude Code. It copies by
+default (`--link` opts into symlink/junction), accepts explicit `--root <dir>` overrides,
+tracks what it installed in a manifest, and never touches skills it didn't install. A
+Claude Code plugin package is a later addition (see
+`docs/agents/proposals/03-distribution-packaging.md`).
 
 ### Harness support
 
 The skills follow the [Agent Skills](https://agentskills.io) open standard (`SKILL.md`
-directories). **Verified live**: kiro-cli, codex, and Claude Code each discover an
-installed skill, load its `references/` on demand, ignore unknown frontmatter, and honor
-user-invoked invocation control (codex isolates the filter cleanly). Each scans its own
-user root (`~/.kiro/skills`, `~/.codex/skills`, `~/.claude/skills`), which the installer
-targets by default. OpenCode has no Agent Skills support at its current version. Full
-results: `docs/agents/research/harness-behavior-probes.md`.
+directories) and are consumable **unchanged** (no conversion, no MCP wrapping) by every
+harness probed live: **kiro-cli, codex, Claude Code, agy (Google Antigravity CLI), Crush
+(Charm), and OpenCode** all discover an installed skill and activate it. User-level scan
+roots differ per harness; project-level `.agents/skills/` is the shared root for agy,
+Crush, OpenCode, and Claude. Full results and the per-harness root table:
+`docs/agents/research/harness-behavior-probes.md`.
 
 ## Status
 
