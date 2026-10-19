@@ -17,8 +17,55 @@ tags: ["type:research", "stream:tooling"]
 
 ## What to build
 
-TBD
+Four spikes validating the release-process skill set (`changelog`, `readme`, `release`).
+The mechanical tail (`release.sh`) is already proven this session: `bash -n` passes, the
+gates reject an equal version and bad semver (exit 1, no mutation), and the dry-run plan +
+changelog-section detection work. What's unverified is the **judgment** and a **real
+live run**.
+
+### Already proven (don't re-spike)
+
+`release.sh` syntax, gate rejections, dry-run plan, changelog-section extraction.
+
+### Spike 1 - changelog judgment (highest value)
+
+Give `changelog` a real history range (our commits + closed tkt tickets since v0.1.0) in a
+live harness run; score the output against a hand-written **gold** changelog for the same
+range: entries user-facing (benefit, not mechanism), refactor/test/internal churn dropped,
+correct Added/Changed/Fixed/Removed bucketing, pulled from both commits *and* closed
+tickets, no leaked hashes/ids/em-dashes.
+
+### Spike 2 - readme drift detection (seeded-bug eval)
+
+Inject defects into a copy of README.md (broken install command, removed-feature-still-
+listed, dead link, stale version line), run `readme`, score caught vs missed vs
+false-positive. Same method as the diagnosing-bugs delta-debugging spike.
+
+### Spike 3 - release end-to-end, live, isolated
+
+In a **throwaway git repo with a real (or sacrificial) gh remote**, seed a CHANGELOG with
+`[Unreleased]` entries and have a harness drive `release` to a real tag + `gh release`.
+Verify: changelog promoted, `[Unreleased]` left empty, annotated tag created, release notes
+match the section; safe/idempotent on a dirty tree. Must run sandboxed so it can't touch
+grey-matter.
+
+### Spike 4 - composition across harnesses
+
+`release` calls `changelog` + `readme` via the Skill tool, a skill-calling-skill path we
+haven't verified. Run `release` (dry-run) in kiro-cli (primary) and codex (secondary) and
+confirm it actually invokes the two sub-skills rather than inlining or skipping them.
+
+### Trigger: dogfood
+
+The cheapest real test is to **use `release` to cut v0.2.0** and treat that as spikes 1+3
+combined (real changelog judgment + real end-to-end run on this repo). Spikes 2 and 4 are
+the targeted seeded-drift and composition checks run alongside. Low priority until the next
+real release.
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [ ] changelog judgment checked against a gold changelog for a real range (user-facing, churn dropped, correct buckets, commits + closed tickets, no leaked hashes/ids/em-dashes)
+- [ ] readme drift detection scored against a README with injected defects (caught/missed/false-positive)
+- [ ] release run end-to-end live in a throwaway repo with real git+gh (changelog promoted, `[Unreleased]` emptied, annotated tag, notes match; dirty-tree safe)
+- [ ] release composition verified: invokes changelog + readme via the Skill tool in kiro-cli and codex
+- [ ] Dogfooding noted: cutting v0.2.0 via the release skill counts as spikes 1+3
