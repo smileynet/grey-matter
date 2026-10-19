@@ -46,7 +46,7 @@ backlash; (4) **disclaimer omission** under edits.
 ## Decision
 
 **Adapt.** grey-matter's conventions were partly built for this skill:
-`docs/tkt-conventions.md` already defines the `triage:` axis (the five states), the
+`docs/agents/tkt-conventions.md` already defines the `triage:` axis (the five states), the
 `kind:` axis (`bug`/`enhancement`), and the PR-request-surface flag. So most repointing
 was already in place.
 
@@ -97,7 +97,7 @@ behavior, quick-override path. Depth held at the upstream altitude.
 - Backlog ticket **11**: revisit triage once the dependency work lands (ticket 10
   tracker-abstraction, tkt 86 `import --github`, tkt 192-199 native fields) so the
   GitHub-adapter path becomes first-class rather than `gh`-scripted inline.
-- The PR-request-surface flag in `docs/tkt-conventions.md` stays; this skill is its only
+- The PR-request-surface flag in `docs/agents/tkt-conventions.md` stays; this skill is its only
   reader.
 
 ## Cross-skill dependencies
@@ -105,7 +105,7 @@ behavior, quick-override path. Depth held at the upstream altitude.
 Calls `grilling` + `domain-modeling` (or `game-modeling` for game systems) to flesh out
 underspecified requests. Produces agent briefs that `implement` / `implement-spec`
 consume. Uses the `triage:` and `kind:` tag axes and the PR flag from
-`docs/tkt-conventions.md`. `init-project` provides the tracker binding.
+`docs/agents/tkt-conventions.md`. `init-project` provides the tracker binding.
 
 ## Web-app bias
 

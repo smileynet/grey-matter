@@ -2,7 +2,7 @@
 
 A single, self-contained HTML file (a **shareable demo**) that lets anyone drive a state model by clicking buttons. Use this when the question is about **business logic, state transitions, or data shape**: the kind of thing that looks reasonable on paper but only feels wrong once you push it through real cases.
 
-Because it's one file with nothing to install, you can hand it to a non-developer (a designer, a PM, a domain expert) and let them feel the model for themselves. So it speaks their language, not the code's. It is a full-bodied HTML artifact in the `docs/report-format.md` sense: the communicative deliverable, not a throwaway skim.
+Because it's one file with nothing to install, you can hand it to a non-developer (a designer, a PM, a domain expert) and let them feel the model for themselves. So it speaks their language, not the code's. It is a full-bodied HTML artifact in the `docs/agents/report-format.md` sense: the communicative deliverable, not a throwaway skim.
 
 If the question is "what should this look like," this is the wrong branch (use [UI.md](UI.md)); if it's "is this mechanic fun," use [GAME.md](GAME.md).
 

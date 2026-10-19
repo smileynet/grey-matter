@@ -28,7 +28,7 @@ and what is a deliberate non-change.
 - **Frontmatter / metadata cleaned up.** `pr`'s nested `metadata.credits` object was
   flattened to a one-line string pointing at `CREDITS.md` (metadata is inert string
   data; attribution prose lives in CREDITS.md). The all-up cross-harness frontmatter
-  schema and the metadata rule are documented in `docs/skill-frontmatter.md`.
+  schema and the metadata rule are documented in `docs/agents/skill-frontmatter.md`.
 
 ## Deliberate non-changes (soft recommendations we are not mechanically applying)
 

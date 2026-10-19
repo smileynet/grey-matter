@@ -56,7 +56,7 @@ Evaluate the skill through these, in order:
    does not reopen it.
 5. **Author and record.** On keep/adapt/new, write the skill under
    `skills/<bucket>/<name>/` to the depth bar. Write the review note at
-   `docs/skill-reviews/<name>.md` (sections: what it is, what it does for the user,
+   `docs/agents/skill-reviews/<name>.md` (sections: what it is, what it does for the user,
    prior art, decision + why, cross-skill dependencies, web-app bias). Update the
    review index with the verdict. File tickets for spun-off or deferred work; reconcile
    any already-authored skill this one couples to. Validate, commit, push.

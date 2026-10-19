@@ -11,24 +11,30 @@ harness reads one source.
 - [`GLOSSARY.md`](./GLOSSARY.md): the one shared vocabulary. Binding homonym
   rulings: **frontier** (never bare "ready") vs. **triage:ready-for-agent**;
   **spec** is the requirements document, the tkt pointer field is the **spec-slug**.
-- [`docs/tkt-conventions.md`](./docs/tkt-conventions.md): how we create, tag, link,
+- [`docs/agents/tkt-conventions.md`](./docs/agents/tkt-conventions.md): how we create, tag, link,
   and close tickets. Note the **interim** rules (epics-via-tags, single-select tag
   discipline) that become native once tkt tickets 192-199 land (tracked by
   grey-matter ticket 04).
-- [`docs/skill-frontmatter.md`](./docs/skill-frontmatter.md): the all-up SKILL.md
+- [`docs/agents/skill-frontmatter.md`](./docs/agents/skill-frontmatter.md): the all-up SKILL.md
   frontmatter schema across Claude Code, Codex, and Kiro, the safe core, per-harness
   invocation control, and what belongs in `metadata` (inert data only).
-- [`docs/report-format.md`](./docs/report-format.md): generated documents, reports, and
+- [`docs/agents/report-format.md`](./docs/agents/report-format.md): generated documents, reports, and
   dashboards pick a format by purpose, **markdown for light, skimmable documents** and
   **HTML for full-bodied documents that communicate finished ideas to users** (siblings,
   not source-and-render).
+- [`docs/agents/doc-conventions.md`](./docs/agents/doc-conventions.md): where things live.
+  `SKILL.md` and this file are **agent-facing** (terse); **`docs/` is for user-facing
+  docs**, **`docs/agents/` for agent-facing reference** (reviews, lenses, research,
+  proposals, conventions), loaded on demand via pointers, never auto-loaded; `.scratch/`
+  is ephemeral. Plus the promotion test (note -> skill) and the dot-prefix rule.
 
 ## Scratch
 
 `.scratch/` (gitignored) is the project-local place for non-committed working files:
 handoff documents, agent notes, throwaway output. One consistent location per project
 so a fresh agent knows where to look. Nothing in `.scratch/` is durable or shared;
-anything worth keeping goes in a committed `docs/` file or a tkt ticket.
+anything worth keeping is promoted to committed `docs/agents/` reference or a tkt ticket
+(see `docs/agents/doc-conventions.md`).
 
 ## References
 

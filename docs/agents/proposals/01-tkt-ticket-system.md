@@ -67,10 +67,10 @@ store reference material. Reference lives in committed docs the ticket points at
 Physical layout:
 
 - Tickets: `.tickets/NN-slug.md` (managed by `tkt`).
-- Per-skill review notes: `docs/skill-reviews/<skill>.md` (+ an index).
-- Lens docs: `docs/lenses/`.
-- Research findings: `docs/research/`.
-- Conventions (this family): `docs/proposals/` and a short `docs/tkt-conventions.md`.
+- Per-skill review notes: `docs/agents/skill-reviews/<skill>.md` (+ an index).
+- Lens docs: `docs/agents/lenses/`.
+- Research findings: `docs/agents/research/`.
+- Conventions (this family): `docs/agents/proposals/` and a short `docs/agents/tkt-conventions.md`.
 
 ### Tag vocabulary
 
@@ -99,7 +99,7 @@ the stream tag.
 
 - A ticket references its originating or output doc with `--spec <slug>` where the
   slug maps to a file under `docs/` (we document the mapping in
-  `docs/tkt-conventions.md`), or a plain body link when `--spec` is too narrow.
+  `docs/agents/tkt-conventions.md`), or a plain body link when `--spec` is too narrow.
 - Reviews and lens docs are the source of truth; the ticket is the work record.
 
 ### Lifecycle
@@ -149,7 +149,7 @@ drawn from the upstream skills.
    Use case: `triage` and `implement-spec` read a tracker flag for whether PRs are
    a request surface / how work closes. grey-matter is mostly docs with a solo
    author, so default: PRs are not a request surface, and tickets close via
-   `tkt close`, not via merged PRs. Record this in `docs/tkt-conventions.md`.
+   `tkt close`, not via merged PRs. Record this in `docs/agents/tkt-conventions.md`.
 
 6. **Unused tkt capabilities to keep in mind.** `backlog` status (deferred work,
    no triage-role analog) and `validation_criteria` with evidence are extra
@@ -177,7 +177,7 @@ computed frontier and the triage "agent-grabbable" tag compose in one query.
 
 ## Follow-ups (to satisfy ticket 01 ACs)
 
-- [ ] Commit `docs/tkt-conventions.md` (the operational short-form of this proposal).
+- [ ] Commit `docs/agents/tkt-conventions.md` (the operational short-form of this proposal).
 - [ ] Confirm the tag vocabulary with the user and adjust.
 - [ ] When starting ticket 03, create the `type:epic` tracking ticket for the
       per-skill review and fan out child tickets under it.

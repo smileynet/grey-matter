@@ -65,7 +65,7 @@ tagged `type:epic` + `wayfinder:map` with children under it (interim epic conven
 native `--parent` lands with tkt 192-197); children are `tkt new ... --tags
 wayfinder:<type>,epic:<map-slug>`; blocking is native `blocked_by`; the frontier is
 `tkt ready`; claim is `tkt claim` -> `in_progress` (no assignee until tkt 194);
-`setup-matt-pocock-skills` -> `init-project`; AGENTS.md-primary. `docs/tkt-conventions.md`
+`setup-matt-pocock-skills` -> `init-project`; AGENTS.md-primary. `docs/agents/tkt-conventions.md`
 already reserves the `wayfinder:` tag axis, so this slots in cleanly.
 
 Three agent-seam adaptations, the real value:
@@ -108,7 +108,7 @@ Schedules other skills: `grilling` + `domain-modeling` (or `game-modeling`) reso
 grilling tickets; `prototype` resolves prototype tickets; `research` runs AFK as a
 subagent. Hands off at `to-spec` (then `to-tickets`, `implement-spec`). `handoff` bridges
 a too-big conversation into a map and side quests out of one. Uses the `wayfinder:` and
-`epic:` tag axes from `docs/tkt-conventions.md`.
+`epic:` tag axes from `docs/agents/tkt-conventions.md`.
 
 ## Web-app bias
 

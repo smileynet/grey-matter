@@ -81,7 +81,7 @@ unexercised branches rot). (d) fork guarantees drift.
 - The base skill gains one conditional pointer: "If this is a game project (see
   Domain detection), also read `GAME-LENS.md`; its assumptions override this
   skill's where they differ."
-- A shared `docs/lenses/README.md` indexes which skills have a game lens and
+- A shared `docs/agents/lenses/README.md` indexes which skills have a game lens and
   records the model (this doc's descendant).
 
 ### Domain detection
@@ -116,7 +116,7 @@ sources diverge, so we avoid the ambiguity entirely).
 
 ## 3. Worked example: the game-centric `tdd` lens
 
-Proves the model. Drafted in full as `docs/lenses/tdd-game-lens.md` (a standalone
+Proves the model. Drafted in full as `docs/agents/lenses/tdd-game-lens.md` (a standalone
 artifact); summarised here.
 
 ### What the lens overrides
@@ -187,7 +187,7 @@ engine.
 
 - [ ] AC1: this web-bias analysis (section 1). **Done in this proposal.**
 - [ ] AC2: the lens model (section 2). **Done in this proposal.**
-- [ ] AC3: draft the worked `tdd` game lens as `docs/lenses/tdd-game-lens.md`
+- [ ] AC3: draft the worked `tdd` game lens as `docs/agents/lenses/tdd-game-lens.md`
       (section 3 is the outline; the committed artifact is the deliverable).
 - [ ] Coordinate with ticket 03: as each skill is reviewed, flag its web-bias so
       the lens set stays grounded in the per-skill findings.

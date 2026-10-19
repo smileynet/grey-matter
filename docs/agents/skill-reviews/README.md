@@ -3,11 +3,11 @@
 One note per upstream `mattpocock/skills` skill: what it is, what it does for the
 user, and our **keep / adapt / drop** decision for the grey-matter set. Source
 reviewed in the sibling repo `d:\code\skills`. See
-[`docs/proposals/02-game-native-development.md`](../proposals/02-game-native-development.md)
+[`docs/agents/proposals/02-game-native-development.md`](../proposals/02-game-native-development.md)
 for the game lens the web-bias flags feed.
 
-Note shape (per `docs/tkt-conventions.md`, reference lives in docs, the ticket is the
-work record): each note is `docs/skill-reviews/<skill>.md` with sections **What it is**,
+Note shape (per `docs/agents/tkt-conventions.md`, reference lives in docs, the ticket is the
+work record): each note is `docs/agents/skill-reviews/<skill>.md` with sections **What it is**,
 **What it does for the user**, **Decision** (keep/adapt/drop + why), **Cross-skill
 dependencies**, **Web-app bias**.
 

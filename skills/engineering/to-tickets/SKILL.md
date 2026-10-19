@@ -66,7 +66,7 @@ Create the approved tickets with `tkt` (see the issue-tracker doc for the exact 
 - Set each ticket's blockers with `--blocked-by`; `tkt ready` then computes the **frontier** (open tickets with all blockers done) natively, no "Blocked by" prose and no local-vs-native branching.
 - Acceptance criteria go in `--vc` (validation criteria); the body is "What to build".
 - Tag the slices `triage:ready-for-agent` (agent-grabbable by construction).
-- If the work came from a spec that is itself an epic of these slices, group them under it: tag each `epic:<slug>` and make the epic ticket `blocked_by` its children (the interim convention; native `--parent` once tkt gains it, see `docs/tkt-conventions.md`). Do NOT close or modify the epic ticket here.
+- If the work came from a spec that is itself an epic of these slices, group them under it: tag each `epic:<slug>` and make the epic ticket `blocked_by` its children (the interim convention; native `--parent` once tkt gains it, see `docs/agents/tkt-conventions.md`). Do NOT close or modify the epic ticket here.
 
 Work the **frontier** via `tkt ready`: any ticket whose blockers are all done. For a purely linear chain that means top to bottom.
 

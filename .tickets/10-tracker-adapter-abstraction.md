@@ -38,7 +38,7 @@ external PRs) and which `tkt import --github` (tkt ticket 86) half-bridges.
   frontier (ready set), claim/lock, close-with-evidence, dependency/blocking, and the
   label/state + category vocabularies (`triage:*`, `kind:*`, `wayfinder:*`, `type:epic`).
 - One **issue-tracker doc per repo** that maps those operations onto the concrete tracker
-  (today: `docs/tkt-conventions.md`; a GitHub adapter would map frontier -> a label query,
+  (today: `docs/agents/tkt-conventions.md`; a GitHub adapter would map frontier -> a label query,
   close -> close issue, blocking -> task-list/sub-issues, etc.).
 - Skills reference the **contract**, not inline `tkt` commands -- OR we consciously decide
   that inline-tkt + a per-repo mapping doc (the lighter option, closer to how we work now)

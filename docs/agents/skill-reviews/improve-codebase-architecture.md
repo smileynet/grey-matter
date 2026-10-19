@@ -69,7 +69,7 @@ Adaptations:
    inferred edges marked; the grill can challenge the diagram, not just the
    recommendation.
 3. **HTML as the full-bodied deliverable.** Per the new repo-wide
-   `docs/report-format.md`: markdown and HTML are siblings chosen by purpose, markdown
+   `docs/agents/report-format.md`: markdown and HTML are siblings chosen by purpose, markdown
    for light skimmable docs, HTML for full-bodied communicative ones. An architecture
    review is full-bodied and visual, so it is authored as HTML (the deliverable in its
    own right, not a render of a markdown source; an optional light markdown summary may
@@ -90,7 +90,7 @@ catalogue (plus a new SoA/AoS pattern for frame-loop findings).
   Nygard, Acton/Fabian) to ground our lenses in the originals and catch any paraphrase
   drift.
 - The markdown-for-light / HTML-for-full-bodied rule is now a **repo-wide** convention
-  (`docs/report-format.md`, linked from AGENTS.md), not local to this skill.
+  (`docs/agents/report-format.md`, linked from AGENTS.md), not local to this skill.
 
 ## Cross-skill dependencies
 

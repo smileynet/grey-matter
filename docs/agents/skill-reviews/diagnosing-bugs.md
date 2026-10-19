@@ -50,7 +50,7 @@ the earned keep.
    run` for the commit axis, and the critical guard, **re-assert the original symptom
    after every cut** (don't minimise into a different bug). This uses the agent's cheap
    iteration without making bisection-first (riskier for an agent to botch). See
-   `docs/research/spike-agent-delta-debugging.md`.
+   `docs/agents/research/spike-agent-delta-debugging.md`.
 2. **Game-lens pointer.** For a game, the fixed-timestep seeded sim is the deterministic
    loop and a recorded-input replay is the repro, see `game-native-design`. The research
    confirmed determinism <-> debuggability: a deterministic sim is a built-in

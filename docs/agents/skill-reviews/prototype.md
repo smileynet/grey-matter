@@ -51,8 +51,8 @@ Research grounded the throwaway core and flagged two agent issues:
 
 **Adapt.** Repointing: capture's "context pointer on the issue" becomes a **tkt context
 pointer** (throwaway branch + the answer recorded on the ticket), per
-`docs/tkt-conventions.md`; the LOGIC HTML file and UI variants align with
-`docs/report-format.md` (HTML as the full-bodied communicative artifact). Kept
+`docs/agents/tkt-conventions.md`; the LOGIC HTML file and UI variants align with
+`docs/agents/report-format.md` (HTML as the full-bodied communicative artifact). Kept
 model-invocable (the sidecar has no policy block), since wayfinder/triage call it.
 
 Adaptations:

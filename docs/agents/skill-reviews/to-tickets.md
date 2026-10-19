@@ -65,7 +65,7 @@ quiz.
 
 Downstream of `to-spec`/`grilling`; upstream of `implement`/`implement-spec`. Produces
 the task graph `tkt ready` serves and `implement` works. Epic grouping follows
-`docs/tkt-conventions.md`. Game slices come from `game-modeling`. Reads GLOSSARY/ADRs.
+`docs/agents/tkt-conventions.md`. Game slices come from `game-modeling`. Reads GLOSSARY/ADRs.
 
 ## Web-app bias
 

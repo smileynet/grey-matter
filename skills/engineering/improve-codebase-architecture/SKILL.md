@@ -47,7 +47,7 @@ Apply the **deletion test** to anything you suspect is shallow: would deleting i
 
 ### 2. Present candidates as a full-bodied HTML report
 
-This review is a **full-bodied, visual, communicative deliverable**: it exists to convey architectural ideas to the user with before/after diagrams, so **HTML is the right format** (see `docs/report-format.md`). Write a self-contained HTML file. A durable review goes in a committed `docs/` path; a throwaway per-run report goes in `.scratch/`. Open it for the user (`xdg-open`/`open`/`start`) and tell them the absolute path.
+This review is a **full-bodied, visual, communicative deliverable**: it exists to convey architectural ideas to the user with before/after diagrams, so **HTML is the right format** (see `docs/agents/report-format.md`). Write a self-contained HTML file. A durable review goes in a committed `docs/` path; a throwaway per-run report goes in `.scratch/`. Open it for the user (`xdg-open`/`open`/`start`) and tell them the absolute path.
 
 The report uses **Tailwind** for layout and **Mermaid** for graph-shaped diagrams, mixed with hand-built CSS/SVG for editorial visuals (mass diagrams, cross-sections, collapse animations). **Degrade gracefully**: if these load from a CDN and the network is absent, the content stays readable and the diagram source stays visible, never a blank page. Be visual: each candidate gets a **before/after visualisation**.
 
@@ -82,5 +82,5 @@ Side effects happen inline as decisions crystallise; call the Skill tool with "d
 - **Naming a module after a concept not in `GLOSSARY.md`?** Add the term to `GLOSSARY.md`. Create the file lazily if it doesn't exist.
 - **Sharpening a fuzzy term during the conversation?** Update `GLOSSARY.md` right there.
 - **User rejects the candidate with a load-bearing reason?** Offer an ADR: _"Want me to record this as an ADR so future architecture reviews don't re-suggest it?"_ Only offer when the reason would actually be needed by a future explorer to avoid re-suggesting the same thing; skip ephemeral reasons ("not worth it right now") and self-evident ones.
-- **User accepts a candidate to act on?** It becomes tracked work: file it as a tkt ticket (see `docs/tkt-conventions.md`) with the candidate's problem/solution and the deletion-test result as context, rather than sliding straight into implementation, this skill plans, a separate flow implements.
+- **User accepts a candidate to act on?** It becomes tracked work: file it as a tkt ticket (see `docs/agents/tkt-conventions.md`) with the candidate's problem/solution and the deletion-test result as context, rather than sliding straight into implementation, this skill plans, a separate flow implements.
 - **Want to explore alternative interfaces for a deepened module?** Call the Skill tool with "codebase-design" and use its design-it-twice parallel sub-agent pattern.

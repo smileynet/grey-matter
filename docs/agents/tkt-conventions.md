@@ -1,7 +1,7 @@
 # tkt conventions for grey-matter
 
 How we create, tag, link, and close tickets in this repo. This is the operational
-short form; the reasoning lives in `docs/proposals/01-*`, `01b-*`, `01c-*`, and the
+short form; the reasoning lives in `docs/agents/proposals/01-*`, `01b-*`, `01c-*`, and the
 vocabulary lives in [`GLOSSARY.md`](../GLOSSARY.md).
 
 Two of the conventions below are **interim**: they describe how we work *today*,
@@ -21,10 +21,10 @@ reference material.
 
 Physical layout:
 - Tickets: `.tickets/NN-slug.md` (managed by `tkt`).
-- Per-skill review notes: `docs/skill-reviews/<skill>.md` (+ an index).
-- Lens docs: `docs/lenses/`.
-- Research findings: `docs/research/`.
-- Proposals / conventions: `docs/proposals/`, this file, `GLOSSARY.md`.
+- Per-skill review notes: `docs/agents/skill-reviews/<skill>.md` (+ an index).
+- Lens docs: `docs/agents/lenses/`.
+- Research findings: `docs/agents/research/`.
+- Proposals / conventions: `docs/agents/proposals/`, this file, `GLOSSARY.md`.
 
 ## Lifecycle
 

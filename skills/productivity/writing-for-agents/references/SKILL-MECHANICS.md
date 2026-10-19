@@ -9,7 +9,7 @@ inert data only (credits, provenance, version) under `metadata`, never anything 
 harness must read to function. Invocation control is per-harness and is not one
 portable field (Claude Code reads `disable-model-invocation`; Codex reads a sidecar
 `agents/openai.yaml`), so a user-invoked skill sets both, kept in sync. The full cross-harness schema and the metadata rule live
-in `docs/skill-frontmatter.md` at the repo root.
+in `docs/agents/skill-frontmatter.md` at the repo root.
 
 ## Invocation
 

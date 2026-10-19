@@ -30,7 +30,7 @@ as the field name (fine in prose; the field is `blocked_by`); prose: "blocker".
 ### parent / child
 Containment: a **child** ticket belongs to an epic **parent**. Distinct from
 `blocked_by` (ordering). Native in tkt once tkt tickets 192-199 land; until then
-emulated (see `docs/tkt-conventions.md`, "Epics"). Context: both.
+emulated (see `docs/agents/tkt-conventions.md`, "Epics"). Context: both.
 _Avoid_: "sub-issue" (skills term; map to child).
 
 ### epic
@@ -77,13 +77,13 @@ a time, enforced by tkt. Distinct from triage role. Context: tkt.
 ### tag / label namespace
 A free-form `tags` entry on a ticket. grey-matter uses a **namespaced** scheme
 (`type:`, `triage:`, `kind:`, `epic:`, `stream:`, `wayfinder:`); see
-`docs/tkt-conventions.md`. Context: both. _Avoid_: "label" as a distinct feature
+`docs/agents/tkt-conventions.md`. Context: both. _Avoid_: "label" as a distinct feature
 (tkt has only tags).
 
 ## Game-native terms
 
 The engine-neutral vocabulary for the game-native-design guidance
-(`docs/lenses/game-native-design/`). Each neutral term lists its per-engine
+(`skills/engineering/game-native-design/`). Each neutral term lists its per-engine
 translation; the engine word is a translation, never the canonical term.
 
 ### simulation update step

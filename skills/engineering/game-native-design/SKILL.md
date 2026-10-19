@@ -12,8 +12,8 @@ between inputs. This is the reference that keeps the agent reasoning game-native
 a reference to consult, not a session to run.
 
 Vocabulary is engine-neutral here; the engine's real names live in the appendix (read
-the one for the detected engine: `project.godot` -> [godot.md](godot.md);
-`*.uproject` -> [unreal.md](unreal.md)).
+the one for the detected engine: `project.godot` -> [godot.md](references/godot.md);
+`*.uproject` -> [unreal.md](references/unreal.md)).
 
 ## Tenets
 
@@ -72,7 +72,7 @@ what changes for games.
 ## Web-ism smells
 
 When reviewing game code, apply the web-ism smell rubric in
-[review-rubric.md](review-rubric.md): the nine ways a game drifts into feeling like a
+[review-rubric.md](references/review-rubric.md): the nine ways a game drifts into feeling like a
 web app, each with its fix. It is the game-architecture counterpart to the Fowler
 smell baseline `code-review` already carries.
 

@@ -15,9 +15,9 @@ spec: "01-tkt-ticket-system"
 # Adapt tkt as the ticket system and define required features
 
 > Proposals (draft for review):
-> - [`docs/proposals/01-tkt-ticket-system.md`](../docs/proposals/01-tkt-ticket-system.md) (fit + initial gap list)
-> - [`docs/proposals/01b-tkt-gaps-and-verbiage.md`](../docs/proposals/01b-tkt-gaps-and-verbiage.md) (convention workaround + verbiage alignment)
-> - [`docs/proposals/01c-tkt-native-gap-closure.md`](../docs/proposals/01c-tkt-native-gap-closure.md) **(preferred: native tkt updates; supersedes 01b gaps 1-4)**
+> - [`docs/agents/proposals/01-tkt-ticket-system.md`](../docs/agents/proposals/01-tkt-ticket-system.md) (fit + initial gap list)
+> - [`docs/agents/proposals/01b-tkt-gaps-and-verbiage.md`](../docs/agents/proposals/01b-tkt-gaps-and-verbiage.md) (convention workaround + verbiage alignment)
+> - [`docs/agents/proposals/01c-tkt-native-gap-closure.md`](../docs/agents/proposals/01c-tkt-native-gap-closure.md) **(preferred: native tkt updates; supersedes 01b gaps 1-4)**
 >
 > Implementation tracked in the **tkt repo** (`D:\code\tkt` -> `smileynet/tkt`),
 > tickets 192-199 (all high priority). This ticket depends on their completion.
@@ -60,8 +60,8 @@ where it falls short.
 
 - [x] Decision recorded on how grey-matter uses tkt to model skill-review and lens work (ticket shape, tags, dependency edges, spec linkage)
 - [x] A gap list exists naming tkt features we need but that are missing or awkward, each with a concrete use case
-- [x] A convention doc committed (e.g. `docs/tkt-conventions.md`) describing how we create, tag, and close tickets in this repo
+- [x] A convention doc committed (e.g. `docs/agents/tkt-conventions.md`) describing how we create, tag, and close tickets in this repo
 
 ## Resolution (2026-10-10)
 
-Decided: tkt is grey-matter's tracker. Three proposals recorded (01 fit+gaps, 01b verbiage+workaround, 01c native closure as preferred). Gap list with use cases in 01c. Conventions committed in docs/tkt-conventions.md and GLOSSARY.md, pointed at from CLAUDE.md. Native gap closure tracked in tkt tickets 192-199; grey-matter ticket 04 gates and documents the migration.
+Decided: tkt is grey-matter's tracker. Three proposals recorded (01 fit+gaps, 01b verbiage+workaround, 01c native closure as preferred). Gap list with use cases in 01c. Conventions committed in docs/agents/tkt-conventions.md and GLOSSARY.md, pointed at from CLAUDE.md. Native gap closure tracked in tkt tickets 192-199; grey-matter ticket 04 gates and documents the migration.

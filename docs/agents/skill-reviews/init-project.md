@@ -32,7 +32,7 @@ dropped. It also absorbs the new conventions we established while reviewing skil
   `.references/README.md` as the rehydration index (what to re-clone and how), so a
   fresh checkout can restore references the gitignore dropped.
 - **tkt** set up via `tkt init` (which writes the tracking block into AGENTS.md), with a
-  pointer to `docs/tkt-conventions.md`.
+  pointer to `docs/agents/tkt-conventions.md`.
 - **Per-installed-skill conventions**: only set up what is installed; each gets its
   config and a one-line AGENTS.md pointer, detail stays in the pointed-at doc.
 - **Game projects** point at `game-native-design` / `game-modeling` and record the
@@ -45,8 +45,8 @@ index verdict is "adapt -> replaced by init-project".
 
 Precondition for the tracker-coupled skills (to-spec, to-tickets, triage, implement,
 wayfinder) the way the upstream setup skill was: they assume the config this writes.
-Runs `tkt init`. Points at `game-native-design`/`game-modeling`, `docs/tkt-conventions.md`,
-`GLOSSARY.md`, `docs/skill-frontmatter.md`.
+Runs `tkt init`. Points at `game-native-design`/`game-modeling`, `docs/agents/tkt-conventions.md`,
+`GLOSSARY.md`, `docs/agents/skill-frontmatter.md`.
 
 ## Web-app bias
 

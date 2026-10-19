@@ -347,7 +347,7 @@ the quarry; the artifact ships only the load-bearing stone.
 - [ ] AC3 (worked example): the choice is now **draft the `game-native-design`
       reference skill** (tenets + two-regime + rubric) as the proof, with the `tdd`
       overlay as a secondary artifact, rather than only `tdd-game-lens.md`. Commit
-      under `docs/lenses/` (or `skills/.../game-native-design/` when authored as a
+      under `docs/agents/lenses/` (or `skills/.../game-native-design/` when authored as a
       real skill). Author the **Godot appendix first** (default engine), then the
       **Unreal appendix** to prove the portable structure against two engines.
 - [ ] Add the "vertical slice" ruling and a "game feel / juice" entry to `GLOSSARY.md`.
@@ -368,8 +368,8 @@ building games in React (setState-per-frame, stale RAF closures, state-store-as-
 state). The encoding-form recommendation drew on Anthropic Agent Skills / steering
 best practices and this repo's own `invocation.md`, `codebase-design`, and `tdd`.
 Existing grey-matter decisions (lens model, determinism spine, GLOSSARY homonym
-rulings, doc layout) were read directly from `docs/proposals/02-*`,
-`docs/tkt-conventions.md`, and `GLOSSARY.md`. Content from external sources was
+rulings, doc layout) were read directly from `docs/agents/proposals/02-*`,
+`docs/agents/tkt-conventions.md`, and `GLOSSARY.md`. Content from external sources was
 rephrased for compliance with licensing restrictions.
 
 The engine-portability revision (section 6) drew on: Godot official docs

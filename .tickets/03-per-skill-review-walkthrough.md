@@ -59,7 +59,7 @@ each produce a committed review note capturing:
 5. Beta + frozen: in-progress writing suite, setup-ts-deep-modules,
    setup-pre-commit; skip Claude-Code/vendor-locked ones unless they fit the stack.
 
-All output lands in this repo (likely `docs/skill-reviews/<skill>.md`), with a
+All output lands in this repo (likely `docs/agents/skill-reviews/<skill>.md`), with a
 summary index. Final storage layout follows the ticket 01 decision.
 
 ## Acceptance criteria

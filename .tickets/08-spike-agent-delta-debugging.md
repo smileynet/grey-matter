@@ -23,4 +23,4 @@ TBD
 
 ## Resolution (2026-10-14)
 
-Decided: keep linear minimisation as default, add bisect (ddmin) for large inputs + git bisect for commit axis, gated on re-asserting the original symptom. Applied to diagnosing-bugs Phase 2; finding at docs/research/spike-agent-delta-debugging.md.
+Decided: keep linear minimisation as default, add bisect (ddmin) for large inputs + git bisect for commit axis, gated on re-asserting the original symptom. Applied to diagnosing-bugs Phase 2; finding at docs/agents/research/spike-agent-delta-debugging.md.

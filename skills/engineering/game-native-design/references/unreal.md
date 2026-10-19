@@ -1,6 +1,6 @@
 # Unreal appendix
 
-The game-native tenets ([SKILL.md](SKILL.md)) in Unreal Engine terms. The core is the
+The game-native tenets ([SKILL.md](../SKILL.md)) in Unreal Engine terms. The core is the
 authority; this names the primitive, it does not re-teach the principle. Community
 idiom (not official API) is marked *(idiom)*.
 

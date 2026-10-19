@@ -40,7 +40,7 @@ Five **state** roles (the tkt `triage:` tag):
 
 For a PR, the states read against the referencing ticket and its attached diff: `ready-for-agent` means a brief is attached and an agent should take the next step on the diff; `ready-for-human` means a human should take it (typically the merge).
 
-Every triaged ticket carries exactly one `kind:` and one `triage:` tag. If two state signals conflict, flag it and ask the maintainer before doing anything else. The canonical role names and their tkt tag strings live in `docs/tkt-conventions.md` (the `kind:` and `triage:` axes); if that mapping isn't present, tell the user to run `/init-project`.
+Every triaged ticket carries exactly one `kind:` and one `triage:` tag. If two state signals conflict, flag it and ask the maintainer before doing anything else. The canonical role names and their tkt tag strings live in `docs/agents/tkt-conventions.md` (the `kind:` and `triage:` axes); if that mapping isn't present, tell the user to run `/init-project`.
 
 State transitions: a fresh ticket goes to `triage:needs-triage` first; from there to `needs-info`, `ready-for-agent`, `ready-for-human`, or `wontfix`. `needs-info` returns to `needs-triage` once the reporter replies. The maintainer can override at any time; flag transitions that look unusual and ask before proceeding.
 
@@ -87,7 +87,7 @@ Whether the maintainer names a tkt ticket or an external issue/PR, the flow is t
    - For a **PR**: check out the branch and run the relevant tests or commands. Quote the real result.
    - Report the outcome: *confirmed* (with the command output and the code path), *failed* (with the output), or *insufficient detail*. **An unverified claim cannot become `ready-for-agent`**; absence of real evidence is a `needs-info` signal, never a pass. A claim you say you verified without captured output is not verified.
 
-4. **Grill (if needed).** If the request needs fleshing out, call the Skill tool twice, for "grilling" and "domain-modeling" (or "game-modeling" when the subject is a game system, per the app/game split in `docs/tkt-conventions.md`). Grill a round of questions at a time, sharpening domain terms and updating `GLOSSARY.md`/ADRs inline as decisions land. Capture resolved points in the ticket so the work isn't lost.
+4. **Grill (if needed).** If the request needs fleshing out, call the Skill tool twice, for "grilling" and "domain-modeling" (or "game-modeling" when the subject is a game system, per the app/game split in `docs/agents/tkt-conventions.md`). Grill a round of questions at a time, sharpening domain terms and updating `GLOSSARY.md`/ADRs inline as decisions land. Capture resolved points in the ticket so the work isn't lost.
 
 5. **Apply the outcome** (tag the ticket; the agent *recommends* terminal/negative states and the maintainer confirms before any close or external action):
    - `ready-for-agent`: write an agent brief into the ticket ([AGENT-BRIEF.md](AGENT-BRIEF.md)) and tag `triage:ready-for-agent`.

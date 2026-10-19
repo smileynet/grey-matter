@@ -22,7 +22,7 @@ The map is a single tkt ticket tagged `type:epic` and `wayfinder:map`, the canon
 
 The map is an **index**, not a store. It lists the decisions made and points at the tickets that hold their detail; a decision lives in exactly one place, its ticket, so the map never restates it, only gists it and links.
 
-**How the map, its children, blocking, and frontier queries map onto tkt is set by the issue-tracker doc.** Read `docs/tkt-conventions.md` (the `wayfinder:` tag axis and the epic convention) before charting. The short form, against tkt today:
+**How the map, its children, blocking, and frontier queries map onto tkt is set by the issue-tracker doc.** Read `docs/agents/tkt-conventions.md` (the `wayfinder:` tag axis and the epic convention) before charting. The short form, against tkt today:
 
 - **Map:** a ticket tagged `type:epic` + `wayfinder:map`, its `blocked_by` listing every open child (interim epic convention; tkt tickets 192-197 will replace this with a native `--parent`).
 - **Child ticket:** `tkt new <slug> --title "..." --tags wayfinder:<type>` with `--blocked-by` for its edges and `--tags epic:<map-slug>` to group it under the map.
@@ -83,7 +83,7 @@ Every ticket is either **HITL** (human in the loop, worked _with_ a human who sp
 
 - **Research** (AFK): Reading documentation, third-party APIs, or local resources like knowledge bases to surface a fact a decision waits on. Resolved by a subagent that calls the Skill tool with "research". Use when knowledge outside the current working directory is required. This is the one HITL exception: AFK by design.
 - **Prototype** (HITL): Raise the fidelity of the discussion by making a cheap, rough, concrete artifact to react to (an outline, a rough take, a stub, or throwaway UI/logic code) by calling the Skill tool with "prototype". **A prototype is throwaway: write it under `.scratch/` (gitignored), never into the committed tree.** This fences the one ticket type that writes code so it cannot silently become implementation. Link the prototype's path as an asset. Use when "how should it look" or "how should it behave" is the key question.
-- **Grilling** (HITL): Conversation. The default case. Always call the Skill tool twice, for "grilling" and "domain-modeling" (or "game-modeling" when the subject is a game system, per `docs/tkt-conventions.md`'s app/game split).
+- **Grilling** (HITL): Conversation. The default case. Always call the Skill tool twice, for "grilling" and "domain-modeling" (or "game-modeling" when the subject is a game system, per `docs/agents/tkt-conventions.md`'s app/game split).
 - **Task** (HITL or AFK): Manual work that must happen before a _decision_ can be made: nothing to decide, prototype, or research, but the discussion is blocked until it's done. Signing up for a service so its API can be judged, provisioning access, moving data so its shape can be seen. This is the one type that _does_ rather than decides, and it earns its place by unblocking a decision, not by delivering the destination. The agent drives it alone where it can (AFK); otherwise it hands the human a precise checklist (HITL). Resolved when the work is done; the answer records what was done and any resulting facts (credentials location, new URLs, row counts) later tickets depend on.
 
 A `task` ticket that reads like a slice of the build is mis-typed. Close it or retype it; it does not belong on the map as implementation.
@@ -123,7 +123,7 @@ User invokes with a loose idea.
 2. **Map the frontier.** Grill again, **breadth-first** this time: fan out across the whole space rather than deep on any one thread, surfacing the open decisions and the first steps takeable now. **If this surfaces no fog** (the way to the destination is already clear, the whole journey small enough for one session), you don't need a map. Stop and tell the user the effort is small enough to skip straight to grilling or a spec.
 3. **Create the map** (`tkt new <map-slug> --title "..." --tags type:epic,wayfinder:map`): Destination and Notes filled in via `tkt edit <id> --spec` or the ticket body, Decisions-so-far empty, the fog sketched into **Not yet specified**.
 4. **Create only the tickets you can specify now** (per Fog of war, under-chart) as children, then wire blocking in a **second pass** (`tkt edit`), since tickets need ids before they can reference each other. Tag each `wayfinder:<type>` and `epic:<map-slug>`, and add the map to each child's blockers so the map epic closes last. `tkt validate` confirms the graph. Everything you can't yet specify stays in **Not yet specified**.
-5. **Fire the research subagents.** For each `research` ticket you just created, spin up a subagent that calls the Skill tool with "research" to resolve it in parallel, capturing findings in a committed `docs/research/<name>.md` with a context pointer from the ticket.
+5. **Fire the research subagents.** For each `research` ticket you just created, spin up a subagent that calls the Skill tool with "research" to resolve it in parallel, capturing findings in a committed `docs/agents/research/<name>.md` with a context pointer from the ticket.
 6. Stop: charting is one session's work; it hand-resolves nothing.
 
 ### Work through the map

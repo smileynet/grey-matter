@@ -51,7 +51,7 @@ Each skill that carries a convention gets its config set up and a pointer from
 `AGENTS.md`. Set up only what is installed:
 
 - **tkt** (ticket tracker): run `tkt init` if `.tickets/` is absent; it writes the
-  tracking block into `AGENTS.md`. Point at `docs/tkt-conventions.md` for the tag
+  tracking block into `AGENTS.md`. Point at `docs/agents/tkt-conventions.md` for the tag
   vocabulary, epic convention, and lifecycle. Confirm the gitignored `.context` and the
   push setting fit this repo.
 - **domain-modeling / game-modeling**: a `GLOSSARY.md` (and `docs/adr/`) are created

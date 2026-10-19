@@ -270,7 +270,7 @@ frontier) and is left as such, not papered over.
 
 ## Follow-ups (to satisfy ticket 01 ACs)
 
-- [ ] Write `docs/tkt-conventions.md` (operational short form of this proposal).
+- [ ] Write `docs/agents/tkt-conventions.md` (operational short form of this proposal).
 - [ ] Write the tkt-flavored `docs/agents/issue-tracker.md`.
 - [ ] Write `GLOSSARY.md` with the crosswalk, pointed at from `CLAUDE.md`.
 - [ ] Write `scripts/lint-tickets.sh` (E1-E4 + validate + lint --check) and wire a
