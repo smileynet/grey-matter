@@ -51,9 +51,15 @@ done: opt-in pre-push hook runs check-repo.mjs and blocks on nonzero exit; insta
 
 ## Correction (2026-10-20)
 
-Maintainer direction: **pre-commit hooks only.** The hook shipped here was changed from
-`pre-push` to **`pre-commit`** (commit `9e6f167`): `scripts/hooks/pre-commit` runs
-`check-repo.mjs` and blocks the *commit* on failure (bypass with `git commit --no-verify`).
-Same opt-in installer (`scripts/install-hooks.mjs` — install/list/uninstall, idempotent,
-foreign-hook-safe). The ticket-34 CI pairing referenced above no longer applies: there is
-no CI, so this local hook is the sole automated gate.
+Two post-close changes:
+
+1. **No CI** (maintainer direction): the ticket-34 CI pairing referenced above no longer
+   applies — there is no CI (GitHub Actions was dropped), so this local hook is the sole
+   automated gate.
+2. **Stage: pre-commit** (agent judgement; maintainer indifferent to stage): the hook was
+   moved from `pre-push` to **`pre-commit`** (commit `9e6f167`). Rationale — `check-repo.mjs`
+   validates the whole tree (not a staged diff) so it's correct at either stage, and the
+   repo's commit-then-immediately-push rhythm means a pre-commit gate stops a broken
+   index/link *before* the bad commit exists rather than after. `scripts/hooks/pre-commit`
+   blocks the commit on failure (bypass: `git commit --no-verify`). Same opt-in installer
+   (`scripts/install-hooks.mjs` — install/list/uninstall, idempotent, foreign-hook-safe).
