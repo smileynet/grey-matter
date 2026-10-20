@@ -31,6 +31,9 @@ harness reads one source.
   buckets (`engineering` build, `productivity` think/communicate, `meta` maintain the set),
   why `meta` exists, the `compass` router, per-bucket READMEs, and how the index stays in
   sync.
+- [`docs/agents/windows-powershell-gotchas.md`](./docs/agents/windows-powershell-gotchas.md):
+  the recurring Windows/PowerShell command traps in this repo (`Move-Item` vs
+  `Rename-Item`, `;` not `&&`, `$env:` not `%VAR%`, quoting) with the correct form for each.
 
 ## Scratch
 
@@ -77,10 +80,21 @@ release or a distribution change. Exit 0 = all invariants hold; nonzero names wh
 Fixtures proving each invariant fails when seeded live in `scripts/check-repo.test.mjs`
 (`node --test`).
 
+Two automated callers run this same command so a regression can't reach `main` unseen:
+
+- **CI** — [`.github/workflows/check-repo.yml`](./.github/workflows/check-repo.yml) runs
+  it on every push and pull request (no secrets; `tkt` isn't on the runner, so its
+  ticket-health check degrades to skipped-with-warning while the file/script invariants
+  still gate).
+- **Local pre-push hook** (opt-in) — `node scripts/install-hooks.mjs` installs a
+  `pre-push` hook that runs it before each push and blocks on failure; `list` / `uninstall`
+  manage it, and it refuses to clobber a foreign hook. The hook is the fast local path; CI
+  is the backstop for anything that bypasses it (hook not installed, `--no-verify`, fork PR).
+
 ## Working rhythm
 
 - **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
-- **Check before you push.** Run `node scripts/check-repo.mjs` before pushing when the task touched skills, indexes, docs, or the installer; a green run is cheap insurance against pushing a broken link or a lost sidecar straight to `main`. (Until a hook enforces this — ticket 34/35 — it's a prose rule.)
+- **Check before you push.** Run `node scripts/check-repo.mjs` before pushing when the task touched skills, indexes, docs, or the installer; a green run is cheap insurance against pushing a broken link or a lost sidecar straight to `main`. Install the opt-in pre-push hook (`node scripts/install-hooks.mjs`) to run it automatically, and CI ([`.github/workflows/check-repo.yml`](./.github/workflows/check-repo.yml)) runs it on every push and PR as the backstop.
 - **Push after every commit.** A commit isn't done until it's pushed.
 - **Deploy by default.** Prefer to deploy changes (install skills into the harness roots with `node scripts/install-skills.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
 
