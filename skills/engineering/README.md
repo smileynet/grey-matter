@@ -17,6 +17,7 @@ sync by [`curate-docs`](../meta/curate-docs/SKILL.md).
 - [triage](./triage/SKILL.md): move external requests + tkt tickets through triage roles.
 - [wayfinder](./wayfinder/SKILL.md): chart a too-big effort as a map of decision tickets.
 - [improve-codebase-architecture](./improve-codebase-architecture/SKILL.md): survey deepening opportunities as a visual report, then grill one.
+- [retro](./retro/SKILL.md): improve the agent's environment after a session.
 
 ## Model-invoked
 
@@ -28,7 +29,6 @@ sync by [`curate-docs`](../meta/curate-docs/SKILL.md).
 - [prototype](./prototype/SKILL.md): throwaway code to answer one design question (logic / UI / game branch).
 - [research](./research/SKILL.md): background agent investigates primary sources, leaves a cited file.
 - [research-audit](./research-audit/SKILL.md): fresh-context validator that scores a research file.
-- [retro](./retro/SKILL.md): improve the agent's environment after a session.
 - [wizard](./wizard/SKILL.md): generate an interactive bash wizard for human-only setup steps.
 - [domain-modeling](./domain-modeling/SKILL.md): sharpen an app's domain language (DDD), the app regime.
 - [game-modeling](./game-modeling/SKILL.md): the game-native counterpart to domain-modeling.

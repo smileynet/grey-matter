@@ -1,0 +1,5 @@
+interface:
+  display_name: "To Tickets"
+  short_description: "Slice a spec into tracer-bullet tkt tickets with blocking edges"
+policy:
+  allow_implicit_invocation: false
