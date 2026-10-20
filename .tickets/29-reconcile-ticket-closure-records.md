@@ -15,8 +15,29 @@ tags: ["type:chore", "stream:skills-review"]
 
 ## What to build
 
-TBD
+The ticket board must represent what was actually completed, what was deliberately split
+or deferred, and why completed tickets satisfy the configured closure rules.
+
+## Context
+
+Found during the 2026-10-19 repository review. `tkt validate --brief` reports four
+unchecked acceptance criteria on done ticket 07, despite the documented `tkt close
+--check-all` rule. Ticket 14 later completes the superseding probe work. Ticket 03 marks
+the review of active, beta, and frozen upstream skills complete, while its resolution
+defers beta/frozen work to ticket 21 and the review index retains eleven TBD rows.
+
+Read first: `.tickets/03-per-skill-review-walkthrough.md`,
+`.tickets/07-verify-harness-frontmatter.md`,
+`.tickets/14-spike-harness-behavior-proofs.md`, `.tickets/21-review-beta-frozen-skills.md`,
+and `docs/agents/skill-reviews/README.md`.
+
+## Out of scope
+
+Do not perform ticket 21's beta/frozen reviews as part of this record-reconciliation work.
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [ ] `tkt validate --strict` reports no unchecked acceptance criteria on a done ticket.
+- [ ] Ticket 07 records its supersession by ticket 14 through a closure state that the tracker accepts.
+- [ ] Ticket 03 accurately scopes its completed work and links the deferred beta/frozen scope to ticket 21.
+- [ ] The skill-review index's incomplete rows and their owning ticket agree.
