@@ -23,11 +23,32 @@
 // Exit: 0 = all pass; 1 = at least one invariant failed.
 
 import { spawnSync } from "node:child_process";
+import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const SCRIPTS = dirname(fileURLToPath(import.meta.url));
+const SELF = "check-repo.mjs";
 const results = [];
+
+// Orphan guard (ticket 34 nice-to-have): every sibling `check-*.mjs` sub-check (excluding
+// this aggregator and any `*.test.mjs`) must be named in this file's run list, so a future
+// check script can't be silently dropped from the aggregated run. This reads the source of
+// THIS file and asserts each check script name appears in it; it does not run them here.
+{
+  const selfSrc = readFileSync(fileURLToPath(import.meta.url), "utf8");
+  const checkScripts = readdirSync(SCRIPTS).filter(
+    (f) => f.startsWith("check-") && f.endsWith(".mjs") && !f.endsWith(".test.mjs") && f !== SELF,
+  );
+  const orphans = checkScripts.filter((f) => !selfSrc.includes(f));
+  if (orphans.length) {
+    console.error(
+      `check-repo.mjs is missing ${orphans.length} sub-check(s) from its run list: ` +
+      orphans.join(", ") + "\n(add a run(...) call for each, or rename it so it is not a check-*.mjs).",
+    );
+    process.exit(1);
+  }
+}
 
 function run(label, cmd, args, { optional = false } = {}) {
   process.stdout.write(`\n=== ${label} ===\n`);

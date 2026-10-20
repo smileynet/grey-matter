@@ -1,0 +1,33 @@
+name: repo-consistency
+
+# Remote backstop for the skill-distribution invariants (ticket 34). Runs the same
+# command a maintainer runs locally — `node scripts/check-repo.mjs` — on every push and
+# pull request, failing the build if any invariant regresses (installer ownership safety,
+# invocation sidecars/README tiers, doc index set-equality, relative links, ticket health).
+#
+# The local pre-push hook (ticket 35, scripts/install-hooks.mjs) is the fast path that
+# catches most of this before it leaves a machine; this workflow is the guarantee for
+# anything that bypasses the hook (not installed, --no-verify, a PR from a fork).
+#
+# No harness authentication or secrets: check-repo.mjs is read-only and offline. `tkt` is
+# not installed on the runner, so its ticket-health check degrades to a skipped-with-
+# warning (by design) — the four file/script invariants still gate the build.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run repository-consistency checks
+        run: node scripts/check-repo.mjs
