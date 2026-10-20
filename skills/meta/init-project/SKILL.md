@@ -20,6 +20,15 @@ a `docs/`? Which skills are installed (they decide what needs tracking, see step
 Note a game engine marker (`project.godot`, `*.uproject`) so game projects get the
 game-native defaults.
 
+**Check the prerequisites.** This skill set depends on **tkt** (until a no-tkt
+optionality path exists). Verify both, and if either is missing, tell the user to install
+it before continuing, don't improvise around a missing tracker:
+
+- the **tkt tool** is on PATH (`tkt --version`);
+- the **`tkt` skill** is deployed to the harness's skill root (so skills like
+  `reconcile-tickets`, `to-tickets`, `implement` can call it for the command surface and
+  ticket standards). It ships with tkt; deploy it the way that harness installs skills.
+
 ### 2. Agent instructions: AGENTS.md primary, CLAUDE.md points to it
 
 `AGENTS.md` is the primary agent-instructions file (the portable standard every harness

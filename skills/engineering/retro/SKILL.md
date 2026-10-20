@@ -26,6 +26,8 @@ The user has asked for a **retrospective**. You are suggesting improvements to t
 
 5. File the candidates the user accepts as tickets (see the issue-tracker doc). **First check existing tickets for overlap** (`tkt query`): when a candidate matches or extends an open ticket, update that ticket rather than filing a near-duplicate. Only genuinely new candidates become new tickets.
 
+Retro grooms the **environment**. To groom the **ticket board** in the same session wrap-up (make open tickets current, capture untracked work, set the frontier ordering), pair this with `reconcile-tickets`.
+
 ## Reference
 
 ### Implementation vs Review

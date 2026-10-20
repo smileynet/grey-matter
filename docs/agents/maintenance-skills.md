@@ -26,6 +26,10 @@ Current members of `skills/meta/`:
   (user-facing entries); `readme` keeps `README.md` honest; `release` is the single
   orchestrator that composes both, picks the version, and runs the gated tag/push/publish
   mechanics (`release/references/release.sh`).
+- **reconcile-tickets**: end-of-session ticket-board hygiene (drift audit, capture
+  untracked work, set frontier ordering). **Wraps the `tkt` skill** (calls it for the
+  command surface + ticket standards rather than copying them, so it can't go stale as tkt
+  evolves). Pairs with `retro`.
 
 Anticipated members (tracked elsewhere): a model-eval harness (ticket 06), a
 primary-source deep-dive capture (ticket 12). File a maintenance skill under
