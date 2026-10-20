@@ -15,6 +15,11 @@ Verdict legend: **keep** (take largely as-is), **adapt** (take, with changes not
 **drop** (leave behind), **defer** (revisit later / beta or frozen), **new** (a
 grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 
+The **beta (`in-progress`) and frozen (`misc`) rows below are deferred to ticket 21**,
+which owns their keep/adapt/drop/defer decisions; ticket 03 delivered the active
+engineering + productivity sets. Each such row reads `defer (ticket 21)` rather than a bare
+TBD so the index and its owning ticket agree.
+
 ## Index
 
 | Skill | Bucket | Invocation | Verdict | Note |
@@ -59,14 +64,14 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | grill-me | productivity | user | keep | [grill-me.md](grill-me.md) |
 | teach | productivity | user | adapt | [teach.md](teach.md) |
 | wait-what | productivity | user | adapt | [wait-what.md](wait-what.md) |
-| chief-of-staff | in-progress | user | TBD | |
-| claude-handoff | in-progress | user | TBD | |
-| loop-me | in-progress | user | TBD | |
-| setup-ts-deep-modules | in-progress | user | TBD | |
-| writing-fragments | in-progress | user | TBD | |
-| writing-shape | in-progress | user | TBD | |
-| writing-beats | in-progress | user | TBD | |
-| git-guardrails-claude-code | misc | model | TBD | |
-| migrate-to-shoehorn | misc | model | TBD | |
-| scaffold-exercises | misc | model | TBD | |
-| setup-pre-commit | misc | model | TBD | |
+| chief-of-staff | in-progress | user | defer (ticket 21) | |
+| claude-handoff | in-progress | user | defer (ticket 21) | |
+| loop-me | in-progress | user | defer (ticket 21) | |
+| setup-ts-deep-modules | in-progress | user | defer (ticket 21) | |
+| writing-fragments | in-progress | user | defer (ticket 21) | |
+| writing-shape | in-progress | user | defer (ticket 21) | |
+| writing-beats | in-progress | user | defer (ticket 21) | |
+| git-guardrails-claude-code | misc | model | defer (ticket 21) | |
+| migrate-to-shoehorn | misc | model | defer (ticket 21) | |
+| scaffold-exercises | misc | model | defer (ticket 21) | |
+| setup-pre-commit | misc | model | defer (ticket 21) | |
