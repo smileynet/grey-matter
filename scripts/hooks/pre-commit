@@ -1,0 +1,34 @@
+#!/usr/bin/env sh
+# grey-matter pre-commit hook — local backstop that keeps a broken commit off main.
+#
+# Runs the repo-consistency command (scripts/check-repo.mjs) and BLOCKS the commit on a
+# nonzero exit, catching a broken link, a lost invocation sidecar, or an index drift
+# locally — before it is committed and (per AGENTS.md's "Working rhythm") pushed. This
+# project uses local hooks only; there is no CI backstop, so the hook is the gate.
+#
+# Opt-in: this is NOT forced on every clone. Install it with
+#   node scripts/install-hooks.mjs        (or scripts/install-hooks.sh / .ps1)
+# and remove it with
+#   node scripts/install-hooks.mjs uninstall
+#
+# Degrades gracefully: if Node is not on PATH, the hook warns and allows the commit rather
+# than blocking work on a missing toolchain. tkt's own absence is already handled inside
+# check-repo.mjs (skipped with a warning).
+
+# Locate the repo root so the hook works regardless of the cwd git invokes it from.
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "pre-commit: node not found on PATH — skipping consistency check." >&2
+  exit 0
+fi
+
+echo "pre-commit: running repo-consistency checks (node scripts/check-repo.mjs)..." >&2
+if node "$ROOT/scripts/check-repo.mjs"; then
+  exit 0
+fi
+
+echo "" >&2
+echo "pre-commit: consistency checks FAILED — commit blocked." >&2
+echo "  Fix the reported invariant, or bypass intentionally with: git commit --no-verify" >&2
+exit 1
