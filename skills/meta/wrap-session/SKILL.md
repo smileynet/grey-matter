@@ -69,13 +69,28 @@ skill updates its bucket `README.md`, `compass`, and the meta roster
 ([`maintenance-skills.md`](../../../docs/agents/maintenance-skills.md)) together — the
 set-equality lint fails a missed one.
 
-### 4. Verify and report
+### 4. Confirm the rehydration index is current
+
+`.references/` is gitignored except its committed [`README.md`](../../../.references/README.md),
+which is the **rehydration index**: on a fresh checkout `.references/` is empty, and that
+README is the only thing telling an agent what to re-clone and how. A session that clones a
+new reference (or drops one) and forgets the README leaves the index stale, and the next
+machine can't rehydrate.
+
+So verify the committed index matches what's on disk: every directory under `.references/`
+(except `README.md` itself) has a section in the README with what it is, why it's a
+reference, and the exact clone command; and every reference the README lists still exists.
+Reconcile any drift now — add the missing section (or remove the dropped one), and refresh a
+clone command or pin that moved. If `.references/` and the index already agree, say so and
+move on; this is a quick currency check, not a rewrite.
+
+### 5. Verify and report
 
 Run `node scripts/check-repo.mjs` so anything landed in step 3 (a new check, a new
 skill/doc, a moved pointer) passes the consistency invariants and link checks, and confirm
 `tkt validate` is clean. Then report three things: the **board** delta (tickets created /
 updated, what the frontier now surfaces), the **environment** changes **landed** this
-session, and what was **deferred** to a ticket and why.
+session (including any rehydration-index fix), and what was **deferred** to a ticket and why.
 
 ## Does not
 
@@ -93,4 +108,6 @@ session, and what was **deferred** to a ticket and why.
   **in the repo now** or a ticket saying why it was deferred — none silently lost.
 - A newly created check is proven red-then-green; a new skill/doc is reachable by a pointer
   and passes `check-repo.mjs`.
+- The committed `.references/README.md` indexes exactly the references on disk, each with a
+  working clone command — a fresh checkout could rehydrate from it.
 - The report separates what was *landed* from what was *filed*.
