@@ -23,6 +23,10 @@
 //   --project   also install into <cwd>/.agents/skills (the shared project-level root
 //               read by agy, Crush, OpenCode, and Claude Code).
 //   --root DIR  install into DIR instead of the default scan root(s). Repeatable.
+//
+// Tests:  node --test scripts/install-skills.test.mjs
+//   (regression coverage for the foreign-skill ownership safety contract;
+//    uses throwaway temp roots, never a real harness skill root.)
 
 import {
   cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync,
@@ -196,14 +200,22 @@ function doInstall(args) {
     }
 
     let refused = 0;
+    // Record ONLY the skills we actually installed. A refused foreign directory
+    // was never ours, so it must not enter the ownership manifest — otherwise the
+    // next install/uninstall would treat it as owned and destroy it (ticket 26).
+    const installedNames = [];
     for (const skill of skills) {
       const r = installOne(skill, root, args, owned);
       const extra = r.reason ? ` (${r.reason})` : r.note ? ` (${r.note})` : "";
       console.log(`  ${r.action.padEnd(7)} ${skill.name}${extra}`);
       if (r.action === "refused") refused++;
+      else installedNames.push(skill.name);
     }
 
-    writeManifest(root, skills.map((s) => s.name), args.link ? "link" : "copy", args.dryRun);
+    // On a dry run nothing was written, so the manifest must not change: preserve
+    // the existing ownership record rather than claiming the planned set.
+    const manifestNames = args.dryRun ? (manifest.installed || []) : installedNames;
+    writeManifest(root, manifestNames, args.link ? "link" : "copy", args.dryRun);
     if (refused) console.log(`  ${refused} refused (foreign dirs); re-run with --force to overwrite.`);
   }
   console.log(`\n${args.dryRun ? "(dry-run) would install" : "installed"} ${skills.length} skills.`);
