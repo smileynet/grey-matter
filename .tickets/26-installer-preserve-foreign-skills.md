@@ -1,7 +1,7 @@
 ---
 id: "26"
 title: "Keep foreign skill directories safe across install and uninstall"
-status: open
+status: in_progress
 blocked_by: []
 priority: urgent
 validation_criteria:
