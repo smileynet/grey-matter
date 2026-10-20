@@ -22,6 +22,7 @@ strategy behind this bucket.
 - [reconcile-tickets](./reconcile-tickets/SKILL.md): end-of-session ticket-board hygiene pass (wraps the `tkt-core` skill; pairs with retro).
 - [wrap-session](./wrap-session/SKILL.md): end-of-session closing bookend, runs reconcile-tickets then retro then lands the cheap mechanical findings (pairs with orient).
 - [verify-tkt-usage](./verify-tkt-usage/SKILL.md): validate the skills' inlined tkt commands against the live `tkt capabilities` manifest.
+- [sync](./sync/SKILL.md): pull current and re-synchronize the coupled pieces (deployed skills, tkt command surface, ticket IDs, repo invariants), then redeploy to the harnesses (the inbound twin of release; report-don't-gate).
 
 ## Model-invoked
 

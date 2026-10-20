@@ -1,0 +1,5 @@
+interface:
+  display_name: "Sync"
+  short_description: "Pull current, re-synchronize skills/tkt/tickets/invariants, and redeploy to the harnesses"
+policy:
+  allow_implicit_invocation: false

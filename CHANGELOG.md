@@ -7,6 +7,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 ## [Unreleased]
 
 ### Added
+- `sync` skill: the inbound twin of `release` — pull the repo current and re-synchronize the coupled pieces (deployed skills, the tkt command surface, ticket IDs, repo invariants), then redeploy the skills to every harness. Orchestrates `verify-tkt-usage`, `check-repo.mjs`, and the installer; reports findings rather than gating the deploy.
 - Release tooling: a `release` command that updates the changelog and README, picks the version, then tags, pushes, and publishes a GitHub release, composing the new `changelog` and `readme` skills.
 - `cheat-sheet` skill: a styled, live-generated reference card of every skill by category.
 
