@@ -1,7 +1,7 @@
 ---
 id: "35"
 title: "Add a pre-push (or pre-commit) hook running check-repo.mjs for fast local feedback"
-status: backlog
+status: open
 blocked_by: []
 priority: low
 validation_criteria:
