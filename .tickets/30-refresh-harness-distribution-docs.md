@@ -1,7 +1,7 @@
 ---
 id: "30"
 title: "Align harness and distribution documentation with verified behavior"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
