@@ -1,7 +1,7 @@
 ---
 id: "37"
 title: "Repoint 'tkt' skill references to 'tkt-core' (tkt renamed its reference skill)"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
