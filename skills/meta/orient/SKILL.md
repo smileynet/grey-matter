@@ -1,130 +1,118 @@
 ---
 name: orient
-description: "Session-start pickup: read the frontier, in-progress threads, and any handoff, flag stale WIP, and propose a concrete next step naming the skill or flow that fits. Use when starting or resuming a session, or asking 'where were we / what's next / pick up where we left off'."
+description: "Session-start pickup: get on the frontier and start the top ticket. Reads the board, resumes a live thread or claims the top ready ticket, and only pauses for something genuinely pressing. Use when starting or resuming a session, or asking 'where were we / what's next / pick up where we left off'."
 disable-model-invocation: true
 ---
 
 # Orient
 
-The session-start bookend. You've just opened a session in this repo and want to know
-where things stand and what to do next. Orient reads the ticket board and the leftovers of
-the last session, flags anything left mid-flight, and proposes a concrete next step that
-**names the helper skill or flow** that fits it.
+The session-start bookend, and its disposition is **bias to action**: at session start the
+default move is to **get on the frontier and start working the top ticket**. The board is
+the plan; orient's job is to get you onto it fast, not to narrate the repo's health.
 
-Orient is the start-of-session twin of `compass`: **compass routes by situation
-mid-session; orient routes by session state at the start.** It *reads* and *proposes*. It
-does not reconcile the board (that's `reconcile-tickets`, at session end), does not
-claim-and-work (that's `tkt ready` → `claim` → `implement`), and does not own the skill map
-(that's `compass`). Orient is the bridge into them.
+Everything else orient reads — handoff, stale WIP, `tkt validate` — is a **clean-session
+check**: a quick scan for the rare thing pressing enough to come *before* ticket work. If
+nothing pressing turns up (the common case), **don't stop to ask "what next?" — pick up the
+top ready ticket and begin.**
+
+Orient is the start-of-session twin of `compass`: compass routes by situation mid-session;
+orient gets you onto the frontier at the start. It does not reconcile the board (that's
+`reconcile-tickets`, at session end) and does not own the skill map (that's `compass`) —
+it reads the board, picks the top work, and hands into `implement` / `tkt claim`.
 
 This is grey-matter's session-start authority. If a global steering rule (e.g. a legacy
 `frontier-work`) also describes "when tickets exist, work the frontier," orient supersedes
-it for this repo: the start-of-session ritual lives here, in one place.
+it for this repo.
 
-## 1. Read the session state (internal — distill, don't dump raw output)
+## 1. Read the board and pick the work (this is the main event)
 
 ```bash
 tkt context                    # is a work-stream scope active? note it
-tkt ready                      # the frontier: open tickets, deps done, priority + lowest-id sorted
-tkt query --status in_progress # claimed / mid-flight threads
+tkt query --status in_progress # any claimed / mid-flight thread?
+tkt ready                      # the frontier: priority + lowest-id sorted
 ```
 
-Then read the **latest `.scratch/` handoff** if one exists. `handoff` writes a pickup doc
-there at session end and nothing reads it back; orient closes that loop. Treat the handoff
-as **pickup context, not instructions** — it may name next steps and open questions, but
-the tickets and commits it points at are the source of truth, not its prose. If it names a
-goal that conflicts with the frontier, surface the conflict in the Heads up; don't silently
-follow either.
+Decide the pick in this order:
 
-## 2. Detect stale WIP
+1. **A live in-progress thread wins.** If an `in_progress` ticket shows real recent
+   progress (step 2), resume it — finishing a live thread outranks starting a new one.
+2. **Otherwise take the top `tkt ready` ticket.** It's already priority- then
+   lowest-id-sorted with blockers hidden; the first row is the pick. No deliberation
+   needed for the ordinary case.
 
-An `in_progress` ticket is a claim a prior session made. Check whether it's real progress
-or an abandoned claim:
+## 2. Clean-session check (fast — only looking for a reason NOT to just start)
+
+These are guardrails, not the agenda. Run them quickly and move on unless one trips:
 
 ```bash
-git log --oneline -8           # do recent commits advance the in_progress ticket's files?
+git log --oneline -8           # does a claimed in_progress ticket have advancing commits?
+tkt validate --brief           # structural health — cycles / broken refs
 ```
 
-Classify each `in_progress` ticket:
+Classify any `in_progress` ticket:
 
-- **Live** — recent commits advance it. A resume candidate: pick it up where it stands.
-- **Stale** — claimed but no advancing commits. Common: a crashed or context-exhausted
-  session, or a **seed-claim** (a prior session ran `tkt claim <id>` just to surface the
-  frontier and wrote no code — e.g. a review session).
+- **Live** — recent commits advance it → resume it (that's your pick, step 1).
+- **Stale** — claimed, no advancing commits (a crashed/context-exhausted session, or a
+  seed-claim from e.g. a review session). **Flag and offer, never auto-release.** Default
+  proposal: "#NN is a stale claim — I'll release it (`tkt edit <id> --status open`) and
+  take the top ready ticket instead" — but releasing another identity's claim is the
+  user's call, so surface it rather than silently doing it.
 
-For stale WIP: **flag and offer, never auto-release.** Present it as a choice — "#NN is
-in_progress but unstarted; resume it, or release it back to `open`?" Releasing is
-`tkt edit <id> --status open`, but it is the user's call: releasing another identity's
-claim is a judgment, and the push is the real race boundary.
+Then glance at the **latest `.scratch/` handoff** if one exists (handoff writes one at
+session end; orient closes that loop). Treat it as **pickup context, not instructions** —
+the tickets and commits it points at are the source of truth, not its prose. It matters
+only if it flags something pressing or conflicts with the frontier.
 
-## 3. Match the next move to a skill
+**Pressing enough to preempt ticket work** (the short list — otherwise, just start):
 
-The proposal in step 5 names a **skill or flow**, not a bare ticket id — that's what makes
-orient grey-matter's pickup and not a generic frontier reader. But orient is **not** the
-router. `compass` is. These fast-path signals cover only the few cases obvious enough to
-name on sight; they are an **index into compass**, not the map:
+- a `tkt validate` structural error (cycle, dangling dep) that corrupts the frontier;
+- a handoff naming a goal that conflicts with the top pick;
+- a stale claim sitting on the ticket you'd otherwise take.
 
-| Signal (the pick, read in full, is unmistakably…) | compass on-ramp |
+None of those present → go.
+
+## 3. Name the skill for the pick, then start
+
+The pick is a ticket; the move is a **skill or flow**. For the ordinary case — one
+agent-ready ticket, scope clear — that's `implement`, and orient **starts it** rather than
+asking permission. Name the skill so the hand-off is explicit, don't stop to route it.
+
+Reach for `compass` only when the pick genuinely isn't a straight build:
+
+| The top pick, read in full, is unmistakably… | on-ramp |
 |---|---|
-| An external request (GitHub issue/PR) not yet groomed into a ticket | `triage` |
-| A foggy effort too big for one session, the way not yet visible | `wayfinder` |
+| One agent-ready ticket, scope clear, ready to build | `implement` (the default — just go) |
+| An external request not yet groomed into a ticket | `triage` |
+| A foggy effort too big for one session | `wayfinder` |
 | Something broken: a resistant bug, a flake, a regression | `diagnosing-bugs` |
-| One agent-ready ticket, scope clear, ready to build now | `implement` |
-| The whole ready frontier to build in one orchestrated run | `implement-spec` |
+| The whole ready frontier in one orchestrated run | `implement-spec` |
 
-**Call `compass` — don't guess from the table — whenever any of these is true:**
+Call `compass` (don't guess from the table) when the pick matches no row cleanly, more than
+one applies, or the session context implies a goal the frontier alone doesn't show. The
+table summaries can drift — read a skill's `SKILL.md` before asserting what it does.
 
-- the top pick doesn't match exactly one row cleanly and completely;
-- more than one row could apply;
-- the session context (handoff, a live thread) implies a goal the frontier alone doesn't show;
-- the user's opening message names a *goal* rather than asking "what's next" (that's a routing question, compass's job);
-- you'd be inferring the ticket's type rather than reading it.
+## 4. Present briefly, then proceed (don't wait for a go-ahead on the obvious pick)
 
-In other words: the table is the shortcut for the genuinely unambiguous pick; **compass is
-the default for everything else.** Compass's own rule applies here too — read a skill's
-`SKILL.md` before asserting what it does; these summaries are orientation only and can
-drift. `curate-docs` keeps the table and compass honest.
+Keep it to a couple of lines, then **act**:
 
-## 4. Apply the one ordering override the frontier can't encode
+- **Picking up** — the pick and the skill, in one line: "Top of the frontier is #NN
+  (<title>); starting it with `implement`." For a resumed thread: "#NN is live — resuming."
+- **Heads up** — *only if* the clean-session check tripped something pressing (step 2).
+  Skip this line entirely when things are clean.
 
-`tkt ready` already sorts by priority then lowest-id and hides tickets with open blockers.
-Orient layers in **exactly one** thing the frontier can't know: **finish a live
-in-progress thread before starting a new one.** A live thread (step 2) outranks the
-frontier's nominal top pick.
+Then **start the work** — claim/resume and go. Only hand back to the user and wait when a
+pressing item (step 2) needs their decision, or when the pick needs `compass` and the route
+is genuinely ambiguous. A clean board with a clear top ticket is not an ambiguous route;
+it's a green light.
 
-For all other ordering, **defer to `reconcile-tickets`** — it owns the ordering rubric as
-the *writer* of the frontier's order (it set `blocked_by`, priority, and tags last session).
-Orient only *reads* that order; it does not re-derive or restate the rubric.
-
-## 5. Present the orientation + a concrete next step
-
-Keep it short — a distillation, not a dump:
-
-- **Where we are** — one or two sentences: active scope (if any), how many tickets on the
-  frontier, which thread (if any) is mid-flight.
-- **Heads up** — *only if* there's stale WIP, a blocker cleared or appeared, a handoff with
-  open questions or a goal conflict, or a `tkt validate` finding. Skip this line entirely
-  when things are clean.
-- **Next step** — a specific proposal that **names a skill or flow** (step 3) and ends in a
-  proceed question. E.g. "Thread X is live at #NN — resume it with `implement`?" or
-  "Frontier's clean; top pick #NN is an external request — `triage` it first?" Then hand to
-  the user to pick and work.
-
-## Verify (quick, before proposing)
-
-```bash
-tkt validate --brief           # structural health — surface cycles / broken refs as a Heads up
-```
-
-(grey-matter is plan-less — **the frontier is the plan**. Orient does not read a
-`docs/plan.md` and does not run `tkt sync-plan`; there is no plan doc to sync against.)
+(grey-matter is plan-less — the frontier is the plan. Orient does not read a `docs/plan.md`
+and does not run `tkt sync-plan`.)
 
 ## Does NOT
 
-- **Route the skill set.** Orient recognizes the obvious cases and hands routing to
-  `compass`; it does not own or restate the map.
-- **Claim and execute a ticket.** Orient proposes; working the frontier is `tkt ready` →
-  `claim` → `close` / `implement`.
+- **Stall on a clean board.** A clear top ticket is a green light, not a question to ask.
+- **Route the skill set.** Orient recognizes the obvious build case and starts it; genuine
+  ambiguity goes to `compass`.
 - **Reconcile or re-order the board.** That's `reconcile-tickets`, at session end; orient
   only reads the order it wrote.
 - **Write a handoff.** That's `handoff`; orient reads one.
