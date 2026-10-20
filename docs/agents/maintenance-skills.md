@@ -67,8 +67,9 @@ primary-source deep-dive capture (ticket 12). File a maintenance skill under
   skills that exist, a stale index actively misleads. `curate-docs` is the skill that keeps
   them honest. The mechanical backstop is a **set-equality lint**: every skill folder
   appears in `compass` and in its bucket README exactly once, and every skill named there
-  resolves to a real folder. The lint is not built yet; it lands with CI, which is part of
-  the distribution decision (ticket 13).
+  resolves to a real folder. This is now built: `scripts/check-docs-consistency.mjs` (run
+  standalone, or via the umbrella `scripts/check-repo.mjs` with the installer, invocation,
+  and ticket checks). See `AGENTS.md` ("Consistency checks").
 - **Wrap tool-owned skills; inline tool commands.** This repo depends on the `tkt` tool
   (a setup prerequisite `init-project` checks). Where tkt ships a *skill* (the `tkt` skill,
   which owns the command surface and ticket standards), **wrap it**, call the Skill tool

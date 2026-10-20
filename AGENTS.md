@@ -58,6 +58,25 @@ per-harness deploy + test instructions are in
 [`docs/agents/harnesses.md`](./docs/agents/harnesses.md); a Claude Code plugin package is
 a later addition.
 
+## Consistency checks
+
+One command verifies every mechanical invariant the skill distribution depends on:
+
+```
+node scripts/check-repo.mjs
+```
+
+It aggregates (each also runnable on its own): installer ownership safety
+(`scripts/install-skills.test.mjs`), invocation sidecars + README tiers
+(`scripts/check-invocation-policy.mjs`), doc indexes + relative links
+(`scripts/check-docs-consistency.mjs`), and ticket health (`tkt validate`). It is
+**read-only on user state** (the installer check uses throwaway temp roots, never a real
+harness skill root) and needs **no harness authentication or network** (tkt is local and
+degrades to a skipped-with-warning if absent), so CI can call it directly. Run it before a
+release or a distribution change. Exit 0 = all invariants hold; nonzero names what failed.
+Fixtures proving each invariant fails when seeded live in `scripts/check-repo.test.mjs`
+(`node --test`).
+
 ## Working rhythm
 
 - **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
