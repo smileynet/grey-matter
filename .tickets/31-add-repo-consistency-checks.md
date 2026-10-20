@@ -1,7 +1,7 @@
 ---
 id: "31"
 title: "Automate repository consistency checks for skill distribution"
-status: open
+status: in_progress
 blocked_by: ["26", "27", "29", "30"]
 priority: medium
 validation_criteria:
