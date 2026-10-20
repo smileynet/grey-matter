@@ -1,7 +1,7 @@
 ---
 id: "38"
 title: "Add wrap-session: end-of-session orchestrator (reconcile + retro + land mechanical findings)"
-status: open
+status: done
 blocked_by: []
 priority: low
 tags: ["stream:tooling"]
@@ -39,3 +39,7 @@ Files: `skills/meta/wrap-session/SKILL.md` + `agents/openai.yaml`; indexes updat
 - [x] It orchestrates reconcile-tickets then retro by calling the Skill tool, and adds a land-now step that builds cheap/unambiguous mechanical findings (check/guardrail or project-level skill/note), deferring the rest to tickets.
 - [x] Listed under User-invoked in `skills/meta/README.md`, mentioned in `compass` (Session bookends + Maintaining-this-set), and in the `maintenance-skills.md` roster.
 - [x] `node scripts/check-repo.mjs` passes (invocation policy, index set-equality, links).
+
+## Resolution (2026-10-20)
+
+done: shipped wrap-session, the single end-of-session closing bookend composing reconcile-tickets + retro and adding a land-now beat that builds cheap/unambiguous mechanical findings this session rather than only filing them.
