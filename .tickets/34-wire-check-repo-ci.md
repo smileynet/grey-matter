@@ -55,3 +55,12 @@ done: GitHub Actions workflow runs the consistency command on push/PR as the rem
 ### Verification
 1. ✓ A CI workflow runs `node scripts/check-repo.mjs` on push and PR and fails the build on a nonzero exit — ".github/workflows/check-repo.yml runs node scripts/check-repo.mjs on push and pull_request, fails build on nonzero exit (48f36dc); permissions contents:read, no secrets, tkt absent degrades to skipped-with-warning by design."
 2. ✓ The workflow needs no harness authentication or secrets (Node + tkt only), matching check-repo.mjs's read-only, auth-free design — "Command demonstrated green locally (same command CI runs); seeded-regression failure proven by the orphan-guard demo (exit 1 on an un-wired check-*.mjs) and existing check-repo.test.mjs fixtures; orphan guard added to check-repo.mjs."
+
+## Correction (2026-10-20)
+
+Maintainer reversed the CI decision: **this project does not use GitHub Actions / CI.**
+The `.github/workflows/check-repo.yml` added here was removed (commit `115c086`). The
+consistency command is now run locally via the opt-in **pre-commit** hook (see ticket 35),
+not a hosted pipeline. The orphan-guard addition to `check-repo.mjs` stands and is
+unaffected. This ticket's CI-specific acceptance criteria are void by that decision; the
+durable outcome is "consistency command exists and is run by a local hook."

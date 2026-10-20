@@ -48,3 +48,12 @@ done: opt-in pre-push hook runs check-repo.mjs and blocks on nonzero exit; insta
 ### Verification
 1. ✓ A git hook runs check-repo.mjs (or the cheap subset) before push/commit and blocks on a nonzero exit — "scripts/hooks/pre-push + install-hooks.mjs/.sh/.ps1 committed (cc15cd1); tested list/install/idempotent, hook runs check-repo.mjs exit 0 on clean repo, graceful node-absent path."
 2. ✓ The hook is opt-in or documented install (not forced on every clone), and degrades gracefully if Node/tkt are absent — "Foreign-hook install and uninstall both REFUSED; opt-in (not forced on clone); AGENTS.md documents CI-vs-hook interaction (local fast path vs remote backstop, same command)."
+
+## Correction (2026-10-20)
+
+Maintainer direction: **pre-commit hooks only.** The hook shipped here was changed from
+`pre-push` to **`pre-commit`** (commit `9e6f167`): `scripts/hooks/pre-commit` runs
+`check-repo.mjs` and blocks the *commit* on failure (bypass with `git commit --no-verify`).
+Same opt-in installer (`scripts/install-hooks.mjs` — install/list/uninstall, idempotent,
+foreign-hook-safe). The ticket-34 CI pairing referenced above no longer applies: there is
+no CI, so this local hook is the sole automated gate.
