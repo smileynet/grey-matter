@@ -99,3 +99,6 @@ now surfaces and why.
 - Pick the single next ticket to execute (that's just working the frontier, `tkt ready`).
 - Decompose a spec into a ticket set from scratch (that's `to-tickets`).
 - Improve the agent's *environment* (that's `retro`, run both at session end).
+
+Pairs with `orient` across the session boundary: reconcile-tickets sets the frontier
+ordering at session end; `orient` reads that order at the next session's start.

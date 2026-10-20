@@ -26,8 +26,11 @@ Found during the 2026-10-19 repository review. The binding convention in
 only the former: grill-with-docs, implement, implement-spec, retro, to-spec, to-tickets,
 init-project, review-skill, grill-me, handoff, and to-questionnaire. The live Codex probe
 in `docs/agents/research/harness-behavior-probes.md` establishes that the sidecar controls
-Codex filtering. `skills/engineering/README.md` also currently classifies `retro` as
-model-invoked.
+Codex filtering. `skills/engineering/README.md` also currently misclassifies two
+user-invoked skills (`retro` and `wizard`) under its Model-invoked heading. The existing
+sidecars on genuinely model-invoked skills (e.g. research, prototype, compass) carry only
+an `interface:` block and no `policy.allow_implicit_invocation`, so the restrictive policy
+belongs only on the eleven user-invoked skills named above.
 
 Read first: `docs/agents/skill-frontmatter.md`, the listed skill directories,
 `docs/agents/research/harness-behavior-probes.md`, and all bucket README files.

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Orient"
+  short_description: "Session-start pickup: frontier, WIP, and the next skill to reach for"
+policy:
+  allow_implicit_invocation: false

@@ -22,3 +22,5 @@ Do not duplicate content already captured in other artifacts (specs, plans, ADRs
 Redact any sensitive information (API keys, passwords, PII): the handoff becomes the next agent's prompt, so a secret in it is a leak.
 
 If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.
+
+The next session reads this doc with `orient` (the session-start bookend), which treats it as pickup context alongside the live frontier and in-progress threads. Write it to be read that way: the frontier and commits are the source of truth, this doc points at them.

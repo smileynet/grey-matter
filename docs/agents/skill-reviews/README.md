@@ -31,6 +31,7 @@ grey-matter skill with no upstream origin, e.g. the game-native counterparts).
 | readme | meta | user | new | [release.md](release.md) |
 | release | meta | user | new | [release.md](release.md) |
 | reconcile-tickets | meta | user | new (wraps tkt skill) | [reconcile-tickets.md](reconcile-tickets.md) |
+| orient | meta | user | new (adapts tkt-orient) | [orient.md](orient.md) |
 | verify-tkt-usage | meta | user | new | [verify-tkt-usage.md](verify-tkt-usage.md) |
 | writing-for-agents | productivity | model | keep | [writing-for-agents.md](writing-for-agents.md) |
 | setup-matt-pocock-skills | engineering | user | adapt -> replaced by init-project | |

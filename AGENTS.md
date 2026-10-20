@@ -58,6 +58,12 @@ per-harness deploy + test instructions are in
 [`docs/agents/harnesses.md`](./docs/agents/harnesses.md); a Claude Code plugin package is
 a later addition.
 
+## Working rhythm
+
+- **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
+- **Push after every commit.** A commit isn't done until it's pushed.
+- **Deploy by default.** Prefer to deploy changes (install skills into the harness roots with `node scripts/install-skills.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
+
 <!-- tkt:begin -->
 ## Tickets
 

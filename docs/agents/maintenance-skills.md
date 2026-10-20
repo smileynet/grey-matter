@@ -30,6 +30,14 @@ Current members of `skills/meta/`:
   untracked work, set frontier ordering). **Wraps the `tkt` skill** (calls it for the
   command surface + ticket standards rather than copying them, so it can't go stale as tkt
   evolves). Pairs with `retro`.
+- **orient**: the start-of-session bookend to `reconcile-tickets`. Reads the frontier +
+  in-progress threads + the last session's `.scratch/` handoff, flags stale WIP
+  (flag-and-offer, never auto-release), and proposes a next step naming the skill/flow that
+  fits. **Adapted** from tkt's internal `tkt-orient` (not wrapped — tkt-orient is
+  tkt-internal, not deployed); the plan-doc/`sync-plan` reads were dropped (grey-matter is
+  plan-less), it absorbs the handoff read-side (there is no `read-handoff`), and it defers
+  routing to `compass` and the ordering rubric to `reconcile-tickets` rather than
+  restating either. The session-start twin of `compass`.
 - **verify-tkt-usage**: validate the tkt **commands** the skills inline against the live
   `tkt capabilities` manifest, catching drift after a tkt upgrade. (Inlined commands are
   allowed, see the wrap-skills-not-commands rule below; this keeps them honest.)
