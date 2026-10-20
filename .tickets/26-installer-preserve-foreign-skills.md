@@ -1,7 +1,7 @@
 ---
 id: "26"
 title: "Keep foreign skill directories safe across install and uninstall"
-status: in_progress
+status: done
 blocked_by: []
 priority: urgent
 validation_criteria:
@@ -36,7 +36,16 @@ explicit `--force` contract.
 
 ## Acceptance criteria
 
-- [ ] A refused foreign destination is absent from the written ownership manifest.
-- [ ] A repeated install and uninstall leave a refused foreign destination byte-for-byte intact.
-- [ ] An explicitly forced replacement is the only path that may replace a foreign destination.
-- [ ] An isolated regression check covers refuse, repeat-install, uninstall, and force behavior.
+- [x] A refused foreign destination is absent from the written ownership manifest.
+- [x] A repeated install and uninstall leave a refused foreign destination byte-for-byte intact.
+- [x] An explicitly forced replacement is the only path that may replace a foreign destination.
+- [x] An isolated regression check covers refuse, repeat-install, uninstall, and force behavior.
+
+## Resolution (2026-10-20)
+
+Fixed the foreign-skill data-loss bug in scripts/install-skills.mjs. Root cause: doInstall wrote the full desired skill set to the ownership manifest, including names installOne() refused (destination exists + not ours), so the next install/uninstall adopted and deleted the refused foreign dir. Fix: record only non-refused install actions in the manifest; a refused dir was never ours so it stays out and is left intact. --force remains the sole path to replace a foreign dir. Dry-run now preserves the existing manifest. Added scripts/install-skills.test.mjs (node:test) with isolated throwaway-root coverage. Committed eb147ac, pushed, redeployed to all 4 harness roots.
+
+### Verification
+1. ✓ An existing foreign skill refused on install remains unchanged after a second install and uninstall — "Test 'repeat install then uninstall leave a refused foreign dir byte-for-byte intact' passes: a seeded foreign SKILL.md sentinel survives two installs + an uninstall unchanged; the refused name is also absent from manifest.installed (AC1)."
+2. ✓ Forced replacement changes only the explicitly forced skill — "Test 'forced replacement is the only path that replaces a foreign dir' passes: without --force the foreign dir is preserved; with --force only that forced skill is replaced and becomes owned, nothing else touched."
+3. ✓ Installer regression checks pass — "scripts/install-skills.test.mjs runs 5/5 green via 'node --test' (was 2 failing before the fix), driving the installer as a subprocess against mkdtemp roots — never a real harness root; node --check passes on installer + test."
