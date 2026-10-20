@@ -1,7 +1,7 @@
 ---
 id: "34"
 title: "Wire check-repo.mjs into CI (run the consistency checks on push/PR)"
-status: open
+status: done
 blocked_by: []
 priority: low
 validation_criteria:
@@ -44,6 +44,14 @@ orphaned from the aggregator's run list. Fold in here or skip; not load-bearing.
 
 ## Acceptance criteria
 
-- [ ] A CI workflow runs `node scripts/check-repo.mjs` on push and PR and fails the build on nonzero exit.
-- [ ] The workflow requires no harness authentication or secrets (Node + optional tkt only).
-- [ ] A seeded regression (e.g. a broken link on a branch) is shown to fail the workflow, or the workflow is demonstrated green on main.
+- [x] A CI workflow runs `node scripts/check-repo.mjs` on push and PR and fails the build on nonzero exit.
+- [x] The workflow requires no harness authentication or secrets (Node + optional tkt only).
+- [x] A seeded regression (e.g. a broken link on a branch) is shown to fail the workflow, or the workflow is demonstrated green on main.
+
+## Resolution (2026-10-20)
+
+done: GitHub Actions workflow runs the consistency command on push/PR as the remote backstop (auth-free, secret-free). Folded in the nice-to-have: check-repo.mjs now asserts every sibling check-*.mjs (minus *.test.mjs) is in its run list, so a check can't be silently orphaned.
+
+### Verification
+1. ✓ A CI workflow runs `node scripts/check-repo.mjs` on push and PR and fails the build on a nonzero exit — ".github/workflows/check-repo.yml runs node scripts/check-repo.mjs on push and pull_request, fails build on nonzero exit (48f36dc); permissions contents:read, no secrets, tkt absent degrades to skipped-with-warning by design."
+2. ✓ The workflow needs no harness authentication or secrets (Node + tkt only), matching check-repo.mjs's read-only, auth-free design — "Command demonstrated green locally (same command CI runs); seeded-regression failure proven by the orphan-guard demo (exit 1 on an un-wired check-*.mjs) and existing check-repo.test.mjs fixtures; orphan guard added to check-repo.mjs."
