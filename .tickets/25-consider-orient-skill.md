@@ -1,7 +1,7 @@
 ---
 id: "25"
 title: "Consider a session-start orient skill (adapt tkt's tkt-orient as the bookend to reconcile-tickets)"
-status: in_progress
+status: done
 blocked_by: []
 priority: low
 validation_criteria:
@@ -52,7 +52,17 @@ session-pickup friction is worth it.
 
 ## Acceptance criteria
 
-- [ ] A decision recorded: adapt tkt-orient into a grey-matter session-start skill, or not, with reasoning
-- [ ] If adapted: reads frontier + in-progress + session context and proposes a next step; drops the `docs/plan.md` + `sync-plan` reads (plan-less); keeps stale-WIP flag-and-offer
-- [ ] The handoff overlap is resolved (absorb resume-from-handoff, or pair with `handoff`)
-- [ ] Naming decided (e.g. `orient-session`); inlined tkt commands kept, covered by `verify-tkt-usage`
+- [x] A decision recorded: adapt tkt-orient into a grey-matter session-start skill, or not, with reasoning
+- [x] If adapted: reads frontier + in-progress + session context and proposes a next step; drops the `docs/plan.md` + `sync-plan` reads (plan-less); keeps stale-WIP flag-and-offer
+- [x] The handoff overlap is resolved (absorb resume-from-handoff, or pair with `handoff`)
+- [x] Naming decided (e.g. `orient-session`); inlined tkt commands kept, covered by `verify-tkt-usage`
+
+## Resolution (2026-10-20)
+
+Decided: adapt tkt-orient into a new grey-matter skill 'orient' (meta, user-invoked) rather than fold into the legacy frontier-work steering. Authored skills/meta/orient/SKILL.md + Codex sidecar, scoped as the session-start twin of compass: reads frontier + in-progress + .scratch/ handoff, flags stale WIP (flag-and-offer, never auto-release), proposes a next step naming a skill/flow. Dropped docs/plan.md + sync-plan (plan-less). Absorbed the handoff read-side (no read-handoff exists). Routing is a fast-path signal table that indexes INTO compass with an explicit call-compass trigger list + a 'does NOT route' boundary, to prevent table overfit. Ordering rubric deferred to reconcile-tickets. Registered in compass, meta README, maintenance-skills, skill-reviews index + review doc; cross-linked reconcile-tickets/retro/handoff. Legacy global frontier-work rule traced to ~/.kiro/steering (user-global, plan-centric, contradicts frontier-is-the-plan); orient supersedes its start-of-session role for this repo; its retirement spun out as ticket 32.
+
+### Verification
+1. ✓ A decision recorded: adapt tkt-orient into a grey-matter session-start skill (bookend to reconcile-tickets), or not, with reasoning — "Decision recorded: adapt (not fold), name 'orient', with reasoning in skill-reviews/orient.md and this resolution"
+2. ✓ If adapted: the skill reads frontier + in-progress + session context and proposes a next step, drops the docs/plan.md + sync-plan reads (grey-matter is plan-less; the frontier is the plan), and keeps stale-WIP flag-and-offer (never auto-release) — "skills/meta/orient/SKILL.md reads tkt ready + tkt query --status in_progress + .scratch/ handoff, keeps stale-WIP flag-and-offer, drops docs/plan.md + sync-plan; installer dry-run lint passes, tkt validate clean (only pre-existing t07 warning)"
+3. ✓ The handoff overlap is resolved: whether orient absorbs resume-from-handoff or pairs with the existing handoff skill (we have no read-handoff) — "Handoff overlap resolved by absorption: orient reads the .scratch/ handoff (no read-handoff skill exists; handoff is write-only); cross-reference added to handoff SKILL.md"
+4. ✓ Naming decided (e.g. orient-session) consistent with reconcile-tickets dropping the tkt- prefix; inlined tkt commands kept (per wrap-skills-not-commands), covered by verify-tkt-usage — "Named 'orient' (drops tkt- prefix per reconcile-tickets precedent); inlined tkt commands (context/ready/query/validate/edit/claim) all confirmed live in tkt 0.4.0 via verify-tkt-usage earlier this session"
