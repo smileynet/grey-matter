@@ -75,26 +75,21 @@ It aggregates (each also runnable on its own): installer ownership safety
 (`scripts/check-docs-consistency.mjs`), and ticket health (`tkt validate`). It is
 **read-only on user state** (the installer check uses throwaway temp roots, never a real
 harness skill root) and needs **no harness authentication or network** (tkt is local and
-degrades to a skipped-with-warning if absent), so CI can call it directly. Run it before a
+degrades to a skipped-with-warning if absent). Run it before a
 release or a distribution change. Exit 0 = all invariants hold; nonzero names what failed.
 Fixtures proving each invariant fails when seeded live in `scripts/check-repo.test.mjs`
 (`node --test`).
 
-Two automated callers run this same command so a regression can't reach `main` unseen:
-
-- **CI** — [`.github/workflows/check-repo.yml`](./.github/workflows/check-repo.yml) runs
-  it on every push and pull request (no secrets; `tkt` isn't on the runner, so its
-  ticket-health check degrades to skipped-with-warning while the file/script invariants
-  still gate).
-- **Local pre-push hook** (opt-in) — `node scripts/install-hooks.mjs` installs a
-  `pre-push` hook that runs it before each push and blocks on failure; `list` / `uninstall`
-  manage it, and it refuses to clobber a foreign hook. The hook is the fast local path; CI
-  is the backstop for anything that bypasses it (hook not installed, `--no-verify`, fork PR).
+An **opt-in pre-commit hook** can run this automatically: `node scripts/install-hooks.mjs`
+installs a `pre-commit` hook that runs `check-repo.mjs` and blocks the commit on failure;
+`list` / `uninstall` manage it, and it refuses to clobber a foreign hook. It is not forced
+on clone — install it if you want the local gate. (This project uses local hooks only;
+there is no CI pipeline.)
 
 ## Working rhythm
 
 - **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
-- **Check before you push.** Run `node scripts/check-repo.mjs` before pushing when the task touched skills, indexes, docs, or the installer; a green run is cheap insurance against pushing a broken link or a lost sidecar straight to `main`. Install the opt-in pre-push hook (`node scripts/install-hooks.mjs`) to run it automatically, and CI ([`.github/workflows/check-repo.yml`](./.github/workflows/check-repo.yml)) runs it on every push and PR as the backstop.
+- **Check before you push.** Run `node scripts/check-repo.mjs` before pushing when the task touched skills, indexes, docs, or the installer; a green run is cheap insurance against pushing a broken link or a lost sidecar straight to `main`. Install the opt-in pre-commit hook (`node scripts/install-hooks.mjs`) to run it automatically. (Local hooks only — this project has no CI.)
 - **Push after every commit.** A commit isn't done until it's pushed.
 - **Deploy by default.** Prefer to deploy changes (install skills into the harness roots with `node scripts/install-skills.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
 
