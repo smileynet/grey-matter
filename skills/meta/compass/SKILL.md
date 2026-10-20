@@ -66,12 +66,15 @@ A **phase** is a chunk of work inside a session. At the **boundary** between two
 
 ## Session bookends
 
-A session has a start and an end, and two skills bracket it. At the **start**, `orient`
+A session has a start and an end, and skills bracket it. At the **start**, `orient`
 reads the frontier, any in-progress thread, and the last session's `.scratch/` handoff,
 flags stale WIP, and proposes a next step (using this map for the routing). At the **end**,
-`reconcile-tickets` grooms the board and `retro` grooms the environment, and `handoff`
-writes the pickup doc that `orient` reads next time. The loop closes: handoff writes →
-orient reads; reconcile sets the order → orient reads it.
+`wrap-session` is the single closing command: it runs `reconcile-tickets` (groom the board)
+then `retro` (groom the environment), and then **lands the cheap mechanical findings** —
+writing the check, guardrail, or project-level skill/note a recurring issue calls for
+instead of only filing it. `handoff` writes the pickup doc that `orient` reads next time.
+(Run `reconcile-tickets` or `retro` alone when you want just one pass.) The loop closes:
+handoff writes → orient reads; reconcile sets the order → orient reads it.
 
 ## Standalone
 
@@ -98,5 +101,6 @@ Meta skills that build and tend the skill set itself, not feature work. They liv
 - **cheat-sheet**: list every skill by category with a one-line description, the quick reference card. (This map, `compass`, is the fuller router; cheat-sheet is the flat index.)
 - **release** (+ **changelog**, **readme**): cut a tagged release. `release` orchestrates, composing `changelog` (user-facing CHANGELOG entries) and `readme` (keep the README honest), picking the version, and running the gated tag/push/publish. Each is also invokable alone.
 - **reconcile-tickets**: end-of-session ticket-board hygiene, make open tickets current, capture untracked work, set the frontier ordering. Pairs with `retro` (board vs environment).
+- **wrap-session**: the single closing bookend that orchestrates the end-of-session wrap, runs `reconcile-tickets` then `retro`, then **lands** the cheap/unambiguous mechanical findings (writes the check, guardrail, or project-level skill/note) rather than only filing them. The session-end twin of `orient`.
 - **orient**: the start-of-session bookend, read the frontier + in-progress threads + the last session's `.scratch/` handoff, flag stale WIP, and propose a concrete next step naming the skill or flow that fits. The session-start twin of this router: `compass` routes by situation mid-session, `orient` routes by session state at the start and defers here when the pick isn't obvious.
 - **verify-tkt-usage**: check the tkt commands the skills inline against the live `tkt capabilities` manifest; run it after a tkt upgrade to catch drift.

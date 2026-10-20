@@ -20,6 +20,7 @@ strategy behind this bucket.
 - [readme](./readme/SKILL.md): keep `README.md` honest and current.
 - [release](./release/SKILL.md): cut a tagged release (orchestrates changelog + readme + version + tag/publish).
 - [reconcile-tickets](./reconcile-tickets/SKILL.md): end-of-session ticket-board hygiene pass (wraps the `tkt-core` skill; pairs with retro).
+- [wrap-session](./wrap-session/SKILL.md): end-of-session closing bookend, runs reconcile-tickets then retro then lands the cheap mechanical findings (pairs with orient).
 - [verify-tkt-usage](./verify-tkt-usage/SKILL.md): validate the skills' inlined tkt commands against the live `tkt capabilities` manifest.
 
 ## Model-invoked

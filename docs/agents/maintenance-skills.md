@@ -30,6 +30,11 @@ Current members of `skills/meta/`:
   untracked work, set frontier ordering). **Wraps the `tkt-core` skill** (calls it for the
   command surface + ticket standards rather than copying them, so it can't go stale as tkt
   evolves). Pairs with `retro`.
+- **wrap-session**: the single end-of-session closing bookend. **Composes**
+  `reconcile-tickets` then `retro`, then adds the beat neither does alone, **landing** the
+  cheap, unambiguous **mechanical** findings this session (writing the check/guardrail or a
+  project-level skill/note) instead of only filing them; expensive or ambiguous findings
+  stay tickets. The session-end twin of `orient`.
 - **orient**: the start-of-session bookend to `reconcile-tickets`. Reads the frontier +
   in-progress threads + the last session's `.scratch/` handoff, flags stale WIP
   (flag-and-offer, never auto-release), and proposes a next step naming the skill/flow that
