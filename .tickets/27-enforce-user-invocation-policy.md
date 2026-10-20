@@ -1,7 +1,7 @@
 ---
 id: "27"
 title: "Honor user-invoked skill policy in every target harness"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
