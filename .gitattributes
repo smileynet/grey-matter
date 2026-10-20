@@ -1,0 +1,26 @@
+# Normalize line endings. Without this, core.autocrlf=true on Windows injects CRLF
+# into committed files — which silently breaks shell scripts when they run on a Linux
+# CI runner (CRLF in a shebang line fails). Text files are stored LF in the repo.
+
+* text=auto eol=lf
+
+# Scripts that MUST be LF regardless of platform (they run under bash / node on CI).
+*.sh    text eol=lf
+*.mjs   text eol=lf
+*.js    text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+*.yaml  text eol=lf
+*.yml   text eol=lf
+*.toml  text eol=lf
+
+# PowerShell is Windows-native; keep CRLF so it runs cleanly there.
+*.ps1   text eol=crlf
+
+# Binary assets: never normalize.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.svg   text eol=lf

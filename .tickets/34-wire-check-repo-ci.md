@@ -36,6 +36,12 @@ workflow is independently useful now.
 Read first: `scripts/check-repo.mjs`, `scripts/check-repo.test.mjs`, AGENTS.md
 ("Consistency checks"), and `.tickets/31-add-repo-consistency-checks.md`.
 
+## Nice-to-have (retro finding 7)
+
+Low-priority robustness: have `check-repo.mjs` assert it invokes every
+`scripts/check-*.mjs` (excluding `*.test.mjs`), so a future check script can't be silently
+orphaned from the aggregator's run list. Fold in here or skip; not load-bearing.
+
 ## Acceptance criteria
 
 - [ ] A CI workflow runs `node scripts/check-repo.mjs` on push and PR and fails the build on nonzero exit.

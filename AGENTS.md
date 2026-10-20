@@ -80,6 +80,7 @@ Fixtures proving each invariant fails when seeded live in `scripts/check-repo.te
 ## Working rhythm
 
 - **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
+- **Check before you push.** Run `node scripts/check-repo.mjs` before pushing when the task touched skills, indexes, docs, or the installer; a green run is cheap insurance against pushing a broken link or a lost sidecar straight to `main`. (Until a hook enforces this — ticket 34/35 — it's a prose rule.)
 - **Push after every commit.** A commit isn't done until it's pushed.
 - **Deploy by default.** Prefer to deploy changes (install skills into the harness roots with `node scripts/install-skills.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
 

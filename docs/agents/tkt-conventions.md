@@ -32,9 +32,18 @@ Physical layout:
 `tkt close <id> --check-all --resolution "..."`.
 
 - Never hand-edit a ticket's status to `done` (skips the close gates).
+- **Closing is terminal.** tkt 0.4.0 refuses *every* mutation of a remote-closed ticket —
+  no reopen (`edit --status`), no AC re-check (`close --force --check-all`, `edit --ac`),
+  and `validate --fix` won't touch it. So **always `--check-all` at close time**: if you
+  close without checking the ACs, the `unchecked-acs-on-done` warning is permanent (you
+  cannot fix it afterward without a forbidden hand-edit). The upstream gap is tracked by
+  ticket 33.
 - Use `--status backlog` only for deliberately parked work.
 - grey-matter's `.tickets/config.toml` has push enabled, so `new`/`claim`/`close`
   commit and push.
+- **`tkt capabilities -o json` is partial** — it under-reports flags (e.g. `--tags`,
+  `--vc`, and `edit --ac` vs `--vc`) and commands. Confirm any flag against
+  `tkt <cmd> --help`, not the manifest alone; see `verify-tkt-usage`.
 
 ## Tag vocabulary (namespaced)
 
