@@ -27,7 +27,7 @@ Current members of `skills/meta/`:
   orchestrator that composes both, picks the version, and runs the gated tag/push/publish
   mechanics (`release/references/release.sh`).
 - **reconcile-tickets**: end-of-session ticket-board hygiene (drift audit, capture
-  untracked work, set frontier ordering). **Wraps the `tkt` skill** (calls it for the
+  untracked work, set frontier ordering). **Wraps the `tkt-core` skill** (calls it for the
   command surface + ticket standards rather than copying them, so it can't go stale as tkt
   evolves). Pairs with `retro`.
 - **orient**: the start-of-session bookend to `reconcile-tickets`. Reads the frontier +
@@ -71,9 +71,9 @@ primary-source deep-dive capture (ticket 12). File a maintenance skill under
   standalone, or via the umbrella `scripts/check-repo.mjs` with the installer, invocation,
   and ticket checks). See `AGENTS.md` ("Consistency checks").
 - **Wrap tool-owned skills; inline tool commands.** This repo depends on the `tkt` tool
-  (a setup prerequisite `init-project` checks). Where tkt ships a *skill* (the `tkt` skill,
-  which owns the command surface and ticket standards), **wrap it**, call the Skill tool
-  with `tkt` rather than copying its content, so it can't go stale as tkt evolves
+  (a setup prerequisite `init-project` checks). Where tkt ships a *skill* (the `tkt-core`
+  skill, which owns the command surface and ticket standards), **wrap it**, call the Skill
+  tool with `tkt-core` rather than copying its content, so it can't go stale as tkt evolves
   (`reconcile-tickets` does this). But **inlining tkt *commands*** (`tkt new`, `tkt close
   --check-all`, ...) directly in a skill **is fine**, the wrap rule is about skills, not
   commands. The staleness control for inlined commands is `verify-tkt-usage`, which checks

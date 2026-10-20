@@ -25,7 +25,7 @@ optionality path exists). Verify both, and if either is missing, tell the user t
 it before continuing, don't improvise around a missing tracker:
 
 - the **tkt tool** is on PATH (`tkt --version`);
-- the **`tkt` skill** is deployed to the harness's skill root (so skills like
+- the **`tkt-core` skill** is deployed to the harness's skill root (so skills like
   `reconcile-tickets`, `to-tickets`, `implement` can call it for the command surface and
   ticket standards). It ships with tkt; deploy it the way that harness installs skills.
 

@@ -11,20 +11,20 @@ current, and the ordering set so the frontier's top picks are the right ones. Pa
 `retro` at session end, reconcile-tickets grooms the **board**, retro grooms the
 **environment**.
 
-This repo tracks work with **tkt**, and the `tkt` tool ships its own skill that owns the
-command surface and the ticket-quality standard, and is updated as the tool evolves.
+This repo tracks work with **tkt**, and the `tkt` tool ships its own skill (`tkt-core`) that
+owns the command surface and the ticket-quality standard, and is updated as the tool evolves.
 **Don't re-spell tkt's commands or ticket standards here; defer to it.**
 
-## Use the tkt skill, don't duplicate it
+## Use the tkt-core skill, don't duplicate it
 
-First, **call the Skill tool with `tkt`**. It is the source of truth for: the command
+First, **call the Skill tool with `tkt-core`**. It is the source of truth for: the command
 surface (`new`/`claim`/`close`/`ready`/`edit`/`query`/`validate`), the ticket format, and
 the ticket-quality standard (intent source, context, behavioral outcome, testable ACs,
 ordering). Everything below is the grey-matter-specific *judgment* layer on top of that,
 what to reconcile and how to order, not how tkt works.
 
 (tkt is a setup prerequisite for this repo; `init-project` verifies the tool and its skill
-are installed. If the `tkt` skill isn't reachable, stop and have the user run
+are installed. If the `tkt-core` skill isn't reachable, stop and have the user run
 `init-project` / install tkt rather than improvising commands. The `docs/plan.md` markdown
 fallback is reserved for a future no-tkt optionality path, not the live path.)
 
@@ -57,14 +57,14 @@ longer relevant):
 
 Scan the session for work with no ticket: decisions needing implementation, issues found,
 follow-ups from closed tickets, anything discussed-but-not-filed. File each as a ticket to
-the tkt quality bar (from the `tkt` skill). **Default new tickets to `open`** (frontier-
+the tkt quality bar (from the `tkt-core` skill). **Default new tickets to `open`** (frontier-
 eligible); reserve `backlog` for work deliberately deferred out of this cycle. Tag with its
 stream at creation. Dedupe first: extend an existing ticket rather than file a near-
 duplicate (`tkt query`).
 
 ### 4. Set the three ordering axes
 
-Keep them distinct (the `tkt` skill defines each; this is how grey-matter applies them):
+Keep them distinct (the `tkt-core` skill defines each; this is how grey-matter applies them):
 
 - **`blocked_by`** - structural only: A must finish before B *can* start. "We'd rather do
   A first" is not a blocker, that's priority.
