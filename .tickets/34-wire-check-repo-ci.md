@@ -1,7 +1,7 @@
 ---
 id: "34"
 title: "Wire check-repo.mjs into CI (run the consistency checks on push/PR)"
-status: backlog
+status: open
 blocked_by: []
 priority: low
 validation_criteria:
