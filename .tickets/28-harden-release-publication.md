@@ -1,7 +1,7 @@
 ---
 id: "28"
 title: "Publish releases without unrelated tags or stranded release state"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -35,7 +35,16 @@ Do not cut a real release or publish to GitHub while implementing this hardening
 
 ## Acceptance criteria
 
-- [ ] A release run pushes `HEAD` and only the requested tag, never unrelated local tags.
-- [ ] A simulated `gh release create` failure leaves no temporary notes file and emits exact recovery instructions.
-- [ ] The script has a portable in-place-edit replacement or documented platform constraint verified on macOS and Linux tooling.
-- [ ] A throwaway-repository test demonstrates the normal and failure paths without contacting the production remote.
+- [x] A release run pushes `HEAD` and only the requested tag, never unrelated local tags.
+- [x] A simulated `gh release create` failure leaves no temporary notes file and emits exact recovery instructions.
+- [x] The script has a portable in-place-edit replacement or documented platform constraint verified on macOS and Linux tooling.
+- [x] A throwaway-repository test demonstrates the normal and failure paths without contacting the production remote.
+
+## Resolution (2026-10-20)
+
+Hardened skills/meta/release/references/release.sh: (1) push HEAD + only refs/tags/\ instead of 'git push origin HEAD --tags', so unrelated local tags are never published; (2) trap-on-EXIT always removes the temp notes file, and a gh release create failure prints exact recovery steps (retry gh, or delete the tag) and exits nonzero, keeping the pushed tag as the durable artifact; (3) replaced GNU-only 'sed -i' with the portable temp-file+redirect pattern. Added references/release.test.sh (local bare origin + fake gh, never the real remote): 11/11 pass. SKILL.md step 6 + Notes updated. Committed 899a1c3, pushed, redeployed. bash -n clean; the clean-tree gate still fires correctly.
+
+### Verification
+1. ✓ Release publication pushes only the requested tag — "Release run pushes only the requested tag: test 'unrelated local tag was NOT pushed' passes while 'release tag v0.2.0 pushed' passes; the script uses 'git push origin refs/tags/\', not '--tags'."
+2. ✓ A GitHub-release failure leaves documented recoverable state and no temporary notes file — "gh failure leaves recoverable state and no temp file: tests 'gh failure makes release exit nonzero', 'failure path prints a recovery message', 'recovery message includes tag-undo instructions', 'tag v0.3.0 pushed despite gh failure', and 'temp notes file cleaned up on failure (trap EXIT)' all pass."
+3. ✓ Release script succeeds on supported macOS and Linux shell tooling — "Portable across macOS/Linux tooling: no 'sed -i' remains (static check passes), replaced by temp-file+mv which behaves identically on BSD/macOS and GNU; bash -n passes. Verified via references/release.test.sh 11/11 in an isolated throwaway repo."
