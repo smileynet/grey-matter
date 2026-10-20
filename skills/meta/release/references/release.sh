@@ -90,14 +90,20 @@ if [[ "$DRY_RUN" == true ]]; then
   echo "  1. promote [Unreleased] -> [$VERSION] - $TODAY in CHANGELOG.md"
   echo "  2. git commit -m 'release: $TAG'"
   echo "  3. git tag -a $TAG"
-  echo "  4. git push origin HEAD --tags"
+  echo "  4. git push origin HEAD, then push only tag $TAG (not other local tags)"
   echo "  5. gh release create $TAG with notes from the changelog section"
   exit 0
 fi
 
 # 1. promote [Unreleased] -> dated version section (leave a fresh empty [Unreleased])
-sed -i "s/^## \[Unreleased\]/## [Unreleased]\n\n## [$VERSION] - $TODAY/" "$CHANGELOG"
-sed -i '/^$/N;/^\n$/d' "$CHANGELOG"
+# Portable in-place edit: write to a temp file and move it back. BSD/macOS `sed -i`
+# requires a backup-suffix argument and GNU `sed -i` does not, so `sed -i` is not
+# portable; the temp-file+mv pattern behaves identically everywhere.
+CHANGELOG_TMP=$(mktemp)
+sed "s/^## \[Unreleased\]/## [Unreleased]\n\n## [$VERSION] - $TODAY/" "$CHANGELOG" > "$CHANGELOG_TMP"
+# collapse any run of blank lines left by the insertion down to a single blank line
+sed '/^$/N;/^\n$/D' "$CHANGELOG_TMP" > "$CHANGELOG"
+rm -f "$CHANGELOG_TMP"
 
 # 2. commit
 git -C "$REPO_ROOT" add "$CHANGELOG"
@@ -106,15 +112,28 @@ git -C "$REPO_ROOT" commit -m "release: $TAG"
 # 3. annotated tag
 git -C "$REPO_ROOT" tag -a "$TAG" -m "Release $TAG"
 
-# 4. push commit + tag
-git -C "$REPO_ROOT" push origin HEAD --tags
+# 4. push commit + ONLY this release tag (never `--tags`, which would publish every
+# unrelated local tag).
+git -C "$REPO_ROOT" push origin HEAD
+git -C "$REPO_ROOT" push origin "refs/tags/$TAG"
 
-# 5. GitHub release with notes extracted from this version's changelog section
+# 5. GitHub release with notes extracted from this version's changelog section.
+# The temp notes file is always cleaned up (trap on EXIT), even if gh fails. A gh
+# failure leaves the pushed tag in place (the tag IS the release; the GitHub release
+# is a retryable presentation layer) and prints exact recovery steps rather than
+# exiting silently.
 NOTES_FILE=$(mktemp)
+trap 'rm -f "$NOTES_FILE"' EXIT
 sed -n "/^## \[$VERSION\]/,/^## \[/{/^## \[$VERSION\]/d;/^## \[/d;p}" "$CHANGELOG" > "$NOTES_FILE"
-gh release create "$TAG" --title "$TAG" --notes-file "$NOTES_FILE" \
-  --repo "$(git -C "$REPO_ROOT" remote get-url origin | sed 's/\.git$//')"
-rm -f "$NOTES_FILE"
+REMOTE_REPO="$(git -C "$REPO_ROOT" remote get-url origin | sed 's/\.git$//')"
+if ! gh release create "$TAG" --title "$TAG" --notes-file "$NOTES_FILE" --repo "$REMOTE_REPO"; then
+  echo "" >&2
+  echo "x gh release create failed. The tag $TAG is already committed and pushed." >&2
+  echo "  The repository state is intact; only the GitHub release is missing. Recover by either:" >&2
+  echo "    - retry the release:   gh release create $TAG --title $TAG --notes-file <(git -C \"$REPO_ROOT\" show $TAG:CHANGELOG.md) --repo $REMOTE_REPO" >&2
+  echo "    - or undo the tag:     git -C \"$REPO_ROOT\" push origin :refs/tags/$TAG && git -C \"$REPO_ROOT\" tag -d $TAG" >&2
+  exit 1
+fi
 
 echo ""
 echo "released $TAG  (gh release view $TAG)"

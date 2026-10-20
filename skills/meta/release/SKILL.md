@@ -44,9 +44,12 @@ mechanics.
 
 6. **Cut the release.** Run `bash references/release.sh <version>`. It re-checks the gates,
    promotes `[Unreleased]` to a dated `[version]` section (leaving a fresh empty
-   `[Unreleased]`), commits `release: v<version>`, creates an annotated tag, pushes commit
-   + tag, and publishes a GitHub release with notes extracted from that version's
-   changelog section.
+   `[Unreleased]`), commits `release: v<version>`, creates an annotated tag, pushes the
+   commit and **only that release tag** (never all local tags), and publishes a GitHub
+   release with notes extracted from that version's changelog section. If the GitHub
+   release step fails, the pushed tag stays in place (it is the durable artifact) and the
+   script prints exact recovery steps (retry `gh release create`, or delete the tag);
+   the temp notes file is always cleaned up.
 
 7. **Report.** Confirm the tag, the GitHub release URL, and anything deferred.
 
@@ -56,7 +59,9 @@ mechanics.
   WSL (it's bash).
 - **Never hand-edit the mechanics.** The gating and the tag/push/publish live in
   `release.sh` on purpose; do the judgement in the skill, let the script do the exact
-  steps. Keep `release.sh` byte-stable (same discipline as `wizard`'s library).
+  steps. Keep `release.sh` stable (same discipline as `wizard`'s library); change it only
+  deliberately, and re-run `bash references/release.test.sh` (isolated: a local bare repo +
+  a fake `gh`, never the real remote) when you do.
 - **Idempotency / safety**: the script aborts without touching anything if a gate fails
   (unclean tree, bad or non-increasing version, empty `[Unreleased]`). `--dry-run` always
   changes nothing.
