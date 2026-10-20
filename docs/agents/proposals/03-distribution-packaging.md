@@ -92,11 +92,16 @@ cadence, the manifest + install script are the load-bearing parts; versioning is
 | --- | --- | --- |
 | Claude Code | plugin manifest (A) | yes (enumerated) |
 | Codex | install script -> `~/.agents/skills/` (B) | yes (recursive scan) |
-| Kiro / kiro-cli | install script -> scan root (B) | [verify, ticket 14] |
-| OpenCode | install script -> `~/.agents/skills/` (B) | yes if it scans the convention [verify] |
+| Kiro / kiro-cli | install script -> scan root (B) | yes (verified live, ticket 14) |
+| OpenCode | install script -> `~/.agents/skills/` (B) | yes (verified live, ticket 14) |
 
-The two unverified cells are exactly what ticket 14 (harness-behavior spikes) probes; this
-proposal doesn't block on them (the plugin path is solid for the primary harness today).
+> **Update (ticket 14 complete):** the two cells above that were `[verify]` are now proven
+> live. kiro-cli discovers + loads skills (and reads `references/` on demand); OpenCode
+> discovers skills under `.agents/skills/` via its runtime `skill` tool (an earlier "no
+> support" note was wrong and is corrected). Six harnesses total are characterized live —
+> see [`../research/harness-behavior-probes.md`](../research/harness-behavior-probes.md).
+> The installer default was also updated to target every known per-harness user root, since
+> scan roots proved to be per-harness, not the single `~/.agents/skills/` convention.
 
 ## Decision (recorded)
 

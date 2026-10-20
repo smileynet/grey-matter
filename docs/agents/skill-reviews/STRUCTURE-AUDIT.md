@@ -1,5 +1,16 @@
 # Structure audit: authored skills vs the Agent Skills standard
 
+> **Historical snapshot (dated ~2026-10, 10 skills authored).** This audit reflects the
+> skill set *at the time it was run* — the "all 10 skills" counts below are of that moment,
+> not the current inventory (now 30+ skills). It is kept as the record of the one-time
+> standard-alignment pass (references/ layout, trigger-tagged pointers, metadata cleanup)
+> and the deliberate `disable-model-invocation` decision, all of which still hold. The
+> **live, current** invariant that every skill's folder name matches its frontmatter `name`,
+> that user-invoked skills carry both the Claude field and the Codex sidecar, and that the
+> indexes stay in sync is enforced mechanically going forward
+> (`scripts/check-invocation-policy.mjs`, and the installer's name==dir lint), not by
+> re-running this snapshot.
+
 Audit of the grey-matter skills authored so far against the agentskills standard
 (mined into `.references/agentskills`). Done after the `pr` skill adopted the
 standard's `references/` + trigger-tagged-pointer conventions. Records what was fixed

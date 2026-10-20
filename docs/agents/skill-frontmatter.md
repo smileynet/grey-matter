@@ -31,7 +31,7 @@ each harness reads differs, and a strict validator rejects the Claude one:
 | --- | --- | --- |
 | Claude Code | `disable-model-invocation: true` | `SKILL.md` frontmatter |
 | Codex | `policy.allow_implicit_invocation: false` | sidecar `agents/openai.yaml` |
-| Kiro | (verify locally; likely ignores the Claude field) | - |
+| Kiro | ignores the Claude field (verified: unknown key ignored, skill still loaded) | - |
 
 So a user-invoked skill sets **both** `disable-model-invocation: true` in `SKILL.md`
 *and* `policy.allow_implicit_invocation: false` in `agents/openai.yaml`, kept in sync
@@ -40,7 +40,8 @@ it is correct; it is the one deliberate deviation from the strict six-field allo
 
 Known wart: the strict agentskills validator and Claude Code's own linter warn on
 `disable-model-invocation` as a non-standard key. The runtime honors it; accept the
-warning. Codex and Kiro ignore the key at runtime (no error expected; verify locally).
+warning. Codex and Kiro ignore the key at runtime (verified live on kiro-cli — the skill
+loaded and ran with an unknown key present; see `research/harness-behavior-probes.md`).
 
 ## metadata: inert data only
 
@@ -113,27 +114,25 @@ unreachable. So the portable rule is:
 
 
 
-Open backlog check: whether kiro-cli 2.31.0 and codex-cli 0.162.1 **ignore vs reject**
-unknown `SKILL.md` frontmatter keys, and whether kiro-cli honors
-`disable-model-invocation`. Drop a probe skill with a known-unknown key into each
-harness's skills dir and watch for warn-vs-reject. Until confirmed, keep frontmatter to
-the safe core plus the deliberate invocation fields.
+## Harness behavior: verified live (ticket 14)
 
-### Confirmed for the standard's reference implementation (ticket 14)
+The questions this schema used to hedge are now **resolved by live probes** across six
+harnesses (kiro-cli, codex, Claude Code, agy, Crush, OpenCode) plus the standard's
+reference library. Full results and per-harness evidence are in
+[`research/harness-behavior-probes.md`](./research/harness-behavior-probes.md). The
+load-bearing findings:
 
-Probed `skills-ref` (the agentskills standard library) directly; results in
-[`research/harness-behavior-probes.md`](./research/harness-behavior-probes.md). These hold
-for the *standard's own parser/catalog*; per-harness runtime behavior still needs an
-authenticated session (the CLIs here were installed but not logged in):
-
-- **Unknown frontmatter is ignored, not rejected**: a skill with an unknown key parses
-  with exit 0 and only `name`+`description` surface; only genuinely malformed YAML exits 1.
-- **Nesting is irrelevant to parsing**: the leaf dir is the skill; a 2-levels-deep skill
-  parses fine. Discovery depth is a per-harness scanner concern, not a parse one.
-- **`references/` are not read by the discovery layer**: the library surfaces the SKILL.md
-  `location` and leaves relative-link reading to the agent at runtime, confirming
-  references are additive and agent-loaded.
-- **`disable-model-invocation` is not filtered by the standard library**: `to-prompt`
-  still lists a user-invoked skill. Filtering is a **per-harness** responsibility, which is
-  exactly why invocation control is expressed per-harness (above), not as one portable
-  field.
+- **Unknown frontmatter is ignored, not rejected** — a skill with an unknown key loads and
+  runs (kiro-cli live + reference lib; only malformed YAML fails).
+- **Nesting is irrelevant to parsing** — the leaf dir is the skill; discovery depth is a
+  per-harness scanner concern. Harnesses install flat (confirmed on Claude Code).
+- **`references/` are agent-loaded at runtime** — proven live on kiro-cli and Claude Code
+  (the agent followed the relative link and returned the token).
+- **Invocation control is honored at the harness layer** — proven isolated on codex: the
+  user-invoked probe (`allow_implicit_invocation: false`) was absent from the model catalog
+  while the model-invokable variant was listed. Filtering is per-harness (agy and Claude
+  Code list user-invoked skills in the catalog; codex filters them), which is exactly why
+  invocation control is expressed per-harness above rather than as one portable field.
+- **Scan roots are per-harness** at the user level (`~/.kiro/skills`, `~/.codex/skills`,
+  `~/.claude/skills`), while the project-level `.agents/skills/` is shared by agy, Crush,
+  and OpenCode. The installer's default-roots list accounts for this.

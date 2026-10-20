@@ -1,5 +1,13 @@
 # Harness behavior probes (ticket 14)
 
+> **Currency note.** This document is the **authoritative, current** record of harness
+> behavior and supersedes ticket 14's resolution where they differ. Ticket 14 was closed
+> mid-investigation and its frozen resolution says Claude Code and OpenCode were "deferred /
+> untested"; they were **subsequently probed live** (both proven — see below), and the
+> earlier "OpenCode has no Agent Skills support" conclusion was wrong and is corrected here.
+> Because tkt makes a closed ticket's resolution immutable, that older text can't be
+> amended; trust this doc, not the ticket 14 resolution, for which harnesses were verified.
+
 Empirical results for how skills are discovered, loaded, and filtered, replacing the
 inferred [SPEC]/[LIKELY]/[VERIFY] reasoning in `docs/agents/skill-frontmatter.md` with what
 was actually observed. Re-run the probe rig when an untested harness is available.

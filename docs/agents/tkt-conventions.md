@@ -2,7 +2,7 @@
 
 How we create, tag, link, and close tickets in this repo. This is the operational
 short form; the reasoning lives in `docs/agents/proposals/01-*`, `01b-*`, `01c-*`, and the
-vocabulary lives in [`GLOSSARY.md`](../GLOSSARY.md).
+vocabulary lives in [`GLOSSARY.md`](../../GLOSSARY.md).
 
 Two of the conventions below are **interim**: they describe how we work *today*,
 before the native tkt features (tkt tickets 192-199) land. Each interim rule names
@@ -93,7 +93,7 @@ merged PR. (Only the `triage` skill reads this flag; default off.)
 
 ## Verbiage
 
-Use the canonical terms in [`GLOSSARY.md`](../GLOSSARY.md). The two binding
+Use the canonical terms in [`GLOSSARY.md`](../../GLOSSARY.md). The two binding
 homonym rulings: say **frontier** (never bare "ready") for computed-ready work and
 the full **`triage:ready-for-agent`** for the asserted label; **spec** is the
 requirements document, the tkt pointer field is the **spec-slug**.
