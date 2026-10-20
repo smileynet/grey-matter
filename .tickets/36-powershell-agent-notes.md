@@ -1,7 +1,7 @@
 ---
 id: "36"
 title: "Add a short agent-facing note on Windows/PowerShell command gotchas"
-status: open
+status: done
 blocked_by: []
 priority: low
 validation_criteria:
@@ -34,5 +34,13 @@ Read first: AGENTS.md, `docs/agents/doc-conventions.md` (where agent-facing note
 
 ## Acceptance criteria
 
-- [ ] A committed agent-facing note lists the recurring PowerShell/Windows traps with the correct form for each.
-- [ ] It is reachable via a pointer from AGENTS.md, not an orphan.
+- [x] A committed agent-facing note lists the recurring PowerShell/Windows traps with the correct form for each.
+- [x] It is reachable via a pointer from AGENTS.md, not an orphan.
+
+## Resolution (2026-10-20)
+
+done: added a committed agent-facing Windows/PowerShell gotchas note (Move-Item vs Rename-Item, semicolon not double-ampersand, env-var syntax, here-string fragility, path quoting, -Filter array), reachable via a pointer in AGENTS.md's conventions list.
+
+### Verification
+1. ✓ A committed agent-facing note lists the handful of PowerShell/Windows traps that recur, each with the correct form — "docs/agents/windows-powershell-gotchas.md committed (d65c5b9); AGENTS.md pointer added; check-repo.mjs link check passes."
+2. ✓ It is reachable from AGENTS.md (a pointer), not an orphan doc — "(no evidence)"
