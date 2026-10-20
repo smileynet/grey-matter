@@ -1,7 +1,7 @@
 ---
 id: "35"
 title: "Add a pre-push (or pre-commit) hook running check-repo.mjs for fast local feedback"
-status: open
+status: done
 blocked_by: []
 priority: low
 validation_criteria:
@@ -37,6 +37,14 @@ Read first: `scripts/check-repo.mjs`, AGENTS.md ("Working rhythm", "Consistency 
 
 ## Acceptance criteria
 
-- [ ] A git hook runs `check-repo.mjs` (or a documented cheap subset) before push/commit and blocks on nonzero exit.
-- [ ] The hook is opt-in / documented-install, not forced on every clone, and degrades gracefully if Node or tkt are absent.
-- [ ] Interaction with ticket 34's CI is noted (local fast path vs remote backstop; same command).
+- [x] A git hook runs `check-repo.mjs` (or a documented cheap subset) before push/commit and blocks on nonzero exit.
+- [x] The hook is opt-in / documented-install, not forced on every clone, and degrades gracefully if Node or tkt are absent.
+- [x] Interaction with ticket 34's CI is noted (local fast path vs remote backstop; same command).
+
+## Resolution (2026-10-20)
+
+done: opt-in pre-push hook runs check-repo.mjs and blocks on nonzero exit; installer is install/list/uninstall, idempotent, not forced on clone, refuses to clobber/remove a foreign hook, degrades gracefully without node. Ticket 34 CI interaction documented in AGENTS.md.
+
+### Verification
+1. ✓ A git hook runs check-repo.mjs (or the cheap subset) before push/commit and blocks on a nonzero exit — "scripts/hooks/pre-push + install-hooks.mjs/.sh/.ps1 committed (cc15cd1); tested list/install/idempotent, hook runs check-repo.mjs exit 0 on clean repo, graceful node-absent path."
+2. ✓ The hook is opt-in or documented install (not forced on every clone), and degrades gracefully if Node/tkt are absent — "Foreign-hook install and uninstall both REFUSED; opt-in (not forced on clone); AGENTS.md documents CI-vs-hook interaction (local fast path vs remote backstop, same command)."
