@@ -25,6 +25,15 @@ tkt --version
 tkt capabilities -o json   # commands{} with inputSchema{} per command
 ```
 
+**The manifest can be present but partial.** At some versions `tkt capabilities`
+under-reports: it has omitted real flags (e.g. `--tags`, `--vc`/`--validation`, `--requires`
+on `new`) and whole commands (e.g. `context`, `blocked`, `audit`) that `tkt <cmd> --help`
+lists. So the manifest proves a command/flag *exists*, but its **absence from the manifest
+does not prove the command/flag is gone**. Whenever a referenced command or flag is missing
+from the manifest, **confirm against `tkt <cmd> --help` before flagging drift**, help is the
+tiebreaker. Only report drift when a command/flag is absent from *both* the manifest and
+`--help`.
+
 ## Process
 
 1. **Load the live surface.** Run `tkt capabilities -o json` and parse it into: the set of
@@ -41,15 +50,20 @@ tkt capabilities -o json   # commands{} with inputSchema{} per command
    `--evidence`, `-o json`, ...). Note prose that *names* a command/flag too, but weight
    actual invocations higher than descriptive mentions.
 
-3. **Diff usage against the manifest.** For each referenced command:
-   - **Command missing** from `capabilities` -> renamed or removed upstream. Flag it, name
-     the current nearest command if there is one.
-   - **Flag not in the command's inputSchema** -> renamed, dropped, or moved. Flag it with
-     the schema's current flags for that command.
-   - **Enum value no longer valid** (e.g. a `priority` or `status` value that changed) ->
-     flag it with the current allowed set.
+3. **Diff usage against the manifest (with a `--help` tiebreaker).** For each referenced
+   command:
+   - **Command missing** from `capabilities` -> check `tkt <cmd> --help`. Still missing ->
+     renamed or removed upstream; flag it. Present in help -> the manifest is partial, not
+     drift.
+   - **Flag not in the command's inputSchema** -> check `tkt <cmd> --help`. Still absent ->
+     renamed/dropped; flag it with the current flags. Present in help -> manifest is
+     partial (this is common for `--tags`/`--vc`), not drift.
+   - **Enum value no longer valid** (e.g. a `priority`/`status` value that changed) ->
+     flag it with the current allowed set (enums in the manifest are reliable where
+     present; confirm against `--help` if the whole command was manifest-partial).
    - **Required field we never pass** -> flag as a latent failure.
-   Anything that matches the manifest is fine, say so briefly; don't list every clean hit.
+   Anything that matches the manifest (or `--help`) is fine, say so briefly; don't list
+   every clean hit.
 
 4. **Report, most-severe-first.** Present a table: skill/file -> command -> the drift ->
    the current correct form from the manifest. A removed command or wrong required field is
@@ -69,7 +83,8 @@ tkt capabilities -o json   # commands{} with inputSchema{} per command
   reads only; it changes no skill, it reports.
 - If `tkt capabilities` itself is missing (an older tkt), that is the first finding, the
   installed tkt predates the manifest; fall back to `tkt <cmd> --help` per command, and
-  note the degraded check.
+  note the degraded check. (The manifest being *present but partial* is handled above by
+  the `--help` tiebreaker, don't flag a help-confirmed flag as drift.)
 - A future hardening is a committed script that runs this diff in CI (the manifest is JSON;
   the diff is deterministic). Out of scope here; this skill is the on-demand audit.
 
