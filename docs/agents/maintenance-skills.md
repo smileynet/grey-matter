@@ -30,6 +30,9 @@ Current members of `skills/meta/`:
   untracked work, set frontier ordering). **Wraps the `tkt` skill** (calls it for the
   command surface + ticket standards rather than copying them, so it can't go stale as tkt
   evolves). Pairs with `retro`.
+- **verify-tkt-usage**: validate the tkt **commands** the skills inline against the live
+  `tkt capabilities` manifest, catching drift after a tkt upgrade. (Inlined commands are
+  allowed, see the wrap-skills-not-commands rule below; this keeps them honest.)
 
 Anticipated members (tracked elsewhere): a model-eval harness (ticket 06), a
 primary-source deep-dive capture (ticket 12). File a maintenance skill under
@@ -58,6 +61,14 @@ primary-source deep-dive capture (ticket 12). File a maintenance skill under
   appears in `compass` and in its bucket README exactly once, and every skill named there
   resolves to a real folder. The lint is not built yet; it lands with CI, which is part of
   the distribution decision (ticket 13).
+- **Wrap tool-owned skills; inline tool commands.** This repo depends on the `tkt` tool
+  (a setup prerequisite `init-project` checks). Where tkt ships a *skill* (the `tkt` skill,
+  which owns the command surface and ticket standards), **wrap it**, call the Skill tool
+  with `tkt` rather than copying its content, so it can't go stale as tkt evolves
+  (`reconcile-tickets` does this). But **inlining tkt *commands*** (`tkt new`, `tkt close
+  --check-all`, ...) directly in a skill **is fine**, the wrap rule is about skills, not
+  commands. The staleness control for inlined commands is `verify-tkt-usage`, which checks
+  them against the live `tkt capabilities` manifest after a tkt upgrade.
 
 ## How a skill joins or leaves the meta bucket
 

@@ -89,3 +89,4 @@ Meta skills that build and tend the skill set itself, not feature work. They liv
 - **cheat-sheet**: list every skill by category with a one-line description, the quick reference card. (This map, `compass`, is the fuller router; cheat-sheet is the flat index.)
 - **release** (+ **changelog**, **readme**): cut a tagged release. `release` orchestrates, composing `changelog` (user-facing CHANGELOG entries) and `readme` (keep the README honest), picking the version, and running the gated tag/push/publish. Each is also invokable alone.
 - **reconcile-tickets**: end-of-session ticket-board hygiene, make open tickets current, capture untracked work, set the frontier ordering. Pairs with `retro` (board vs environment).
+- **verify-tkt-usage**: check the tkt commands the skills inline against the live `tkt capabilities` manifest; run it after a tkt upgrade to catch drift.
