@@ -1,7 +1,7 @@
 ---
 id: "36"
 title: "Add a short agent-facing note on Windows/PowerShell command gotchas"
-status: backlog
+status: open
 blocked_by: []
 priority: low
 validation_criteria:
