@@ -1,7 +1,7 @@
 ---
 id: "29"
 title: "Make completed ticket records match their delivered and deferred scope"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
