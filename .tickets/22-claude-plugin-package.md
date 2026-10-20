@@ -28,7 +28,11 @@ Per proposal 03 ("ship both A + B; we did B first"):
 - **Generate-and-check the `skills` array** from the on-disk `skills/**/SKILL.md` set with
   a `--check` fail mode (the set-equality lint promised in ticket 17 and
   `docs/agents/maintenance-skills.md`). The installer's name-uniqueness lint is the seed to
-  reuse. `curate-docs` points at this as the sync guard.
+  reuse. `curate-docs` points at this as the sync guard. **Note (post-ticket-31):** the
+  set-equality lint now exists as `scripts/check-docs-consistency.mjs` (skill-folder ==
+  bucket-README == compass); this ticket extends the same idea to the *plugin manifest's*
+  `skills` array (a different artifact), and should share logic with it rather than
+  reinvent.
 - **Version/release**: decide changesets + `sync-plugin-version.mjs` + a `release.yml`
   (upstream's pattern) vs hand-versioning until there's a real release cadence. Versioning
   is additive to the manifest.
