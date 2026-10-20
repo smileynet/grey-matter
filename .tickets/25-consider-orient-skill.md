@@ -1,7 +1,7 @@
 ---
 id: "25"
 title: "Consider a session-start orient skill (adapt tkt's tkt-orient as the bookend to reconcile-tickets)"
-status: open
+status: in_progress
 blocked_by: []
 priority: low
 validation_criteria:
