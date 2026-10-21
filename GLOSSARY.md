@@ -114,7 +114,47 @@ A **false friend** across domains:
 Qualify it ("tracer-bullet slice" vs "polished slice") whenever both domains are in
 play; never let the bare term carry the game meaning in a tracer-bullet context.
 
-## Crosswalk: tkt <-> skills
+## adopt-project terms
+
+The vocabulary for brownfield adoption (`skills/meta/adopt-project`, ticket 40). Distinct
+from `init-project`'s greenfield scaffolding.
+
+### adopt (vs init)
+**adopt**: bring the grey-matter workflow into a repo that **already has code and history**,
+characterizing and reconciling around what exists. **init**: scaffold a **fresh/empty** repo
+forward from intent. Context: skills (meta). _Avoid_: using "init" for the brownfield case.
+
+### as-is model
+The honest description of what a codebase currently **is and does** — vocabulary as actually
+named in the code, conventions as actually followed, real build/test commands, known-legacy
+areas — built *before* any planning of change. Context: skills. _Avoid_: "domain model" when
+you mean the characterized-from-code baseline specifically.
+
+### characterize
+To derive the as-is model **from the code itself** (symbols, structure, commit history), not
+from stated intent. After Feathers: a running system is its own specification. Context: skills.
+
+### reconcile (vs clobber)
+To merge grey-matter's structure with existing agent files **non-destructively** — never
+overwrite; classify each existing artifact and integrate around it. **clobber** is the failure
+it avoids: overwriting or shadowing what's already there. Context: skills.
+
+### install-semantics / negotiate-semantics
+The two polarities of adopt-project's reconcile/seed/wire steps. **install**: no incumbent
+agent layer — scaffold grey-matter conventions (carefully). **negotiate**: an incumbent agent
+layer exists — it is authoritative, so default to deferring, pointer-only additions, and
+standing down rather than forking a competing system. Context: skills. (See ADR 0002.)
+
+### incumbent agent layer
+Pre-existing agent scaffolding in a target repo — an AGENTS.md doctrine, a tracker of any
+kind, or existing skills — whose presence flips adopt-project into negotiate-semantics.
+Context: skills. _Avoid_: treating a non-grey-matter tracker as "absent" just because it isn't
+tkt.
+
+### conformance-audit
+Auditing a repo's existing skills, tool scripts, and agent guidance against grey-matter's
+**current** health/maintenance/optimization standards (`skills/meta/conformance-audit`, ticket
+42). Called by adopt-project and runnable standalone for ongoing upkeep. Context: skills (meta).
 
 Match strength is honest (exact / close / broad / narrow); a blank counterpart is
 a real gap, not forced equivalence.

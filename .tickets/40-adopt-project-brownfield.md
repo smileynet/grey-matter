@@ -25,9 +25,54 @@ skills (`init-project`, `domain-modeling`/`game-modeling`, `codebase-design`, `t
 ## Context
 
 Requested after shipping `wrap-session`. Researched 2026-10-20 via three subagents (prior art,
-repo scouting under `d:\code\`, and a teardown of an existing `adopt-project` skill). Key
-findings (full detail below) — this is a design brief, not a finished design; grill/spec it
-before building.
+repo scouting under `d:\code\`, and a teardown of the crew-research `adopt-project` prior art).
+**Design grilled to a shared understanding 2026-10-21** (see "Settled design" below); remaining
+authoring is the `implement` step. The research findings are retained below the settled design as
+the rationale trail.
+
+### Settled design (grilled 2026-10-21)
+
+- **End state = a *fully adopted* project.** The hand-off skills are **part of the workflow**, not
+  a to-do list left for the user. "Fully adopted" means the existing project is fully represented
+  and operable under the workflow (plumbing wired, as-is model characterized, existing backlog
+  captured and triaged into a workable frontier) — **not** that future work has been planned.
+- **Bounded by "derivable from the repo as it is."** Everything characterizable or capturable from
+  existing code/history/conventions is in scope and called inline; the moment the next step needs a
+  *future* the repo doesn't yet contain, that's the seam where adoption ends.
+- **Composition — calls inline:** `init-project` (plumbing, *after* inventory/reconcile decides
+  what's safe; needs the guard fix in ticket 41), `domain-modeling`/`game-modeling`
+  (glossary-from-code), the **conformance-audit** skill (ticket 42; audits existing
+  skills/scripts/agent-guidance against current grey-matter standards), and `triage` (backlog
+  capture). **Recommends, does not call:** `wayfinder` — it generates *new* work, which is building
+  *in* the adopted repo, not adopting it.
+- **Characterization — glossary-from-code, stage-then-write (option b).** Inferred terms are
+  **staged for confirm/correct/reject at the approval gate**; only confirmed terms are written to
+  the target repo's `GLOSSARY.md`. The committed glossary never holds unconfirmed fiction. (A
+  backlog ticket will revisit switching to a hybrid — write code-attested symbols directly-but-
+  marked, stage only interpretations — based on findings from real use.)
+- **Safety — "reconcile, never clobber", on git.** Require a **clean working tree** before adopting
+  (hard guardrail), reconcile/merge existing agent files rather than overwrite, present everything
+  at the approval gate, land adoption as **one reviewable commit**. Git is the backup (revertable
+  history) — no bespoke `.bak` machinery. adopt-project is *meant* to meaningfully reshape the
+  project; the safety model is "bold, coherent, fully visible, revertable," not "avoid touching."
+- **Archetypes — soft lens + one polarity gate.** The five archetypes (below) are a **descriptive
+  vocabulary** that tunes effort (soft lens). PLUS a single binary gate after Step 1: **is there an
+  incumbent agent layer?** (existing AGENTS.md doctrine / an existing tracker of any kind / existing
+  skills). If yes, steps 3–5 switch from **install-semantics** to **negotiate-semantics**:
+  - *reconcile:* incumbent is authoritative; classify each artifact own / leave-alone / pointer-only
+    / ask-before-touch; default to NOT installing.
+  - *seed:* first ask "does a non-grey-matter tracker already own this board?" — if so, **stand
+    down** (never fork a second tracker).
+  - *wire:* assertions-of-existing over creations; never `tkt init` beside a live tracker.
+  This is NOT pure emphasis-tuning (the herdr dry-run proved a pure soft lens would fork herdr's
+  live `.tickets/` while reporting success), and NOT a five-way branch — one polarity bit flips
+  three steps' *verb* from install to negotiate. The "never clobber" git contract prevents
+  overwriting *bytes*; the polarity gate prevents creating a *parallel competing system*. Both
+  needed. (See ADR.)
+- **Bucket/invocation:** user-invoked `meta` (`disable-model-invocation: true` + sidecar), the
+  brownfield twin of `init-project`.
+- **Docs/provenance:** no `skill-reviews/` doc — this ticket is the design record. crew-research is
+  cited as **prior art consulted, never authoritative** (home `code/crew-research/atomics/`).
 
 ### Why a new skill (the delta from init-project)
 
@@ -57,25 +102,27 @@ pointers, GLOSSARY, seeded frontier, wired checks), opposite starting point.
   specification." The glossary/standards must be characterized *from code*, not imagined from
   intent. This is `domain-modeling`'s existing mandatory "cross-check against code" rule, flipped
   to be the *starting point*. `codebase-design` already owns the **seam** vocabulary.
-- **Direct prior art — catalyst's `.kiro` `adopt-project` skill** (d:\code\catalyst,
-  d:\code\catalyst-agentic). A 5-phase flow: **Inventory → Capture → Recommend (approval gate) →
-  Deploy (back up, merge, never clobber) → Verify.**
-  - *Steal:* the **exhaustive cross-harness inventory matrix** (`.kiro/`, `AGENTS.md`/`AGENT.md`,
+- **Prior art consulted — the crew-research `adopt-project` skill** (home:
+  `code/crew-research/atomics/`; an incidental localized copy also sits in `catalyst/.kiro/`
+  after the global skills were decommissioned and localized into consuming projects). Treated as
+  **prior art, not an authoritative source** — grey-matter is a unique reimagining (your own
+  skills + Pocock's, for a newer model generation without legacy baggage), not a descendant of
+  crew-research. A 5-phase flow worth studying: **Inventory → Capture → Recommend (approval gate)
+  → Deploy (back up, merge, never clobber) → Verify.**
+  - *Borrow:* the **exhaustive cross-harness inventory matrix** (`.kiro/`, `AGENTS.md`/`AGENT.md`,
     `CLAUDE.md`/`GEMINI.md`, `.cursorrules`+`.cursor/rules/*.mdc`, `.github/copilot-instructions.md`,
     `.windsurfrules`+`.windsurf/rules/*`, `.clinerules/*`, `.rules/*`, `CONTRIBUTING.md`/
     `DEVELOPMENT.md`, `.scratch/`/`.memory/`, existing SKILL.md, `references/`/`.references/`);
-    the **non-destructive contract** (back up before touching, merge don't clobber, ask before
-    replacing a workflow, approval gate before deploy); the **source→capture→placement routing
-    table**; the idempotency guard; the "global skills stay active — this is workspace structure
-    only" framing.
-  - *Gaps to fill (catalyst's skill doesn't do these):* **glossary-from-code** (it seeds glossary
-    only from prose decision docs, never from source symbols), **coding-standards-from-style
-    inference** (it captures *stated* rules but never *infers* from formatter configs / dominant
-    patterns), and **tracker seeding** (it has no step turning an existing backlog/issues/TODOs
-    into tickets — grey-matter's tkt-centric world wants that). Also re-point all catalyst
-    coupling (`.memory/`, crew tiers, `mise run add-skill`) to grey-matter reality (AGENTS.md
-    primary + CLAUDE.md pointer, `.scratch/`, `tkt`, `docs/agents/` pointers) — same rewrite
-    grey-matter already did for its own `init-project` (see `docs/agents/skill-reviews/init-project.md`).
+    the **non-destructive contract** (merge don't clobber, ask before replacing a workflow,
+    approval gate before deploy); the **source→capture→placement routing table**; the "global
+    skills stay active — this is workspace structure only" framing.
+  - *Gaps we fill (crew-research's skill doesn't do these):* **glossary-from-code** (it seeds
+    glossary only from prose decision docs, never from source symbols), **coding-standards-from-style
+    inference** (captures *stated* rules but never *infers* from formatter configs / dominant
+    patterns), and **tracker seeding** (no step turning an existing backlog/issues/TODOs into
+    tickets — grey-matter's tkt-centric world wants that). Re-point any crew-research coupling
+    (`.memory/`, crew tiers, `mise run add-skill`) to grey-matter reality (AGENTS.md primary +
+    CLAUDE.md pointer, `.scratch/`, `tkt`, `docs/agents/` pointers).
 
 ### Brownfield starting-state archetypes (from scouting real repos)
 
@@ -100,25 +147,32 @@ had *some* agent scaffolding. The skill's first phase must **detect and classify
    tests, or a big domain with no glossary and sparse TODOs. → **behavior-characterization
    fallback**: derive vocabulary + behavior from code + commit history.
 
-### Proposed shape (to be sharpened in grill/spec, not final)
+### Pipeline (grilled; one linear flow, archetype = soft lens, + install/negotiate polarity on 3–5)
 
 1. **Survey & classify** — inventory the cross-harness matrix + detect the build/test/lint command
    (justfile / package.json / Cargo.toml / project.godot / Makefile / pyproject); use the
    tree-sitter `code` tool for an Aider-style symbol map + high-centrality modules (don't read
-   everything); classify into one of the 5 archetypes.
-2. **Characterize the as-is model** — back-fill `GLOSSARY.md` *from code* (via domain/game-modeling's
-   mandatory code cross-check as the *primary* loop), record contradictions + legacy/known-broken
-   areas honestly; offer ADRs only for decisions already baked into the code.
-3. **Derive standards from current style** — state observed conventions ("this repo uses X"), mark
-   divergence; include only what the agent couldn't infer.
-4. **Seed the board from reality** — turn existing TODO/FIXME, open issues, obvious gaps into tkt
-   tickets, but **park most as `backlog`**, promote only a curated frontier to `open` (route through
-   `triage` where it fits) so `tkt ready` isn't flooded.
-5. **Wire the plumbing (reconcile, never clobber)** — AGENTS.md-primary + CLAUDE.md pointer,
-   `.scratch/`, `.references/` + its rehydration README, gitignore, `tkt init` if absent, wire
-   consistency checks; back up anything replaced; **approval gate before writing**.
-6. **Confirm & hand off** — present as-is model + proposed board for human correction, then stop;
-   forward change planning is `wayfinder` (now starting from a real baseline).
+   everything); name the archetype(s); **set the polarity bit** (incumbent agent layer? →
+   negotiate-semantics on steps 3–5, else install-semantics).
+2. **Characterize the as-is model** — back-fill a `GLOSSARY.md` *from code* (via domain/game-modeling's
+   mandatory code cross-check as the *primary* loop); **stage inferred terms for confirmation** (b);
+   record contradictions + legacy/known-broken areas honestly; offer ADRs only for decisions already
+   baked into the code.
+3. **Conformance-audit + reconcile (polarity-aware)** — call the conformance-audit skill (ticket 42)
+   on existing skills/scripts/agent-guidance; reconcile existing agent files. *Install-semantics:*
+   scaffold grey-matter conventions, careful not to clobber. *Negotiate-semantics:* incumbent is
+   authoritative — classify each artifact own / leave-alone / pointer-only / ask-before-touch.
+4. **Seed & triage the board** — call `triage` to capture existing TODO/FIXME, issues, and gaps into
+   a triaged, ordered frontier (triage's roles move raw findings to `backlog`/`ready-for-agent` so
+   `tkt ready` isn't flooded). *Negotiate-semantics:* if a non-grey-matter tracker already owns the
+   board, **stand down** — do not fork a second tracker.
+5. **Wire the plumbing (reconcile, never clobber)** — call `init-project` (guard-fixed, ticket 41) to
+   create only the genuinely-absent plumbing: AGENTS.md-primary + CLAUDE.md pointer, `.scratch/`,
+   `.references/` + its rehydration README, gitignore, `tkt init` if absent, wire consistency checks.
+   *Negotiate-semantics:* assertions-of-existing over creations; never `tkt init` beside a live tracker.
+6. **Confirm & recommend** — present the as-is model + triaged board as one reviewable change for human
+   correction (approval gate; land as one commit), then **recommend `wayfinder`** for forward work and
+   stop. Adoption ends here.
 
 ### Risks / pitfalls to design against
 
@@ -139,20 +193,20 @@ had *some* agent scaffolding. The skill's first phase must **detect and classify
 New skill → update its bucket `README.md` (User-invoked), `compass` (the on-ramps / health
 section — it's a brownfield on-ramp alongside the greenfield `init-project`→`wayfinder`), and the
 `docs/agents/maintenance-skills.md` roster together (the set-equality lint fails a missed one), add
-the `agents/openai.yaml` sidecar, and deploy via `scripts/install-skills.mjs`. Consider a
-`docs/agents/skill-reviews/adopt-project.md` recording the catalyst-prior-art adaptation (the same
-way `init-project.md` records its rewrite).
+the `agents/openai.yaml` sidecar, and deploy via `scripts/install-skills.mjs`. **No `skill-reviews/`
+doc** — this ticket is the design record; crew-research is prior art, not an adaptation source.
 
 Read first: `skills/meta/init-project/SKILL.md`, `docs/agents/skill-reviews/init-project.md`,
 `skills/engineering/domain-modeling` + `game-modeling`, `skills/meta/wayfinder`, `skills/meta/triage`,
-`docs/agents/maintenance-skills.md`, `docs/agents/doc-conventions.md`.
+`docs/agents/maintenance-skills.md`, `docs/agents/doc-conventions.md`, and the two ADRs
+(adoption boundary; soft-lens + polarity gate). Blocked by ticket 41 (init-project guard fix) and
+ticket 42 (conformance-audit skill).
 
 ## Acceptance criteria
 
 - [ ] `skills/meta/adopt-project/SKILL.md` exists, user-invoked (`disable-model-invocation: true`) with the Codex sidecar `agents/openai.yaml` (`allow_implicit_invocation: false`), written to the `writing-for-agents` rules.
-- [ ] The skill first **surveys & classifies** the repo (cross-harness inventory matrix + build/test command detection + tree-sitter symbol map) into a brownfield archetype before writing anything.
-- [ ] It **characterizes an as-is model from code** (glossary-from-code via the domain/game-modeling code cross-check; records legacy/known-broken areas) rather than inventing one from intent, and gates on human confirmation before committing it.
-- [ ] It is **non-destructive**: existing AGENTS.md/CLAUDE.md/rules/tickets are reconciled (backed up, merged, ask-before-replace), never clobbered; it detects and respects an existing tracker / agent layer rather than creating a competing one.
-- [ ] It **seeds the tkt board from reality** (TODO/FIXME/issues/gaps), defaulting most to `backlog` and promoting only a curated frontier to `open`.
-- [ ] It **orchestrates** existing skills (init-project plumbing, domain/game-modeling, triage/to-tickets) and **hands forward to wayfinder** for change planning; it does not duplicate them.
+- [ ] The skill first **surveys & classifies** the repo (cross-harness inventory matrix + build/test command detection + tree-sitter symbol map), names the archetype(s), and **sets the install-vs-negotiate polarity** from "is there an incumbent agent layer?".
+- [ ] It **characterizes an as-is model from code** (glossary-from-code via the domain/game-modeling code cross-check; records legacy/known-broken areas) and **stages inferred glossary terms for confirmation** before any are committed.
+- [ ] It is **non-destructive on git**: requires a clean working tree, reconciles existing agent files (never clobbers), lands adoption as one reviewable commit; and under **negotiate-semantics** it detects an incumbent tracker/agent layer and stands down rather than forking a competing system.
+- [ ] It **orchestrates by calling** `init-project` (guard-fixed), `domain-modeling`/`game-modeling`, the conformance-audit skill, and `triage` (full triaged board seed); and **recommends `wayfinder`** for forward work rather than running it. End state is a fully adopted, workable repo.
 - [ ] Indexes updated together (bucket README + compass + maintenance-skills roster) and `node scripts/check-repo.mjs` passes; skill deployed via install-skills.mjs.

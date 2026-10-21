@@ -50,6 +50,14 @@ gitignored; only [`.references/README.md`](./.references/README.md) is committed
 rehydration index. On a fresh checkout the dir is empty, re-clone the references listed
 in that README. Add new references there with their clone command.
 
+**Prior art is prior art, not authority.** grey-matter is a unique reimagining — your own
+skills and preferences combined with Pocock's, built for a newer model generation without
+legacy baggage. Other skill sets we study (notably **crew-research**, home
+`code/crew-research/atomics/`) are **prior art we draw insight from, never an authoritative
+source.** Cite them as "X does this (prior art); grey-matter chose Y" — consulted and weighed,
+not inherited or adapted-from. Don't cite an incidental localized copy (e.g. a skill copied
+into some project's `.kiro/`) as the source; cite the lineage's home.
+
 ## Install / distribution
 
 Skills are installed into a harness scan root with `node scripts/install-skills.mjs`
