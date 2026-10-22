@@ -22,7 +22,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, lstatSync, mkdirSync, readFileSync, rmSync, realpathSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const CREW_STEERING = [
@@ -89,7 +89,9 @@ function main(argv) {
     else { console.error(`unknown argument: ${argv[i]}`); process.exit(2); }
   }
   const { remove, keep } = plan(home);
-  const rel = (p) => p.slice(home.length + 1);
+  // Report POSIX-style paths so the `remove <path>` / `keep <path>` lines are stable
+  // across OSes (on Windows join() yields backslashes, which broke consumers and tests).
+  const rel = (p) => p.slice(home.length + 1).split(sep).join("/");
   console.log(`${apply ? "apply" : "dry-run"}: ${remove.length} to remove, ${keep.length} kept on purpose`);
   remove.forEach((p) => console.log(`  remove ${rel(p)}`));
   keep.forEach(([p, why]) => console.log(`  keep   ${rel(p)} (${why})`));
