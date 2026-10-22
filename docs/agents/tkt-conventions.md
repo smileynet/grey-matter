@@ -32,6 +32,14 @@ Physical layout:
 `tkt close <id> --check-all --resolution "..."`.
 
 - Never hand-edit a ticket's status to `done` (skips the close gates).
+- **`tkt new` seeds a `TBD` body; fill it before the ticket is on the frontier.** Even
+  with `--vc` (which sets `validation_criteria` in frontmatter), the ticket *body* is a
+  template stub (`## What to build` / `## Acceptance criteria` → `TBD`). An **`open`**
+  ticket with a stub body trips `tkt validate`'s `stub-body` warning (a `backlog` ticket
+  does not). So for a substantive ticket, fill the body in the same pass as creation — the
+  fresh-agent context (intent source, files to read, behavioral outcome) and the AC
+  checkboxes — rather than leaving a placeholder on the frontier. Park as `--status
+  backlog` only if you genuinely intend to flesh it out later.
 - **Create substantive tickets with `--vc` so `close --evidence` maps.** `tkt close --evidence`
   attaches one evidence item per **`validation_criteria`** (frontmatter) entry. A ticket that
   has only `## Acceptance criteria` checkboxes in its body but no `validation_criteria` gets
@@ -78,6 +86,10 @@ the stream tag.
 
 - Sequence work with `blocked_by`; let `tkt ready` surface the next item (it sorts
   by priority then lowest id).
+- **`tkt edit --blocked-by` *replaces* the whole list, it does not append.** To add one
+  blocker to a ticket that already has some, pass the full set (`--blocked-by
+  45,46,47,48,49,50,51,57`), not just the new id — otherwise you silently drop the
+  existing edges. Confirm with `tkt query` after editing.
 - `tkt validate` guarantees no cycles and no dangling edges.
 
 ## Epics (parent / child)
