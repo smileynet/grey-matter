@@ -15,8 +15,16 @@ tags: ["type:enhancement", "stream:migration"]
 
 ## What to build
 
-TBD
+Apply the accepted revisions in [proposal 05](../docs/agents/proposals/05-adopt-project-pilot-revisions.md)
+to `skills/meta/adopt-project/SKILL.md` and `skills/meta/conformance-audit/SKILL.md` (R1-R9).
+Port the pilot's relocation and link-check scripts (kept locally in `.scratch/adopt-decksmith/`;
+the method is in proposal 05 R2) to `scripts/relocate-knowledge.mjs` with fixtures. Batch adoption
+of the 67 `.memory/` repos depends on this script.
+
+Wait for the user's review of proposal 05 before editing the skills.
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [ ] Each accepted R-item from proposal 05 is reflected in adopt-project / conformance-audit; any rejected item is noted in the proposal.
+- [ ] `scripts/relocate-knowledge.mjs` with fixtures for: a depth change, a link between moved files, an untouched evidence file, a skipped code span.
+- [ ] `node scripts/check-repo.mjs` green.
