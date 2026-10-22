@@ -1,7 +1,7 @@
 ---
 id: "41"
 title: "Make init-project's guard create-what's-missing (composable on a non-empty repo)"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 tags: ["stream:tooling"]
