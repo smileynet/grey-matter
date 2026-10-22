@@ -111,3 +111,20 @@ Confirm three unverified mechanics before repo 2:
 3. The `wip(...)` commit rule for unfinished work, instead of leaving the tree dirty (which would
    park the repo).
 4. Pacing: 2–3 repos per sitting, and a check-in after 3 gates are approved without edits.
+
+## Run log
+
+**Phase A (2026-10-22):** snapshot `~/.local/share/grey-matter/phaseA-snapshot-20261022T145130Z.tar.gz`;
+38 grey-matter skills installed into `~/.kiro/skills` (5 refused as crew collisions); global
+AGENTS.md installed for kiro and Claude.
+
+**Repo 1, multimodal-enablement (no live agent):** adopted in `9b67fff` (plus evidence and 7
+migration-finding tickets 025-031). Baseline held: 0 broken links, both self-tests pass,
+`slides:audience` / `slides:verify` findings identical to pre-adoption HEAD. New workspace `w2V`;
+fresh kiro agent oriented to 021 (top of `tkt ready`), checked, given the go-ahead.
+
+Spike results from the launch:
+- `herdr agent start <name> --kind kiro --pane <id> -- chat --v3 -a` is correct; `chat` is not doubled.
+- The first prompt sent right after `agent start` reported ready was not delivered (empty input
+  box, no turn). Always confirm delivery by reading the pane; resend only when the input box is
+  empty and no turn ran. `--until idle --until done --until blocked` returned cleanly.
