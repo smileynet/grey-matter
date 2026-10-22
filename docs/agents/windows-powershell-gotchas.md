@@ -46,6 +46,12 @@ for the cases where a shell command is genuinely the right tool (git, Node, tkt,
   `powershell.exe -NoProfile -Command`, and pipe through `tr -d '\r'`.
 - **PowerShell output carries `\r`.** Strip it before comparing strings.
 - **Compare Python paths to git output with `Path.as_posix()`**: git always prints `/`.
+- **A pipe hides a gating command's failure.** `node scripts/check-repo.mjs | tail -11 && git push`
+  tests `tail`'s exit code, so a red check still pushes (it did, 2026-10-22). Run the gate bare
+  under `set -e`, or redirect it to a file and grep the file after the exit code is known.
+- **Edit code and data with Edit/Write, or a script file.** Backslashes, regexes, and template
+  literals inside `node -e`, `python -`, or a heredoc get re-escaped: `"\b"` once landed in JSON as
+  a backspace and `"\n"` as a real newline inside a regex. Write a `.mjs` to the scratchpad instead.
 
 Each of these was low-severity (recovered in one retry) but cross-session and cheap to
 document once.

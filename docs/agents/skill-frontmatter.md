@@ -46,6 +46,11 @@ started, and tells the agent not to replicate it by other means. So when an orch
 2026-10-22 (`wrap-session` -> `reconcile-tickets` was refused); enforced by Check 3 of
 `scripts/check-invocation-policy.mjs`.
 
+A redeployed invocation change does not reach a running Claude Code session at once: right
+after `install-skills.mjs`, the same session still refused the flipped skill, and it became
+callable only after the session's skill list refreshed (observed one turn later). A new session
+picks it up reliably.
+
 Known wart: the strict agentskills validator and Claude Code's own linter warn on
 `disable-model-invocation` as a non-standard key. The runtime honors it; accept the
 warning. Codex and Kiro ignore the key at runtime (verified live on kiro-cli — the skill
