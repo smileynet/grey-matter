@@ -45,6 +45,7 @@ A starting situation that generates work, then merges onto the main flow.
 - **Bugs and external requests piling up** -> **triage**. It adapts an external request (a GitHub issue/PR) into a tkt ticket, moves it through triage roles, and produces agent-ready tickets that **implement** later picks up. Triage is for work you **didn't create**; tickets that to-tickets produced are already agent-ready, so don't triage them.
 - **Something's broken** -> **diagnosing-bugs**. For the hard ones: the resistant bug, the intermittent flake, the regression between two known-good states. It refuses to theorise until it has a **tight feedback loop** (one command that already goes red on this bug), then fixes with a regression test. After the fix, run **retro** to ask what would have prevented it; if the real finding is there's no good seam to lock it down, that's a job for **improve-codebase-architecture**.
 - **A huge, foggy effort: a greenfield project or a build too big for one session** -> **wayfinder**, the most demanding flow here. When the way to the destination isn't visible yet, it charts a **shared map** of **decision tickets** (a tkt epic) and resolves them one at a time, producing **decisions, not deliverables**, until the way is clear. When the map clears it **hands off, it doesn't build**: merge onto the main flow at **to-spec**.
+- **An existing codebase to bring under the workflow** -> **adopt-project**. The brownfield on-ramp (the counterpart to `init-project`, which is greenfield): it characterizes the repo's **as-is model** from the code, reconciles grey-matter's structure around what exists (**subsuming** an incumbent agent layer, not clobbering or deferring to it), seeds a **triaged** board, and wires the plumbing — ending in a *fully adopted* repo. Then it **recommends `wayfinder`** for forward work and stops; adoption is bounded by what's derivable from the repo as it is.
 
 ## Codebase and docs health
 
@@ -97,6 +98,7 @@ Off the main flow entirely.
 Meta skills that build and tend the skill set itself, not feature work. They live in the `meta` bucket (`skills/meta/`); see `docs/agents/maintenance-skills.md` for the strategy.
 
 - **init-project**: the **precondition**, run before your first flow to configure the tkt tracker, triage tags, and doc layout the other skills assume.
+- **adopt-project**: the brownfield counterpart to init-project (also an on-ramp above) — bring the workflow into a repo that already has code and history by characterizing its as-is model, subsuming/reconciling what exists, seeding a triaged board, and wiring plumbing; calls init-project / domain-modeling / conformance-audit / triage, recommends wayfinder.
 - **review-skill**: the method for reviewing an upstream skill and deciding keep/adapt/drop/new when adapting it into this set.
 - **curate-docs**: promote/move/prune agent-facing docs (also listed under health above).
 - **cheat-sheet**: list every skill by category with a one-line description, the quick reference card. (This map, `compass`, is the fuller router; cheat-sheet is the flat index.)

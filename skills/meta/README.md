@@ -12,6 +12,7 @@ strategy behind this bucket.
 ## User-invoked
 
 - [init-project](./init-project/SKILL.md): the precondition, configure a repo's tkt tracker, triage tags, and doc layout for the other skills.
+- [adopt-project](./adopt-project/SKILL.md): bring the workflow into an existing (brownfield) repo — characterize the as-is model from code, reconcile/subsume what exists, seed a triaged board, wire plumbing.
 - [review-skill](./review-skill/SKILL.md): review an upstream skill and decide keep/adapt/drop/new when adapting it in.
 - [curate-docs](./curate-docs/SKILL.md): promote mature notes into skills, move docs into a skill's `references/`, prune stale docs.
 - [conformance-audit](./conformance-audit/SKILL.md): audit a repo's skills/scripts/agent-guidance/docs against current grey-matter standards and apply the mechanically-safe fixes (gated).

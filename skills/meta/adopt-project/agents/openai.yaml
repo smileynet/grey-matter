@@ -1,0 +1,5 @@
+interface:
+  display_name: "Adopt Project"
+  short_description: "Bring the grey-matter workflow into an existing (brownfield) repo — characterize, reconcile, seed, wire"
+policy:
+  allow_implicit_invocation: false

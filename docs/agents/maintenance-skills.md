@@ -14,6 +14,13 @@ Current members of `skills/meta/`:
 
 - **init-project**: the precondition, sets up a repo's tkt tracker, triage tags, and doc
   layout so the other skills have what they assume.
+- **adopt-project**: the brownfield counterpart to init-project — brings the workflow into a
+  repo that already has code and history. Characterizes the as-is model from the code,
+  reconciles grey-matter's structure around what exists (**subsumes** an incumbent agent
+  layer: migrate its value, then replace — never clobber or defer), seeds a triaged board,
+  wires plumbing, and recommends `wayfinder` for forward work. **Composes** init-project,
+  domain/game-modeling, conformance-audit, and triage; it orchestrates, it doesn't
+  reimplement. See `docs/adr/0001` (adoption boundary) and `0002` (soft-lens + polarity gate).
 - **review-skill**: the method for reviewing an upstream skill and deciding
   keep/adapt/drop/new when adapting it into this set.
 - **curate-docs**: promote a mature note into a skill, move a skill's private reference
