@@ -1,7 +1,7 @@
 ---
 id: "48"
 title: "Fold crew-research nuggets into harnesses.md, doc-conventions, windows gotchas"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "harnesses.md: kiro agent-config gotchas, images, Claude /review alias note"
