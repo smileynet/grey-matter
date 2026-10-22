@@ -1,7 +1,7 @@
 ---
 id: "57"
 title: "uninstall-crew-research test fails on Windows: forward-slash regex vs backslash path output"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
