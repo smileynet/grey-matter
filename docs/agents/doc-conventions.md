@@ -24,6 +24,16 @@ location.
 Generated reports/dashboards follow [`report-format.md`](./report-format.md) (markdown for
 light skims, HTML for full-bodied deliverables).
 
+## Prose tells in user-facing writing
+
+For prose a person reads (README, changelog, PR bodies, docs), judge AI tells **in clusters,
+not singly**. One em dash means nothing. Em dashes plus forced triples plus "robust",
+"seamless", "leverage", or "delve" plus a recap conclusion means rewrite. Name the concrete
+capability or measurement instead of an adjective, and end on the last concrete fact, not a
+summary. After editing for style, re-check every factual claim: tightening a sentence can
+flatten a hedge into an overclaim. A project with its own prose linter (e.g. a deck repo's)
+uses that instead.
+
 ## Lifecycle and the dot-prefix rule
 
 Match the name prefix and git status to how durable the thing is:

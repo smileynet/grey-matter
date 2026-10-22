@@ -23,6 +23,11 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **Test (non-interactive)**: `kiro-cli chat --no-interactive --trust-all-tools "<prompt>"`.
 - **Invocation filter**: consistent with honoring `disable-model-invocation` (not cleanly
   isolated; see codex for the clean case).
+- **Agent-config gotchas** (`~/.kiro/agents/*.json`): `tools` must list `@builtin` and every
+  `@<server>` the agent uses, or those tools never load. `allowedTools` only auto-approves, and
+  subagents don't inherit the parent's: a missing entry stalls the worker on an approval prompt.
+  On machines with AIM-managed agents the JSON is rewritten on load, so deploy configs by copy,
+  never symlink. Verify a config with a live probe that should fail, not by reading the file.
 
 ### codex (secondary)
 
@@ -44,6 +49,9 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **Test**: `claude -p "<prompt>" --allowedTools Read` (a plain `-p` works;
   `--plugin-dir` + piped stdin can hang, use a direct `-p` prompt).
 - Confirmed references/ load on demand; install is flat (bucket nesting is repo-only).
+- **`/review` is not grey-matter's review.** A skill named `code-review` replaces Claude's
+  bundled `/code-review`, but the bundled alias `/review` still runs Claude's own reviewer
+  (no two axes, no tickets). Invoke `/code-review`.
 
 ### agy (ancillary, Google Antigravity CLI)
 
@@ -74,6 +82,19 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   project `.opencode/skills`, `.claude/skills`, `.agents/skills`. **Install**: `--project`,
   or `--root ~/.config/opencode/skills`.
 - **Test**: `opencode run "<prompt>"` from the project dir.
+
+## Images
+
+All three primary harnesses read images natively: kiro-cli takes a path in the prompt (up to 10
+images, each under 10 MB); Claude Code takes a path, a paste, or a drag; Codex takes
+`codex exec -i <file>`.
+
+- If an image has dropped out of context (compaction), re-ask in a fresh headless run
+  (`kiro-cli chat --no-interactive`, `claude -p`, `codex exec -i`) rather than describing it
+  from memory.
+- Pre-resize to the model's long-edge tier (1568 px standard; 2576 px on high-res Claude
+  models), and stay at or under 2000 px per image when sending more than 20.
+- In a multi-image prompt, label each image's role ("Image A: the render") in the text.
 
 ## User-level standing rules (global AGENTS.md)
 

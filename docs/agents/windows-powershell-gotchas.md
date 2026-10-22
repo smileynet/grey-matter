@@ -37,5 +37,15 @@ for the cases where a shell command is genuinely the right tool (git, Node, tkt,
   -Filter "a*","b*"` throws. Use `-Include` with `-Recurse`, or a `Where-Object` match on
   `$_.Name`.
 
+## Bash under Git Bash / MSYS, and scripts generally
+
+- **`IFS=$'\t' read` collapses consecutive tabs**, so empty fields vanish and later columns
+  shift. Use a non-whitespace delimiter (`IFS='|'`, with `yq ... | join("|")` instead of `@tsv`).
+- **uv-installed tool shims (`.exe`) can fail under Git Bash/MSYS** (the venv's site-packages
+  doesn't resolve). Under `set -e`, guard `$(tool ...) || true`, fall back to
+  `powershell.exe -NoProfile -Command`, and pipe through `tr -d '\r'`.
+- **PowerShell output carries `\r`.** Strip it before comparing strings.
+- **Compare Python paths to git output with `Path.as_posix()`**: git always prints `/`.
+
 Each of these was low-severity (recovered in one retry) but cross-session and cheap to
 document once.
