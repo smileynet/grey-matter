@@ -1,7 +1,7 @@
 ---
 id: "49"
 title: "Manifest-scoped crew-research uninstall script (dry-run, do-not-touch list)"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
