@@ -1,7 +1,7 @@
 ---
 id: "53"
 title: "Apply proposal 05: adopt-project + conformance-audit revisions, relocate-knowledge script"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -25,6 +25,15 @@ Wait for the user's review of proposal 05 before editing the skills.
 
 ## Acceptance criteria
 
-- [ ] Each accepted R-item from proposal 05 is reflected in adopt-project / conformance-audit; any rejected item is noted in the proposal.
-- [ ] `scripts/relocate-knowledge.mjs` with fixtures for: a depth change, a link between moved files, an untouched evidence file, a skipped code span.
-- [ ] `node scripts/check-repo.mjs` green.
+- [x] Each accepted R-item from proposal 05 is reflected in adopt-project / conformance-audit; any rejected item is noted in the proposal.
+- [x] `scripts/relocate-knowledge.mjs` with fixtures for: a depth change, a link between moved files, an untouched evidence file, a skipped code span.
+- [x] `node scripts/check-repo.mjs` green.
+
+## Resolution (2026-10-22)
+
+done: proposal 05 applied; relocation script ships inside the adopt-project skill and is gated by check-repo invariant 5
+
+### Verification
+1. ✓ adopt-project and conformance-audit carry the accepted R1-R9 revisions — "adopt-project + conformance-audit carry R1-R9 (commit 1998fb7)"
+2. ✓ scripts/relocate-knowledge.mjs exists with fixtures (depth change, moved-to-moved link, evidence untouched, code-span skip), wired into check-repo — "skills/meta/adopt-project/scripts/relocate-knowledge.mjs + scripts/relocate-knowledge.test.mjs: 6 fixtures pass (depth change, moved-to-moved link, evidence untouched, code-span skip, leftovers, no-clobber); byte-identical to pilot on decksmith cd2c856 (139/139)"
+3. ✓ check-repo.mjs green — "node scripts/check-repo.mjs: 5/5 invariants pass"
