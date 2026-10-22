@@ -65,6 +65,8 @@ Skills are installed into a harness scan root with `node scripts/install-skills.
 `--project` for `<cwd>/.agents/skills`; manifest-tracked, idempotent,
 `--dry-run`/`list`/`uninstall`). The decision and design are in
 [`docs/agents/proposals/03-distribution-packaging.md`](./docs/agents/proposals/03-distribution-packaging.md);
+the user-level standing rules (`global/AGENTS.md`, no steering) install with
+`node scripts/install-agents-md.mjs` (owner-marked, never clobbers a foreign file);
 per-harness deploy + test instructions are in
 [`docs/agents/harnesses.md`](./docs/agents/harnesses.md); a Claude Code plugin package is
 a later addition.
@@ -80,8 +82,9 @@ node scripts/check-repo.mjs
 It aggregates (each also runnable on its own): installer ownership safety
 (`scripts/install-skills.test.mjs`), invocation sidecars + README tiers
 (`scripts/check-invocation-policy.mjs`), doc indexes + relative links
-(`scripts/check-docs-consistency.mjs`), ticket health (`tkt validate`), and adopt-project's
-knowledge-relocation fixtures (`scripts/relocate-knowledge.test.mjs`). It is
+(`scripts/check-docs-consistency.mjs`), ticket health (`tkt validate`), adopt-project's
+knowledge-relocation fixtures (`scripts/relocate-knowledge.test.mjs`), and the global AGENTS.md
+size budget + ownership (`scripts/install-agents-md.test.mjs`). It is
 **read-only on user state** (the installer check uses throwaway temp roots, never a real
 harness skill root) and needs **no harness authentication or network** (tkt is local and
 degrades to a skipped-with-warning if absent). Run it before a
@@ -100,7 +103,7 @@ there is no CI pipeline.)
 - **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
 - **Check before you push.** Run `node scripts/check-repo.mjs` before pushing when the task touched skills, indexes, docs, or the installer; a green run is cheap insurance against pushing a broken link or a lost sidecar straight to `main`. Install the opt-in pre-commit hook (`node scripts/install-hooks.mjs`) to run it automatically. (Local hooks only — this project has no CI.)
 - **Push after every commit.** A commit isn't done until it's pushed. Another session may be pushing to `main` too — if a push is rejected, `git pull --rebase` (or fetch + rebase) and push again; don't force-push. (`tkt new`/`claim`/`close` auto-push, so they interleave with manual commits — the same rebase-and-retry applies.)
-- **Deploy by default.** Prefer to deploy changes (install skills into the harness roots with `node scripts/install-skills.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
+- **Deploy by default.** Prefer to deploy changes (install skills into the harness roots with `node scripts/install-skills.mjs`, the global rules with `node scripts/install-agents-md.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
 
 <!-- tkt:begin -->
 ## Tickets

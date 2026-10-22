@@ -13,6 +13,8 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 - `adopt-project` relocates a dot-prefixed knowledge folder such as `.memory/` into grey-matter paths with a bundled script that keeps every link resolving and leaves recorded evidence untouched. It now also sets up Git LFS, untracks sensitive files, completes the `.references/` clone index, and reshapes AGENTS.md around who actually reads it.
 - `adopt-project` files audit findings as review-first migration findings, so the project's own agent confirms or rejects each one before acting on it.
 
+- User-level standing rules: one short `global/AGENTS.md` (verify before claiming done, keep code minimal, trust observation over docs), installed into kiro-cli, Codex, Claude Code, and OpenCode with `scripts/install-agents-md.mjs`. It replaces always-on steering, stays under a 3 KB budget, and never overwrites a file it didn't install.
+
 ### Changed
 - `adopt-project` treats skills a repo ships to its users as product: it audits them but no longer restructures them. `conformance-audit` reports grey-matter's own layout rules as not applicable on such repos.
 

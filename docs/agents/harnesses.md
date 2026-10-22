@@ -75,6 +75,25 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   or `--root ~/.config/opencode/skills`.
 - **Test**: `opencode run "<prompt>"` from the project dir.
 
+## User-level standing rules (global AGENTS.md)
+
+grey-matter has no steering. Its always-on rules are one short file, `global/AGENTS.md`
+(budget 3 KB, enforced), installed with `node scripts/install-agents-md.mjs` into each
+harness's global instructions file:
+
+| Harness | Global file | Source of the path |
+| --- | --- | --- |
+| kiro-cli | `~/.kiro/steering/AGENTS.md` | kiro.dev steering docs: AGENTS.md there is always-on |
+| codex | `~/.codex/AGENTS.md` | Codex docs: global, merged with repo AGENTS.md |
+| Claude Code | `~/.claude/CLAUDE.md` | Claude Code memory docs (user memory) |
+| OpenCode | `~/.config/opencode/AGENTS.md` | OpenCode rules docs |
+| agy, Crush | not installed | no verified user-level rules path yet; project AGENTS.md still applies |
+
+An installed file starts with an owner marker. The installer refuses to overwrite a file
+without it (`--force` overrides), and `uninstall` removes only marked files. Evidence for the
+no-steering decision: [kiro-steering-empirical](./research/kiro-steering-empirical.md),
+[steering-vs-agents-md-portability](./research/steering-vs-agents-md-portability.md).
+
 ## How to test a harness (the probe-rig runbook)
 
 Reproducible procedure to validate any harness (or re-check one after an update). This is

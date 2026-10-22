@@ -30,6 +30,11 @@ node scripts/install-skills.mjs list       # what's installed
 node scripts/install-skills.mjs uninstall  # remove what we installed
 ```
 
+User-level standing rules live in one short file, `global/AGENTS.md`, installed into each
+harness's global instructions file with `node scripts/install-agents-md.mjs` (`--dry-run`,
+`list`, `uninstall`; never overwrites a file it didn't install). See
+[`docs/agents/harnesses.md`](./docs/agents/harnesses.md).
+
 Wrappers `scripts/install-skills.sh` and `scripts/install-skills.ps1` call the same
 Node script. By default it installs into every known harness user root present on the
 machine (`~/.kiro/skills`, `~/.codex/skills`, `~/.claude/skills`, `~/.agents/skills`),
