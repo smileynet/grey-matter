@@ -1,7 +1,7 @@
 ---
 id: "40"
 title: "Add adopt-project: bring the grey-matter workflow into an existing (brownfield) repo"
-status: open
+status: in_progress
 blocked_by: ["41", "42"]
 priority: medium
 tags: ["stream:tooling"]
