@@ -84,10 +84,18 @@ Consume these; do not copy them into a new rubric (a fourth copy drifts):
 - **Safe tier** — the rules the existing `scripts/check-*.mjs` embody (invocation policy, index
   set-equality, link resolution, installer safety). On a **foreign** repo that has no grey-matter
   scripts, apply the *rules those checks embody* against the target's files — do not run our scripts
-  in their repo.
+  in their repo. When checking links by hand, skip fenced code and inline code spans (link-shaped
+  example syntax there is not a link); adopt-project's `relocate-knowledge.mjs check-links` does this.
 - **Judgment tier** — the convention docs: `writing-for-agents`, `docs/agents/doc-conventions.md`,
   `docs/agents/skill-frontmatter.md`, and the `readme` / `curate-docs` standards. A judgment finding
   cites the doc it violates, so it rests on a real rule, not an opinion.
+
+**Grey-matter-internal rules are N/A on foreign skills.** Bucket READMEs, the `compass` router, and
+`agents/openai.yaml` invocation sidecars are grey-matter's own distribution layout, not part of the
+agentskills standard. On a repo that does not distribute its skills *through grey-matter* (its own
+skill product, its own installer), report them as N/A, not as findings. Audit those skills against
+the open standard instead: frontmatter shape and name rules, and links that resolve **where the
+skills are installed**, not only in the source repo.
 
 ## Incumbent repos (polarity)
 
@@ -104,8 +112,9 @@ Land fixes on git: a clean working tree going in, fixes applied behind the Phase
 commit, never a byte overwritten outside an approved finding.
 
 - **Standalone:** make your own commit for the applied fixes.
-- **Called by `adopt-project`:** fold the fixes into adoption's single reviewable commit (don't make a
-  separate one), and return the findings list so adoption can present it at its own gate.
+- **Called by `adopt-project`:** fold the fixes into adoption's reviewable commit (don't make a
+  separate one), and return the findings list so adoption can present it at its own gate. Adoption
+  files approved judgment findings as review-first migration findings; this skill doesn't file them.
 
 ## Composition — cite and recommend, don't call
 

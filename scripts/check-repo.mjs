@@ -10,6 +10,7 @@
 //   2. invocation sidecars/README  -> scripts/check-invocation-policy.mjs
 //   3. doc indexes + links         -> scripts/check-docs-consistency.mjs
 //   4. ticket health               -> tkt validate   (skipped w/ warning if tkt absent)
+//   5. knowledge relocation        -> scripts/relocate-knowledge.test.mjs (node:test, temp git repos)
 //
 // Design (AC-driven):
 //  - READ-ONLY on user state. The installer test uses throwaway temp roots (mkdtemp),
@@ -79,6 +80,7 @@ run("3. doc indexes + relative links", node, [join(SCRIPTS, "check-docs-consiste
 // tkt validate: normal severity (a warning like unchecked-acs-on-done does not fail the
 // build; only structural errors — cycles, dangling deps — exit nonzero).
 run("4. ticket health (tkt validate)", "tkt", ["validate"], { optional: true });
+run("5. knowledge relocation (adopt-project)", node, ["--test", join(SCRIPTS, "relocate-knowledge.test.mjs")]);
 
 // --- Summary ------------------------------------------------------------------
 console.log("\n==================== repo-check summary ====================");

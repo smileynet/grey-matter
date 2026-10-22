@@ -1,6 +1,8 @@
 # Proposal 05: adopt-project revisions from the first pilot
 
-**Ticket:** 51. **Status:** proposal for review. **Pilot:** decksmith, 2026-10-22, decksmith
+**Ticket:** 51 (pilot), 53 (applied). **Status:** accepted and applied 2026-10-22: R1–R9 are in
+`skills/meta/adopt-project/` (body + `references/relocation.md`, `references/repo-hygiene.md`,
+`scripts/relocate-knowledge.mjs`) and `skills/meta/conformance-audit/`. **Pilot:** decksmith, 2026-10-22, decksmith
 commits `519cb08` (adoption), `daf070e` (evidence), and `8668829` plus the next commit (board).
 
 The pilot ran adopt-project end to end on a mature repo whose incumbent layer was crew-research
@@ -45,8 +47,10 @@ dot prefix (it breaks the dot-prefix rule), relocate it:
 4. Verify with a **before/after baseline**: the link check and the test suite both pass before,
    and the same checks pass after.
 
-**Tooling.** Promote the pilot's scripts (`relocate.py`, `check_links.py`, kept in `.scratch/`)
-into `scripts/relocate-knowledge.mjs` with fixtures. The fixtures must include a depth change, a
+**Tooling.** The pilot's scripts became `skills/meta/adopt-project/scripts/relocate-knowledge.mjs`
+(it lives in the skill folder so it installs with the skill), with fixtures in
+`scripts/relocate-knowledge.test.mjs` wired into `check-repo.mjs`. Rerun on decksmith's
+pre-adoption commit, it reproduces the pilot's result byte for byte (139/139 files). The fixtures must include a depth change, a
 link between two moved files, an evidence file left untouched, and a link inside a code span
 that must be skipped. 67 repos under `~/code` share this layout, so this script is what makes
 batch adoption tractable.

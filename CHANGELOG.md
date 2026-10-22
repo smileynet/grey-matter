@@ -10,6 +10,11 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 - `sync` skill: the inbound twin of `release` — pull the repo current and re-synchronize the coupled pieces (deployed skills, the tkt command surface, ticket IDs, repo invariants), then redeploy the skills to every harness. Orchestrates `verify-tkt-usage`, `check-repo.mjs`, and the installer; reports findings rather than gating the deploy.
 - Release tooling: a `release` command that updates the changelog and README, picks the version, then tags, pushes, and publishes a GitHub release, composing the new `changelog` and `readme` skills.
 - `cheat-sheet` skill: a styled, live-generated reference card of every skill by category.
+- `adopt-project` relocates a dot-prefixed knowledge folder such as `.memory/` into grey-matter paths with a bundled script that keeps every link resolving and leaves recorded evidence untouched. It now also sets up Git LFS, untracks sensitive files, completes the `.references/` clone index, and reshapes AGENTS.md around who actually reads it.
+- `adopt-project` files audit findings as review-first migration findings, so the project's own agent confirms or rejects each one before acting on it.
+
+### Changed
+- `adopt-project` treats skills a repo ships to its users as product: it audits them but no longer restructures them. `conformance-audit` reports grey-matter's own layout rules as not applicable on such repos.
 
 ## [0.1.0] - 2026-10-19
 

@@ -80,7 +80,8 @@ node scripts/check-repo.mjs
 It aggregates (each also runnable on its own): installer ownership safety
 (`scripts/install-skills.test.mjs`), invocation sidecars + README tiers
 (`scripts/check-invocation-policy.mjs`), doc indexes + relative links
-(`scripts/check-docs-consistency.mjs`), and ticket health (`tkt validate`). It is
+(`scripts/check-docs-consistency.mjs`), ticket health (`tkt validate`), and adopt-project's
+knowledge-relocation fixtures (`scripts/relocate-knowledge.test.mjs`). It is
 **read-only on user state** (the installer check uses throwaway temp roots, never a real
 harness skill root) and needs **no harness authentication or network** (tkt is local and
 degrades to a skipped-with-warning if absent). Run it before a
