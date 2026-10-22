@@ -77,3 +77,7 @@ mode is over-production, writing ADRs for trivial decisions. An ADR is tiny: a t
 and 1-3 sentences on context, decision, and why. Add a Consequences or Considered
 Options line only when the rejection is non-obvious and worth remembering. Number them
 `docs/adr/NNNN-slug.md`, incrementing from the highest existing.
+
+One ADR per **independently reversible** decision. If two choices could change on their own
+timelines, they are two ADRs (or one of them is just a ticket); bundling forces an all-or-nothing
+supersede later.
