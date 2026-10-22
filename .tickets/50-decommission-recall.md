@@ -1,7 +1,7 @@
 ---
 id: "50"
 title: "Decommission recall entirely (binary, data, steering, skill, agent refs, AGENTS.md refs)"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "recall binary, steering, and skill removed from all harness roots"
