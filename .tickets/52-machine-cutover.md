@@ -14,8 +14,17 @@ tags: ["type:chore", "stream:migration"]
 
 ## What to build
 
-TBD
+The final global swap, after 45–51 land. Sequence ([proposal 04 § Cutover](../docs/agents/proposals/04-crew-research-migration.md)):
+
+1. Snapshot, then run the ticket 49 script (crew-research uninstall) and the ticket 50 steps.
+2. `node scripts/install-skills.mjs`, plus the global AGENTS.md install (ticket 45).
+3. Verify in fresh kiro-cli and codex sessions.
+4. Freeze crew-research: add a README/AGENTS.md note that its `init` would undo the cutover.
+
+Rollback: restore the snapshot, or run `mise run init -- --global --tier full` in crew-research.
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [ ] Fresh kiro-cli and codex sessions list grey-matter skills; non-crew skills intact; global AGENTS.md injected.
+- [ ] Shim verified in one .memory/ repo.
+- [ ] crew-research marked frozen; snapshot retained.
