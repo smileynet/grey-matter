@@ -99,3 +99,20 @@ test("check-links skips code fences and inline code, and still FAILS on a real b
     assert.deepEqual(broken, ["bad.md:1: nope.md"]);
   } finally { rmSync(repo, { recursive: true, force: true }); }
 });
+
+test("--evidence-dir protects non-JSON records by path, and check-links --skip excludes a tree", () => {
+  const repo = fixtureRepo({
+    ".memory/evidence/run/review.md": "Reviewed [readme](../../../README.md) at `.memory/specs/a.md`.\n",
+    ".memory/specs/a.md": "# a\n",
+    "README.md": "# r\n",
+  });
+  try {
+    const before = read(repo, ".memory/evidence/run/review.md");
+    const r = relocate(repo, { map: [[".memory/evidence/", "docs/agents/evidence/"], [".memory/specs/", "docs/agents/specs/"]],
+      evidenceDirs: [".memory/evidence/"], apply: true });
+    assert.equal(read(repo, "docs/agents/evidence/run/review.md"), before);
+    assert.deepEqual(r.skippedEvidence, ["docs/agents/evidence/run/review.md"]);
+    assert.equal(checkLinks(repo).broken.length, 1);
+    assert.equal(checkLinks(repo, { skip: ["docs/agents/evidence/"] }).broken.length, 0);
+  } finally { rmSync(repo, { recursive: true, force: true }); }
+});

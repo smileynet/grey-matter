@@ -5,7 +5,8 @@
 //
 // Usage:
 //   node <skill-dir>/scripts/relocate-knowledge.mjs <repo> [--apply] [--map old=new ...] [--evidence-ext .json ...]
-//   node <skill-dir>/scripts/relocate-knowledge.mjs check-links <repo>
+//        [--evidence-dir <old-path-prefix> ...]
+//   node <skill-dir>/scripts/relocate-knowledge.mjs check-links <repo> [--skip <path-prefix> ...]
 //
 // Dry-run by default. With no --map, uses the default map for the common incumbent layout
 // (DEFAULT_MAP below). --evidence-ext replaces the default list of evidence extensions.
@@ -16,6 +17,8 @@
 //    survives depth changes and links between two moved files.
 //  - Repo-rooted mentions (`.memory/specs/x.md` in prose or code) are prefix-mapped.
 //  - Recorded evidence (JSON, logs, transcripts) is never rewritten: it records what was observed.
+//    Evidence is matched by extension, or by --evidence-dir (an old-path prefix, e.g.
+//    .memory/evidence/) for evidence trees holding .md/.txt/.py records whose digests are pinned.
 //  - Leftover mentions of an old root are reported for a human, never rewritten blindly.
 //  - check-links: relative markdown links in tracked .md files that don't resolve, skipping
 //    fenced code and inline code spans. Run it before and after to prove nothing broke.
@@ -86,14 +89,14 @@ const git = (repo, args) => execFileSync("git", ["-C", repo, ...args], { encodin
 const tracked = (repo, pattern) =>
   git(repo, ["ls-files", "-z", ...(pattern ? [pattern] : [])]).split("\0").filter(Boolean);
 
-export function relocate(repo, { map = DEFAULT_MAP, evidenceExt = DEFAULT_EVIDENCE_EXT, apply = false } = {}) {
+export function relocate(repo, { map = DEFAULT_MAP, evidenceExt = DEFAULT_EVIDENCE_EXT, evidenceDirs = [], apply = false } = {}) {
   const roots = [...new Set(map.map(([o]) => o.split("/")[0]))];
   const rootRe = new RegExp(`(?<![\\w-])(?:${roots.map(escapeRe).join("|")})(?![\\w-])`);
   const rewritten = [], leftovers = [], skippedEvidence = [];
   for (const oldF of tracked(repo)) {
     const newF = mapPath(oldF, map) ?? oldF;
     const abs = join(repo, oldF);
-    if (evidenceExt.some((e) => oldF.endsWith(e))) {
+    if (evidenceExt.some((e) => oldF.endsWith(e)) || evidenceDirs.some((d) => oldF.startsWith(d))) {
       if (roots.some((r) => existsSync(abs) && readFileSync(abs, "utf8").includes(r + "/"))) skippedEvidence.push(newF);
       continue;
     }
@@ -125,9 +128,9 @@ export function relocate(repo, { map = DEFAULT_MAP, evidenceExt = DEFAULT_EVIDEN
   return { rewritten, moves, leftovers, skippedEvidence };
 }
 
-export function checkLinks(repo) {
+export function checkLinks(repo, { skip = [] } = {}) {
   const broken = [];
-  const files = tracked(repo, "*.md");
+  const files = tracked(repo, "*.md").filter((f) => !skip.some((s) => f.startsWith(s)));
   for (const f of files) {
     let fence = false;
     readFileSync(join(repo, f), "utf8").split("\n").forEach((line, i) => {
@@ -144,26 +147,32 @@ export function checkLinks(repo) {
 }
 
 function main(argv) {
-  const usage = () => { console.error("usage: relocate-knowledge.mjs <repo> [--apply] [--map old=new ...] [--evidence-ext .ext ...]\n       relocate-knowledge.mjs check-links <repo>"); process.exit(2); };
+  const usage = () => { console.error("usage: relocate-knowledge.mjs <repo> [--apply] [--map old=new ...] [--evidence-ext .ext ...] [--evidence-dir <prefix> ...]\n       relocate-knowledge.mjs check-links <repo> [--skip <prefix> ...]"); process.exit(2); };
   if (argv[0] === "check-links") {
     if (!argv[1]) usage();
-    const { files, broken } = checkLinks(argv[1]);
+    const skip = [];
+    for (let i = 2; i < argv.length; i++) {
+      if (argv[i] === "--skip" && argv[i + 1]) skip.push(argv[++i]);
+      else usage();
+    }
+    const { files, broken } = checkLinks(argv[1], { skip });
     console.log(`${files} md files, ${broken.length} broken relative links`);
     broken.forEach((b) => console.log("  " + b));
     process.exit(broken.length ? 1 : 0);
   }
   const repo = argv[0];
   if (!repo || repo.startsWith("--")) usage();
-  const map = [], evidenceExt = [];
+  const map = [], evidenceExt = [], evidenceDirs = [];
   let apply = false;
   for (let i = 1; i < argv.length; i++) {
     if (argv[i] === "--apply") apply = true;
     else if (argv[i] === "--map" && argv[i + 1]?.includes("=")) map.push(argv[++i].split("="));
     else if (argv[i] === "--evidence-ext" && argv[i + 1]) evidenceExt.push(argv[++i]);
+    else if (argv[i] === "--evidence-dir" && argv[i + 1]) evidenceDirs.push(argv[++i]);
     else usage();
   }
   try {
-    const r = relocate(repo, { map: map.length ? map : DEFAULT_MAP, evidenceExt: evidenceExt.length ? evidenceExt : DEFAULT_EVIDENCE_EXT, apply });
+    const r = relocate(repo, { map: map.length ? map : DEFAULT_MAP, evidenceExt: evidenceExt.length ? evidenceExt : DEFAULT_EVIDENCE_EXT, evidenceDirs, apply });
     console.log(`${apply ? "applied" : "dry-run"}: ${r.moves.length} moves, ${r.rewritten.length} files rewritten`);
     r.moves.forEach(([o, n]) => console.log(`  move ${o} -> ${n}`));
     console.log(`evidence files left untouched that mention an old root: ${r.skippedEvidence.length}`);

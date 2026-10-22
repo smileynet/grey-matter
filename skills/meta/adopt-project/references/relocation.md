@@ -44,4 +44,8 @@ judgment, shown at the gate. Pass the full map explicitly with `--map old=new` (
   closed tickets, which still need to resolve.
 - **Recorded evidence is never rewritten** (`.json`, `.jsonl`, `.ndjson`, `.log` by default;
   `--evidence-ext` overrides). It records what was observed, and rewriting it falsifies the record.
+  An evidence **tree** that also holds `.md`/`.txt`/`.py` records (often digest-pinned in a
+  manifest) is protected by path with `--evidence-dir <old-prefix>` (e.g. `.memory/evidence/`).
+  Its own relative links can break when it moves deeper; record that as a known exception and
+  run `check-links --skip <new-prefix>`, rather than rewriting evidence to fix them.
 - `check-links` skips fenced code and inline code, where link-shaped text is usually an example.
