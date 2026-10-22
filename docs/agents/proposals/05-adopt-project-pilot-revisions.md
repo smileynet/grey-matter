@@ -104,6 +104,16 @@ cloning, and a rehydration index without clone commands.
 Step 2 contradictions and the Step 3 judgment findings (40 items in the pilot).
 
 **Revision (Step 4).**
+- Migrating an existing backlog stays the core job. Audit findings are filed **as migration
+  findings**, not as ready work: they come from an outside audit and may misread the design.
+  - Title prefix `Review migration finding:` and tag `migration-finding`.
+  - A banner: who filed it, `Confirmation status: unconfirmed`, and "reproduce each point,
+    then confirm, reject, or re-scope it before changing code; never act on the diagnosis or
+    the remedy on authority."
+  - The first acceptance criterion is that review step. Rejecting every point is a valid close.
+  - Suggested remedies are labeled as suggestions; the owner decides the fix.
+  - One line in the target's AGENTS.md says what the tag means, so the project's own agent
+    knows to review first.
 - Group findings **one ticket per decision**, not one per finding (40 items became 10).
 - Default to backlog.
 - Commit the audit reports into the repo (`docs/agents/research/adoption-<date>/`) so tickets
