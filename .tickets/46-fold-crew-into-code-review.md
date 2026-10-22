@@ -1,7 +1,7 @@
 ---
 id: "46"
 title: "Fold crew-research review nuggets into code-review (findings-as-hypotheses, closed-ticket AC, cross-family leg, invalid-state smell)"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "code-review files findings as unconfirmed hypotheses with reproduce-first AC"
@@ -30,7 +30,16 @@ Context: [proposal 04](../docs/agents/proposals/04-crew-research-migration.md).
 
 ## Acceptance criteria
 
-- [ ] Step 5 files findings as unconfirmed hypotheses with reproduce-first AC.
-- [ ] Spec axis checks closed tickets' acceptance criteria.
-- [ ] Cross-family reference file and Representable Invalid State smell added.
-- [ ] `node scripts/check-repo.mjs` green.
+- [x] Step 5 files findings as unconfirmed hypotheses with reproduce-first AC.
+- [x] Spec axis checks closed tickets' acceptance criteria.
+- [x] Cross-family reference file and Representable Invalid State smell added.
+- [x] `node scripts/check-repo.mjs` green.
+
+## Resolution (2026-10-22)
+
+done: crew-research review-new-work, dispatch-review, data-modeling nuggets folded into code-review
+
+### Verification
+1. ✓ code-review files findings as unconfirmed hypotheses with reproduce-first AC — "step 5: first AC of every filed finding is reproduce + confirmed/rejected/obsolete"
+2. ✓ Spec axis checks closed tickets' AC; optional cross-family reference and Representable Invalid State smell added — "Spec brief (d) checks closed tickets' AC; references/cross-family.md added; rubric-app gains Representable Invalid State"
+3. ✓ check-repo.mjs green — "node scripts/check-repo.mjs: all 7 invariants pass"
