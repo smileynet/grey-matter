@@ -1,7 +1,7 @@
 ---
 id: "49"
 title: "Manifest-scoped crew-research uninstall script (dry-run, do-not-touch list)"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -33,6 +33,15 @@ Context: [proposal 04 § What's deployed today](../docs/agents/proposals/04-crew
 
 ## Acceptance criteria
 
-- [ ] Dry-run lists exactly the manifest-named skills and crew steering files.
-- [ ] Do-not-touch set provably untouched (test with a throwaway root).
-- [ ] Snapshot is taken before any removal; restore steps documented.
+- [x] Dry-run lists exactly the manifest-named skills and crew steering files.
+- [x] Do-not-touch set provably untouched (test with a throwaway root).
+- [x] Snapshot is taken before any removal; restore steps documented.
+
+## Resolution (2026-10-22)
+
+done: scripts/uninstall-crew-research.mjs + tests (check-repo invariant 7); run at cutover (ticket 52)
+
+### Verification
+1. ✓ Removes only dirs listed in .crew-skills / .crew-skills-codex / .crew-skills-crush and only the crew-owned steering files — "Removes only dirs named in .crew-skills / .crew-skills-codex / .crew-skills-crush, plus the 8 remaining crew steering files and the crew-generated ~/.codex/AGENTS.md"
+2. ✓ Dry-run output proves the 34 non-crew skills and non-crew steering are untouched — "Real dry-run: 108 to remove; kept set = exactly the 34 non-crew kiro skills + amazon-builder/, archwright symlink, references/; fake-home tests prove symlinks, foreign files, grey-matter-owned dirs, and unsafe manifest entries are kept"
+3. ✓ Snapshot step precedes removal; restore documented — "Apply mode tars a snapshot before any removal; restore = tar -xzf <backup> -C ~ (printed)"
