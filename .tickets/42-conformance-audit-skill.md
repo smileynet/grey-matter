@@ -1,7 +1,7 @@
 ---
 id: "42"
 title: "Add conformance-audit: audit a repo's skills/scripts/agent-guidance against current grey-matter standards"
-status: in_progress
+status: open
 blocked_by: []
 priority: medium
 tags: ["stream:tooling"]
