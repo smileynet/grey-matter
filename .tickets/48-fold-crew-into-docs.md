@@ -1,7 +1,7 @@
 ---
 id: "48"
 title: "Fold crew-research nuggets into harnesses.md, doc-conventions, windows gotchas"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "harnesses.md: kiro agent-config gotchas, images, Claude /review alias note"
@@ -34,6 +34,15 @@ Context: [proposal 04](../docs/agents/proposals/04-crew-research-migration.md).
 
 ## Acceptance criteria
 
-- [ ] harnesses.md carries the kiro config, images, and /review alias notes.
-- [ ] doc-conventions prose-tells note and windows gotchas bash/MSYS section added.
-- [ ] `node scripts/check-repo.mjs` green.
+- [x] harnesses.md carries the kiro config, images, and /review alias notes.
+- [x] doc-conventions prose-tells note and windows gotchas bash/MSYS section added.
+- [x] `node scripts/check-repo.mjs` green.
+
+## Resolution (2026-10-22)
+
+done: mcp-partitioning, image-handling, writing-style, prose-check, script-authoring nuggets folded into docs
+
+### Verification
+1. ✓ harnesses.md: kiro agent-config gotchas, images, Claude /review alias note — "harnesses.md: kiro agent-config gotchas, an Images section, and the Claude /review alias note"
+2. ✓ doc-conventions prose-tells note; windows gotchas bash/MSYS section — "doc-conventions prose-tells section; windows gotchas bash/MSYS section"
+3. ✓ check-repo.mjs green — "node scripts/check-repo.mjs all invariants pass"
