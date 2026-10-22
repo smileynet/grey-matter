@@ -10,6 +10,15 @@ Scaffold the conventions the skills assume, once per repo. Explore first, propos
 write, don't clobber what's already there. The goal is a project where a fresh agent
 and the skills both find what they expect.
 
+**Create what's missing, never all-or-nothing.** Each piece of scaffolding is checked and
+created independently: if some of it already exists (an `AGENTS.md`, a `.tickets/`), create
+only the pieces that are genuinely absent and leave the rest untouched — never bail out of
+the whole run because one piece is present, and never overwrite an existing file (reconcile
+it per its step, don't replace it). This makes init-project **composable**: a caller like
+`adopt-project` can run it on a partially-scaffolded (brownfield) repo, after its own
+inventory/reconcile step, and trust it to fill only the real gaps. "Skip what exists" is
+non-destructive by construction.
+
 ## Process
 
 ### 1. Explore
@@ -42,17 +51,20 @@ only one exists, reconcile to this shape; never maintain two divergent copies.
 
 ### 3. Scratch, references, and gitignore
 
+Each of these is created only if absent; if it already exists, leave it and move on.
+
 Create `.scratch/` as the project-local home for non-committed working files (handoffs,
 agent notes, throwaway output) and gitignore it. Add a short `## Scratch` note to
-`AGENTS.md` stating the rule: nothing in `.scratch/` is durable; anything worth keeping
-goes in committed `docs/` or a ticket.
+`AGENTS.md` stating the rule (if not already present): nothing in `.scratch/` is durable;
+anything worth keeping goes in committed `docs/` or a ticket.
 
 Create `.references/` as the place to clone prior-art and reference material. Gitignore
 its *contents* but commit a `.references/README.md` (`.references/*` then
 `!.references/README.md`). That README is the rehydration index: for each reference, what
 it is, why it's a reference here, and the exact clone command, so a fresh checkout on
 another machine can re-clone what the gitignored dir lost. Nothing in `.references/` is a
-dependency, only material agents read.
+dependency, only material agents read. If `.references/` already exists, confirm its README
+is a current rehydration index rather than replacing it.
 
 ### 4. Track what the installed skills need
 
@@ -77,3 +89,9 @@ Each skill that carries a convention gets its config set up and a pointer from
 Show the user the `AGENTS.md` layout, the `.gitignore` additions, and which skills you
 set up. Let them edit before writing. Then write, and tell them what to re-run if they
 later install a skill with its own convention.
+
+**When called by another skill** (e.g. `adopt-project`): skip the interactive confirm —
+the caller owns its own approval gate — and report back the set of pieces created versus
+already-present, so the caller can fold them into its single reviewable commit. Because the
+run is create-what's-missing, re-invoking init-project on an already- or partially-scaffolded
+repo is safe and idempotent: it creates nothing that exists and overwrites nothing.
