@@ -1,7 +1,7 @@
 ---
 id: "46"
 title: "Fold crew-research review nuggets into code-review (findings-as-hypotheses, closed-ticket AC, cross-family leg, invalid-state smell)"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "code-review files findings as unconfirmed hypotheses with reproduce-first AC"
