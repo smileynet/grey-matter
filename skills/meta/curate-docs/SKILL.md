@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 A periodic sweep of the repo's agent-facing knowledge, deciding what to **promote**, what to **move**, and what to **delete**. Knowledge accrues as loose notes in `docs/agents/` and throwaway files in `.scratch/`; left alone it rots (stale findings, notes that should be skills, docs stranded away from the skill that needs them). This skill keeps it curated. The governing rules are in `docs/agents/doc-conventions.md`; this skill applies them.
 
-User-invoked: a human runs it when the knowledge base needs tending, like `retro` for the environment.
+User-invoked: a human runs it when the knowledge base needs tending, as `wrap-session` does for the session.
 
 ## What it decides
 

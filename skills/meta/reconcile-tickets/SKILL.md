@@ -1,7 +1,6 @@
 ---
 name: reconcile-tickets
 description: "End-of-session ticket pass: make every open ticket current, capture all untracked work as tickets, and set ordering so the frontier surfaces the right next picks. Use when wrapping up a session, auditing ticket health, or asking 'is everything captured?'."
-disable-model-invocation: true
 ---
 
 # Reconcile Tickets

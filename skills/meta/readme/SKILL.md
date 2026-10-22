@@ -1,7 +1,6 @@
 ---
 name: readme
 description: "Keep README.md honest and current: what the project is, how to install and use it, its status. Use at release time or when the README has drifted from reality."
-disable-model-invocation: true
 ---
 
 # Readme

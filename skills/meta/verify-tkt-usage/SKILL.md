@@ -1,7 +1,6 @@
 ---
 name: verify-tkt-usage
 description: "Validate every tkt command this repo's skills reference against the live tkt capabilities manifest, catching drift when tkt renames, removes, or re-types a command or flag. Use after a tkt upgrade, or when auditing whether the skills still match the installed tkt."
-disable-model-invocation: true
 ---
 
 # Verify tkt Usage

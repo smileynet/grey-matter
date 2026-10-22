@@ -1,7 +1,6 @@
 ---
 name: changelog
 description: "Maintain CHANGELOG.md in Keep a Changelog format with user-facing entries. Use when recording what changed for a release, updating the Unreleased section, or asked to write/update the changelog."
-disable-model-invocation: true
 ---
 
 # Changelog

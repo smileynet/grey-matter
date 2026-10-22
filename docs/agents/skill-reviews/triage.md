@@ -1,6 +1,6 @@
 # triage
 
-- Bucket: engineering. Invocation: user-invoked (`disable-model-invocation: true`).
+- Bucket: engineering. Invocation: model-invoked since 2026-10-22 (was user-invoked; orchestrators like wrap-session must call it via the Skill tool, which Claude Code refuses for user-invoked skills; enforced by check-invocation-policy.mjs Check 3).
 - Verdict: **adapt**: keep the state machine and both reference files; recast around the
   PR-as-external-surface / tkt-as-internal-unit **adapter**; put evidence teeth on
   verification; make `.out-of-scope/` matching surface-and-confirm.

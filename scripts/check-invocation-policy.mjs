@@ -110,6 +110,31 @@ for (const bucket of new Set(skills.map((s) => s.bucket))) {
   }
 }
 
+// --- Check 3: no skill composes a user-invoked skill via the Skill tool -------
+// Claude Code refuses a Skill-tool call to a `disable-model-invocation: true` skill,
+// even from inside a skill the user invoked, and says not to replicate it by other
+// means. So an orchestrator that "calls the Skill tool with `x`" silently breaks if
+// `x` is user-invoked (wrap-session -> reconcile-tickets/retro shipped that way).
+// Scan each "Skill tool ..." sentence for quoted/backticked names of real skills.
+const byName = new Map(skills.map((s) => [s.name, s]));
+for (const s of skills) {
+  const text = readFileSync(join(s.dir, "SKILL.md"), "utf8").replace(/\r?\n/g, " ");
+  const called = new Set();
+  for (const m of text.matchAll(/Skill tool([^.]{0,200})/g)) {
+    for (const n of m[1].matchAll(/[`"*]+([a-z][a-z0-9-]+)[`"*]+/g)) {
+      if (byName.has(n[1]) && n[1] !== s.name) called.add(n[1]);
+    }
+  }
+  for (const target of called) {
+    if (byName.get(target).userInvoked) {
+      problems.push(
+        `${s.bucket}/${s.name}: calls the Skill tool with \`${target}\`, which is user-invoked ` +
+        `(disable-model-invocation: true); Claude Code refuses that call`,
+      );
+    }
+  }
+}
+
 // --- Report -------------------------------------------------------------------
 if (problems.length) {
   console.error(`invocation-policy check FAILED (${problems.length} mismatch(es)):`);

@@ -1,5 +1,3 @@
 interface:
   display_name: "Readme"
   short_description: "Keep README.md honest and current"
-policy:
-  allow_implicit_invocation: false

@@ -1,7 +1,6 @@
 ---
 name: retro
-description: "Conduct a retrospective on a coding session."
-disable-model-invocation: true
+description: "Conduct a retrospective on a coding session: read it from a fresh context and propose environment fixes (checks, guardrails, steering), classified mechanical vs judgement. Use when a session ends, after a build that went sideways, or when wrap-session reaches its retro step."
 ---
 
 The user has asked for a **retrospective**. You are suggesting improvements to the coding agent's **environment** to improve future runs.

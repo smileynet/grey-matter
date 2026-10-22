@@ -1,7 +1,6 @@
 ---
 name: conformance-audit
 description: "Audit a repo's skills, tool scripts, agent guidance, and docs against grey-matter's current standards, then apply the mechanically-safe fixes behind an approval gate. Use to re-conform an adopted repo as guidance evolves, or as a step inside adopt-project. Trigger: conformance audit, check repo against standards, re-conform, does this repo still follow current conventions."
-disable-model-invocation: true
 ---
 
 # Conformance Audit

@@ -1,7 +1,6 @@
 ---
 name: init-project
-description: Set up a new project's agent conventions once: AGENTS.md, scratch dir, gitignore, tkt, and whatever else the installed skills need tracked.
-disable-model-invocation: true
+description: "Set up a new project's agent conventions once: AGENTS.md, scratch dir, gitignore, tkt, and whatever else the installed skills need tracked. Use when the user asks to initialize a repo for this workflow, or when adopt-project needs the missing plumbing created."
 ---
 
 # Init Project

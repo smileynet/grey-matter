@@ -1,7 +1,6 @@
 ---
 name: triage
-description: Move external requests (issues, PRs) and internal tkt tickets through a state machine of triage roles: categorise, verify with real evidence, grill if needed, and write agent-ready briefs.
-disable-model-invocation: true
+description: "Move external requests (issues, PRs) and internal tkt tickets through triage roles: categorise, verify with real evidence, grill if needed, and write agent-ready briefs. Use when the user asks to triage issues or tickets, or when adopt-project seeds a board from raw items."
 ---
 
 # Triage

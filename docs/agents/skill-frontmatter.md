@@ -38,6 +38,14 @@ So a user-invoked skill sets **both** `disable-model-invocation: true` in `SKILL
 (user-invoked in both or neither). This is the inherited `invocation.md` convention and
 it is correct; it is the one deliberate deviation from the strict six-field allowlist.
 
+**A skill another skill calls must be model-invoked.** Claude Code refuses a Skill-tool
+call to a `disable-model-invocation: true` skill even from inside a skill the user
+started, and tells the agent not to replicate it by other means. So when an orchestrator
+(`wrap-session`, `release`, `sync`, `adopt-project`) says "call the Skill tool with `x`",
+`x` must be model-invoked; only the orchestrator itself stays user-invoked. Verified live
+2026-10-22 (`wrap-session` -> `reconcile-tickets` was refused); enforced by Check 3 of
+`scripts/check-invocation-policy.mjs`.
+
 Known wart: the strict agentskills validator and Claude Code's own linter warn on
 `disable-model-invocation` as a non-standard key. The runtime honors it; accept the
 warning. Codex and Kiro ignore the key at runtime (verified live on kiro-cli — the skill

@@ -1,5 +1,3 @@
 interface:
   display_name: "Verify tkt Usage"
   short_description: "Check skills' tkt commands against the live tkt manifest"
-policy:
-  allow_implicit_invocation: false

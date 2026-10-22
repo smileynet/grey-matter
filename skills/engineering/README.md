@@ -14,10 +14,8 @@ sync by [`curate-docs`](../meta/curate-docs/SKILL.md).
 - [to-tickets](./to-tickets/SKILL.md): slice a spec into tracer-bullet tkt tickets with blocking edges.
 - [implement](./implement/SKILL.md): build one ticket, driving tdd and code-review.
 - [implement-spec](./implement-spec/SKILL.md): build a whole spec across the frontier on one integration branch.
-- [triage](./triage/SKILL.md): move external requests + tkt tickets through triage roles.
 - [wayfinder](./wayfinder/SKILL.md): chart a too-big effort as a map of decision tickets.
 - [improve-codebase-architecture](./improve-codebase-architecture/SKILL.md): survey deepening opportunities as a visual report, then grill one.
-- [retro](./retro/SKILL.md): improve the agent's environment after a session.
 
 ## Model-invoked
 
@@ -34,3 +32,5 @@ sync by [`curate-docs`](../meta/curate-docs/SKILL.md).
 - [game-modeling](./game-modeling/SKILL.md): the game-native counterpart to domain-modeling.
 - [codebase-design](./codebase-design/SKILL.md): deep-module vocabulary, the service regime.
 - [game-native-design](./game-native-design/SKILL.md): the game-native philosophy, the frame-loop regime.
+- [triage](./triage/SKILL.md): move external requests + tkt tickets through triage roles.
+- [retro](./retro/SKILL.md): improve the agent's environment after a session.

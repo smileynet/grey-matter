@@ -1,6 +1,6 @@
 # init-project
 
-- Bucket: meta. Invocation: user-invoked. **New skill** (grey-matter's
+- Bucket: meta. Invocation: model-invoked since 2026-10-22 (was user-invoked; orchestrators like wrap-session must call it via the Skill tool, which Claude Code refuses for user-invoked skills; enforced by check-invocation-policy.mjs Check 3). **New skill** (grey-matter's
   replacement for the upstream `setup-matt-pocock-skills`).
 - Verdict: **new**.
 

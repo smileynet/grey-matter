@@ -114,3 +114,16 @@ test("invocation check FAILS when a user-invoked skill loses its sidecar", () =>
   }
   assert.ok(existsSync(sidecar), "sidecar restored");
 });
+
+// (invariant: an orchestrator must not Skill-call a user-invoked skill — Claude Code refuses it)
+test("invocation check FAILS when an orchestrator's Skill-tool target is user-invoked", () => {
+  const skill = join(REPO, "skills", "engineering", "retro", "SKILL.md");
+  const sidecar = join(REPO, "skills", "engineering", "retro", "agents", "openai.yaml");
+  withSeededFile(skill, (s) => s.replace(/^(name: retro\r?\n)/m, "$1disable-model-invocation: true\n"), () => {
+    withSeededFile(sidecar, (y) => y.trimEnd() + "\npolicy:\n  allow_implicit_invocation: false\n", () => {
+      const r = runCheck("check-invocation-policy.mjs");
+      assert.equal(r.status, 1, "expected nonzero when wrap-session's retro is user-invoked");
+      assert.match(r.out, /wrap-session: calls the Skill tool with `retro`/);
+    });
+  });
+});
