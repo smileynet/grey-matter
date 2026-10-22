@@ -159,6 +159,67 @@ Auditing a repo's existing skills, tool scripts, and agent guidance against grey
 **current** health/maintenance/optimization standards (`skills/meta/conformance-audit`, ticket
 42). Called by adopt-project and runnable standalone for ongoing upkeep. Context: skills (meta).
 
+## spike-options terms
+
+The vocabulary for the empirical decision discipline (`skills/engineering/spike-options`).
+Distinct from `prototype` (one throwaway answering one design question) and from
+`improve-codebase-architecture` (candidates compared on paper, not built).
+
+### spike  (homonym - see ruling)
+In grey-matter, a **throwaway build that answers a deciding question for one option** in a
+multi-option comparison. Each spike *is* a `prototype` (reuse its throwaway/capture
+discipline); the plural, run against one shared question, is a **spike run**. Context:
+skills (engineering). _Avoid_: "spike" for a one-off prototype with no comparison (that is
+just a `prototype`), and the agile "spike = any timeboxed investigation" sense.
+
+### meaningful option
+An approach genuinely in contention to win a decision — distinct enough that it could
+change the answer, not a trivial variant. A spike run spikes **every** meaningful option;
+there is **no fixed count**. Context: skills. _Avoid_: capping the count, or spiking
+near-duplicates (the waste `prototype`'s "diverge in structure, not colour" rule guards).
+
+### deciding question
+The single question a spike run exists to answer — the uncertainty that reasoning alone
+can't settle and only building reveals. Every spike in the run answers the *same* deciding
+question, and each is "done enough" the instant it answers it (not when it works).
+Context: skills.
+
+### verdict
+The outcome of reviewing a spike run with the user (via `grilling`): which option won,
+which lost, and **why**. Recorded as a context pointer on the originating ticket, alongside
+the spike branch names, plus integration ticket(s) for the winner (the "integration plan").
+An ADR is offered only when the decision clears domain-modeling's three-part gate. Context:
+skills.
+
+## delivery-dashboard terms
+
+The vocabulary for the completion-communication artifact
+(`skills/productivity/delivery-dashboard`). Distinct from `CHANGELOG.md` (durable, archival,
+text) — the dashboard is the living, relevant-now, visual surface.
+
+### delivery dashboard
+A single durable, evolving HTML artifact per project that communicates delivered work to the
+user in the **JTBD register**. Organized into **tabs by concern/workstream**; each tab carries
+a current-state view plus a **short rolling history** of what's currently relevant. Tabs are
+**curated and retired** as features integrate — it reflects the present and recent, not a full
+archive. Value-language follows `changelog`; HTML rules follow `report-format.md`. Context:
+skills (productivity). _Avoid_: "report" (a per-run report is a different artifact), treating
+it as append-only (the history rolls).
+
+### JTBD register
+The writing register for the delivery dashboard: every explanation reads as if for the person
+whose **job-to-be-done** the work serves — the value, what's new about the experience, how it
+affects their JTBD — with no jargon, no sausage-making, low cognitive load. The value-language
+discipline is `changelog`'s, surfaced visually. Context: skills.
+
+### fidelity ladder
+The three-rung rule for how real a dashboard visual is, matched to the feature's build state and
+**always labelled with its rung**: **wireframe** (nothing built — a greybox/sketch of the
+intended experience), **mocked** (partially built — real layout, representative/stubbed data),
+**live** (shipped — real data / the actual thing). Climbing the ladder is the visible progress
+signal in a tab's current-state view. The rung label is load-bearing: an unlabelled wireframe
+reads as a promise. Context: skills.
+
 Match strength is honest (exact / close / broad / narrow); a blank counterpart is
 a real gap, not forced equivalence.
 
@@ -185,3 +246,6 @@ a real gap, not forced equivalence.
 - **"issue" vs "ticket"**: collapsed to **ticket**; "issue" is a skills alias only.
 - **"vertical slice"**: a false friend. Web = thin path through all layers; game = a
   polished representative chunk. Qualify it when both domains are in play.
+- **"spike"**: scoped to a throwaway build answering a deciding question for one option in
+  a multi-option **spike run** (`spike-options`). A one-off throwaway with no comparison is
+  a `prototype`, not a spike; the agile "any timeboxed investigation" sense is not used.
