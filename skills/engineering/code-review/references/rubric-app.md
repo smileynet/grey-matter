@@ -15,6 +15,7 @@ Each smell reads *what it is* -> *how to fix*; match it against the diff:
 - **Duplicated Code**: the same logic shape appears in more than one hunk or file in the change. -> extract the shared shape, call it from both.
 - **Feature Envy**: a method that reaches into another object's data more than its own. -> move the method onto the data it envies.
 - **Data Clumps**: the same few fields or params keep travelling together (a type wanting to be born). -> bundle them into one type, pass that.
+- **Representable Invalid State**: the type admits a combination the domain forbids (dependent flags like `held` + `sold`, fields valid only in some states, a stored count beside the collection it counts). -> a variant type carrying its data; derive what can be derived instead of storing it. Skip a lone genuine boolean, a private type with three or fewer use sites, and prototypes. Exhaustiveness only holds if the checker runs: no catch-all `_ =>` / bare `default:`, `assertNever` / `assert_never` in the fallthrough, and Go's interface `nil` case.
 - **Primitive Obsession**: a primitive or string standing in for a domain concept that deserves its own type. -> give the concept its own small type.
 - **Repeated Switches**: the same `switch`/`if`-cascade on the same type recurs across the change. -> replace with polymorphism, or one map both sites share.
 - **Shotgun Surgery**: one logical change forces scattered edits across many files in the diff. -> gather what changes together into one module.
