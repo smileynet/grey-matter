@@ -26,7 +26,7 @@
 // Exit: 0 ok; 1 check-links found broken links; 2 usage or git error.
 
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync, realpathSync } from "node:fs";
 import { dirname, join, posix, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -56,7 +56,19 @@ export function mapPath(path, map) {
 const LINK = /(\]\()([^)\s]+)(\))/g;
 const SKIP_TARGET = /^([a-z][a-z0-9+.-]*:|#|\/|<|\{)/i;
 
+// Link rewriting skips fenced code blocks and inline code spans: link-shaped text there is an
+// example (e.g. asm `tbl[idx](x)`), not a link. Repo-rooted path mentions are still rewritten
+// everywhere by rewriteRooted, since commands in fences cite real paths.
 export function rewriteLinks(text, oldFile, newFile, map) {
+  let fence = false;
+  return text.split("\n").map((line) => {
+    if (/^\s*(```|~~~)/.test(line)) { fence = !fence; return line; }
+    if (fence) return line;
+    return line.split(/(`[^`]*`)/).map((part, i) => (i % 2 ? part : rewriteLinkPart(part, oldFile, newFile, map))).join("");
+  }).join("\n");
+}
+
+function rewriteLinkPart(text, oldFile, newFile, map) {
   return text.replace(LINK, (whole, open, target, close) => {
     if (SKIP_TARGET.test(target)) return whole;
     const [path, ...frag] = target.split("#");
@@ -184,6 +196,6 @@ function main(argv) {
   }
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+if (process.argv[1] && realpathSync(fileURLToPath(import.meta.url)) === realpathSync(resolve(process.argv[1]))) {
   main(process.argv.slice(2));
 }

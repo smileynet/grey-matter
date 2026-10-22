@@ -6,7 +6,7 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, symlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { execFileSync } from "node:child_process";
@@ -115,4 +115,28 @@ test("--evidence-dir protects non-JSON records by path, and check-links --skip e
     assert.equal(checkLinks(repo).broken.length, 1);
     assert.equal(checkLinks(repo, { skip: ["docs/agents/evidence/"] }).broken.length, 0);
   } finally { rmSync(repo, { recursive: true, force: true }); }
+});
+
+test("links inside fenced code and inline code are not rewritten", () => {
+  const repo = fixtureRepo({
+    ".memory/ref.md": "See [a](specs/a.md).\n```asm\ntbl[idx](x)\n```\nInline `f[i](y)` too.\n",
+    ".memory/specs/a.md": "# a\n",
+  });
+  try {
+    relocate(repo, { map: [[".memory/ref.md", "docs/agents/research/ref.md"], [".memory/specs/", "docs/agents/specs/"]], apply: true });
+    assert.equal(read(repo, "docs/agents/research/ref.md"),
+      "See [a](../specs/a.md).\n```asm\ntbl[idx](x)\n```\nInline `f[i](y)` too.\n");
+  } finally { rmSync(repo, { recursive: true, force: true }); }
+});
+
+test("the CLI runs when invoked through a symlinked path", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gm-link-"));
+  try {
+    execFileSync("git", ["-C", dir, "init", "-q"]);
+    const real = new URL("../skills/meta/adopt-project/scripts/relocate-knowledge.mjs", import.meta.url).pathname;
+    const link = join(dir, "rk.mjs");
+    symlinkSync(real, link);
+    const out = execFileSync(process.execPath, [link, "check-links", dir], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).toString();
+    assert.match(out, /md files/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });

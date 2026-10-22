@@ -18,7 +18,7 @@
 // Size budget: the source must stay <= BUDGET_BYTES, because every harness pays for it on
 // every turn. Install refuses to run over budget.
 
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync, realpathSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -88,7 +88,7 @@ function uninstall({ dryRun, targets }) {
   }
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+if (process.argv[1] && realpathSync(fileURLToPath(import.meta.url)) === realpathSync(resolve(process.argv[1]))) {
   const a = parseArgs(process.argv.slice(2));
   ({ install, list, uninstall })[a.cmd](a);
 }
