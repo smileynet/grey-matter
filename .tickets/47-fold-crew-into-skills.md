@@ -1,7 +1,7 @@
 ---
 id: "47"
 title: "Fold crew-research nuggets into domain-modeling, research, prototype, implement-spec"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Each of the 4 target skills carries its nugget from proposal 04 (one line or a references/ file)"
