@@ -1,7 +1,7 @@
 ---
 id: "40"
 title: "Add adopt-project: bring the grey-matter workflow into an existing (brownfield) repo"
-status: in_progress
+status: done
 blocked_by: ["41", "42"]
 priority: medium
 tags: ["stream:tooling"]
@@ -211,9 +211,13 @@ ticket 42 (conformance-audit skill).
 
 ## Acceptance criteria
 
-- [ ] `skills/meta/adopt-project/SKILL.md` exists, user-invoked (`disable-model-invocation: true`) with the Codex sidecar `agents/openai.yaml` (`allow_implicit_invocation: false`), written to the `writing-for-agents` rules.
-- [ ] The skill first **surveys & classifies** the repo (cross-harness inventory matrix + build/test command detection + tree-sitter symbol map), names the archetype(s), and **sets the install-vs-negotiate polarity** from "is there an incumbent agent layer?".
-- [ ] It **characterizes an as-is model from code** (glossary-from-code via the domain/game-modeling code cross-check; records legacy/known-broken areas) and **stages inferred glossary terms for confirmation** before any are committed.
-- [ ] It is **non-destructive on git**: requires a clean working tree, reconciles existing agent files (never clobbers), lands adoption as one reviewable commit; and under **subsume-semantics** it migrates an incumbent tracker/agent layer's worth-keeping content into grey-matter and replaces it (lossless, gated) rather than forking a competing system or deferring to it.
-- [ ] It **orchestrates by calling** `init-project` (guard-fixed), `domain-modeling`/`game-modeling`, the conformance-audit skill, and `triage` (full triaged board seed); and **recommends `wayfinder`** for forward work rather than running it. End state is a fully adopted, workable repo.
-- [ ] Indexes updated together (bucket README + compass + maintenance-skills roster) and `node scripts/check-repo.mjs` passes; skill deployed via install-skills.mjs.
+- [x] `skills/meta/adopt-project/SKILL.md` exists, user-invoked (`disable-model-invocation: true`) with the Codex sidecar `agents/openai.yaml` (`allow_implicit_invocation: false`), written to the `writing-for-agents` rules.
+- [x] The skill first **surveys & classifies** the repo (cross-harness inventory matrix + build/test command detection + tree-sitter symbol map), names the archetype(s), and **sets the install-vs-negotiate polarity** from "is there an incumbent agent layer?".
+- [x] It **characterizes an as-is model from code** (glossary-from-code via the domain/game-modeling code cross-check; records legacy/known-broken areas) and **stages inferred glossary terms for confirmation** before any are committed.
+- [x] It is **non-destructive on git**: requires a clean working tree, reconciles existing agent files (never clobbers), lands adoption as one reviewable commit; and under **subsume-semantics** it migrates an incumbent tracker/agent layer's worth-keeping content into grey-matter and replaces it (lossless, gated) rather than forking a competing system or deferring to it.
+- [x] It **orchestrates by calling** `init-project` (guard-fixed), `domain-modeling`/`game-modeling`, the conformance-audit skill, and `triage` (full triaged board seed); and **recommends `wayfinder`** for forward work rather than running it. End state is a fully adopted, workable repo.
+- [x] Indexes updated together (bucket README + compass + maintenance-skills roster) and `node scripts/check-repo.mjs` passes; skill deployed via install-skills.mjs.
+
+## Resolution (2026-10-22)
+
+done: shipped adopt-project, the brownfield counterpart to init-project. Characterizes an existing repo's as-is model from code, subsumes/reconciles an incumbent agent layer (migrate-then-replace, never clobber/defer/fork), seeds a triaged board, wires plumbing, and recommends wayfinder for forward work — ending in a fully adopted repo. Orchestrates existing skills; realizes ADR 0001 (adoption boundary) and 0002 (soft-lens + polarity gate).
