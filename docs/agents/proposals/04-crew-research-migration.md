@@ -133,6 +133,8 @@ the bundled `/review` alias still runs Claude's built-in reviewer. Note this in 
 3. Uninstall crew-research (manifest-scoped, dry-run first), decommission recall, install grey-matter skills + the global AGENTS.md.
 4. Verify in fresh kiro-cli and codex sessions: the non-crew skills are intact, AGENTS.md is injected, and the shim works in one `.memory/` repo.
 5. Freeze crew-research deploys (its init would undo the cutover). Keep the repo as prior art.
-6. Run `adopt-project` per repo over time. Remove the shim when no `.memory/` repos remain.
+6. Adopt repos with `adopt-project` portfolio mode (`scripts/survey-repos.mjs`): the freshest tier first, the rest
+   on their next real work, or all in batches. Each repo keeps its own gate. Remove the shim when no active
+   `.memory/` repos remain.
 
 Rollback for steps 3–4: restore the snapshot (or `mise run init -- --global --tier full` from crew-research).

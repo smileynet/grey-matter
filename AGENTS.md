@@ -83,8 +83,9 @@ It aggregates (each also runnable on its own): installer ownership safety
 (`scripts/install-skills.test.mjs`), invocation sidecars + README tiers
 (`scripts/check-invocation-policy.mjs`), doc indexes + relative links
 (`scripts/check-docs-consistency.mjs`), ticket health (`tkt validate`), adopt-project's
-knowledge-relocation fixtures (`scripts/relocate-knowledge.test.mjs`), and the global AGENTS.md
-size budget + ownership (`scripts/install-agents-md.test.mjs`). It is
+knowledge-relocation fixtures (`scripts/relocate-knowledge.test.mjs`), the global AGENTS.md
+size budget + ownership (`scripts/install-agents-md.test.mjs`), the crew-research uninstall scope
+(`scripts/uninstall-crew-research.test.mjs`), and the repo-survey tiers (`scripts/survey-repos.test.mjs`). It is
 **read-only on user state** (the installer check uses throwaway temp roots, never a real
 harness skill root) and needs **no harness authentication or network** (tkt is local and
 degrades to a skipped-with-warning if absent). Run it before a

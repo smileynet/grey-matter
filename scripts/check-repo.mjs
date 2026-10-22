@@ -13,6 +13,7 @@
 //   5. knowledge relocation        -> scripts/relocate-knowledge.test.mjs (node:test, temp git repos)
 //   6. global AGENTS.md            -> scripts/install-agents-md.test.mjs (size budget + ownership)
 //   7. crew-research uninstall     -> scripts/uninstall-crew-research.test.mjs (fake home only)
+//   8. repo survey (portfolio)     -> scripts/survey-repos.test.mjs (temp git repos)
 //
 // Design (AC-driven):
 //  - READ-ONLY on user state. The installer test uses throwaway temp roots (mkdtemp),
@@ -85,6 +86,7 @@ run("4. ticket health (tkt validate)", "tkt", ["validate"], { optional: true });
 run("5. knowledge relocation (adopt-project)", node, ["--test", join(SCRIPTS, "relocate-knowledge.test.mjs")]);
 run("6. global AGENTS.md (budget + ownership)", node, ["--test", join(SCRIPTS, "install-agents-md.test.mjs")]);
 run("7. crew-research uninstall scope", node, ["--test", join(SCRIPTS, "uninstall-crew-research.test.mjs")]);
+run("8. repo survey tiers (adopt-project portfolio)", node, ["--test", join(SCRIPTS, "survey-repos.test.mjs")]);
 
 // --- Summary ------------------------------------------------------------------
 console.log("\n==================== repo-check summary ====================");

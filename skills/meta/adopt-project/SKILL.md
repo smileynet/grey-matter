@@ -163,6 +163,29 @@ it. Then commit in the shape above, verify against the Step 1 baseline (tests, l
 clone if LFS changed), and push. Finally, **recommend `wayfinder`** for the first forward chunk of work
 and stop. Adoption ends here.
 
+## Portfolio mode (optional): which sibling repos to adopt
+
+When the user wants to bring several repos over (a migration off another skill set, a new machine),
+survey the sibling repos before adopting any of them:
+
+```
+node <skill-dir>/scripts/survey-repos.mjs [<parent-dir>] [--exclude <name> ...] [--fresh-days 30] [--warm-days 90]
+```
+
+It defaults to the current repo's parent and is read-only. It ranks every git repo there by freshness
+(last commit, commits in the fresh window) and reports what adoption would face: a dirty tree, an
+incumbent `.memory/`, a tracker, and AGENTS.md references to skills that no longer exist. Exclude
+tool repos and retired projects that aren't candidates. Present the tiers and offer two options:
+
+- **Freshest first (default).** Adopt the *now* tier (fresh, clean tree) right away; the
+  *now-after-wip* tier once each owner lands its work in progress; *warm* repos on their next real
+  work; leave *dormant* ones on whatever fallback the user-level AGENTS.md provides.
+- **All.** Adopt every candidate repo in batches of a few per session, freshest first. Each repo still
+  runs the full pipeline above with its own approval gate and its own commits; batching never merges
+  gates. Dirty repos are skipped (and listed), never stashed or committed on the owner's behalf.
+
+Either way, one repo at a time: the gate per repo is what keeps adoption honest.
+
 ## Archetypes (the soft lens — diagnostic vocabulary, not a branch)
 
 Name the repo's starting state to set expectations and tune effort. These overlap and one axis

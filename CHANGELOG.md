@@ -11,6 +11,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 - Release tooling: a `release` command that updates the changelog and README, picks the version, then tags, pushes, and publishes a GitHub release, composing the new `changelog` and `readme` skills.
 - `cheat-sheet` skill: a styled, live-generated reference card of every skill by category.
 - `adopt-project` relocates a dot-prefixed knowledge folder such as `.memory/` into grey-matter paths with a bundled script that keeps every link resolving and leaves recorded evidence untouched. It now also sets up Git LFS, untracks sensitive files, completes the `.references/` clone index, and reshapes AGENTS.md around who actually reads it.
+- `adopt-project` portfolio mode: survey every sibling repo, rank them by freshness, and adopt the freshest first or all of them in batches, each with its own approval gate.
 - `adopt-project` files audit findings as review-first migration findings, so the project's own agent confirms or rejects each one before acting on it.
 
 - User-level standing rules: one short `global/AGENTS.md` (verify before claiming done, keep code minimal, trust observation over docs), installed into kiro-cli, Codex, Claude Code, and OpenCode with `scripts/install-agents-md.mjs`. It replaces always-on steering, stays under a 3 KB budget, and never overwrites a file it didn't install.
