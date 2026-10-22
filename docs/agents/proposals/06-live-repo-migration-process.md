@@ -128,3 +128,21 @@ Spike results from the launch:
 - The first prompt sent right after `agent start` reported ready was not delivered (empty input
   box, no turn). Always confirm delivery by reading the pane; resend only when the input box is
   empty and no turn ran. `--until idle --until done --until blocked` returned cleanly.
+
+**Round 2 (2026-10-22), "do all idle":** adopted studio-model-service, fragment-dedup-estimator,
+broadcast-scraper, roblox-dashboard, game-state-manager, bounty-board, artist-pipeline,
+3d-pipeline, cloud-compute-optimization, litellm-test. Live agents in game-state-manager,
+roblox-dashboard, bounty-board, cloud-compute-optimization (kiro + codex), 3d-pipeline and
+litellm-test (kiro + codex) were paused with handoffs, retired with `/quit`, and relaunched with
+orient; every pick was checked against the board before go-ahead (litellm's backlog pick was
+routed to the user instead). Tests and checks matched baseline in every repo.
+
+Lessons folded into the tooling: `--evidence-dir` and `check-links --skip` (digest-pinned
+evidence trees in bounty-board, artist-pipeline, cloud-compute-optimization, litellm-test);
+link rewriting skips code fences (an asm `tbl[idx](x)` was being turned into a link); script
+main guards compare realpaths (via the symlinked `~` they silently did nothing). Process
+lessons: a cancelled subagent's processes keep running (artist-pipeline's `mise run check`
+finished on its own; verify on-disk state before redoing work); don't dispatch an apply in the
+same parallel batch as its audit; GitLab pushes fail once the 12 h Midway SSH cert lapses (load
+the agent key, and ask the user to `mwinit` if it has expired); a vacated pane may be reused by
+the human (game-state-manager's ran `aim`), so split a new pane instead of reusing it.
