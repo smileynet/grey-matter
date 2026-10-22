@@ -1,7 +1,7 @@
 ---
 id: "45"
 title: "Global AGENTS.md: author the 6-line guardrail+shim file and install it per harness (manifest-tracked, no clobber)"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -36,7 +36,16 @@ Evidence: `docs/agents/research/{kiro-steering-empirical,kiro-steering-docs,stee
 
 ## Acceptance criteria
 
-- [ ] Source file in repo, <= 3 KB, content matches the proposal 04 draft (or the deltas are recorded there).
-- [ ] Installer installs/lists/uninstalls it for kiro, codex, claude, opencode; foreign file is never clobbered.
-- [ ] `check-repo.mjs` enforces the size budget and the ownership test covers the new target.
-- [ ] `docs/agents/harnesses.md` documents the per-harness global path.
+- [x] Source file in repo, <= 3 KB, content matches the proposal 04 draft (or the deltas are recorded there).
+- [x] Installer installs/lists/uninstalls it for kiro, codex, claude, opencode; foreign file is never clobbered.
+- [x] `check-repo.mjs` enforces the size budget and the ownership test covers the new target.
+- [x] `docs/agents/harnesses.md` documents the per-harness global path.
+
+## Resolution (2026-10-22)
+
+done: global AGENTS.md + installer shipped; actual install happens at cutover (ticket 52)
+
+### Verification
+1. ✓ Global AGENTS.md source exists in repo, <=3KB, matches proposal 04 draft — "global/AGENTS.md 1173 B (<=3 KB), the proposal 04 draft verbatim"
+2. ✓ install-skills.mjs (or sibling) installs it to kiro/codex/claude/opencode user paths, manifest-tracked, refuses to clobber a foreign file, supports --dry-run/list/uninstall — "scripts/install-agents-md.mjs: kiro/codex/claude/opencode targets, owner-marked, refuses foreign (real dry-run refused crew's ~/.codex/AGENTS.md), --dry-run/list/uninstall; 5 tests pass"
+3. ✓ check-repo.mjs covers it (size budget + installer ownership test) — "check-repo invariant 6 enforces budget + ownership; harnesses.md documents the per-harness paths (agy/Crush recorded unsupported)"
