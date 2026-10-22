@@ -1,7 +1,7 @@
 ---
 id: "45"
 title: "Global AGENTS.md: author the 6-line guardrail+shim file and install it per harness (manifest-tracked, no clobber)"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
