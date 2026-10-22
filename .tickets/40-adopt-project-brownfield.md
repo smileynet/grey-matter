@@ -58,17 +58,20 @@ the rationale trail.
 - **Archetypes — soft lens + one polarity gate.** The five archetypes (below) are a **descriptive
   vocabulary** that tunes effort (soft lens). PLUS a single binary gate after Step 1: **is there an
   incumbent agent layer?** (existing AGENTS.md doctrine / an existing tracker of any kind / existing
-  skills). If yes, steps 3–5 switch from **install-semantics** to **negotiate-semantics**:
-  - *reconcile:* incumbent is authoritative; classify each artifact own / leave-alone / pointer-only
-    / ask-before-touch; default to NOT installing.
-  - *seed:* first ask "does a non-grey-matter tracker already own this board?" — if so, **stand
-    down** (never fork a second tracker).
-  - *wire:* assertions-of-existing over creations; never `tkt init` beside a live tracker.
+  skills). If yes, steps 3–5 switch from **install-semantics** to **subsume-semantics**:
+  - purpose is **subsume and replace** the incumbent, not defer to it — the incumbent is *what's
+    being replaced* (consistent with "fully adopted", ADR 0001), not a protected authority.
+  - **migrate-then-replace, lossless and gated by default:** capture the incumbent's content worth
+    keeping (governance rules → AGENTS.md; real backlog → tkt; decisions → ADRs), then replace the
+    incumbent structure with grey-matter's; propose it at the approval gate, land as one reviewable
+    commit. Wholesale *automatic* replacement only when the user specifically asks.
+  - *seed:* never run two trackers — **migrate** the incumbent tracker's tickets into tkt and replace
+    it (not `tkt init` a second board, and not merely defer to theirs).
   This is NOT pure emphasis-tuning (the herdr dry-run proved a pure soft lens would fork herdr's
   live `.tickets/` while reporting success), and NOT a five-way branch — one polarity bit flips
-  three steps' *verb* from install to negotiate. The "never clobber" git contract prevents
-  overwriting *bytes*; the polarity gate prevents creating a *parallel competing system*. Both
-  needed. (See ADR.)
+  three steps' *verb* from install to subsume. The "never clobber" git contract prevents
+  overwriting *bytes*; the polarity gate governs what to do with a *whole incumbent system*
+  (subsume it, losslessly + gated, not fork or discard it). Both needed. (See ADR 0002.)
 - **Bucket/invocation:** user-invoked `meta` (`disable-model-invocation: true` + sidecar), the
   brownfield twin of `init-project`.
 - **Docs/provenance:** no `skill-reviews/` doc — this ticket is the design record. crew-research is
@@ -134,8 +137,9 @@ had *some* agent scaffolding. The skill's first phase must **detect and classify
    → **install** over existing code; mine class names + tests + README to synthesize glossary +
    initial frontier. Hard part: backlog mostly isn't written down anywhere.
 2. **Mature bespoke agent workflow (conflicting).** e.g. `herdr` (custom opinionated AGENTS.md,
-   its own `.tickets/`, its own `herdr-*` SKILL.md files). → **reconcile/merge, not install**;
-   never clobber; decide what grey-matter defers to; avoid a second competing tracker/AGENTS dialect.
+   its own `.tickets/`, its own `herdr-*` SKILL.md files). → **subsume-semantics**: migrate its
+   worth-keeping content (governance rules, the live backlog) into grey-matter and replace it,
+   lossless + gated; never fork a second tracker or AGENTS dialect.
 3. **Chaotic multi-tool / cross-repo residue.** e.g. `catalyst` (aider + .claude + .kiro +
    oh-my-pi at once, overlapping skills, agent material homed in a *sibling* repo, tmp litter).
    → **archaeology then reconcile**; identify authoritative vs abandoned, respect a declared
@@ -147,32 +151,35 @@ had *some* agent scaffolding. The skill's first phase must **detect and classify
    tests, or a big domain with no glossary and sparse TODOs. → **behavior-characterization
    fallback**: derive vocabulary + behavior from code + commit history.
 
-### Pipeline (grilled; one linear flow, archetype = soft lens, + install/negotiate polarity on 3–5)
+### Pipeline (grilled; one linear flow, archetype = soft lens, + install/subsume polarity on 3–5)
 
 1. **Survey & classify** — inventory the cross-harness matrix + detect the build/test/lint command
    (justfile / package.json / Cargo.toml / project.godot / Makefile / pyproject); use the
    tree-sitter `code` tool for an Aider-style symbol map + high-centrality modules (don't read
    everything); name the archetype(s); **set the polarity bit** (incumbent agent layer? →
-   negotiate-semantics on steps 3–5, else install-semantics).
+   subsume-semantics on steps 3–5, else install-semantics).
 2. **Characterize the as-is model** — back-fill a `GLOSSARY.md` *from code* (via domain/game-modeling's
    mandatory code cross-check as the *primary* loop); **stage inferred terms for confirmation** (b);
    record contradictions + legacy/known-broken areas honestly; offer ADRs only for decisions already
    baked into the code.
 3. **Conformance-audit + reconcile (polarity-aware)** — call the conformance-audit skill (ticket 42)
-   on existing skills/scripts/agent-guidance; reconcile existing agent files. *Install-semantics:*
-   scaffold grey-matter conventions, careful not to clobber. *Negotiate-semantics:* incumbent is
-   authoritative — classify each artifact own / leave-alone / pointer-only / ask-before-touch.
+   on existing skills/scripts/agent-guidance/docs; reconcile existing agent files. *Install-semantics:*
+   scaffold grey-matter conventions, careful not to clobber. *Subsume-semantics:* migrate the
+   incumbent's content worth keeping (governance → AGENTS.md, decisions → ADRs) into grey-matter's
+   structures, then replace — lossless and gated.
 4. **Seed & triage the board** — call `triage` to capture existing TODO/FIXME, issues, and gaps into
    a triaged, ordered frontier (triage's roles move raw findings to `backlog`/`ready-for-agent` so
-   `tkt ready` isn't flooded). *Negotiate-semantics:* if a non-grey-matter tracker already owns the
-   board, **stand down** — do not fork a second tracker.
+   `tkt ready` isn't flooded). *Subsume-semantics:* if a non-grey-matter tracker already owns the
+   board, **migrate its tickets into tkt and replace it** — never fork a second tracker, never merely
+   defer to theirs.
 5. **Wire the plumbing (reconcile, never clobber)** — call `init-project` (guard-fixed, ticket 41) to
    create only the genuinely-absent plumbing: AGENTS.md-primary + CLAUDE.md pointer, `.scratch/`,
    `.references/` + its rehydration README, gitignore, `tkt init` if absent, wire consistency checks.
-   *Negotiate-semantics:* assertions-of-existing over creations; never `tkt init` beside a live tracker.
-6. **Confirm & recommend** — present the as-is model + triaged board as one reviewable change for human
-   correction (approval gate; land as one commit), then **recommend `wayfinder`** for forward work and
-   stop. Adoption ends here.
+   *Subsume-semantics:* the replacement supersedes incumbent plumbing; never `tkt init` beside a
+   still-live tracker (migrate it in step 4 first).
+6. **Confirm & recommend** — present the as-is model + triaged board (and any subsume/replace plan) as
+   one reviewable change for human correction (approval gate; land as one commit), then **recommend
+   `wayfinder`** for forward work and stop. Adoption ends here.
 
 ### Risks / pitfalls to design against
 
@@ -207,6 +214,6 @@ ticket 42 (conformance-audit skill).
 - [ ] `skills/meta/adopt-project/SKILL.md` exists, user-invoked (`disable-model-invocation: true`) with the Codex sidecar `agents/openai.yaml` (`allow_implicit_invocation: false`), written to the `writing-for-agents` rules.
 - [ ] The skill first **surveys & classifies** the repo (cross-harness inventory matrix + build/test command detection + tree-sitter symbol map), names the archetype(s), and **sets the install-vs-negotiate polarity** from "is there an incumbent agent layer?".
 - [ ] It **characterizes an as-is model from code** (glossary-from-code via the domain/game-modeling code cross-check; records legacy/known-broken areas) and **stages inferred glossary terms for confirmation** before any are committed.
-- [ ] It is **non-destructive on git**: requires a clean working tree, reconciles existing agent files (never clobbers), lands adoption as one reviewable commit; and under **negotiate-semantics** it detects an incumbent tracker/agent layer and stands down rather than forking a competing system.
+- [ ] It is **non-destructive on git**: requires a clean working tree, reconciles existing agent files (never clobbers), lands adoption as one reviewable commit; and under **subsume-semantics** it migrates an incumbent tracker/agent layer's worth-keeping content into grey-matter and replaces it (lossless, gated) rather than forking a competing system or deferring to it.
 - [ ] It **orchestrates by calling** `init-project` (guard-fixed), `domain-modeling`/`game-modeling`, the conformance-audit skill, and `triage` (full triaged board seed); and **recommends `wayfinder`** for forward work rather than running it. End state is a fully adopted, workable repo.
 - [ ] Indexes updated together (bucket README + compass + maintenance-skills roster) and `node scripts/check-repo.mjs` passes; skill deployed via install-skills.mjs.

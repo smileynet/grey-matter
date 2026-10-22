@@ -139,17 +139,20 @@ To merge grey-matter's structure with existing agent files **non-destructively**
 overwrite; classify each existing artifact and integrate around it. **clobber** is the failure
 it avoids: overwriting or shadowing what's already there. Context: skills.
 
-### install-semantics / negotiate-semantics
+### install-semantics / subsume-semantics
 The two polarities of adopt-project's reconcile/seed/wire steps. **install**: no incumbent
-agent layer — scaffold grey-matter conventions (carefully). **negotiate**: an incumbent agent
-layer exists — it is authoritative, so default to deferring, pointer-only additions, and
-standing down rather than forking a competing system. Context: skills. (See ADR 0002.)
+agent layer — scaffold grey-matter conventions (carefully). **subsume**: an incumbent agent
+layer exists and is **being replaced** — migrate its content worth keeping (governance rules,
+backlog, decisions) into grey-matter's structures, then replace it; lossless and gated by
+default (automatic only if the user asks). Context: skills. (See ADR 0002.) _Avoid_:
+"negotiate-semantics" (the earlier name; adopt-project subsumes the incumbent, it does not
+defer to it).
 
 ### incumbent agent layer
 Pre-existing agent scaffolding in a target repo — an AGENTS.md doctrine, a tracker of any
-kind, or existing skills — whose presence flips adopt-project into negotiate-semantics.
-Context: skills. _Avoid_: treating a non-grey-matter tracker as "absent" just because it isn't
-tkt.
+kind, or existing skills — whose presence flips adopt-project into subsume-semantics (migrate
+its value, then replace it). Context: skills. _Avoid_: treating a non-grey-matter tracker as
+"absent" just because it isn't tkt.
 
 ### conformance-audit
 Auditing a repo's existing skills, tool scripts, and agent guidance against grey-matter's
