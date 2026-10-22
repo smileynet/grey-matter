@@ -19,6 +19,12 @@ Current members of `skills/meta/`:
 - **curate-docs**: promote a mature note into a skill, move a skill's private reference
   into its `references/`, prune stale docs. Also owns keeping the router and bucket
   READMEs honest.
+- **conformance-audit**: audit a repo's skills, tool scripts, agent guidance, and docs
+  against grey-matter's *current* standards and apply the mechanically-safe fixes behind an
+  approval gate; judgment calls are surfaced (routed to `readme`/`curate-docs`), not
+  auto-applied. Standalone for ongoing re-conformance; called by `adopt-project` as a
+  pipeline step. **Consumes** the `check-*.mjs` rules + convention docs — owns no rules of
+  its own.
 - **cheat-sheet**: list every skill by category with a one-line description (the quick
   reference card; the flat index to compass's map).
 - **compass**: the router/index over the whole set.
