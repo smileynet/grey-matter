@@ -1,7 +1,7 @@
 ---
 id: "41"
 title: "Make init-project's guard create-what's-missing (composable on a non-empty repo)"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 tags: ["stream:tooling"]
@@ -36,7 +36,11 @@ Read first: `skills/meta/init-project/SKILL.md`, `docs/agents/skill-reviews/init
 
 ## Acceptance criteria
 
-- [ ] init-project creates only the absent plumbing pieces when run on a partially-scaffolded repo, instead of bailing because one piece (e.g. `AGENTS.md`) exists.
-- [ ] It never overwrites an existing file — skip-what-exists is non-destructive.
-- [ ] It is safe to invoke from `adopt-project` after an inventory/reconcile step (the behavior ticket 40 depends on).
-- [ ] `node scripts/check-repo.mjs` passes and the skill is redeployed via install-skills.mjs.
+- [x] init-project creates only the absent plumbing pieces when run on a partially-scaffolded repo, instead of bailing because one piece (e.g. `AGENTS.md`) exists.
+- [x] It never overwrites an existing file — skip-what-exists is non-destructive.
+- [x] It is safe to invoke from `adopt-project` after an inventory/reconcile step (the behavior ticket 40 depends on).
+- [x] `node scripts/check-repo.mjs` passes and the skill is redeployed via install-skills.mjs.
+
+## Resolution (2026-10-22)
+
+done: init-project now creates only the genuinely-absent pieces and never bails or overwrites, making it composable — adopt-project (ticket 40) can call it on a partially-scaffolded brownfield repo after its own inventory/reconcile step.
