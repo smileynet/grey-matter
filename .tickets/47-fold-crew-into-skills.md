@@ -1,7 +1,7 @@
 ---
 id: "47"
 title: "Fold crew-research nuggets into domain-modeling, research, prototype, implement-spec"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "Each of the 4 target skills carries its nugget from proposal 04 (one line or a references/ file)"
@@ -30,6 +30,14 @@ Context: [proposal 04](../docs/agents/proposals/04-crew-research-migration.md).
 
 ## Acceptance criteria
 
-- [ ] domain-modeling, research, prototype, and implement-spec each carry their nugget.
-- [ ] No skill body grows beyond its depth bar (detail goes to `references/`).
-- [ ] `node scripts/check-repo.mjs` green.
+- [x] domain-modeling, research, prototype, and implement-spec each carry their nugget.
+- [x] No skill body grows beyond its depth bar (detail goes to `references/`).
+- [x] `node scripts/check-repo.mjs` green.
+
+## Resolution (2026-10-22)
+
+done: study-reference, multi-agent-validation, subagent-reliability, adr-authoring nuggets folded
+
+### Verification
+1. ✓ Each of the 4 target skills carries its nugget from proposal 04 (one line or a references/ file) — "research, prototype, implement-spec, domain-modeling each carry their nugget (1-3 lines in place, no body growth)"
+2. ✓ check-repo.mjs green — "node scripts/check-repo.mjs all invariants pass"
