@@ -1,7 +1,7 @@
 ---
 id: "51"
 title: "Pilot adopt-project (subsume) on decksmith and feed findings back into adopt-project"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
