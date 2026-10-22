@@ -32,6 +32,13 @@ Physical layout:
 `tkt close <id> --check-all --resolution "..."`.
 
 - Never hand-edit a ticket's status to `done` (skips the close gates).
+- **Create substantive tickets with `--vc` so `close --evidence` maps.** `tkt close --evidence`
+  attaches one evidence item per **`validation_criteria`** (frontmatter) entry. A ticket that
+  has only `## Acceptance criteria` checkboxes in its body but no `validation_criteria` gets
+  `--evidence ignored: ticket has no validation_criteria to map it to` at close, and the
+  evidence is dropped. So pass `--vc "..."` (repeatable, one per acceptance criterion) at
+  `tkt new` time for any ticket you'll close with evidence. (Config only *warns* on missing
+  evidence, so this is a convention, not a gate — but the warning means lost evidence.)
 - **Closing is terminal.** tkt 0.4.0 refuses *every* mutation of a remote-closed ticket —
   no reopen (`edit --status`), no AC re-check (`close --force --check-all`, `edit --ac`),
   and `validate --fix` won't touch it. So **always `--check-all` at close time**: if you

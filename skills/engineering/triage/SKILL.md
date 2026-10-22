@@ -87,7 +87,7 @@ Whether the maintainer names a tkt ticket or an external issue/PR, the flow is t
    - For a **PR**: check out the branch and run the relevant tests or commands. Quote the real result.
    - Report the outcome: *confirmed* (with the command output and the code path), *failed* (with the output), or *insufficient detail*. **An unverified claim cannot become `ready-for-agent`**; absence of real evidence is a `needs-info` signal, never a pass. A claim you say you verified without captured output is not verified.
 
-4. **Grill (if needed).** If the request needs fleshing out, call the Skill tool twice, for "grilling" and "domain-modeling" (or "game-modeling" when the subject is a game system, per the app/game split in `docs/agents/tkt-conventions.md`). Grill a round of questions at a time, sharpening domain terms and updating `GLOSSARY.md`/ADRs inline as decisions land. Capture resolved points in the ticket so the work isn't lost.
+4. **Grill (if needed).** If the request needs fleshing out, call the Skill tool twice, for "grilling" and "domain-modeling" (or "game-modeling" when the subject is a game system, per the app/game split in `docs/agents/tkt-conventions.md`). Grill per the grilling skill's rhythm (one question at a time by default), sharpening domain terms and updating `GLOSSARY.md`/ADRs inline as decisions land. Capture resolved points in the ticket so the work isn't lost.
 
 5. **Apply the outcome** (tag the ticket; the agent *recommends* terminal/negative states and the maintainer confirms before any close or external action):
    - `ready-for-agent`: write an agent brief into the ticket ([AGENT-BRIEF.md](AGENT-BRIEF.md)) and tag `triage:ready-for-agent`.

@@ -88,9 +88,13 @@ move on; this is a quick currency check, not a rewrite.
 
 Run `node scripts/check-repo.mjs` so anything landed in step 3 (a new check, a new
 skill/doc, a moved pointer) passes the consistency invariants and link checks, and confirm
-`tkt validate` is clean. Then report three things: the **board** delta (tickets created /
-updated, what the frontier now surfaces), the **environment** changes **landed** this
-session (including any rehydration-index fix), and what was **deferred** to a ticket and why.
+`tkt validate` is clean. Then **confirm the working tree is clean** (`git status --porcelain`):
+a non-empty tree at wrap time means finished work is stranded unpushed — commit and push it
+(or say why it's deliberately left), because the "commit + push after every task" rhythm means
+the next session should find nothing dangling. Then report three things: the **board** delta
+(tickets created / updated, what the frontier now surfaces), the **environment** changes
+**landed** this session (including any rehydration-index fix), and what was **deferred** to a
+ticket and why.
 
 ## Does not
 
@@ -110,4 +114,5 @@ session (including any rehydration-index fix), and what was **deferred** to a ti
   and passes `check-repo.mjs`.
 - The committed `.references/README.md` indexes exactly the references on disk, each with a
   working clone command — a fresh checkout could rehydrate from it.
+- The working tree is clean at wrap — no finished-but-unpushed work stranded for the next session.
 - The report separates what was *landed* from what was *filed*.
