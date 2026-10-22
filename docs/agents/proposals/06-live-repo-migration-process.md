@@ -146,3 +146,30 @@ finished on its own; verify on-disk state before redoing work); don't dispatch a
 same parallel batch as its audit; GitLab pushes fail once the 12 h Midway SSH cert lapses (load
 the agent key, and ask the user to `mwinit` if it has expired); a vacated pane may be reused by
 the human (game-state-manager's ran `aim`), so split a new pane instead of reusing it.
+
+**Round 3 (2026-10-22), "proceed with remaining, all are idle":** one combined audit+apply brief
+with the approved defaults (no per-repo gate), 4 parallel subagents per batch. Adopted 15
+(agent-observability, genai-enterprise-aws, grafana-games, SA-Escalation-Helper, roblox-openai,
+multimodal-doc, dynamodb-game-demo, inno-hub, dynamo-saga, scopely-cicd, tmegs-pi,
+kev-deployment, jumpdeck, sa-project-helper, games-sa-buddy). KiroCrew excluded (upstream clone).
+
+**Round 4 (2026-10-22), the rest:** adopted 33 more (video-boss, herdr-flock,
+roblox-image-upload, teach-me, delirium-world-models-poc, asana-butler, world-models, cde-study,
+aws-cube-semantic-layer, discord-briefing, scopely-semantic-layer, sharktank-manager, peccy-pi,
+discord-poc, archwright, tmegs-player-card-helper, sa-system-setup, dotfiles, wizard_of_oz,
+sa-admin-delegation, system-health, codex-runner, genai-field-lab, terraform-aws-lore (on a
+branch, per its never-commit-to-main rule), horde-autoscaling, recap-ferry, onboarding-buddy,
+workshop_studio, session-bp-capture, ue-analysis, kiro-wiki-sa-pack, kiro-wiki-email-pack,
+kiro-assistant). Stopped for a human: shader-library (local diverged from origin, 4 ahead / 49
+behind), kiro-wiki (dirty tree removes `.mise.toml` secret redactions), news-scraper (dirty tree
+deletes 6 tracked source files). Excluded: pylon (others' repo, Sam not an author),
+cloud-game-development-toolkit (public upstream). Pushed only internal games-sa-tools GitLab
+repos; GitHub and third-party remotes were left for the owner.
+
+Lessons folded into the brief: check upstream before anything (`HEAD...@{u}`; fast-forward when
+0 ahead, before the pre-clean commit; STOP when diverged), since three checkouts were 25-81
+commits behind and one adoption landed on a stale base; the empty init-project `.memory/` stub
+(CONTEXT.md with no terms, empty adr/) is deleted, not a stop; never pre-clean-commit dirt that
+deletes source or removes a security setting. Repos that ship skills or harnesses (archwright,
+codex-runner, sa-system-setup) keep target-project `.memory/` paths as product text
+(`--evidence-dir`); their skills still assume the crew layout in targets, filed as findings.

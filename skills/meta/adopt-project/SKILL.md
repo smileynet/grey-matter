@@ -25,7 +25,11 @@ repo doesn't yet contain, that is the seam where adoption ends and building begi
 ## Two things govern the whole run
 
 **1. Safety — reconcile on git, never clobber.** Require a **clean working tree** before starting
-(hard guardrail — refuse otherwise). Reconcile existing files, never overwrite them. Present
+(hard guardrail — refuse otherwise). Also adopt on a **current base**: `git fetch`, then
+`git rev-list --left-right --count HEAD...@{u}`; fast-forward when 0 ahead, refuse when diverged
+(an adoption on a stale checkout collides with upstream tickets and moves). An empty
+init-project stub (a `.memory/CONTEXT.md` with no terms, an empty `adr/`) is not knowledge;
+delete it. Reconcile existing files, never overwrite them. Present
 everything at the approval gate. Git is the backup — the diff is the audit and `git revert` is the
 undo; no bespoke `.bak` machinery. Commit shape: **one reviewable adoption commit** (relocation,
 reconcile, plumbing, safe fixes), then one evidence commit (the audit reports), then the board
