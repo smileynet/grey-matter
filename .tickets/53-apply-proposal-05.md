@@ -1,7 +1,7 @@
 ---
 id: "53"
 title: "Apply proposal 05: adopt-project + conformance-audit revisions, relocate-knowledge script"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
