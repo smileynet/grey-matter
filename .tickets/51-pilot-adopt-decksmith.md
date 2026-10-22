@@ -1,7 +1,7 @@
 ---
 id: "51"
 title: "Pilot adopt-project (subsume) on decksmith and feed findings back into adopt-project"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -27,8 +27,8 @@ Feed what breaks or is awkward back into adopt-project (or file tickets) before 
 
 ## Acceptance criteria
 
-- [ ] decksmith adopted in one reviewable commit: .memory migrated, AGENTS.md reconciled, board triaged.
-- [ ] Findings applied to adopt-project or filed as tickets.
+- [x] decksmith adopted in one reviewable commit: .memory migrated, AGENTS.md reconciled, board triaged.
+- [x] Findings applied to adopt-project or filed as tickets.
 
 ## Pilot record (2026-10-22)
 
@@ -41,3 +41,11 @@ smudges LFS images, `tkt sync-plan PLAN.md --check` pass.
 
 Findings fed back as [proposal 05](../docs/agents/proposals/05-adopt-project-pilot-revisions.md)
 (R1-R9), pending review before they're applied to adopt-project / conformance-audit.
+
+## Resolution (2026-10-22)
+
+done: decksmith adopted (subsume); pilot findings in proposal 05, application tracked in ticket 53
+
+### Verification
+1. ✓ decksmith adopted in one reviewable commit (.memory migrated, AGENTS.md reconciled, board triaged) — "decksmith 519cb08: one adoption commit; full conformance pass before/after; 0 broken links before/after; fresh clone smudges LFS"
+2. ✓ Findings filed as grey-matter tickets or applied to adopt-project — "Findings written to proposal 05 (R1-R9) and filed as grey-matter ticket 53"
