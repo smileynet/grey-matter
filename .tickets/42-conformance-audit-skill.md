@@ -1,7 +1,7 @@
 ---
 id: "42"
 title: "Add conformance-audit: audit a repo's skills/scripts/agent-guidance against current grey-matter standards"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 tags: ["stream:tooling"]
@@ -74,9 +74,13 @@ Read first: `.tickets/40-adopt-project-brownfield.md`, `docs/adr/0002-adopt-proj
 
 ## Acceptance criteria
 
-- [ ] `skills/meta/conformance-audit/SKILL.md` exists, user-invoked (`disable-model-invocation: true`) with the Codex sidecar `agents/openai.yaml`, written to the `writing-for-agents` rules.
-- [ ] It runs as **two phases** — audit (assess + classify safe-auto-fix vs needs-judgment, no edits) → approval gate → fix (apply only the safe tier; needs-judgment stays surfaced).
-- [ ] It audits the **four classes** (skills, tool scripts, agent guidance, docs & organization), consuming the existing `check-*.mjs` rules (safe tier) and the convention docs (judgment tier) — not a new rubric; and excludes doc-content rewriting and domain-model accuracy.
-- [ ] It is runnable **standalone** and invokable by `adopt-project`; fixes apply regardless of incumbent (subsume intent); **cite-and-recommend** `readme`/`curate-docs` for judgment-tier doc findings rather than calling them.
-- [ ] **Non-destructive on git:** safe fixes land as a reviewable commit, behind the gate, never clobber.
-- [ ] Indexes updated (bucket README + compass + maintenance-skills roster) and `node scripts/check-repo.mjs` passes; deployed via install-skills.mjs.
+- [x] `skills/meta/conformance-audit/SKILL.md` exists, user-invoked (`disable-model-invocation: true`) with the Codex sidecar `agents/openai.yaml`, written to the `writing-for-agents` rules.
+- [x] It runs as **two phases** — audit (assess + classify safe-auto-fix vs needs-judgment, no edits) → approval gate → fix (apply only the safe tier; needs-judgment stays surfaced).
+- [x] It audits the **four classes** (skills, tool scripts, agent guidance, docs & organization), consuming the existing `check-*.mjs` rules (safe tier) and the convention docs (judgment tier) — not a new rubric; and excludes doc-content rewriting and domain-model accuracy.
+- [x] It is runnable **standalone** and invokable by `adopt-project`; fixes apply regardless of incumbent (subsume intent); **cite-and-recommend** `readme`/`curate-docs` for judgment-tier doc findings rather than calling them.
+- [x] **Non-destructive on git:** safe fixes land as a reviewable commit, behind the gate, never clobber.
+- [x] Indexes updated (bucket README + compass + maintenance-skills roster) and `node scripts/check-repo.mjs` passes; deployed via install-skills.mjs.
+
+## Resolution (2026-10-22)
+
+done: shipped conformance-audit — a user-invoked meta skill that audits a repo's skills/scripts/agent-guidance/docs against grey-matter's current standards and applies the mechanically-safe fixes behind an approval gate, surfacing judgment calls. Runnable standalone and called by adopt-project.
