@@ -57,3 +57,28 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 Native validation gate: [current Claude evidence](../docs/agents/research/claude-current-validation.md) proves root validation misses nested skill defects. Candidate preparation must run `scripts/probe-claude-validation.mjs` with a current validator for each candidate pack (explicit manifests plus exact components and seeded detection), alongside the other native checks. Preserve the isolated policy probe from ticket 73 for candidate compatibility checks.
 
 Preserve ticket 65’s independent YAML syntax gate: native Claude accepted malformed YAML during the source audit. Native advice scans must be complete; run against tracked/candidate snapshots so untracked target/ and .git do not exhaust the directory scan cap.
+
+## Artifact layer progress
+
+[Release artifact tooling](../docs/agents/release-artifacts.md) builds all three host
+bundles from an exact committed source and verifies them after extraction without
+the checkout. It uses the deployer's shared resource closure plus declared runtime
+files, preserves notices/modes and records hashes/identity. Seeded fixtures cover
+stale assets, missing/extra files, malformed YAML, source/lock/version mismatches,
+credential exclusions and replay protection. Native/platform fields remain unverified
+until real candidate checks run. Candidate worktree/version preparation, read-only
+dry-run, phase resume and final gates remain required; this ticket stays in progress.
+
+The artifact layer is now invariant 11, with 22 isolated fixtures. Full source-version
+bundle smoke checks pass on all six host/product rows, with [exact asset evidence](../docs/agents/research/evidence/artifact-conformance-20261023.json).
+A stale root Cargo.lock fixture exposed a cargo metadata --no-deps limitation;
+explicit TOML parsing now rejects it. The older bucket-removal regression fixture
+was also repaired to mutate parsed JSON and reject no-op seeds after manifest
+formatting changed. No candidate versions, tags or publication were changed.
+
+The initial native artifact probe missed Claude README_MISSING because success=true
+coexisted with blocking=true. The packager now generates complete per-host READMEs;
+a resealed short-README fixture fails; the current Claude probe checks directory
+blockers and seeds README removal. Final six artifact rows and both native controls
+pass, with the initial finding retained in the same evidence JSON. Nonblocking icon
+advice remains in staging 71. This is an implemented packaging fix, not release approval.

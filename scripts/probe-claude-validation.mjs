@@ -71,8 +71,18 @@ try {
   const defect = run(["plugin", "validate", flat, "--strict", "--json"]);
   writeFileSync(seeded, original);
   const seedDetected = defect.exit !== 0 && /description must be a string/.test(defect.stdout);
-  const pass = runs.every((r) => r.exit === 0 && r.result.success && !r.result.directory?.incomplete) && seedDetected;
-  console.log(JSON.stringify({ status: pass ? "pass" : "fail", metrics: { skills: skills.length, nativeChecks: runs.length, copiedSkillsMatched: hashes.length, trackedSnapshotFiles: tracked.length }, version, pack, sourceSnapshot: "tracked working-tree bytes, excluding untracked build output", runs, seed: { exit: defect.exit, detected: seedDetected, result: JSON.parse(defect.stdout) }, hashes, errors: pass ? [] : ["native validation, complete directory scan or seeded scanner coverage failed"] }, null, 2));
+  let readmeControl = { detected: false, reason: "source README.md missing" };
+  const readme = join(snapshot, "README.md");
+  if (tracked.includes("README.md")) {
+    const bytes = readFileSync(readme);
+    rmSync(readme);
+    const result = run(["plugin", "validate", join(snapshot, ".claude-plugin/plugin.json"), "--json"]);
+    writeFileSync(readme, bytes);
+    const parsed = JSON.parse(result.stdout);
+    readmeControl = { exit: result.exit, detected: parsed.directory?.findings?.some((finding) => finding.code === "README_MISSING" && finding.blocking) ?? false, result: parsed };
+  }
+  const pass = runs.every((r) => r.exit === 0 && r.result.success && !r.result.directory?.incomplete && !r.result.directory?.failure && !(r.result.directory?.findings ?? []).some((finding) => finding.blocking)) && seedDetected && readmeControl.detected;
+  console.log(JSON.stringify({ status: pass ? "pass" : "fail", metrics: { skills: skills.length, nativeChecks: runs.length, copiedSkillsMatched: hashes.length, trackedSnapshotFiles: tracked.length }, version, pack, sourceSnapshot: "tracked working-tree bytes, excluding untracked build output", runs, seed: { exit: defect.exit, detected: seedDetected, result: JSON.parse(defect.stdout) }, readmeControl, hashes, errors: pass ? [] : ["native validation, directory blockers/completeness or seeded controls failed"] }, null, 2));
   if (!pass) process.exitCode = 1;
 } catch (error) {
   console.error(JSON.stringify({ status: "error", metrics: {}, errors: [error.message] }));

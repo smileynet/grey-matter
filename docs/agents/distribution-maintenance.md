@@ -61,7 +61,7 @@ When a change touches skills, the plugin manifests, or tkt's plugin:
 
 ## Consistency checks
 
-Maintainer setup requires Node 22+ and the pinned parser dependency. Run `npm ci --ignore-scripts` once after cloning or lockfile changes. Plugin consumers and the standalone deploy engine do not need npm dependencies.
+Maintainer setup requires Node 22+ and the pinned parser/archive dependencies. Run `npm ci --ignore-scripts` once after cloning or lockfile changes. Plugin consumers and the standalone deploy engine do not need npm dependencies.
 
 One command verifies the mechanical distribution invariants:
 
@@ -92,3 +92,6 @@ installs a `pre-commit` hook that runs `check-repo.mjs` and blocks the commit on
 on clone — install it if you want the local gate. (This project uses local hooks only;
 there is no CI pipeline.)
 
+
+Release bundle construction and verification are documented in
+[release artifacts](release-artifacts.md); their isolated fixtures are invariant 11.

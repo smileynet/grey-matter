@@ -33,7 +33,9 @@ function runCheck(script) {
 function withSeededFile(file, mutate, fn) {
   const original = readFileSync(file, "utf8");
   try {
-    writeFileSync(file, mutate(original));
+    const seeded = mutate(original);
+    assert.notEqual(seeded, original, `fixture did not seed a defect in ${file}`);
+    writeFileSync(file, seeded);
     fn();
   } finally {
     writeFileSync(file, original);
@@ -131,7 +133,12 @@ test("invocation check FAILS when an orchestrator's Skill-tool target is user-in
 // (invariant: the Claude plugin manifest names every skill bucket and keeps up with tags)
 test("plugin-manifest check FAILS when a bucket drops out of plugin.json skills", () => {
   const manifest = join(REPO, ".claude-plugin", "plugin.json");
-  withSeededFile(manifest, (s) => s.replace(/, "\.\/skills\/meta"/, ""), () => {
+  withSeededFile(manifest, (s) => {
+    const value = JSON.parse(s);
+    assert.ok(value.skills.includes("./skills/meta"));
+    value.skills = value.skills.filter((path) => path !== "./skills/meta");
+    return JSON.stringify(value, null, 2) + "\n";
+  }, () => {
     const r = runCheck("check-plugin-manifest.mjs");
     assert.equal(r.status, 1, "expected nonzero when skills/meta is unlisted");
     assert.match(r.out, /missing "\.\/skills\/meta"/);

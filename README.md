@@ -78,8 +78,8 @@ Crush, OpenCode, and Claude. Full results and the per-harness root table:
 ## Maintainer checks
 
 Use Node 22+ and run `npm ci --ignore-scripts` after cloning, then
-`node scripts/check-repo.mjs`. Checks run offline; the pinned YAML parser is a
-development dependency. Plugin users do not need npm dependencies. The standalone
+`node scripts/check-repo.mjs`. Checks run offline; pinned YAML/TOML parsers and archive tooling are
+maintenance dependencies. Plugin users do not need npm dependencies. The standalone
 deploy engine remains dependency-free.
 
 Native validation, source-documentation audits, and update procedures are described in
