@@ -134,3 +134,11 @@ and auto-bump aliases are removed. Their wrappers work in source and flat plugin
 layouts; runtime manifests include modules, deploy engine and package/lock resources.
 Actual candidate preparation/verification orchestration, approved scope/version results,
 compatibility and remaining platforms still gate closure.
+
+[Wiring evidence](../docs/agents/research/evidence/release-wiring-20261023.json) ties
+grey-matter `f77fbd3` and tkt `d9e55e5` to six passing native bundle rows, 94 local
+release fixtures, four standalone tkt wiring fixtures and 296 Rust tests. tkt's
+[hosted CI run](https://github.com/smileynet/tkt/actions/runs/40033425413) also passes
+on Ubuntu 24.04.5 / Node 22.23.3 / Rust 1.99.1. This verifies Linux tkt product wiring,
+not native Windows support or grey-matter's entire Linux suite. Versioned candidates
+and final release readiness remain pending.

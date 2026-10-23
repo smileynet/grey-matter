@@ -1,0 +1,560 @@
+{
+  "date": "2026-10-23",
+  "scope": "Standalone release-wiring verification on existing source versions; not approved release candidates, upgrades or publication.",
+  "ci": {
+    "repo": "smileynet/tkt",
+    "sha": "d9e55e5ec1a21420e82b6e61760590022ceaa8a7",
+    "run": "https://github.com/smileynet/tkt/actions/runs/40033425413",
+    "job": 120687000917,
+    "status": "completed",
+    "conclusion": "success",
+    "platform": "Ubuntu 24.04.5 x64",
+    "node": "22.23.3",
+    "rustc": "1.99.1",
+    "nodeTests": 4,
+    "rustTests": 296,
+    "excerpt": [
+      "\ufeff2026-10-23T22:24:43.6822630Z Current runner version: '2.338.0'",
+      "2026-10-23T22:24:48.5048414Z node: v22.23.3",
+      "2026-10-23T22:24:48.5048861Z npm: 10.9.9",
+      "2026-10-23T22:25:03.6543297Z   stable-x86_64-unknown-linux-gnu updated - rustc 1.99.1 (58cf8f9c3 2026-10-13) (from rustc 1.99.0 (b940084d7 2026-09-28))",
+      "2026-10-23T22:25:03.6911137Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+      "2026-10-23T22:25:03.8671944Z rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+      "2026-10-23T22:25:04.5346435Z # Subtest: vendored release files match their reviewed ownership inventory",
+      "2026-10-23T22:25:04.5360328Z ok 1 - vendored release files match their reviewed ownership inventory",
+      "2026-10-23T22:25:04.5366253Z # Subtest: release entry points contain no legacy publisher or implicit bump path",
+      "2026-10-23T22:25:04.5368960Z ok 2 - release entry points contain no legacy publisher or implicit bump path",
+      "2026-10-23T22:25:04.5393338Z # Subtest: Node dependencies are pinned maintainer prerequisites, outside Rust dependencies",
+      "2026-10-23T22:25:04.5394816Z ok 3 - Node dependencies are pinned maintainer prerequisites, outside Rust dependencies",
+      "2026-10-23T22:25:04.5397873Z # Subtest: standalone Node, bash and mise preparation inspect without output or version changes",
+      "2026-10-23T22:25:04.5398902Z ok 4 - standalone Node, bash and mise preparation inspect without output or version changes",
+      "2026-10-23T22:25:04.5472289Z # tests 4",
+      "2026-10-23T22:25:04.5473452Z # pass 4",
+      "2026-10-23T22:25:22.0202456Z test result: ok. 191 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s",
+      "2026-10-23T22:25:22.3089112Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s",
+      "2026-10-23T22:25:26.0522208Z test result: ok. 96 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.74s",
+      "2026-10-23T22:25:26.0540334Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  },
+  "native": [
+    {
+      "status": "pass",
+      "product": "grey-matter",
+      "version": "0.1.0",
+      "candidateSha": "f77fbd3cceb2305be09a0caa4cda0db4b0a8cff9",
+      "platform": {
+        "os": "darwin",
+        "release": "25.6.0",
+        "arch": "arm64"
+      },
+      "isolation": {
+        "homes": "disposable",
+        "credentials": "environment allowlist; no user configuration",
+        "network": "loopback-only sandbox"
+      },
+      "tooling": {
+        "release-native.mjs": "82369f435a8894526a1f4385b59863f8e360f536713e6e6629e9a97d8465a973",
+        "release-artifacts.mjs": "df22e1f9cf17065abb7da60449ff3c14a2a7f2af51372733369d0bda450a984d",
+        "probe-claude-validation.mjs": "eb91b5cce1610f6c8c4da1c40c7e0c8a8b3222cf093f408583114bbc7f5fafcb"
+      },
+      "started": "2026-10-23T22:25:34.256Z",
+      "finished": "2026-10-23T22:25:36.092Z",
+      "assets": [
+        {
+          "host": "codex",
+          "name": "grey-matter-0.1.0-codex.tar.gz",
+          "sha256": "c8db702744b69bee1061f463c8189b38166b7918c7bba61fd270c9b04a3ea1fd"
+        },
+        {
+          "host": "claude",
+          "name": "grey-matter-0.1.0-claude.tar.gz",
+          "sha256": "4cfd8fb178f2ab32b0cd46ab4698e85af5b6e54a9dfa445eab3c98d32bafa992"
+        },
+        {
+          "host": "agy",
+          "name": "grey-matter-0.1.0-agy.tar.gz",
+          "sha256": "b550f53d419ef206f8219b20a7dbfcecd2590fe1e0dd8f73541411532909c05c"
+        }
+      ],
+      "rows": [
+        {
+          "host": "codex",
+          "status": "pass",
+          "nativeVersion": "codex-cli 0.147.0",
+          "asset": "grey-matter-0.1.0-codex.tar.gz",
+          "assetSha256": "c8db702744b69bee1061f463c8189b38166b7918c7bba61fd270c9b04a3ea1fd",
+          "expectedSkills": [
+            "adopt-project",
+            "changelog",
+            "cheat-sheet",
+            "code-review",
+            "codebase-design",
+            "compass",
+            "conformance-audit",
+            "curate-docs",
+            "diagnosing-bugs",
+            "domain-modeling",
+            "game-modeling",
+            "game-native-design",
+            "grill-me",
+            "grill-with-docs",
+            "grilling",
+            "handoff",
+            "implement",
+            "implement-spec",
+            "improve-codebase-architecture",
+            "init-project",
+            "line-craft",
+            "orient",
+            "pr",
+            "prototype",
+            "readme",
+            "reconcile-tickets",
+            "release",
+            "research",
+            "research-audit",
+            "retro",
+            "review-skill",
+            "sync",
+            "tdd",
+            "teach",
+            "to-questionnaire",
+            "to-spec",
+            "to-tickets",
+            "triage",
+            "verify-tkt-usage",
+            "wait-what",
+            "wayfinder",
+            "wizard",
+            "wrap-session",
+            "writing-for-agents"
+          ],
+          "catalogNames": [
+            "grey-matter:adopt-project",
+            "grey-matter:changelog",
+            "grey-matter:cheat-sheet",
+            "grey-matter:code-review",
+            "grey-matter:codebase-design",
+            "grey-matter:compass",
+            "grey-matter:conformance-audit",
+            "grey-matter:curate-docs",
+            "grey-matter:diagnosing-bugs",
+            "grey-matter:domain-modeling",
+            "grey-matter:game-modeling",
+            "grey-matter:game-native-design",
+            "grey-matter:grill-me",
+            "grey-matter:grill-with-docs",
+            "grey-matter:grilling",
+            "grey-matter:handoff",
+            "grey-matter:implement",
+            "grey-matter:implement-spec",
+            "grey-matter:improve-codebase-architecture",
+            "grey-matter:init-project",
+            "grey-matter:line-craft",
+            "grey-matter:orient",
+            "grey-matter:pr",
+            "grey-matter:prototype",
+            "grey-matter:readme",
+            "grey-matter:reconcile-tickets",
+            "grey-matter:release",
+            "grey-matter:research",
+            "grey-matter:research-audit",
+            "grey-matter:retro",
+            "grey-matter:review-skill",
+            "grey-matter:sync",
+            "grey-matter:tdd",
+            "grey-matter:teach",
+            "grey-matter:to-questionnaire",
+            "grey-matter:to-spec",
+            "grey-matter:to-tickets",
+            "grey-matter:triage",
+            "grey-matter:verify-tkt-usage",
+            "grey-matter:wait-what",
+            "grey-matter:wayfinder",
+            "grey-matter:wizard",
+            "grey-matter:wrap-session",
+            "grey-matter:writing-for-agents"
+          ],
+          "installedFilesMatched": 202
+        },
+        {
+          "host": "claude",
+          "status": "pass",
+          "nativeVersion": "2.1.309 (Claude Code)",
+          "asset": "grey-matter-0.1.0-claude.tar.gz",
+          "assetSha256": "4cfd8fb178f2ab32b0cd46ab4698e85af5b6e54a9dfa445eab3c98d32bafa992",
+          "expectedSkills": [
+            "adopt-project",
+            "changelog",
+            "cheat-sheet",
+            "code-review",
+            "codebase-design",
+            "compass",
+            "conformance-audit",
+            "curate-docs",
+            "diagnosing-bugs",
+            "domain-modeling",
+            "game-modeling",
+            "game-native-design",
+            "grill-me",
+            "grill-with-docs",
+            "grilling",
+            "handoff",
+            "implement",
+            "implement-spec",
+            "improve-codebase-architecture",
+            "init-project",
+            "line-craft",
+            "orient",
+            "pr",
+            "prototype",
+            "readme",
+            "reconcile-tickets",
+            "release",
+            "research",
+            "research-audit",
+            "retro",
+            "review-skill",
+            "sync",
+            "tdd",
+            "teach",
+            "to-questionnaire",
+            "to-spec",
+            "to-tickets",
+            "triage",
+            "verify-tkt-usage",
+            "wait-what",
+            "wayfinder",
+            "wizard",
+            "wrap-session",
+            "writing-for-agents"
+          ],
+          "seededProbe": {
+            "status": "pass",
+            "metrics": {
+              "skills": 44,
+              "nativeChecks": 3,
+              "copiedSkillsMatched": 44,
+              "trackedSnapshotFiles": 202
+            },
+            "version": "2.1.309 (Claude Code)",
+            "sourceSnapshot": "extracted snapshot bytes"
+          },
+          "descriptionSeedDetected": true,
+          "readmeSeedDetected": true,
+          "nativeChecks": [
+            {
+              "exit": 0,
+              "success": true,
+              "directory": {
+                "profile": null,
+                "findings": [
+                  {
+                    "code": "ICON_MISSING",
+                    "title": "No icon",
+                    "severity": "warning",
+                    "blocking": false,
+                    "hold": false,
+                    "file": ".claude-plugin/plugin.json",
+                    "field": "icon",
+                    "message": "No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.",
+                    "fix": "Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon."
+                  }
+                ],
+                "undecided": [],
+                "incomplete": false,
+                "failure": null,
+                "notes": [
+                  "This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder."
+                ]
+              }
+            },
+            {
+              "exit": 0,
+              "success": true,
+              "directory": null
+            },
+            {
+              "exit": 0,
+              "success": true,
+              "directory": null
+            }
+          ]
+        },
+        {
+          "host": "agy",
+          "status": "pass",
+          "nativeVersion": "1.4.6",
+          "asset": "grey-matter-0.1.0-agy.tar.gz",
+          "assetSha256": "b550f53d419ef206f8219b20a7dbfcecd2590fe1e0dd8f73541411532909c05c",
+          "expectedSkills": [
+            "adopt-project",
+            "changelog",
+            "cheat-sheet",
+            "code-review",
+            "codebase-design",
+            "compass",
+            "conformance-audit",
+            "curate-docs",
+            "diagnosing-bugs",
+            "domain-modeling",
+            "game-modeling",
+            "game-native-design",
+            "grill-me",
+            "grill-with-docs",
+            "grilling",
+            "handoff",
+            "implement",
+            "implement-spec",
+            "improve-codebase-architecture",
+            "init-project",
+            "line-craft",
+            "orient",
+            "pr",
+            "prototype",
+            "readme",
+            "reconcile-tickets",
+            "release",
+            "research",
+            "research-audit",
+            "retro",
+            "review-skill",
+            "sync",
+            "tdd",
+            "teach",
+            "to-questionnaire",
+            "to-spec",
+            "to-tickets",
+            "triage",
+            "verify-tkt-usage",
+            "wait-what",
+            "wayfinder",
+            "wizard",
+            "wrap-session",
+            "writing-for-agents"
+          ],
+          "catalogNames": [
+            "grey-matter:adopt-project",
+            "grey-matter:changelog",
+            "grey-matter:cheat-sheet",
+            "grey-matter:code-review",
+            "grey-matter:codebase-design",
+            "grey-matter:compass",
+            "grey-matter:conformance-audit",
+            "grey-matter:curate-docs",
+            "grey-matter:diagnosing-bugs",
+            "grey-matter:domain-modeling",
+            "grey-matter:game-modeling",
+            "grey-matter:game-native-design",
+            "grey-matter:grill-me",
+            "grey-matter:grill-with-docs",
+            "grey-matter:grilling",
+            "grey-matter:handoff",
+            "grey-matter:implement",
+            "grey-matter:implement-spec",
+            "grey-matter:improve-codebase-architecture",
+            "grey-matter:init-project",
+            "grey-matter:line-craft",
+            "grey-matter:orient",
+            "grey-matter:pr",
+            "grey-matter:prototype",
+            "grey-matter:readme",
+            "grey-matter:reconcile-tickets",
+            "grey-matter:release",
+            "grey-matter:research",
+            "grey-matter:research-audit",
+            "grey-matter:retro",
+            "grey-matter:review-skill",
+            "grey-matter:sync",
+            "grey-matter:tdd",
+            "grey-matter:teach",
+            "grey-matter:to-questionnaire",
+            "grey-matter:to-spec",
+            "grey-matter:to-tickets",
+            "grey-matter:triage",
+            "grey-matter:verify-tkt-usage",
+            "grey-matter:wait-what",
+            "grey-matter:wayfinder",
+            "grey-matter:wizard",
+            "grey-matter:wrap-session",
+            "grey-matter:writing-for-agents"
+          ],
+          "installedFilesMatched": 199,
+          "numTurns": 0,
+          "invocationPoliciesMatched": true
+        }
+      ]
+    },
+    {
+      "status": "pass",
+      "product": "tkt",
+      "version": "0.4.0",
+      "candidateSha": "d9e55e5ec1a21420e82b6e61760590022ceaa8a7",
+      "platform": {
+        "os": "darwin",
+        "release": "25.6.0",
+        "arch": "arm64"
+      },
+      "isolation": {
+        "homes": "disposable",
+        "credentials": "environment allowlist; no user configuration",
+        "network": "loopback-only sandbox"
+      },
+      "tooling": {
+        "release-native.mjs": "82369f435a8894526a1f4385b59863f8e360f536713e6e6629e9a97d8465a973",
+        "release-artifacts.mjs": "df22e1f9cf17065abb7da60449ff3c14a2a7f2af51372733369d0bda450a984d",
+        "probe-claude-validation.mjs": "eb91b5cce1610f6c8c4da1c40c7e0c8a8b3222cf093f408583114bbc7f5fafcb"
+      },
+      "started": "2026-10-23T22:25:13.078Z",
+      "finished": "2026-10-23T22:25:15.406Z",
+      "assets": [
+        {
+          "host": "codex",
+          "name": "tkt-0.4.0-codex.tar.gz",
+          "sha256": "ab46214c07e0f5c7616688bef559a4d28d0043b62d87a75556d3b873b56fc934"
+        },
+        {
+          "host": "claude",
+          "name": "tkt-0.4.0-claude.tar.gz",
+          "sha256": "dea681f53f84f1f4fc3a1829b5bba4856a0aac0407e1bdcfc94ac10a8b3cebef"
+        },
+        {
+          "host": "agy",
+          "name": "tkt-0.4.0-agy.tar.gz",
+          "sha256": "08fac4ad5a76959b896957df59b6a3ad13dc083aae15badad68e07e7ab6e16ed"
+        }
+      ],
+      "rows": [
+        {
+          "host": "codex",
+          "status": "pass",
+          "nativeVersion": "codex-cli 0.147.0",
+          "asset": "tkt-0.4.0-codex.tar.gz",
+          "assetSha256": "ab46214c07e0f5c7616688bef559a4d28d0043b62d87a75556d3b873b56fc934",
+          "expectedSkills": [
+            "tkt-core",
+            "tkt-orient",
+            "tkt-reconcile",
+            "tkt-work"
+          ],
+          "catalogNames": [
+            "tkt:tkt-core",
+            "tkt:tkt-orient",
+            "tkt:tkt-reconcile",
+            "tkt:tkt-work"
+          ],
+          "installedFilesMatched": 33
+        },
+        {
+          "host": "claude",
+          "status": "pass",
+          "nativeVersion": "2.1.309 (Claude Code)",
+          "asset": "tkt-0.4.0-claude.tar.gz",
+          "assetSha256": "dea681f53f84f1f4fc3a1829b5bba4856a0aac0407e1bdcfc94ac10a8b3cebef",
+          "expectedSkills": [
+            "tkt-core",
+            "tkt-orient",
+            "tkt-reconcile",
+            "tkt-work"
+          ],
+          "seededProbe": {
+            "status": "pass",
+            "metrics": {
+              "skills": 4,
+              "nativeChecks": 3,
+              "copiedSkillsMatched": 4,
+              "trackedSnapshotFiles": 33
+            },
+            "version": "2.1.309 (Claude Code)",
+            "sourceSnapshot": "extracted snapshot bytes"
+          },
+          "descriptionSeedDetected": true,
+          "readmeSeedDetected": true,
+          "nativeChecks": [
+            {
+              "exit": 0,
+              "success": true,
+              "directory": {
+                "profile": null,
+                "findings": [
+                  {
+                    "code": "ICON_MISSING",
+                    "title": "No icon",
+                    "severity": "warning",
+                    "blocking": false,
+                    "hold": false,
+                    "file": ".claude-plugin/plugin.json",
+                    "field": "icon",
+                    "message": "No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.",
+                    "fix": "Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon."
+                  }
+                ],
+                "undecided": [],
+                "incomplete": false,
+                "failure": null,
+                "notes": [
+                  "This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder."
+                ]
+              }
+            },
+            {
+              "exit": 0,
+              "success": true,
+              "directory": null
+            },
+            {
+              "exit": 0,
+              "success": true,
+              "directory": null
+            }
+          ]
+        },
+        {
+          "host": "agy",
+          "status": "pass",
+          "nativeVersion": "1.4.6",
+          "asset": "tkt-0.4.0-agy.tar.gz",
+          "assetSha256": "08fac4ad5a76959b896957df59b6a3ad13dc083aae15badad68e07e7ab6e16ed",
+          "expectedSkills": [
+            "tkt-core",
+            "tkt-orient",
+            "tkt-reconcile",
+            "tkt-work"
+          ],
+          "catalogNames": [
+            "tkt:tkt-core",
+            "tkt:tkt-orient",
+            "tkt:tkt-reconcile",
+            "tkt:tkt-work"
+          ],
+          "installedFilesMatched": 30,
+          "numTurns": 0,
+          "invocationPoliciesMatched": true
+        }
+      ]
+    }
+  ],
+  "deploymentAudit": {
+    "status": "pass",
+    "metrics": {
+      "plugins": 19,
+      "packs": 4
+    },
+    "findings": [],
+    "errors": []
+  },
+  "localChecks": {
+    "greyMatter": {
+      "sourceSha": "f77fbd3cceb2305be09a0caa4cda0db4b0a8cff9",
+      "repositoryInvariants": 11,
+      "releaseTests": 94
+    },
+    "tkt": {
+      "sourceSha": "d9e55e5ec1a21420e82b6e61760590022ceaa8a7",
+      "wiringTests": 4,
+      "rustTests": 296,
+      "fmt": "pass",
+      "clippy": "pass"
+    }
+  }
+}
