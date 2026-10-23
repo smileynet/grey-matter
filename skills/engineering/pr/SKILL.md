@@ -5,6 +5,9 @@ metadata:
   credits: "Summary visuals adapted from Dex Horthy / HumanLayer 'show-me'; see CREDITS.md"
 ---
 
+The Summary visual menu and placement guidance below are modified from HumanLayer
+show-me for PR descriptions. See [credits and licenses](CREDITS.md).
+
 Use this template for writing the PR body:
 
 ```markdown

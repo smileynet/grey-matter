@@ -585,3 +585,43 @@ test("audit: retained legacy content stays unowned and changed bytes need review
     assert.ok(JSON.parse(changed.stdout).findings.some((n) => n.includes("unowned: legacy")));
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
+
+
+test("legal artifacts: bundles and bare skills retain notices, and missing or empty requirements block replacement", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = join(sb.home, "source");
+    const skill = join(pack, "skills", "example");
+    mkdirSync(skill, { recursive: true });
+    mkdirSync(join(pack, ".claude-plugin"));
+    writeFileSync(join(pack, ".claude-plugin", "plugin.json"), JSON.stringify({
+      name: "example", version: "1.0.0", license: "MIT AND Apache-2.0",
+      metadata: { deploy: { legalFiles: ["LICENSE", "NOTICE"], skillLicenseFiles: ["LICENSE"] } },
+    }));
+    writeFileSync(join(skill, "SKILL.md"), "---\nname: example\ndescription: License fixture\n---\n");
+    const required = [join(pack, "LICENSE"), join(pack, "NOTICE"), join(skill, "LICENSE")];
+    for (const file of required) writeFileSync(file, "retained copyright and license\n");
+    const out = join(sb.home, "package");
+    const args = ["agy", "build", "--pack", pack, "--out", out];
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    for (const path of ["LICENSE", "NOTICE", "skills/example/LICENSE"]) {
+      assert.equal(readFileSync(join(out, path), "utf8"), "retained copyright and license\n");
+    }
+    for (const file of required) {
+      for (const state of ["missing", "empty"]) {
+        if (state === "missing") rmSync(file); else writeFileSync(file, "");
+        const result = runWithEnv(args, sb.env);
+        assert.notEqual(result.status, 0);
+        assert.match(result.stdout, /required legal artifact/);
+        const check = runWithEnv(["check", "--pack", pack], sb.env);
+        assert.notEqual(check.status, 0);
+        assert.match(check.stdout, /required legal artifact/);
+        assert.equal(readFileSync(join(out, "NOTICE"), "utf8"), "retained copyright and license\n");
+        writeFileSync(file, "retained copyright and license\n");
+      }
+    }
+    const bare = join(sb.home, "bare");
+    assert.equal(runWithEnv(["install", "--pack", pack, "--root", bare, "--no-agy"], sb.env).status, 0);
+    assert.equal(readFileSync(join(bare, "example", "LICENSE"), "utf8"), "retained copyright and license\n");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});

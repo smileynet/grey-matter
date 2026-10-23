@@ -3,11 +3,44 @@
   "displayName": "grey-matter",
   "version": "0.1.0",
   "description": "Agent skills for game-centric and app development: engineering (build), productivity (think/communicate), and meta (tend the set). Start with the compass router.",
-  "author": { "name": "smileynet" },
+  "author": {
+    "name": "smileynet"
+  },
   "homepage": "https://github.com/smileynet/grey-matter",
   "repository": "https://github.com/smileynet/grey-matter",
-  "license": "MIT",
-  "keywords": ["skills", "agent-skills", "engineering", "productivity", "meta", "game-dev", "tkt"],
-  "skills": ["./skills/engineering", "./skills/productivity", "./skills/meta"],
-  "dependencies": [{ "name": "tkt", "marketplace": "tkt" }]
+  "license": "MIT AND Apache-2.0",
+  "keywords": [
+    "skills",
+    "agent-skills",
+    "engineering",
+    "productivity",
+    "meta",
+    "game-dev",
+    "tkt"
+  ],
+  "skills": [
+    "./skills/engineering",
+    "./skills/productivity",
+    "./skills/meta"
+  ],
+  "dependencies": [
+    {
+      "name": "tkt",
+      "marketplace": "tkt"
+    }
+  ],
+  "metadata": {
+    "deploy": {
+      "legalFiles": [
+        "LICENSE",
+        "NOTICE",
+        "LICENSES/Apache-2.0.txt",
+        "skills/engineering/pr/NOTICE",
+        "skills/engineering/pr/LICENSE-APACHE.txt"
+      ],
+      "skillLicenseFiles": [
+        "LICENSE"
+      ]
+    }
+  }
 }

@@ -1,0 +1,15 @@
+grey-matter
+
+This distribution adapts material from mattpocock/skills, licensed under MIT.
+Copyright (c) 2026 Matt Pocock
+The MIT license and upstream notice are retained in LICENSE.
+
+The pr skill's Summary visual menu and placement guidance adapt HumanLayer's
+show-me skill. That material is licensed under Apache License 2.0; see
+LICENSES/Apache-2.0.txt and skills/engineering/pr/CREDITS.md.
+
+HumanLayer
+Copyright 2025-2026 QueryTale, Inc. d/b/a HumanLayer
+
+The copied guidance has been adapted for writing pull-request descriptions.
+This attribution does not imply endorsement or grant trademark rights.

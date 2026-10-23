@@ -1,3 +1,15 @@
-# Credits
+# Credits and licenses
 
-The **Summary** section's menu of visuals (pseudocode, call trees, component trees, file trees, Mermaid, diffs) and its placement guidance come from [Dex Horthy](https://github.com/dexhorthy)'s [`show-me`](https://github.com/humanlayer/humanlayer) skill, reproduced almost word for word and aimed at a diff instead of a live conversation. `pr` does not depend on `show-me` as a skill (it isn't part of this repo, and a hard dependency would break standalone installs), so the content is copied in rather than pointed at; this file is the attribution a dependency would otherwise have carried.
+The Summary visual menu and placement guidance adapt the HumanLayer `show-me`
+skill almost word for word for PR descriptions. Existing project credit names
+[Dex Horthy](https://github.com/dexhorthy); this is attribution, not a verified
+copyright ownership claim.
+
+Inspected source baseline: [HumanLayer show-me at 3a8dd2d](https://github.com/humanlayer/humanlayer/blob/3a8dd2d3c1ed01d4fd2282b6dee2075199dffffb/apps/riptide-humanlayer-claude-plugin/skills/show-me/SKILL.md).
+The originally copied revision is unknown. The upstream root license is Apache
+License 2.0 and its relevant NOTICE identifies HumanLayer, Copyright 2025-2026
+QueryTale, Inc. d/b/a HumanLayer. Retain [NOTICE](NOTICE) and
+[the Apache license](LICENSE-APACHE.txt) with the copied guidance. The MIT
+notice for the rest of this skill is retained in [LICENSE](LICENSE).
+
+`pr` embeds this adapted content to work independently of a `show-me` install.

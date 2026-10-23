@@ -89,3 +89,8 @@ Native validation, source-documentation audits, and update procedures are descri
 
 The active engineering + productivity skill sets are reviewed and authored; beta/frozen
 upstream skills and distribution hardening are tracked in `.tickets/` (run `tkt ready`).
+
+## License
+
+MIT with Apache-2.0 material in the PR skill. See [LICENSE](LICENSE),
+[NOTICE](NOTICE), and [PR credits](skills/engineering/pr/CREDITS.md) for scope and attribution.
