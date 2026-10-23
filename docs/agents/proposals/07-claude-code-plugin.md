@@ -1,6 +1,18 @@
 # Proposal 07: grey-matter as a Claude Code plugin
 
-**Ticket:** 22. **Status:** proposal for review.
+**Ticket:** 22. **Status:** phase 1 built (2026-10-22); phases 2-3 open.
+
+> **Update (phase 1 built):** checked live on Claude Code 2.1.223.
+> - Listing the three bucket dirs in `skills` works. `claude plugin details` shows all 44
+>   skills. `claude plugin validate` passes, apart from one expected `--strict` warning that
+>   the repo-root `CLAUDE.md` isn't loaded as plugin context.
+> - tkt is now its own Claude plugin (tkt ticket 209). grey-matter declares it in
+>   `dependencies`, and grey-matter's marketplace lists it as a `github` source, so one
+>   `/plugin marketplace add` gets both without the cross-marketplace allowlist.
+> - The version bump lives in `release.sh` (step 1b), and `scripts/check-plugin-manifest.mjs`
+>   is check-repo invariant 9.
+> - The installer's `~/.claude/skills` default and the SessionStart hook (moved to tkt's
+>   plugin, which owns the frontier) are follow-up tickets.
 
 This picks up the deferred half (A) of [proposal 03](./03-distribution-packaging.md): a
 Claude Code plugin for grey-matter, so `/plugin install` replaces copying skills into

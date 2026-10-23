@@ -70,7 +70,7 @@ if [[ ! -f "$CHANGELOG" ]]; then
   echo "x CHANGELOG.md not found at $CHANGELOG (run the changelog skill first)" >&2
   exit 1
 fi
-UNRELEASED=$(sed -n '/^## \[Unreleased\]/,/^## \[/{/^## \[/!p}' "$CHANGELOG" | grep -v '^$' || true)
+UNRELEASED=$(sed -n '/^## \[Unreleased\]/,/^## \[/{/^## \[/!p;}' "$CHANGELOG" | grep -v '^$' || true)
 if [[ -z "$UNRELEASED" ]]; then
   echo "x no entries under [Unreleased] in CHANGELOG.md (run the changelog skill first)" >&2
   exit 1
@@ -78,6 +78,8 @@ fi
 
 TODAY=$(date +%Y-%m-%d)
 TAG="v$VERSION"
+# A Claude Code plugin caches by its manifest version, so the release keeps it in step.
+PLUGIN_MANIFEST="$REPO_ROOT/.claude-plugin/plugin.json"
 
 echo ""
 echo "Release: $TAG ($TODAY)   previous: ${LAST_TAG:-none}"
@@ -88,6 +90,7 @@ if [[ "$DRY_RUN" == true ]]; then
   echo ""
   echo "DRY RUN - would:"
   echo "  1. promote [Unreleased] -> [$VERSION] - $TODAY in CHANGELOG.md"
+  [[ -f "$PLUGIN_MANIFEST" ]] && echo "  1b. set \"version\": \"$VERSION\" in .claude-plugin/plugin.json"
   echo "  2. git commit -m 'release: $TAG'"
   echo "  3. git tag -a $TAG"
   echo "  4. git push origin HEAD, then push only tag $TAG (not other local tags)"
@@ -100,10 +103,22 @@ fi
 # requires a backup-suffix argument and GNU `sed -i` does not, so `sed -i` is not
 # portable; the temp-file+mv pattern behaves identically everywhere.
 CHANGELOG_TMP=$(mktemp)
-sed "s/^## \[Unreleased\]/## [Unreleased]\n\n## [$VERSION] - $TODAY/" "$CHANGELOG" > "$CHANGELOG_TMP"
+# awk, not sed: a "\n" in a sed replacement is GNU-only (BSD sed writes a literal "n").
+awk -v v="$VERSION" -v d="$TODAY" '{ print } !done && /^## \[Unreleased\]/ { print ""; print "## [" v "] - " d; done=1 }' \
+  "$CHANGELOG" > "$CHANGELOG_TMP"
 # collapse any run of blank lines left by the insertion down to a single blank line
 sed '/^$/N;/^\n$/D' "$CHANGELOG_TMP" > "$CHANGELOG"
 rm -f "$CHANGELOG_TMP"
+
+# 1b. bump the Claude Code plugin manifest's version, when the repo has one. Only the
+# first "version" key is the plugin's own (a later one would sit inside a dependency).
+if [[ -f "$PLUGIN_MANIFEST" ]]; then
+  MANIFEST_TMP=$(mktemp)
+  awk -v v="$VERSION" '!done && /"version"[[:space:]]*:/ { sub(/"version"[[:space:]]*:[[:space:]]*"[^"]*"/, "\"version\": \"" v "\""); done=1 } { print }' \
+    "$PLUGIN_MANIFEST" > "$MANIFEST_TMP"
+  mv "$MANIFEST_TMP" "$PLUGIN_MANIFEST"
+  git -C "$REPO_ROOT" add "$PLUGIN_MANIFEST"
+fi
 
 # 2. commit
 git -C "$REPO_ROOT" add "$CHANGELOG"
@@ -124,7 +139,7 @@ git -C "$REPO_ROOT" push origin "refs/tags/$TAG"
 # exiting silently.
 NOTES_FILE=$(mktemp)
 trap 'rm -f "$NOTES_FILE"' EXIT
-sed -n "/^## \[$VERSION\]/,/^## \[/{/^## \[$VERSION\]/d;/^## \[/d;p}" "$CHANGELOG" > "$NOTES_FILE"
+sed -n "/^## \[$VERSION\]/,/^## \[/{/^## \[$VERSION\]/d;/^## \[/d;p;}" "$CHANGELOG" > "$NOTES_FILE"
 REMOTE_REPO="$(git -C "$REPO_ROOT" remote get-url origin | sed 's/\.git$//')"
 if ! gh release create "$TAG" --title "$TAG" --notes-file "$NOTES_FILE" --repo "$REMOTE_REPO"; then
   echo "" >&2

@@ -127,3 +127,22 @@ test("invocation check FAILS when an orchestrator's Skill-tool target is user-in
     });
   });
 });
+
+// (invariant: the Claude plugin manifest names every skill bucket and keeps up with tags)
+test("plugin-manifest check FAILS when a bucket drops out of plugin.json skills", () => {
+  const manifest = join(REPO, ".claude-plugin", "plugin.json");
+  withSeededFile(manifest, (s) => s.replace(/, "\.\/skills\/meta"/, ""), () => {
+    const r = runCheck("check-plugin-manifest.mjs");
+    assert.equal(r.status, 1, "expected nonzero when skills/meta is unlisted");
+    assert.match(r.out, /missing "\.\/skills\/meta"/);
+  });
+});
+
+test("plugin-manifest check FAILS when plugin.json version is behind the latest tag", () => {
+  const manifest = join(REPO, ".claude-plugin", "plugin.json");
+  withSeededFile(manifest, (s) => s.replace(/"version": "[^"]*"/, '"version": "0.0.1"'), () => {
+    const r = runCheck("check-plugin-manifest.mjs");
+    assert.equal(r.status, 1, "expected nonzero when the version lags the latest v* tag");
+    assert.match(r.out, /behind the latest tag/);
+  });
+});

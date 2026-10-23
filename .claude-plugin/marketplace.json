@@ -1,0 +1,17 @@
+{
+  "name": "grey-matter",
+  "description": "grey-matter's agent skills, plus tkt, the ticket tracker its workflow skills run on.",
+  "owner": { "name": "smileynet" },
+  "plugins": [
+    {
+      "name": "grey-matter",
+      "source": "./",
+      "description": "Agent skills for game-centric and app development. Start with the compass router."
+    },
+    {
+      "name": "tkt",
+      "source": { "source": "github", "repo": "smileynet/tkt" },
+      "description": "Git-native ticket tracker workflow skills (tkt-core, tkt-orient, tkt-work, tkt-reconcile). Needs the tkt CLI on PATH."
+    }
+  ]
+}

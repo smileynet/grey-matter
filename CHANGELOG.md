@@ -7,6 +7,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 ## [Unreleased]
 
 ### Added
+- Claude Code plugin: install with `/plugin marketplace add smileynet/grey-matter`, then `/plugin install grey-matter@grey-matter`. It brings in tkt's workflow skills as a dependency. Skills are namespaced (`/grey-matter:code-review`), so they no longer shadow Claude's bundled `/code-review`.
 - Antigravity (`agy`) global deployment via a plugin package: `scripts/build-agy-plugin.mjs` assembles the skills into an `agy` plugin (`plugin.json` + flattened `skills/`), validates it with `agy plugin validate --strict`, and installs it with `agy plugin install`. On the probed agy, skill discovery is plugin-driven (not a bare-directory scan), so this is how the skills reach agy globally.
 - `sync` skill: the inbound twin of `release` — pull the repo current and re-synchronize the coupled pieces (deployed skills, the tkt command surface, ticket IDs, repo invariants), then redeploy the skills to every harness. Orchestrates `verify-tkt-usage`, `check-repo.mjs`, and the installer; reports findings rather than gating the deploy.
 - Release tooling: a `release` command that updates the changelog and README, picks the version, then tags, pushes, and publishes a GitHub release, composing the new `changelog` and `readme` skills.
@@ -19,7 +20,11 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 - `line-craft` skill: write fiction prose and dialogue so feeling is carried by acts and errands. It includes a revision pass and a self-testing catalog of sentimental shapes, which grows from lines the author rejects, plus a standalone checker. The moves come from a study of LucasArts adventure dialogue.
 
 ### Changed
+- `release` also sets the version in `.claude-plugin/plugin.json` when a repo has one, so installed plugins pick up the new release.
 - `adopt-project` treats skills a repo ships to its users as product: it audits them but no longer restructures them. `conformance-audit` reports grey-matter's own layout rules as not applicable on such repos.
+
+### Fixed
+- `release` works on macOS: its changelog edits no longer rely on GNU-only `sed` syntax.
 
 ## [0.1.0] - 2026-10-19
 

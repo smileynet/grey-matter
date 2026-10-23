@@ -69,8 +69,11 @@ plugin with `node scripts/build-agy-plugin.mjs install`. The decision and design
 the user-level standing rules (`global/AGENTS.md`, no steering) install with
 `node scripts/install-agents-md.mjs` (owner-marked, never clobbers a foreign file);
 per-harness deploy + test instructions are in
-[`docs/agents/harnesses.md`](./docs/agents/harnesses.md); a Claude Code plugin package is
-a later addition.
+[`docs/agents/harnesses.md`](./docs/agents/harnesses.md). Claude Code installs grey-matter as a
+plugin from this repo's own marketplace (`.claude-plugin/`, which also lists tkt as a
+dependency): `/plugin marketplace add smileynet/grey-matter`, then
+`/plugin install grey-matter@grey-matter`. The design is in
+[`docs/agents/proposals/07-claude-code-plugin.md`](./docs/agents/proposals/07-claude-code-plugin.md).
 
 ## Consistency checks
 
@@ -86,7 +89,9 @@ It aggregates (each also runnable on its own): installer ownership safety
 (`scripts/check-docs-consistency.mjs`), ticket health (`tkt validate`), adopt-project's
 knowledge-relocation fixtures (`scripts/relocate-knowledge.test.mjs`), the global AGENTS.md
 size budget + ownership (`scripts/install-agents-md.test.mjs`), the crew-research uninstall scope
-(`scripts/uninstall-crew-research.test.mjs`), and the repo-survey tiers (`scripts/survey-repos.test.mjs`). It is
+(`scripts/uninstall-crew-research.test.mjs`), the repo-survey tiers (`scripts/survey-repos.test.mjs`), and the
+Claude plugin manifest (`scripts/check-plugin-manifest.mjs`: every skill bucket listed, version not
+behind the latest tag, marketplace entry present). It is
 **read-only on user state** (the installer check uses throwaway temp roots, never a real
 harness skill root) and needs **no harness authentication or network** (tkt is local and
 degrades to a skipped-with-warning if absent). Run it before a

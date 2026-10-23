@@ -52,6 +52,13 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **`/review` is not grey-matter's review.** A skill named `code-review` replaces Claude's
   bundled `/code-review`, but the bundled alias `/review` still runs Claude's own reviewer
   (no two axes, no tickets). Invoke `/code-review`.
+- **Plugin install** (alternative to copying into `~/.claude/skills/`):
+  `/plugin marketplace add smileynet/grey-matter`, then `/plugin install grey-matter@grey-matter`
+  (pulls in `tkt@grey-matter` as a dependency). Plugin skills are namespaced
+  (`/grey-matter:code-review`, `/tkt:tkt-core`), so they no longer shadow Claude's bundled
+  `/code-review`. Don't use both install paths at once, or each skill is listed twice.
+  **Test locally**: `claude --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`
+  lists the components without a model call.
 
 ### agy (ancillary, Google Antigravity CLI)
 

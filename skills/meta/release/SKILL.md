@@ -44,7 +44,8 @@ mechanics.
 
 6. **Cut the release.** Run `bash references/release.sh <version>`. It re-checks the gates,
    promotes `[Unreleased]` to a dated `[version]` section (leaving a fresh empty
-   `[Unreleased]`), commits `release: v<version>`, creates an annotated tag, pushes the
+   `[Unreleased]`), sets the version in `.claude-plugin/plugin.json` when the repo has one
+   (Claude Code caches plugins by version), commits `release: v<version>`, creates an annotated tag, pushes the
    commit and **only that release tag** (never all local tags), and publishes a GitHub
    release with notes extracted from that version's changelog section. If the GitHub
    release step fails, the pushed tag stays in place (it is the durable artifact) and the

@@ -14,6 +14,7 @@
 //   6. global AGENTS.md            -> scripts/install-agents-md.test.mjs (size budget + ownership)
 //   7. crew-research uninstall     -> scripts/uninstall-crew-research.test.mjs (fake home only)
 //   8. repo survey (portfolio)     -> scripts/survey-repos.test.mjs (temp git repos)
+//   9. Claude plugin manifest      -> scripts/check-plugin-manifest.mjs (buckets, version, marketplace)
 //
 // Design (AC-driven):
 //  - READ-ONLY on user state. The installer test uses throwaway temp roots (mkdtemp),
@@ -87,6 +88,7 @@ run("5. knowledge relocation (adopt-project)", node, ["--test", join(SCRIPTS, "r
 run("6. global AGENTS.md (budget + ownership)", node, ["--test", join(SCRIPTS, "install-agents-md.test.mjs")]);
 run("7. crew-research uninstall scope", node, ["--test", join(SCRIPTS, "uninstall-crew-research.test.mjs")]);
 run("8. repo survey tiers (adopt-project portfolio)", node, ["--test", join(SCRIPTS, "survey-repos.test.mjs")]);
+run("9. Claude plugin manifest", node, [join(SCRIPTS, "check-plugin-manifest.mjs")]);
 
 // --- Summary ------------------------------------------------------------------
 console.log("\n==================== repo-check summary ====================");
