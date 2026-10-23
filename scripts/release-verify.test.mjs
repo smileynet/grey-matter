@@ -7,7 +7,7 @@ import { dirname, join, relative } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { buildArtifacts } from "./release-artifacts.mjs";
-import { verifyCandidate, requireMatchingIdentity } from "./release-verify.mjs";
+import { verifyCandidate, requireMatchingIdentity, readCandidateEvidence } from "./release-verify.mjs";
 const scripts = dirname(fileURLToPath(import.meta.url));
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const put = (path, bytes) => { mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, bytes); };
@@ -68,4 +68,67 @@ test("interrupted orchestration records unfinished gates and refuses stale outpu
 
 test("conflicting execution modes are rejected before state changes", () => fixture(async ({ run, out }) => {
   await assert.rejects(run({ execute: true, dryRun: true }), /cannot combine/); assert.equal(existsSync(out), false);
+}));
+
+function evidenceFixture({ artifacts, out, sha }) {
+  const metadata = JSON.parse(readFileSync(join(artifacts, "release-metadata.json")));
+  const identity = { schema: 1, status: "pass", publishable: false, product: metadata.name, version: metadata.version, candidateSha: sha };
+  const log = "fixture executed gate\n";
+  put(join(out, "product/1-product.log"), log);
+  const product = { ...identity, mode: "product-evidence", checks: [{ exit: 0, signal: null, error: null, log: "1-product.log", sha256: hash(log) }] };
+  const native = { ...identity, mode: "native-evidence", rows: metadata.assets.map((asset) => ({ host: asset.host, asset: asset.name, assetSha256: asset.sha256, status: "pass", nativeVersion: "fixture 1", checks: [{ exit: 0 }] })) };
+  const index = { ...identity, mode: "candidate-verification", metadataSha256: hash(readFileSync(join(artifacts, "release-metadata.json"))), phases: { product: "pass", native: "pass" }, pending: ["scope", "compatibility", "upgrade", "platform-approval", "final-audit", "staging"] };
+  const save = () => {
+    for (const [name, report] of [["product", product], ["native", native]]) {
+      const file = `${name}/${name}-evidence.json`, bytes = JSON.stringify(report);
+      put(join(out, file), bytes); index[`${name}Evidence`] = { file, sha256: hash(bytes) };
+    }
+    const bytes = JSON.stringify(index); put(join(out, "verification.json"), bytes); return hash(bytes);
+  };
+  return { product, native, index, save, read: () => readCandidateEvidence({ artifacts, evidence: out, verificationSha256: save() }) };
+}
+
+test("bound evidence checks index, child reports and logs without granting publication", () => fixture(async (f) => {
+  const proof = evidenceFixture(f), verificationSha256 = proof.save();
+  const result = readCandidateEvidence({ artifacts: f.artifacts, evidence: f.out, verificationSha256 });
+  assert.equal(result.publishable, false); assert.ok(result.pending.includes("final-audit"));
+  put(join(f.out, "product/1-product.log"), "changed bytes");
+  assert.throws(() => readCandidateEvidence({ artifacts: f.artifacts, evidence: f.out, verificationSha256 }), /changed/);
+}));
+
+test("bound evidence refuses changed index, cleared gates and cross-identity reports", () => fixture(async (f) => {
+  const proof = evidenceFixture(f), anchor = proof.save();
+  proof.index.pending = []; proof.save();
+  assert.throws(() => readCandidateEvidence({ artifacts: f.artifacts, evidence: f.out, verificationSha256: anchor }), /changed/);
+  assert.throws(() => proof.read(), /cannot waive/);
+  proof.index.pending = ["scope", "compatibility", "upgrade", "platform-approval", "final-audit", "staging"];
+  proof.product.candidateSha = "b".repeat(40);
+  assert.throws(() => proof.read(), /different commit/);
+}));
+
+test("bound evidence refuses incomplete native rows and failed product commands", () => fixture(async (f) => {
+  const proof = evidenceFixture(f);
+  proof.native.rows.pop(); assert.throws(() => proof.read(), /omitted/);
+  proof.native.rows.push(proof.native.rows[0]); assert.throws(() => proof.read(), /missing, duplicate/);
+  const other = evidenceFixture(f); other.product.checks[0].exit = 7;
+  assert.throws(() => other.read(), /product command failed/);
+}));
+
+test("bound evidence rejects report path traversal and symlinked product logs", () => fixture(async (f) => {
+  const proof = evidenceFixture(f); proof.save();
+  proof.index.productEvidence.file = "../product-evidence.json";
+  const bytes = JSON.stringify(proof.index); put(join(f.out, "verification.json"), bytes);
+  assert.throws(() => readCandidateEvidence({ artifacts: f.artifacts, evidence: f.out, verificationSha256: hash(bytes) }), /report location/);
+  const other = evidenceFixture(f), verificationSha256 = other.save();
+  const outside = join(f.temp, "outside.log"); put(outside, "fixture executed gate\n");
+  const log = join(f.out, "product/1-product.log"); rmSync(log);
+  // Directory junctions work without Windows symlink privileges and still exercise escape detection.
+  if (process.platform === "win32") {
+    rmSync(join(f.out, "product"), { recursive: true });
+    mkdirSync(join(f.temp, "external-product"));
+    put(join(f.temp, "external-product/product-evidence.json"), JSON.stringify(other.product));
+    put(join(f.temp, "external-product/1-product.log"), "fixture executed gate\n");
+    symlinkSync(join(f.temp, "external-product"), join(f.out, "product"), "junction");
+  } else symlinkSync(outside, log);
+  assert.throws(() => readCandidateEvidence({ artifacts: f.artifacts, evidence: f.out, verificationSha256 }), /escaped/);
 }));
