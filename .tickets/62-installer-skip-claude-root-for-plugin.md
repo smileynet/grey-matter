@@ -14,8 +14,17 @@ tags: ["stream:tooling"]
 
 ## What to build
 
-TBD
+Since ticket 22, Claude Code can install grey-matter as a plugin. `scripts/install-skills.mjs`
+still copies every skill into `~/.claude/skills/` by default, so a user with both sees each
+skill twice: once bare (`code-review`) and once namespaced (`grey-matter:code-review`). The bare
+copy also keeps shadowing Claude's bundled `/code-review`. Proposal 07, decision 2.
+
+Drop `~/.claude/skills` from the default roots when the plugin is the Claude path. Detect that
+from `claude plugin list --json` if it's reliable, or else add an explicit flag. Print a one-line
+note when the root is skipped. tkt's `tools/deploy-skills.sh` has the same overlap; it's tracked
+in tkt.
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [ ] install-skills.mjs default roots no longer include ~/.claude/skills when the grey-matter Claude plugin is installed (or via a documented flag), and it prints a one-line note instead
+- [ ] never deletes a foreign dir; existing manifest-tracked copies are removable with uninstall --root ~/.claude/skills
