@@ -1,7 +1,7 @@
 ---
 id: "64"
 title: "One deployer across projects (proposal 08): deploy.mjs, plugin.json as the pack manifest, vendored into tkt"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -72,7 +72,7 @@ separation, and duplicate audit. Portfolio-wide drift checking remains phase 3.
 - [x] Proposal 08's three decisions are recorded (vendor vs depend, tkt on Node, portfolio list location)
 - [x] grey-matter deploys through deploy.mjs, reading .claude-plugin/plugin.json; no harness sees a skill twice (OpenCode overlap covered by a test); build-agy-plugin.mjs retired
 - [x] tkt deploys through a vendored tools/deploy.mjs; deploy-skills.sh is a wrapper; tests/deploy_skills.rs passes against it
-- [ ] deploy.mjs audit lists unowned dirs and cross-pack name collisions on this machine (the crew-research leftovers and testing-guide appear)
+- [x] deploy.mjs audit lists unowned dirs and cross-pack name collisions on this machine (the crew-research leftovers and testing-guide appear)
 
 
 ## Release-readiness continuation (2026-10-23)
@@ -106,3 +106,16 @@ Additional acceptance criteria:
 ## Phase 3 implementation (2026-10-23)
 
 Engine 1.2.0 reads the committed `skill-packs.json`, inventories actual installed Claude/Codex caches, rejects active source collisions and vendor drift, and records reviewed legacy content without adopting ownership. Read [deployment inventory and evidence](../docs/agents/research/deployment-inventory.md). The isolated native shared-root probe confirms codex-cli 0.147.0 reads `.agents/skills`; the claimed-only table entry is removed. The historical gaps above are resolved by this implementation. Plugin runtime policy and package resource closure remain separate findings under tickets 72–73.
+
+## Resolution (2026-10-23)
+
+done: deploy engine 1.2.0 inventories actual installed caches, detects portfolio collisions and vendor drift, records unowned legacy dispositions and verifies native shared-root discovery; canonical b1b02ce, tkt vendor d185156.
+
+### Verification
+1. ✓ Proposal 08's three decisions are recorded (vendor vs depend, tkt on Node, portfolio list location) — "Proposal 08 and ticket decisions record vendor choice, Node maintainer requirement and committed skill-packs.json location."
+2. ✓ grey-matter deploys through deploy.mjs, reading .claude-plugin/plugin.json; no harness sees a skill twice (OpenCode overlap covered by a test); build-agy-plugin.mjs retired — "node scripts/check-repo.mjs: all 9 invariants pass, including 26 deploy fixtures; live portfolio deployment refreshed each plugin once and strict audit has zero duplicate findings."
+3. ✓ tkt deploys through a vendored tools/deploy.mjs; deploy-skills.sh is a wrapper; tests/deploy_skills.rs passes against it — "tkt mise run check: fmt/clippy and 296 tests pass; cmp confirms identical tools/deploy.mjs; commit d185156 pushed."
+4. ✓ deploy.mjs audit lists unowned dirs and cross-pack name collisions on this machine (the crew-research leftovers and testing-guide appear) — "audit --json --strict: 19 plugins, 4 packs, 6 inventory-only overlaps including testing-guide, 43 retained unowned directories, no blocking findings."
+5. ✓ Audit fixtures inspect actual cached Codex plugin contents across multiple installed plugins and marketplaces and detect stale/missing skills — "26 deploy fixtures include multiple marketplaces, actual missing cached skills/manifests and cross-plugin duplicate detection."
+6. ✓ A committed portfolio manifest supports seeded cross-pack name-collision and vendored-deployer drift checks without requiring unregistered sibling checkouts — "skill-packs.json committed; seeded collision/vendor drift fail before writes, optional absent and unregistered sibling scenarios pass."
+7. ✓ Shared-root evidence and legacy-directory dispositions are durable, versioned and distinguish unowned content from duplicate loading — "probe-codex-shared.mjs: codex-cli 0.147.0, isolated native catalog returns shared-root skill once and zero errors; deployment-inventory.md and legacy-skill-inventory.json committed."
