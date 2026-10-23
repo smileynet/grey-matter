@@ -54,7 +54,8 @@
         "package.json",
         "package-lock.json",
         "scripts/release-verify.mjs",
-        "scripts/release-publish.mjs"
+        "scripts/release-publish.mjs",
+        "scripts/release-github.mjs"
       ]
     }
   }

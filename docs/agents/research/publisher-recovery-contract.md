@@ -1,9 +1,8 @@
 # Publisher recovery contract
 
-Read 2026-10-23 for ticket 68. Documentation and local configuration were inspected;
-no live GitHub release, repository setting or registry publication was tested.
-The implementation currently contains a tested reconciliation library, not a live
-publisher or completed release workflow.
+Ticket 68 currently provides a tested reconciliation library and GitHub adapter.
+Live checks on 2026-10-23 covered repository settings and release discovery;
+publication remains untested.
 
 ## Observed contracts
 
@@ -27,7 +26,12 @@ inspection makes no writes. Execution is tested only against fake services. Its 
 record must match the candidate commit and have no pending checks; this checks the
 record's shape and identity, not the authenticity of external audit evidence. The
 future staging/publisher integration must validate that evidence before calling it.
-There is no live adapter or publication CLI, and existing entry points still reject
+`release-github.mjs` now provides a GitHub.com adapter with read-only defaults,
+authenticated pagination, annotated-tag verification, exact binary uploads and typed
+publication fields. Four injected-command fixtures pass. Actual read-only discovery
+found zero releases in grey-matter and five in tkt. Immutable releases were disabled
+in both repositories. Mutation
+requests remain fixture-tested only. There is no publication CLI; entry points still reject
 `publish` and `resume`.
 
 ## tkt integration and recovery seams
@@ -54,19 +58,19 @@ job recovery; job database IDs come from `gh run view`, not browser URL guesses.
 
 ## Remaining gates
 
-- Implement argument-safe GitHub and Git adapters, authenticated pagination, immutable
-  setting inspection and remote tag verification. A missing API digest currently
+- Complete Git/GitHub adapter integration and transport-recovery coverage. Authenticated
+  pagination and settings reads have live evidence; mutation requests do not. A missing API digest currently
   blocks recovery; a download-and-hash fallback would require its own tests.
 - Bind final staging/audit evidence before exposing publication commands. The library's
   input fields do not grant human authorization or certify final readiness.
-- Implement the atomic branch/tag push, crate observation/publication, cargo-dist
+- Complete atomic branch/tag integration, crate observation/publication, cargo-dist
   integration and stable promotion/recovery. Test unsupported atomic pushes and
   interruptions using disposable remotes and fake services.
-- Preserve settings, client-version and native-platform gaps. [Asset attestation
+- Track unresolved settings, client-version and native-platform checks. [Asset attestation
   verification](https://cli.github.com/manual/gh_release_verify-asset) applies after
   immutable publication; live availability and supported gh versions remain untested.
 
 Coverage: GitHub and cargo-dist documentation and tkt's local release configuration
-were inspected. Live publication behavior, repository settings and supported
-client/platform combinations remain untested. Ticket 68 remains open. This work
+were inspected. Read-only GitHub discovery/settings calls were exercised on both repos.
+Live publication behavior and complete client/platform combinations remain untested. Ticket 68 remains open. This work
 published no tag, registry release, GitHub release or stable ref.

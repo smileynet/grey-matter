@@ -99,7 +99,7 @@ run("7. crew-research uninstall scope", node, ["--test", join(SCRIPTS, "uninstal
 run("8. repo survey tiers (adopt-project portfolio)", node, ["--test", join(SCRIPTS, "survey-repos.test.mjs")]);
 run("9. Claude plugin manifest", node, [join(SCRIPTS, "check-plugin-manifest.mjs")]);
 run("10. YAML syntax and core types", node, [join(SCRIPTS, "check-skill-syntax.mjs")]);
-run("11. release draft, artifact and publisher safety", node, ["--test", join(SCRIPTS, "release-artifacts.test.mjs"), join(SCRIPTS, "release-version.test.mjs"), join(SCRIPTS, "release.test.mjs"), join(SCRIPTS, "release-product.test.mjs"), join(SCRIPTS, "release-native.test.mjs"), join(SCRIPTS, "release-entrypoints.test.mjs"), join(SCRIPTS, "release-verify.test.mjs"), join(SCRIPTS, "release-publish.test.mjs"), join(SCRIPTS, "release-git.test.mjs")]);
+run("11. release draft, artifact and publisher safety", node, ["--test", join(SCRIPTS, "release-artifacts.test.mjs"), join(SCRIPTS, "release-version.test.mjs"), join(SCRIPTS, "release.test.mjs"), join(SCRIPTS, "release-product.test.mjs"), join(SCRIPTS, "release-native.test.mjs"), join(SCRIPTS, "release-entrypoints.test.mjs"), join(SCRIPTS, "release-verify.test.mjs"), join(SCRIPTS, "release-publish.test.mjs"), join(SCRIPTS, "release-git.test.mjs"), join(SCRIPTS, "release-github.test.mjs")]);
 run("12. opt-in Git hooks", node, ["--test", join(SCRIPTS, "install-hooks.test.mjs")]);
 
 // --- Summary ------------------------------------------------------------------
