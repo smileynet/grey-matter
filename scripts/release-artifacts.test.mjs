@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as tar from "tar";
-import { buildArtifacts, verifyArtifacts } from "./release-artifacts.mjs";
+import { buildArtifacts, verifyArtifacts, extractArtifact } from "./release-artifacts.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -138,4 +138,20 @@ for (const change of ["extra", "missing", "version", "dangling", "short-readme"]
   asset.sha256 = hash(readFileSync(join(out, asset.name)));
   put(join(out, "release-metadata.json"), JSON.stringify(metadata, null, 2) + "\n");
   assert.throws(() => verifyArtifacts(out), /unexpected archive entry|missing expected|wrong agy bundle|package resource missing|incomplete agy plugin README/);
+}));
+
+test("sealed runtime includes its dependency manifest and wrapper works in each host layout", () => fixture(({ repo, dir, build, commit }) => {
+  const file = join(repo, ".claude-plugin/plugin.json"), manifest = JSON.parse(readFileSync(file));
+  manifest.metadata.deploy.runtimeFiles.push("scripts/release.mjs", "package.json", "package-lock.json"); put(file, JSON.stringify(manifest));
+  put(join(repo, "scripts/release.mjs"), 'console.log(JSON.stringify(process.argv.slice(2)));');
+  put(join(repo, "package.json"), '{"private":true,"type":"module"}'); put(join(repo, "package-lock.json"), '{"lockfileVersion":3,"packages":{}}');
+  put(join(repo, "skills/example/references/release.sh"), readFileSync(join(here, "../skills/meta/release/references/release.sh")));
+  commit(); const metadata = build();
+  for (const asset of metadata.assets) {
+    const extracted = join(dir, asset.host); extractArtifact(join(dir, "out", asset.name), extracted, asset.files);
+    assert.ok(asset.files["package.json"]); assert.ok(asset.files["package-lock.json"]);
+    assert.match(readFileSync(join(extracted, "README.md"), "utf8"), /npm ci --ignore-scripts/);
+    const result = spawnSync("bash", [join(extracted, "skills/example/references/release.sh"), "prepare", "--out", "path with spaces"], { encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr); assert.deepEqual(JSON.parse(result.stdout), ["prepare", "--out", "path with spaces"]);
+  }
 }));

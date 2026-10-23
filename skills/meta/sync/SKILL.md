@@ -83,7 +83,16 @@ refresh. Preserve existing copies when a refresh fails.
    Report whatever it finds in the final delta (step 7). **Do not gate the deploy on it** —
    drift is a follow-up to fix, not a reason to leave the harnesses stale.
 
-5. **Verify repo invariants.** Run the consistency checker (it owns installer-safety,
+5. **Synchronize owned release tools and verify invariants.** If the pull changed
+   shared release modules, resolve tkt's registered checkout from `skill-packs.json`.
+   When present, run `node scripts/sync-release-tools.mjs --target /path/to/tkt`
+   to inspect drift, then `--write` for owned updates. Keep its private package/lock
+   aligned with canonical development dependencies. A foreign/local edit refusal is
+   a mechanical stop; preserve the files and report it. Run `mise run check` in
+   tkt, then commit/push the owned update. A tkt-only installation runs its own copies
+   and needs no grey-matter checkout. Do not add another deploy inside this step.
+
+   Run the consistency checker (it owns installer-safety,
    invocation-policy, doc-consistency, and `tkt validate`):
 
    ```bash
@@ -102,6 +111,10 @@ refresh. Preserve existing copies when a refresh fails.
    node scripts/deploy.mjs             # refresh Codex, choose roots, and refresh agy once
    node scripts/deploy.mjs audit       # report unowned dirs and skills a harness sees twice
    ```
+
+   When step 5 changed both registered packs, replace the install line with
+   `node scripts/deploy.mjs --portfolio skill-packs.json`; it refreshes each active
+   pack once. Do not also run per-pack deploy commands or compatibility wrappers.
 
    The installer is idempotent: it refreshes changed skills, adds new ones, and prunes
    skills removed upstream. It picks user-level roots from its harness table so each harness
@@ -137,9 +150,8 @@ refresh. Preserve existing copies when a refresh fails.
 - **Not `orient`.** `orient` is bias-to-action onto the frontier at session start; `sync`
   is a deliberate maintenance pass. If you just pulled, run `sync` *before* `orient` so the
   board and the deployed skills are current before you pick up work.
-- **Deploy is local.** Steps 1-5 may change the repo (only a `tkt rebase` commit); step 6
-  writes to harness roots, never the repo. After sync the working tree is clean apart from
-  that one possible rebase commit.
+- **Deploy is local.** Steps 1-5 may create ticket-rebase and owned vendor-update commits;
+  step 6 refreshes harness roots/plugins. Commit/push those changes before deployment.
 
 ## It's working if
 

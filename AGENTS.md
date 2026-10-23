@@ -65,7 +65,7 @@ such as a skill copied into a project's `.kiro/`.
 
 Read [distribution maintenance](./docs/agents/distribution-maintenance.md) when changing
 skills, manifests, deployment or release guidance. It covers plugin updates, ownership,
-per-host validation and the consistency checks.
+shared release-tool synchronization, per-host validation and the consistency checks.
 
 - Setup: Node 22+, then `npm ci --ignore-scripts` after clone or lockfile changes.
 - Gate: `node scripts/check-repo.mjs` must exit 0 before committing/pushing distribution changes.

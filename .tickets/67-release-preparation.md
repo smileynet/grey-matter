@@ -36,7 +36,8 @@ and [plugin update semantics](../docs/agents/research/plugin-release-semantics.m
 facts at execution time; links alone are not evidence of conformance.
 
 Start with:
-- `skills/meta/release/references/release.sh` and `release.test.sh`
+- `skills/meta/release/references/release.sh`, `scripts/release.test.mjs` and
+  `scripts/release-entrypoints.test.mjs` (replace the retired legacy-publication shell fixtures)
 - `scripts/deploy.mjs` and plugin manifests
 - [tkt release.toml](https://github.com/smileynet/tkt/blob/main/release.toml)
 - [tkt tools/release.sh](https://github.com/smileynet/tkt/blob/main/tools/release.sh)
@@ -122,3 +123,14 @@ source-version bundles (44/4 exact skills): Codex 0.147.0, Claude 2.1.309 and AG
 The runner/probe file hashes match the implementation. Expected installed files match
 for Codex (189/22) and AGY (186/19). These are macOS smoke results for existing bundle
 identities, not approved 0.2.0/0.5.0 candidates or completion of ticket 67.
+
+## Standalone wiring progress
+
+tkt now owns hash-tracked copies of the shared preparation/product/native modules,
+its own pinned private Node package/lock and a release-tool test task in the canonical
+mise gate. The sync helper refuses unowned/local edits and dependency drift.
+Both shell entry points forward explicit prepare/verify modes only; legacy publishing
+and auto-bump aliases are removed. Their wrappers work in source and flat plugin
+layouts; runtime manifests include modules, deploy engine and package/lock resources.
+Actual candidate preparation/verification orchestration, approved scope/version results,
+compatibility and remaining platforms still gate closure.

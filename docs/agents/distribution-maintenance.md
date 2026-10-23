@@ -59,6 +59,17 @@ When a change touches skills, the plugin manifests, or tkt's plugin:
   which installs a second plugin named `tkt` alongside a local `tkt@tkt`. A tkt change reaches
   grey-matter users when tkt releases, with no edit here.
 
+## Shared release tools
+
+Release modules are canonical in `scripts/` and vendored into tkt's `tools/` with
+`node scripts/sync-release-tools.mjs --target /path/to/tkt --write`. Without `--write`
+it checks drift. It protects foreign/local edits and requires a private target package
+with matching canonical development dependencies. Update tkt's package/lock deliberately
+when dependencies change, run both product gates, then commit/push each changed repo.
+Deploy each changed pack once, or use one `--portfolio skill-packs.json` deployment.
+The release wrappers expose local preparation/verification; publication/resume is unfinished.
+Read [draft preparation](release-preparation.md) for modes, prerequisites and ownership.
+
 ## Consistency checks
 
 Maintainer setup requires Node 22+ and the pinned parser/archive dependencies. Run `npm ci --ignore-scripts` once after cloning or lockfile changes. Plugin consumers and the standalone deploy engine do not need npm dependencies.

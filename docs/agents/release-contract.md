@@ -1,10 +1,10 @@
 # Coordinated release contract
 
 Effective for the release-readiness work, ticket 66, 2026-10-23. This is the
-implementation contract for tickets 67–71. **The existing publication scripts do
-not yet implement it.** Until preparation, publication/resume and candidate
-verification gates pass, use them only for inspection; do not execute their legacy
-publication path. Current scope ends with reviewed, staged candidates.
+implementation contract for tickets 67–71. **Publication/resume is not implemented
+by the current entry points.** Preparation and product/native verification are partial
+implementations; legacy publication entry points are disabled. Current scope ends
+with reviewed, staged candidates.
 
 ## Release identity and version authority
 

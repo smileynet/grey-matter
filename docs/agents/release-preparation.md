@@ -6,6 +6,24 @@ This command currently produces `mode: draft`, `publishable: false` and explicit
 pending product, native, scope and platform validation. Publication is not implemented
 here; proposed real candidate versions remain subject to approval.
 
+## Entry points and shared ownership
+
+Use `node scripts/release.mjs` in grey-matter or `node tools/release.mjs` in tkt.
+The shell wrappers expose `prepare`, `verify-product` and `verify-native`; they
+forward explicit arguments and preserve the Node tools' default inspection mode.
+tkt also exposes `mise run release -- MODE ...`. The old version/patch/minor/major
+shell modes and automatic mise bump aliases are removed. No wrapper runs cargo-release,
+creates a GitHub release or pushes a ref. Publication/resume remains ticket 68.
+
+Canonical modules live in grey-matter. After changing them, check tkt with
+`node scripts/sync-release-tools.mjs --target /path/to/tkt`; use `--write` to update
+owned copies. It requires a private target package with development dependencies
+matching the canonical package, refuses foreign/local edits and records per-file hashes in tkt's `tools/release-vendor.json`. Update tkt's
+private package/lock deliberately if canonical dependencies change. The deploy engine
+keeps its existing separate vendor ownership. Runtime manifests include the shared
+modules, deploy engine and package/lock so extracted plugins retain those resources.
+Run `npm ci --ignore-scripts` in a source checkout before maintenance commands.
+
 ## Inspect or create a draft
 
 Maintainers need Node 22+, Git and `npm ci --ignore-scripts` in grey-matter. From its

@@ -40,6 +40,19 @@
       ],
       "skillLicenseFiles": [
         "LICENSE"
+      ],
+      "runtimeFiles": [
+        "scripts/release.mjs",
+        "scripts/release-artifacts.mjs",
+        "scripts/release-version.mjs",
+        "scripts/release-git.mjs",
+        "scripts/release-product.mjs",
+        "scripts/release-native.mjs",
+        "scripts/check-skill-syntax.mjs",
+        "scripts/probe-claude-validation.mjs",
+        "scripts/deploy.mjs",
+        "package.json",
+        "package-lock.json"
       ]
     }
   }
