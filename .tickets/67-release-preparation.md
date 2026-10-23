@@ -142,3 +142,15 @@ release fixtures, four standalone tkt wiring fixtures and 296 Rust tests. tkt's
 on Ubuntu 24.04.5 / Node 22.23.3 / Rust 1.99.1. This verifies Linux tkt product wiring,
 not native Windows support or grey-matter's entire Linux suite. Versioned candidates
 and final release readiness remain pending.
+
+## Candidate verification orchestration progress
+
+`release.mjs verify` now joins the strict product gate and sealed-bundle native gate
+for a full commit SHA. It rejects mismatched checkout/bundle identity before output,
+runs fresh checks in ordered child directories, skips native execution after product
+failure and binds both reports plus sealed metadata by hashes in an atomic index.
+Source cleanliness and artifact identity are checked again before success. Reusing
+existing evidence output is refused; failed/interrupted runs retain unfinished phases.
+The new module is vendored into tkt and included in both runtime manifests/wrappers.
+The result keeps scope, compatibility, upgrade, platform approval, audit and staging
+pending; it never grants publication or closes this ticket by itself.

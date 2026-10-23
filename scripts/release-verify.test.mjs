@@ -1,0 +1,71 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { dirname, join, relative } from "node:path";
+import { tmpdir } from "node:os";
+import { fileURLToPath } from "node:url";
+import { buildArtifacts } from "./release-artifacts.mjs";
+import { verifyCandidate, requireMatchingIdentity } from "./release-verify.mjs";
+const scripts = dirname(fileURLToPath(import.meta.url));
+const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
+const put = (path, bytes) => { mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, bytes); };
+function tree(dir) {
+  const files = {};
+  const walk = (at) => { for (const item of readdirSync(at, { withFileTypes: true })) { const file = join(at, item.name); if (item.isDirectory()) walk(file); else if (item.isFile()) files[relative(dir, file)] = hash(readFileSync(file)); } };
+  walk(dir); return files;
+}
+async function fixture(fn, check = 'console.log("fixture gate passed");') {
+  const temp = mkdtempSync(join(tmpdir(), "candidate verify ")), repo = join(temp, "repo"), artifacts = join(temp, "artifacts"), out = join(temp, "evidence");
+  const git = (...args) => execFileSync("git", ["-C", repo, ...args], { encoding: "utf8", stdio: "pipe" }).trim();
+  try {
+    mkdirSync(repo); git("init", "-b", "main"); git("config", "user.name", "Fixture"); git("config", "user.email", "fixture@example.invalid"); git("config", "core.autocrlf", "false");
+    const manifest = { name: "grey-matter", version: "0.1.0", description: "Fixture", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE"] } } };
+    put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(manifest)); put(join(repo, ".codex-plugin/plugin.json"), '{"name":"grey-matter","version":"0.1.0","skills":"./skills/"}');
+    put(join(repo, ".claude-plugin/marketplace.json"), '{"name":"grey-matter","plugins":[{"name":"grey-matter","source":"./"}]}');
+    put(join(repo, "skills/example/SKILL.md"), "---\nname: example\ndescription: Candidate fixture\n---\nFixture.\n"); put(join(repo, "LICENSE"), "Fixture notice\n");
+    cpSync(join(scripts, "deploy.mjs"), join(repo, "scripts/deploy.mjs")); put(join(repo, "scripts/check-repo.mjs"), check);
+    const commit = () => { git("add", "."); git("-c", `core.hooksPath=${join(temp, "no hooks")}`, "commit", "-m", "Fixture"); return git("rev-parse", "HEAD"); };
+    const sha = commit(); buildArtifacts({ repo, ref: sha, out: artifacts });
+    await fn({ temp, repo, artifacts, out, sha, git, commit, run: (extra = {}) => verifyCandidate({ repo, sha, artifacts, out, ...extra }) });
+  } finally { rmSync(temp, { recursive: true, force: true }); }
+}
+test("different product, version or commit cannot share verification evidence", () => {
+  const product = { product: "tkt", version: "0.4.0", candidateSha: "a".repeat(40) }, metadata = { name: "tkt", version: "0.4.0", candidateSha: "a".repeat(40) }; requireMatchingIdentity(product, metadata);
+  for (const extra of [{ name: "grey-matter" }, { version: "0.5.0" }, { candidateSha: "b".repeat(40) }]) assert.throws(() => requireMatchingIdentity(product, { ...metadata, ...extra }), /different commit/);
+});
+test("default and explicit CLI dry-run preserve repository, artifacts and output bytes", () => fixture(async ({ temp, repo, artifacts, out, sha, run }) => {
+  const before = tree(temp), result = await run(); assert.equal(result.mode, "dry-run"); assert.equal(result.publishable, false); assert.deepEqual(result.phases, { product: "not-run", native: "not-run" });
+  const cli = spawnSync(process.execPath, [join(scripts, "release.mjs"), "verify", "--repo", repo, "--sha", sha, "--artifacts", artifacts, "--out", out, "--dry-run"], { encoding: "utf8" });
+  assert.equal(cli.status, 0, cli.stderr); assert.equal(JSON.parse(cli.stdout).mode, "dry-run"); assert.deepEqual(tree(temp), before);
+}));
+test("new checkout commit cannot reuse the old sealed bundle identity", () => fixture(async ({ repo, commit, run, out }) => {
+  put(join(repo, "extra.txt"), "new source\n"); const sha = commit(); await assert.rejects(run({ sha, execute: true }), /different commit/); assert.equal(existsSync(out), false);
+}));
+test("failed product gate records failure and never launches native validation", () => fixture(async ({ run, out }) => {
+  const result = await run({ execute: true, codex: "must-not-be-run" }); assert.equal(result.status, "fail"); assert.deepEqual(result.phases, { product: "fail", native: "not-run" }); assert.equal(existsSync(join(out, "native")), false); assert.equal(JSON.parse(readFileSync(join(out, "verification.json"))).status, "fail");
+}, 'console.error("seeded failed product"); process.exit(7);'));
+test("failed native gate preserves product proof and blocks verified status", () => fixture(async ({ run, out, temp }) => {
+  const result = await run({ execute: true, codex: join(temp, "missing-codex") }); assert.equal(result.status, "fail"); assert.deepEqual(result.phases, { product: "pass", native: "fail" }); assert.equal(result.publishable, false);
+  for (const evidence of [result.productEvidence, result.nativeEvidence]) assert.equal(hash(readFileSync(join(out, evidence.file))), evidence.sha256);
+  assert.ok(result.pending.includes("final-audit")); await assert.rejects(run({ execute: true }), /new directory/);
+}));
+test("changed artifacts during the product gate cannot acquire native or overall success", () => fixture(async ({ run, artifacts, out }) => {
+  const previous = process.env.RELEASE_FIXTURE_ASSET;
+  try {
+    const metadata = JSON.parse(readFileSync(join(artifacts, "release-metadata.json"))); process.env.RELEASE_FIXTURE_ASSET = join(artifacts, metadata.assets[0].name);
+    const result = await run({ execute: true }); assert.equal(result.status, "fail"); assert.match(result.errors[0], /stale or corrupted/); assert.equal(result.phases.native, "not-run"); assert.equal(existsSync(join(out, "native")), false);
+  } finally { if (previous === undefined) delete process.env.RELEASE_FIXTURE_ASSET; else process.env.RELEASE_FIXTURE_ASSET = previous; }
+}, 'import {writeFileSync} from "node:fs"; writeFileSync(process.env.RELEASE_FIXTURE_ASSET, "changed");'));
+test("foreign output and checkout/artifact aliases are refused without overwrite", () => fixture(async ({ run, out, temp, repo, artifacts }) => {
+  mkdirSync(out); put(join(out, "foreign"), "keep"); await assert.rejects(run({ execute: true }), /new directory/); assert.equal(readFileSync(join(out, "foreign"), "utf8"), "keep");
+  for (const [name, root] of [["source", repo], ["assets", artifacts]]) { const alias = join(temp, name); symlinkSync(root, alias, process.platform === "win32" ? "junction" : "dir"); await assert.rejects(run({ execute: true, out: join(alias, "evidence") }), /outside/); assert.equal(existsSync(join(root, "evidence")), false); }
+}));
+test("interrupted orchestration records unfinished gates and refuses stale output reuse", () => fixture(async ({ run, out }) => {
+  const result = await run({ execute: true, progress: () => { throw new Error("interrupted fixture"); } }); assert.equal(result.status, "fail"); assert.deepEqual(result.phases, { product: "not-run", native: "not-run" }); assert.equal(JSON.parse(readFileSync(join(out, "verification.json"))).status, "fail"); await assert.rejects(run({ execute: true }), /new directory/);
+}));
+
+test("conflicting execution modes are rejected before state changes", () => fixture(async ({ run, out }) => {
+  await assert.rejects(run({ execute: true, dryRun: true }), /cannot combine/); assert.equal(existsSync(out), false);
+}));

@@ -13,8 +13,8 @@ for (const path of ["skills/meta/release/references/release.sh", "skills/release
   try {
     const entry = join(temp, path), dir = path === "tools/release.sh" ? "tools" : "scripts";
     mkdirSync(dirname(entry), { recursive: true }); cpSync(wrapper, entry);
-    for (const name of ["release.mjs", "release-product.mjs", "release-native.mjs"]) put(join(temp, dir, name), 'console.log(JSON.stringify(process.argv.slice(2)));');
-    for (const [mode, prefix] of [["prepare", ["prepare"]], ["verify-product", []], ["verify-native", []]]) {
+    for (const name of ["release.mjs", "release-product.mjs", "release-native.mjs", "release-verify.mjs"]) put(join(temp, dir, name), 'console.log(JSON.stringify(process.argv.slice(2)));');
+    for (const [mode, prefix] of [["prepare", ["prepare"]], ["verify", []], ["verify-product", []], ["verify-native", []]]) {
       const result = spawnSync("bash", [entry, mode, "--out", "path with spaces", "--execute"], { cwd: tmpdir(), encoding: "utf8" });
       assert.equal(result.status, 0, result.stderr); assert.deepEqual(JSON.parse(result.stdout), [...prefix, "--out", "path with spaces", "--execute"]);
     }

@@ -2,14 +2,14 @@
 
 Ticket 67 implementation: local draft mechanics, not release readiness. The release
 contract still gates production use on complete preparation/native/platform checks.
-This command currently produces `mode: draft`, `publishable: false` and explicit
+Preparation produces `mode: draft`, `publishable: false` and explicit
 pending product, native, scope and platform validation. Publication is not implemented
 here; proposed real candidate versions remain subject to approval.
 
 ## Entry points and shared ownership
 
 Use `node scripts/release.mjs` in grey-matter or `node tools/release.mjs` in tkt.
-The shell wrappers expose `prepare`, `verify-product` and `verify-native`; they
+The shell wrappers expose `prepare`, `verify`, `verify-product` and `verify-native`; they
 forward explicit arguments and preserve the Node tools' default inspection mode.
 tkt also exposes `mise run release -- MODE ...`. The old version/patch/minor/major
 shell modes and automatic mise bump aliases are removed. No wrapper runs cargo-release,
@@ -92,6 +92,35 @@ losing invocation rather than force changes.
 Later intentional staging edits produce a new reviewed commit. Rebuild artifacts from
 that exact commit into a new output and repeat all gates; do not rerun version preparation
 against already-bumped source or reinterpret an old draft state as the new identity.
+
+## Verify a prepared identity
+
+Use the candidate SHA and artifact directory returned by preparation:
+
+```sh
+node scripts/release.mjs verify --repo /path/to/candidate --sha FULL_COMMIT_SHA --artifacts /path/to/draft/artifacts --out /path/to/new-verification
+```
+
+tkt uses the same arguments through `node tools/release.mjs verify` or
+`bash tools/release.sh verify`. The default validates checkout/bundle identity and
+reports both gate plans. `--execute` runs the product gate first, then native gates,
+in new child evidence directories. Install the candidate's maintainer dependencies
+before execution. Native binary overrides are `--codex`, `--claude` and `--agy`.
+
+The checkout must be clean at the full requested SHA; product/version/commit must
+match the sealed metadata before any verification output is created. A product
+failure skips native execution. Native failure, an intervening checkout move, or
+changed sealed bytes prevents success. The atomically written verification.json index records
+phase states, timestamps and the metadata hash, plus hashes of child reports as they
+finish. Logs/results remain in the product/ and native/ subdirectories. Reports are generated fresh; previous
+output directories are refused. After failure or interruption, inspect the retained
+output and run again at a new path. Preparation can still resume its own draft state;
+verification does not change that state or its immutable artifacts.
+
+Successful product/native verification keeps `publishable: false` and explicit
+pending scope, compatibility, upgrades, platform approval, final audit and staging.
+It verifies the supplied commit and bundles, not completion of the entire release
+contract. Actual candidate evidence and remaining gates are still required by ticket 67.
 
 ## Product evidence for an exact commit
 

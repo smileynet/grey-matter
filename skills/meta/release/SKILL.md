@@ -25,13 +25,15 @@ Publication is a separate action from preparing or staging a candidate.
    reasoning and get approval before preparing versioned candidates. Record the
    approved version and scope; recovery reuses them rather than bumping again.
 4. **Dry-run and prepare.** Inspect the product's release entry point and its current
-   capabilities. The [release.sh](references/release.sh) wrapper exposes prepare,
+   capabilities. The [release.sh](references/release.sh) wrapper exposes prepare, verify,
    verify-product and verify-native only; legacy publication is disabled. These
    tools default to inspection and retain pending gates. Until tickets 67–69
    finish integration, use their evidence as partial results. Prepare only with an
    approved version/scope, in a dedicated clean candidate branch/worktree. Record
    the exact commit and artifacts.
-5. **Verify and stage.** Run source/native syntax, resource/legal closure, version,
+5. **Verify and stage.** Use the product entry point's `verify` mode with the prepared
+   SHA and artifact directory for fresh product/native evidence. Keep its pending
+   gates explicit. Run source/native syntax, resource/legal closure, version,
    checksum, recovery, platform and fresh-install/upgrade gates on that candidate.
    Obtain the final audit disposition, stage notes/README/changelog and repeat gates
    after edits. Report a staging index with SHAs, hashes, compatibility and blockers.
