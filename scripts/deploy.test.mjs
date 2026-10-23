@@ -14,7 +14,7 @@ import { test, before, after, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import {
   mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, symlinkSync,
-  readdirSync,
+  readdirSync, chmodSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
@@ -253,7 +253,29 @@ function homeSandbox({ harnesses = [], claude = false, codex = false } = {}) {
     mkdirSync(join(home, ".codex"), { recursive: true });
     writeFileSync(join(home, ".codex", "config.toml"), '[plugins."grey-matter@grey-matter"]\nenabled = true\n');
   }
-  const env = { ...process.env, HOME: home, USERPROFILE: home, PATH: dirname(process.execPath) };
+  // A fake CLI keeps plugin refresh tests offline and away from the real Codex cache.
+  const bin = join(home, "bin");
+  mkdirSync(bin);
+  const cli = join(bin, "codex");
+  writeFileSync(cli, `#!${process.execPath}
+const fs = require("node:fs");
+const path = require("node:path");
+const home = process.env.HOME;
+const pack = process.env.TEST_PACK;
+const args = process.argv.slice(2);
+fs.appendFileSync(path.join(home, "codex-calls.jsonl"), JSON.stringify(args) + "\\n");
+if (args[1] === "list") {
+  console.log(JSON.stringify({installed: [{pluginId: "grey-matter@grey-matter", enabled: true, source: {source: "local", path: process.env.TEST_PLUGIN_SOURCE || pack}}]}));
+} else {
+  if (process.env.TEST_REFRESH_FAIL) process.exit(1);
+  const dest = path.join(home, "plugin-cache");
+  fs.rmSync(dest, {recursive: true, force: true});
+  fs.cpSync(path.join(pack, "skills"), dest, {recursive: true});
+  console.log(JSON.stringify({installedPath: dest}));
+}
+`);
+  chmodSync(cli, 0o755);
+  const env = { ...process.env, HOME: home, USERPROFILE: home, PATH: bin + ":" + dirname(process.execPath), TEST_PACK: dirname(HERE) };
   delete env.CODEX_HOME;
   delete env.CLAUDE_CODE_PLUGIN_CACHE_DIR;
   return { home, env, has: (rel) => existsSync(join(home, rel, "orient", "SKILL.md")) };
@@ -349,22 +371,64 @@ test("lint: metadata.deploy.forbidRefs blocks a skill naming one outside the pac
   } finally { rmSync(pack, { recursive: true, force: true }); }
 });
 
-test("default roots: a symlinked root is one root; the copy wins over a plugin duplicate", () => {
-  // ~/.codex/skills -> ~/.kiro/skills (as on the maintainer's machine): Kiro needs the copy,
-  // and Codex, with the plugin, then sees it twice. The deploy must warn, keep Kiro's copy,
-  // and never "release" the shared dir it just installed into.
-  const sb = homeSandbox({ harnesses: ["kiro"], codex: true });
+test("default roots: separate a plugin root symlink and preserve both harnesses' foreign skills", () => {
+  const sb = homeSandbox({ harnesses: ["kiro", "codex"], codex: true });
   try {
-    mkdirSync(join(sb.home, ".kiro", "skills"), { recursive: true });
-    symlinkSync(join(sb.home, ".kiro", "skills"), join(sb.home, ".codex", "skills"), "dir");
+    const kiro = join(sb.home, ".kiro", "skills");
+    mkdirSync(join(kiro, "foreign"), { recursive: true });
+    writeFileSync(join(kiro, "foreign", "SKILL.md"), "foreign sentinel");
+    symlinkSync(kiro, join(sb.home, ".codex", "skills"), process.platform === "win32" ? "junction" : "dir");
     const r = runWithEnv(["--no-agy"], sb.env);
     assert.equal(r.status, 0, r.stdout);
-    assert.match(r.stdout, /kiro\s+<- ~\/\.kiro\/skills/);
-    assert.match(r.stdout, /codex .*twice/);
-    assert.match(r.stdout, /warning: no set of roots/);
-    assert.ok(sb.has(".kiro/skills"), "Kiro keeps its copy");
-    const again = runWithEnv(["--no-agy"], sb.env);
-    assert.ok(sb.has(".kiro/skills"), "a second run doesn't release the shared dir");
-    assert.doesNotMatch(again.stdout, /not needed/);
+    assert.match(r.stdout, /separating codex skill root/);
+    assert.ok(sb.has(".kiro/skills"));
+    assert.ok(!sb.has(".codex/skills"));
+    assert.equal(readFileSync(join(sb.home, ".codex", "skills", "foreign", "SKILL.md"), "utf8"), "foreign sentinel");
+    assert.equal(readFileSync(join(kiro, "foreign", "SKILL.md"), "utf8"), "foreign sentinel");
+    const repeat = runWithEnv(["--no-agy"], sb.env);
+    assert.equal(repeat.status, 0, repeat.stdout);
+    assert.doesNotMatch(repeat.stdout, /separating codex skill root/);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("Codex: default deploy refreshes the installed plugin once; dry-run and explicit roots do not", () => {
+  const sb = homeSandbox({ harnesses: ["codex"], codex: true });
+  try {
+    assert.equal(runWithEnv(["--no-agy", "--dry-run"], sb.env).status, 0);
+    const log = join(sb.home, "codex-calls.jsonl");
+    assert.ok(!existsSync(log));
+    const r = runWithEnv(["--no-agy"], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.ok(!sb.has(".codex/skills"));
+    assert.equal(readFileSync(join(sb.home, "plugin-cache", "meta", "sync", "SKILL.md"), "utf8"),
+      readFileSync(join(HERE, "..", "skills", "meta", "sync", "SKILL.md"), "utf8"));
+    const calls = readFileSync(log, "utf8").trim().split("\n").map(JSON.parse);
+    assert.equal(calls.filter((c) => c[1] === "add").length, 1);
+    assert.equal(runWithEnv(["--root", join(sb.home, ".codex", "skills")], sb.env).status, 0);
+    assert.equal(readFileSync(log, "utf8").trim().split("\n").length, 2);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("Codex: a failed refresh or different marketplace source preserves existing copies", () => {
+  const sb = homeSandbox({ harnesses: ["codex"] });
+  try {
+    assert.equal(runWithEnv(["--no-agy"], sb.env).status, 0);
+    writeFileSync(join(sb.home, ".codex", "config.toml"), '[plugins."grey-matter@grey-matter"]\nenabled = true\n');
+    const failed = runWithEnv(["--no-agy"], { ...sb.env, TEST_REFRESH_FAIL: "1" });
+    assert.notEqual(failed.status, 0);
+    assert.ok(sb.has(".codex/skills"));
+    const wrong = runWithEnv(["--no-agy"], { ...sb.env, TEST_PLUGIN_SOURCE: sb.home });
+    assert.notEqual(wrong.status, 0);
+    assert.match(wrong.stdout, /must use this checkout/);
+    assert.ok(sb.has(".codex/skills"));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("audit: includes Codex plugin coverage when reporting bare duplicates", () => {
+  const sb = homeSandbox({ harnesses: ["codex"], codex: true });
+  try {
+    assert.equal(runWithEnv(["--root", join(sb.home, ".codex", "skills"), "--allow-dual"], sb.env).status, 0);
+    const r = runWithEnv(["audit"], sb.env);
+    assert.match(r.stdout, /codex sees 44 skill\(s\) twice/);
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });

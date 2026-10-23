@@ -60,7 +60,7 @@ Install `tkt@tkt` separately from `smileynet/tkt` for ticket tracking.
 User-level standing rules still use `scripts/install-agents-md.mjs`.
 
 For local development, replace `smileynet/grey-matter` with the checkout's absolute path.
-After edits, run `codex plugin add grey-matter@grey-matter` again to refresh the cached copy,
+After edits, run `node scripts/deploy.mjs` once to refresh the cached plugin and harness roots,
 then start a new chat. The skill installer skips Codex scan roots when this plugin
 is enabled, removing only copies it previously installed. `--allow-dual` overrides
 that guard.

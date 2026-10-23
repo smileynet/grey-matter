@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// deploy.mjs 1.0.0 (grey-matter) — deploy a skill pack to every agent harness on this machine.
+// deploy.mjs 1.1.0 (grey-matter) — deploy a skill pack to every agent harness on this machine.
 //
 // One deployer for every project that ships skills (proposal 08). The project declares WHAT
 // it ships in .claude-plugin/plugin.json (name, version, `skills` dirs; deploy-only settings
@@ -24,10 +24,10 @@
 // there, except a root read by a harness that has this pack's plugin (--allow-dual overrides).
 //
 // Safety: only manifest-tracked dirs are ever removed or overwritten; a foreign dir with the
-// same name is refused unless --force. Nothing here contacts the network.
+// same name is refused unless --force. Codex refresh requires its CLI and a local marketplace.
 
 import {
-  cpSync, existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, realpathSync, rmSync, statSync,
+  cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, renameSync, unlinkSync, readdirSync, readFileSync, realpathSync, rmSync, statSync,
   symlinkSync, writeFileSync,
 } from "node:fs";
 import { execFileSync, spawnSync } from "node:child_process";
@@ -35,7 +35,7 @@ import { homedir, platform } from "node:os";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const DEPLOY_VERSION = "1.0.0";
+const DEPLOY_VERSION = "1.1.0";
 const HOME = homedir();
 const isDir = (p) => { try { return statSync(p).isDirectory(); } catch { return false; } };
 const isFile = (p) => { try { return statSync(p).isFile(); } catch { return false; } };
@@ -130,6 +130,41 @@ function codexPlugin(pack) {
   return null;
 }
 
+// Refresh before pruning copies: a failed plugin update must leave the old deployment intact.
+function refreshCodex(pack, args) {
+  const label = codexPlugin(pack);
+  if (!label) return;
+  const id = label.slice("Codex plugin ".length);
+  console.log(`\n${args.dryRun ? "would refresh" : "refreshing"} Codex plugin ${id}`);
+  if (args.dryRun) return;
+  const listing = JSON.parse(execFileSync("codex", ["plugin", "list", "--json"], { encoding: "utf8" }));
+  const installed = listing.installed?.find((p) => p.pluginId === id && p.enabled);
+  if (installed?.source?.source !== "local" || real(installed.source.path) !== real(pack.dir)) {
+    throw new Error(`${id} must use this checkout as its local marketplace before deploy: codex plugin marketplace add ${pack.dir}`);
+  }
+  execFileSync("codex", ["plugin", "add", id, "--json"], { stdio: "inherit" });
+}
+
+// A plugin harness must not inherit another harness's bare copies through a root symlink.
+function separatePluginRoots(pack, args) {
+  for (const h of HARNESSES()) {
+    if (!h.plugin?.(pack) || !exists(h.own) || !lstatSync(h.own).isSymbolicLink()) continue;
+    console.log(`\n${args.dryRun ? "would separate" : "separating"} ${h.id} skill root ${h.own} from ${real(h.own)}`);
+    if (args.dryRun) continue;
+    const target = real(h.own);
+    const staged = mkdtempSync(join(dirname(h.own), ".skills-detached-"));
+    try {
+      cpSync(target, staged, { recursive: true });
+      unlinkSync(h.own);
+      try { renameSync(staged, h.own); }
+      catch (error) {
+        symlinkSync(target, h.own, platform() === "win32" ? "junction" : "dir");
+        throw error;
+      }
+    } finally { rmSync(staged, { recursive: true, force: true }); }
+  }
+}
+
 // Which harnesses read an arbitrary root: exact user roots, or <proj>/<dir>/skills patterns.
 function readersOf(root, harnesses) {
   const r = resolve(root);
@@ -215,6 +250,10 @@ function doInstall(pack, args) {
   if (!pack.skills.length) { console.error(`no skills found for ${pack.name}`); process.exit(1); }
   const errors = lint(pack);
   if (errors.length) { console.error("install aborted, lint failed:"); for (const e of errors) console.error("  - " + e); process.exit(1); }
+  if (!args.roots.length) {
+    refreshCodex(pack, args);
+    if (!args.allowDual) separatePluginRoots(pack, args);
+  }
   const harnesses = HARNESSES().map((h) => ({ ...h, covered: !args.allowDual && h.plugin ? h.plugin(pack) : null }));
 
   if (args.roots.length) {
@@ -399,6 +438,8 @@ function doAudit(pack, args) {
   }
   for (const h of harnesses.filter((h) => isDir(h.home))) {
     const seen = new Map(h.id === "claude" ? claudeSkills : []);
+    const codex = h.id === "codex" && codexPlugin(pack);
+    if (codex) for (const s of pack.skills) seen.set(s.name, [codex]);
     const rootsRead = uniqReal([...h.reads.map((x) => x.root), ...roots.filter((r) => readersOf(r, [h]).length)].filter(isDir));
     for (const r of rootsRead) for (const n of contents.get(r)?.keys() ?? []) seen.set(n, [...(seen.get(n) ?? []), tilde(r)]);
     const dupes = [...seen].filter(([, src]) => src.length > 1);

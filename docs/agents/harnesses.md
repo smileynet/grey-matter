@@ -38,16 +38,14 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   separately. Each repository has `.codex-plugin/plugin.json` and
   `.agents/plugins/marketplace.json`; Codex discovers nested skills recursively.
 - **Local development:** register the absolute checkout path as the marketplace,
-  then repeat `codex plugin add <name>@<name>` after edits to refresh the cache.
+  then run `node scripts/deploy.mjs` once after edits to refresh the cache and roots.
   Start a new chat to load changes. Installed plugin skills use `<plugin>:<skill>` names.
 - **Duplicate prevention:** `deploy.mjs` copies nothing into `.codex/skills` or `.agents/skills`
   while the pack's Codex plugin is enabled in the user config (`CODEX_HOME` supported), and
   removes only manifest-owned copies. `--allow-dual` overrides. Disabled plugins permit copies.
-- **On the maintainer's Mac, `~/.codex/skills` is a symlink to `~/.kiro/skills`,** so Kiro and
-  Codex share every copy. With the grey-matter Codex plugin enabled, Kiro's copy makes Codex list
-  each skill twice. `deploy.mjs` keeps Kiro's copy, because a missing skill is worse than a
-  duplicate, and warns. To get one copy each, replace the symlink with a real dir or disable the
-  Codex plugin.
+- **Symlinked roots:** default deploy separates an enabled plugin harness's skill-root
+  symlink into a real directory, preserving unrelated skills. Owned bare copies are then
+  removed from that root; Kiro retains its own copies. `--dry-run` reports the separation.
 - **Reads `~/.agents/skills`?** Claimed, not seen live (0.147 names only `~/.codex/skills`), so
   the deployer never relies on it as Codex's copy but avoids putting a second copy there.
 - Packaging reference: [OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins).

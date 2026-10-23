@@ -68,8 +68,8 @@ It copies there, takes back copies it left elsewhere, and packages the Antigravi
 plugin when `~/.gemini` exists. It is manifest-tracked and idempotent, refuses foreign dirs,
 and takes `--dry-run`/`list`/`uninstall`/`--root`/`--project`. It also has `check` (the
 manifests match disk and tags) and `audit` (unowned dirs, and skills a harness sees twice).
-`install-skills.mjs` and `build-agy-plugin.mjs` forward to it. tkt will vendor the same
-file (ticket 64, phase 2), so **change the harness table here, never in a copy**. The earlier
+`install-skills.mjs` and `build-agy-plugin.mjs` forward to it. tkt vendors the same
+file at `tools/deploy.mjs` (ticket 64), so **change the harness table here, never in a copy**. The earlier
 design is in
 [`docs/agents/proposals/03-distribution-packaging.md`](./docs/agents/proposals/03-distribution-packaging.md);
 the user-level standing rules (`global/AGENTS.md`, no steering) install with
@@ -149,7 +149,7 @@ there is no CI pipeline.)
 - **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
 - **Check before you push.** Run `node scripts/check-repo.mjs` before pushing when the task touched skills, indexes, docs, or the installer; a green run is cheap insurance against pushing a broken link or a lost sidecar straight to `main`. Install the opt-in pre-commit hook (`node scripts/install-hooks.mjs`) to run it automatically. (Local hooks only — this project has no CI.)
 - **Push after every commit.** A commit isn't done until it's pushed. Another session may be pushing to `main` too — if a push is rejected, `git pull --rebase` (or fetch + rebase) and push again; don't force-push. (`tkt new`/`claim`/`close` auto-push, so they interleave with manual commits — the same rebase-and-retry applies.)
-- **Deploy by default.** Prefer to deploy changes (deploy skills with `node scripts/deploy.mjs` (harness roots and the Antigravity plugin), refresh the Claude plugin (see "Keeping the Claude plugin current"), install the global rules with `node scripts/install-agents-md.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
+- **Deploy by default.** After skill or guidance changes, run `node scripts/deploy.mjs` once: it refreshes the enabled Codex plugin from this checkout, selects bare roots without duplicates, and refreshes the Antigravity plugin when `~/.gemini` exists. `sync` uses that same command; the legacy wrappers are alternatives, not extra deploy steps. Install changed global rules with `node scripts/install-agents-md.mjs`. Restart chats to load refreshed plugin skills.
 
 <!-- tkt:begin -->
 ## Tickets

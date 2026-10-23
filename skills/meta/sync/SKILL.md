@@ -14,7 +14,7 @@ command that gets current *safely*.
 The four couplings it keeps aligned:
 
 1. **Repo ↔ deployed skills.** A pull can add, change, or remove skills; the harness scan
-   roots and the Antigravity (`agy`) plugin keep serving the old copies until
+   roots and cached Codex/Antigravity plugins keep serving the old copies until
    `deploy.mjs` re-runs.
 2. **Skills ↔ tkt command surface.** The skills inline tkt commands; a tkt upgrade can
    rename a flag or drop a subcommand and break a skill mid-task.
@@ -29,8 +29,8 @@ specialized check to the skill or script that owns it — it reimplements none o
 **Disposition: report, don't gate.** No *finding* stops the deploy. The deploy is
 mechanically safe regardless (the installer is idempotent, manifest-tracked, and never
 touches a dir it didn't install), so drift and red checks are surfaced loudly as follow-ups
-rather than used as a gate. The **only** hard stop is a mechanical impossibility — a
-non-fast-forward pull — because merging the user's divergent work is not sync's call.
+rather than used as a gate. Mechanical failures stop the run: a non-fast-forward pull or a failed plugin
+refresh. Preserve existing copies when a refresh fails.
 
 ## Steps
 
@@ -91,18 +91,21 @@ non-fast-forward pull — because merging the user's divergent work is not sync'
    clean pull.
 
 6. **Redeploy to the harnesses.** Push the current skills back out to every owned root and
-   refresh the Antigravity (`agy`) plugin if `agy` is installed:
+   refresh installed plugins through the single deploy command:
 
    ```bash
    node scripts/deploy.mjs --dry-run   # if step 1 showed a surprising count delta
-   node scripts/deploy.mjs             # every harness here, plus the agy plugin when ~/.gemini exists
+   node scripts/deploy.mjs             # refresh Codex, choose roots, and refresh agy once
    node scripts/deploy.mjs audit       # report unowned dirs and skills a harness sees twice
    ```
 
    The installer is idempotent: it refreshes changed skills, adds new ones, and prunes
    skills removed upstream. It picks user-level roots from its harness table so each harness
    sees each skill once (an installed Claude or Codex plugin counts as the copy), and refreshes
-   the global `grey-matter` plugin in `~/.gemini/config/plugins/` (where `agy` discovers skills).
+   the enabled Codex plugin cache and, when `~/.gemini` exists, the Antigravity plugin.
+   Codex must use this
+   checkout as its local marketplace; a refresh failure stops deployment before copies are
+   removed. Run this command once; legacy wrappers are alternatives, not additional steps.
    Report `audit` findings; don't delete unowned dirs without the user.
    Crush reads **project** roots only, so for it note `node scripts/deploy.mjs --project`
    inside each project that wants it — sync doesn't chase project roots.
@@ -111,7 +114,7 @@ non-fast-forward pull — because merging the user's divergent work is not sync'
 
    - **Commits pulled** (`git log --oneline <before>..HEAD`).
    - **Skills changed**: added / modified / pruned, the **per-root count** after, and
-     whether the `agy` plugin was refreshed.
+     which plugin caches were refreshed.
    - **tkt**: version before → after, and any **drift** `verify-tkt-usage` found.
    - **Ticket health**: whether a rebase ran, and `tkt validate` status.
    - **Repo check**: green, or exactly what `check-repo.mjs` flagged.
@@ -137,8 +140,8 @@ non-fast-forward pull — because merging the user's divergent work is not sync'
 ## It's working if
 
 - `git pull --ff-only` fast-forwarded (or sync stopped cleanly and told you why it couldn't).
-- Every owned harness root reports the same skill count as the repo has, with new skills
-  present and removed ones pruned.
+- Each harness sees the source skill set once, through its plugin or selected owned root,
+  with new skills present and removed ones pruned.
 - A tkt version change surfaced a `verify-tkt-usage` report; a clean tkt did not.
 - The delta names exactly what changed and what to follow up on — and nothing was gated:
   the harnesses are current even when a finding needs later attention.

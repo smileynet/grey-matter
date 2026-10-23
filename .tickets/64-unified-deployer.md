@@ -48,19 +48,23 @@ Live deploy on this Mac:
   separate roots and released Kiro's fresh copies; this is also how Kiro was emptied earlier
   by the Codex guard. Fixed: roots are compared by real path, a missing skill costs more than
   a duplicate, and a test covers it.
-- The symlink plus the Codex plugin leaves Codex seeing grey-matter twice. The deployer warns;
-  the fix is the user's (a real dir, or disable the plugin).
+- Superseded by the 2026-10-23 plugin refresh work: deployment separates a plugin
+  harness's symlinked root, preserves unrelated skills, and removes only owned copies.
 
 Known gaps, for phases 2-3:
-- `audit` reads Claude plugin contents but not Codex plugin contents, so the Codex duplicate
-  above shows in the deploy warning only.
 - Cross-pack name collisions (`testing-guide`) need the portfolio list.
 - Codex reading `~/.agents/skills` is marked `claimed`, not verified.
-- tkt still deploys with bash (phase 2), and its Codex plugin (tkt@tkt) isn't guarded there.
+**Phase 2 done (2026-10-23).** tkt vendors deploy.mjs 1.1.0; deploy-skills.sh
+forwards to it. Its forbidden-reference lint is pack metadata. `cargo test --test
+deploy_skills --test plugin_manifests` passes all 9 tests. The engine refreshes each
+enabled local Codex plugin once on a default deploy, before pruning copies; explicit
+root installs and dry runs never refresh. `sync` and standing guidance call that same
+entry point. The 21 deploy tests cover refresh failure, source mismatch, symlink
+separation, and duplicate audit. Portfolio-wide drift checking remains phase 3.
 
 ## Acceptance criteria
 
 - [x] Proposal 08's three decisions are recorded (vendor vs depend, tkt on Node, portfolio list location)
 - [x] grey-matter deploys through deploy.mjs, reading .claude-plugin/plugin.json; no harness sees a skill twice (OpenCode overlap covered by a test); build-agy-plugin.mjs retired
-- [ ] tkt deploys through a vendored tools/deploy.mjs; deploy-skills.sh is a wrapper; tests/deploy_skills.rs passes against it
+- [x] tkt deploys through a vendored tools/deploy.mjs; deploy-skills.sh is a wrapper; tests/deploy_skills.rs passes against it
 - [ ] deploy.mjs audit lists unowned dirs and cross-pack name collisions on this machine (the crew-research leftovers and testing-guide appear)
