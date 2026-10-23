@@ -5,16 +5,17 @@
 import { chmodSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { git } from "./release-git.mjs";
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as tar from "tar";
-import { parse as parseToml, TomlError } from "smol-toml";
+import { ReleaseError as ArtifactError, inspectVersions } from "./release-version.mjs";
+export { ArtifactError };
 import { loadPack, lint, agyResources, PackError } from "./deploy.mjs";
 import { checkPack } from "./check-skill-syntax.mjs";
 
 const hosts = ["codex", "claude", "agy"];
-export class ArtifactError extends Error {}
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 function read(path, encoding) {
   try { return readFileSync(path, encoding); }
@@ -30,15 +31,7 @@ function json(path) {
     throw error;
   }
 }
-function toml(path) {
-  try { return parseToml(read(path, "utf8"), { unsafeKeyBehaviour: "throw" }); }
-  catch (error) {
-    if (error instanceof TomlError) throw new ArtifactError(`invalid TOML artifact: ${path}: ${error.message}`);
-    throw error;
-  }
-}
 const encoded = (value) => JSON.stringify(value, null, 2) + "\n";
-const git = (repo, ...args) => execFileSync("git", ["-C", repo, ...args], { maxBuffer: 128 * 1024 * 1024 });
 
 function safePath(path) {
   if (!path || isAbsolute(path) || /[\\:\x00-\x1f]/.test(path) || path.replace(/\/$/, "").split("/").some((part) => !part || part === ".." || part === ".")) throw new ArtifactError(`unsafe archive path: ${path}`);
@@ -134,31 +127,18 @@ export function verifyArtifacts(out) {
 }
 
 export function buildArtifacts({ repo, ref, out, compatibility = { status: "not-run", pairs: [] } }) {
-  const candidateSha = git(repo, "rev-parse", "--verify", `${ref}^{commit}`).toString().trim();
+  const candidateSha = git(repo, ["rev-parse", "--verify", "--end-of-options", `${ref}^{commit}`]).trim();
   const temp = mkdtempSync(join(tmpdir(), "plugin-bundle-"));
   try {
     const sourceTar = join(temp, "source.tar");
-    writeFileSync(sourceTar, git(repo, "archive", "--format=tar", candidateSha));
+    writeFileSync(sourceTar, git(repo, ["archive", "--format=tar", candidateSha], { encoding: null, maxBuffer: 128 * 1024 * 1024 }));
     const source = join(temp, "source");
     extract(sourceTar, source);
     const pack = loadPack(source);
     const errors = lint(pack);
     if (errors.length) throw new ArtifactError(errors.join("; "));
-    const identity = { name: pack.name, version: pack.version, skills: pack.skills.length };
-    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(identity.name) || !/^\d+\.\d+\.\d+$/.test(identity.version)) throw new ArtifactError("invalid source pack identity");
-    if (existsSync(join(source, "Cargo.toml"))) {
-      const product = toml(join(source, "Cargo.toml")).package;
-      if (!product || product.name !== identity.name || product.version !== identity.version) throw new ArtifactError("source Cargo authority differs from plugin identity/version");
-      const lock = toml(join(source, "Cargo.lock"));
-      const root = lock.package?.filter((item) => item.name === product.name && !item.source);
-      if (root?.length !== 1 || root[0].version !== product.version) throw new ArtifactError("source Cargo.lock root package version differs from Cargo authority");
-    }
-    for (const path of [".codex-plugin/plugin.json", "plugin.json"]) {
-      if (existsSync(join(source, path))) {
-        const manifest = json(join(source, path));
-        if (manifest.name !== identity.name || manifest.version !== identity.version) throw new ArtifactError(`source version mismatch: ${path}`);
-      }
-    }
+    const versionState = inspectVersions((file) => read(join(source, file), "utf8"), (file) => existsSync(join(source, file)));
+    const identity = { name: versionState.name, version: versionState.version, skills: pack.skills.length };
     const resources = agyResources(pack);
     const staged = join(temp, "assets");
     mkdirSync(staged);

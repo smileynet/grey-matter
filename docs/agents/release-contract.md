@@ -35,6 +35,10 @@ Proposed candidates are grey-matter 0.2.0 and tkt 0.5.0. Approval is pending; re
 the user's answer and the included scope before preparing versioned candidates.
 No preparation or recovery command silently chooses or increments a version.
 
+The [local draft mechanics](release-preparation.md) and [artifact layer](release-artifacts.md)
+now exist, with explicit pending validation. They are not a completed preparation or
+publication implementation.
+
 ## Modes and mutation boundaries
 
 The release skill orchestrates these modes. Tickets 67–69 provide the executable

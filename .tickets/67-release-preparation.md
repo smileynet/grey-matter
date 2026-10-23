@@ -82,3 +82,16 @@ a resealed short-README fixture fails; the current Claude probe checks directory
 blockers and seeds README removal. Final six artifact rows and both native controls
 pass, with the initial finding retained in the same evidence JSON. Nonblocking icon
 advice remains in staging 71. This is an implemented packaging fix, not release approval.
+
+## Local draft mechanics progress
+
+[Draft preparation](../docs/agents/release-preparation.md) implements default read-only
+dry-run, a separate branch/worktree (or an explicit app-managed worktree), coordinated
+version/lock/changelog edits, immutable notes/artifact identity and resume based on
+observed Git/file state. Per-file ownership receipts recover interrupted replacements;
+original source and foreign files are preserved. Git context variables cannot redirect
+writes into another index/repository. The tool has no publication path and always
+reports publishable=false with pending gates. Product/native/scope/compatibility and
+platform gate integration, tkt standalone entry-point wiring and real approved candidate
+evidence remain before closure. Candidate 0.2.0/0.5.0 approval is still pending; only
+synthetic fixtures have executed version preparation.

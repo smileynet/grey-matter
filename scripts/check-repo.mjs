@@ -16,7 +16,7 @@
 //   8. repo survey (portfolio)     -> scripts/survey-repos.test.mjs (temp git repos)
 //   9. Claude plugin manifest      -> scripts/check-plugin-manifest.mjs (buckets, version, marketplace)
 //  10. YAML syntax and core types  -> scripts/check-skill-syntax.mjs (npm ci once for maintainers)
-//  11. release artifact closure     -> scripts/release-artifacts.test.mjs (isolated commits/archives)
+//  11. release draft/artifact safety -> release*.test.mjs (isolated repos/worktrees/archives)
 //
 // Design (AC-driven):
 //  - READ-ONLY on user state. The installer test uses throwaway temp roots (mkdtemp),
@@ -92,7 +92,7 @@ run("7. crew-research uninstall scope", node, ["--test", join(SCRIPTS, "uninstal
 run("8. repo survey tiers (adopt-project portfolio)", node, ["--test", join(SCRIPTS, "survey-repos.test.mjs")]);
 run("9. Claude plugin manifest", node, [join(SCRIPTS, "check-plugin-manifest.mjs")]);
 run("10. YAML syntax and core types", node, [join(SCRIPTS, "check-skill-syntax.mjs")]);
-run("11. release artifact closure and identity", node, ["--test", join(SCRIPTS, "release-artifacts.test.mjs")]);
+run("11. release draft and artifact safety", node, ["--test", join(SCRIPTS, "release-artifacts.test.mjs"), join(SCRIPTS, "release-version.test.mjs"), join(SCRIPTS, "release.test.mjs")]);
 
 // --- Summary ------------------------------------------------------------------
 console.log("\n==================== repo-check summary ====================");
