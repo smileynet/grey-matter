@@ -3,13 +3,16 @@ id: "64"
 title: "One deployer across projects (proposal 08): deploy.mjs, plugin.json as the pack manifest, vendored into tkt"
 status: open
 blocked_by: []
-priority: medium
+priority: high
 validation_criteria:
   - "Proposal 08's three decisions are recorded (vendor vs depend, tkt on Node, portfolio list location)"
   - "grey-matter deploys through deploy.mjs, reading .claude-plugin/plugin.json; no harness sees a skill twice (OpenCode overlap covered by a test); build-agy-plugin.mjs retired"
   - "tkt deploys through a vendored tools/deploy.mjs; deploy-skills.sh is a wrapper; tests/deploy_skills.rs passes against it"
   - "deploy.mjs audit lists unowned dirs and cross-pack name collisions on this machine (the crew-research leftovers and testing-guide appear)"
-tags: ["stream:tooling"]
+  - "Audit fixtures inspect actual cached Codex plugin contents across multiple installed plugins and marketplaces and detect stale/missing skills"
+  - "A committed portfolio manifest supports seeded cross-pack name-collision and vendored-deployer drift checks without requiring unregistered sibling checkouts"
+  - "Shared-root evidence and legacy-directory dispositions are durable, versioned and distinguish unowned content from duplicate loading"
+tags: ["stream:tooling", "epic:release-readiness"]
 ---
 
 # One deployer across projects (proposal 08): deploy.mjs, plugin.json as the pack manifest, vendored into tkt
@@ -53,7 +56,9 @@ Live deploy on this Mac:
 
 Known gaps, for phases 2-3:
 - Cross-pack name collisions (`testing-guide`) need the portfolio list.
-- Codex reading `~/.agents/skills` is marked `claimed`, not verified.
+- The deployed Codex client has now returned 40 skills under `~/.agents/skills` through
+  app-server `skills/list`. The harness table still marks it claimed; reproduce in an
+  isolated fixture, record client version, and update guidance.
 **Phase 2 done (2026-10-23).** tkt vendors deploy.mjs 1.1.0; deploy-skills.sh
 forwards to it. Its forbidden-reference lint is pack metadata. `cargo test --test
 deploy_skills --test plugin_manifests` passes all 9 tests. The engine refreshes each
@@ -68,3 +73,32 @@ separation, and duplicate audit. Portfolio-wide drift checking remains phase 3.
 - [x] grey-matter deploys through deploy.mjs, reading .claude-plugin/plugin.json; no harness sees a skill twice (OpenCode overlap covered by a test); build-agy-plugin.mjs retired
 - [x] tkt deploys through a vendored tools/deploy.mjs; deploy-skills.sh is a wrapper; tests/deploy_skills.rs passes against it
 - [ ] deploy.mjs audit lists unowned dirs and cross-pack name collisions on this machine (the crew-research leftovers and testing-guide appear)
+
+
+## Release-readiness continuation (2026-10-23)
+
+Intent: the user requested tickets covering all outstanding findings before release.
+Read [release readiness](../docs/agents/proposals/09-release-readiness.md) and the
+[source research](../docs/agents/research/plugin-release-semantics.md). Ticket 70's
+final audit depends on this work; plugin syntax/documentation conformance belongs to 65.
+
+Remaining work is phase 3, not another deployment rewrite:
+- Inventory every installed Codex plugin's actual cached manifest/skills, including
+  multiple plugins and marketplaces. Current `audit` only adds the current pack's source
+  skill names for an enabled plugin; do not present expected coverage as actual contents.
+- Use the committed portfolio list to detect cross-pack name collisions and check each
+  vendored deploy engine against the canonical source. Fixtures seed both kinds of drift.
+- Reproduce the observed shared-root read and replace stale claimed-only guidance with
+  versioned evidence. Test each installed harness's physical roots plus discovered catalog.
+- Classify the 43 unowned shared legacy directories by provenance, skill versus
+  reference-only content, and keep/migrate/retire disposition. Preserve useful standalone
+  skills and reference pointers; do not fabricate installer ownership.
+- Keep the resolved OpenCode cleanup resolved: 42 identical duplicate directories and
+  five stale shadows were archived, all 44 grey-matter skills were deployed, and physical
+  roots/live catalogs showed no duplicate managed skills. Add regression coverage rather
+  than recreating those cleanup tasks.
+
+Additional acceptance criteria:
+- [ ] Audit fixtures inspect actual cached Codex plugin contents across multiple installed plugins and marketplaces and detect stale/missing skills.
+- [ ] A committed portfolio manifest supports seeded cross-pack name-collision and vendored-deployer drift checks without requiring unregistered sibling checkouts.
+- [ ] Shared-root evidence and legacy-directory dispositions are durable, versioned and distinguish unowned content from duplicate loading.
