@@ -1,7 +1,7 @@
 ---
 id: "74"
 title: "Ship complete license and attribution notices in plugin artifacts"
-status: open
+status: in_progress
 blocked_by: []
 spec: "release-readiness"
 priority: high
