@@ -1,3 +1,4 @@
+import { readStagedCandidate } from "./release-staging.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
@@ -134,4 +135,73 @@ test("bound evidence rejects report path traversal and symlinked product logs", 
     symlinkSync(join(f.temp, "external-product"), join(f.out, "product"), "junction");
   } else symlinkSync(outside, log);
   assert.throws(() => readCandidateEvidence({ artifacts: f.artifacts, evidence: f.out, verificationSha256 }), /escaped/);
+}));
+
+function stagingFixture(f) {
+  const proof = evidenceFixture(f), verificationSha256 = proof.save();
+  const identity = { product: "grey-matter", version: "0.1.0", candidateSha: f.sha };
+  const entry = { ...identity, repository: "example/grey-matter", metadataSha256: hash(readFileSync(join(f.artifacts, "release-metadata.json"))), verificationSha256, gates: {} };
+  const reports = {};
+  for (const gate of proof.index.pending) reports[gate] = { schema: 1, kind: "release-gate", ...identity, gate, status: "pass", blockers: [], summary: "Synthetic staging fixture only", evidence: ["Synthetic fixture; not actual release approval"] };
+  const notes = "Reviewed fixture notes\n";
+  put(join(f.repo, "staging/notes.md"), notes); entry.notes = { file: "staging/notes.md", sha256: hash(notes) };
+  const index = { schema: 1, kind: "release-staging", status: "staged", entries: [entry, { product: "tkt", version: "0.5.0", candidateSha: "b".repeat(40), repository: "example/tkt" }] };
+  function save() {
+    for (const [gate, report] of Object.entries(reports)) {
+      const file = `staging/${gate}.json`, bytes = JSON.stringify(report); put(join(f.repo, file), bytes); entry.gates[gate] = { file, sha256: hash(bytes) };
+    }
+    put(join(f.repo, "staging/index.json"), JSON.stringify(index));
+    return f.commit();
+  }
+  const read = (reviewSha, extra = {}) => readStagedCandidate({ reviewRepo: f.repo, reviewSha, indexFile: "staging/index.json", product: "grey-matter", artifacts: f.artifacts, evidence: f.out, ...extra });
+  return { entry, reports, index, save, read };
+}
+
+test("staging reader binds a committed index, six receipts, notes and complete assets", () => fixture(async (f) => {
+  const stage = stagingFixture(f), sha = stage.save(), result = stage.read(sha);
+  assert.equal(result.product, "grey-matter"); assert.equal(result.candidateSha, f.sha);
+  assert.deepEqual(result.gates.pending, []); assert.equal(result.staging.reviewSha, sha);
+  assert.equal(result.assets.length, 5); assert.ok(result.assets.some((a) => a.name === "SHA256SUMS"));
+  put(join(f.repo, "staging/notes.md"), "Unreviewed changes");
+  assert.equal(stage.read(sha).notes, "Reviewed fixture notes\n");
+}));
+
+test("staging reader rejects blocked, mismatched or missing gate receipts", () => fixture(async (f) => {
+  const stage = stagingFixture(f);
+  stage.reports.scope.blockers = ["unapproved scope"]; assert.throws(() => stage.read(stage.save()), /scope evidence/);
+  stage.reports.scope.blockers = []; stage.reports.upgrade.candidateSha = "b".repeat(40);
+  assert.throws(() => stage.read(stage.save()), /different commit/);
+  stage.reports.upgrade.candidateSha = f.sha;
+  const sha = stage.save(); delete stage.entry.gates.compatibility;
+  put(join(f.repo, "staging/index.json"), JSON.stringify(stage.index)); const missing = f.commit();
+  assert.throws(() => stage.read(missing), /missing or unknown gates/);
+  assert.equal(stage.read(sha).gates.status, "pass");
+}));
+
+test("staging reader refuses changed artifacts and unpinned review identities", () => fixture(async (f) => {
+  const stage = stagingFixture(f), sha = stage.save();
+  assert.throws(() => stage.read("HEAD"), /explicit reviewed commit/);
+  stage.entry.metadataSha256 = "0".repeat(64);
+  assert.throws(() => stage.read(stage.save()), /metadata changed/);
+  assert.equal(stage.read(sha).version, "0.1.0");
+}));
+
+test("staging reader ignores local Git replacements of the pinned review commit", () => fixture(async (f) => {
+  const stage = stagingFixture(f), reviewed = stage.save();
+  const changed = "Unreviewed replacement notes\n";
+  put(join(f.repo, "staging/notes.md"), changed); stage.entry.notes.sha256 = hash(changed);
+  const replacement = stage.save(); f.git("replace", reviewed, replacement);
+  assert.equal(stage.read(reviewed).notes, "Reviewed fixture notes\n");
+}));
+
+test("staging reader requires receipt digests and rejects committed symlink blobs", () => fixture(async (f) => {
+  const stage = stagingFixture(f); stage.save();
+  delete stage.entry.gates.scope.sha256;
+  put(join(f.repo, "staging/index.json"), JSON.stringify(stage.index));
+  assert.throws(() => stage.read(f.commit()), /requires a digest/);
+  stage.save();
+  const blob = f.git("rev-parse", "HEAD:staging/notes.md");
+  f.git("update-index", "--cacheinfo", "120000", blob, "staging/notes.md");
+  f.git("-c", `core.hooksPath=${join(f.temp, "no hooks")}`, "commit", "-m", "seed symlink notes blob");
+  assert.throws(() => stage.read(f.git("rev-parse", "HEAD")), /committed regular file/);
 }));

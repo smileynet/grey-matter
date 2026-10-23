@@ -1,0 +1,55 @@
+# Pinned staging evidence
+
+`readStagedCandidate` in `scripts/release-staging.mjs` reads a staging index and its
+receipts from an explicit 40-character Git commit. Publication integration must use
+this reviewed commit, rather than mutable working files or a caller-supplied
+`status: pass`. The reader makes no writes and does not authorize publication.
+
+## Index format
+
+The index has `schema: 1`, `kind: "release-staging"`, `status: "staged"` and an
+`entries` array identifying grey-matter and tkt exactly once. The caller selects one
+product and supplies its local sealed artifacts and verification directory.
+
+Each selected entry contains:
+
+| Field | Contract |
+| --- | --- |
+| `product`, `version`, `candidateSha` | Exact product, stable version and full candidate commit; must match sealed metadata and verification reports. |
+| `repository` | Explicit GitHub owner/repository; remote binding remains a publication-integration requirement. |
+| `metadataSha256` | SHA-256 of the sealed `release-metadata.json`. |
+| `verificationSha256` | SHA-256 of `verification.json`; the evidence reader checks child report/log hashes and every native artifact identity. |
+| `notes` | `{file, sha256}` for nonempty release notes committed at the reviewed index revision. |
+| `gates` | Exactly `scope`, `compatibility`, `upgrade`, `platform-approval`, `final-audit`, `staging`, each a committed `{file, sha256}` receipt. |
+
+Every gate receipt has `schema: 1`, `kind: "release-gate"`, the candidate identity,
+its `gate` name, `status: "pass"`, an empty `blockers` array, a nonempty `summary`
+and a nonempty `evidence` array of source/command descriptions. Failed or missing
+gates cannot be waived by editing the verification report's pending list.
+
+Receipts and notes must be regular Git blobs. Absolute paths, parent traversal,
+symlink blobs and mismatched hashes are rejected. Working-tree edits do not change
+what a pinned commit supplies. Release Git commands ignore local replacement refs with `GIT_NO_REPLACE_OBJECTS`,
+as specified by the [Git reference](https://git-scm.com/docs/git-replace).
+Git stores the receipts; local artifact and log bytes
+are checked independently against their sealed hashes.
+
+## Result and limits
+
+The reader returns the reconciler's candidate identity, reviewed notes and five
+plugin-release assets: three host archives, metadata and `SHA256SUMS`. It derives
+an empty pending-gate list only after checking all six receipts for the selected
+product. It does not certify the other product's local artifacts, run missing checks,
+or generate passing receipts.
+
+An explicit commit provides an integrity boundary, not proof of human review. The
+staging workflow and operator must establish that the commit is the reviewed one.
+A caller choosing an unreviewed commit cannot turn that choice into authorization.
+Real publication still requires separately authorized execution, correct remote
+binding, immutable-release policy and the assigned publisher. tkt's cargo-dist assets
+and crate recovery must be integrated before exposing its publication path.
+
+Current coverage uses committed synthetic receipts and disposable repositories.
+It proves identity/hash binding and refusal behavior, not final release readiness.
+Tickets 70 and 71 must supply real audit/staging receipts after the remaining gates
+pass. See the [release contract](release-contract.md) for the publication boundary.

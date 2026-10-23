@@ -141,3 +141,6 @@ The [release identity decision](decisions/0001-release-identity.md) records trad
 [plugin update semantics](research/plugin-release-semantics.md) retain primary URLs,
 warnings, observation dates and known gaps. Re-read the linked source sections when
 implementing or changing a host contract; native behavior supplements specifications.
+
+The [pinned staging evidence format](release-staging.md) binds each selected candidate
+to a reviewed Git index revision, six gate receipts, notes and sealed local evidence.
