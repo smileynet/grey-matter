@@ -53,3 +53,13 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 - [ ] Guidance defines local development versus stable/pinned consumers, separates Git marketplace releases from optional public-directory submission, and never promises undocumented Codex cache semantics.
 - [ ] Release/sync/AGENTS/router references route local refresh through one canonical deploy call with duplicate prevention; no instruction runs legacy wrappers as extra deployments.
 - [ ] Document links, invocation sidecars and skill indexes pass check-repo; an independent prose review is resolved and evidence is recorded.
+
+## Implemented guidance
+
+The [release contract](../docs/agents/release-contract.md) is the implementation
+source of truth; [ADR-0001](../docs/agents/decisions/0001-release-identity.md) records
+rationale and rejected alternatives. Release/versioning/sync/router guidance routes
+to that contract, separates read-only dry-run from prepare/stage and authorized
+publication, and explicitly identifies legacy script gaps for tickets 67–69.
+tkt's `docs/releasing.md` and AGENTS point to the same authority and canonical deploy.
+Candidate 0.2.0/0.5.0 approval remains pending; no version has been changed here.

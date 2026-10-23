@@ -23,6 +23,10 @@ The four couplings it keeps aligned:
 4. **Repo invariants.** `check-repo.mjs` must stay green (indexes, links, invocation
    sidecars, installer safety).
 
+Read the [release contract](../../../docs/agents/release-contract.md) when choosing
+development, stable or pinned sources. Sync refreshes the configured source; it
+does not publish a release or promote stable.
+
 **Sync is an orchestrator.** It does the pull/deploy *judgement* itself and hands every
 specialized check to the skill or script that owns it — it reimplements none of them.
 

@@ -4,8 +4,9 @@ Status: planning baseline, 2026-10-23. Intent: the user requested tickets coveri
 outstanding findings, release skills/scripts/guidance, final project audit, and staged
 release artifacts. Creating this plan does not authorize publishing a release.
 
-The policies below are the working proposal. The release-contract ticket must confirm
-policy decisions and actual version choices before implementing irreversible behavior.
+The historical policies below informed the [release contract](../release-contract.md),
+which is now the implementation authority. Candidate versions still require approval;
+this request authorizes staging, not irreversible publication.
 
 ## Working release contract
 

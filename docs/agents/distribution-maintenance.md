@@ -37,7 +37,7 @@ When a change touches skills, the plugin manifests, or tkt's plugin:
   can report "already at the latest version" while `main` has changed. New installs
   can receive the current source ref, so a push to `main` can reach new users before
   a release. The release skill bumps the manifest version; keep version edits inside
-  that workflow. Stable/pinned delivery policy is defined by the release contract.
+  that workflow. Stable/pinned delivery policy is defined by the [release contract](release-contract.md).
 - **Refresh this machine's install** as part of "Deploy by default." Use a marketplace added
   from the local checkout (`claude plugin marketplace add <path-to-grey-matter>`, once). It
   loads the files in place, so run `/reload-plugins` or start a new session to pick up edits.

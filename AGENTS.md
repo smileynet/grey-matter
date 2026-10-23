@@ -76,6 +76,9 @@ per-host validation and the consistency checks.
 Record unavailable gates and exact failures in the owning ticket; continue independent
 work. Release staging waits for required evidence or an explicit supported-scope decision.
 
+Release preparation/publication: read [the release contract](docs/agents/release-contract.md)
+for version authorities, mode boundaries, publishers and remaining gates.
+
 ## Working rhythm
 
 - **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
