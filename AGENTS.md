@@ -75,6 +75,29 @@ dependency): `/plugin marketplace add smileynet/grey-matter`, then
 `/plugin install grey-matter@grey-matter`. The design is in
 [`docs/agents/proposals/07-claude-code-plugin.md`](./docs/agents/proposals/07-claude-code-plugin.md).
 
+### Keeping the Claude plugin current
+
+When a change touches skills, the plugin manifests, or tkt's plugin:
+
+- **New or changed skill:** no manifest edit. `plugin.json` lists bucket dirs, so the skill is
+  picked up as is. **New bucket:** add `./skills/<bucket>` to `.claude-plugin/plugin.json`;
+  `scripts/check-plugin-manifest.mjs` (check-repo invariant 9) fails until you do.
+- **Users get changes only on a release.** A GitHub install is pinned to `plugin.json`'s
+  `version`. A push to `main` reaches nobody until the version changes, and
+  `claude plugin update` reports "already at the latest version" until then. The `release`
+  skill (`release.sh` step 1b) bumps it. Don't hand-edit `version` outside a release.
+- **Refresh this machine's install** as part of "Deploy by default." Use a marketplace added
+  from the local checkout (`claude plugin marketplace add <path-to-grey-matter>`, once). It
+  loads the files in place, so run `/reload-plugins` or start a new session to pick up edits.
+  For a GitHub install, run `claude plugin marketplace update grey-matter`, then
+  `claude plugin update grey-matter@grey-matter` (this only changes anything after a release).
+- **Check before committing:** `node scripts/check-repo.mjs` runs `claude plugin validate`
+  when `claude` is on PATH. To see what loads, run
+  `claude --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`, which lists the
+  skills without a model call.
+- **tkt's plugin lives in the tkt repo** and is listed here as a `github` source with no
+  pinned ref. A tkt plugin change reaches grey-matter users when tkt releases, with no edit here.
+
 ## Consistency checks
 
 One command verifies every mechanical invariant the skill distribution depends on:
@@ -110,7 +133,7 @@ there is no CI pipeline.)
 - **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
 - **Check before you push.** Run `node scripts/check-repo.mjs` before pushing when the task touched skills, indexes, docs, or the installer; a green run is cheap insurance against pushing a broken link or a lost sidecar straight to `main`. Install the opt-in pre-commit hook (`node scripts/install-hooks.mjs`) to run it automatically. (Local hooks only — this project has no CI.)
 - **Push after every commit.** A commit isn't done until it's pushed. Another session may be pushing to `main` too — if a push is rejected, `git pull --rebase` (or fetch + rebase) and push again; don't force-push. (`tkt new`/`claim`/`close` auto-push, so they interleave with manual commits — the same rebase-and-retry applies.)
-- **Deploy by default.** Prefer to deploy changes (install skills into the harness roots with `node scripts/install-skills.mjs`, refresh the Antigravity plugin with `node scripts/build-agy-plugin.mjs install`, install the global rules with `node scripts/install-agents-md.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
+- **Deploy by default.** Prefer to deploy changes (install skills into the harness roots with `node scripts/install-skills.mjs`, refresh the Antigravity plugin with `node scripts/build-agy-plugin.mjs install`, refresh the Claude plugin (see "Keeping the Claude plugin current"), install the global rules with `node scripts/install-agents-md.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
 
 <!-- tkt:begin -->
 ## Tickets
