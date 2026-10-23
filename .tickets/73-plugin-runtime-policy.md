@@ -1,7 +1,7 @@
 ---
 id: "73"
 title: "Verify plugin invocation policy and current host validation"
-status: open
+status: in_progress
 blocked_by: []
 spec: "release-readiness"
 priority: high
