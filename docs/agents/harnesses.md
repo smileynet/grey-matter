@@ -31,6 +31,19 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 
 ### codex (secondary)
 
+- **Plugin install:** `codex plugin marketplace add smileynet/grey-matter`, then
+  `codex plugin add grey-matter@grey-matter`. Add `smileynet/tkt` and install `tkt@tkt`
+  separately. Each repository has `.codex-plugin/plugin.json` and
+  `.agents/plugins/marketplace.json`; Codex discovers nested skills recursively.
+- **Local development:** register the absolute checkout path as the marketplace,
+  then repeat `codex plugin add <name>@<name>` after edits to refresh the cache.
+  Start a new chat to load changes. Installed plugin skills use `<plugin>:<skill>` names.
+- **Duplicate prevention:** installers skip `.codex/skills` and `.agents/skills` when
+  their Codex plugin is enabled in the user config (`CODEX_HOME` supported), removing
+  only manifest-owned copies. `--allow-dual` overrides. Disabled plugins permit copies.
+- Packaging reference: [OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins).
+
+
 - Binary `codex` (a `.ps1` shim via fnm on this machine), probed 0.163.0. Auto-scans its
   root. Uses the `agents/openai.yaml` sidecar for invocation policy.
 - **User root**: `~/.codex/skills/`. **Install**: default set, or `--root ~/.codex/skills`.

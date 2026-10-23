@@ -81,6 +81,19 @@ if (plugin && marketplace) {
   }
 }
 
+// Codex discovers skills recursively from the common root.
+const codex = readJson(join(REPO, ".codex-plugin", "plugin.json"));
+const codexMarket = readJson(join(REPO, ".agents", "plugins", "marketplace.json"));
+if (codex && plugin) {
+  if (codex.name !== plugin.name || codex.version !== plugin.version) problems.push("Codex and Claude plugin identities/versions differ");
+  if (codex.skills !== "./skills/") problems.push("Codex skills must point at ./skills/");
+}
+if (codexMarket && codex) {
+  const entry = codexMarket.plugins?.find((p) => p.name === codex.name);
+  if (entry?.source?.path !== "./" || entry?.source?.source !== "local") problems.push("Codex marketplace must point at the repository root");
+  if (entry?.policy?.installation !== "AVAILABLE" || entry?.policy?.authentication !== "ON_INSTALL") problems.push("Codex marketplace installation/authentication policy missing");
+}
+
 // --- 4. claude plugin validate (optional) ---------------------------------------
 for (const target of [PLUGIN, MARKETPLACE]) {
   const r = spawnSync("claude", ["plugin", "validate", target], { cwd: REPO, encoding: "utf8" });

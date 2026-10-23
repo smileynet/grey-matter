@@ -73,7 +73,9 @@ cat > .claude-plugin/plugin.json <<'EOF'
   "dependencies": [{ "name": "dep", "version": "^9.0.0" }]
 }
 EOF
-git add CHANGELOG.md .claude-plugin/plugin.json
+mkdir -p .codex-plugin
+cp .claude-plugin/plugin.json .codex-plugin/plugin.json
+git add CHANGELOG.md .claude-plugin/plugin.json .codex-plugin/plugin.json
 git commit --quiet -m "init"
 git branch -M main
 git push --quiet origin main 2>/dev/null
@@ -119,6 +121,8 @@ if grep -qE '^## \[0\.2\.0\] - ' CHANGELOG.md; then ok "changelog promoted to da
 # Plugin manifest bumped in the release commit; the dependency's range is untouched.
 if git show v0.2.0:.claude-plugin/plugin.json | grep -q '"version": "0.2.0"'; then ok "plugin.json version bumped in the release commit"; else bad "plugin.json version not bumped"; fi
 if git show v0.2.0:.claude-plugin/plugin.json | grep -q '"\^9.0.0"'; then ok "dependency version range left alone"; else bad "dependency version range was rewritten"; fi
+
+if git show v0.2.0:.codex-plugin/plugin.json | grep -q '"version": "0.2.0"'; then ok "Codex plugin version bumped in release commit"; else bad "Codex plugin version not bumped"; fi
 
 # No stray temp files left in the work tree.
 if ls "$WORK"/tmp.* >/dev/null 2>&1; then bad "temp file left behind in work dir"; else ok "no temp notes file left behind"; fi

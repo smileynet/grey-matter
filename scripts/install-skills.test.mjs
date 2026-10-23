@@ -151,7 +151,7 @@ function dualSandbox({ plugin }) {
   mkdirSync(plugins, { recursive: true });
   const ids = plugin ? { [plugin]: [{ scope: "user", version: "0.1.0" }] } : {};
   writeFileSync(join(plugins, "installed_plugins.json"), JSON.stringify({ version: 2, plugins: ids }));
-  return { base, env: { ...process.env, CLAUDE_CODE_PLUGIN_CACHE_DIR: plugins } };
+  return { base, env: { ...process.env, CLAUDE_CODE_PLUGIN_CACHE_DIR: plugins, CODEX_HOME: base } };
 }
 
 function runWithEnv(args, env) {
@@ -209,5 +209,30 @@ test("plugin installed: roots Claude doesn't read still install; --allow-dual ov
     const claudeRoot = join(base, ".claude", "skills");
     assert.equal(runWithEnv(["--root", claudeRoot, "--allow-dual"], env).status, 0);
     assert.ok(existsSync(join(claudeRoot, "orient")), "--allow-dual copies anyway");
+  } finally { rmSync(base, { recursive: true, force: true }); }
+});
+
+
+test("Codex plugin removes owned copies, preserves foreign skills, and honors disable/override", () => {
+  const { base, env } = dualSandbox({ plugin: null });
+  try {
+    const root = join(base, ".codex", "skills");
+    const config = join(base, "config.toml");
+    assert.equal(runWithEnv(["--root", root], env).status, 0);
+    mkdirSync(join(root, "foreign"));
+    writeFileSync(config, '[plugins."grey-matter@grey-matter"]\nenabled = true\n');
+    const skipped = runWithEnv(["--root", root], env);
+    assert.equal(skipped.status, 0, skipped.stdout);
+    assert.match(skipped.stdout, /skipped: Codex plugin/);
+    assert.ok(!existsSync(join(root, "orient")));
+    assert.ok(existsSync(join(root, "foreign")));
+    assert.equal(runWithEnv(["--root", root, "--allow-dual"], env).status, 0);
+    assert.ok(existsSync(join(root, "orient")));
+    writeFileSync(config, '[plugins."grey-matter@grey-matter"]\nenabled = false\n');
+    assert.equal(runWithEnv(["--root", root], env).status, 0);
+    assert.ok(existsSync(join(root, "orient")));
+    writeFileSync(config, '[plugins."grey-matter@grey-matter"]\nenabled = true\n');
+    const shared = join(base, ".agents", "skills");
+    assert.match(runWithEnv(["--root", shared], env).stdout, /skipped: Codex plugin/);
   } finally { rmSync(base, { recursive: true, force: true }); }
 });

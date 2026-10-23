@@ -1,0 +1,20 @@
+{
+  "name": "grey-matter",
+  "interface": {
+    "displayName": "grey-matter"
+  },
+  "plugins": [
+    {
+      "name": "grey-matter",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -75,6 +75,23 @@ function claudePluginInstalled() {
   } catch { return null; }
 }
 
+// Codex records enabled marketplace plugins in the user configuration.
+function codexPluginInstalled() {
+  const home = process.env.CODEX_HOME || join(homedir(), ".codex");
+  const config = join(home, "config.toml");
+  if (!existsSync(config)) return null;
+  const sections = readFileSync(config, "utf8").split(/(?=^\[)/m);
+  for (const section of sections) {
+    const id = /^\[plugins\.["'](grey-matter@[^"']+)["']\]/.exec(section)?.[1];
+    if (id && /^enabled\s*=\s*true\s*(?:#.*)?$/m.test(section)) return id;
+  }
+  return null;
+}
+
+function codexReads(root) {
+  return basename(root) === "skills" && [".codex", ".agents"].includes(basename(dirname(root)));
+}
+
 // Roots Claude Code scans for skills: any <x>/.claude/skills, and a project-level
 // <proj>/.agents/skills (not the user-level ~/.agents/skills, which it doesn't read).
 function claudeReads(root) {
@@ -215,9 +232,14 @@ function doInstall(args) {
 
   const desired = new Set(skills.map((s) => s.name));
   const plugin = args.allowDual ? null : claudePluginInstalled();
+  const codexPlugin = args.allowDual ? null : codexPluginInstalled();
   for (const root of args.roots) {
     if (plugin && claudeReads(root)) {
-      skipForPlugin(root, plugin, args.dryRun);
+      skipForPlugin(root, `Claude plugin ${plugin}`, args.dryRun);
+      continue;
+    }
+    if (codexPlugin && codexReads(root)) {
+      skipForPlugin(root, `Codex plugin ${codexPlugin}`, args.dryRun);
       continue;
     }
     if (!args.dryRun) mkdirSync(root, { recursive: true });
@@ -256,10 +278,10 @@ function doInstall(args) {
   console.log(`\n${args.dryRun ? "(dry-run) would install" : "installed"} ${skills.length} skills.`);
 }
 
-// Claude Code already loads these skills from the plugin, so leave this root alone and
+// The harness already loads these skills from the plugin, so leave this root alone and
 // take back any copies we put here earlier (only manifest-tracked ones, never foreign).
 function skipForPlugin(root, plugin, dryRun) {
-  console.log(`\nroot: ${root}  (skipped: Claude plugin ${plugin} is installed; --allow-dual to copy anyway)`);
+  console.log(`\nroot: ${root}  (skipped: ${plugin} is installed; --allow-dual to copy anyway)`);
   const names = readManifest(root).installed || [];
   for (const name of names) console.log(`  remove ${name} (duplicate of the plugin)${dryRun ? "" : rmIfExists(join(root, name))}`);
   if (!dryRun) { const mp = join(root, MANIFEST_NAME); if (existsSync(mp)) rmSync(mp, { force: true }); }
