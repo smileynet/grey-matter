@@ -263,13 +263,15 @@ function homeSandbox({ harnesses = [], claude = false, codex = false } = {}) {
   // A fake CLI keeps plugin refresh tests offline and away from the real Codex cache.
   const bin = join(home, "bin");
   mkdirSync(bin);
-  const cli = join(bin, "codex");
-  writeFileSync(cli, `#!${process.execPath}
+  const cli = join(bin, process.platform === "win32" ? "codex.exe" : "codex");
+  const script = process.platform === "win32" ? join(bin, "codex.cjs") : cli;
+  writeFileSync(script, `#!${process.execPath}
 const fs = require("node:fs");
 const path = require("node:path");
+if (process.platform !== "win32" || path.basename(process.execPath).toLowerCase() === "codex.exe") {
 const home = process.env.HOME;
 const pack = process.env.TEST_PACK;
-const args = process.argv.slice(2);
+const args = process.platform === "win32" ? [path.basename(process.argv[1]), ...process.argv.slice(2)] : process.argv.slice(2);
 fs.appendFileSync(path.join(home, "codex-calls.jsonl"), JSON.stringify(args) + "\\n");
 if (args[1] === "list") {
   console.log(process.env.TEST_PLUGIN_LIST || JSON.stringify({installed: [{pluginId: "grey-matter@grey-matter", name: "grey-matter", marketplaceName: "grey-matter", version: "0.1.0", enabled: true, source: {source: "local", path: process.env.TEST_PLUGIN_SOURCE || pack}}]}));
@@ -280,9 +282,14 @@ if (args[1] === "list") {
   fs.cpSync(path.join(pack, "skills"), dest, {recursive: true});
   console.log(JSON.stringify({installedPath: dest}));
 }
+process.exit(0);
+}
 `);
+  // Windows execFile needs a native executable; preload the fixture only in its copy.
+  if (process.platform === "win32") cpSync(process.execPath, cli);
   chmodSync(cli, 0o755);
   const env = { ...process.env, HOME: home, USERPROFILE: home, PATH: bin + delimiter + dirname(process.execPath), TEST_PACK: dirname(HERE) };
+  if (process.platform === "win32") env.NODE_OPTIONS = `--require ${JSON.stringify(script.replaceAll("\\", "/"))}`;
   delete env.CODEX_HOME;
   delete env.CLAUDE_CODE_PLUGIN_CACHE_DIR;
   return { home, env, has: (rel) => existsSync(join(home, rel, "orient", "SKILL.md")) };

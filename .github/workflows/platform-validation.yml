@@ -29,6 +29,9 @@ jobs:
       - name: Worktree path diagnostics
         if: always()
         run: node --test --test-name-pattern 'resume after interrupted worktree' scripts/release.test.mjs
+      - name: Native deployment and hook fixtures
+        if: always()
+        run: node --test scripts/deploy.test.mjs scripts/install-hooks.test.mjs
 
   full-gate:
     strategy:
