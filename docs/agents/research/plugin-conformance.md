@@ -1,8 +1,7 @@
 # Plugin source conformance
 
 Audited 2026-10-23, ticket 65. **Syntax and isolated source loading are verified for
-all six rows below. Release remains blocked:** ticket 74 must supply complete license
-and attribution artifacts; tickets 60 and 66–71 retain platform, release tooling,
+all six rows below. Release remains blocked:** tickets 60 and 66–71 retain platform, release tooling,
 candidate upgrade and final staging gates. This is a source audit, not release approval.
 
 ## Exact artifacts and native results
@@ -141,3 +140,13 @@ Native probes are explicit gates, separate from offline checks. Re-run all relev
 checks on candidate artifacts after version, notice or packaging changes. Ticket 70
 makes the staging decision; 71 repeats gates after final artifact edits. No release
 was tagged, published, promoted or submitted by this audit.
+
+## Notice remediation verification
+
+Ticket 74 added the missing license and attribution artifacts, accurate mixed-license
+metadata, and mandatory notice checks. The [notice inventory](plugin-notice-inventory.md)
+records pinned provenance and the [fresh six-row evidence](evidence/notice-conformance-20261023.json)
+for grey-matter `1190b6a` / tkt `5b6c867`. All six native loading/validation rows pass;
+AGY installed legal files and Codex cache files match source bytes. The matrix above
+retains the original audit revisions and their historical notice findings. Remaining
+candidate, platform, upgrade and release gates still apply.

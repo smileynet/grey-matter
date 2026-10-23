@@ -41,3 +41,18 @@ change is not evidence that a future candidate archive has been prepared.
 The fixtures deliberately remove and empty root LICENSE/NOTICE and a standalone
 skill license, reject the package build, and prove the previous package survives.
 They also assert retained bytes in a complete generated package and bare install.
+
+## Verification on the changed sources
+
+[Six isolated native rows](evidence/notice-conformance-20261023.json) pass on grey-matter
+`1190b6a` and tkt `5b6c867`: Codex 0.147.0 and Claude 2.1.309 discover 44/4 skills;
+Antigravity 1.4.6 validates and installs both generated packages with exact names.
+The AGY probe byte-compares every declared legal artifact in both the generated
+and installed package; Codex compares every archive file to its installed cache.
+Claude validates both manifests and exact components from the source archive.
+No real model turns or inherited credentials are used.
+
+All 10 grey-matter repository invariants, 28 deployment fixtures, tkt format/clippy/
+296-test checks, and current Claude seeded validation pass. Independent prose review
+found no actionable issues. Candidate extraction and final release audit remain
+separate gates; these results resolve the source notice finding, not release readiness.

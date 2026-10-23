@@ -1,0 +1,638 @@
+{
+  "date": "2026-10-23",
+  "rows": [
+    {
+      "repository": "grey-matter",
+      "host": "codex",
+      "sourceSha": "1190b6aa1fb550d00f60cddc57acf1267e4430fe",
+      "expectedSkills": 44,
+      "sourceSkillNames": [
+        "adopt-project",
+        "changelog",
+        "cheat-sheet",
+        "code-review",
+        "codebase-design",
+        "compass",
+        "conformance-audit",
+        "curate-docs",
+        "diagnosing-bugs",
+        "domain-modeling",
+        "game-modeling",
+        "game-native-design",
+        "grill-me",
+        "grill-with-docs",
+        "grilling",
+        "handoff",
+        "implement",
+        "implement-spec",
+        "improve-codebase-architecture",
+        "init-project",
+        "line-craft",
+        "orient",
+        "pr",
+        "prototype",
+        "readme",
+        "reconcile-tickets",
+        "release",
+        "research",
+        "research-audit",
+        "retro",
+        "review-skill",
+        "sync",
+        "tdd",
+        "teach",
+        "to-questionnaire",
+        "to-spec",
+        "to-tickets",
+        "triage",
+        "verify-tkt-usage",
+        "wait-what",
+        "wayfinder",
+        "wizard",
+        "wrap-session",
+        "writing-for-agents"
+      ],
+      "checks": [
+        {
+          "command": "codex plugin marketplace add ARCHIVE --json",
+          "output": {
+            "marketplaceName": "grey-matter",
+            "installedRoot": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/grey-matter",
+            "alreadyAdded": false
+          }
+        },
+        {
+          "command": "codex plugin add grey-matter@grey-matter --json",
+          "output": {
+            "pluginId": "grey-matter@grey-matter",
+            "name": "grey-matter",
+            "marketplaceName": "grey-matter",
+            "version": "0.1.0",
+            "installedPath": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/grey-matter-codex-home/.codex/plugins/cache/grey-matter/grey-matter/0.1.0",
+            "authPolicy": "ON_INSTALL"
+          }
+        },
+        {
+          "command": "app-server initialize -> initialized -> skills/list",
+          "skills": 44,
+          "names": [
+            "grey-matter:adopt-project",
+            "grey-matter:changelog",
+            "grey-matter:cheat-sheet",
+            "grey-matter:code-review",
+            "grey-matter:codebase-design",
+            "grey-matter:compass",
+            "grey-matter:conformance-audit",
+            "grey-matter:curate-docs",
+            "grey-matter:diagnosing-bugs",
+            "grey-matter:domain-modeling",
+            "grey-matter:game-modeling",
+            "grey-matter:game-native-design",
+            "grey-matter:grill-me",
+            "grey-matter:grill-with-docs",
+            "grey-matter:grilling",
+            "grey-matter:handoff",
+            "grey-matter:implement",
+            "grey-matter:implement-spec",
+            "grey-matter:improve-codebase-architecture",
+            "grey-matter:init-project",
+            "grey-matter:line-craft",
+            "grey-matter:orient",
+            "grey-matter:pr",
+            "grey-matter:prototype",
+            "grey-matter:readme",
+            "grey-matter:reconcile-tickets",
+            "grey-matter:release",
+            "grey-matter:research",
+            "grey-matter:research-audit",
+            "grey-matter:retro",
+            "grey-matter:review-skill",
+            "grey-matter:sync",
+            "grey-matter:tdd",
+            "grey-matter:teach",
+            "grey-matter:to-questionnaire",
+            "grey-matter:to-spec",
+            "grey-matter:to-tickets",
+            "grey-matter:triage",
+            "grey-matter:verify-tkt-usage",
+            "grey-matter:wait-what",
+            "grey-matter:wayfinder",
+            "grey-matter:wizard",
+            "grey-matter:wrap-session",
+            "grey-matter:writing-for-agents"
+          ],
+          "catalogErrors": [],
+          "cacheFilesByteMatched": 375
+        }
+      ],
+      "version": "codex-cli 0.147.0",
+      "status": "pass",
+      "isolation": "fresh home/config/workspace; loopback-only macOS network sandbox; source is exact git archive",
+      "realModelCalls": 0
+    },
+    {
+      "repository": "grey-matter",
+      "host": "claude",
+      "sourceSha": "1190b6aa1fb550d00f60cddc57acf1267e4430fe",
+      "expectedSkills": 44,
+      "sourceSkillNames": [
+        "adopt-project",
+        "changelog",
+        "cheat-sheet",
+        "code-review",
+        "codebase-design",
+        "compass",
+        "conformance-audit",
+        "curate-docs",
+        "diagnosing-bugs",
+        "domain-modeling",
+        "game-modeling",
+        "game-native-design",
+        "grill-me",
+        "grill-with-docs",
+        "grilling",
+        "handoff",
+        "implement",
+        "implement-spec",
+        "improve-codebase-architecture",
+        "init-project",
+        "line-craft",
+        "orient",
+        "pr",
+        "prototype",
+        "readme",
+        "reconcile-tickets",
+        "release",
+        "research",
+        "research-audit",
+        "retro",
+        "review-skill",
+        "sync",
+        "tdd",
+        "teach",
+        "to-questionnaire",
+        "to-spec",
+        "to-tickets",
+        "triage",
+        "verify-tkt-usage",
+        "wait-what",
+        "wayfinder",
+        "wizard",
+        "wrap-session",
+        "writing-for-agents"
+      ],
+      "checks": [
+        {
+          "command": "claude plugin validate ARCHIVE/.claude-plugin/plugin.json --json",
+          "output": {
+            "success": true,
+            "strict": false,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/grey-matter/.claude-plugin/plugin.json",
+            "manifest": {
+              "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/grey-matter/.claude-plugin/plugin.json",
+              "type": "plugin",
+              "errors": [],
+              "warnings": [],
+              "notes": [],
+              "gatingHooks": []
+            },
+            "contents": [
+              {
+                "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/grey-matter/CLAUDE.md",
+                "type": "plugin",
+                "errors": [],
+                "warnings": [
+                  {
+                    "path": "root",
+                    "message": "CLAUDE.md at the plugin root is not loaded as project context. To ship context with your plugin, use a skill (skills/<name>/SKILL.md) instead.",
+                    "code": null
+                  }
+                ],
+                "notes": [],
+                "gatingHooks": []
+              }
+            ],
+            "advice": [
+              {
+                "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/grey-matter/README.md",
+                "message": "This README has no line that installs \"grey-matter\" from a marketplace. Add the install line, which works in one step on Claude Code 2.1.275 or later. Validate the folder that holds its marketplace.json to have <owner>/<repo> filled in, and the name its marketplace lists it under.",
+                "installLine": "/plugin install grey-matter --marketplace <owner>/<repo>"
+              }
+            ],
+            "directory": {
+              "profile": null,
+              "findings": [
+                {
+                  "code": "ICON_MISSING",
+                  "title": "No icon",
+                  "severity": "warning",
+                  "blocking": false,
+                  "hold": false,
+                  "file": ".claude-plugin/plugin.json",
+                  "field": "icon",
+                  "message": "No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.",
+                  "fix": "Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon."
+                }
+              ],
+              "undecided": [],
+              "incomplete": false,
+              "failure": null,
+              "notes": [
+                "This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder."
+              ]
+            }
+          }
+        },
+        {
+          "command": "claude plugin validate ARCHIVE/.claude-plugin/marketplace.json --json",
+          "output": {
+            "success": true,
+            "strict": false,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/grey-matter/.claude-plugin/marketplace.json",
+            "manifest": {
+              "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/grey-matter/.claude-plugin/marketplace.json",
+              "type": "marketplace",
+              "errors": [],
+              "warnings": [],
+              "notes": [],
+              "gatingHooks": []
+            },
+            "contents": [],
+            "advice": [],
+            "directory": null
+          }
+        },
+        {
+          "command": "claude plugin validate FLAT_EXACT_COMPONENTS --strict --json",
+          "output": {
+            "success": true,
+            "strict": true,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/grey-matter-claude-home/components/skills",
+            "manifest": null,
+            "contents": [],
+            "advice": [],
+            "directory": null
+          }
+        },
+        {
+          "command": "claude --plugin-dir ARCHIVE plugin details grey-matter",
+          "skills": 44,
+          "inventory": "grey-matter 0.1.0\n  Description: Agent skills for game-centric and app development: engineering (build), productivity (think/communicate), and meta (tend the set). Start with the compass router.\n  Source: grey-matter@inline\n\nComponent inventory\n  Skills (44)  adopt-project, changelog, cheat-sheet, code-review, codebase-design, compass, conformance-audit, curate-docs, diagnosing-bugs, domain-modeling, game-modeling, game-native-design, grill-me, grill-with-docs, grilling, handoff, implement, implement-spec, improve-codebase-architecture, init-project, line-craft, orient, pr, prototype, readme, reconcile-tickets, release, research, research-audit, retro, review-skill, sync, tdd, teach, to-questionnaire, to-spec, to-tickets, triage, verify-tkt-usage, wait-what, wayfinder, wizard, wrap-session, writing-for-agents\n  Agents (0)\n  Hooks (0)\n  MCP servers (0)\n  LSP servers (0)"
+        }
+      ],
+      "version": "2.1.309 (Claude Code)",
+      "status": "pass",
+      "isolation": "fresh home/config/workspace; loopback-only macOS network sandbox; source is exact git archive",
+      "realModelCalls": 0
+    },
+    {
+      "repository": "grey-matter",
+      "host": "agy",
+      "sourceSha": "1190b6aa1fb550d00f60cddc57acf1267e4430fe",
+      "expectedSkills": 44,
+      "sourceSkillNames": [
+        "adopt-project",
+        "changelog",
+        "cheat-sheet",
+        "code-review",
+        "codebase-design",
+        "compass",
+        "conformance-audit",
+        "curate-docs",
+        "diagnosing-bugs",
+        "domain-modeling",
+        "game-modeling",
+        "game-native-design",
+        "grill-me",
+        "grill-with-docs",
+        "grilling",
+        "handoff",
+        "implement",
+        "implement-spec",
+        "improve-codebase-architecture",
+        "init-project",
+        "line-craft",
+        "orient",
+        "pr",
+        "prototype",
+        "readme",
+        "reconcile-tickets",
+        "release",
+        "research",
+        "research-audit",
+        "retro",
+        "review-skill",
+        "sync",
+        "tdd",
+        "teach",
+        "to-questionnaire",
+        "to-spec",
+        "to-tickets",
+        "triage",
+        "verify-tkt-usage",
+        "wait-what",
+        "wayfinder",
+        "wizard",
+        "wrap-session",
+        "writing-for-agents"
+      ],
+      "checks": [
+        {
+          "command": "node ARCHIVE/scripts-or-tools/deploy.mjs agy build --pack ARCHIVE --out PACKAGE",
+          "output": "\nagy plugin: ~/package  (44 skills, v0.1.0)\n"
+        },
+        {
+          "command": "agy plugin validate PACKAGE --strict --json",
+          "output": {
+            "dir": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/grey-matter-agy-home/package",
+            "manifest": "plugin.json",
+            "name": "grey-matter",
+            "agentPluginsSpec": false,
+            "components": {
+              "agents": 0,
+              "hooks": 0,
+              "mcpServers": 0,
+              "rules": 0,
+              "sidecars": 0,
+              "skills": 44
+            },
+            "findings": []
+          }
+        },
+        {
+          "command": "agy plugin install PACKAGE",
+          "output": "  [ok]    grey-matter\n          \u2714 skills      : 44 processed\n          - agents      : skipped (not found)\n          - commands    : skipped (not found)\n          - mcpServers  : skipped (not found)\n          - hooks       : skipped (not found)\n"
+        },
+        {
+          "command": "agy --output-format json --print /skills",
+          "numTurns": 0,
+          "skills": 44,
+          "names": [
+            "grey-matter:adopt-project",
+            "grey-matter:changelog",
+            "grey-matter:cheat-sheet",
+            "grey-matter:code-review",
+            "grey-matter:codebase-design",
+            "grey-matter:compass",
+            "grey-matter:conformance-audit",
+            "grey-matter:curate-docs",
+            "grey-matter:diagnosing-bugs",
+            "grey-matter:domain-modeling",
+            "grey-matter:game-modeling",
+            "grey-matter:game-native-design",
+            "grey-matter:grill-me",
+            "grey-matter:grill-with-docs",
+            "grey-matter:grilling",
+            "grey-matter:handoff",
+            "grey-matter:implement",
+            "grey-matter:implement-spec",
+            "grey-matter:improve-codebase-architecture",
+            "grey-matter:init-project",
+            "grey-matter:line-craft",
+            "grey-matter:orient",
+            "grey-matter:pr",
+            "grey-matter:prototype",
+            "grey-matter:readme",
+            "grey-matter:reconcile-tickets",
+            "grey-matter:release",
+            "grey-matter:research",
+            "grey-matter:research-audit",
+            "grey-matter:retro",
+            "grey-matter:review-skill",
+            "grey-matter:sync",
+            "grey-matter:tdd",
+            "grey-matter:teach",
+            "grey-matter:to-questionnaire",
+            "grey-matter:to-spec",
+            "grey-matter:to-tickets",
+            "grey-matter:triage",
+            "grey-matter:verify-tkt-usage",
+            "grey-matter:wait-what",
+            "grey-matter:wayfinder",
+            "grey-matter:wizard",
+            "grey-matter:wrap-session",
+            "grey-matter:writing-for-agents"
+          ],
+          "humanOnly": 20,
+          "catalogPolicyMatchesAllSourceSkills": true
+        }
+      ],
+      "installedWrapPath": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/grey-matter-agy-home/.gemini/config/plugins/grey-matter/skills/wrap-session",
+      "installedResourcesResolve": true,
+      "legalArtifactsByteMatched": 49,
+      "packageTreeSha256": "7b30c95ea7937b1652e059d80b1cd9821bc2a888dd2135e6adf2b8379006e653",
+      "version": "1.4.6",
+      "status": "pass",
+      "isolation": "fresh home/config/workspace; loopback-only macOS network sandbox; source is exact git archive",
+      "realModelCalls": 0
+    },
+    {
+      "repository": "tkt",
+      "host": "codex",
+      "sourceSha": "5b6c867500e4c2e87202f3bbdb3e2010c8275d5b",
+      "expectedSkills": 4,
+      "sourceSkillNames": [
+        "tkt-core",
+        "tkt-orient",
+        "tkt-reconcile",
+        "tkt-work"
+      ],
+      "checks": [
+        {
+          "command": "codex plugin marketplace add ARCHIVE --json",
+          "output": {
+            "marketplaceName": "tkt",
+            "installedRoot": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/tkt",
+            "alreadyAdded": false
+          }
+        },
+        {
+          "command": "codex plugin add tkt@tkt --json",
+          "output": {
+            "pluginId": "tkt@tkt",
+            "name": "tkt",
+            "marketplaceName": "tkt",
+            "version": "0.4.0",
+            "installedPath": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/tkt-codex-home/.codex/plugins/cache/tkt/tkt/0.4.0",
+            "authPolicy": "ON_INSTALL"
+          }
+        },
+        {
+          "command": "app-server initialize -> initialized -> skills/list",
+          "skills": 4,
+          "names": [
+            "tkt:tkt-core",
+            "tkt:tkt-orient",
+            "tkt:tkt-reconcile",
+            "tkt:tkt-work"
+          ],
+          "catalogErrors": [],
+          "cacheFilesByteMatched": 314
+        }
+      ],
+      "version": "codex-cli 0.147.0",
+      "status": "pass",
+      "isolation": "fresh home/config/workspace; loopback-only macOS network sandbox; source is exact git archive",
+      "realModelCalls": 0
+    },
+    {
+      "repository": "tkt",
+      "host": "claude",
+      "sourceSha": "5b6c867500e4c2e87202f3bbdb3e2010c8275d5b",
+      "expectedSkills": 4,
+      "sourceSkillNames": [
+        "tkt-core",
+        "tkt-orient",
+        "tkt-reconcile",
+        "tkt-work"
+      ],
+      "checks": [
+        {
+          "command": "claude plugin validate ARCHIVE/.claude-plugin/plugin.json --json",
+          "output": {
+            "success": true,
+            "strict": false,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/tkt/.claude-plugin/plugin.json",
+            "manifest": {
+              "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/tkt/.claude-plugin/plugin.json",
+              "type": "plugin",
+              "errors": [],
+              "warnings": [],
+              "notes": [],
+              "gatingHooks": []
+            },
+            "contents": [],
+            "advice": [
+              {
+                "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/tkt/README.md",
+                "message": "This README has no line that installs \"tkt\" from a marketplace. Add the install line, which works in one step on Claude Code 2.1.275 or later. Validate the folder that holds its marketplace.json to have <owner>/<repo> filled in, and the name its marketplace lists it under.",
+                "installLine": "/plugin install tkt --marketplace <owner>/<repo>"
+              }
+            ],
+            "directory": {
+              "profile": null,
+              "findings": [
+                {
+                  "code": "ICON_MISSING",
+                  "title": "No icon",
+                  "severity": "warning",
+                  "blocking": false,
+                  "hold": false,
+                  "file": ".claude-plugin/plugin.json",
+                  "field": "icon",
+                  "message": "No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.",
+                  "fix": "Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon."
+                }
+              ],
+              "undecided": [],
+              "incomplete": false,
+              "failure": null,
+              "notes": [
+                "This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder."
+              ]
+            }
+          }
+        },
+        {
+          "command": "claude plugin validate ARCHIVE/.claude-plugin/marketplace.json --json",
+          "output": {
+            "success": true,
+            "strict": false,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/tkt/.claude-plugin/marketplace.json",
+            "manifest": {
+              "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/tkt/.claude-plugin/marketplace.json",
+              "type": "marketplace",
+              "errors": [],
+              "warnings": [],
+              "notes": [],
+              "gatingHooks": []
+            },
+            "contents": [],
+            "advice": [],
+            "directory": null
+          }
+        },
+        {
+          "command": "claude plugin validate FLAT_EXACT_COMPONENTS --strict --json",
+          "output": {
+            "success": true,
+            "strict": true,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/tkt-claude-home/components/skills",
+            "manifest": null,
+            "contents": [],
+            "advice": [],
+            "directory": null
+          }
+        },
+        {
+          "command": "claude --plugin-dir ARCHIVE plugin details tkt",
+          "skills": 4,
+          "inventory": "tkt 0.4.0\n  Description: Git-native ticket tracker and workflow skills (tkt-core, tkt-orient, tkt-work, tkt-reconcile): track tasks as markdown files in .tickets/ and work the dependency-graph frontier. Requires the tkt CLI on PATH.\n  Source: tkt@inline\n\nComponent inventory\n  Skills (4)  tkt-core, tkt-orient, tkt-reconcile, tkt-work\n  Agents (0)\n  Hooks (0)\n  MCP servers (0)\n  LSP servers (0)"
+        }
+      ],
+      "version": "2.1.309 (Claude Code)",
+      "status": "pass",
+      "isolation": "fresh home/config/workspace; loopback-only macOS network sandbox; source is exact git archive",
+      "realModelCalls": 0
+    },
+    {
+      "repository": "tkt",
+      "host": "agy",
+      "sourceSha": "5b6c867500e4c2e87202f3bbdb3e2010c8275d5b",
+      "expectedSkills": 4,
+      "sourceSkillNames": [
+        "tkt-core",
+        "tkt-orient",
+        "tkt-reconcile",
+        "tkt-work"
+      ],
+      "checks": [
+        {
+          "command": "node ARCHIVE/scripts-or-tools/deploy.mjs agy build --pack ARCHIVE --out PACKAGE",
+          "output": "\nagy plugin: ~/package  (4 skills, v0.4.0)\n"
+        },
+        {
+          "command": "agy plugin validate PACKAGE --strict --json",
+          "output": {
+            "dir": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/plugin-source-audit-0fokbw9_/tkt-agy-home/package",
+            "manifest": "plugin.json",
+            "name": "tkt",
+            "agentPluginsSpec": false,
+            "components": {
+              "agents": 0,
+              "hooks": 0,
+              "mcpServers": 0,
+              "rules": 0,
+              "sidecars": 0,
+              "skills": 4
+            },
+            "findings": []
+          }
+        },
+        {
+          "command": "agy plugin install PACKAGE",
+          "output": "  [ok]    tkt\n          \u2714 skills      : 4 processed\n          - agents      : skipped (not found)\n          - commands    : skipped (not found)\n          - mcpServers  : skipped (not found)\n          - hooks       : skipped (not found)\n"
+        },
+        {
+          "command": "agy --output-format json --print /skills",
+          "numTurns": 0,
+          "skills": 4,
+          "names": [
+            "tkt:tkt-core",
+            "tkt:tkt-orient",
+            "tkt:tkt-reconcile",
+            "tkt:tkt-work"
+          ],
+          "humanOnly": 0,
+          "catalogPolicyMatchesAllSourceSkills": true
+        }
+      ],
+      "legalArtifactsByteMatched": 7,
+      "packageTreeSha256": "490b60071ee928cd70ddc8090a62ba66e0ccf3e4aca1c50fa70ff9d6dabba33c",
+      "version": "1.4.6",
+      "status": "pass",
+      "isolation": "fresh home/config/workspace; loopback-only macOS network sandbox; source is exact git archive",
+      "realModelCalls": 0
+    }
+  ]
+}

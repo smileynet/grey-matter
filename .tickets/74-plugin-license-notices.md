@@ -35,3 +35,12 @@ Changes may span both repos and the canonical/vendored deployer. Include require
 - [ ] A durable provenance inventory cites exact upstream license/NOTICE sources for Matt Pocock and copied HumanLayer PR guidance, without guessing authorship or permissions.
 - [ ] Both source repos and prepared plugin bundles retain applicable license texts, copyright/attribution notices and accurate license metadata.
 - [ ] Packaging fixtures reject missing required notices and native conformance checks pass after metadata or resource changes.
+
+## Implementation and verification
+
+[Notice inventory](../docs/agents/research/plugin-notice-inventory.md) records pinned
+upstream terms, provenance limits and exact distribution paths. Implemented in
+grey-matter `1190b6a` and tkt `5b6c867`; canonical engine 1.3.2 is byte-identical.
+[Fresh six-host evidence](../docs/agents/research/evidence/notice-conformance-20261023.json)
+verifies native loading after metadata/resources changed, including installed notice
+bytes. Candidate preparation 67 must preserve and recheck these artifacts.
