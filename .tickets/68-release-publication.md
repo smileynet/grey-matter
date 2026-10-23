@@ -99,3 +99,5 @@ retain the next adapter contracts and disposable Git transcript. Actual setting 
 found immutable releases disabled in both repositories. Future publication must
 block until enabled under separate authorization; no settings were changed. Git
 probes establish transaction behavior, not annotated-tag or full release-order coverage.
+
+`release-git.mjs` now exposes an offline-testable candidate ref adapter: pinned commit/annotated-tag objects, one push destination, explicit refspecs, atomic push and observed-state replay. Five disposable-remote fixtures cover dry-run, replay, implicit-tag suppression, unsupported atomic servers, conflicting tags, multiple URLs, stable refusal and divergence. Local gate: all 12 invariants and 126 release tests pass; tkt check passes five Node and 296 Rust tests plus fmt/clippy. Stable promotion, ambiguous transport/concurrency fixtures, authenticated GitHub integration and publication CLI remain unfinished; no real release refs were pushed.
