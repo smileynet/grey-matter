@@ -1,7 +1,7 @@
 ---
 id: "67"
 title: "Prepare version-consistent release candidates and plugin bundles"
-status: open
+status: in_progress
 blocked_by: ["66", "74"]
 priority: high
 spec: "release-readiness"
