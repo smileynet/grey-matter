@@ -92,6 +92,12 @@ When a change touches skills, the plugin manifests, or tkt's plugin:
   loads the files in place, so run `/reload-plugins` or start a new session to pick up edits.
   For a GitHub install, run `claude plugin marketplace update grey-matter`, then
   `claude plugin update grey-matter@grey-matter` (this only changes anything after a release).
+- **One install path per harness (guarded).** A skill must never load twice in one harness.
+  With the plugin installed, `install-skills.mjs` skips every root Claude Code reads (any
+  `.claude/skills`, and a project `.agents/skills`). It also removes copies it put there
+  earlier and never touches foreign dirs. `--allow-dual` overrides this; don't use it in a
+  normal deploy. Any new deploy path, or a new harness root that Claude Code reads, must keep
+  this guard (`scripts/install-skills.test.mjs` covers it).
 - **Check before committing:** `node scripts/check-repo.mjs` runs `claude plugin validate`
   when `claude` is on PATH. To see what loads, run
   `claude --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`, which lists the

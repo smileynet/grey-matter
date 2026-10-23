@@ -10,7 +10,7 @@
 // install is never touched.
 //
 // Usage:
-//   node scripts/install-skills.mjs [install] [--link] [--dry-run] [--force] [--root <dir>]
+//   node scripts/install-skills.mjs [install] [--link] [--dry-run] [--force] [--allow-dual] [--root <dir>]
 //   node scripts/install-skills.mjs list
 //   node scripts/install-skills.mjs uninstall [--dry-run] [--root <dir>]
 //
@@ -23,6 +23,14 @@
 //   --project   also install into <cwd>/.agents/skills (the shared project-level root
 //               read by agy, Crush, OpenCode, and Claude Code).
 //   --root DIR  install into DIR instead of the default scan root(s). Repeatable.
+//   --allow-dual  install into a root Claude Code reads even though the grey-matter
+//               Claude plugin is installed (each skill then lists twice). See below.
+//
+// Dual-deploy guard: when Claude Code has the grey-matter plugin installed
+// (installed_plugins.json under $CLAUDE_CODE_PLUGIN_CACHE_DIR or ~/.claude/plugins),
+// every root Claude Code reads (any .claude/skills, and a project .agents/skills) is
+// skipped, and copies this installer put there before are removed, so a skill never
+// loads twice (bare and grey-matter:-namespaced). Other harness roots are unaffected.
 //
 // Tests:  node --test scripts/install-skills.test.mjs
 //   (regression coverage for the foreign-skill ownership safety contract;
@@ -33,7 +41,7 @@ import {
   statSync, symlinkSync, writeFileSync, lstatSync,
 } from "node:fs";
 import { homedir, platform } from "node:os";
-import { dirname, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -55,8 +63,29 @@ function defaultRoots() {
   return existing.length ? existing : [join(homedir(), ".agents", "skills")];
 }
 
+// --- Dual-deploy guard (Claude Code plugin) ----------------------------------------
+const PLUGIN_NAME = "grey-matter";
+
+// The grey-matter Claude plugin id, if Claude Code has it installed (any marketplace).
+function claudePluginInstalled() {
+  const dir = process.env.CLAUDE_CODE_PLUGIN_CACHE_DIR || join(homedir(), ".claude", "plugins");
+  try {
+    const data = JSON.parse(readFileSync(join(dir, "installed_plugins.json"), "utf8"));
+    return Object.keys(data.plugins || {}).find((id) => id.startsWith(`${PLUGIN_NAME}@`)) || null;
+  } catch { return null; }
+}
+
+// Roots Claude Code scans for skills: any <x>/.claude/skills, and a project-level
+// <proj>/.agents/skills (not the user-level ~/.agents/skills, which it doesn't read).
+function claudeReads(root) {
+  const parent = basename(dirname(root));
+  if (basename(root) !== "skills") return false;
+  if (parent === ".claude") return true;
+  return parent === ".agents" && resolve(root) !== resolve(join(homedir(), ".agents", "skills"));
+}
+
 function parseArgs(argv) {
-  const args = { cmd: "install", link: false, dryRun: false, force: false, project: false, roots: [] };
+  const args = { cmd: "install", link: false, dryRun: false, force: false, project: false, allowDual: false, roots: [] };
   const rest = argv.slice(2);
   for (let i = 0; i < rest.length; i++) {
     const a = rest[i];
@@ -65,6 +94,7 @@ function parseArgs(argv) {
     else if (a === "--dry-run") args.dryRun = true;
     else if (a === "--force") args.force = true;
     else if (a === "--project") args.project = true;
+    else if (a === "--allow-dual") args.allowDual = true;
     else if (a === "--root") args.roots.push(resolve(rest[++i]));
     else { console.error(`unknown argument: ${a}`); process.exit(2); }
   }
@@ -184,7 +214,12 @@ function doInstall(args) {
   }
 
   const desired = new Set(skills.map((s) => s.name));
+  const plugin = args.allowDual ? null : claudePluginInstalled();
   for (const root of args.roots) {
+    if (plugin && claudeReads(root)) {
+      skipForPlugin(root, plugin, args.dryRun);
+      continue;
+    }
     if (!args.dryRun) mkdirSync(root, { recursive: true });
     const manifest = readManifest(root);
     const owned = new Set(manifest.installed || []);
@@ -219,6 +254,15 @@ function doInstall(args) {
     if (refused) console.log(`  ${refused} refused (foreign dirs); re-run with --force to overwrite.`);
   }
   console.log(`\n${args.dryRun ? "(dry-run) would install" : "installed"} ${skills.length} skills.`);
+}
+
+// Claude Code already loads these skills from the plugin, so leave this root alone and
+// take back any copies we put here earlier (only manifest-tracked ones, never foreign).
+function skipForPlugin(root, plugin, dryRun) {
+  console.log(`\nroot: ${root}  (skipped: Claude plugin ${plugin} is installed; --allow-dual to copy anyway)`);
+  const names = readManifest(root).installed || [];
+  for (const name of names) console.log(`  remove ${name} (duplicate of the plugin)${dryRun ? "" : rmIfExists(join(root, name))}`);
+  if (!dryRun) { const mp = join(root, MANIFEST_NAME); if (existsSync(mp)) rmSync(mp, { force: true }); }
 }
 
 function rmIfExists(dest) {

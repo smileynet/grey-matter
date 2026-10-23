@@ -141,3 +141,73 @@ test("an unrelated foreign dir (no name collision) is never touched (AC2 corolla
     "an unrelated foreign dir must survive install+uninstall",
   );
 });
+
+// --- Dual-deploy guard: a Claude plugin install means no copies where Claude reads ---
+// Each case uses its own temp tree: a fake plugins dir (CLAUDE_CODE_PLUGIN_CACHE_DIR)
+// holding installed_plugins.json, and temp roots named like real harness roots.
+function dualSandbox({ plugin }) {
+  const base = mkdtempSync(join(tmpdir(), "gm-dual-"));
+  const plugins = join(base, "plugins");
+  mkdirSync(plugins, { recursive: true });
+  const ids = plugin ? { [plugin]: [{ scope: "user", version: "0.1.0" }] } : {};
+  writeFileSync(join(plugins, "installed_plugins.json"), JSON.stringify({ version: 2, plugins: ids }));
+  return { base, env: { ...process.env, CLAUDE_CODE_PLUGIN_CACHE_DIR: plugins } };
+}
+
+function runWithEnv(args, env) {
+  try {
+    return { stdout: execFileSync("node", [INSTALLER, ...args], { encoding: "utf8", env }), status: 0 };
+  } catch (e) {
+    return { stdout: (e.stdout || "") + (e.stderr || ""), status: e.status ?? 1 };
+  }
+}
+
+test("plugin installed: a .claude/skills root is skipped and nothing is copied", () => {
+  const { base, env } = dualSandbox({ plugin: "grey-matter@grey-matter" });
+  try {
+    const claudeRoot = join(base, ".claude", "skills");
+    const r = runWithEnv(["--root", claudeRoot], env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.match(r.stdout, /skipped: Claude plugin grey-matter@grey-matter is installed/);
+    assert.ok(!existsSync(join(claudeRoot, "orient")), "no skill copied into a root Claude reads");
+  } finally { rmSync(base, { recursive: true, force: true }); }
+});
+
+test("plugin installed: earlier copies are removed, a foreign dir is left alone", () => {
+  const { base, env } = dualSandbox({ plugin: null });
+  const claudeRoot = join(base, ".claude", "skills");
+  try {
+    assert.equal(runWithEnv(["--root", claudeRoot], env).status, 0); // copies, no plugin yet
+    assert.ok(existsSync(join(claudeRoot, "orient")), "precondition: copy installed");
+    mkdirSync(join(claudeRoot, "someone-elses"), { recursive: true });
+    writeFileSync(join(env.CLAUDE_CODE_PLUGIN_CACHE_DIR, "installed_plugins.json"),
+      JSON.stringify({ version: 2, plugins: { "grey-matter@grey-matter": [{}] } }));
+    const r = runWithEnv(["--root", claudeRoot], env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.ok(!existsSync(join(claudeRoot, "orient")), "our earlier copy removed");
+    assert.ok(!existsSync(join(claudeRoot, MANIFEST_NAME)), "our manifest removed");
+    assert.ok(existsSync(join(claudeRoot, "someone-elses")), "foreign dir untouched");
+  } finally { rmSync(base, { recursive: true, force: true }); }
+});
+
+test("plugin installed: a project .agents/skills root is skipped too", () => {
+  const { base, env } = dualSandbox({ plugin: "grey-matter@grey-matter" });
+  try {
+    const projectRoot = join(base, "proj", ".agents", "skills");
+    const r = runWithEnv(["--root", projectRoot], env);
+    assert.match(r.stdout, /skipped: Claude plugin/);
+    assert.ok(!existsSync(join(projectRoot, "orient")));
+  } finally { rmSync(base, { recursive: true, force: true }); }
+});
+
+test("plugin installed: roots Claude doesn't read still install; --allow-dual overrides", () => {
+  const { base, env } = dualSandbox({ plugin: "grey-matter@grey-matter" });
+  try {
+    const kiroRoot = join(base, ".kiro", "skills");
+    assert.equal(runWithEnv(["--root", kiroRoot], env).status, 0);
+    assert.ok(existsSync(join(kiroRoot, "orient")), "non-Claude root unaffected by the guard");
+    const claudeRoot = join(base, ".claude", "skills");
+    assert.equal(runWithEnv(["--root", claudeRoot, "--allow-dual"], env).status, 0);
+    assert.ok(existsSync(join(claudeRoot, "orient")), "--allow-dual copies anyway");
+  } finally { rmSync(base, { recursive: true, force: true }); }
+});

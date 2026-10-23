@@ -56,7 +56,8 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   `/plugin marketplace add smileynet/tkt`, `/plugin marketplace add smileynet/grey-matter`, then
   `/plugin install grey-matter@grey-matter` (pulls in `tkt@tkt` as a dependency). Plugin skills are namespaced
   (`/grey-matter:code-review`, `/tkt:tkt-core`), so they no longer shadow Claude's bundled
-  `/code-review`. Don't use both install paths at once, or each skill is listed twice.
+  `/code-review`. Using both install paths would list each skill twice, so `install-skills.mjs`
+  skips Claude-read roots while the plugin is installed (`--allow-dual` overrides).
   **Test locally**: `claude --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`
   lists the components without a model call.
 
