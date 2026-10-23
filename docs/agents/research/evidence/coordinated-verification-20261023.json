@@ -1,0 +1,230 @@
+{
+  "date": "2026-10-23",
+  "scope": "Coordinated product/native verification on current source-version snapshots; approved versioned candidates and remaining release gates are still pending.",
+  "repositories": [
+    {
+      "output": "/Users/sambiggins/code/.release-evidence/grey-6def961-coordinated",
+      "indexSha256": "b6fdb3e9f242969c98e52270039bbb3ceb57f74b5707bc89242cfb2ea151c48d",
+      "index": {
+        "schema": 1,
+        "status": "pass",
+        "mode": "candidate-verification",
+        "publishable": false,
+        "candidateSha": "6def9610636b432f4a48de0754663f98326d5214",
+        "product": "grey-matter",
+        "version": "0.1.0",
+        "metadataSha256": "143eab707699e48bc3dd9be4229abe7cc2e857c09976ad0478542313356b4c72",
+        "phases": {
+          "product": "pass",
+          "native": "pass"
+        },
+        "plan": {
+          "product": [
+            [
+              "/Users/sambiggins/.local/share/fnm/node-versions/v24.14.1/installation/bin/node",
+              "scripts/check-repo.mjs",
+              "--require-tools"
+            ]
+          ],
+          "native": [
+            {
+              "host": "codex",
+              "asset": "grey-matter-0.1.0-codex.tar.gz",
+              "sha256": "dc5e8e9e0860a18a345afaeaa83ef20af1f6600be262f97e5a555eb9766e2d56",
+              "binary": "codex"
+            },
+            {
+              "host": "claude",
+              "asset": "grey-matter-0.1.0-claude.tar.gz",
+              "sha256": "d1308dabb897c45a3691d7a3a90dbdf426c85aeab2caa796cc19da43f4ed3e73",
+              "binary": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-current-wudp1tak/install/node_modules/@anthropic-ai/claude-code-darwin-arm64/claude"
+            },
+            {
+              "host": "agy",
+              "asset": "grey-matter-0.1.0-agy.tar.gz",
+              "sha256": "f0ada57d2221222d3b713ff866495e4ecb57960b02586fa1f1dab1d02641e7b0",
+              "binary": "agy"
+            }
+          ]
+        },
+        "pending": [
+          "scope",
+          "compatibility",
+          "upgrade",
+          "platform-approval",
+          "final-audit",
+          "staging"
+        ],
+        "started": "2026-10-23T22:35:31.730Z",
+        "productEvidence": {
+          "file": "product/product-evidence.json",
+          "sha256": "2f6bbbfe8cffef36293ae6f883aac21c719e765105fb9f174b98402f64221d19",
+          "platform": {
+            "os": "darwin",
+            "release": "25.6.0",
+            "arch": "arm64",
+            "node": "v24.14.1"
+          }
+        },
+        "nativeEvidence": {
+          "file": "native/native-evidence.json",
+          "sha256": "9a8591491450c10f8cce1f49172816d3f50bffc74032f67612579a23b7f16c49",
+          "platform": {
+            "os": "darwin",
+            "release": "25.6.0",
+            "arch": "arm64"
+          },
+          "isolation": {
+            "homes": "disposable",
+            "credentials": "environment allowlist; no user configuration",
+            "network": "loopback-only sandbox"
+          }
+        },
+        "finished": "2026-10-23T22:36:01.670Z"
+      },
+      "nativeRows": [
+        {
+          "host": "codex",
+          "status": "pass",
+          "nativeVersion": "codex-cli 0.147.0",
+          "skills": 44,
+          "assetSha256": "dc5e8e9e0860a18a345afaeaa83ef20af1f6600be262f97e5a555eb9766e2d56"
+        },
+        {
+          "host": "claude",
+          "status": "pass",
+          "nativeVersion": "2.1.309 (Claude Code)",
+          "skills": 44,
+          "assetSha256": "d1308dabb897c45a3691d7a3a90dbdf426c85aeab2caa796cc19da43f4ed3e73"
+        },
+        {
+          "host": "agy",
+          "status": "pass",
+          "nativeVersion": "1.4.6",
+          "skills": 44,
+          "assetSha256": "f0ada57d2221222d3b713ff866495e4ecb57960b02586fa1f1dab1d02641e7b0"
+        }
+      ]
+    },
+    {
+      "output": "/Users/sambiggins/code/.release-evidence/tkt-64c651c-coordinated",
+      "indexSha256": "41df22f4ed2954bf867c1e37c5e48fbfd957c5855f74ff8e1e146be507a7488b",
+      "index": {
+        "schema": 1,
+        "status": "pass",
+        "mode": "candidate-verification",
+        "publishable": false,
+        "candidateSha": "64c651cda08556f1fd6b2a5ed29a4a7b3d72c7f9",
+        "product": "tkt",
+        "version": "0.4.0",
+        "metadataSha256": "77a81b2ffc087dc07d31501a7dd241ac2a9dea08a611af29a33c142c142ac925",
+        "phases": {
+          "product": "pass",
+          "native": "pass"
+        },
+        "plan": {
+          "product": [
+            [
+              "mise",
+              "run",
+              "check"
+            ]
+          ],
+          "native": [
+            {
+              "host": "codex",
+              "asset": "tkt-0.4.0-codex.tar.gz",
+              "sha256": "d4354b86b3ed321f9d426e9270fca55374b8574f6cfee67aaafb7043cf72f631",
+              "binary": "codex"
+            },
+            {
+              "host": "claude",
+              "asset": "tkt-0.4.0-claude.tar.gz",
+              "sha256": "cb1746279511c2cd3effbe73065f5613e8ae7d7a0a72cb48dd256799c9c88a42",
+              "binary": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-current-wudp1tak/install/node_modules/@anthropic-ai/claude-code-darwin-arm64/claude"
+            },
+            {
+              "host": "agy",
+              "asset": "tkt-0.4.0-agy.tar.gz",
+              "sha256": "986b7ec9597bf0c5a66625df14d7c5981ebe782c9350db60374a3ec9ba2c050a",
+              "binary": "agy"
+            }
+          ]
+        },
+        "pending": [
+          "scope",
+          "compatibility",
+          "upgrade",
+          "platform-approval",
+          "final-audit",
+          "staging"
+        ],
+        "started": "2026-10-23T22:35:32.414Z",
+        "productEvidence": {
+          "file": "product/product-evidence.json",
+          "sha256": "c264a64b90c65db3f0d1b796abc491da357ccbf6127606f862599b31d43f7291",
+          "platform": {
+            "os": "darwin",
+            "release": "25.6.0",
+            "arch": "arm64",
+            "node": "v26.7.0"
+          }
+        },
+        "nativeEvidence": {
+          "file": "native/native-evidence.json",
+          "sha256": "c3b52ca1f2c29693c14c7b8a46c5c2cb1ffe6fb0da3ad1119e9c7f8bdff330c3",
+          "platform": {
+            "os": "darwin",
+            "release": "25.6.0",
+            "arch": "arm64"
+          },
+          "isolation": {
+            "homes": "disposable",
+            "credentials": "environment allowlist; no user configuration",
+            "network": "loopback-only sandbox"
+          }
+        },
+        "finished": "2026-10-23T22:35:47.198Z"
+      },
+      "nativeRows": [
+        {
+          "host": "codex",
+          "status": "pass",
+          "nativeVersion": "codex-cli 0.147.0",
+          "skills": 4,
+          "assetSha256": "d4354b86b3ed321f9d426e9270fca55374b8574f6cfee67aaafb7043cf72f631"
+        },
+        {
+          "host": "claude",
+          "status": "pass",
+          "nativeVersion": "2.1.309 (Claude Code)",
+          "skills": 4,
+          "assetSha256": "cb1746279511c2cd3effbe73065f5613e8ae7d7a0a72cb48dd256799c9c88a42"
+        },
+        {
+          "host": "agy",
+          "status": "pass",
+          "nativeVersion": "1.4.6",
+          "skills": 4,
+          "assetSha256": "986b7ec9597bf0c5a66625df14d7c5981ebe782c9350db60374a3ec9ba2c050a"
+        }
+      ]
+    }
+  ],
+  "ci": {
+    "repository": "smileynet/tkt",
+    "sha": "64c651cda08556f1fd6b2a5ed29a4a7b3d72c7f9",
+    "run": "https://github.com/smileynet/tkt/actions/runs/40034566186",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "deploymentAudit": {
+    "status": "pass",
+    "metrics": {
+      "plugins": 19,
+      "packs": 4
+    },
+    "findings": [],
+    "errors": []
+  }
+}

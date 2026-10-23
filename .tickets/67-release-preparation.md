@@ -154,3 +154,10 @@ existing evidence output is refused; failed/interrupted runs retain unfinished p
 The new module is vendored into tkt and included in both runtime manifests/wrappers.
 The result keeps scope, compatibility, upgrade, platform approval, audit and staging
 pending; it never grants publication or closes this ticket by itself.
+
+[Coordinated evidence](../docs/agents/research/evidence/coordinated-verification-20261023.json)
+records fresh product/native success for grey-matter `6def961` and tkt `64c651c`,
+with child report/log hashes checked against their indices. tkt's new
+[hosted run](https://github.com/smileynet/tkt/actions/runs/40034566186) also passes.
+These are current source-version smoke snapshots (0.1.0/0.4.0); proposed 0.2.0/0.5.0
+approval, included-scope decisions and actual final-candidate evidence remain pending.
