@@ -38,9 +38,29 @@ Start by recording the three decisions at the end of the proposal, then build ph
 Phase 1 waits for the in-flight Codex plugin work in this checkout (`.codex-plugin/`, a Codex
 guard in `install-skills.mjs`) to be committed. deploy.mjs folds that guard in.
 
+## Progress
+
+**Phase 1 done (b745972, 2026-10-23).** `scripts/deploy.mjs` 1.0.0, 18 tests in `scripts/deploy.test.mjs`.
+`install-skills.mjs`, `build-agy-plugin.mjs` and `check-plugin-manifest.mjs` forward to it.
+Live deploy on this Mac:
+- kiro <- `~/.kiro/skills`; opencode <- `~/.config/opencode/skills`; claude and codex <- plugins.
+- `~/.codex/skills` is a symlink to `~/.kiro/skills`. The first live run treated the two as
+  separate roots and released Kiro's fresh copies; this is also how Kiro was emptied earlier
+  by the Codex guard. Fixed: roots are compared by real path, a missing skill costs more than
+  a duplicate, and a test covers it.
+- The symlink plus the Codex plugin leaves Codex seeing grey-matter twice. The deployer warns;
+  the fix is the user's (a real dir, or disable the plugin).
+
+Known gaps, for phases 2-3:
+- `audit` reads Claude plugin contents but not Codex plugin contents, so the Codex duplicate
+  above shows in the deploy warning only.
+- Cross-pack name collisions (`testing-guide`) need the portfolio list.
+- Codex reading `~/.agents/skills` is marked `claimed`, not verified.
+- tkt still deploys with bash (phase 2), and its Codex plugin (tkt@tkt) isn't guarded there.
+
 ## Acceptance criteria
 
 - [x] Proposal 08's three decisions are recorded (vendor vs depend, tkt on Node, portfolio list location)
-- [ ] grey-matter deploys through deploy.mjs, reading .claude-plugin/plugin.json; no harness sees a skill twice (OpenCode overlap covered by a test); build-agy-plugin.mjs retired
+- [x] grey-matter deploys through deploy.mjs, reading .claude-plugin/plugin.json; no harness sees a skill twice (OpenCode overlap covered by a test); build-agy-plugin.mjs retired
 - [ ] tkt deploys through a vendored tools/deploy.mjs; deploy-skills.sh is a wrapper; tests/deploy_skills.rs passes against it
 - [ ] deploy.mjs audit lists unowned dirs and cross-pack name collisions on this machine (the crew-research leftovers and testing-guide appear)
