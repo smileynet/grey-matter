@@ -7,6 +7,9 @@ Thumbs.db
 
 # Node (in case tooling lands here later)
 node_modules/
+
+# Build output (the agy plugin package is generated from skills/)
+dist/
 # Cloned reference material (prior art). Contents gitignored; the committed
 # README.md says how to rehydrate them on a fresh checkout.
 .references/*

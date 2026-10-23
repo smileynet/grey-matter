@@ -55,13 +55,27 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 
 ### agy (ancillary, Google Antigravity CLI)
 
-- Binary `agy`, probed 1.2.0. Native skills (`--disable-slash-commands` covers "skill
-  expansion"). `--print` is non-interactive.
-- **Project root**: `.agents/skills/` (confirmed live). User root `~/.gemini/...` (verify).
-  **Install**: `--project`, or `--root <its user root>` once confirmed.
-- **Test**: `agy --dangerously-skip-permissions --print "<prompt>"` from the project dir.
-  Gotcha: `-p` grabs the next token as its prompt, put flags first and the prompt last, or
-  use `-p='...'`.
+- Binary `agy`. `--print` is non-interactive; `--disable-slash-commands` covers "skill
+  expansion".
+- **Global install is PLUGIN-driven, not a bare-dir scan.** On the probed **agy 1.1.14**,
+  `agy` surfaces skills only from plugins registered in `~/.gemini/config/plugins/` (each
+  has a top-level `plugin.json` + a `skills/` subdir of SKILL.md dirs). Copying skill dirs
+  into `~/.gemini/antigravity-cli/skills/` or a project `.agents/skills/` did **nothing**
+  on this version (the repo's earlier "project root confirmed live" was agy **1.2.0**, a
+  different version — bare-dir scanning is version-gated; don't assume it). So "deploy
+  globally to agy" = build a plugin package and install it.
+- **Install**: `node scripts/build-agy-plugin.mjs install` (builds `dist/agy-plugin/`,
+  runs `agy plugin validate --strict`, then `agy plugin install <dir>`). Verify with
+  `agy plugin list --json` (shows `grey-matter` + its skill count) or by asking agy to
+  list its skills. Re-run after a `sync` to refresh the package.
+- **Manifest shape** (from an installed official plugin): `plugin.json` has
+  `name/displayName/version/description/author/keywords/...` and **no `skills` array** —
+  skills are auto-discovered from the `skills/` subdir, keyed on each SKILL.md's
+  frontmatter `name`. A folder name ≠ frontmatter `name` is a **warning**, not an error
+  (ours match, so validate is clean).
+- **Test**: `agy --dangerously-skip-permissions --print "<prompt>"` from any dir (global
+  once installed). Gotcha: `-p` grabs the next token as its prompt, put flags first and
+  the prompt last, or use `-p='...'`.
 - **Invocation filter**: lists user-invoked skills in the catalog (does not filter like
   codex).
 
