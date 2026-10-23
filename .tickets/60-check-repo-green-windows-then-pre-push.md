@@ -1,7 +1,7 @@
 ---
 id: "60"
 title: "check-repo is red on Windows (invariants 5, 7); fix, then gate pushes on it with a pre-push hook"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "node scripts/check-repo.mjs exits 0 on Windows (Git Bash) at main, and a committed .githooks/pre-push runs it and blocks a push when an invariant is seeded red"
