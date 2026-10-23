@@ -98,12 +98,45 @@ runs trusted repository check scripts with the maintainer's normal tool environm
 it is not a sandbox. Its Git context variables are cleared to keep checks in the
 candidate repository. The separate install/upgrade probes use disposable homes.
 
+## Native evidence for sealed bundles
+
+```sh
+node scripts/release-native.mjs --artifacts /path/to/bundles --out /path/to/new-evidence
+```
+
+The default verifies bundle structure and reports the native plan without launching
+harnesses or creating the evidence output. `--execute` uses a fresh home/config and
+workspace for each host. `--codex`, `--claude` and `--agy` select explicit binaries;
+Claude must be at least 2.1.289. The tool records actual CLI versions, sealed asset
+hashes, source SHA, probe-script hashes, commands/results and host details.
+
+Codex installs the local bundle, checks each sealed file in the cache against its hash and
+compares exact skill names through app-server `skills/list`. Claude runs the current
+seeded probe on the extracted snapshot: manifests, exact flat components, an invalid
+description and a removed README. Blocking directory findings and incomplete scans
+fail even when the native response says success. Inline discovery must find the
+expected count. Independent YAML parsing remains part of sealed-bundle verification.
+AGY validates/installs its package, checks installed files against sealed hashes and
+compares exact names and invocation policy through `/skills`; model turns must be zero.
+These loading checks do not execute skill workflows or test previous-release upgrades.
+
+Native subprocesses receive an environment allowlist with disposable configuration,
+not inherited credentials. On macOS a network sandbox permits loopback only; other
+platforms explicitly record network enforcement as unavailable. No model turn is
+requested. The AGY read-only catalog uses a dummy key and an unreachable loopback
+endpoint. Disposable homes are removed after completion or a handled failure; a hard
+termination can leave a temporary directory for inspection. Evidence is written to
+a new output directory outside the sealed artifacts; existing output is refused.
+Failed rows retain their native output and stop further checks. Success remains
+`publishable: false` with product, scope, compatibility, upgrade and other-platform
+gates pending. This command does not refresh real user plugin installations.
+
 ## Current coverage and remaining gates
 
 Isolated fixtures exercise dry-run byte preservation, skill/Cargo version surfaces,
 comment/lock/notes handling, eight interrupted phases, real CLI termination, app-managed
 worktrees, symlink/junction alias protection, paths with spaces, Git environment scoping,
 foreign edits and corrupted artifacts. These are macOS results until actual Windows/Linux
-runs exist. Native candidate, product checks, reviewed scope/compatibility and platform
-validation remain pending. Ticket 67 stays open; 68–71 still own publication recovery,
+runs exist. Product and native commands now exist. Fresh approved-candidate results, reviewed
+scope/compatibility, full orchestration and platform validation remain pending. Ticket 67 stays open; 68–71 still own publication recovery,
 upgrade probes, final audit and staged release artifacts.

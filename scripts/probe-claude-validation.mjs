@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Validate manifests and exact skill components, including a seeded scanner-coverage check.
-// Usage: node scripts/probe-claude-validation.mjs [--pack DIR] [--binary CLAUDE_BINARY]
+// Usage: node scripts/probe-claude-validation.mjs [--pack DIR] [--binary CLAUDE_BINARY] [--snapshot]
 // Requires Claude >=2.1.289. No model, install, authentication or network request is needed.
-import { mkdtempSync, mkdirSync, readdirSync, readFileSync, writeFileSync, cpSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readdirSync, readFileSync, writeFileSync, cpSync, rmSync, lstatSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve, basename } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -10,13 +10,14 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 
 let pack = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-let binary = "claude";
+let binary = "claude", archived = false;
 const home = mkdtempSync(join(tmpdir(), "claude-validation-"));
 try {
   const args = process.argv.slice(2);
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--pack" && args[i + 1]) pack = resolve(args[++i]);
     else if (args[i] === "--binary" && args[i + 1]) binary = args[++i];
+    else if (args[i] === "--snapshot") archived = true;
     else throw new Error(`unknown or incomplete argument: ${args[i]}`);
   }
   const env = { PATH: process.env.PATH, HOME: home, USERPROFILE: home, CLAUDE_CONFIG_DIR: join(home, "config"), DISABLE_UPDATES: "1", CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1" };
@@ -30,9 +31,22 @@ try {
   const numbers = version.match(/^(\d+)\.(\d+)\.(\d+)/)?.slice(1).map(Number);
   if (versionRun.exit !== 0 || !numbers || numbers[0] < 2 || (numbers[0] === 2 && numbers[1] === 1 && numbers[2] < 289) || (numbers[0] === 2 && numbers[1] < 1)) throw new Error(`Claude >=2.1.289 required; found ${version || versionRun.stderr}`);
   // Full checkouts can exceed the native directory scan cap because of target/ or .git.
-  const listing = spawnSync("git", ["ls-files", "-z"], { cwd: pack, encoding: "utf8" });
-  if (listing.error || listing.status !== 0) throw new Error(`cannot enumerate tracked plugin inputs: ${listing.error?.message ?? listing.stderr}`);
-  const tracked = listing.stdout.split("\0").filter(Boolean);
+  const tracked = [];
+  if (archived) {
+    const inventory = (relative = "") => {
+      for (const name of readdirSync(join(pack, relative))) {
+        const file = join(relative, name), stat = lstatSync(join(pack, file));
+        if (stat.isDirectory()) inventory(file);
+        else if (stat.isFile()) tracked.push(file);
+        else throw new Error(`snapshot contains a non-regular path: ${file}`);
+      }
+    };
+    inventory();
+  } else {
+    const listing = spawnSync("git", ["ls-files", "-z"], { cwd: pack, encoding: "utf8" });
+    if (listing.error || listing.status !== 0) throw new Error(`cannot enumerate tracked plugin inputs: ${listing.error?.message ?? listing.stderr}`);
+    tracked.push(...listing.stdout.split("\0").filter(Boolean));
+  }
   const snapshot = join(home, "source");
   for (const file of tracked) {
     const dest = join(snapshot, file);
@@ -82,7 +96,7 @@ try {
     readmeControl = { exit: result.exit, detected: parsed.directory?.findings?.some((finding) => finding.code === "README_MISSING" && finding.blocking) ?? false, result: parsed };
   }
   const pass = runs.every((r) => r.exit === 0 && r.result.success && !r.result.directory?.incomplete && !r.result.directory?.failure && !(r.result.directory?.findings ?? []).some((finding) => finding.blocking)) && seedDetected && readmeControl.detected;
-  console.log(JSON.stringify({ status: pass ? "pass" : "fail", metrics: { skills: skills.length, nativeChecks: runs.length, copiedSkillsMatched: hashes.length, trackedSnapshotFiles: tracked.length }, version, pack, sourceSnapshot: "tracked working-tree bytes, excluding untracked build output", runs, seed: { exit: defect.exit, detected: seedDetected, result: JSON.parse(defect.stdout) }, readmeControl, hashes, errors: pass ? [] : ["native validation, directory blockers/completeness or seeded controls failed"] }, null, 2));
+  console.log(JSON.stringify({ status: pass ? "pass" : "fail", metrics: { skills: skills.length, nativeChecks: runs.length, copiedSkillsMatched: hashes.length, trackedSnapshotFiles: tracked.length }, version, pack, sourceSnapshot: archived ? "extracted snapshot bytes" : "tracked working-tree bytes, excluding untracked build output", runs, seed: { exit: defect.exit, detected: seedDetected, result: JSON.parse(defect.stdout) }, readmeControl, hashes, errors: pass ? [] : ["native validation, directory blockers/completeness or seeded controls failed"] }, null, 2));
   if (!pass) process.exitCode = 1;
 } catch (error) {
   console.error(JSON.stringify({ status: "error", metrics: {}, errors: [error.message] }));

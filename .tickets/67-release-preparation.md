@@ -105,3 +105,20 @@ foreign output, path aliases and a successful command that changes source are re
 The checker now offers `--require-tools`: missing tkt cannot silently skip a release
 check. This evidence is explicitly product-only, not release readiness; native, scope,
 compatibility, other-platform and standalone tkt wiring remain outstanding.
+
+## Sealed-bundle native gate progress
+
+`release-native.mjs` promotes the six-row scratch audit into a repeatable command.
+It verifies sealed assets before starting native CLIs, uses disposable configuration
+and an environment allowlist, compares exact namespaces and installed Codex/AGY bytes,
+and runs Claude's seeded probe against extracted snapshots. Directory blockers,
+incomplete scans, duplicate/missing names, changed bytes and missing tools fail.
+Native versions and actual platform/network isolation are recorded; no upgrade,
+workflow-execution, cross-platform or overall release approval is implied.
+
+[Six-host tooling evidence](../docs/agents/research/evidence/native-tooling-20261023.json)
+records all rows passing on sealed grey-matter `932e441` / tkt `f2445dc`
+source-version bundles (44/4 exact skills): Codex 0.147.0, Claude 2.1.309 and AGY 1.4.6.
+The runner/probe file hashes match the implementation. Expected installed files match
+for Codex (189/22) and AGY (186/19). These are macOS smoke results for existing bundle
+identities, not approved 0.2.0/0.5.0 candidates or completion of ticket 67.

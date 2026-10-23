@@ -67,6 +67,8 @@ function extract(file, dest, expected) {
   }
 }
 
+export { extract as extractArtifact };
+
 function inventory(dir) {
   const files = {};
   const walk = (at) => {
