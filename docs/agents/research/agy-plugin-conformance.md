@@ -73,3 +73,9 @@ No hooks, MCP configuration, subagents, rules, or native background sidecars are
 - Cross-platform behavior and arbitrary runtime paths inside prose remain outside this audit's verified coverage.
 
 Evidence: `git diff --stat` → empty after scratch-only generation; generated outputs and this note are gitignored. Remediation is tracked in tickets 72 (package resources) and 73 (runtime policy and current validation); ticket 65 owns the consolidated matrix. Retain these coverage limits.
+
+## Resource repair follow-up (ticket 72, 2026-10-23)
+
+Engine 1.3.0 preserves skill source layout, declares extra bucket paths using the vendor `skills` field, and includes concrete Markdown-linked resources transitively. Missing or escaping resources fail before replacement of an existing package. The original flattened-package finding above describes the original tested revision.
+
+Fresh isolated copies validate on agy 1.4.5 with 44/four skills and no findings. All three wrap-session targets resolve without source-checkout access; transitive `report-format.md` is included. A seeded missing-resource fixture fails, preserves the prior output, and succeeds after repair and source removal. Reproduce with `node --test scripts/deploy.test.mjs`, then `node scripts/deploy.mjs agy build --out <temporary-output>` (add `--pack <tkt-checkout>` for tkt) and native strict validation from a disposable home. Runtime command/resource closure beyond Markdown links remains a candidate-bundle and install-test gate in tickets 67/69. Invocation enforcement remains unresolved under ticket 73.

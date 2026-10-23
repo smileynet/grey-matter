@@ -97,12 +97,15 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   `node scripts/deploy.mjs agy install` (builds `dist/agy-plugin/`,
   runs `agy plugin validate --strict`, then `agy plugin install <dir>`). Verify with
   `agy plugin list --json` (shows `grey-matter` + its skill count) or by asking agy to
-  list its skills. Re-run after a `sync` to refresh the package.
-- **Manifest shape** (from an installed official plugin): `plugin.json` has
-  `name/displayName/version/description/author/keywords/...` and **no `skills` array** —
-  skills are auto-discovered from the `skills/` subdir, keyed on each SKILL.md's
-  frontmatter `name`. A folder name ≠ frontmatter `name` is a **warning**, not an error
-  (ours match, so validate is clean).
+  list its skills. `sync` already runs this deployment; do not deploy a second time.
+- **Manifest and resources**: the [vendor schema](https://antigravity.google/schemas/v1/plugin.json)
+  supports `skills` paths in addition to default `skills/` discovery. Engine 1.3.0
+  preserves bucket paths and declares those directories, so relative links keep their
+  source meaning. Packaging includes concrete Markdown-linked resources recursively and
+  fails on missing or escaping targets before replacing output. Native agy 1.4.5 strict
+  validation discovers 44 grey-matter and four tkt skills in isolated packages. This checks
+  linked resources and catalog shape; candidate tests also cover runtime commands and
+  dynamic resources. See the [source audit](research/agy-plugin-conformance.md).
 - **Test**: `agy --dangerously-skip-permissions --print "<prompt>"` from any dir (global
   once installed). Gotcha: `-p` grabs the next token as its prompt, put flags first and
   the prompt last, or use `-p='...'`.
