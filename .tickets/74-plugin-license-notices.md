@@ -1,7 +1,7 @@
 ---
 id: "74"
 title: "Ship complete license and attribution notices in plugin artifacts"
-status: in_progress
+status: done
 blocked_by: []
 spec: "release-readiness"
 priority: high
@@ -32,9 +32,9 @@ Changes may span both repos and the canonical/vendored deployer. Include require
 
 ## Acceptance criteria
 
-- [ ] A durable provenance inventory cites exact upstream license/NOTICE sources for Matt Pocock and copied HumanLayer PR guidance, without guessing authorship or permissions.
-- [ ] Both source repos and prepared plugin bundles retain applicable license texts, copyright/attribution notices and accurate license metadata.
-- [ ] Packaging fixtures reject missing required notices and native conformance checks pass after metadata or resource changes.
+- [x] A durable provenance inventory cites exact upstream license/NOTICE sources for Matt Pocock and copied HumanLayer PR guidance, without guessing authorship or permissions.
+- [x] Both source repos and prepared plugin bundles retain applicable license texts, copyright/attribution notices and accurate license metadata.
+- [x] Packaging fixtures reject missing required notices and native conformance checks pass after metadata or resource changes.
 
 ## Implementation and verification
 
@@ -44,3 +44,12 @@ grey-matter `1190b6a` and tkt `5b6c867`; canonical engine 1.3.2 is byte-identica
 [Fresh six-host evidence](../docs/agents/research/evidence/notice-conformance-20261023.json)
 verifies native loading after metadata/resources changed, including installed notice
 bytes. Candidate preparation 67 must preserve and recheck these artifacts.
+
+## Resolution (2026-10-23)
+
+Preserved pinned MIT and HumanLayer Apache notices in source, standalone skills and generated packages; corrected mixed-license metadata and enforced required artifacts with seeded fixtures. Six isolated native rows pass after the changes; candidate extraction remains ticket 67.
+
+### Verification
+1. ✓ A durable provenance inventory cites exact upstream license/NOTICE sources for Matt Pocock and copied HumanLayer PR guidance, without guessing authorship or permissions. — "Committed plugin-notice-inventory.md cites Matt license at 5beb35b040e3de97e54fa9e386d7e42d15c295c2 and HumanLayer source/LICENSE/NOTICE at 3a8dd2d3c1ed01d4fd2282b6dee2075199dffffb; originally copied revisions and ownership limits explicitly recorded."
+2. ✓ Both source repos and prepared plugin bundles retain applicable license texts, copyright/attribution notices and accurate license metadata. — "grey 1190b6a and tkt 5b6c867 retain root and standalone notices; notice-conformance-20261023.json byte-compares installed AGY legal files and all Codex archive/cache files. MIT AND Apache-2.0 reflects included material without relicensing."
+3. ✓ Packaging fixtures reject missing required notices and native conformance checks pass after metadata or resource changes. — "28 deployment fixtures pass including missing/empty root and standalone legal files, check failure and previous-package preservation. All six native source rows pass Codex 0.147.0/Claude 2.1.309/AGY 1.4.6; all 10 repo checks and tkt fmt/clippy/296 tests pass; strict live audit pass, 19 plugins/4 packs, no duplicate findings; independent prose review clear."
