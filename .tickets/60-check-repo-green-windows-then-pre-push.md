@@ -33,9 +33,9 @@ aggregator is red on main on this Windows machine and grey-matter has no hook th
    ("A pipe hides a gating command's failure", `3388845`).
 
 ## Acceptance criteria
-- [ ] `node scripts/check-repo.mjs` exits 0 on Windows at main.
-- [ ] `.githooks/pre-push` blocks a push when an invariant is seeded red, and allows it when green.
-- [ ] Hook enablement is documented where the other hooks are.
+- [x] `node scripts/check-repo.mjs` exits 0 on Windows at main.
+- [x] `.githooks/pre-push` blocks a push when an invariant is seeded red, and allows it when green.
+- [x] Hook enablement is documented where the other hooks are.
 
 ## Context
 - `scripts/check-repo.mjs` (the aggregator), `scripts/uninstall-crew-research.test.mjs`,
@@ -68,3 +68,18 @@ consistently; the existing worktree/junction and candidate-local-output tests co
 The new hook fixtures prove opt-in ownership, custom hooksPath and green/red/green
 pushes with the real YAML syntax checker and a disposable bare remote. Documentation
 and primary Git sources are in [distribution maintenance](../docs/agents/distribution-maintenance.md).
+
+## Final verification
+
+At `a9590d7`, [run 40037111113](https://github.com/smileynet/grey-matter/actions/runs/40037111113)
+passes all 12 invariants on Windows Server 2025/Git Bash/Node 22.23.4 and Ubuntu/Node
+22.23.3. All 103 release tests pass with zero skips; all five hook tests pass, including
+the real green/red/green push. Targeted Windows coverage is 49 passed, zero failed/skipped.
+macOS also passes all 12 invariants; tkt `d5d7363` passes its local mise gate.
+The [structured evidence](../docs/agents/research/evidence/windows-prepush-20261023.json)
+records exact revisions, commands, tool versions, job IDs, sources and coverage limits.
+
+Enabled the local pre-push hook. One portfolio deployment refreshed each Codex plugin
+once and rebuilt agy packages (44/4 skills). The subsequent strict audit passed:
+19 plugins, four packs, zero findings/errors. Logs: `.scratch/windows-hook-portfolio-deploy.log`
+and `.scratch/windows-hook-final-audit.json`; repeat with the canonical deploy/audit commands.

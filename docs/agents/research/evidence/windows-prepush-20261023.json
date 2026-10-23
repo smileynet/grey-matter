@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "date": "2026-10-23",
+  "ticket": "60",
+  "greyMatterSha": "a9590d7f621e609418e447a2ab588707643f5328",
+  "tktLocalGateSha": "d5d73639a92e44d6df8b76a0a8817e202ab63bf7",
+  "scope": "Repository tooling and Git hook verification; native Windows plugin-client validation remains ticket 69.",
+  "baseline": {
+    "sha": "21cedae87c94e90fd1ba2e6ec57ecf0f1f2b40cc",
+    "url": "https://github.com/smileynet/grey-matter/actions/runs/40035229915",
+    "windowsFailedInvariants": [1, 5, 7, 11],
+    "originalSuites": {"passed": 9, "failed": 3}
+  },
+  "finalRun": "https://github.com/smileynet/grey-matter/actions/runs/40037111113",
+  "command": "node scripts/check-repo.mjs --require-tools",
+  "platforms": [
+    {
+      "os": "Windows Server 2025",
+      "image": "windows-2025-vs2026",
+      "shell": "Git Bash",
+      "node": "22.23.4",
+      "job": 120699207235,
+      "invariantsPassed": 12,
+      "releaseTests": {"passed": 103, "failed": 0, "skipped": 0},
+      "hookTests": {"passed": 5, "failed": 0, "skipped": 0}
+    },
+    {
+      "os": "Ubuntu 24.04",
+      "shell": "bash",
+      "node": "22.23.3",
+      "job": 120699207157,
+      "invariantsPassed": 12,
+      "releaseTests": {"passed": 103, "failed": 0, "skipped": 0},
+      "hookTests": {"passed": 5, "failed": 0, "skipped": 0}
+    },
+    {
+      "os": "macOS",
+      "arch": "arm64",
+      "node": "24.14.1",
+      "invariantsPassed": 12,
+      "log": ".scratch/windows-final-macos-gate.log",
+      "tktCommand": "mise run check",
+      "tktNodeTestsPassed": 4,
+      "tktRustTestsPassed": 296,
+      "tktLog": ".scratch/tkt-native-path-gate.log"
+    }
+  ],
+  "windowsTargeted": {"job": 120699207194, "passed": 49, "failed": 0, "skipped": 0},
+  "pinnedTktRunnerDependency": "64c651cda08556f1fd6b2a5ed29a4a7b3d72c7f9",
+  "hookEvidence": "A disposable bare remote accepts green, rejects malformed YAML without advancing its ref, and accepts the repaired tree. Exported GIT_DIR/GIT_WORK_TREE do not reach checks. Ownership, custom hooksPath, linked worktrees and executable-mode repair pass.",
+  "reproduction": "npm ci --ignore-scripts; dispatch platform-validation.yml from the recorded source ref; inspect each job log. The workflow is manual-only and never publishes products.",
+  "sources": [
+    "https://git-scm.com/docs/githooks",
+    "https://git-scm.com/docs/git-rev-parse",
+    "https://git-scm.com/docs/git-config",
+    "https://nodejs.org/docs/latest-v22.x/api/fs.html#fsrealpathsyncnativepath-options",
+    "https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow",
+    "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idstepsshell"
+  ]
+}

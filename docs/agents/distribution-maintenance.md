@@ -138,3 +138,8 @@ exist on the default branch before dispatch, and write access is required, per
 Its explicit `shell: bash` uses Git for Windows and enables pipefail, per
 [GitHub's shell reference](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idstepsshell).
 Sources read 2026-10-23. Failed jobs are evidence to fix, not a passing platform gate.
+
+The [2026-10-23 platform evidence](research/evidence/windows-prepush-20261023.json)
+records a passing 12-invariant gate on Windows/Git Bash, Ubuntu and macOS. The
+targeted Windows job also checks worktree recovery, archive links, deployment and hooks.
+Native Windows plugin-client validation remains a separate release gate in ticket 69.
