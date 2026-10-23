@@ -10,6 +10,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { checkLinks, relocate } from "../skills/meta/adopt-project/scripts/relocate-knowledge.mjs";
 
 function fixtureRepo(files) {
@@ -133,7 +134,7 @@ test("the CLI runs when invoked through a symlinked path", () => {
   const dir = mkdtempSync(join(tmpdir(), "gm-link-"));
   try {
     execFileSync("git", ["-C", dir, "init", "-q"]);
-    const real = new URL("../skills/meta/adopt-project/scripts/relocate-knowledge.mjs", import.meta.url).pathname;
+    const real = fileURLToPath(new URL("../skills/meta/adopt-project/scripts/relocate-knowledge.mjs", import.meta.url));
     const link = join(dir, "rk.mjs");
     symlinkSync(real, link);
     const out = execFileSync(process.execPath, [link, "check-links", dir], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).toString();

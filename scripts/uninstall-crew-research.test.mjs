@@ -42,7 +42,7 @@ test("dry-run removes nothing", () => {
   const h = fakeHome();
   try {
     const r = run(h);
-    assert.equal(r.status, 0);
+    assert.equal(r.status, 0, r.stdout + r.stderr);
     assert.match(r.stdout, /remove .kiro\/skills\/handoff/);
     assert.ok(has(h, ".kiro/skills/handoff") && has(h, ".codex/AGENTS.md"));
   } finally { rmSync(h, { recursive: true, force: true }); }
@@ -52,7 +52,8 @@ test("apply removes exactly the manifest-named and crew-owned items, and snapsho
   const h = fakeHome();
   try {
     const backup = join(h, "snap.tar.gz");
-    assert.equal(run(h, "--apply", "--backup", backup).status, 0);
+    const r = run(h, "--apply", "--backup", backup);
+    assert.equal(r.status, 0, r.stdout + r.stderr);
     assert.ok(existsSync(backup));
     for (const gone of [".kiro/skills/handoff", ".kiro/skills/code-review", ".kiro/skills/recall",
       ".agents/skills/handoff", ".agents/skills/grill-with-docs", ".kiro/.crew-skills", ".kiro/.crew-tier",
@@ -75,7 +76,7 @@ test("a grey-matter-owned dir and a non-crew codex AGENTS.md are kept", () => {
     writeFileSync(join(h, ".kiro/skills/.installed-by-grey-matter.json"), JSON.stringify({ installed: ["code-review"] }));
     writeFileSync(join(h, ".codex/AGENTS.md"), "<!-- installed by grey-matter -->\n");
     const r = run(h, "--apply", "--backup", join(h, "s.tgz"));
-    assert.equal(r.status, 0);
+    assert.equal(r.status, 0, r.stdout + r.stderr);
     assert.ok(has(h, ".kiro/skills/code-review"));
     assert.ok(has(h, ".codex/AGENTS.md"));
     assert.match(r.stdout, /owned by grey-matter/);
