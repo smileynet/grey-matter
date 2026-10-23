@@ -1,0 +1,505 @@
+{
+  "date": "2026-10-23",
+  "platform": "macOS",
+  "earlierArchivedRevisions": {
+    "grey-matter": "fe50b6d71904d2bb8eb13232aa2ee3f99e853eae",
+    "tkt": "45db853e20dfa915ee92fb00fe21cff1fb2a6327"
+  },
+  "results": [
+    {
+      "status": "pass",
+      "metrics": {
+        "skills": 44,
+        "nativeChecks": 3,
+        "copiedSkillsMatched": 44,
+        "trackedSnapshotFiles": 309
+      },
+      "version": "2.1.309 (Claude Code)",
+      "pack": "/Users/sambiggins/code/grey-matter",
+      "sourceSnapshot": "tracked working-tree bytes, excluding untracked build output",
+      "runs": [
+        {
+          "args": [
+            "plugin",
+            "validate",
+            "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/source/.claude-plugin/plugin.json",
+            "--json"
+          ],
+          "exit": 0,
+          "stderr": "",
+          "result": {
+            "success": true,
+            "strict": false,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/source/.claude-plugin/plugin.json",
+            "manifest": {
+              "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/source/.claude-plugin/plugin.json",
+              "type": "plugin",
+              "errors": [],
+              "warnings": [],
+              "notes": [],
+              "gatingHooks": []
+            },
+            "contents": [
+              {
+                "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/source/CLAUDE.md",
+                "type": "plugin",
+                "errors": [],
+                "warnings": [
+                  {
+                    "path": "root",
+                    "message": "CLAUDE.md at the plugin root is not loaded as project context. To ship context with your plugin, use a skill (skills/<name>/SKILL.md) instead.",
+                    "code": null
+                  }
+                ],
+                "notes": [],
+                "gatingHooks": []
+              }
+            ],
+            "advice": [
+              {
+                "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/source/README.md",
+                "message": "This README has no line that installs \"grey-matter\" from a marketplace. Add the install line, which works in one step on Claude Code 2.1.275 or later. Validate the folder that holds its marketplace.json to have <owner>/<repo> filled in, and the name its marketplace lists it under.",
+                "installLine": "/plugin install grey-matter --marketplace <owner>/<repo>"
+              }
+            ],
+            "directory": {
+              "profile": null,
+              "findings": [
+                {
+                  "code": "ICON_MISSING",
+                  "title": "No icon",
+                  "severity": "warning",
+                  "blocking": false,
+                  "hold": false,
+                  "file": ".claude-plugin/plugin.json",
+                  "field": "icon",
+                  "message": "No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.",
+                  "fix": "Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon."
+                }
+              ],
+              "undecided": [],
+              "incomplete": false,
+              "failure": null,
+              "notes": [
+                "This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder."
+              ]
+            }
+          }
+        },
+        {
+          "args": [
+            "plugin",
+            "validate",
+            "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/source/.claude-plugin/marketplace.json",
+            "--json"
+          ],
+          "exit": 0,
+          "stderr": "",
+          "result": {
+            "success": true,
+            "strict": false,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/source/.claude-plugin/marketplace.json",
+            "manifest": {
+              "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/source/.claude-plugin/marketplace.json",
+              "type": "marketplace",
+              "errors": [],
+              "warnings": [],
+              "notes": [],
+              "gatingHooks": []
+            },
+            "contents": [],
+            "advice": [],
+            "directory": null
+          }
+        },
+        {
+          "args": [
+            "plugin",
+            "validate",
+            "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/components/skills",
+            "--strict",
+            "--json"
+          ],
+          "exit": 0,
+          "stderr": "",
+          "result": {
+            "success": true,
+            "strict": true,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/components/skills",
+            "manifest": null,
+            "contents": [],
+            "advice": [],
+            "directory": null
+          }
+        }
+      ],
+      "seed": {
+        "exit": 1,
+        "detected": true,
+        "result": {
+          "success": false,
+          "strict": true,
+          "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/components/skills",
+          "manifest": null,
+          "contents": [
+            {
+              "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-eGs483/components/skills/code-review/SKILL.md",
+              "type": "skill",
+              "errors": [
+                {
+                  "path": "description",
+                  "message": "description must be a string, got array. At runtime this value is dropped.",
+                  "code": null
+                }
+              ],
+              "warnings": [],
+              "notes": [],
+              "gatingHooks": []
+            }
+          ],
+          "advice": [],
+          "directory": null
+        }
+      },
+      "hashes": [
+        {
+          "name": "code-review",
+          "sha256": "1a74fb4e233f40a9af918f47d578422e5f74be08599f8d30499e031d47bfe2ba"
+        },
+        {
+          "name": "codebase-design",
+          "sha256": "fa297091025800834b0ac83293be6ed7b32f359af28a922b52b88e8d435f46ce"
+        },
+        {
+          "name": "diagnosing-bugs",
+          "sha256": "318c356446f1a8b71c57f408e35c2d5afe80d2aa9f734b2ffa2c884463617d82"
+        },
+        {
+          "name": "domain-modeling",
+          "sha256": "e80599f8c9c4887b07c97f4f6632cf406efddad9e9d2315914fd707c5e371b2f"
+        },
+        {
+          "name": "game-modeling",
+          "sha256": "83a3ca1cbcc7534c96061f705b4b87db05904a8c377b9f9ee438a9106ca43557"
+        },
+        {
+          "name": "game-native-design",
+          "sha256": "9dcca1950fbf9d9e2789bae78c80b1a865782325b4eaa6b9308452517e44f5d4"
+        },
+        {
+          "name": "grill-with-docs",
+          "sha256": "c794712714465da5d4247f08577203cd5fb74b7c7b523bb750ee04499426a3c1"
+        },
+        {
+          "name": "implement",
+          "sha256": "ce9c2365d1e55c25f8ce07708e6dc411858c978e4fdd812c6873692cae1f830f"
+        },
+        {
+          "name": "implement-spec",
+          "sha256": "19b6dcac96f958b0e73d6b31a70b56d4eb19dbd31cc127fad1131fcd0071a4ee"
+        },
+        {
+          "name": "improve-codebase-architecture",
+          "sha256": "8fab8f35941dce75a64d86c17cbe73e52724b2dd7580d76ce8b250b7e441ce19"
+        },
+        {
+          "name": "pr",
+          "sha256": "798e4224f59d5e522a390befaca8f570aee314673ba64c40fd81bed1cd7a05e7"
+        },
+        {
+          "name": "prototype",
+          "sha256": "7af6e5bb09ece2edf0e6edc7682bcee73ad18830b2ac4b2e6a6a2be784f0b4be"
+        },
+        {
+          "name": "research",
+          "sha256": "c9944a8b98d5b1b902ef89d271ea9287a5f6326095d8ba98d38e68038ebdfd7d"
+        },
+        {
+          "name": "research-audit",
+          "sha256": "0ce3a7e46c7e7ff3c051658eb4a6dc2ea1e803ce00d71a72c0d940ffa0ce6a1c"
+        },
+        {
+          "name": "retro",
+          "sha256": "54e5868d96b5c5d9fd40c0be05f6b711db07fc43fc1d1dce5ed07b8f2a69c853"
+        },
+        {
+          "name": "tdd",
+          "sha256": "2d021d73ac59196611b89930edfc4322afcff819f465f6fd7beb8e69b68c91e6"
+        },
+        {
+          "name": "to-spec",
+          "sha256": "d9c760d0149c75db77be43aff50e4dae79feef1a3d76f9a17f9887e8349b381b"
+        },
+        {
+          "name": "to-tickets",
+          "sha256": "fe411e6f2f69621388e37c3e5f85cf533c22bb5eb0c1f4632f4a53d3407a6d8d"
+        },
+        {
+          "name": "triage",
+          "sha256": "dbac194f29381ad941efecec127323a5903c15ccb58da0cd4e1f9990e017883a"
+        },
+        {
+          "name": "wayfinder",
+          "sha256": "f0aba49ce92c66fb54c77175035488e54dd135c8df2a4d0961f597fa4d5a9d35"
+        },
+        {
+          "name": "wizard",
+          "sha256": "6725f9d15e9e9cd78704b861e5913d08183d6002e11e59ee00b207e17982295b"
+        },
+        {
+          "name": "adopt-project",
+          "sha256": "49fa84148faf9f7ddc2d1748a5ff8c1f4e56d2f1c465f316e98d3fd14e391849"
+        },
+        {
+          "name": "changelog",
+          "sha256": "808848a2bee8fe0e02331d0c5aeac73ab4cd5cdd2b2858a009e40c40fbc68dc6"
+        },
+        {
+          "name": "cheat-sheet",
+          "sha256": "81d57e4494944f9940aa6d60a02d3a3a9ed5b55a7e8c4afcc0ff7084c1406674"
+        },
+        {
+          "name": "compass",
+          "sha256": "47d7d9da744c7d4737de7624bb5691f94f2743864c258f1e941044b6cdad1334"
+        },
+        {
+          "name": "conformance-audit",
+          "sha256": "ed65bfbe1b59924ebc91ad242e73600180d109a89eb11eb70ea40a9c9c77905f"
+        },
+        {
+          "name": "curate-docs",
+          "sha256": "d54f4515cf2ee6ab0968f504131f1455341d02343070cd68973c189cc81e072f"
+        },
+        {
+          "name": "init-project",
+          "sha256": "eae51bf827a1c9c539a09206ba7ef54e78c00a03d77a98d0e1fc750f1ab9b6cc"
+        },
+        {
+          "name": "orient",
+          "sha256": "a854e7d5fb91cbb8fe9b972dbd9f2679721c9d56c81567837f4861a22c34b2f6"
+        },
+        {
+          "name": "readme",
+          "sha256": "65781f87c239c837ff06a4d531844160ec557a13a0c0adb57e67a41c4c06e5fe"
+        },
+        {
+          "name": "reconcile-tickets",
+          "sha256": "708d743a392b330cfd17adb45890a0661c5b960a900c75ca30fa2ec9413f3f54"
+        },
+        {
+          "name": "release",
+          "sha256": "1c899b9238f62e22c5803ad20d4e2c1cb36d7a7ef8cf9878a449af8ffe65cca1"
+        },
+        {
+          "name": "review-skill",
+          "sha256": "bb031883760a33d0aea92727d8157d003cc1108fe5f51cf79d5754ce7bbda5d6"
+        },
+        {
+          "name": "sync",
+          "sha256": "027c97f8860a2970db6bed37421aac51b345cbad0bcfdd3708b03d58c0af4a1b"
+        },
+        {
+          "name": "verify-tkt-usage",
+          "sha256": "b83425fbabd62d9072c82768f92dade9c62a4d667141721f43678ebaf6de0dca"
+        },
+        {
+          "name": "wrap-session",
+          "sha256": "da765b6ccbe11af50040c7c7c154394c7b7a1f4c66cc1ed0b4740f39e1c7b0a2"
+        },
+        {
+          "name": "grill-me",
+          "sha256": "caaf8b8de1684f96e26b28f3c29189db5c89cce4b73e1c93d86164f66ef88637"
+        },
+        {
+          "name": "grilling",
+          "sha256": "4721afd59294f9eddc56c001625c42b08bafcfe33f2483a2e11fe491a87af905"
+        },
+        {
+          "name": "handoff",
+          "sha256": "db6f7149844c1875d7f68530f0d17b10344679f6745554ed74102ab564be57db"
+        },
+        {
+          "name": "line-craft",
+          "sha256": "6c3912fd8b7571e341d500a029b3057ee1796089560985797e4c459b4159f5ab"
+        },
+        {
+          "name": "teach",
+          "sha256": "59c76b02996635ecbaf4cc93ecdf91ad5ddf5f28c972d88aae486402007c29a1"
+        },
+        {
+          "name": "to-questionnaire",
+          "sha256": "108763dd26cd8b8be21e5c4d274d976f88cb023443e733db946e4d3cce92fdc8"
+        },
+        {
+          "name": "wait-what",
+          "sha256": "59fd052b73612ee365fe00c86460376bbb9547878ebd987a486c5e8492b4575b"
+        },
+        {
+          "name": "writing-for-agents",
+          "sha256": "b727f1f831253da641981080622b6ac44defc65ea1213066dc84a4146df9970b"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "status": "pass",
+      "metrics": {
+        "skills": 4,
+        "nativeChecks": 3,
+        "copiedSkillsMatched": 4,
+        "trackedSnapshotFiles": 308
+      },
+      "version": "2.1.309 (Claude Code)",
+      "pack": "/Users/sambiggins/code/tkt",
+      "sourceSnapshot": "tracked working-tree bytes, excluding untracked build output",
+      "runs": [
+        {
+          "args": [
+            "plugin",
+            "validate",
+            "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-LkqpL3/source/.claude-plugin/plugin.json",
+            "--json"
+          ],
+          "exit": 0,
+          "stderr": "",
+          "result": {
+            "success": true,
+            "strict": false,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-LkqpL3/source/.claude-plugin/plugin.json",
+            "manifest": {
+              "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-LkqpL3/source/.claude-plugin/plugin.json",
+              "type": "plugin",
+              "errors": [],
+              "warnings": [],
+              "notes": [],
+              "gatingHooks": []
+            },
+            "contents": [],
+            "advice": [
+              {
+                "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-LkqpL3/source/README.md",
+                "message": "This README has no line that installs \"tkt\" from a marketplace. Add the install line, which works in one step on Claude Code 2.1.275 or later. Validate the folder that holds its marketplace.json to have <owner>/<repo> filled in, and the name its marketplace lists it under.",
+                "installLine": "/plugin install tkt --marketplace <owner>/<repo>"
+              }
+            ],
+            "directory": {
+              "profile": null,
+              "findings": [
+                {
+                  "code": "ICON_MISSING",
+                  "title": "No icon",
+                  "severity": "warning",
+                  "blocking": false,
+                  "hold": false,
+                  "file": ".claude-plugin/plugin.json",
+                  "field": "icon",
+                  "message": "No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.",
+                  "fix": "Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon."
+                }
+              ],
+              "undecided": [],
+              "incomplete": false,
+              "failure": null,
+              "notes": [
+                "This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder."
+              ]
+            }
+          }
+        },
+        {
+          "args": [
+            "plugin",
+            "validate",
+            "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-LkqpL3/source/.claude-plugin/marketplace.json",
+            "--json"
+          ],
+          "exit": 0,
+          "stderr": "",
+          "result": {
+            "success": true,
+            "strict": false,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-LkqpL3/source/.claude-plugin/marketplace.json",
+            "manifest": {
+              "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-LkqpL3/source/.claude-plugin/marketplace.json",
+              "type": "marketplace",
+              "errors": [],
+              "warnings": [],
+              "notes": [],
+              "gatingHooks": []
+            },
+            "contents": [],
+            "advice": [],
+            "directory": null
+          }
+        },
+        {
+          "args": [
+            "plugin",
+            "validate",
+            "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-LkqpL3/components/skills",
+            "--strict",
+            "--json"
+          ],
+          "exit": 0,
+          "stderr": "",
+          "result": {
+            "success": true,
+            "strict": true,
+            "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-LkqpL3/components/skills",
+            "manifest": null,
+            "contents": [],
+            "advice": [],
+            "directory": null
+          }
+        }
+      ],
+      "seed": {
+        "exit": 1,
+        "detected": true,
+        "result": {
+          "success": false,
+          "strict": true,
+          "target": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-LkqpL3/components/skills",
+          "manifest": null,
+          "contents": [
+            {
+              "file": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/claude-validation-LkqpL3/components/skills/tkt-core/SKILL.md",
+              "type": "skill",
+              "errors": [
+                {
+                  "path": "description",
+                  "message": "description must be a string, got array. At runtime this value is dropped.",
+                  "code": null
+                }
+              ],
+              "warnings": [],
+              "notes": [],
+              "gatingHooks": []
+            }
+          ],
+          "advice": [],
+          "directory": null
+        }
+      },
+      "hashes": [
+        {
+          "name": "tkt-core",
+          "sha256": "12a96e3782b6480ad4fd8a2c45967b5892a02194562c58e8861120530bbb089b"
+        },
+        {
+          "name": "tkt-orient",
+          "sha256": "61e5de7e4e9acad5dedc275ffd759eb5bca728f92f3d42452c5b2ac338657f34"
+        },
+        {
+          "name": "tkt-reconcile",
+          "sha256": "bb9904a952b1cd150a160a2caf11ce07303893b419fa1559dd83134637f69c92"
+        },
+        {
+          "name": "tkt-work",
+          "sha256": "175d85c8e0815a2a709e49018a138439bac8ef6638e4a510cd9c289a6472b11b"
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

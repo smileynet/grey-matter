@@ -128,3 +128,7 @@ this audit does not certify an unbuilt reduced bundle.
 
 Coverage: ✅ manifest/catalog/source inspection and isolated native inventory;
 ⚠️ full-home isolation, latest-validator/component execution/install-upgrade certification remains partial.
+
+## Current policy evidence (ticket 73)
+
+The earlier unverified invocation-policy observation is resolved for the exact native versions in [policy evidence](plugin-invocation-policy.md), using loopback-only captured context, explicit human expansion and a removed-policy control. This does not certify every platform or future candidate bundle. [Current Claude validation](claude-current-validation.md) records the newer validator and seeded nested-scanner limitation. Tickets 65/67/69 retain those candidate gates.

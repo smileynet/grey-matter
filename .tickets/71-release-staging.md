@@ -53,3 +53,5 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 - [ ] The final audit is re-run/reconciled on the fully staged candidate after documentation and version edits; links/prose, native syntax checks, package exclusions, install-upgrade and duplicate-loading gates pass with fresh evidence.
 - [ ] A committed staging index lists both candidate revisions, review artifacts, release notes, checksums, compatibility, unresolved exclusions and exact later publish/resume commands; machine-local paths have reproducible generation instructions.
 - [ ] No release tag is pushed, registry/GitHub release published, stable ref promoted or public plugin-directory submission made; closing this ticket reports staged status only.
+
+Native Claude 2.1.309 reports nonblocking icon and current marketplace install-line advice for both repos. Include these in artifact polish or explicitly resolve their applicability in the audit; do not drop them because schema validation passes. See [dated validation evidence](../docs/agents/research/claude-current-validation.md). Root CLAUDE.md is repository guidance and must not be advertised as automatically loaded plugin context.

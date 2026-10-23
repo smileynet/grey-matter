@@ -109,8 +109,11 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **Test**: `agy --dangerously-skip-permissions --print "<prompt>"` from any dir (global
   once installed). Gotcha: `-p` grabs the next token as its prompt, put flags first and
   the prompt last, or use `-p='...'`.
-- **Invocation filter**: lists user-invoked skills in the catalog (does not filter like
-  codex).
+- **Invocation policy (agy 1.4.5)**: `/skills` lists human-only skills with
+  `model_invocable: false`. Their metadata is excluded from model context, while explicit
+  `/grey-matter:<skill>` expands the body. A loopback capture and removed-policy control
+  verify this behavior; the published frontmatter reference still omits the field.
+  See [policy evidence](research/plugin-invocation-policy.md).
 
 ### Crush (ancillary, Charm)
 
@@ -182,9 +185,12 @@ the method behind every row above.
      `references/probe.md` and return the token?
    - **Unknown frontmatter**: did the skill load at all despite the unknown key?
      (ignored = loads; rejected = errors)
-   - **Invocation filter**: does the model catalog list `probe-open` but **not**
-     `probe-skill`? If so, the harness honors user-invoked filtering (codex does; agy/crush
-     list both).
+   - **Invocation policy**: inspect the actual model context, explicit user expansion,
+     and a control with the policy removed. A model's self-report or a user-facing skill
+     list alone does not prove enforcement. On macOS run
+     `node scripts/probe-invocation-policy.mjs codex` (or `claude` / `agy`) for isolated
+     loopback-only captures with no real model calls. Results are version-specific;
+     Crush has no equivalent verified probe here.
 4. **Record** results in `research/harness-behavior-probes.md` and update the row here.
 5. **Clean up**: remove both probes from the harness root.
 

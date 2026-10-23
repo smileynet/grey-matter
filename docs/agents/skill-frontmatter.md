@@ -31,6 +31,7 @@ each harness reads differs, and a strict validator rejects the Claude one:
 | --- | --- | --- |
 | Claude Code | `disable-model-invocation: true` | `SKILL.md` frontmatter |
 | Codex | `policy.allow_implicit_invocation: false` | sidecar `agents/openai.yaml` |
+| Antigravity 1.4.5 | `disable-model-invocation: true` (observed runtime; omitted by published frontmatter reference) | `SKILL.md` frontmatter |
 | Kiro | ignores the Claude field (verified: unknown key ignored, skill still loaded) | - |
 
 So a user-invoked skill sets **both** `disable-model-invocation: true` in `SKILL.md`
@@ -51,10 +52,10 @@ after `install-skills.mjs`, the same session still refused the flipped skill, an
 callable only after the session's skill list refreshed (observed one turn later). A new session
 picks it up reliably.
 
-Known wart: the strict agentskills validator and Claude Code's own linter warn on
-`disable-model-invocation` as a non-standard key. The runtime honors it; accept the
-warning. Codex and Kiro ignore the key at runtime (verified live on kiro-cli — the skill
-loaded and ran with an unknown key present; see `research/harness-behavior-probes.md`).
+The strict Agent Skills allowlist does not include `disable-model-invocation`; this is
+a host extension. Claude Code 2.1.309 accepts the field in native component validation.
+Codex uses the sidecar for this policy. Kiro loaded and ran with the unknown key present;
+that proves tolerance, not invocation enforcement (see `research/harness-behavior-probes.md`).
 
 ## metadata: inert data only
 
@@ -141,11 +142,11 @@ load-bearing findings:
   per-harness scanner concern. Harnesses install flat (confirmed on Claude Code).
 - **`references/` are agent-loaded at runtime** — proven live on kiro-cli and Claude Code
   (the agent followed the relative link and returned the token).
-- **Invocation control is honored at the harness layer** — proven isolated on codex: the
-  user-invoked probe (`allow_implicit_invocation: false`) was absent from the model catalog
-  while the model-invokable variant was listed. Filtering is per-harness (agy and Claude
-  Code list user-invoked skills in the catalog; codex filters them), which is exactly why
-  invocation control is expressed per-harness above rather than as one portable field.
+- **Invocation control is version-specific.** Current loopback captures verify metadata
+  exclusion, explicit body expansion and a removed-policy control on Codex 0.147.0,
+  Claude Code 2.1.223/2.1.309 and Antigravity 1.4.5. User-facing catalogs can still list
+  human-only entries. Read [policy evidence](research/plugin-invocation-policy.md) for
+  commands and limits; older catalog self-reports do not override captured model context.
 - **Scan roots are per-harness** at the user level (`~/.kiro/skills`, `~/.codex/skills`,
   `~/.claude/skills`), while the project-level `.agents/skills/` is shared by agy, Crush,
   and OpenCode. The installer's default-roots list accounts for this.

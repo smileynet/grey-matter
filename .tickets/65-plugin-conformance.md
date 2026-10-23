@@ -58,3 +58,7 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 ## Preserved first-pass research
 
 Read the dated [Codex](../docs/agents/research/codex-plugin-conformance.md), [Claude](../docs/agents/research/claude-plugin-conformance.md), and [Antigravity](../docs/agents/research/agy-plugin-conformance.md) reports. These preserve source links, exact revisions, native results and coverage limits. They are inputs to the final matrix, not blanket conformance passes. Concrete remediation: tickets 72 and 73, both mandatory final-audit blockers.
+
+Current evidence: [invocation policy](../docs/agents/research/plugin-invocation-policy.md) resolves the old agy unknown for 1.4.5 and tests Codex/Claude controls. [Claude 2.1.309 validation](../docs/agents/research/claude-current-validation.md) exposes a nested custom-root scanner gap. Run `node scripts/probe-claude-validation.mjs --binary <current-native-binary>` for each repo; it checks manifests, exact flat components and a seeded failing type error. Do not rely solely on root validator success.
+
+Remaining syntax detector: current Claude accepts a malformed-YAML name seed. Add an independent standards-based YAML parser/check and a malformed-YAML failing fixture, covering frontmatter and applicable sidecars. This remains required even when native description-type controls pass. The final matrix must distinguish this gap from valid source files.

@@ -45,3 +45,7 @@ Archives were created with git archive HEAD into `codex-isolated/{grey-matter,tk
 Evidence: isolated `codex plugin marketplace add <archived-root> --json` and `codex plugin list --available --json` → both exit 0, expected name/version/root, no stderr, installed empty. Evidence: `node scripts/check-invocation-policy.mjs` → 44 skills / 20 manual policies agree. Evidence: `git status --short` → empty before this scratch report (scratch is gitignored); this worker made no tracked edits.
 
 Scope note: the later `git diff --stat` shows scripts/deploy.mjs changed by another concurrent worker (115 lines); this worker edited only ignored scratch files and did not alter that diff.
+
+## Current policy evidence (ticket 73)
+
+The earlier unverified invocation-policy observation is resolved for the exact native versions in [policy evidence](plugin-invocation-policy.md), using loopback-only captured context, explicit human expansion and a removed-policy control. This does not certify every platform or future candidate bundle. [Current Claude validation](claude-current-validation.md) records the newer validator and seeded nested-scanner limitation. Tickets 65/67/69 retain those candidate gates.
