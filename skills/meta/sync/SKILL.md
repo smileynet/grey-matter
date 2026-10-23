@@ -14,7 +14,8 @@ command that gets current *safely*.
 The four couplings it keeps aligned:
 
 1. **Repo ↔ deployed skills.** A pull can add, change, or remove skills; the harness scan
-   roots keep serving the old copies until `install-skills.mjs` re-runs.
+   roots and the Antigravity (`agy`) plugin keep serving the old copies until
+   `install-skills.mjs` and `build-agy-plugin.mjs install` re-run.
 2. **Skills ↔ tkt command surface.** The skills inline tkt commands; a tkt upgrade can
    rename a flag or drop a subcommand and break a skill mid-task.
 3. **Local tickets ↔ upstream tickets.** A pull can collide ticket IDs; `tkt rebase`
@@ -89,28 +90,32 @@ non-fast-forward pull — because merging the user's divergent work is not sync'
    regardless); flag the red check as needs-fixing. A green run is the normal case after a
    clean pull.
 
-6. **Redeploy to the harnesses.** Push the current skills back out to every owned root:
+6. **Redeploy to the harnesses.** Push the current skills back out to every owned root and
+   refresh the Antigravity (`agy`) plugin if `agy` is installed:
 
    ```bash
    node scripts/install-skills.mjs --dry-run   # if step 1 showed a surprising count delta
    node scripts/install-skills.mjs             # copy into every owned harness root
+   node scripts/build-agy-plugin.mjs install   # rebuild, validate, and install the agy plugin (skip if agy is absent)
    ```
 
    The installer is idempotent: it refreshes changed skills, adds new ones, and prunes
    skills removed upstream. User-level roots (`~/.kiro`, `~/.codex`, `~/.claude`,
-   `~/.agents`) are the default. agy and Crush read **project** roots only, so for those
-   note `node scripts/install-skills.mjs --project` inside each project that wants them —
-   sync doesn't chase project roots.
+   `~/.agents`) are the default, and `build-agy-plugin.mjs install` refreshes the global
+   `grey-matter` plugin in `~/.gemini/config/plugins/` (where `agy` discovers skills).
+   Crush reads **project** roots only, so for it note `node scripts/install-skills.mjs --project`
+   inside each project that wants it — sync doesn't chase project roots.
 
 7. **Report the delta.** One compact summary, most-pressing-first:
 
    - **Commits pulled** (`git log --oneline <before>..HEAD`).
-   - **Skills changed**: added / modified / pruned, and the **per-root count** after.
+   - **Skills changed**: added / modified / pruned, the **per-root count** after, and
+     whether the `agy` plugin was refreshed.
    - **tkt**: version before → after, and any **drift** `verify-tkt-usage` found.
    - **Ticket health**: whether a rebase ran, and `tkt validate` status.
    - **Repo check**: green, or exactly what `check-repo.mjs` flagged.
    - **Follow-ups**: e.g. "run `reconcile-tickets`", "fix the drift in skill X", "`--project`
-     install for agy in repo Y".
+     install for Crush in repo Y".
 
    Optionally confirm with one live discovery probe on the primary harness
    (`kiro-cli chat --no-interactive --trust-all-tools "list the skills available to you"`).

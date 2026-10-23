@@ -63,7 +63,8 @@ into some project's `.kiro/`) as the source; cite the lineage's home.
 Skills are installed into a harness scan root with `node scripts/install-skills.mjs`
 (copies each skill into the known harness user roots, flattening the bucket structure;
 `--project` for `<cwd>/.agents/skills`; manifest-tracked, idempotent,
-`--dry-run`/`list`/`uninstall`). The decision and design are in
+`--dry-run`/`list`/`uninstall`), and packaged/installed as a global Antigravity (`agy`)
+plugin with `node scripts/build-agy-plugin.mjs install`. The decision and design are in
 [`docs/agents/proposals/03-distribution-packaging.md`](./docs/agents/proposals/03-distribution-packaging.md);
 the user-level standing rules (`global/AGENTS.md`, no steering) install with
 `node scripts/install-agents-md.mjs` (owner-marked, never clobbers a foreign file);
@@ -104,7 +105,7 @@ there is no CI pipeline.)
 - **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
 - **Check before you push.** Run `node scripts/check-repo.mjs` before pushing when the task touched skills, indexes, docs, or the installer; a green run is cheap insurance against pushing a broken link or a lost sidecar straight to `main`. Install the opt-in pre-commit hook (`node scripts/install-hooks.mjs`) to run it automatically. (Local hooks only — this project has no CI.)
 - **Push after every commit.** A commit isn't done until it's pushed. Another session may be pushing to `main` too — if a push is rejected, `git pull --rebase` (or fetch + rebase) and push again; don't force-push. (`tkt new`/`claim`/`close` auto-push, so they interleave with manual commits — the same rebase-and-retry applies.)
-- **Deploy by default.** Prefer to deploy changes (install skills into the harness roots with `node scripts/install-skills.mjs`, the global rules with `node scripts/install-agents-md.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
+- **Deploy by default.** Prefer to deploy changes (install skills into the harness roots with `node scripts/install-skills.mjs`, refresh the Antigravity plugin with `node scripts/build-agy-plugin.mjs install`, install the global rules with `node scripts/install-agents-md.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
 
 <!-- tkt:begin -->
 ## Tickets
