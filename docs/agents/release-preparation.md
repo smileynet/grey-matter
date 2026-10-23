@@ -75,6 +75,29 @@ Later intentional staging edits produce a new reviewed commit. Rebuild artifacts
 that exact commit into a new output and repeat all gates; do not rerun version preparation
 against already-bumped source or reinterpret an old draft state as the new identity.
 
+## Product evidence for an exact commit
+
+Inspect the product gate without writing or running it:
+
+```sh
+node scripts/release-product.mjs --repo /path/to/candidate --sha FULL_COMMIT_SHA --out /path/to/new-evidence
+```
+
+Add `--execute` to run grey-matter's `check-repo.mjs --require-tools` or tkt's
+`mise run check` in a clean checkout at that exact SHA. Install the candidate's
+maintainer dependencies first; this command does not install or publish anything.
+Evidence needs a new directory outside the checkout. Logs, hashes, exit/signal,
+command, timestamps and the actual OS/architecture/Node version are recorded there.
+A failed command or changed candidate produces failed evidence. Output is never
+reused as proof: rerunning needs a new evidence path and executes checks again.
+
+`--require-tools` makes the normally optional missing-tkt check fail. Native checks
+remain a separate gate. Product success always retains `publishable: false` and
+pending native, scope, compatibility and remaining-platform checks. This command
+runs trusted repository check scripts with the maintainer's normal tool environment;
+it is not a sandbox. Its Git context variables are cleared to keep checks in the
+candidate repository. The separate install/upgrade probes use disposable homes.
+
 ## Current coverage and remaining gates
 
 Isolated fixtures exercise dry-run byte preservation, skill/Cargo version surfaces,

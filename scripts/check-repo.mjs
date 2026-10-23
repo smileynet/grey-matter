@@ -26,7 +26,7 @@
 //    Nothing here logs into Claude/Codex/Kiro or hits a network.
 //  - Each sub-check is independently runnable; this is the aggregator.
 //
-// Run:  node scripts/check-repo.mjs
+// Run:  node scripts/check-repo.mjs [--require-tools]
 // Exit: 0 = all pass; 1 = at least one invariant failed.
 
 import { spawnSync } from "node:child_process";
@@ -37,6 +37,12 @@ import { fileURLToPath } from "node:url";
 const SCRIPTS = dirname(fileURLToPath(import.meta.url));
 const SELF = "check-repo.mjs";
 const results = [];
+const args = process.argv.slice(2);
+if (args.some((arg) => arg !== "--require-tools")) {
+  console.error("usage: node scripts/check-repo.mjs [--require-tools]");
+  process.exit(2);
+}
+const requireTools = args.includes("--require-tools");
 
 // Orphan guard (ticket 34 nice-to-have): every sibling `check-*.mjs` sub-check (excluding
 // this aggregator and any `*.test.mjs`) must be named in this file's run list, so a future
@@ -62,7 +68,7 @@ function run(label, cmd, args, { optional = false } = {}) {
   const r = spawnSync(cmd, args, { stdio: "inherit", cwd: join(SCRIPTS, "..") });
   if (r.error) {
     if (r.error.code === "ENOENT") {
-      if (optional) {
+      if (optional && !requireTools) {
         console.log(`(skipped: ${cmd} not found — ${label} not checked)`);
         results.push({ label, status: "skip" });
         return;
@@ -92,7 +98,7 @@ run("7. crew-research uninstall scope", node, ["--test", join(SCRIPTS, "uninstal
 run("8. repo survey tiers (adopt-project portfolio)", node, ["--test", join(SCRIPTS, "survey-repos.test.mjs")]);
 run("9. Claude plugin manifest", node, [join(SCRIPTS, "check-plugin-manifest.mjs")]);
 run("10. YAML syntax and core types", node, [join(SCRIPTS, "check-skill-syntax.mjs")]);
-run("11. release draft and artifact safety", node, ["--test", join(SCRIPTS, "release-artifacts.test.mjs"), join(SCRIPTS, "release-version.test.mjs"), join(SCRIPTS, "release.test.mjs")]);
+run("11. release draft and artifact safety", node, ["--test", join(SCRIPTS, "release-artifacts.test.mjs"), join(SCRIPTS, "release-version.test.mjs"), join(SCRIPTS, "release.test.mjs"), join(SCRIPTS, "release-product.test.mjs")]);
 
 // --- Summary ------------------------------------------------------------------
 console.log("\n==================== repo-check summary ====================");

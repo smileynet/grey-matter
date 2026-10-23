@@ -95,3 +95,13 @@ reports publishable=false with pending gates. Product/native/scope/compatibility
 platform gate integration, tkt standalone entry-point wiring and real approved candidate
 evidence remain before closure. Candidate 0.2.0/0.5.0 approval is still pending; only
 synthetic fixtures have executed version preparation.
+
+## Exact-commit product gate progress
+
+`release-product.mjs` now defaults to a read-only command plan, then runs the product's
+full gate only with `--execute` against a clean full SHA. It records commands, log hashes,
+exit/signal and actual host metadata outside the candidate. Dirty/moved candidates,
+foreign output, path aliases and a successful command that changes source are refused.
+The checker now offers `--require-tools`: missing tkt cannot silently skip a release
+check. This evidence is explicitly product-only, not release readiness; native, scope,
+compatibility, other-platform and standalone tkt wiring remain outstanding.
