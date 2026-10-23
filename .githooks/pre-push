@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+# grey-matter pre-push hook
+# Git exports repository-local variables into hooks. Drop them before checks create
+# disposable repositories; otherwise their Git commands can operate on this checkout.
+set -eu
+ROOT="$(git rev-parse --show-toplevel)"
+LOCAL_VARS="$(git rev-parse --local-env-vars)"
+unset $LOCAL_VARS
+cd "$ROOT"
+if ! command -v node >/dev/null 2>&1; then
+  echo "pre-push: node is required; push blocked." >&2
+  exit 1
+fi
+exec node scripts/check-repo.mjs

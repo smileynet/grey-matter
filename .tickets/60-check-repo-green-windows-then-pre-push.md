@@ -48,3 +48,18 @@ Added opt-in `platform-validation.yml`: Windows/Git Bash/Node 22 reproduces the 
 original fixture suites; separate Windows/Ubuntu jobs run check-repo --require-tools
 with pinned tkt source. This supplies an actual failing runner before path/symlink
 fixes. It is not an automatic push/PR pipeline or evidence of platform success.
+
+## Observed Windows baseline
+
+Run [40035229915](https://github.com/smileynet/grey-matter/actions/runs/40035229915)
+at `21cedae87c94e90fd1ba2e6ec57ecf0f1f2b40cc`: Ubuntu strict gate passed;
+Windows failed invariants 1, 5, 7 and 11. Original suites: 9/12 passed.
+The relocation fixture used URL.pathname for a Windows file path. Diagnostics at
+`6a9771e` confirmed both uninstall failures: GNU tar interpreted `C:` in the backup
+filename as a remote host (`Cannot connect to C: resolve failed`). The default-root
+fixture PATH used a POSIX delimiter. Release worktree identity failures are being
+diagnosed separately; do not close this ticket until the complete Windows gate passes.
+
+The new hook fixtures prove opt-in ownership, custom hooksPath and green/red/green
+pushes with the real YAML syntax checker and a disposable bare remote. Documentation
+and primary Git sources are in [distribution maintenance](../docs/agents/distribution-maintenance.md).

@@ -1,38 +1,27 @@
 #!/usr/bin/env node
-// install-hooks.mjs — opt-in installer for the grey-matter pre-commit consistency hook
-// (ticket 35).
-//
-// Copies scripts/hooks/pre-commit into .git/hooks/pre-commit so that
-// `node scripts/check-repo.mjs` runs locally before every commit and blocks on a nonzero
-// exit. This project uses local hooks only (no CI), so the hook is the automated gate.
-//
-// Deliberately OPT-IN: nothing installs this automatically on clone. A maintainer who
-// wants the local gate runs this once.
-//
-// Safe by design:
-//  - Refuses to overwrite a pre-existing pre-commit hook it did not write (a foreign
-//    hook), the same ownership caution as the skills installer. Use `uninstall` or move it
-//    aside first.
-//  - Idempotent: re-running `install` when our hook is already in place is a no-op.
-//  - Read-only on everything except .git/hooks/pre-commit.
-//
-// Usage:
-//   node scripts/install-hooks.mjs            # install (default)
-//   node scripts/install-hooks.mjs list       # show current pre-commit hook status
-//   node scripts/install-hooks.mjs uninstall  # remove our hook (only if we own it)
+// Opt-in ownership-guarded installer. Default: pre-commit; select --hook pre-push.
+// Usage: node scripts/install-hooks.mjs [install|list|uninstall] [--hook NAME]
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, chmodSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
-const HOOK = "pre-commit";
 const SCRIPTS = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(SCRIPTS, "..");
-const SOURCE = join(SCRIPTS, "hooks", HOOK);
+const args = process.argv.slice(2);
+let cmd = "install";
+let HOOK = "pre-commit";
+if (args.length && !args[0].startsWith("--")) cmd = args.shift();
+if (args[0] === "--hook" && args.length === 2) HOOK = args.splice(0, 2)[1];
+if (args.length || !["pre-commit", "pre-push"].includes(HOOK) || !["install", "list", "uninstall"].includes(cmd)) {
+  console.error("Usage: install-hooks.mjs [install|list|uninstall] [--hook pre-commit|pre-push]");
+  process.exit(1);
+}
+const SOURCE = HOOK === "pre-push" ? join(REPO, ".githooks", HOOK) : join(SCRIPTS, "hooks", HOOK);
 
 // A marker line present in our hook source; lets us recognize a hook we own vs a foreign one.
-const OWNED_MARKER = "grey-matter pre-commit hook";
+const OWNED_MARKER = `grey-matter ${HOOK} hook`;
 
 function gitHooksDir() {
   // Honor a custom core.hooksPath if one is configured; otherwise default to .git/hooks.
@@ -40,10 +29,9 @@ function gitHooksDir() {
   if (r.status === 0 && r.stdout.trim()) {
     return resolve(REPO, r.stdout.trim());
   }
-  return join(REPO, ".git", "hooks");
+  throw new Error(`Cannot resolve Git hooks directory: ${r.stderr || r.error?.message}`);
 }
 
-const cmd = process.argv[2] || "install";
 const target = join(gitHooksDir(), HOOK);
 
 function status() {
@@ -68,6 +56,10 @@ if (cmd === "uninstall") {
   if (s === "absent") { console.log(`${HOOK} hook: nothing to uninstall.`); process.exit(0); }
   if (s === "foreign") {
     console.error(`REFUSED: ${target} is not a grey-matter hook; not removing it.`);
+    process.exit(1);
+  }
+  if (target === SOURCE) {
+    console.error(`REFUSED: ${target} is the tracked hook source; change core.hooksPath to disable it.`);
     process.exit(1);
   }
   rmSync(target);
@@ -102,7 +94,6 @@ if (s === "ours" && readFileSync(target, "utf8") === source) {
 
 mkdirSync(dirname(target), { recursive: true });
 writeFileSync(target, source, { mode: 0o755 });
-try { chmodSync(target, 0o755); } catch { /* chmod is a no-op / may throw on some FS; mode above covers it */ }
+chmodSync(target, 0o755);
 console.log(`Installed grey-matter ${HOOK} hook -> ${target}`);
-console.log("It runs `node scripts/check-repo.mjs` before each commit and blocks on failure.");
-console.log("Bypass a single commit with: git commit --no-verify");
+console.log(`It runs \`node scripts/check-repo.mjs\` before each ${HOOK === "pre-push" ? "push" : "commit"} and blocks on failure.`);

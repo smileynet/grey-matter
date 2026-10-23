@@ -18,7 +18,7 @@ import {
   readdirSync, chmodSync, cpSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, dirname } from "node:path";
+import { join, dirname, delimiter } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 
@@ -282,7 +282,7 @@ if (args[1] === "list") {
 }
 `);
   chmodSync(cli, 0o755);
-  const env = { ...process.env, HOME: home, USERPROFILE: home, PATH: bin + ":" + dirname(process.execPath), TEST_PACK: dirname(HERE) };
+  const env = { ...process.env, HOME: home, USERPROFILE: home, PATH: bin + delimiter + dirname(process.execPath), TEST_PACK: dirname(HERE) };
   delete env.CODEX_HOME;
   delete env.CLAUDE_CODE_PLUGIN_CACHE_DIR;
   return { home, env, has: (rel) => existsSync(join(home, rel, "orient", "SKILL.md")) };

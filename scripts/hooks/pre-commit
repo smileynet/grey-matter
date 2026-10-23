@@ -4,7 +4,7 @@
 # Runs the repo-consistency command (scripts/check-repo.mjs) and BLOCKS the commit on a
 # nonzero exit, catching a broken link, a lost invocation sidecar, or an index drift
 # locally — before it is committed and (per AGENTS.md's "Working rhythm") pushed. This
-# project uses local hooks only; there is no CI backstop, so the hook is the gate.
+# project uses local gates by default, with manual platform checks available.
 #
 # Opt-in: this is NOT forced on every clone. Install it with
 #   node scripts/install-hooks.mjs        (or scripts/install-hooks.sh / .ps1)

@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, symlinkSync, w
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 
 const SCRIPT = join(dirname(fileURLToPath(import.meta.url)), "uninstall-crew-research.mjs");
 
@@ -55,6 +55,9 @@ test("apply removes exactly the manifest-named and crew-owned items, and snapsho
     const r = run(h, "--apply", "--backup", backup);
     assert.equal(r.status, 0, r.stdout + r.stderr);
     assert.ok(existsSync(backup));
+    const entries = execFileSync("tar", ["-tzf", "snap.tar.gz"], { cwd: h, encoding: "utf8" });
+    assert.match(entries, /\.kiro\/skills\/handoff\/SKILL.md/);
+    assert.match(entries, /\.kiro\/steering\/image-handling.md/);
     for (const gone of [".kiro/skills/handoff", ".kiro/skills/code-review", ".kiro/skills/recall",
       ".agents/skills/handoff", ".agents/skills/grill-with-docs", ".kiro/.crew-skills", ".kiro/.crew-tier",
       ".agents/skills/.crew-skills-codex", ".kiro/steering/verification-protocol.md",

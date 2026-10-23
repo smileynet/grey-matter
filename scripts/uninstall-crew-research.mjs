@@ -22,7 +22,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, lstatSync, mkdirSync, readFileSync, rmSync, realpathSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname, join, resolve, sep } from "node:path";
+import { basename, dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const CREW_STEERING = [
@@ -99,7 +99,8 @@ function main(argv) {
   backup ??= join(home, ".local", "share", "grey-matter", `crew-research-snapshot-${new Date().toISOString().replace(/[:.]/g, "-")}.tar.gz`);
   mkdirSync(dirname(backup), { recursive: true });
   const snap = [".kiro/skills", ".kiro/steering", ".kiro/.crew-skills", ".kiro/.crew-tier", ".agents/skills", ".codex/AGENTS.md"].filter((p) => exists(join(home, p)));
-  execFileSync("tar", ["-czf", backup, "-C", home, ...snap]);
+  // GNU tar interprets a drive colon in -f as a remote host. Use a local basename.
+  execFileSync("tar", ["-czf", basename(backup), "-C", home, ...snap], { cwd: dirname(backup) });
   console.log(`snapshot: ${backup}  (restore: tar -xzf ${backup} -C ${home})`);
   for (const p of remove) rmSync(p, { recursive: true, force: true });
   console.log(`removed ${remove.length}.`);

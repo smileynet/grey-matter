@@ -17,6 +17,7 @@
 //   9. Claude plugin manifest      -> scripts/check-plugin-manifest.mjs (buckets, version, marketplace)
 //  10. YAML syntax and core types  -> scripts/check-skill-syntax.mjs (npm ci once for maintainers)
 //  11. release draft/artifact safety -> release*.test.mjs (isolated repos/worktrees/archives)
+//  12. opt-in Git hooks            -> install-hooks.test.mjs (disposable repositories)
 //
 // Design (AC-driven):
 //  - READ-ONLY on user state. The installer test uses throwaway temp roots (mkdtemp),
@@ -99,6 +100,7 @@ run("8. repo survey tiers (adopt-project portfolio)", node, ["--test", join(SCRI
 run("9. Claude plugin manifest", node, [join(SCRIPTS, "check-plugin-manifest.mjs")]);
 run("10. YAML syntax and core types", node, [join(SCRIPTS, "check-skill-syntax.mjs")]);
 run("11. release draft and artifact safety", node, ["--test", join(SCRIPTS, "release-artifacts.test.mjs"), join(SCRIPTS, "release-version.test.mjs"), join(SCRIPTS, "release.test.mjs"), join(SCRIPTS, "release-product.test.mjs"), join(SCRIPTS, "release-native.test.mjs"), join(SCRIPTS, "release-entrypoints.test.mjs"), join(SCRIPTS, "release-verify.test.mjs")]);
+run("12. opt-in Git hooks", node, ["--test", join(SCRIPTS, "install-hooks.test.mjs")]);
 
 // --- Summary ------------------------------------------------------------------
 console.log("\n==================== repo-check summary ====================");

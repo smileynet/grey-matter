@@ -103,6 +103,23 @@ installs a `pre-commit` hook that runs `check-repo.mjs` and blocks the commit on
 on clone — install it if you want the local gate. (Normal gates remain local; the manually dispatched platform job below supplies
 Windows/Linux evidence.)
 
+For a push gate, run `node scripts/install-hooks.mjs --hook pre-push`. This installs
+the committed `.githooks/pre-push` in Git's effective hook directory. It runs
+`node scripts/check-repo.mjs`, blocks on failure or missing Node, and clears Git's repository
+context before checks create temporary repositories. Manage it with `list --hook pre-push`
+or `uninstall --hook pre-push`. The installer respects `core.hooksPath`, preserves
+foreign hooks, and refuses to delete its tracked source when `.githooks` is configured
+directly. Both hooks remain opt-in. Invariant 12 tests ownership, worktrees and a real
+green/red/green push against a disposable bare remote.
+
+Git requires executable hooks and aborts a push on a nonzero pre-push exit. Its
+[hook documentation](https://git-scm.com/docs/githooks) also requires clearing exported
+repository variables before operating in another repository;
+[`--local-env-vars`](https://git-scm.com/docs/git-rev-parse) supplies their names.
+[`core.hooksPath`](https://git-scm.com/docs/git-config) changes the effective directory.
+Sources read 2026-10-23. Clearing all `GIT_*` variables would also discard unrelated
+configuration, so the hook clears only Git's repository-local list.
+
 
 Release bundle construction and verification are documented in
 [release artifacts](release-artifacts.md); their isolated fixtures are invariant 11.
@@ -110,7 +127,7 @@ Release bundle construction and verification are documented in
 ## Manual platform validation
 
 `.github/workflows/platform-validation.yml` runs only on `workflow_dispatch`. It
-reproduces ticket 60's two Windows fixture failures, then runs the full strict gate
+reproduces ticket 60's two Windows fixture suites and runs the full strict gate
 on Windows and Ubuntu with Node 22 and a pinned tkt source dependency. Native plugin
 CLIs, previous-release upgrades and product publication are outside this job.
 
