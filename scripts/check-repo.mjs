@@ -15,6 +15,7 @@
 //   7. crew-research uninstall     -> scripts/uninstall-crew-research.test.mjs (fake home only)
 //   8. repo survey (portfolio)     -> scripts/survey-repos.test.mjs (temp git repos)
 //   9. Claude plugin manifest      -> scripts/check-plugin-manifest.mjs (buckets, version, marketplace)
+//  10. YAML syntax and core types  -> scripts/check-skill-syntax.mjs (npm ci once for maintainers)
 //
 // Design (AC-driven):
 //  - READ-ONLY on user state. The installer test uses throwaway temp roots (mkdtemp),
@@ -89,6 +90,7 @@ run("6. global AGENTS.md (budget + ownership)", node, ["--test", join(SCRIPTS, "
 run("7. crew-research uninstall scope", node, ["--test", join(SCRIPTS, "uninstall-crew-research.test.mjs")]);
 run("8. repo survey tiers (adopt-project portfolio)", node, ["--test", join(SCRIPTS, "survey-repos.test.mjs")]);
 run("9. Claude plugin manifest", node, [join(SCRIPTS, "check-plugin-manifest.mjs")]);
+run("10. YAML syntax and core types", node, [join(SCRIPTS, "check-skill-syntax.mjs")]);
 
 // --- Summary ------------------------------------------------------------------
 console.log("\n==================== repo-check summary ====================");

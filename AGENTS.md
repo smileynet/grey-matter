@@ -39,110 +39,42 @@ harness reads one source.
 
 `.scratch/` (gitignored) is the project-local place for non-committed working files:
 handoff documents, agent notes, throwaway output. One consistent location per project
-so a fresh agent knows where to look. Nothing in `.scratch/` is durable or shared;
-anything worth keeping is promoted to committed `docs/agents/` reference or a tkt ticket
+so a fresh agent knows where to look.
+
+Nothing in `.scratch/` is durable or shared; anything worth keeping is promoted to committed `docs/agents/` reference or a tkt ticket
 (see `docs/agents/doc-conventions.md`).
 
 ## References
 
 `.references/` holds cloned prior-art and reference material. Its contents are
-gitignored; only [`.references/README.md`](./.references/README.md) is committed, as the
-rehydration index. On a fresh checkout the dir is empty, re-clone the references listed
-in that README. Add new references there with their clone command.
+gitignored; only [`.references/README.md`](./.references/README.md) is committed, as the rehydration index.
+Re-clone its listed references on a fresh checkout; add each new reference with its clone command.
 
-**Prior art is prior art, not authority.** grey-matter is a unique reimagining — your own
-skills and preferences combined with Pocock's, built for a newer model generation without
-legacy baggage. Other skill sets we study (notably **crew-research**, home
+**Prior art is prior art, not authority.** grey-matter combines your skills and preferences
+with Pocock's for this workflow.
+
+Other skill sets we study (notably **crew-research**, home
 `code/crew-research/atomics/`) are **prior art we draw insight from, never an authoritative
-source.** Cite them as "X does this (prior art); grey-matter chose Y" — consulted and weighed,
-not inherited or adapted-from. Don't cite an incidental localized copy (e.g. a skill copied
-into some project's `.kiro/`) as the source; cite the lineage's home.
+source.**
 
-## Install / distribution
+Cite them as "X does this (prior art); grey-matter chose Y" — consulted and weighed,
+not inherited or adapted-from. Cite the lineage's home rather than an incidental copy
+such as a skill copied into a project's `.kiro/`.
 
-Skills deploy with `node scripts/deploy.mjs` (proposal 08). It reads the pack from
-`.claude-plugin/plugin.json` and has one harness table (which skill roots each harness reads,
-and how to tell whether its plugin is installed). From that table it picks roots so each
-harness on this machine sees each skill exactly once, counting an installed plugin as the copy.
-It copies there, takes back copies it left elsewhere, and packages the Antigravity (`agy`)
-plugin when `~/.gemini` exists. It is manifest-tracked and idempotent, refuses foreign dirs,
-and takes `--dry-run`/`list`/`uninstall`/`--root`/`--project`. It also has `check` (the
-manifests match disk and tags) and `audit` (unowned dirs, and skills a harness sees twice).
-`install-skills.mjs` and `build-agy-plugin.mjs` forward to it. tkt vendors the same
-file at `tools/deploy.mjs` (ticket 64), so **change the harness table here, never in a copy**. The earlier
-design is in
-[`docs/agents/proposals/03-distribution-packaging.md`](./docs/agents/proposals/03-distribution-packaging.md);
-the user-level standing rules (`global/AGENTS.md`, no steering) install with
-`node scripts/install-agents-md.mjs` (owner-marked, never clobbers a foreign file);
-per-harness deploy + test instructions are in
-[`docs/agents/harnesses.md`](./docs/agents/harnesses.md). Claude Code installs grey-matter as a
-plugin from this repo's own marketplace (`.claude-plugin/`). It depends on `tkt@tkt`, from
-tkt's marketplace, so add both: `/plugin marketplace add smileynet/tkt`,
-`/plugin marketplace add smileynet/grey-matter`, then `/plugin install grey-matter@grey-matter`
-(tkt installs with it). The design is in
-[`docs/agents/proposals/07-claude-code-plugin.md`](./docs/agents/proposals/07-claude-code-plugin.md).
+## Maintainer commands
 
-### Keeping the Claude plugin current
+Read [distribution maintenance](./docs/agents/distribution-maintenance.md) when changing
+skills, manifests, deployment or release guidance. It covers plugin updates, ownership,
+per-host validation and the consistency checks.
 
-When a change touches skills, the plugin manifests, or tkt's plugin:
+- Setup: Node 22+, then `npm ci --ignore-scripts` after clone or lockfile changes.
+- Gate: `node scripts/check-repo.mjs` must exit 0 before committing/pushing distribution changes.
+- Syntax fixtures: `node --test scripts/skill-syntax.test.mjs` must pass; native validation alone misses malformed YAML.
 
-- **New or changed skill:** no manifest edit. `plugin.json` lists bucket dirs, so the skill is
-  picked up as is. **New bucket:** add `./skills/<bucket>` to `.claude-plugin/plugin.json`;
-  `scripts/check-plugin-manifest.mjs` (check-repo invariant 9) fails until you do.
-- **Users get changes only on a release.** A GitHub install is pinned to `plugin.json`'s
-  `version`. A push to `main` reaches nobody until the version changes, and
-  `claude plugin update` reports "already at the latest version" until then. The `release`
-  skill (`release.sh` step 1b) bumps it. Don't hand-edit `version` outside a release.
-- **Refresh this machine's install** as part of "Deploy by default." Use a marketplace added
-  from the local checkout (`claude plugin marketplace add <path-to-grey-matter>`, once). It
-  loads the files in place, so run `/reload-plugins` or start a new session to pick up edits.
-  For a GitHub install, run `claude plugin marketplace update grey-matter`, then
-  `claude plugin update grey-matter@grey-matter` (this only changes anything after a release).
-- **One install path per harness (guarded).** A skill must never load twice in one harness.
-  `deploy.mjs` enforces this from its harness table: a root that a harness with an installed
-  plugin reads gets no copy, and copies it left there earlier are removed. Foreign dirs are
-  never touched. `--allow-dual` overrides; don't use it in a normal deploy. A new harness, or a
-  root a harness turns out to read, goes in that table, not in a new guard
-  (`scripts/deploy.test.mjs` covers it).
-- **Check before committing:** `node scripts/check-repo.mjs` runs `claude plugin validate`
-  when `claude` is on PATH. To see what loads, run
-  `claude --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`, which lists the
-  skills without a model call.
-- **tkt's plugin lives in the tkt repo**, and grey-matter depends on `tkt@tkt` with no version
-  range (`allowCrossMarketplaceDependenciesOn: ["tkt"]` in `marketplace.json`). Don't relist
-  tkt in grey-matter's marketplace. A bare `tkt` dependency resolves to `tkt@grey-matter`,
-  which installs a second plugin named `tkt` alongside a local `tkt@tkt`. A tkt change reaches
-  grey-matter users when tkt releases, with no edit here.
+## When blocked
 
-## Consistency checks
-
-One command verifies every mechanical invariant the skill distribution depends on:
-
-```
-node scripts/check-repo.mjs
-```
-
-It aggregates (each also runnable on its own): the deployer's ownership, plugin guards and
-root selection (`scripts/deploy.test.mjs`), invocation sidecars + README tiers
-(`scripts/check-invocation-policy.mjs`), doc indexes + relative links
-(`scripts/check-docs-consistency.mjs`), ticket health (`tkt validate`), adopt-project's
-knowledge-relocation fixtures (`scripts/relocate-knowledge.test.mjs`), the global AGENTS.md
-size budget + ownership (`scripts/install-agents-md.test.mjs`), the crew-research uninstall scope
-(`scripts/uninstall-crew-research.test.mjs`), the repo-survey tiers (`scripts/survey-repos.test.mjs`), and the
-Claude plugin manifest (`scripts/check-plugin-manifest.mjs`: every skill bucket listed, version not
-behind the latest tag, marketplace entry present). It is
-**read-only on user state** (the installer check uses throwaway temp roots, never a real
-harness skill root) and needs **no harness authentication or network** (tkt is local and
-degrades to a skipped-with-warning if absent). Run it before a
-release or a distribution change. Exit 0 = all invariants hold; nonzero names what failed.
-Fixtures proving each invariant fails when seeded live in `scripts/check-repo.test.mjs`
-(`node --test`).
-
-An **opt-in pre-commit hook** can run this automatically: `node scripts/install-hooks.mjs`
-installs a `pre-commit` hook that runs `check-repo.mjs` and blocks the commit on failure;
-`list` / `uninstall` manage it, and it refuses to clobber a foreign hook. It is not forced
-on clone — install it if you want the local gate. (This project uses local hooks only;
-there is no CI pipeline.)
+Record unavailable gates and exact failures in the owning ticket; continue independent
+work. Release staging waits for required evidence or an explicit supported-scope decision.
 
 ## Working rhythm
 

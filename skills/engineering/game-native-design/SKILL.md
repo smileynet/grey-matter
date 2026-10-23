@@ -1,6 +1,6 @@
 ---
 name: game-native-design
-description: Build games that feel like games, not web apps. Use when designing or reviewing game code: the loop, simulation state, performance, feel, or when another skill needs the game-native vocabulary. Reach for the matching engine appendix once the engine is known.
+description: "Build games that feel like games, not web apps. Use when designing or reviewing game code: the loop, simulation state, performance, feel, or when another skill needs the game-native vocabulary. Reach for the matching engine appendix once the engine is known."
 ---
 
 # Game-Native Design

@@ -75,6 +75,16 @@ roots differ per harness; project-level `.agents/skills/` is the shared root for
 Crush, OpenCode, and Claude. Full results and the per-harness root table:
 `docs/agents/research/harness-behavior-probes.md`.
 
+## Maintainer checks
+
+Use Node 22+ and run `npm ci --ignore-scripts` after cloning, then
+`node scripts/check-repo.mjs`. Checks run offline; the pinned YAML parser is a
+development dependency. Plugin users do not need npm dependencies. The standalone
+deploy engine remains dependency-free.
+
+Native validation, source-documentation audits, and update procedures are described in
+[distribution maintenance](docs/agents/distribution-maintenance.md).
+
 ## Status
 
 The active engineering + productivity skill sets are reviewed and authored; beta/frozen
