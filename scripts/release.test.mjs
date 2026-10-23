@@ -111,7 +111,7 @@ test("a terminated CLI process resumes from its owned worktree without a second 
 for (const detached of [false, true]) test(`existing ${detached ? "detached" : "branch"} app-managed worktree preserves its source checkout`, () => fixture(({ dir, repo, sourceSha, run }) => {
   const worktree = join(dir, "managed"); git(repo, "worktree", "add", ...(detached ? ["--detach"] : ["-b", "codex/managed-fixture"]), worktree, sourceSha);
   const result = run({ execute: true, worktree });
-  assert.equal(result.worktree, worktree); assert.equal(git(repo, "rev-parse", "HEAD"), sourceSha);
+  assert.equal(result.worktree, realpathSync.native(worktree)); assert.equal(git(repo, "rev-parse", "HEAD"), sourceSha);
 }));
 
 test("foreign output and unrelated candidate changes are preserved and refused", () => fixture(({ out, run }) => {

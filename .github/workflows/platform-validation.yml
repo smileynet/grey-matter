@@ -26,9 +26,12 @@ jobs:
       - run: npm ci --ignore-scripts
       - name: Original Windows failures
         run: node --test scripts/relocate-knowledge.test.mjs scripts/uninstall-crew-research.test.mjs
-      - name: Worktree path diagnostics
+      - name: Worktree identity and recovery
         if: always()
-        run: node --test --test-name-pattern 'resume after interrupted worktree' scripts/release.test.mjs
+        run: node --test --test-name-pattern 'resume after interrupted worktree|app-managed worktree' scripts/release.test.mjs
+      - name: Archive symlink rejection
+        if: always()
+        run: node --test --test-name-pattern 'committed symlinks' scripts/release-artifacts.test.mjs
       - name: Native deployment and hook fixtures
         if: always()
         run: node --test scripts/deploy.test.mjs scripts/install-hooks.test.mjs

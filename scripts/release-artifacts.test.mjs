@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { execFileSync, spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
@@ -102,8 +102,12 @@ for (const state of ["matching", "wrong-authority", "stale-lock"]) test(`Cargo a
   else assert.throws(() => build(), state === "wrong-authority" ? /Cargo authority differs/ : /Cargo.lock root package version differs/);
 }));
 
-test("source symlinks are rejected before extraction or output writes", { skip: process.platform === "win32" }, () => fixture(({ repo, out, commit, build }) => {
-  symlinkSync("../../outside", join(repo, "skills/example/escape")); commit();
+test("committed symlinks are rejected before extraction or output writes", () => fixture(({ repo, out, build }) => {
+  // Seed Git's link mode directly, independent of Windows checkout/privilege settings.
+  put(join(repo, "link-target"), "../../outside");
+  const blob = git(repo, "hash-object", "-w", "link-target");
+  git(repo, "update-index", "--add", "--cacheinfo", `120000,${blob},skills/example/escape`);
+  git(repo, "commit", "--no-verify", "-m", "Committed symlink fixture");
   assert.throws(() => build(), /unsupported archive entry/);
   assert.equal(existsSync(out), false);
 }));
