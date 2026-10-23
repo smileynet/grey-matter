@@ -151,3 +151,7 @@ against the final candidate tree, and re-runs gates on that exact candidate. Sto
 pushing tags, publishing registries/GitHub releases, promoting stable, or submitting stores.
 Use a dedicated candidate worktree/branch so ordinary local deploy never exposes proposed
 versions to stable users. A later release action publishes the reviewed candidate.
+
+## First-pass conformance findings (2026-10-23)
+
+The [Codex](../research/codex-plugin-conformance.md), [Claude](../research/claude-plugin-conformance.md), and [Antigravity](../research/agy-plugin-conformance.md) source audits preserve native results and authoritative links. Ticket 72 repairs three dangling Antigravity wrap-session resource links. Ticket 73 verifies runtime invocation policy and current Claude component validation. Both block ticket 70; discovery and schema success alone do not certify runtime behavior. Ticket 65 still owns the consolidated six-row report and refreshed release-revision evidence.

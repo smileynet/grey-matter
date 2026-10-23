@@ -54,3 +54,7 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 - [ ] OpenAI, Claude, Agent Skills, and applicable Agent Plugins specifications are re-read; the current vendor-published Antigravity plugin specification or shipped schema is located and cited, with unavailable guidance explicitly recorded.
 - [ ] Native checks and isolated loading verify both repositories without credentials or files accidentally supplied by the maintainer checkout; source-versus-runtime conflicts are documented.
 - [ ] The committed report and references pass relative-link checks; any new mechanical rule includes a seeded failing fixture proving detection.
+
+## Preserved first-pass research
+
+Read the dated [Codex](../docs/agents/research/codex-plugin-conformance.md), [Claude](../docs/agents/research/claude-plugin-conformance.md), and [Antigravity](../docs/agents/research/agy-plugin-conformance.md) reports. These preserve source links, exact revisions, native results and coverage limits. They are inputs to the final matrix, not blanket conformance passes. Concrete remediation: tickets 72 and 73, both mandatory final-audit blockers.
