@@ -15,8 +15,11 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 - `adopt-project` files audit findings as review-first migration findings, so the project's own agent confirms or rejects each one before acting on it.
 
 - User-level standing rules: one short `global/AGENTS.md` (verify before claiming done, keep code minimal, trust observation over docs), installed into kiro-cli, Codex, Claude Code, and OpenCode with `scripts/install-agents-md.mjs`. It replaces always-on steering, stays under a 3 KB budget, and never overwrites a file it didn't install.
+- `line-craft` skill: write fiction prose and dialogue so feeling is carried by acts and errands. It includes a revision pass and a self-testing catalog of sentimental shapes, which grows from lines the author rejects, plus a standalone checker. The moves come from a study of LucasArts adventure dialogue.
 
 ### Changed
+- `research` reads copyrighted sources in place (short snippets, cited by URL; clone only what a license allows) and writes findings into the research directory the repo's `AGENTS.md` names, falling back to `docs/agents/research/`. `research-audit` writes its audit next to the findings it checks.
+- `retro` has a new "passed but rejected" category for output the user rejected even though it passed every check. The fix it looks for is a positive move with before/after examples, with the rejected output captured as a fixture.
 - `adopt-project` treats skills a repo ships to its users as product: it audits them but no longer restructures them. `conformance-audit` reports grey-matter's own layout rules as not applicable on such repos.
 
 ## [0.1.0] - 2026-10-19

@@ -89,6 +89,7 @@ Off the main flow entirely.
 - **to-questionnaire**: when what's blocking you is in **someone else's** head, it writes them a questionnaire aimed at the gap. What comes back is material for grill-with-docs or to-spec.
 - **wizard**: for the steps only a **human** can take (provisioning, credentials, CI secrets, clicking an unfamiliar dashboard, a one-off migration). It generates an interactive bash script that walks the human through and writes captured values to a **sink** (`.env`, CI secret). Model-invoked, for where a human is genuinely in the loop.
 - **writing-for-agents**: the reference for writing documents agents consume (skills, `AGENTS.md`, pointed-at docs).
+- **line-craft**: the reference for writing fiction lines people read (prose, dialogue): feeling as acts and errands, a shape catalog that grows from rejected lines.
 
 - **teach**: learn a topic over multiple sessions in a stateful workspace, the agent tutors you, grounding lessons in trusted fetched sources and gating mastery on demonstrated retrieval. For acquiring a skill or concept, not shipping code.
 - **wait-what**: a mid-conversation corrective when a message didn't land. Fire it inside any other skill and the agent re-pitches with the context it assumed, in plain active-voice sentences, using the `GLOSSARY.md` vocabulary.

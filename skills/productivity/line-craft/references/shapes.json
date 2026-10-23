@@ -1,0 +1,108 @@
+{
+  "format": "voice-shapes-catalog",
+  "version": 1,
+  "notes": "STARTER catalog for the line-craft skill (format: CATALOG.md). Seeded from the writing workspace house catalog (D:/code/writing/_spikes/suite/data/voice-shapes.json, tkt 84/85); the examples are that project's author-rejected lines and their accepted rewrites. Copy into a project and grow it from the project's own rejections.",
+  "shapes": [
+    {
+      "ruleId": "fragment-kicker",
+      "severity": "fail",
+      "pattern": "\\bNot [a-z]+(?: [a-z]+){0,2}\\. Not [a-z]+(?: [a-z]+){0,2}\\. [A-Z][a-z]+(?: [a-z]+){0,2}\\.",
+      "flags": "g",
+      "message": "three-fragment kicker (\"Not X. Not Y. Z.\") delivers the verdict as a drumbeat",
+      "move": "small-fact ending",
+      "fixHint": "end on one small domestic fact that implies the verdict, or give it to a character who can't quite commit",
+      "examples": [
+        {
+          "bad": "She left Morgan to her cots and her ledgers and her changed hands, and marked the ward on her map as a place with a light still on in it. Not cured. Not lost. Kept.",
+          "clean": "She left Morgan to her cots and her ledgers, and marked the ward on her map with a small square, the mark she used for water.",
+          "source": "arc-catalyst-morgan close_ally, pre-tkt-84"
+        }
+      ]
+    },
+    {
+      "ruleId": "dialogue-gloss",
+      "severity": "fail",
+      "pattern": "\\b(?:said|says|asked|told \\w+) it (?:like|as if|as though)\\b[^.!?]*[.!?]",
+      "flags": "gi",
+      "message": "the narrator explains how a line was said instead of letting the next beat show it",
+      "move": "reply or act",
+      "fixHint": "delete the gloss; let a reply or an action carry it",
+      "examples": [
+        {
+          "bad": "Morgan, she said, when Echo asked what the initials stood for. Morgan Chen. She said it like an entry in the ledger, something to be kept straight.",
+          "clean": "Morgan, she said, when Echo asked what the initials stood for. Morgan Chen. She spelled the Chen, and wrote it in the ledger under Echo's line.",
+          "source": "arc-catalyst-morgan recognize (cold entry), pre-tkt-84"
+        }
+      ]
+    },
+    {
+      "ruleId": "whatever-become",
+      "severity": "fail",
+      "pattern": "\\bwhatever (?:the rest of )?(?:she|he|they|it|her|him|them)(?: had)? (?:become|turned into)\\b[^.!?]*",
+      "flags": "gi",
+      "message": "ominous non-description: names that something changed without saying what",
+      "move": "literal act",
+      "fixHint": "name one literal, checkable thing she does now, or no longer does",
+      "examples": [
+        {
+          "bad": "You, she said, in the voice off the tape. You found the cache. Good. Her hands, squaring the ledger, were a nurse's hands yet, whatever the rest of her had become.",
+          "clean": "You, she said, in the voice off the tape. You found the cache. Good. Did you use the gauze or save it? She was writing the answer down before Echo gave it.",
+          "source": "arc-catalyst-morgan recognize, pre-tkt-84"
+        }
+      ]
+    },
+    {
+      "ruleId": "vague-something",
+      "severity": "warn",
+      "pattern": "\\bsomething (?:that was )?(?:still|past|no longer|more than|less than)\\b[^.,;!?]*",
+      "flags": "gi",
+      "message": "abstraction standing in for a person (\"something that was still a person\")",
+      "move": "retained habit",
+      "fixHint": "show one retained habit concretely and stop; don't follow it with 'she had always done that'",
+      "examples": [
+        {
+          "bad": "She looked up. Her eyes tracked the cracked XEDRA badge and stopped there, and something that was still a person surfaced behind the change.",
+          "clean": "She looked up. Her eyes tracked the cracked XEDRA badge and stopped there. Then she reached over and retied the bandage on Echo's wrist. It had been tied wrong for two days.",
+          "source": "arc-catalyst-morgan recognize, pre-tkt-84"
+        },
+        {
+          "bad": "The ward again. The squared cots, the clean water, the tenders who did not move quite like people. Order kept by something past human.",
+          "clean": "The ward again. The squared cots, the clean water, the tenders who did not move quite like people. The ledger on the folding table, open to today.",
+          "source": "arc-catalyst-morgan ward revisit, pre-tkt-84"
+        }
+      ]
+    },
+    {
+      "ruleId": "callback-gloss",
+      "severity": "warn",
+      "pattern": "\\bIt was what [^.!?]*(?:asked|said|wanted|told)[^.!?]*[.!?]|\\bhanded back\\b",
+      "flags": "g",
+      "message": "the narrator points at the story's own earlier line and asks the reader to feel the echo",
+      "move": "errand",
+      "fixHint": "cut it; turn the instruction into a specific errand and let the reader notice the echo",
+      "examples": [
+        {
+          "bad": "Keep the order, Echo told her. Keep whoever comes next alive. It was what the note had asked of Echo, handed back.",
+          "clean": "Echo told her the pumphouse was still stocked, the water under the board was good, and the cot needed a new leg. Morgan wrote it down. She asked which leg.",
+          "source": "arc-catalyst-morgan close_ally, pre-tkt-84"
+        }
+      ]
+    },
+    {
+      "ruleId": "aphoristic-closer",
+      "severity": "warn",
+      "pattern": "(?:^|[.!?] )((?:Someone|Somebody|A (?:man|woman|person)|The kind of \\w+) who [^.!?]+\\.)(?= #|\\s*$)",
+      "flags": "g",
+      "message": "a verbless verdict closes the line (\"Someone who triaged even her own leaving.\")",
+      "move": "end on the act",
+      "fixHint": "end on the act itself; keep any reaction as small as possible",
+      "examples": [
+        {
+          "bad": "She walked the shelves. Three weeks of supplies made to last three months. Someone who triaged even her own leaving.",
+          "clean": "She walked the shelves. Three weeks of supplies, rationed out to last three months. The gauze was on the top shelf, out of the damp, with the date it was opened written on the box.",
+          "source": "arc-catalyst-morgan walk_shelves, pre-tkt-84"
+        }
+      ]
+    }
+  ]
+}
