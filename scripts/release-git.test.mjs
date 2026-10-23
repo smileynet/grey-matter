@@ -60,3 +60,53 @@ test("candidate refs: divergent branch cannot create the release tag", (t) => {
   assert.equal(git(input.repo, ["ls-remote", input.remotePath, input.tag]).trim(), "");
   assert.match(git(input.repo, ["ls-remote", input.remotePath, input.branch]), new RegExp(`^${foreign}`));
 });
+
+test("candidate refs: mirror configuration cannot widen or delete refs", (t) => {
+  const input = fixture(t);
+  git(input.repo, ["push", input.remotePath, `${input.candidateSha}:refs/heads/retained`]);
+  git(input.repo, ["branch", "unrequested"]);
+  git(input.repo, ["config", "remote.origin.mirror", "true"]);
+  assert.equal(pushCandidateRefs({ ...input, execute: true }).complete, true);
+  assert.match(git(input.repo, ["ls-remote", input.remotePath, "refs/heads/retained"]), new RegExp(`^${input.candidateSha}`));
+  assert.equal(git(input.repo, ["ls-remote", input.remotePath, "refs/heads/unrequested"]).trim(), "");
+});
+
+test("candidate refs: an annotated tag with another embedded name is refused", (t) => {
+  const input = fixture(t);
+  git(input.repo, ["tag", "-a", "wrong-name", "-m", "different identity"]);
+  const tagObject = git(input.repo, ["rev-parse", "wrong-name"]).trim();
+  assert.throws(() => pushCandidateRefs({ ...input, tagObject, execute: true }), /header differs/);
+  assert.equal(git(input.repo, ["ls-remote", input.remotePath]).trim(), "");
+});
+
+test("candidate refs: a receive-time competing branch update rejects the whole candidate", (t) => {
+  const input = fixture(t);
+  git(input.repo, ["push", input.remotePath, `${input.candidateSha}:${input.branch}`]);
+  const previous = input.candidateSha;
+  git(input.repo, ["commit", "--allow-empty", "-m", "advance candidate"]);
+  git(input.repo, ["tag", "-f", "-a", "v1.0.0", "-m", "candidate"]);
+  input.candidateSha = git(input.repo, ["rev-parse", "HEAD"]).trim();
+  input.tagObject = git(input.repo, ["rev-parse", "v1.0.0"]).trim();
+  git(input.repo, ["checkout", "--orphan", "competitor"]);
+  git(input.repo, ["commit", "--allow-empty", "-m", "competing history"]);
+  const competitor = git(input.repo, ["rev-parse", "HEAD"]).trim();
+  git(input.repo, ["push", input.remotePath, `${competitor}:refs/heads/competitor`]);
+  // The receive hook races after the client's observation, using already-stored objects.
+  writeFileSync(join(input.remotePath, "hooks", "pre-receive"), `#!/bin/sh\nunset GIT_QUARANTINE_PATH\ngit update-ref ${input.branch} ${competitor} ${previous} || exit 1\n`, { mode: 0o755 });
+  assert.throws(() => pushCandidateRefs({ ...input, execute: true }), /divergent/);
+  assert.equal(git(input.repo, ["ls-remote", input.remotePath, input.tag]).trim(), "");
+  assert.match(git(input.repo, ["ls-remote", input.remotePath, input.branch]), new RegExp(`^${competitor}`));
+});
+
+test("candidate refs: a race on an already-matching branch stops after tag-only success", (t) => {
+  const input = fixture(t);
+  git(input.repo, ["push", input.remotePath, `${input.candidateSha}:${input.branch}`]);
+  git(input.repo, ["checkout", "--orphan", "competitor"]);
+  git(input.repo, ["commit", "--allow-empty", "-m", "competing history"]);
+  const competitor = git(input.repo, ["rev-parse", "HEAD"]).trim();
+  git(input.repo, ["push", input.remotePath, `${competitor}:refs/heads/competitor`]);
+  writeFileSync(join(input.remotePath, "hooks", "pre-receive"), `#!/bin/sh\nunset GIT_QUARANTINE_PATH\ngit update-ref ${input.branch} ${competitor} ${input.candidateSha} || exit 1\n`, { mode: 0o755 });
+  assert.throws(() => pushCandidateRefs({ ...input, execute: true }), /divergent/);
+  assert.match(git(input.repo, ["ls-remote", input.remotePath, input.tag]), new RegExp(`^${input.tagObject}`));
+  assert.match(git(input.repo, ["ls-remote", input.remotePath, input.branch]), new RegExp(`^${competitor}`));
+});
