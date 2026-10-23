@@ -1,0 +1,221 @@
+{
+  "schema": 1,
+  "date": "2026-10-23",
+  "approval": "User explicitly approved grey-matter 0.2.0 and tkt 0.5.0 for staged candidates only.",
+  "scope": "Initial local drafts; notes/scope are not final staging approval. No release tag, registry/GitHub publication or stable promotion.",
+  "entries": [
+    {
+      "product": "grey-matter",
+      "version": "0.2.0",
+      "sourceSha": "d0340d4c4189b3d7b2e4c72d67ba1a34bbe231df",
+      "candidateSha": "d31b72a33be3661e1654ec2a27273cd75af6bc04",
+      "branch": "codex/release-grey-matter-0.2.0-d0340d4c",
+      "worktree": "/Users/sambiggins/.codex/worktrees/release-grey-matter-0-2-0/grey-matter",
+      "localOutput": ".scratch/candidates/grey-matter-0.2.0-initial",
+      "verificationSha256": "eaee928de4fb9b6ce94d050ad575df588e77369a958b6ed7c56ff3014c3d14f1",
+      "metadataSha256": "786bb6084dfae007ec1bd61f6e01324df9238db84a8f15cc96897a8492588c38",
+      "productGate": {
+        "status": "pass",
+        "platform": {
+          "os": "darwin",
+          "release": "25.6.0",
+          "arch": "arm64",
+          "node": "v24.14.1"
+        },
+        "checks": [
+          {
+            "command": [
+              "/Users/sambiggins/.local/share/fnm/node-versions/v24.14.1/installation/bin/node",
+              "scripts/check-repo.mjs",
+              "--require-tools"
+            ],
+            "started": "2026-10-23T23:44:05.166Z",
+            "finished": "2026-10-23T23:44:45.663Z",
+            "exit": 0,
+            "signal": null,
+            "error": null,
+            "log": "1-product.log",
+            "sha256": "9552175f16bc6b6d283aac7cec1bb264f555771504fbf91609490735d784943f"
+          }
+        ]
+      },
+      "nativeGate": {
+        "status": "pass",
+        "platform": {
+          "os": "darwin",
+          "release": "25.6.0",
+          "arch": "arm64"
+        },
+        "isolation": {
+          "homes": "disposable",
+          "credentials": "environment allowlist; no user configuration",
+          "network": "loopback-only sandbox"
+        },
+        "rows": [
+          {
+            "host": "codex",
+            "status": "pass",
+            "version": "codex-cli 0.147.0",
+            "skills": 44,
+            "asset": "grey-matter-0.2.0-codex.tar.gz",
+            "assetSha256": "e96bb5001623841c3ceb457836ea8110e9f170de8f9217201986ec5c686ab89e"
+          },
+          {
+            "host": "claude",
+            "status": "pass",
+            "version": "2.1.309 (Claude Code)",
+            "skills": 44,
+            "asset": "grey-matter-0.2.0-claude.tar.gz",
+            "assetSha256": "ce00722465fb69166d1a8786b63bd8c7b03209a72c6d171ebe0272f813c91357"
+          },
+          {
+            "host": "agy",
+            "status": "pass",
+            "version": "1.4.6",
+            "skills": 44,
+            "asset": "grey-matter-0.2.0-agy.tar.gz",
+            "assetSha256": "a4b4fe3a77e0fde4e5024efa2520fdfa729492ffc41690217d5fa364b235e709"
+          }
+        ]
+      },
+      "assets": [
+        {
+          "host": "codex",
+          "name": "grey-matter-0.2.0-codex.tar.gz",
+          "sha256": "e96bb5001623841c3ceb457836ea8110e9f170de8f9217201986ec5c686ab89e",
+          "files": 206
+        },
+        {
+          "host": "claude",
+          "name": "grey-matter-0.2.0-claude.tar.gz",
+          "sha256": "ce00722465fb69166d1a8786b63bd8c7b03209a72c6d171ebe0272f813c91357",
+          "files": 206
+        },
+        {
+          "host": "agy",
+          "name": "grey-matter-0.2.0-agy.tar.gz",
+          "sha256": "a4b4fe3a77e0fde4e5024efa2520fdfa729492ffc41690217d5fa364b235e709",
+          "files": 203
+        }
+      ],
+      "pending": [
+        "scope",
+        "compatibility",
+        "upgrade",
+        "platform-approval",
+        "final-audit",
+        "staging"
+      ],
+      "publishable": false
+    },
+    {
+      "product": "tkt",
+      "version": "0.5.0",
+      "sourceSha": "385596b48c4ae02b5a7af99c73b09cd12bcd5692",
+      "candidateSha": "8c4038574c2a5bb58086909859cd14b6071115f6",
+      "branch": "codex/release-tkt-0.5.0-385596b4",
+      "worktree": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-initial/worktree",
+      "localOutput": ".scratch/candidates/tkt-0.5.0-initial",
+      "verificationSha256": "38d48d511560e4e8af905ecc20ca3fa81d6e9c0c8b3fa7cda8cdff06077421ba",
+      "metadataSha256": "e78ab47be75a930d34d9edc5dedc40e7b26eeb4fb93a50e04f08b6baec036cb0",
+      "productGate": {
+        "status": "pass",
+        "platform": {
+          "os": "darwin",
+          "release": "25.6.0",
+          "arch": "arm64",
+          "node": "v24.14.1"
+        },
+        "checks": [
+          {
+            "command": [
+              "mise",
+              "run",
+              "check"
+            ],
+            "started": "2026-10-23T23:44:05.700Z",
+            "finished": "2026-10-23T23:44:31.343Z",
+            "exit": 0,
+            "signal": null,
+            "error": null,
+            "log": "1-product.log",
+            "sha256": "c4c3bb822d37607d683c3a12eafce8c04fadd8b58dd270a3c65e5cd4e9d31578"
+          }
+        ]
+      },
+      "nativeGate": {
+        "status": "pass",
+        "platform": {
+          "os": "darwin",
+          "release": "25.6.0",
+          "arch": "arm64"
+        },
+        "isolation": {
+          "homes": "disposable",
+          "credentials": "environment allowlist; no user configuration",
+          "network": "loopback-only sandbox"
+        },
+        "rows": [
+          {
+            "host": "codex",
+            "status": "pass",
+            "version": "codex-cli 0.147.0",
+            "skills": 4,
+            "asset": "tkt-0.5.0-codex.tar.gz",
+            "assetSha256": "47621fbcc3bb261f391830d897769357ca3db2acc103ae74d87a86e6f9a185aa"
+          },
+          {
+            "host": "claude",
+            "status": "pass",
+            "version": "2.1.309 (Claude Code)",
+            "skills": 4,
+            "asset": "tkt-0.5.0-claude.tar.gz",
+            "assetSha256": "f37411bb101a3aaf3b18accc0f236f52f81bb730828d9f7a8e14b0c404eb5656"
+          },
+          {
+            "host": "agy",
+            "status": "pass",
+            "version": "1.4.6",
+            "skills": 4,
+            "asset": "tkt-0.5.0-agy.tar.gz",
+            "assetSha256": "49c9bfe897a49ef8c8be66c989699af747aace524bdd6ad0cc3b259aeadb649f"
+          }
+        ]
+      },
+      "assets": [
+        {
+          "host": "codex",
+          "name": "tkt-0.5.0-codex.tar.gz",
+          "sha256": "47621fbcc3bb261f391830d897769357ca3db2acc103ae74d87a86e6f9a185aa",
+          "files": 36
+        },
+        {
+          "host": "claude",
+          "name": "tkt-0.5.0-claude.tar.gz",
+          "sha256": "f37411bb101a3aaf3b18accc0f236f52f81bb730828d9f7a8e14b0c404eb5656",
+          "files": 36
+        },
+        {
+          "host": "agy",
+          "name": "tkt-0.5.0-agy.tar.gz",
+          "sha256": "49c9bfe897a49ef8c8be66c989699af747aace524bdd6ad0cc3b259aeadb649f",
+          "files": 33
+        }
+      ],
+      "pending": [
+        "scope",
+        "compatibility",
+        "upgrade",
+        "platform-approval",
+        "final-audit",
+        "staging"
+      ],
+      "publishable": false
+    }
+  ],
+  "remaining": [
+    "Regenerate final candidates after the stdin import guard and evidence result-field fixes.",
+    "Review README/changelog/release notes and included scope in tickets 70-71.",
+    "Complete compatibility, upgrade, platform and publication-integration gates."
+  ]
+}

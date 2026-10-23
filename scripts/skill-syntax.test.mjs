@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Seed syntax/shape defects in disposable skill packs; no real source files are changed.
 // Run: node --test scripts/skill-syntax.test.mjs
+import { spawnSync } from "node:child_process";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
@@ -33,4 +34,11 @@ for (const [label, frontmatter, sidecar, diagnostic] of [
   const result = fixture(frontmatter, sidecar);
   assert.equal(result.status, "fail");
   assert.match(result.errors.join("\n"), diagnostic);
+});
+
+test("library imports from Node stdin do not resolve the dash marker as a file", () => {
+  const target = new URL("./release-verify.mjs", import.meta.url).href;
+  const result = spawnSync(process.execPath, ["--input-type=module", "-"], { input: `await import(${JSON.stringify(target)}); console.log("import passed");`, encoding: "utf8" });
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.stdout.trim(), "import passed");
 });

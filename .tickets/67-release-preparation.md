@@ -165,3 +165,5 @@ approval, included-scope decisions and actual final-candidate evidence remain pe
 ## Candidate version approval (2026-10-23)
 
 The user explicitly approved grey-matter 0.2.0 and tkt 0.5.0 for staged candidates. This supersedes the pending-version notes above. It does not approve publication, release-tag pushes, crates.io, stable promotion or directory submission. Final included-scope dispositions and candidate checks remain required.
+
+[Approved-version draft evidence](../docs/agents/research/evidence/approved-candidate-drafts-20261023.json) records grey-matter `d31b72a` (0.2.0) and tkt `8c40385` (0.5.0), all six bundles, fresh macOS product/native passes, hashes and unchanged-SHA preparation replay. Real evidence reads exposed and fixed two tooling defects: stdin imports attempted to resolve `-` as a file, and the reader's product report overwrote its product-name field. Seeded regressions now cover both, with YAML fixtures included in the full gate. These initial drafts predate those fixes and require regeneration before final staging; compatibility, upgrade, platform, scope and final-audit gates remain pending. No publication occurred.

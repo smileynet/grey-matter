@@ -91,6 +91,9 @@ function evidenceFixture({ artifacts, out, sha }) {
 test("bound evidence checks index, child reports and logs without granting publication", () => fixture(async (f) => {
   const proof = evidenceFixture(f), verificationSha256 = proof.save();
   const result = readCandidateEvidence({ artifacts: f.artifacts, evidence: f.out, verificationSha256 });
+  assert.equal(result.product, "grey-matter");
+  assert.equal(result.productEvidence.mode, "product-evidence");
+  assert.equal(result.nativeEvidence.mode, "native-evidence");
   assert.equal(result.publishable, false); assert.ok(result.pending.includes("final-audit"));
   put(join(f.out, "product/1-product.log"), "changed bytes");
   assert.throws(() => readCandidateEvidence({ artifacts: f.artifacts, evidence: f.out, verificationSha256 }), /changed/);
