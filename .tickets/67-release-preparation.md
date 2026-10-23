@@ -2,7 +2,7 @@
 id: "67"
 title: "Prepare version-consistent release candidates and plugin bundles"
 status: open
-blocked_by: ["66"]
+blocked_by: ["66", "74"]
 priority: high
 spec: "release-readiness"
 validation_criteria:
