@@ -1,7 +1,7 @@
 ---
 id: "64"
 title: "One deployer across projects (proposal 08): deploy.mjs, plugin.json as the pack manifest, vendored into tkt"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
