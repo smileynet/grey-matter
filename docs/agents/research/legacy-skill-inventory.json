@@ -1,0 +1,567 @@
+{
+  "date": "2026-10-23",
+  "root": "~/.agents/skills",
+  "ownership": "Unowned by grey-matter and tkt; retention does not adopt installer ownership",
+  "hashAlgorithm": "sha256(sorted relative UTF-8 path + NUL + bytes + NUL)",
+  "entries": [
+    {
+      "name": "adr-authoring",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "0dfad0bb1f696eb682166ac2a17635ab426d52c4357217d361a226b3c2faf290",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/adr-authoring",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "agents-md-authoring",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "63ef40766658abc80dead03667ac13db6bbddbc5a98ace53cd32e2f989b40292",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/agents-md-authoring",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "architecture-deepening",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "b2a3311e7c255e85d1a2188bd311f9581c1ab65b07b18b53ae91ca4bcfc0a22e",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/architecture-deepening",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "changelog-discipline",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "43eec995a77125ff27c0afe22acb6ea96f25f8aab2a0883fa4280209f0dc618e",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/changelog-discipline",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "cheatsheet",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "2711584d91ec679c656762e0655c11b25bdb4b566497c0f84189e6eb04509db4",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/cheatsheet",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "coding-plan-limits",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "f65235cd21477529bdde759ee6f9215a33238f8c722965802038451df278c9c9",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/coding-plan-limits",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "data-modeling",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "b8f58ca645ebc22f044f39134ee9710c0753e1c55f856a36c8a9711057357513",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/data-modeling",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "deployment-safety",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "e839a37ccc130ddbf9f5136a78813e69b12655f8f0e4a41d299552c010b047ef",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/deployment-safety",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "diagrams",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "faadc775aae24a499c616745bc75783f0e6988c60f50aed9ed70ad04f105fbd4",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/diagrams",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "dispatch-review",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "18d98b0ba59efc08e53abdae65c3783ac538d091d694c1b1e975f399ce7d9194",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/dispatch-review",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "docs-audit",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "73b4df6d899bf1fc22af06fe308529314b6beaf6414eee9e528278fea3ef7d47",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/docs-audit",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "enforcement-hierarchy",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "c42b17774729cfdc4451c4424d996231eab48fd143b734d0da657d3a5ce1378f",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/enforcement-hierarchy",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "eval-criteria",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "f2f801d7eef5dfea4b3eea2f02698ddad7ea75ec58a6018767322b2354411d15",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/eval-criteria",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "feedback-loop-debugging",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "683d88ad66b0d977f78de920cf8c98da9b3990921e8bd0bc7c6ee6118bee6ad1",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/feedback-loop-debugging",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "git-protocol",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "142c17565181f927872461e8cb2f8bb48d85fd130baf2a40a62a6ec0c0ebb6f6",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/git-protocol",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "guidance-sync",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "51a072f01fe7df6d5a1a5c201bdddef1bd7ec249d94346a6cb70b5d96c93da0e",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/guidance-sync",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "mise-helper",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "bfdc5775d585c7a8a7aad5ead54af2ad1b02a8b72afc745fefdaf126934c5472",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/mise-helper",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "multi-agent-validation",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "bdd8507cbf8f9462f420ef13446cc5006f95b8931986800f2dc39867ba6bf796",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/multi-agent-validation",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "plan-prereqs",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "904fd6a43a2ae3f99ea93ec2c1c56ce755dab23463966ac67f34ef3994fc38fd",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/plan-prereqs",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "plan-ticket-sync",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "94fbe3c5ee0a2bc68693eb91b5ddacafa43447f3a74bc9098fa2d9b7c684ccc0",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/plan-ticket-sync",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "planning-cycles",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "54f493b391911063e652d36ff0f07a6d1cf17d26e7924e95cd9817e215bb1a0f",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/planning-cycles",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "project-cleanup",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "dceb4e14dfd5ca8c853aaf6a7cf21f4f9e49e25894e9ef956bde46b38b7c8dcc",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/project-cleanup",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "project-conventions",
+      "kind": "reference-only",
+      "disposition": "keep-user-managed",
+      "reason": "Referenced resources used by installed user-level guidance",
+      "treeSha256": "99b76463b4428f926caf838ac6b65f5b63eda14b94a7bb6d1e2a50f688f472dc",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/project-conventions",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": false
+      }
+    },
+    {
+      "name": "project-winddown",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "3688abb694d18944a6e83e69d01e550c88d6c6313cbe54ce1e41025c3c950c1e",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/project-winddown",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "prose-check",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "3a380d48ce0ad0040099e7d7c7009ab7a717507d8612c78257cdaa1d5b408be7",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/prose-check",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "read-handoff",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "348ef6753a28dbf1db9972afb3181268efbdff82afb9d5518275b89e40964806",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/read-handoff",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": false
+      }
+    },
+    {
+      "name": "readme-writing",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "a5ac2033e07c06e7d7c71d329ddc65a541794f9ae704e16e004aee4c1dbf89b3",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/readme-writing",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "recall",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "42869ee5855c9fb04c83f1f6166ddacc91714183497af6d08e9f91ce1142fa5d",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/recall",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "release-protocol",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "ee31149f0f2b1af6e63b0a9e3d4e93a14b060876bb4b77b8442e9385eb378d0a",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/release-protocol",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "research-methodology",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "58fcb65c28810a6939bd68d88c0b3efc2ed7637d5fd48e4913592b24c3839115",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/research-methodology",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "research-output",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "4a5325b7567f830a67e512223a9155ac7f3127f8e66db14491d889ddf3951fd3",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/research-output",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": false
+      }
+    },
+    {
+      "name": "review-new-work",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "00898972bbb4316a97aa1e9caf040b4603a69bdfd86aebbf17b6d0655d3f819d",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/review-new-work",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "script-authoring",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "72f3da4c34db17d68224e8727208234c825ea1d4364099e00a299f3daec019c8",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/script-authoring",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "skill-authoring",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "7fc9db7c2d8ec131ab7e2217c19b9e68ec2376b68d8a62671a9338ff547999c5",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/skill-authoring",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "spec-driven-development",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "1118e7b4cac5380c79cb61b4ad750452585eb9bbba7197ddabe0501618ae67bb",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/spec-driven-development",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "study-all-references",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "225b49a8f0aea383aaff3e2564f1fb1ae7189aa848e853efd0811854f0cefa08",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/study-all-references",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "study-reference",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "c675f0191acf26b8162bfa98321461236030d7062796b0506d6acd718f7cb705",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/study-reference",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "subagent-reliability",
+      "kind": "reference-only",
+      "disposition": "keep-user-managed",
+      "reason": "Referenced resources used by installed user-level guidance",
+      "treeSha256": "7504fb46f491d8591898934dca6f005998e1c606f2b2aa96128f2a418e51b811",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/subagent-reliability",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": false
+      }
+    },
+    {
+      "name": "testing-guide",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "0cd901911f9ea9a15056eb98e8e56af040e980ebe8d4059d1f8844fa57ba85e6",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/testing-guide",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "update-proposal",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "df59c8219beaec59c0db7529ed79a222e424600cd136812024b479a493154d30",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/update-proposal",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "verification-protocol",
+      "kind": "reference-only",
+      "disposition": "keep-user-managed",
+      "reason": "Referenced resources used by installed user-level guidance",
+      "treeSha256": "7f60f49ac9d97b3e2e8b44be55c6b6032e9e0fd462962b3696174ad5fb7612b8",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/verification-protocol",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": false
+      }
+    },
+    {
+      "name": "vertical-slice-planning",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "9c9ae2fdee83105e868dfa22fdfc8ccf53e56abb16d84d89b724f73140d49796",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/vertical-slice-planning",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    },
+    {
+      "name": "writing-style",
+      "kind": "skill",
+      "disposition": "keep-user-managed",
+      "reason": "Standalone legacy capability not replaced by this pack",
+      "treeSha256": "d9bf76e16d796270dd3914396d0286825c7e6887610acca04faa23ced6c91191",
+      "provenance": {
+        "repository": "https://github.com/smileynet/crew-research",
+        "sourcePath": "atomics/skills/writing-style",
+        "sourceCommit": "45c75231303ba7defba419e34972286bf7118318",
+        "byteMatchAtInventory": true
+      }
+    }
+  ]
+}

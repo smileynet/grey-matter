@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "packs": [
+    {
+      "name": "grey-matter",
+      "path": "."
+    },
+    {
+      "name": "tkt",
+      "path": "../tkt",
+      "optional": true,
+      "engine": "tools/deploy.mjs"
+    },
+    {
+      "name": "godot-helper",
+      "path": "../godot-helper",
+      "optional": true,
+      "inventoryOnly": true,
+      "skillRoots": [
+        ".kiro/skills"
+      ]
+    },
+    {
+      "name": "crew-research-prior-art",
+      "path": "../crew-research",
+      "optional": true,
+      "inventoryOnly": true,
+      "skillRoots": [
+        "atomics/skills"
+      ]
+    }
+  ],
+  "legacyInventory": "docs/agents/research/legacy-skill-inventory.json"
+}

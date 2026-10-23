@@ -102,3 +102,7 @@ Additional acceptance criteria:
 - [ ] Audit fixtures inspect actual cached Codex plugin contents across multiple installed plugins and marketplaces and detect stale/missing skills.
 - [ ] A committed portfolio manifest supports seeded cross-pack name-collision and vendored-deployer drift checks without requiring unregistered sibling checkouts.
 - [ ] Shared-root evidence and legacy-directory dispositions are durable, versioned and distinguish unowned content from duplicate loading.
+
+## Phase 3 implementation (2026-10-23)
+
+Engine 1.2.0 reads the committed `skill-packs.json`, inventories actual installed Claude/Codex caches, rejects active source collisions and vendor drift, and records reviewed legacy content without adopting ownership. Read [deployment inventory and evidence](../docs/agents/research/deployment-inventory.md). The isolated native shared-root probe confirms codex-cli 0.147.0 reads `.agents/skills`; the claimed-only table entry is removed. The historical gaps above are resolved by this implementation. Plugin runtime policy and package resource closure remain separate findings under tickets 72–73.

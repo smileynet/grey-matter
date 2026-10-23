@@ -46,8 +46,9 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **Symlinked roots:** default deploy separates an enabled plugin harness's skill-root
   symlink into a real directory, preserving unrelated skills. Owned bare copies are then
   removed from that root; Kiro retains its own copies. `--dry-run` reports the separation.
-- **Reads `~/.agents/skills`?** Claimed, not seen live (0.147 names only `~/.codex/skills`), so
-  the deployer never relies on it as Codex's copy but avoids putting a second copy there.
+- **Reads `~/.agents/skills`: verified on codex-cli 0.147.0.**
+  `node scripts/probe-codex-shared.mjs` uses a disposable home and the native app-server
+  catalog; one shared-root probe loads without a model call. Both roots count for coverage.
 - Packaging reference: [OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins).
 
 

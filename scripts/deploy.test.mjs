@@ -10,11 +10,12 @@
 // driven as a subprocess (its functions aren't exported), which is exactly the
 // surface a user hits.
 
+import { createHash } from "node:crypto";
 import { test, before, after, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import {
   mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, symlinkSync,
-  readdirSync, chmodSync,
+  readdirSync, chmodSync, cpSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
@@ -253,6 +254,12 @@ function homeSandbox({ harnesses = [], claude = false, codex = false } = {}) {
     mkdirSync(join(home, ".codex"), { recursive: true });
     writeFileSync(join(home, ".codex", "config.toml"), '[plugins."grey-matter@grey-matter"]\nenabled = true\n');
   }
+  if (codex) {
+  const cached = join(home, ".codex", "plugins", "cache", "grey-matter", "grey-matter", "0.1.0");
+  mkdirSync(join(cached, ".codex-plugin"), { recursive: true });
+  cpSync(join(HERE, "..", "skills"), join(cached, "skills"), { recursive: true });
+  cpSync(join(HERE, "..", ".codex-plugin", "plugin.json"), join(cached, ".codex-plugin", "plugin.json"));
+  }
   // A fake CLI keeps plugin refresh tests offline and away from the real Codex cache.
   const bin = join(home, "bin");
   mkdirSync(bin);
@@ -265,7 +272,7 @@ const pack = process.env.TEST_PACK;
 const args = process.argv.slice(2);
 fs.appendFileSync(path.join(home, "codex-calls.jsonl"), JSON.stringify(args) + "\\n");
 if (args[1] === "list") {
-  console.log(JSON.stringify({installed: [{pluginId: "grey-matter@grey-matter", enabled: true, source: {source: "local", path: process.env.TEST_PLUGIN_SOURCE || pack}}]}));
+  console.log(process.env.TEST_PLUGIN_LIST || JSON.stringify({installed: [{pluginId: "grey-matter@grey-matter", name: "grey-matter", marketplaceName: "grey-matter", version: "0.1.0", enabled: true, source: {source: "local", path: process.env.TEST_PLUGIN_SOURCE || pack}}]}));
 } else {
   if (process.env.TEST_REFRESH_FAIL) process.exit(1);
   const dest = path.join(home, "plugin-cache");
@@ -314,8 +321,8 @@ test("default roots: plugins count as the copy, and stale copies are taken back"
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
-test("default roots: a claimed read never counts as a harness's copy", () => {
-  // Codex is only *claimed* to read ~/.agents/skills, so it must get ~/.codex/skills.
+test("default roots: prefer the own root on an equal-cost shared-root choice", () => {
+  // Both Codex roots are verified; its own root wins the deterministic tie.
   const sb = homeSandbox({ harnesses: ["codex"] });
   try {
     assert.equal(runWithEnv(["--no-agy"], sb.env).status, 0);
@@ -430,5 +437,115 @@ test("audit: includes Codex plugin coverage when reporting bare duplicates", () 
     assert.equal(runWithEnv(["--root", join(sb.home, ".codex", "skills"), "--allow-dual"], sb.env).status, 0);
     const r = runWithEnv(["audit"], sb.env);
     assert.match(r.stdout, /codex sees 44 skill\(s\) twice/);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+
+test("audit: enumerate multiple cached Codex plugins and detect actual source mismatches", () => {
+  const sb = homeSandbox({ harnesses: ["codex"], codex: true });
+  try {
+    const cache = join(sb.home, ".codex", "plugins", "cache");
+    rmSync(join(cache, "grey-matter", "grey-matter", "0.1.0", "skills", "meta", "sync"), { recursive: true });
+    const at = join(cache, "team", "extra", "1.0.0");
+    mkdirSync(join(at, ".codex-plugin"), { recursive: true });
+    writeFileSync(join(at, ".codex-plugin", "plugin.json"), JSON.stringify({ name: "extra", skills: "./skills" }));
+    mkdirSync(join(at, "skills", "nested", "orient"), { recursive: true });
+    writeFileSync(join(at, "skills", "nested", "orient", "SKILL.md"), "---\nname: orient\n---\nExample");
+    const installed = [
+      { pluginId: "grey-matter@grey-matter", name: "grey-matter", marketplaceName: "grey-matter", version: "0.1.0", enabled: true },
+      { pluginId: "extra@team", name: "extra", marketplaceName: "team", version: "1.0.0", enabled: true },
+    ];
+    const r = runWithEnv(["audit", "--json"], { ...sb.env, TEST_PLUGIN_LIST: JSON.stringify({ installed }) });
+    assert.equal(r.status, 0, r.stdout);
+    const data = JSON.parse(r.stdout);
+    assert.equal(data.metrics.plugins, 2);
+    assert.equal(data.inventory.find((p) => p.id === "grey-matter@grey-matter").skills.length, 43);
+    assert.ok(data.findings.some((s) => s.includes("source mismatch") && s.includes("sync")));
+    assert.ok(data.findings.some((s) => s.includes("codex sees 1 skill(s) twice: orient")));
+    rmSync(at, { recursive: true });
+    const missing = runWithEnv(["audit", "--json", "--strict"], { ...sb.env, TEST_PLUGIN_LIST: JSON.stringify({ installed }) });
+    assert.equal(missing.status, 1);
+    assert.ok(JSON.parse(missing.stdout).findings.some((s) => s.includes("installed manifest missing")));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("portfolio: reject cross-pack name collisions and vendored drift before writing", () => {
+  const sb = homeSandbox();
+  try {
+    const other = join(sb.home, "other");
+    mkdirSync(join(other, ".claude-plugin"), { recursive: true });
+    writeFileSync(join(other, ".claude-plugin", "plugin.json"), JSON.stringify({ name: "other", version: "1.0.0" }));
+    mkdirSync(join(other, "skills", "orient"), { recursive: true });
+    writeFileSync(join(other, "skills", "orient", "SKILL.md"), "---\nname: orient\n---\nOther pack");
+    writeFileSync(join(other, "deploy.mjs"), "old vendor copy");
+    const portfolio = join(sb.home, "packs.json");
+    writeFileSync(portfolio, JSON.stringify({ packs: [
+      { name: "grey-matter", path: dirname(HERE) }, { name: "other", path: other, engine: "deploy.mjs" },
+    ] }));
+    const r = runWithEnv(["--portfolio", portfolio, "--no-agy"], sb.env);
+    assert.equal(r.status, 1);
+    assert.match(r.stdout, /cross-pack collision: orient/);
+    assert.match(r.stdout, /vendored deployer drift/);
+    assert.ok(!sb.has(".agents/skills"));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("Codex: verified shared root supplies coverage without a redundant own copy", () => {
+  const sb = homeSandbox({ harnesses: ["codex"] });
+  try {
+    const shared = join(sb.home, ".agents", "skills");
+    assert.equal(runWithEnv(["--root", shared], sb.env).status, 0);
+    const audited = runWithEnv(["audit", "--json"], sb.env);
+    assert.equal(audited.status, 0, audited.stdout);
+    assert.ok(!JSON.parse(audited.stdout).findings.some((s) => s.includes("codex sees")));
+    assert.ok(sb.has(".agents/skills"));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+
+test("portfolio: deploy each registered active pack once without scanning other siblings", () => {
+  const sb = homeSandbox();
+  try {
+    const other = join(sb.home, "other");
+    mkdirSync(join(other, ".claude-plugin"), { recursive: true });
+    writeFileSync(join(other, ".claude-plugin", "plugin.json"), JSON.stringify({ name: "other", version: "1.0.0" }));
+    mkdirSync(join(other, "skills", "other-core"), { recursive: true });
+    writeFileSync(join(other, "skills", "other-core", "SKILL.md"), "---\nname: other-core\n---\nOther pack");
+    const portfolio = join(sb.home, "packs.json");
+    writeFileSync(portfolio, JSON.stringify({ packs: [
+      { name: "grey-matter", path: dirname(HERE) }, { name: "other", path: other },
+      { name: "absent-optional", path: join(sb.home, "uncloned"), optional: true },
+    ] }));
+    const result = runWithEnv(["--portfolio", portfolio, "--no-agy"], sb.env);
+    assert.equal(result.status, 0, result.stdout);
+    assert.ok(sb.has(".agents/skills"));
+    assert.ok(existsSync(join(sb.home, ".agents", "skills", "other-core", "SKILL.md")));
+    assert.equal((result.stdout.match(/installed 44 skills/g) ?? []).length, 1);
+    assert.equal((result.stdout.match(/installed 1 skills/g) ?? []).length, 1);
+    assert.equal(runWithEnv(["--portfolio", portfolio, "--no-agy"], sb.env).status, 0);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+
+test("audit: retained legacy content stays unowned and changed bytes need review", () => {
+  const sb = homeSandbox();
+  try {
+    const shared = join(sb.home, ".agents", "skills", "legacy");
+    mkdirSync(shared, { recursive: true });
+    const text = "---\nname: legacy\n---\nUser managed";
+    writeFileSync(join(shared, "SKILL.md"), text);
+    const treeSha256 = createHash("sha256").update("SKILL.md\0").update(text).update("\0").digest("hex");
+    const inventory = join(sb.home, "legacy.json");
+    writeFileSync(inventory, JSON.stringify({ root: "~/.agents/skills", entries: [{ name: "legacy", disposition: "keep-user-managed", treeSha256 }] }));
+    const portfolio = join(sb.home, "packs.json");
+    writeFileSync(portfolio, JSON.stringify({ packs: [{ name: "grey-matter", path: dirname(HERE) }], legacyInventory: "legacy.json" }));
+    const r = runWithEnv(["audit", "--json", "--strict", "--portfolio", portfolio], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.ok(JSON.parse(r.stdout).notices.some((n) => n.includes("1 retained user-managed")));
+    assert.ok(!existsSync(join(shared, "..", MANIFEST_NAME)));
+    writeFileSync(join(shared, "SKILL.md"), text + " changed");
+    const changed = runWithEnv(["audit", "--json", "--strict", "--portfolio", portfolio], sb.env);
+    assert.equal(changed.status, 1);
+    assert.ok(JSON.parse(changed.stdout).findings.some((n) => n.includes("unowned: legacy")));
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
