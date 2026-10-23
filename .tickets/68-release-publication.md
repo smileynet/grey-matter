@@ -76,3 +76,26 @@ primary URLs, current tkt workflow evidence, API warnings and remaining gaps. No
 adapter, publication CLI, atomic branch/tag push, crate recovery or stable promotion is
 implemented by this library. Ticket 68 remains open until those components are
 implemented and verified. No real publication ran.
+
+## Verification checkpoint
+
+grey-matter `7dbb7a1` passes all 12 local invariants and 121 release tests. tkt
+`5617825` passes five Node fixtures, 296 Rust tests, fmt/clippy and
+[hosted CI](https://github.com/smileynet/tkt/actions/runs/40039176668) on Node 22.
+All six source-version bundles contain the same publisher module hash
+`784fad3d9d7f9635da32c013eca7021287e0e44aa54c9dd98e60e9b1b3b018e8`.
+These are 0.1.0/0.4.0 smoke bundles, not approved 0.2.0/0.5.0 candidates.
+One portfolio deployment refreshed each pack once; strict audit: 19 plugins/four
+packs, zero findings/errors.
+[Platform run 40039247245](https://github.com/smileynet/grey-matter/actions/runs/40039247245)
+completed successfully at the same grey-matter revision: Windows Server 2025
+(Node 22.23.4) and Ubuntu (Node 22.23.3) each passed the complete repository gate,
+121 release tests and five hook tests with zero skips. The separate Windows
+regression job passed 49 fixtures. These fixture runs do not establish live
+publication or candidate install/upgrade readiness.
+
+[Publication preflight observations](../docs/agents/research/publication-preflight-observations.md)
+retain the next adapter contracts and disposable Git transcript. Actual setting GETs
+found immutable releases disabled in both repositories. Future publication must
+block until enabled under separate authorization; no settings were changed. Git
+probes establish transaction behavior, not annotated-tag or full release-order coverage.

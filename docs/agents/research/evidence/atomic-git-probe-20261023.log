@@ -1,0 +1,159 @@
+Environment: GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_TERMINAL_PROMPT=0
+
+$ git init --bare /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git
+Initialized empty Git repository in /private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git/
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: will change to "main" in Git 3.0. To configure the initial branch name
+hint: to use in all of your new repositories, which will suppress this warning,
+hint: call:
+hint:
+hint: 	git config --global init.defaultBranch <name>
+hint:
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint:
+hint: 	git branch -m <name>
+hint:
+hint: Disable this message with "git config set advice.defaultBranchName false"
+exit=0
+
+$ git init /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work
+Initialized empty Git repository in /private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work/.git/
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: will change to "main" in Git 3.0. To configure the initial branch name
+hint: to use in all of your new repositories, which will suppress this warning,
+hint: call:
+hint:
+hint: 	git config --global init.defaultBranch <name>
+hint:
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint:
+hint: 	git branch -m <name>
+hint:
+hint: Disable this message with "git config set advice.defaultBranchName false"
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work config user.name 'Disposable Probe'
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work config user.email probe@example.invalid
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work commit --allow-empty -m base
+[master (root-commit) 688300a] base
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work rev-parse HEAD
+688300a22d7a9c1353fede96e18dc2ca4f3daefc
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work branch -M candidate
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work tag v1
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work push --atomic /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git refs/heads/candidate:refs/heads/stable refs/tags/v1:refs/tags/v1
+To /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git
+ * [new branch]      candidate -> stable
+ * [new tag]         v1 -> v1
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work commit --allow-empty -m candidate2
+[candidate 24e5f3f] candidate2
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work rev-parse HEAD
+24e5f3f10d4ae1b27b9667646e056475e6c04b4b
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work tag v2
+exit=0
+
+$ git --git-dir=/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git config receive.advertiseAtomic false
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work push --atomic /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git refs/heads/candidate:refs/heads/stable refs/tags/v2:refs/tags/v2
+fatal: the receiving end does not support --atomic push
+fatal: the remote end hung up unexpectedly
+exit=128
+
+$ git --git-dir=/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git rev-parse refs/heads/stable
+688300a22d7a9c1353fede96e18dc2ca4f3daefc
+exit=0
+
+$ git --git-dir=/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git show-ref --verify refs/tags/v2
+fatal: 'refs/tags/v2' - not a valid ref
+exit=128
+
+$ git --git-dir=/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git config receive.advertiseAtomic true
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work push --atomic /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git refs/heads/candidate:refs/heads/stable refs/tags/v2:refs/tags/v2
+To /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git
+   688300a..24e5f3f  candidate -> stable
+ * [new tag]         v2 -> v2
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work switch -c divergent 688300a22d7a9c1353fede96e18dc2ca4f3daefc
+Switched to a new branch 'divergent'
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work commit --allow-empty -m divergent
+[divergent a9ff592] divergent
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work rev-parse HEAD
+a9ff5925a9e26e04bcd43977e9f16f4667f8a6c5
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work tag v3
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work merge-base --is-ancestor 24e5f3f10d4ae1b27b9667646e056475e6c04b4b a9ff5925a9e26e04bcd43977e9f16f4667f8a6c5
+exit=1
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work push --atomic /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git refs/heads/divergent:refs/heads/stable refs/tags/v3:refs/tags/v3
+error: atomic push failed for ref refs/heads/stable. status: 2
+To /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git
+ ! [rejected]        divergent -> stable (non-fast-forward)
+ ! [rejected]        v3 -> v3 (atomic push failed)
+error: failed to push some refs to '/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git'
+hint: Updates were rejected because a pushed branch tip is behind its remote
+hint: counterpart. If you want to integrate the remote changes, use 'git pull'
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+exit=1
+
+$ git --git-dir=/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git rev-parse refs/heads/stable
+24e5f3f10d4ae1b27b9667646e056475e6c04b4b
+exit=0
+
+$ git --git-dir=/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git show-ref --verify refs/tags/v3
+fatal: 'refs/tags/v3' - not a valid ref
+exit=128
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work switch candidate
+Switched to branch 'candidate'
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work commit --allow-empty -m candidate3
+[candidate 801a8c7] candidate3
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work tag v1-conflict
+exit=0
+
+$ git -C /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/work push --atomic /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git refs/heads/candidate:refs/heads/stable refs/tags/v1-conflict:refs/tags/v1
+error: atomic push failed for ref refs/tags/v1. status: 3
+To /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git
+ ! [rejected]        candidate -> stable (atomic push failed)
+ ! [rejected]        v1-conflict -> v1 (already exists)
+error: failed to push some refs to '/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git'
+hint: Updates were rejected because the tag already exists in the remote.
+exit=1
+
+$ git --git-dir=/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/ticket68-git-clean-eirsa97n/remote.git rev-parse refs/heads/stable
+24e5f3f10d4ae1b27b9667646e056475e6c04b4b
+exit=0
