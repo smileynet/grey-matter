@@ -1,7 +1,7 @@
 ---
 id: "68"
 title: "Publish and resume coordinated GitHub and plugin releases safely"
-status: open
+status: in_progress
 blocked_by: ["66"]
 priority: high
 spec: "release-readiness"
