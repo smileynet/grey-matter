@@ -1,7 +1,7 @@
 ---
 id: "65"
 title: "Audit every plugin format against primary documentation"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 spec: "release-readiness"
@@ -48,12 +48,12 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 
 ## Acceptance criteria
 
-- [ ] A committed conformance report contains all six repository/format rows, each with primary-source section links, documentation date, exact tested artifact SHA and native validator or discovery output.
-- [ ] The report covers names, versions, metadata/schema, marketplace source/ref/SHA paths, namespace/dependencies, skill frontmatter/sidecars/invocation policy, referenced files, hooks when present, and security/privacy requirements or explicit not-applicable reasons.
-- [ ] Every release-blocking deviation has a linked remediation ticket and is included as a blocker of the final audit; unknown source guidance is labeled unverified rather than pass.
-- [ ] OpenAI, Claude, Agent Skills, and applicable Agent Plugins specifications are re-read; the current vendor-published Antigravity plugin specification or shipped schema is located and cited, with unavailable guidance explicitly recorded.
-- [ ] Native checks and isolated loading verify both repositories without credentials or files accidentally supplied by the maintainer checkout; source-versus-runtime conflicts are documented.
-- [ ] The committed report and references pass relative-link checks; any new mechanical rule includes a seeded failing fixture proving detection.
+- [x] A committed conformance report contains all six repository/format rows, each with primary-source section links, documentation date, exact tested artifact SHA and native validator or discovery output.
+- [x] The report covers names, versions, metadata/schema, marketplace source/ref/SHA paths, namespace/dependencies, skill frontmatter/sidecars/invocation policy, referenced files, hooks when present, and security/privacy requirements or explicit not-applicable reasons.
+- [x] Every release-blocking deviation has a linked remediation ticket and is included as a blocker of the final audit; unknown source guidance is labeled unverified rather than pass.
+- [x] OpenAI, Claude, Agent Skills, and applicable Agent Plugins specifications are re-read; the current vendor-published Antigravity plugin specification or shipped schema is located and cited, with unavailable guidance explicitly recorded.
+- [x] Native checks and isolated loading verify both repositories without credentials or files accidentally supplied by the maintainer checkout; source-versus-runtime conflicts are documented.
+- [x] The committed report and references pass relative-link checks; any new mechanical rule includes a seeded failing fixture proving detection.
 
 ## Preserved first-pass research
 
@@ -66,3 +66,15 @@ Remaining syntax detector: current Claude accepts a malformed-YAML name seed. Ad
 ## Source audit result
 
 The [six-row source conformance report](../docs/agents/research/plugin-conformance.md) records exact tested revisions, native outputs, primary sections, source/runtime conflicts and remaining gates. Independent YAML parsing repaired a real source defect and is now invariant 10. Engine 1.3.1 preserves flat agy names while projecting resource links. All six source rows pass syntax/loading; ticket 74 is a newly discovered notice-artifact release blocker, linked into preparation 67 and final audit 70. This ticket does not declare the release ready.
+
+## Resolution (2026-10-23)
+
+Verified all six source plugin formats against primary documentation and isolated native loading; repaired YAML and AGY namespace/resource defects; tracked notice blocker 74 separately. Source conformance is not release approval.
+
+### Verification
+1. ✓ A committed conformance report contains all six repository/format rows, each with primary-source section links, documentation date, exact tested artifact SHA and native validator or discovery output. — "Committed report docs/agents/research/plugin-conformance.md at ac1a264 contains six rows, primary sections, date, exact grey 9ca0c9c and tkt 2c09678 artifacts and native evidence JSON."
+2. ✓ The report covers names, versions, metadata/schema, marketplace source/ref/SHA paths, namespace/dependencies, skill frontmatter/sidecars/invocation policy, referenced files, hooks when present, and security/privacy requirements or explicit not-applicable reasons. — "Report contract coverage records identity/version/schema/source paths/namespaces/dependencies/frontmatter/policy/resources and explicit hook/security/privacy applicability."
+3. ✓ Every release-blocking deviation has a linked remediation ticket and is included as a blocker of the final audit; unknown source guidance is labeled unverified rather than pass. — "Findings map to closed 72/73, invariant 10, and open notice blocker 74; 74 blocks preparation 67 and final audit 70. Platform and release gates remain explicit."
+4. ✓ OpenAI, Claude, Agent Skills, and applicable Agent Plugins specifications are re-read; the current vendor-published Antigravity plugin specification or shipped schema is located and cited, with unavailable guidance explicitly recorded. — "Dated host reports and consolidated bibliography record OpenAI, Claude, Agent Skills, Agent Plugins and live Antigravity schema actually read, with source/runtime conflicts."
+5. ✓ Native checks and isolated loading verify both repositories without credentials or files accidentally supplied by the maintainer checkout; source-versus-runtime conflicts are documented. — "Six isolated git-archive native rows pass: Codex 0.147.0 and Claude 2.1.309 discover 44/4 skills; AGY 1.4.6 installs 44/4 exact names and resolves resources; no credentials/model turns."
+6. ✓ The committed report and references pass relative-link checks; any new mechanical rule includes a seeded failing fixture proving detection. — "check-repo all 10 invariants pass; nine YAML and 27 deploy fixtures pass; docs consistency 44 skills and links pass; git diff --check clean; independent prose review no findings."
