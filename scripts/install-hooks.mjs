@@ -67,11 +67,6 @@ if (cmd === "uninstall") {
   process.exit(0);
 }
 
-if (cmd !== "install") {
-  console.error(`Unknown command "${cmd}". Use: install | list | uninstall`);
-  process.exit(1);
-}
-
 // install
 if (!existsSync(SOURCE)) {
   console.error(`Missing hook source: ${SOURCE}`);
@@ -88,6 +83,7 @@ if (s === "foreign") {
 
 const source = readFileSync(SOURCE, "utf8");
 if (s === "ours" && readFileSync(target, "utf8") === source) {
+  chmodSync(target, 0o755);
   console.log(`${HOOK} hook already installed and current: ${target}`);
   process.exit(0);
 }

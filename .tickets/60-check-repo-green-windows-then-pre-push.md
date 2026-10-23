@@ -60,6 +60,11 @@ filename as a remote host (`Cannot connect to C: resolve failed`). The default-r
 fixture PATH used a POSIX delimiter. Release worktree identity failures are being
 diagnosed separately; do not close this ticket until the complete Windows gate passes.
 
+The worktree probe at `275c677` captured Git's `runneradmin` path versus filesystem
+`RUNNER~1` for the same directory. Release guards now use
+[`realpathSync.native`](https://nodejs.org/docs/latest-v22.x/api/fs.html#fsrealpathsyncnativepath-options)
+consistently; the existing worktree/junction and candidate-local-output tests cover this boundary.
+
 The new hook fixtures prove opt-in ownership, custom hooksPath and green/red/green
 pushes with the real YAML syntax checker and a disposable bare remote. Documentation
 and primary Git sources are in [distribution maintenance](../docs/agents/distribution-maintenance.md).

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -31,7 +31,9 @@ test("pre-push installer is opt-in, idempotent and refuses foreign hooks", (t) =
   assert.equal(existsSync(target), false);
   ok(install("--hook", "pre-push"));
   const body = readFileSync(target, "utf8");
+  chmodSync(target, 0o644);
   ok(install("--hook", "pre-push"));
+  if (process.platform !== "win32") assert.equal(statSync(target).mode & 0o111, 0o111);
   assert.equal(readFileSync(target, "utf8"), body);
   assert.match(ok(install("list", "--hook", "pre-push")), /installed/);
   ok(install("uninstall", "--hook", "pre-push"));
