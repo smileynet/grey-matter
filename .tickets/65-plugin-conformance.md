@@ -62,3 +62,7 @@ Read the dated [Codex](../docs/agents/research/codex-plugin-conformance.md), [Cl
 Current evidence: [invocation policy](../docs/agents/research/plugin-invocation-policy.md) resolves the old agy unknown for 1.4.5 and tests Codex/Claude controls. [Claude 2.1.309 validation](../docs/agents/research/claude-current-validation.md) exposes a nested custom-root scanner gap. Run `node scripts/probe-claude-validation.mjs --binary <current-native-binary>` for each repo; it checks manifests, exact flat components and a seeded failing type error. Do not rely solely on root validator success.
 
 Remaining syntax detector: current Claude accepts a malformed-YAML name seed. Add an independent standards-based YAML parser/check and a malformed-YAML failing fixture, covering frontmatter and applicable sidecars. This remains required even when native description-type controls pass. The final matrix must distinguish this gap from valid source files.
+
+## Source audit result
+
+The [six-row source conformance report](../docs/agents/research/plugin-conformance.md) records exact tested revisions, native outputs, primary sections, source/runtime conflicts and remaining gates. Independent YAML parsing repaired a real source defect and is now invariant 10. Engine 1.3.1 preserves flat agy names while projecting resource links. All six source rows pass syntax/loading; ticket 74 is a newly discovered notice-artifact release blocker, linked into preparation 67 and final audit 70. This ticket does not declare the release ready.

@@ -1,0 +1,57 @@
+{
+  "sourceSha": "2c09678e6784e3428a0c19fd3ddb9428b13fa141",
+  "runs": [
+    {
+      "strict": true,
+      "exit": 1,
+      "validation": {
+        "dir": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/tkt-agy-root-4ft_kpuj/source",
+        "manifest": "plugin.json",
+        "name": "tkt",
+        "agentPluginsSpec": false,
+        "components": {
+          "agents": 0,
+          "hooks": 0,
+          "mcpServers": 0,
+          "rules": 0,
+          "sidecars": 0,
+          "skills": 4
+        },
+        "findings": [
+          {
+            "severity": "warning",
+            "file": "AGENTS.md",
+            "message": "never loaded: plugins load rules only from rules/. Move it to rules/AGENTS.md"
+          }
+        ]
+      },
+      "stderr": "Error: validation failed in strict mode: 1 warning\n"
+    },
+    {
+      "strict": false,
+      "exit": 0,
+      "validation": {
+        "dir": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/tkt-agy-root-4ft_kpuj/source",
+        "manifest": "plugin.json",
+        "name": "tkt",
+        "agentPluginsSpec": false,
+        "components": {
+          "agents": 0,
+          "hooks": 0,
+          "mcpServers": 0,
+          "rules": 0,
+          "sidecars": 0,
+          "skills": 4
+        },
+        "findings": [
+          {
+            "severity": "warning",
+            "file": "AGENTS.md",
+            "message": "never loaded: plugins load rules only from rules/. Move it to rules/AGENTS.md"
+          }
+        ]
+      },
+      "stderr": ""
+    }
+  ]
+}

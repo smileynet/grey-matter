@@ -47,8 +47,9 @@ Implementation order: version consistency gates; draft/resume behavior; release-
 The two research notes retain source URLs, warnings, verified facts versus inference,
 and open questions. Codex same-version cache behavior is not established by its public
 packaging documentation; test the installed version rather than importing Claude rules.
-Antigravity source documentation still needs to be located and read during conformance
-work. Its installed CLI and validator supplement that documentation, not replace it.
+Antigravity source documentation and its live vendor schema have now been read; see the
+[six-row conformance report](../research/plugin-conformance.md). Native loading evidence
+supplements those specifications rather than replacing them.
 
 ## Plugin conformance coverage
 
@@ -106,8 +107,8 @@ URL/path and version, and document any unavailable authoritative guidance as a g
 
 ## Ticket sequence
 
-All new tickets use `stream:tooling` and `epic:release-readiness`, remain open, and have
-machine-mappable validation criteria. Existing work is reused rather than duplicated.
+All new tickets use `stream:tooling` and `epic:release-readiness` and have
+machine-mappable validation criteria. Ticket files carry current execution status. Existing work is reused rather than duplicated.
 
 | Ticket | Deliverable | Blocked by |
 | --- | --- | --- |
@@ -115,10 +116,10 @@ machine-mappable validation criteria. Existing work is reused rather than duplic
 | [60](../../../.tickets/60-check-repo-green-windows-then-pre-push.md) | Existing Windows failures/push gate | None |
 | [65](../../../.tickets/65-plugin-conformance.md) | Six plugin conformance rows against primary sources | None |
 | [66](../../../.tickets/66-release-contract.md) | Reviewed release skills and guidance | 65 |
-| [67](../../../.tickets/67-release-preparation.md) | Versioned candidate preparation and complete bundles | 66 |
+| [67](../../../.tickets/67-release-preparation.md) | Versioned candidate preparation and complete bundles | 66, 74 |
 | [68](../../../.tickets/68-release-publication.md) | One publisher per repo, draft/resume and stable promotion | 67 |
 | [69](../../../.tickets/69-release-install-verification.md) | Isolated fresh-install/upgrade evidence | 67, 68 |
-| [70](../../../.tickets/70-pre-release-audit.md) | Final cross-project go/no-go audit | 64, 60, 65-69 |
+| [70](../../../.tickets/70-pre-release-audit.md) | Final cross-project go/no-go audit | 64, 60, 65-69, 72-74 |
 | [71](../../../.tickets/71-release-staging.md) | Reviewed release artifacts, with gates re-run after edits | 70 |
 
 Release-scope decisions may intentionally defer unrelated open work, but no silent
@@ -155,3 +156,13 @@ versions to stable users. A later release action publishes the reviewed candidat
 ## First-pass conformance findings (2026-10-23)
 
 The [Codex](../research/codex-plugin-conformance.md), [Claude](../research/claude-plugin-conformance.md), and [Antigravity](../research/agy-plugin-conformance.md) source audits preserve native results and authoritative links. Ticket 72 repairs three dangling Antigravity wrap-session resource links. Ticket 73 verifies runtime invocation policy and current Claude component validation. Both block ticket 70; discovery and schema success alone do not certify runtime behavior. Ticket 65 still owns the consolidated six-row report and refreshed release-revision evidence.
+
+## Source-audit follow-up
+
+The [consolidated report](../research/plugin-conformance.md) records all six native
+syntax/loading passes and their exact tested revisions. Tickets 72 and 73 resolved
+resource/namespace and invocation-policy findings. Independent YAML parsing repaired
+a source defect and is now a repository invariant. Newly discovered
+[ticket 74](../../../.tickets/74-plugin-license-notices.md) preserves required license
+and attribution artifacts; it blocks candidate preparation 67 and final audit 70.
+Syntax/loading passes do not clear these remaining release gates.

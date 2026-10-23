@@ -207,6 +207,65 @@
         }
       ],
       "errors": []
+    },
+    {
+      "status": "pass",
+      "metrics": {
+        "cases": 3,
+        "passed": 3
+      },
+      "host": "agy",
+      "version": "1.4.6",
+      "probeSha256": "192e43dc2b170a05324a58c4ebbd11c8e2d5e280a39a4be5c9991200d8c3ec89",
+      "isolated": true,
+      "network": "loopback-only macOS sandbox",
+      "modelCalls": 0,
+      "cases": [
+        {
+          "case": "implicit-context",
+          "pass": true,
+          "requests": 2,
+          "paths": [
+            "/v1beta/models/gemini-3.1-flash-lite-preview:streamGenerateContent?alt=sse",
+            "/v1beta/models/gemini-3.1-pro-preview:streamGenerateContent?alt=sse"
+          ],
+          "cliExit": 3,
+          "openCatalog": true,
+          "humanCatalog": false,
+          "humanBody": false
+        },
+        {
+          "case": "explicit-human-expansion",
+          "pass": true,
+          "requests": 2,
+          "paths": [
+            "/v1beta/models/gemini-3.1-flash-lite-preview:streamGenerateContent?alt=sse",
+            "/v1beta/models/gemini-3.1-pro-preview:streamGenerateContent?alt=sse"
+          ],
+          "cliExit": 3,
+          "openCatalog": true,
+          "humanCatalog": false,
+          "humanBody": true
+        },
+        {
+          "case": "removed-policy-control",
+          "pass": true,
+          "requests": 2,
+          "cliExit": 3,
+          "humanCatalog": true
+        }
+      ],
+      "catalog": [
+        {
+          "name": "policy-probe:probe-human",
+          "modelInvocable": false
+        },
+        {
+          "name": "policy-probe:probe-open",
+          "modelInvocable": true
+        }
+      ],
+      "errors": []
     }
   ]
 }

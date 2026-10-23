@@ -9,7 +9,7 @@ context sent to a model. Catalog visibility alone is not an invocation test.
 | --- | --- | --- | --- | --- |
 | Codex | 0.147.0 | `agents/openai.yaml` → `policy.allow_implicit_invocation: false` | Unique human-only description marker and body excluded | `$policy-probe:probe-human` expands body |
 | Claude Code | 2.1.223 and 2.1.309 | `disable-model-invocation: true` | Unique human-only description marker and body excluded | `/policy-probe:probe-human` expands body |
-| Antigravity | 1.4.5 | `disable-model-invocation: true` | Unique human-only description marker and body excluded | `/policy-probe:probe-human` expands body |
+| Antigravity | 1.4.5 and 1.4.6 | `disable-model-invocation: true` | Unique human-only description marker and body excluded | `/policy-probe:probe-human` expands body |
 
 [L1:verified] Each host passes three controlled cases: ordinary context includes an
 open twin and excludes the human-only description marker and body; an explicit human command includes its
