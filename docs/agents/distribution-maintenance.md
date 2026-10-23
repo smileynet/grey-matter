@@ -100,9 +100,24 @@ Fixtures proving each invariant fails when seeded live in `scripts/check-repo.te
 An **opt-in pre-commit hook** can run this automatically: `node scripts/install-hooks.mjs`
 installs a `pre-commit` hook that runs `check-repo.mjs` and blocks the commit on failure;
 `list` / `uninstall` manage it, and it refuses to clobber a foreign hook. It is not forced
-on clone — install it if you want the local gate. (This project uses local hooks only;
-there is no CI pipeline.)
+on clone — install it if you want the local gate. (Normal gates remain local; the manually dispatched platform job below supplies
+Windows/Linux evidence.)
 
 
 Release bundle construction and verification are documented in
 [release artifacts](release-artifacts.md); their isolated fixtures are invariant 11.
+
+## Manual platform validation
+
+`.github/workflows/platform-validation.yml` runs only on `workflow_dispatch`. It
+reproduces ticket 60's two Windows fixture failures, then runs the full strict gate
+on Windows and Ubuntu with Node 22 and a pinned tkt source dependency. Native plugin
+CLIs, previous-release upgrades and product publication are outside this job.
+
+Dispatch with `gh workflow run platform-validation.yml --ref main`; inspect the
+returned run and each job's logs before claiming platform success. The workflow must
+exist on the default branch before dispatch, and write access is required, per
+[GitHub's manual-run guide](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow).
+Its explicit `shell: bash` uses Git for Windows and enables pipefail, per
+[GitHub's shell reference](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idstepsshell).
+Sources read 2026-10-23. Failed jobs are evidence to fix, not a passing platform gate.

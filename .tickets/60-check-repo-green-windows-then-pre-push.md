@@ -41,3 +41,10 @@ aggregator is red on main on this Windows machine and grey-matter has no hook th
 - `scripts/check-repo.mjs` (the aggregator), `scripts/uninstall-crew-research.test.mjs`,
   `skills/meta/adopt-project/scripts/relocate-knowledge.mjs` and its test.
 - tkt 57, commits `521e92b`, `022faa3`.
+
+## Reproduction setup (2026-10-23)
+
+Added opt-in `platform-validation.yml`: Windows/Git Bash/Node 22 reproduces the two
+original fixture suites; separate Windows/Ubuntu jobs run check-repo --require-tools
+with pinned tkt source. This supplies an actual failing runner before path/symlink
+fixes. It is not an automatic push/PR pipeline or evidence of platform success.
