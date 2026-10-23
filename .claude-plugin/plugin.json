@@ -9,5 +9,5 @@
   "license": "MIT",
   "keywords": ["skills", "agent-skills", "engineering", "productivity", "meta", "game-dev", "tkt"],
   "skills": ["./skills/engineering", "./skills/productivity", "./skills/meta"],
-  "dependencies": ["tkt"]
+  "dependencies": [{ "name": "tkt", "marketplace": "tkt" }]
 }

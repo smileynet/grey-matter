@@ -70,9 +70,10 @@ the user-level standing rules (`global/AGENTS.md`, no steering) install with
 `node scripts/install-agents-md.mjs` (owner-marked, never clobbers a foreign file);
 per-harness deploy + test instructions are in
 [`docs/agents/harnesses.md`](./docs/agents/harnesses.md). Claude Code installs grey-matter as a
-plugin from this repo's own marketplace (`.claude-plugin/`, which also lists tkt as a
-dependency): `/plugin marketplace add smileynet/grey-matter`, then
-`/plugin install grey-matter@grey-matter`. The design is in
+plugin from this repo's own marketplace (`.claude-plugin/`). It depends on `tkt@tkt`, from
+tkt's marketplace, so add both: `/plugin marketplace add smileynet/tkt`,
+`/plugin marketplace add smileynet/grey-matter`, then `/plugin install grey-matter@grey-matter`
+(tkt installs with it). The design is in
 [`docs/agents/proposals/07-claude-code-plugin.md`](./docs/agents/proposals/07-claude-code-plugin.md).
 
 ### Keeping the Claude plugin current
@@ -95,8 +96,11 @@ When a change touches skills, the plugin manifests, or tkt's plugin:
   when `claude` is on PATH. To see what loads, run
   `claude --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`, which lists the
   skills without a model call.
-- **tkt's plugin lives in the tkt repo** and is listed here as a `github` source with no
-  pinned ref. A tkt plugin change reaches grey-matter users when tkt releases, with no edit here.
+- **tkt's plugin lives in the tkt repo**, and grey-matter depends on `tkt@tkt` with no version
+  range (`allowCrossMarketplaceDependenciesOn: ["tkt"]` in `marketplace.json`). Don't relist
+  tkt in grey-matter's marketplace. A bare `tkt` dependency resolves to `tkt@grey-matter`,
+  which installs a second plugin named `tkt` alongside a local `tkt@tkt`. A tkt change reaches
+  grey-matter users when tkt releases, with no edit here.
 
 ## Consistency checks
 

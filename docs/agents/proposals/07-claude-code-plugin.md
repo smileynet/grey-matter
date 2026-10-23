@@ -6,9 +6,11 @@
 > - Listing the three bucket dirs in `skills` works. `claude plugin details` shows all 44
 >   skills. `claude plugin validate` passes, apart from one expected `--strict` warning that
 >   the repo-root `CLAUDE.md` isn't loaded as plugin context.
-> - tkt is now its own Claude plugin (tkt ticket 209). grey-matter declares it in
->   `dependencies`, and grey-matter's marketplace lists it as a `github` source, so one
->   `/plugin marketplace add` gets both without the cross-marketplace allowlist.
+> - tkt is now its own Claude plugin (tkt ticket 209). grey-matter depends on `tkt@tkt` and
+>   allowlists the `tkt` marketplace. The first design relisted tkt in grey-matter's marketplace
+>   under a bare dependency. On a live install that resolved to `tkt@grey-matter`, a second
+>   `tkt` beside the local `tkt@tkt`, and the GitHub fetch failed over SSH. So users add both
+>   marketplaces.
 > - The version bump lives in `release.sh` (step 1b), and `scripts/check-plugin-manifest.mjs`
 >   is check-repo invariant 9.
 > - The installer's `~/.claude/skills` default and the SessionStart hook (moved to tkt's
@@ -61,6 +63,7 @@ agents/              # optional, phase 3
 Install for users:
 
 ```
+/plugin marketplace add smileynet/tkt
 /plugin marketplace add smileynet/grey-matter
 /plugin install grey-matter@grey-matter
 ```
