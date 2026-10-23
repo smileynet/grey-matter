@@ -1,7 +1,7 @@
 ---
 id: "72"
 title: "Preserve resource links in generated Antigravity plugins"
-status: open
+status: in_progress
 blocked_by: []
 spec: "release-readiness"
 priority: high
