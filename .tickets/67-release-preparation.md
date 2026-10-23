@@ -161,3 +161,7 @@ with child report/log hashes checked against their indices. tkt's new
 [hosted run](https://github.com/smileynet/tkt/actions/runs/40034566186) also passes.
 These are current source-version smoke snapshots (0.1.0/0.4.0); proposed 0.2.0/0.5.0
 approval, included-scope decisions and actual final-candidate evidence remain pending.
+
+## Candidate version approval (2026-10-23)
+
+The user explicitly approved grey-matter 0.2.0 and tkt 0.5.0 for staged candidates. This supersedes the pending-version notes above. It does not approve publication, release-tag pushes, crates.io, stable promotion or directory submission. Final included-scope dispositions and candidate checks remain required.

@@ -5,7 +5,7 @@ outstanding findings, release skills/scripts/guidance, final project audit, and 
 release artifacts. Creating this plan does not authorize publishing a release.
 
 The historical policies below informed the [release contract](../release-contract.md),
-which is now the implementation authority. Candidate versions still require approval;
+which is now the implementation authority. Candidate versions were approved on 2026-10-23 (grey-matter 0.2.0, tkt 0.5.0);
 this request authorizes staging, not irreversible publication.
 
 ## Working release contract
@@ -19,7 +19,7 @@ Use one release version per repository. The GitHub release and all plugin packag
 
 Keep the deploy engine's internal version for vendor drift checks; it is not a third product release train. A skills-only tkt change still bumps tkt's release version.
 
-Before 1.0, use patch for compatible fixes and small skill/guidance corrections; minor for substantial new capability, a new distribution target, or any breaking change. Reserve 1.0 for an explicit stability commitment. After 1.0 use normal SemVer. This makes the current pre-1.0 policy less ambiguous. Candidate next versions are grey-matter 0.2.0 and tkt 0.5.0, subject to reviewing the full unreleased changes.
+Before 1.0, use patch for compatible fixes and small skill/guidance corrections; minor for substantial new capability, a new distribution target, or any breaking change. Reserve 1.0 for an explicit stability commitment. After 1.0 use normal SemVer. This makes the current pre-1.0 policy less ambiguous. Approved staged-candidate versions are grey-matter 0.2.0 and tkt 0.5.0 (user approval, 2026-10-23). The full unreleased scope still requires the final audit.
 
 Separate development from stable delivery. Developers use a local checkout and deploy.mjs. Plugin consumers register each repo's stable marketplace branch, advanced only to a verified release commit. Exact-version consumers pin the vX.Y.Z tag. main remains development. Explicit plugin versions do not snapshot main for new installs, and an immutable tag does not advance automatically.
 

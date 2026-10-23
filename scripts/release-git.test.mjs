@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { promotePublishedStable } from "./release-publish.mjs";
+import { createHash } from "node:crypto";
 import { git, pushCandidateRefs } from "./release-git.mjs";
 
 function fixture(t) {
@@ -109,4 +111,65 @@ test("candidate refs: a race on an already-matching branch stops after tag-only 
   assert.throws(() => pushCandidateRefs({ ...input, execute: true }), /divergent/);
   assert.match(git(input.repo, ["ls-remote", input.remotePath, input.tag]), new RegExp(`^${input.tagObject}`));
   assert.match(git(input.repo, ["ls-remote", input.remotePath, input.branch]), new RegExp(`^${competitor}`));
+});
+
+function publication(input) {
+  const bytes = Buffer.from("sealed bundle"), sha256 = createHash("sha256").update(bytes).digest("hex");
+  const candidate = { repository: "example/grey-matter", product: "grey-matter", version: "1.0.0", candidateSha: input.candidateSha, title: "v1.0.0", notes: "Reviewed notes", assets: [{ name: "bundle.tgz", bytes, size: bytes.length, sha256 }], gates: { status: "pass", product: "grey-matter", version: "1.0.0", candidateSha: input.candidateSha, pending: [] } };
+  const state = { id: 1, draft: false, immutable: true };
+  const api = {
+    tag: () => ({ sha: input.candidateSha, annotated: true }),
+    releases: () => [{ ...state, tag_name: "v1.0.0", name: candidate.title, body: candidate.notes, html_url: "https://example.invalid/release" }],
+    assets: () => [{ name: "bundle.tgz", size: bytes.length, digest: `sha256:${sha256}`, state: "uploaded" }],
+  };
+  return { candidate, state, api, run: (execute = false) => promotePublishedStable({ repo: input.repo, candidate, api, publisher: "local", execute }) };
+}
+
+test("stable: dry-run, initial creation and replay require immutable published bytes", async (t) => {
+  const input = fixture(t), proof = publication(input);
+  assert.equal((await proof.run()).complete, false);
+  assert.equal(git(input.repo, ["ls-remote", input.remotePath]).trim(), "");
+  assert.equal((await proof.run(true)).complete, true);
+  assert.equal((await proof.run(true)).complete, true);
+  assert.match(git(input.repo, ["ls-remote", input.remotePath, "refs/heads/stable"]), new RegExp(`^${input.candidateSha}`));
+});
+
+test("stable: unpublished, mutable and incomplete releases cannot change refs", async (t) => {
+  for (const state of [{ draft: true, immutable: false }, { draft: false, immutable: false }]) {
+    const input = fixture(t), proof = publication(input); Object.assign(proof.state, state);
+    await assert.rejects(proof.run(true));
+    assert.equal(git(input.repo, ["ls-remote", input.remotePath]).trim(), "");
+  }
+  const input = fixture(t), proof = publication(input); proof.api.assets = () => [];
+  await assert.rejects(proof.run(true), /missing assets/);
+  assert.equal(git(input.repo, ["ls-remote", input.remotePath]).trim(), "");
+});
+
+test("stable: fast-forward succeeds and divergence preserves the channel", async (t) => {
+  const input = fixture(t), proof = publication(input);
+  git(input.repo, ["push", input.remotePath, `${input.candidateSha}:refs/heads/stable`]);
+  git(input.repo, ["commit", "--allow-empty", "-m", "next tested release"]);
+  input.candidateSha = git(input.repo, ["rev-parse", "HEAD"]).trim();
+  const next = publication(input); assert.equal((await next.run(true)).complete, true);
+  const previous = proof.candidate.candidateSha;
+  proof.api.tag = () => ({ sha: previous, annotated: true });
+  await assert.rejects(proof.run(true), /divergent/);
+  assert.notEqual(previous, input.candidateSha);
+  assert.match(git(input.repo, ["ls-remote", input.remotePath, "refs/heads/stable"]), new RegExp(`^${input.candidateSha}`));
+});
+
+test("stable: a rejected promotion resumes without repeating publication", async (t) => {
+  const input = fixture(t), proof = publication(input), hook = join(input.remotePath, "hooks/pre-receive");
+  writeFileSync(hook, "#!/bin/sh\nexit 1\n", { mode: 0o755 });
+  await assert.rejects(proof.run(true), /resume promotion/);
+  assert.equal(git(input.repo, ["ls-remote", input.remotePath]).trim(), "");
+  rmSync(hook); assert.equal((await proof.run(true)).complete, true);
+});
+
+test("stable: a changed release ID fails post-promotion verification without rollback", async (t) => {
+  const input = fixture(t), proof = publication(input), original = proof.api.releases;
+  let reads = 0;
+  proof.api.releases = () => { if (++reads === 2) proof.state.id = 2; return original(); };
+  await assert.rejects(proof.run(true), /release ID changed/);
+  assert.match(git(input.repo, ["ls-remote", input.remotePath, "refs/heads/stable"]), new RegExp(`^${input.candidateSha}`));
 });
