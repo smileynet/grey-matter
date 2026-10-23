@@ -6,6 +6,11 @@ by the current entry points.** Preparation and product/native verification are p
 implementations; legacy publication entry points are disabled. Current scope ends
 with reviewed, staged candidates.
 
+The [publisher recovery contract](research/publisher-recovery-contract.md) records
+current API/CI evidence and the shared reconciliation library tested with fake services. The
+library does not expose a publication command or validate final staging evidence;
+live adapters, atomic branch/tag push, registry and stable recovery remain ticket 68 work.
+
 ## Release identity and version authority
 
 Each repository releases independently. One product version identifies one immutable

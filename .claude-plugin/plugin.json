@@ -53,7 +53,8 @@
         "scripts/deploy.mjs",
         "package.json",
         "package-lock.json",
-        "scripts/release-verify.mjs"
+        "scripts/release-verify.mjs",
+        "scripts/release-publish.mjs"
       ]
     }
   }

@@ -118,7 +118,7 @@ machine-mappable validation criteria. Ticket files carry current execution statu
 | [65](../../../.tickets/65-plugin-conformance.md) | Six plugin conformance rows against primary sources | None |
 | [66](../../../.tickets/66-release-contract.md) | Reviewed release skills and guidance | 65 |
 | [67](../../../.tickets/67-release-preparation.md) | Versioned candidate preparation and complete bundles | 66, 74 |
-| [68](../../../.tickets/68-release-publication.md) | One publisher per repo, draft/resume and stable promotion | 67 |
+| [68](../../../.tickets/68-release-publication.md) | One publisher per repo, draft/resume and stable promotion | 66 |
 | [69](../../../.tickets/69-release-install-verification.md) | Isolated fresh-install/upgrade evidence | 67, 68 |
 | [70](../../../.tickets/70-pre-release-audit.md) | Final cross-project go/no-go audit | 64, 60, 65-69, 72-74 |
 | [71](../../../.tickets/71-release-staging.md) | Reviewed release artifacts, with gates re-run after edits | 70 |
@@ -143,7 +143,9 @@ Checks: grey-matter `node scripts/check-repo.mjs`; tkt `mise run check` and
 `node tools/deploy.mjs check`; release fixtures; native plugin validators; isolated
 fresh-install and upgrade tests; physical roots plus live catalogs. Treat supported
 Windows/macOS/Linux coverage explicitly; unavailable platforms are coverage gaps, not
-passes. Re-run deployment duplicate probes after refresh and repeat deploy for idempotence.
+passes. Re-run duplicate probes after refresh; test repeated-deploy idempotence in
+disposable fixtures. Refresh each changed pack once, using one portfolio deploy when
+both packs change.
 
 Final audit records exact source revisions, severity, release disposition for every open
 ticket/finding, documentation/link/prose health, secret/development-debris exclusions,

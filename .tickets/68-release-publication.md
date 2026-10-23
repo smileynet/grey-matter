@@ -36,7 +36,7 @@ and [plugin update semantics](../docs/agents/research/plugin-release-semantics.m
 facts at execution time; links alone are not evidence of conformance.
 
 Start with:
-- `skills/meta/release/references/release.sh` and `release.test.sh`
+- `skills/meta/release/references/release.sh`, `scripts/release-publish.mjs` and `scripts/release-publish.test.mjs`
 - [tkt release workflow](https://github.com/smileynet/tkt/blob/main/.github/workflows/release.yml)
 - [tkt release configuration](https://github.com/smileynet/tkt/blob/main/release.toml)
 - plugin marketplaces and stable-channel install instructions
@@ -53,3 +53,26 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 - [ ] State-aware resume covers missing/draft/published GitHub states, interrupted asset upload, tkt crate publication and failed stable promotion without bumping again or replacing published bytes.
 - [ ] Stable advances only to the tested published release SHA, remains unchanged on failed pre-publication verification, and is re-verified after promotion; pinned consumers retain immutable refs.
 - [ ] The command reports per-channel status and URLs, distinguishes optional store submission from Git marketplace availability, and fixtures run without real publication.
+
+## Implementation dependency
+
+Depends on completed contract 66 rather than final-candidate evidence 67: offline
+implementation and fixture testing can proceed while version approval is pending.
+The final audit 70 still depends on both 67 and 68. This changes work ordering, not
+the required candidate evidence or publication authorization.
+
+## Reconciliation library progress
+
+`scripts/release-publish.mjs` is shared with tkt through its owned vendor inventory.
+Eighteen fake-service fixtures exercise default read-only inspection, publisher
+assignment, local asset hash checks, candidate gate identity, partial drafts/uploads,
+recovery after timeouts, changed/missing release IDs, immutable releases and
+replay without repeated writes. Digest-less, incomplete, mismatched, duplicate or unexpected assets
+stop recovery without clobbering. The gate record checks product/version/commit and
+pending work; its authenticity must still be established by the staging integration.
+
+The [recovery research](../docs/agents/research/publisher-recovery-contract.md) retains
+primary URLs, current tkt workflow evidence, API warnings and remaining gaps. No live
+adapter, publication CLI, atomic branch/tag push, crate recovery or stable promotion is
+implemented by this library. Ticket 68 remains open until those components are
+implemented and verified. No real publication ran.
