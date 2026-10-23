@@ -1,7 +1,7 @@
 ---
 id: "60"
 title: "check-repo is red on Windows (invariants 5, 7); fix, then gate pushes on it with a pre-push hook"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "node scripts/check-repo.mjs exits 0 on Windows (Git Bash) at main, and a committed .githooks/pre-push runs it and blocks a push when an invariant is seeded red"
@@ -83,3 +83,10 @@ Enabled the local pre-push hook. One portfolio deployment refreshed each Codex p
 once and rebuilt agy packages (44/4 skills). The subsequent strict audit passed:
 19 plugins, four packs, zero findings/errors. Logs: `.scratch/windows-hook-portfolio-deploy.log`
 and `.scratch/windows-hook-final-audit.json`; repeat with the canonical deploy/audit commands.
+
+## Resolution (2026-10-23)
+
+done: fixed Windows URL, tar, PATH/executable and native path alias failures; added and enabled ownership-guarded pre-push gate with real push fixtures and documented platform evidence.
+
+### Verification
+1. ✓ node scripts/check-repo.mjs exits 0 on Windows (Git Bash) at main, and a committed .githooks/pre-push runs it and blocks a push when an invariant is seeded red — "Evidence: GitHub run 40037111113 at a9590d7 -> Windows/Git Bash and Ubuntu pass all 12 invariants, 103 release tests and five hook tests with zero skips; targeted Windows 49/49. Local strict gate and tkt mise check pass. Installed pre-push ran all invariants on the real 71b2fbc push. One portfolio deploy; strict audit 19 plugins/four packs, zero findings/errors. See docs/agents/research/evidence/windows-prepush-20261023.json."
