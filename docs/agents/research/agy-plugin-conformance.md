@@ -83,3 +83,7 @@ Fresh isolated copies validate on agy 1.4.5 with 44/four skills and no findings.
 ## Current policy evidence (ticket 73)
 
 The earlier unverified invocation-policy observation is resolved for the exact native versions in [policy evidence](plugin-invocation-policy.md), using loopback-only captured context, explicit human expansion and a removed-policy control. This does not certify every platform or future candidate bundle. [Current Claude validation](claude-current-validation.md) records the newer validator and seeded nested-scanner limitation. Tickets 65/67/69 retain those candidate gates.
+
+## Namespace-preserving projection (ticket 65)
+
+Isolated installation revealed that 1.3.0’s preserved bucket paths change commands to `grey-matter:meta:wrap-session`. Extra explicit leaf roots outside `skills/` also retain path-derived namespace segments. Engine 1.3.1 therefore uses flat skill directories and projects concrete Markdown links to packaged resource paths. Transitive documents stay included. The installed `grey-matter:wrap-session` resolves all three root-document links through `../../`, while its source remains organized by bucket. Fixtures protect links with code-styled labels, transitive resources, and untouched fenced/inline examples. Native installed catalogs must assert exact `plugin:skill` names, not only counts or leaf suffixes.

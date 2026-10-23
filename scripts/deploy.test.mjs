@@ -347,11 +347,12 @@ test("agy: with ~/.gemini present and no agy CLI, the plugin is packaged and cop
     assert.equal(r.status, 0, r.stdout);
     const dest = join(sb.home, ".gemini", "config", "plugins", "grey-matter");
     assert.equal(JSON.parse(readFileSync(join(dest, "plugin.json"), "utf8")).name, "grey-matter");
-    assert.ok(existsSync(join(dest, "skills", "meta", "orient", "SKILL.md")));
-    const wrap = join(dest, "skills", "meta", "wrap-session");
-    for (const path of ["../../../docs/agents/doc-conventions.md", "../../../docs/agents/maintenance-skills.md", "../../../.references/README.md"]) {
+    assert.ok(existsSync(join(dest, "skills", "orient", "SKILL.md")));
+    const wrap = join(dest, "skills", "wrap-session");
+    for (const path of ["../../docs/agents/doc-conventions.md", "../../docs/agents/maintenance-skills.md", "../../.references/README.md"]) {
       assert.ok(existsSync(join(wrap, path)), `packaged wrap-session resource: ${path}`);
     }
+    assert.match(readFileSync(join(wrap, "SKILL.md"), "utf8"), /\]\(\.\.\/\.\.\/docs\/agents\/doc-conventions\.md\)/);
     assert.ok(existsSync(join(dest, "docs", "agents", "report-format.md")), "transitive documentation link is included");
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
@@ -364,7 +365,7 @@ test("agy: missing resources fail before replacing the last package; repaired li
     mkdirSync(skill, { recursive: true });
     mkdirSync(join(pack, ".claude-plugin"));
     writeFileSync(join(pack, ".claude-plugin", "plugin.json"), JSON.stringify({ name: "example", version: "1.0.0", skills: ["./skills/bucket"] }));
-    writeFileSync(join(skill, "SKILL.md"), "---\nname: example\ndescription: Resource fixture\n---\n[Guide](../../../guide.md)\n");
+    writeFileSync(join(skill, "SKILL.md"), "---\nname: example\ndescription: Resource fixture\n---\n[Guide](../../../guide.md)\n`[Example](missing-inline.md)`\n```md\n[Example](missing-fenced.md)\n```\n");
     const out = join(sb.home, "package");
     mkdirSync(out);
     writeFileSync(join(out, "previous.txt"), "last good package");
@@ -373,13 +374,15 @@ test("agy: missing resources fail before replacing the last package; repaired li
     assert.notEqual(failed.status, 0);
     assert.match(failed.stdout, /package resource missing: guide.md/);
     assert.equal(readFileSync(join(out, "previous.txt"), "utf8"), "last good package");
-    writeFileSync(join(pack, "guide.md"), "[Details](details.md)\n");
+    writeFileSync(join(pack, "guide.md"), "[Details](details.md)\n[Skill](skills/bucket/example/SKILL.md)\n");
     writeFileSync(join(pack, "details.md"), "Resource detail\n");
     assert.equal(runWithEnv(args, sb.env).status, 0);
     rmSync(pack, { recursive: true });
-    assert.ok(existsSync(join(out, "skills", "bucket", "example", "SKILL.md")));
+    assert.match(readFileSync(join(out, "skills", "example", "SKILL.md"), "utf8"), /\[Guide\]\(\.\.\/\.\.\/guide\.md\)/);
+    assert.match(readFileSync(join(out, "skills", "example", "SKILL.md"), "utf8"), /`\[Example\]\(missing-inline\.md\)`/);
     assert.equal(readFileSync(join(out, "details.md"), "utf8"), "Resource detail\n");
-    assert.deepEqual(JSON.parse(readFileSync(join(out, "plugin.json"), "utf8")).skills, ["./skills/bucket"]);
+    assert.match(readFileSync(join(out, "guide.md"), "utf8"), /\[Skill\]\(skills\/example\/SKILL\.md\)/);
+    assert.equal(JSON.parse(readFileSync(join(out, "plugin.json"), "utf8")).skills, undefined);
     assert.ok(!existsSync(join(out, "previous.txt")));
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
