@@ -1,7 +1,7 @@
 ---
 id: "62"
 title: "install-skills: stop defaulting to ~/.claude/skills once the Claude plugin is the install path"
-status: open
+status: done
 blocked_by: []
 priority: low
 validation_criteria:
@@ -26,5 +26,13 @@ in tkt.
 
 ## Acceptance criteria
 
-- [ ] install-skills.mjs default roots no longer include ~/.claude/skills when the grey-matter Claude plugin is installed (or via a documented flag), and it prints a one-line note instead
-- [ ] never deletes a foreign dir; existing manifest-tracked copies are removable with uninstall --root ~/.claude/skills
+- [x] install-skills.mjs default roots no longer include ~/.claude/skills when the grey-matter Claude plugin is installed (or via a documented flag), and it prints a one-line note instead
+- [x] never deletes a foreign dir; existing manifest-tracked copies are removable with uninstall --root ~/.claude/skills
+
+## Resolution (2026-10-23)
+
+done: dual-deploy guard in install-skills.mjs; tkt's deploy-skills.sh got the same guard (tkt ef92009).
+
+### Verification
+1. ✓ install-skills.mjs default roots no longer include ~/.claude/skills when the grey-matter Claude plugin is installed (or via a documented flag), and it prints a one-line note instead — "install-skills.mjs reads installed_plugins.json (CLAUDE_CODE_PLUGIN_CACHE_DIR or ~/.claude/plugins); with grey-matter@* installed it skips every Claude-read root and prints 'skipped: Claude plugin grey-matter@grey-matter is installed; --allow-dual to copy anyway'. Live dry run on this machine skips ~/.claude/skills; kiro/codex/agents roots still install."
+2. ✓ never deletes a foreign dir; existing manifest-tracked copies are removable with uninstall --root ~/.claude/skills — "Only manifest-tracked copies are removed from a skipped root (test: foreign dir survives); uninstall --root ~/.claude/skills still works (used live 2026-10-23 to remove 44 copies). install-skills.test.mjs 9/9."
