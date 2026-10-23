@@ -1,7 +1,7 @@
 ---
 id: "65"
 title: "Audit every plugin format against primary documentation"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 spec: "release-readiness"
