@@ -27,9 +27,20 @@ Projects vendor it at `tools/deploy.mjs`, and grey-matter checks the copies for 
 
 Start by recording the three decisions at the end of the proposal, then build phases 1-3.
 
+## Decisions (2026-10-23, accepted by the user)
+
+1. **Vendor, don't depend.** Each project keeps a copy at `tools/deploy.mjs` with a version
+   header, and grey-matter checks those copies for drift. tkt never needs a grey-matter checkout.
+2. **tkt takes on Node for maintainer deploys.** `deploy-skills.sh` becomes a wrapper and the
+   bash-4 requirement goes away. tkt CLI and plugin users need neither.
+3. **The portfolio list lives in grey-matter,** not `~/.config`.
+
+Phase 1 waits for the in-flight Codex plugin work in this checkout (`.codex-plugin/`, a Codex
+guard in `install-skills.mjs`) to be committed. deploy.mjs folds that guard in.
+
 ## Acceptance criteria
 
-- [ ] Proposal 08's three decisions are recorded (vendor vs depend, tkt on Node, portfolio list location)
+- [x] Proposal 08's three decisions are recorded (vendor vs depend, tkt on Node, portfolio list location)
 - [ ] grey-matter deploys through deploy.mjs, reading .claude-plugin/plugin.json; no harness sees a skill twice (OpenCode overlap covered by a test); build-agy-plugin.mjs retired
 - [ ] tkt deploys through a vendored tools/deploy.mjs; deploy-skills.sh is a wrapper; tests/deploy_skills.rs passes against it
 - [ ] deploy.mjs audit lists unowned dirs and cross-pack name collisions on this machine (the crew-research leftovers and testing-guide appear)
