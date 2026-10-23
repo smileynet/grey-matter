@@ -1,7 +1,7 @@
 ---
 id: "66"
 title: "Define coordinated release skills and guidance"
-status: open
+status: in_progress
 blocked_by: ["65"]
 priority: high
 spec: "release-readiness"
