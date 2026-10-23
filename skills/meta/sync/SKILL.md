@@ -15,7 +15,7 @@ The four couplings it keeps aligned:
 
 1. **Repo ↔ deployed skills.** A pull can add, change, or remove skills; the harness scan
    roots and the Antigravity (`agy`) plugin keep serving the old copies until
-   `install-skills.mjs` and `build-agy-plugin.mjs install` re-run.
+   `deploy.mjs` re-runs.
 2. **Skills ↔ tkt command surface.** The skills inline tkt commands; a tkt upgrade can
    rename a flag or drop a subcommand and break a skill mid-task.
 3. **Local tickets ↔ upstream tickets.** A pull can collide ticket IDs; `tkt rebase`
@@ -39,7 +39,7 @@ non-fast-forward pull — because merging the user's divergent work is not sync'
    ```bash
    git rev-parse HEAD                        # commit before the pull
    tkt --version                             # tkt version before
-   node scripts/install-skills.mjs list      # per-root installed counts before
+   node scripts/deploy.mjs list              # per-root installed counts before
    ```
 
 2. **Pull safely (the one hard gate).** Fetch, show the gap, fast-forward only:
@@ -94,16 +94,17 @@ non-fast-forward pull — because merging the user's divergent work is not sync'
    refresh the Antigravity (`agy`) plugin if `agy` is installed:
 
    ```bash
-   node scripts/install-skills.mjs --dry-run   # if step 1 showed a surprising count delta
-   node scripts/install-skills.mjs             # copy into every owned harness root
-   node scripts/build-agy-plugin.mjs install   # rebuild, validate, and install the agy plugin (skip if agy is absent)
+   node scripts/deploy.mjs --dry-run   # if step 1 showed a surprising count delta
+   node scripts/deploy.mjs             # every harness here, plus the agy plugin when ~/.gemini exists
+   node scripts/deploy.mjs audit       # report unowned dirs and skills a harness sees twice
    ```
 
    The installer is idempotent: it refreshes changed skills, adds new ones, and prunes
-   skills removed upstream. User-level roots (`~/.kiro`, `~/.codex`, `~/.claude`,
-   `~/.agents`) are the default, and `build-agy-plugin.mjs install` refreshes the global
-   `grey-matter` plugin in `~/.gemini/config/plugins/` (where `agy` discovers skills).
-   Crush reads **project** roots only, so for it note `node scripts/install-skills.mjs --project`
+   skills removed upstream. It picks user-level roots from its harness table so each harness
+   sees each skill once (an installed Claude or Codex plugin counts as the copy), and refreshes
+   the global `grey-matter` plugin in `~/.gemini/config/plugins/` (where `agy` discovers skills).
+   Report `audit` findings; don't delete unowned dirs without the user.
+   Crush reads **project** roots only, so for it note `node scripts/deploy.mjs --project`
    inside each project that wants it — sync doesn't chase project roots.
 
 7. **Report the delta.** One compact summary, most-pressing-first:

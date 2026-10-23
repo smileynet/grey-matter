@@ -66,7 +66,7 @@ mechanics.
 - **Idempotency / safety**: the script aborts without touching anything if a gate fails
   (unclean tree, bad or non-increasing version, empty `[Unreleased]`). `--dry-run` always
   changes nothing.
-- This skill does not deploy the skills to harnesses, that's `scripts/install-skills.mjs`.
+- This skill does not deploy the skills to harnesses, that's `scripts/deploy.mjs`.
   A release tags and publishes the repo; deploying is a separate, local step.
 
 ## It's working if

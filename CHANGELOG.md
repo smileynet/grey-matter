@@ -20,6 +20,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 - `line-craft` skill: write fiction prose and dialogue so feeling is carried by acts and errands. It includes a revision pass and a self-testing catalog of sentimental shapes, which grows from lines the author rejects, plus a standalone checker. The moves come from a study of LucasArts adventure dialogue.
 
 ### Changed
+- One deployer, `scripts/deploy.mjs`, replaces the installer and the agy packager. It picks skill roots so every harness on the machine sees each skill exactly once, counting an installed Claude or Codex plugin. It takes back copies it left elsewhere, and adds `check` and `audit` (unowned dirs, skills a harness sees twice). `install-skills.mjs` and `build-agy-plugin.mjs` still work and forward to it.
 - `install-skills.mjs` won't copy skills where Claude Code already loads them from the grey-matter plugin, and it removes copies it put there before, so a skill is never listed twice. `--allow-dual` overrides.
 - `release` also sets the version in `.claude-plugin/plugin.json` when a repo has one, so installed plugins pick up the new release.
 - `adopt-project` treats skills a repo ships to its users as product: it audits them but no longer restructures them. `conformance-audit` reports grey-matter's own layout rules as not applicable on such repos.

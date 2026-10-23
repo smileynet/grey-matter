@@ -1,6 +1,6 @@
 # Proposal 08: one deploy mechanism across projects
 
-**Status:** proposal for review. **Scope:** grey-matter, tkt, and every sibling repo that
+**Status:** accepted 2026-10-23 (decisions on ticket 64); phase 1 built. **Scope:** grey-matter, tkt, and every sibling repo that
 ships skills.
 
 Each project that ships skills now has its own deploy code, and the copies drift. This

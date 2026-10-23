@@ -60,11 +60,17 @@ into some project's `.kiro/`) as the source; cite the lineage's home.
 
 ## Install / distribution
 
-Skills are installed into a harness scan root with `node scripts/install-skills.mjs`
-(copies each skill into the known harness user roots, flattening the bucket structure;
-`--project` for `<cwd>/.agents/skills`; manifest-tracked, idempotent,
-`--dry-run`/`list`/`uninstall`), and packaged/installed as a global Antigravity (`agy`)
-plugin with `node scripts/build-agy-plugin.mjs install`. The decision and design are in
+Skills deploy with `node scripts/deploy.mjs` (proposal 08). It reads the pack from
+`.claude-plugin/plugin.json` and has one harness table (which skill roots each harness reads,
+and how to tell whether its plugin is installed). From that table it picks roots so each
+harness on this machine sees each skill exactly once, counting an installed plugin as the copy.
+It copies there, takes back copies it left elsewhere, and packages the Antigravity (`agy`)
+plugin when `~/.gemini` exists. It is manifest-tracked and idempotent, refuses foreign dirs,
+and takes `--dry-run`/`list`/`uninstall`/`--root`/`--project`. It also has `check` (the
+manifests match disk and tags) and `audit` (unowned dirs, and skills a harness sees twice).
+`install-skills.mjs` and `build-agy-plugin.mjs` forward to it. tkt will vendor the same
+file (ticket 64, phase 2), so **change the harness table here, never in a copy**. The earlier
+design is in
 [`docs/agents/proposals/03-distribution-packaging.md`](./docs/agents/proposals/03-distribution-packaging.md);
 the user-level standing rules (`global/AGENTS.md`, no steering) install with
 `node scripts/install-agents-md.mjs` (owner-marked, never clobbers a foreign file);
@@ -93,11 +99,11 @@ When a change touches skills, the plugin manifests, or tkt's plugin:
   For a GitHub install, run `claude plugin marketplace update grey-matter`, then
   `claude plugin update grey-matter@grey-matter` (this only changes anything after a release).
 - **One install path per harness (guarded).** A skill must never load twice in one harness.
-  With the plugin installed, `install-skills.mjs` skips every root Claude Code reads (any
-  `.claude/skills`, and a project `.agents/skills`). It also removes copies it put there
-  earlier and never touches foreign dirs. `--allow-dual` overrides this; don't use it in a
-  normal deploy. Any new deploy path, or a new harness root that Claude Code reads, must keep
-  this guard (`scripts/install-skills.test.mjs` covers it).
+  `deploy.mjs` enforces this from its harness table: a root that a harness with an installed
+  plugin reads gets no copy, and copies it left there earlier are removed. Foreign dirs are
+  never touched. `--allow-dual` overrides; don't use it in a normal deploy. A new harness, or a
+  root a harness turns out to read, goes in that table, not in a new guard
+  (`scripts/deploy.test.mjs` covers it).
 - **Check before committing:** `node scripts/check-repo.mjs` runs `claude plugin validate`
   when `claude` is on PATH. To see what loads, run
   `claude --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`, which lists the
@@ -116,8 +122,8 @@ One command verifies every mechanical invariant the skill distribution depends o
 node scripts/check-repo.mjs
 ```
 
-It aggregates (each also runnable on its own): installer ownership safety
-(`scripts/install-skills.test.mjs`), invocation sidecars + README tiers
+It aggregates (each also runnable on its own): the deployer's ownership, plugin guards and
+root selection (`scripts/deploy.test.mjs`), invocation sidecars + README tiers
 (`scripts/check-invocation-policy.mjs`), doc indexes + relative links
 (`scripts/check-docs-consistency.mjs`), ticket health (`tkt validate`), adopt-project's
 knowledge-relocation fixtures (`scripts/relocate-knowledge.test.mjs`), the global AGENTS.md
@@ -143,7 +149,7 @@ there is no CI pipeline.)
 - **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
 - **Check before you push.** Run `node scripts/check-repo.mjs` before pushing when the task touched skills, indexes, docs, or the installer; a green run is cheap insurance against pushing a broken link or a lost sidecar straight to `main`. Install the opt-in pre-commit hook (`node scripts/install-hooks.mjs`) to run it automatically. (Local hooks only — this project has no CI.)
 - **Push after every commit.** A commit isn't done until it's pushed. Another session may be pushing to `main` too — if a push is rejected, `git pull --rebase` (or fetch + rebase) and push again; don't force-push. (`tkt new`/`claim`/`close` auto-push, so they interleave with manual commits — the same rebase-and-retry applies.)
-- **Deploy by default.** Prefer to deploy changes (install skills into the harness roots with `node scripts/install-skills.mjs`, refresh the Antigravity plugin with `node scripts/build-agy-plugin.mjs install`, refresh the Claude plugin (see "Keeping the Claude plugin current"), install the global rules with `node scripts/install-agents-md.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
+- **Deploy by default.** Prefer to deploy changes (deploy skills with `node scripts/deploy.mjs` (harness roots and the Antigravity plugin), refresh the Claude plugin (see "Keeping the Claude plugin current"), install the global rules with `node scripts/install-agents-md.mjs`, publish, etc.) as part of finishing the work, unless the user says otherwise.
 
 <!-- tkt:begin -->
 ## Tickets

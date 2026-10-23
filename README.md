@@ -18,16 +18,18 @@ router over the whole set, or read [`AGENTS.md`](./AGENTS.md) for the convention
 
 ## Install
 
-Skills are discovered by an agent harness from a scan root (e.g. `~/.agents/skills/`).
-The installer copies each skill there, flattening the bucket structure:
+Skills are discovered by an agent harness from a scan root (e.g. `~/.kiro/skills/`) or a
+plugin. The deployer picks roots so each harness here sees each skill once, counting an
+installed grey-matter plugin, and copies there with the bucket structure flattened:
 
 ```sh
 # from the repo root (requires Node):
-node scripts/install-skills.mjs            # copy into each installed harness's user root
-node scripts/install-skills.mjs --project  # copy into <cwd>/.agents/skills (project-level)
-node scripts/install-skills.mjs --dry-run  # preview, change nothing
-node scripts/install-skills.mjs list       # what's installed
-node scripts/install-skills.mjs uninstall  # remove what we installed
+node scripts/deploy.mjs              # deploy to every harness on this machine (+ agy plugin)
+node scripts/deploy.mjs --project    # copy into <cwd>/.agents/skills (project-level)
+node scripts/deploy.mjs --dry-run    # preview, change nothing
+node scripts/deploy.mjs list         # what's installed
+node scripts/deploy.mjs uninstall    # remove what we installed
+node scripts/deploy.mjs audit        # unowned dirs, skills a harness sees twice
 ```
 
 User-level standing rules live in one short file, `global/AGENTS.md`, installed into each

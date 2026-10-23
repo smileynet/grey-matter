@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// Regression tests for install-skills.mjs — the installer's foreign-skill
-// safety contract (ticket 26).
+// Regression tests for deploy.mjs (proposal 08): the foreign-skill safety contract
+// (ticket 26), the plugin dual-deploy guards (tickets 62, 210), and root selection.
 //
-// Run: node --test scripts/install-skills.test.mjs
+// Run: node --test scripts/deploy.test.mjs
 //
 // These tests NEVER touch a real harness skill root. Each test builds an
 // isolated throwaway root under the OS temp dir, runs the installer against it
@@ -13,7 +13,7 @@
 import { test, before, after, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import {
-  mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync,
+  mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, symlinkSync,
   readdirSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -22,7 +22,7 @@ import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const INSTALLER = join(HERE, "install-skills.mjs");
+const INSTALLER = join(HERE, "deploy.mjs");
 const MANIFEST_NAME = ".installed-by-grey-matter.json";
 
 let root;
@@ -235,4 +235,136 @@ test("Codex plugin removes owned copies, preserves foreign skills, and honors di
     const shared = join(base, ".agents", "skills");
     assert.match(runWithEnv(["--root", shared], env).stdout, /skipped: Codex plugin/);
   } finally { rmSync(base, { recursive: true, force: true }); }
+});
+
+// --- Root selection with no --root: a fake HOME holding the harness dirs -----------------
+// HOME (and USERPROFILE) point at a temp tree, so the real harness roots are never read or
+// written. Plugin state comes from the fake ~/.claude/plugins and ~/.codex/config.toml.
+function homeSandbox({ harnesses = [], claude = false, codex = false } = {}) {
+  const home = mkdtempSync(join(tmpdir(), "gm-home-"));
+  const dirs = { kiro: ".kiro", codex: ".codex", claude: ".claude", opencode: join(".config", "opencode") };
+  for (const h of harnesses) mkdirSync(join(home, dirs[h]), { recursive: true });
+  if (claude) {
+    mkdirSync(join(home, ".claude", "plugins"), { recursive: true });
+    writeFileSync(join(home, ".claude", "plugins", "installed_plugins.json"),
+      JSON.stringify({ version: 2, plugins: { "grey-matter@grey-matter": [{}] } }));
+  }
+  if (codex) {
+    mkdirSync(join(home, ".codex"), { recursive: true });
+    writeFileSync(join(home, ".codex", "config.toml"), '[plugins."grey-matter@grey-matter"]\nenabled = true\n');
+  }
+  const env = { ...process.env, HOME: home, USERPROFILE: home, PATH: dirname(process.execPath) };
+  delete env.CODEX_HOME;
+  delete env.CLAUDE_CODE_PLUGIN_CACHE_DIR;
+  return { home, env, has: (rel) => existsSync(join(home, rel, "orient", "SKILL.md")) };
+}
+
+test("default roots: each harness gets one copy; OpenCode is served by ~/.claude/skills", () => {
+  const sb = homeSandbox({ harnesses: ["kiro", "codex", "claude", "opencode"] });
+  try {
+    const r = runWithEnv(["--no-agy"], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.ok(sb.has(".kiro/skills") && sb.has(".codex/skills") && sb.has(".claude/skills"));
+    assert.ok(!sb.has(".agents/skills"), "no shared copy: Codex and OpenCode would see it twice");
+    assert.ok(!sb.has(".config/opencode/skills"), "OpenCode already reads ~/.claude/skills");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("default roots: plugins count as the copy, and stale copies are taken back", () => {
+  const sb = homeSandbox({ harnesses: ["kiro", "codex", "claude", "opencode"] });
+  try {
+    // An earlier install, the old way: a copy in the shared root, plus a foreign dir there.
+    assert.equal(runWithEnv(["--root", join(sb.home, ".agents", "skills")], sb.env).status, 0);
+    mkdirSync(join(sb.home, ".agents", "skills", "someone-elses"));
+    assert.equal(runWithEnv(["--no-agy"], sb.env).status, 0);
+    assert.ok(!sb.has(".agents/skills"), "shared copy removed once each harness has its own");
+
+    const withPlugins = homeSandbox({ harnesses: ["kiro", "opencode"], claude: true, codex: true });
+    try {
+      const r = runWithEnv(["--no-agy"], withPlugins.env);
+      assert.equal(r.status, 0, r.stdout);
+      assert.match(r.stdout, /claude\s+<- Claude plugin grey-matter@grey-matter/);
+      assert.ok(!withPlugins.has(".claude/skills") && !withPlugins.has(".codex/skills"));
+      assert.ok(withPlugins.has(".config/opencode/skills"), "OpenCode falls back to its own root");
+      assert.ok(withPlugins.has(".kiro/skills"));
+    } finally { rmSync(withPlugins.home, { recursive: true, force: true }); }
+    assert.ok(existsSync(join(sb.home, ".agents", "skills", "someone-elses")), "foreign dir untouched");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("default roots: a claimed read never counts as a harness's copy", () => {
+  // Codex is only *claimed* to read ~/.agents/skills, so it must get ~/.codex/skills.
+  const sb = homeSandbox({ harnesses: ["codex"] });
+  try {
+    assert.equal(runWithEnv(["--no-agy"], sb.env).status, 0);
+    assert.ok(sb.has(".codex/skills") && !sb.has(".agents/skills"));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("default roots: no known harness falls back to the shared ~/.agents/skills", () => {
+  const sb = homeSandbox();
+  try {
+    assert.equal(runWithEnv(["--no-agy"], sb.env).status, 0);
+    assert.ok(sb.has(".agents/skills"));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("agy: with ~/.gemini present and no agy CLI, the plugin is packaged and copied", () => {
+  const sb = homeSandbox({ harnesses: ["kiro"] });
+  try {
+    mkdirSync(join(sb.home, ".gemini", "config", "plugins"), { recursive: true });
+    const out = join(sb.home, "agy-out");
+    const r = runWithEnv(["agy", "install", "--out", out], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    const dest = join(sb.home, ".gemini", "config", "plugins", "grey-matter");
+    assert.equal(JSON.parse(readFileSync(join(dest, "plugin.json"), "utf8")).name, "grey-matter");
+    assert.ok(existsSync(join(dest, "skills", "orient", "SKILL.md")));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("audit: reports unowned dirs and a skill a harness sees twice", () => {
+  const sb = homeSandbox({ harnesses: ["opencode"] });
+  try {
+    for (const r of [join(".config", "opencode", "skills"), join(".agents", "skills")]) {
+      mkdirSync(join(sb.home, r, "stray"), { recursive: true });
+    }
+    const r = runWithEnv(["audit"], sb.env);
+    assert.match(r.stdout, /unowned: stray/);
+    assert.match(r.stdout, /opencode sees 1 skill\(s\) twice: stray/);
+    assert.equal(runWithEnv(["audit", "--strict"], sb.env).status, 1);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("lint: metadata.deploy.forbidRefs blocks a skill naming one outside the pack", () => {
+  const pack = mkdtempSync(join(tmpdir(), "gm-pack-"));
+  try {
+    mkdirSync(join(pack, ".claude-plugin"));
+    writeFileSync(join(pack, ".claude-plugin", "plugin.json"),
+      JSON.stringify({ name: "demo", version: "1.0.0", metadata: { deploy: { forbidRefs: ["wrap-session"] } } }));
+    mkdirSync(join(pack, "skills", "demo-core"), { recursive: true });
+    writeFileSync(join(pack, "skills", "demo-core", "SKILL.md"), "---\nname: demo-core\n---\nThen run wrap-session.\n");
+    const r = runInstaller(["--pack", pack, "--root", root]);
+    assert.equal(r.status, 1);
+    assert.match(r.stdout, /references skills outside the pack: wrap-session/);
+  } finally { rmSync(pack, { recursive: true, force: true }); }
+});
+
+test("default roots: a symlinked root is one root; the copy wins over a plugin duplicate", () => {
+  // ~/.codex/skills -> ~/.kiro/skills (as on the maintainer's machine): Kiro needs the copy,
+  // and Codex, with the plugin, then sees it twice. The deploy must warn, keep Kiro's copy,
+  // and never "release" the shared dir it just installed into.
+  const sb = homeSandbox({ harnesses: ["kiro"], codex: true });
+  try {
+    mkdirSync(join(sb.home, ".kiro", "skills"), { recursive: true });
+    symlinkSync(join(sb.home, ".kiro", "skills"), join(sb.home, ".codex", "skills"), "dir");
+    const r = runWithEnv(["--no-agy"], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.match(r.stdout, /kiro\s+<- ~\/\.kiro\/skills/);
+    assert.match(r.stdout, /codex .*twice/);
+    assert.match(r.stdout, /warning: no set of roots/);
+    assert.ok(sb.has(".kiro/skills"), "Kiro keeps its copy");
+    const again = runWithEnv(["--no-agy"], sb.env);
+    assert.ok(sb.has(".kiro/skills"), "a second run doesn't release the shared dir");
+    assert.doesNotMatch(again.stdout, /not needed/);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });

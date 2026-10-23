@@ -6,7 +6,7 @@
 // distribution change, and callable from CI.
 //
 // Invariants checked:
-//   1. installer ownership safety  -> scripts/install-skills.test.mjs  (node:test)
+//   1. deployer (ownership, plugin guards, root selection) -> scripts/deploy.test.mjs (node:test)
 //   2. invocation sidecars/README  -> scripts/check-invocation-policy.mjs
 //   3. doc indexes + links         -> scripts/check-docs-consistency.mjs
 //   4. ticket health               -> tkt validate   (skipped w/ warning if tkt absent)
@@ -78,7 +78,7 @@ function run(label, cmd, args, { optional = false } = {}) {
 
 const node = process.execPath;
 
-run("1. installer ownership safety", node, ["--test", join(SCRIPTS, "install-skills.test.mjs")]);
+run("1. deployer: ownership, plugin guards, root selection", node, ["--test", join(SCRIPTS, "deploy.test.mjs")]);
 run("2. invocation sidecars + README groups", node, [join(SCRIPTS, "check-invocation-policy.mjs")]);
 run("3. doc indexes + relative links", node, [join(SCRIPTS, "check-docs-consistency.mjs")]);
 // tkt validate: normal severity (a warning like unchecked-acs-on-done does not fail the

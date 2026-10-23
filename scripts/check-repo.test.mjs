@@ -6,7 +6,7 @@
 // run the specific check, assert it exits nonzero, then restore the file — with a guard
 // that ALWAYS restores even if an assertion throws. The installer-ownership and
 // ticket-validation invariants are proven in their own isolated harnesses
-// (install-skills.test.mjs; the tkt immutability findings in ticket 29/33), and are
+// (deploy.test.mjs; the tkt immutability findings in ticket 29/33), and are
 // re-asserted here at the command level.
 //
 // Nothing here mutates a user skill root or needs harness auth.
@@ -90,9 +90,9 @@ test("link check FAILS on a broken relative link", () => {
     });
 });
 
-// (invariant: installer ownership safety — proven by the dedicated isolated suite)
+// (invariant: deployer ownership safety — proven by the dedicated isolated suite)
 test("installer ownership regression suite passes (isolated temp roots)", () => {
-  const r = spawnSync(node, ["--test", join(SCRIPTS, "install-skills.test.mjs")],
+  const r = spawnSync(node, ["--test", join(SCRIPTS, "deploy.test.mjs")],
     { cwd: REPO, encoding: "utf8" });
   assert.equal(r.status, 0, (r.stdout || "") + (r.stderr || ""));
   // And it is the suite that proves the FAILING seeded case (refused foreign dir): its

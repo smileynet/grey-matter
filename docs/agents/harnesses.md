@@ -7,8 +7,10 @@ this doc is the current how-to.
 
 All harnesses below support the **Agent Skills** `SKILL.md` standard natively, so our
 skills deploy **unchanged**, no conversion, no MCP wrapping. Skills install into a **scan
-root** (user-level, per harness) or a **project root** (`.agents/skills/` is shared). Use
-`scripts/install-skills.mjs` (see the repo README).
+root** (user-level, per harness) or a **project root** (`.agents/skills/` is shared), or
+come from a plugin. Use `scripts/deploy.mjs` (see the repo README). Its harness table records
+which roots each harness reads. Keep that table in step with the per-harness notes below:
+"reads" there are verified; a claimed read is marked `claimed` and never counted as a copy.
 
 ## Per-harness reference
 
@@ -18,8 +20,8 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 ### kiro-cli (primary)
 
 - Binary `kiro-cli`, probed 2.31.0. Skills exposed via the Skill tool.
-- **User root**: `~/.kiro/skills/`. **Install**: `node scripts/install-skills.mjs` (it is
-  in the default set) or `--root ~/.kiro/skills`.
+- **User root**: `~/.kiro/skills/`. **Install**: `node scripts/deploy.mjs` (it is
+  in the harness table) or `--root ~/.kiro/skills`.
 - **Test (non-interactive)**: `kiro-cli chat --no-interactive --trust-all-tools "<prompt>"`.
 - **Invocation filter**: consistent with honoring `disable-model-invocation` (not cleanly
   isolated; see codex for the clean case).
@@ -38,9 +40,16 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **Local development:** register the absolute checkout path as the marketplace,
   then repeat `codex plugin add <name>@<name>` after edits to refresh the cache.
   Start a new chat to load changes. Installed plugin skills use `<plugin>:<skill>` names.
-- **Duplicate prevention:** installers skip `.codex/skills` and `.agents/skills` when
-  their Codex plugin is enabled in the user config (`CODEX_HOME` supported), removing
-  only manifest-owned copies. `--allow-dual` overrides. Disabled plugins permit copies.
+- **Duplicate prevention:** `deploy.mjs` copies nothing into `.codex/skills` or `.agents/skills`
+  while the pack's Codex plugin is enabled in the user config (`CODEX_HOME` supported), and
+  removes only manifest-owned copies. `--allow-dual` overrides. Disabled plugins permit copies.
+- **On the maintainer's Mac, `~/.codex/skills` is a symlink to `~/.kiro/skills`,** so Kiro and
+  Codex share every copy. With the grey-matter Codex plugin enabled, Kiro's copy makes Codex list
+  each skill twice. `deploy.mjs` keeps Kiro's copy, because a missing skill is worse than a
+  duplicate, and warns. To get one copy each, replace the symlink with a real dir or disable the
+  Codex plugin.
+- **Reads `~/.agents/skills`?** Claimed, not seen live (0.147 names only `~/.codex/skills`), so
+  the deployer never relies on it as Codex's copy but avoids putting a second copy there.
 - Packaging reference: [OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins).
 
 
@@ -69,7 +78,7 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   `/plugin marketplace add smileynet/tkt`, `/plugin marketplace add smileynet/grey-matter`, then
   `/plugin install grey-matter@grey-matter` (pulls in `tkt@tkt` as a dependency). Plugin skills are namespaced
   (`/grey-matter:code-review`, `/tkt:tkt-core`), so they no longer shadow Claude's bundled
-  `/code-review`. Using both install paths would list each skill twice, so `install-skills.mjs`
+  `/code-review`. Using both install paths would list each skill twice, so `deploy.mjs`
   skips Claude-read roots while the plugin is installed (`--allow-dual` overrides).
   **Test locally**: `claude --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`
   lists the components without a model call.
@@ -85,7 +94,8 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   on this version (the repo's earlier "project root confirmed live" was agy **1.2.0**, a
   different version — bare-dir scanning is version-gated; don't assume it). So "deploy
   globally to agy" = build a plugin package and install it.
-- **Install**: `node scripts/build-agy-plugin.mjs install` (builds `dist/agy-plugin/`,
+- **Install**: part of `node scripts/deploy.mjs` when `~/.gemini` exists, or on its own with
+  `node scripts/deploy.mjs agy install` (builds `dist/agy-plugin/`,
   runs `agy plugin validate --strict`, then `agy plugin install <dir>`). Verify with
   `agy plugin list --json` (shows `grey-matter` + its skill count) or by asking agy to
   list its skills. Re-run after a `sync` to refresh the package.
