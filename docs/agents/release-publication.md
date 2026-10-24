@@ -74,7 +74,8 @@ inspect its receipt and confirm the owning process is no longer active before re
 an abandoned lock. Never remove another running publisher's lock or start the same
 release under a second state path. The lock is local, not a distributed GitHub lease.
 
-Local tkt publication is refused. Its cargo-dist job remains the sole publisher;
-CI dispatch, dist asset integration and crate recovery remain ticket 68 work. This
+Local tkt publication is refused. Its intended sole publisher is CI. Build-only
+staging and the [reviewed artifact reader](release-ci-artifacts.md) exist; the
+review-bound CI publisher, dispatch and crate recovery remain ticket 68 work. This
 command does not bypass that boundary. Neither a successful plan nor synthetic
 passing receipts establish final release readiness or human approval.

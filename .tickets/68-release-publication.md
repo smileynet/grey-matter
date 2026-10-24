@@ -63,7 +63,7 @@ the required candidate evidence or publication authorization.
 
 ## Current implementation checkpoint
 
-Canonical release modules live in grey-matter `scripts/`; tkt vendors 16 owned
+Canonical release modules live in grey-matter `scripts/`; tkt vendors 17 owned
 files through `scripts/sync-release-tools.mjs`. Library and CLI fixtures use
 synthetic evidence, fake services and disposable Git remotes. No real release,
 registry upload, tag push or stable promotion has run.
@@ -114,9 +114,10 @@ failed at dist installation because the wrapper forced bash over PowerShell.
 The targeted test failed before correction. Another regression caught unqualified
 intermediate names before the attempt-isolation fix. A fresh corrected smoke run,
 [40048951483](https://github.com/smileynet/tkt/actions/runs/40048951483), is at exact
-SHA `57c27af008511646a02b3fb8ca62ececbca9b01d`; its planning/crate jobs passed and
-platform jobs were active at the last observation. Poll that run; do not dispatch
-again merely because observation times out. Neither run is a 0.5.0 candidate.
+SHA `57c27af008511646a02b3fb8ca62ececbca9b01d`; all nine jobs completed successfully. The downloaded ZIP matches its GitHub
+digest; all 16 files, archive paths, crate VCS and ARM macOS binary identity were
+checked. Local tkt packaging reproduces the CI crate hash. See [smoke evidence](../docs/agents/research/evidence/ci-stage-smoke-20261023.json).
+Neither run is a 0.5.0 candidate.
 
 Tkt 212/213/214 are closed: scratch exclusion, packaged Git identity and root-anchored
 crate inputs. See [identity remediation](../docs/agents/research/evidence/crate-remediation-20261023.json)
@@ -125,15 +126,18 @@ The initial 0.2.0/0.5.0 drafts predate these changes and must be regenerated.
 
 ## Remaining work before closure
 
-1. Complete and inspect a successful staging run, sealed bytes and artifact
-   provenance. Verify run/attempt/jobs, artifact IDs/digests/expiry, exact inventory
-   and safe extraction. Names or run IDs alone are insufficient. Live rerun
-   behavior remains unverified; require a complete fresh attempt.
+1. Integrate the new `release-ci-artifacts.mjs` reader into publication. Its eight
+   fixtures and live read bind run/attempt/jobs, upload-log ID/digest, API metadata,
+   ZIP digest, safe bounded flat-file decoding, exact inventory and reviewed seal.
+   It re-observes remote state after download. Live rerun behavior remains
+   unverified; require a complete fresh attempt.
 2. Implement the later review-bound CI publisher and local dispatch/observer.
    It must download reviewed staged bytes, never rebuild or reseal them. Preserve
    one GitHub publisher, exact annotated tag, development M and stable C.
-3. Implement the durable registry-attempt barrier and prove the exact Cargo upload
-   boundary with a harmless localhost probe. A dry-run comparison plus a checksum
+3. Implement the durable registry-attempt barrier and the production Cargo upload
+   boundary. Four localhost capture cases now verify clean-source reproducibility,
+   replacement of corrupt output, default dirty-source refusal and changed bytes
+   under --allow-dirty; they do not complete the production transport guard. A dry-run comparison plus a checksum
    after upload does not by itself prove pre-upload byte equality. Require explicit
    recovery after unknown outcomes; Actions retention cannot serve as the ledger.
 4. Integrate/fix/retest all publication states and per-channel reporting, then

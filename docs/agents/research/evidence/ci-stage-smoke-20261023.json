@@ -1,0 +1,178 @@
+{
+  "status": "pass",
+  "candidateEvidence": false,
+  "repository": "smileynet/tkt",
+  "sourceSha": "57c27af008511646a02b3fb8ca62ececbca9b01d",
+  "runId": 40048951483,
+  "runAttempt": 1,
+  "runConclusion": "success",
+  "artifactId": 12542926635,
+  "artifactName": "tkt-sealed-stage-40048951483-1",
+  "artifactZipSha256": "dabb8e1eaab3a1a28f375bc64c24144d59369da5a65f00226e55762b726ad201",
+  "sealSha256": "897b255e3b9664db56a3dd28c7d3e654b31f2313846c7614148bed6ab3d8f8e0",
+  "sealedFiles": [
+    {
+      "name": "sha256.sum",
+      "size": 578,
+      "sha256": "3160691a7eaf0b4d77d438441f82b243200eff99842567d82d956fbba31b46c6"
+    },
+    {
+      "name": "source.tar.gz",
+      "size": 484942,
+      "sha256": "3c086881322312ce1dfb1f91df1e453f961cbb20117f7b2167f7197783ce3779"
+    },
+    {
+      "name": "source.tar.gz.sha256",
+      "size": 81,
+      "sha256": "1ae19aa60bd099af66fcf1d5349f814afb958e4edefab26ab6b199071938fd37"
+    },
+    {
+      "name": "tkt-0.4.0.crate",
+      "size": 119410,
+      "sha256": "b2c52152a77e96ce593bf5e0866b38f8627e6e5e87e02f70e968171c173d89ff"
+    },
+    {
+      "name": "tkt-aarch64-apple-darwin.tar.gz",
+      "size": 1310702,
+      "sha256": "3b919ab0cbc41d7593d27d81078ae73924ec6d7b2b06653d0d0100dea836cb0b"
+    },
+    {
+      "name": "tkt-aarch64-apple-darwin.tar.gz.sha256",
+      "size": 99,
+      "sha256": "f85178b20c7c3de140e75856cd0aa536580ad5931db7cd9ae0faef3f5a3ff9c5"
+    },
+    {
+      "name": "tkt-aarch64-unknown-linux-gnu.tar.gz",
+      "size": 1357811,
+      "sha256": "dded902cf6da52fe5b71189ddb531236a39f60ce565981d1e607fb50dd0b1171"
+    },
+    {
+      "name": "tkt-aarch64-unknown-linux-gnu.tar.gz.sha256",
+      "size": 104,
+      "sha256": "1caf3c9f91a8431f924eeecbf0a410455ee18981b2dc215f4a9cbda251ef47f9"
+    },
+    {
+      "name": "tkt-installer.ps1",
+      "size": 22122,
+      "sha256": "2518067b327beea71235cd18a99c4d066c75e01f794a880c392f2d20dc40fa41"
+    },
+    {
+      "name": "tkt-installer.sh",
+      "size": 53832,
+      "sha256": "905f498a04ee54d912d78e07b317b2da9c539dbe3e0923ee655c3cb170c1da59"
+    },
+    {
+      "name": "tkt-x86_64-apple-darwin.tar.gz",
+      "size": 1397276,
+      "sha256": "e7057d7cf96aa31e0b94a7ccbb8df9bfdc9ee48c7dd2e17c6409005bc9b56d9d"
+    },
+    {
+      "name": "tkt-x86_64-apple-darwin.tar.gz.sha256",
+      "size": 98,
+      "sha256": "8fa3384d0f466341f920b03bf2eab076ce9987c424e696111ea6f21e7b1588b5"
+    },
+    {
+      "name": "tkt-x86_64-pc-windows-msvc.zip",
+      "size": 1508694,
+      "sha256": "81f8088c6fc5aab90b39c986e5caf176cd38036ca0c94892fb8f1564e5ca8648"
+    },
+    {
+      "name": "tkt-x86_64-pc-windows-msvc.zip.sha256",
+      "size": 98,
+      "sha256": "3733a477628d3d7c931661bb98c5a8b94d7a40424d749ccae0bbb46e1c551647"
+    },
+    {
+      "name": "tkt-x86_64-unknown-linux-gnu.tar.gz",
+      "size": 1450335,
+      "sha256": "368545c1442d54a0e822c101b441d18a0fc609c333e054ca89d6fd55bff3438f"
+    },
+    {
+      "name": "tkt-x86_64-unknown-linux-gnu.tar.gz.sha256",
+      "size": 103,
+      "sha256": "dbddb7918bf84e54b3174abb3279c848895d10c7359b1d211ad9c3501d30683f"
+    }
+  ],
+  "archives": [
+    {
+      "name": "source.tar.gz",
+      "entries": 368,
+      "links": []
+    },
+    {
+      "name": "tkt-aarch64-apple-darwin.tar.gz",
+      "entries": 5,
+      "links": []
+    },
+    {
+      "name": "tkt-aarch64-unknown-linux-gnu.tar.gz",
+      "entries": 5,
+      "links": []
+    },
+    {
+      "name": "tkt-x86_64-apple-darwin.tar.gz",
+      "entries": 5,
+      "links": []
+    },
+    {
+      "name": "tkt-x86_64-unknown-linux-gnu.tar.gz",
+      "entries": 5,
+      "links": []
+    }
+  ],
+  "nativeVersion": "tkt 0.4.0 (57c27af)",
+  "crateVcs": {
+    "git": {
+      "sha1": "57c27af008511646a02b3fb8ca62ececbca9b01d"
+    },
+    "path_in_vcs": ""
+  },
+  "windowsEntries": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "tkt.exe"
+  ],
+  "publicationPerformed": false,
+  "limitations": [
+    "Source-version 0.4.0 smoke, not approved 0.5.0 candidate",
+    "Only ARM macOS binary executed locally; other target build success is not install/upgrade proof",
+    "Live rerun provenance not tested"
+  ],
+  "unifiedChecksumsVerified": 6,
+  "localRepackage": {
+    "command": "cargo package --locked --no-verify --target-dir <fresh-output>",
+    "cargoVersion": "1.99.1",
+    "crateSha256": "b2c52152a77e96ce593bf5e0866b38f8627e6e5e87e02f70e968171c173d89ff",
+    "matchesCiSeal": true
+  },
+  "readerVerification": {
+    "status": "pass",
+    "provenance": {
+      "repository": "smileynet/tkt",
+      "repositoryId": 1316150092,
+      "candidateSha": "57c27af008511646a02b3fb8ca62ececbca9b01d",
+      "workflowId": 330592177,
+      "runId": 40048951483,
+      "runAttempt": 1,
+      "artifactId": 12542926635,
+      "artifactName": "tkt-sealed-stage-40048951483-1",
+      "sealJobId": 120737925003
+    },
+    "files": 16,
+    "zipSha256": "dabb8e1eaab3a1a28f375bc64c24144d59369da5a65f00226e55762b726ad201",
+    "sealSha256": "897b255e3b9664db56a3dd28c7d3e654b31f2313846c7614148bed6ab3d8f8e0"
+  },
+  "readerSourceSha256": "d18b06ab66e78ca33c3e626cf9b855661bb77d477c9bd3e064433aaab2feda9e",
+  "dependencyAudit": {
+    "command": "npm audit --json",
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "lockfileSha256": "a8038487f41d22f05f034d059457610250a619f92f288d4d2d1c96f6d33a4f59"
+  }
+}

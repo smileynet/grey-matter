@@ -59,7 +59,8 @@
         "scripts/release-staging.mjs",
         "scripts/release-publication.mjs",
         "scripts/release-registry.mjs",
-        "scripts/release-development.mjs"
+        "scripts/release-development.mjs",
+        "scripts/release-ci-artifacts.mjs"
       ]
     }
   }

@@ -1,0 +1,95 @@
+{
+  "status": "pass",
+  "cargoVersion": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)",
+  "root": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/tkt local Cargo transport 6NAWWg",
+  "index": "sparse+http://127.0.0.1:54203/index/",
+  "cases": [
+    {
+      "name": "baseline",
+      "cargoExit": 101,
+      "puts": 1,
+      "capturedSha256": "77a8fcdbefc084a442b12ed85e5895dc36be922adca861c301c6a02045e2ca27",
+      "matchesSeal": true
+    },
+    {
+      "name": "corrupted-output",
+      "cargoExit": 101,
+      "puts": 1,
+      "capturedSha256": "77a8fcdbefc084a442b12ed85e5895dc36be922adca861c301c6a02045e2ca27",
+      "matchesSeal": true,
+      "stderr": "    Updating `probe` index\n   Packaging tkt-local-transport-fixture v0.0.1 (/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/tkt local Cargo transport 6NAWWg/source)\n    Packaged 5 files, 1.2KiB (890B compressed)\n   Uploading tkt-local-transport-fixture v0.0.1 (/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/tkt local Cargo transport 6NAWWg/source)\nerror: failed to publish tkt-local-transport-fixture v0.0.1 to registry at http://127.0.0.1:54203\n\nCaused by:\n  the remote server responded with an error (status 400 Bad Request): Local transport capture completed; deliberate refusal, nothing forwarded\n"
+    },
+    {
+      "name": "dirty-source",
+      "cargoExit": 101,
+      "puts": 0,
+      "capturedSha256": null,
+      "matchesSeal": null,
+      "stderr": "    Updating `probe` index\nerror: 1 files in the working directory contain changes that were not yet committed into git:\n\nsrc/main.rs\n\nto proceed despite this and include the uncommitted changes, pass the `--allow-dirty` flag\n"
+    },
+    {
+      "name": "dirty-source-allowed",
+      "cargoExit": 101,
+      "puts": 1,
+      "capturedSha256": "8b6c75f4c5ea797019d7e442c2b9f8fdc284a79949b29fbde6fac3294fa394e0",
+      "matchesSeal": false,
+      "stderr": "    Updating `probe` index\n   Packaging tkt-local-transport-fixture v0.0.1 (/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/tkt local Cargo transport 6NAWWg/source)\n    Packaged 5 files, 1.3KiB (916B compressed)\n   Uploading tkt-local-transport-fixture v0.0.1 (/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/tkt local Cargo transport 6NAWWg/source)\nerror: failed to publish tkt-local-transport-fixture v0.0.1 to registry at http://127.0.0.1:54203\n\nCaused by:\n  the remote server responded with an error (status 400 Bad Request): Local transport capture completed; deliberate refusal, nothing forwarded\n"
+    }
+  ],
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/index/config.json"
+    },
+    {
+      "method": "GET",
+      "path": "/index/tk/t-/tkt-local-transport-fixture"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/crates/new"
+    },
+    {
+      "method": "GET",
+      "path": "/index/config.json"
+    },
+    {
+      "method": "GET",
+      "path": "/index/tk/t-/tkt-local-transport-fixture"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/crates/new"
+    },
+    {
+      "method": "GET",
+      "path": "/index/config.json"
+    },
+    {
+      "method": "GET",
+      "path": "/index/tk/t-/tkt-local-transport-fixture"
+    },
+    {
+      "method": "GET",
+      "path": "/index/config.json"
+    },
+    {
+      "method": "GET",
+      "path": "/index/tk/t-/tkt-local-transport-fixture"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/crates/new"
+    }
+  ],
+  "sealedSha256": "77a8fcdbefc084a442b12ed85e5895dc36be922adca861c301c6a02045e2ca27",
+  "realRegistryPublication": false,
+  "limits": [
+    "Dependency-free fixture; no production upload mechanism",
+    "No OS egress filter; isolated Cargo config names only loopback registry, fixture publish allowlist contains only probe, dummy token only",
+    "Default clean-source refusal is observed; no proof of arbitrary concurrent mutation safety"
+  ],
+  "sourceProbe": "docs/agents/research/examples/cargo-local-transport.mjs",
+  "sourceProbeSha256": "18e422102ad1a6313dc93a1b5625857fd0e21fddcd2b57cc5fb9ad3a8fc25309",
+  "candidateEvidence": false
+}

@@ -1,6 +1,6 @@
 # Cargo 1.99.1 sealed transport investigation
 
-Date: 2026-10-23. Scope: one transport question for ticket 68. No publication, registry upload, release, tag, source edit, or Cargo publish invocation ran. Probe below is a design, not observed success.
+Date: 2026-10-23. Scope: one transport question for ticket 68. The initial investigation made no mutations. A later disposable localhost probe executed four Cargo publish cases with isolated Cargo configuration, a probe-only package allowlist and dummy credentials. The mock captured requests and deliberately refused them; no production registry, release, tag or stable ref changed.
 
 ## Practical conclusion
 
@@ -48,4 +48,37 @@ Emit structured probe result with status, Cargo full version, invocation/config 
 
 Warnings: `--locked` controls lockfile changes, not source immutability or archive identity. `--no-verify` is not an existing-archive transport option. A comparison before a later packaging step leaves a time-of-check/time-of-use gap. A captured mismatch proves failure after transmission; it does not prevent that transmission. Pinning alone is insufficient, and a mock probe proves only the tested invocation/environment. No evidence here supports deploying a custom loopback proxy or patched Cargo as a production workaround.
 
-Coverage: ✅ installed CLI identity/options and official protocol read; ✅ bounded probe designed; ⚠️ exact pinned source not retrieved; ❌ localhost probe not implemented/run; ❌ sealed-file-only transport mechanism established. Preserve the existing release-contract gate.
+Coverage: installed CLI/options and official protocol verified; four localhost cases observed; exact pinned source retrieval and a production sealed-byte mechanism remain unverified. Preserve the release-contract gate.
+
+## Executed localhost follow-up
+
+[L1:verified] The [four-case capture](evidence/cargo-local-transport-20261023.json)
+used a dependency-free disposable Git fixture, empty Cargo home, an explicit named
+loopback sparse registry, `publish=["probe"]` and a dummy token. The server only
+served local configuration and captured PUT bodies; it forwarded nothing and
+returned a deliberate HTTP 400. Cargo exit 101 is expected after capture. No OS
+egress filter was used; this is configuration/credential isolation, not a claim
+that all possible outbound traffic was physically blocked.
+
+| Case | Observed PUTs | Result |
+| --- | ---: | --- |
+| Same clean source after packaging | 1 | Captured crate hash equals the seal |
+| Corrupt pre-existing target/package crate | 1 | Cargo replaces it; capture again equals the original seal |
+| Modify packaged source, default flags | 0 | Cargo refuses dirty source before upload |
+| Same modification with explicit --allow-dirty | 1 | Capture differs from seal; this flag cannot enter the publisher |
+
+Reproduce the fixture with `node docs/agents/research/examples/cargo-local-transport.mjs` from the grey-matter root. It retains captures in its reported temporary directory.
+
+The command shape was `cargo publish --registry probe --locked --no-verify
+--target-dir <fresh-target>`, with `--allow-dirty` added only in the negative case.
+The mock decoded the documented metadata/crate length-prefixed body. The source
+mutation changed `src/main.rs` after the original seal; the corrupt-output case
+replaced the existing crate file with unrelated text. These observations establish
+repackaging and the clean-source refusal, not safety against arbitrary concurrent
+changes inside a later Cargo invocation.
+
+[L1:verified] A fresh local `cargo package --locked --no-verify` at tkt `57c27af`
+also reproduced the Linux CI crate hash exactly. See [CI smoke evidence](evidence/ci-stage-smoke-20261023.json).
+This tests real tkt packaging across those two environments without an upload.
+The production adapter still needs pinned inputs/toolchain, an enforced source
+write boundary, the durable attempt barrier and recovery tests.
