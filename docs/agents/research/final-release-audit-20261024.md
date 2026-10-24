@@ -1,6 +1,6 @@
 # Final release candidate audit — 2026-10-24
 
-**Technical checks pass within the measured scope. Linux native validation now passes in ticket 78. [Windows validation now passes](windows-native-validation-completion-20261024.md), including the complete Codex candidate catalog after authorized live duplicate cleanup. Audit 70 and staging 71 remain incomplete.** No release tag, GitHub release, registry publication, stable promotion or public plugin-directory submission was performed. This report covers the approved grey-matter 0.2.0 and tkt 0.5.0 candidates; it does not authorize publication.
+**Audit 70 passes: go for staging grey-matter 0.2.0 and tkt 0.5.0.** No release tag, GitHub release, registry publication, stable promotion or public plugin-directory submission was performed. This report covers the approved grey-matter 0.2.0 and tkt 0.5.0 candidates; it does not authorize publication.
 
 ## Exact candidates and evidence
 
@@ -38,7 +38,7 @@ Native versions: Codex 0.147.0, Claude 2.1.310, Antigravity 1.4.6, Kiro 2.34.0, 
 
 | Finding | Disposition and evidence |
 | --- | --- |
-| Original OpenCode duplicate/unowned-directory findings | Resolved for managed skill loading. Fresh canonical portfolio refresh followed by strict audit: 19 plugins, four packs, zero findings/errors. Each isolated native catalog has all 50 managed skills exactly once. Forty-three distinct user-managed directories remain explicitly inventoried; installer ownership does not permit deleting them. Inventory-only source-name overlaps are not loaded duplicates. |
+| Original OpenCode duplicate/unowned-directory findings | Resolved for managed skill loading. The macOS canonical portfolio refresh and strict audit report 19 plugins, four packs and zero findings/errors. Each isolated native catalog has all 50 managed skills exactly once. Forty-three distinct macOS user-managed directories remain explicitly inventoried; installer ownership does not permit deleting them. Inventory-only source-name overlaps are not loaded duplicates. |
 | Codex plugin inventory and shared scan-root claims | Addressed by ticket 64 and the current native probes. Actual catalogs verify plugin/bare selection, same-version cache repair, disable/enable and symlink-root separation; no inferred scan-root claim is used as proof. |
 | tkt bash-only deployment | Addressed. `tools/deploy.mjs` matches the canonical engine; the bash script is an alternative entry point. One portfolio refresh deployed each changed pack once. |
 | Windows portability and push-rejection fixture | tkt 219/220 closed. Exact replacement candidate CI passes Windows/Linux full gates, hooks and Rust 1.85 MSRV. Windows's deliberate symlink-fixture skip and Unix-only test difference are recorded, not counted as executed. |
@@ -46,7 +46,7 @@ Native versions: Codex 0.147.0, Claude 2.1.310, Antigravity 1.4.6, Kiro 2.34.0, 
 | Historical ticket 07 unchecked criteria | Existing warning preserved with its supersession rationale. It is not a current failing close gate; ticket 33 remains parked. |
 | Claude listing icon / source-root context advice | Optional listing icon advice is nonblocking; source-root CLAUDE.md advice is absent from sealed payload validation. No public-directory listing eligibility is asserted. |
 | Archive README install prerequisites | Staging must include the coordinated install guide: register/install the extracted tkt package before grey-matter, then install the tkt CLI separately. The compact archive README commands assume dependency marketplaces are registered. An extra fresh-home run of those compact commands timed out with network denied; it is inconclusive and is not substituted for the successful dependency-first candidate probes. |
-| Native Windows/Linux vendor loading | [Linux native validation](linux-native-validation-20261024.md) now passes on randomserver, including all six clients and upgrade controls. [Windows native evidence](windows-native-validation-20261024.md) now includes all six package rows and fixture controls. The [completion report](windows-native-validation-completion-20261024.md) resolves those 48 live duplicates and records a passing complete Codex candidate catalog/state probe. No coverage exclusion has been approved. |
+| Native Windows/Linux vendor loading | [Linux native validation](linux-native-validation-20261024.md) now passes on randomserver, including all six clients and upgrade controls. [Windows completion](windows-native-validation-completion-20261024.md) resolves the initial 48 live duplicates and records a passing complete Codex candidate catalog/state probe. The [initial report](windows-native-validation-20261024.md) retains the historical package and fixture evidence. No coverage exclusion has been approved. |
 
 ## Scope and ticket reconciliation
 
@@ -68,8 +68,16 @@ Publication implementation review and its four remediations are closed in ticket
 
 ## Go/no-go and staging rechecks
 
-**Current decision: Windows evidence is complete; no-go remains until final audit 70 finishes.** [Linux 78](linux-native-validation-20261024.md) passes with recorded isolation/runtime limits. [Windows 77](https://github.com/smileynet/grey-matter/blob/main/.tickets/77-windows-native-candidate-validation.md) is closed with cited completion evidence. No Windows coverage waiver was needed or approved; there are no unresolved observed technical release defects within the already tested scope.
+**Decision: go for staging; no unresolved release blockers remain within the measured scope.** [Linux 78](linux-native-validation-20261024.md) passes with recorded isolation/runtime limits. [Windows 77](https://github.com/smileynet/grey-matter/blob/main/.tickets/77-windows-native-candidate-validation.md) is closed with cited completion evidence. No Windows coverage waiver was needed or approved; there are no unresolved observed technical release defects within the already tested scope.
 
-After the platform evidence is reconciled and audit 70 closes, ticket 71 must commit a review carrier (the staging files pinned to one Git commit), including scope, compatibility, upgrade, platform-approval, final-audit and staging receipts for each exact candidate. Include both note drafts, checksums, all six plugin archives, tkt's reviewed CI provenance, the pinned annotated tag object record and exact later publish/resume commands. A tag object record is not a pushed tag.
+Ticket 71 must commit a review carrier (the staging files pinned to one Git commit), including scope, compatibility, upgrade, platform-approval, final-audit and staging receipts for each exact candidate. Include both note drafts, checksums, all six plugin archives, tkt's reviewed CI provenance, the pinned annotated tag object record and exact later publish/resume commands. A tag object record is not a pushed tag.
 
 Recheck staged bytes with `readStagedCandidate` for both products and `readStagedTktCandidate` for the joined CI assets; verify regular committed blobs and their hashes, unchanged candidate worktrees, resource closure, version consistency, links/prose and current duplicate audit. Changes to source behavior or release-facing candidate documents require replacement artifacts and affected evidence. Ticket/plan status and the review-carrier audit do not change frozen candidate bytes. Preserve earlier reviews and their hashes rather than relabeling them as fresh executions.
+
+## Final reconciliation
+
+The bounded documentation findings are already corrected in the frozen sources: the glossary links the intended adoption ADR and routes procedures to owning skills; tkt AGENTS retains applicable Node/workflow checks for tooling; README channel guidance distinguishes default-branch development from later stable publication. No replacement candidate was needed. Compatibility/upgrade receipts now include completed Windows evidence rather than their historical pending-platform wording. Scope, platform and final-audit receipts record staging readiness only.
+
+Fresh source gates and the live Mac portfolio audit were repeated during closure. The portfolio audit reports no duplicate loading or ownership errors, retaining the 43 inventoried user directories. The tkt Actions seal was independently re-read: 16 assets and the original ZIP digest match. The crates.io index still reports 0.5.0 absent; absence is not a reservation and must be checked again before publishing. See [closure evidence](evidence/audit70-closeout-20261024.json).
+
+Measured limits remain explicit: Windows/Linux network isolation was unavailable, catalogs do not prove every model activation, and direct hook fixtures do not prove authenticated interactive sessions. Windows AGY combines actual plugin inventory with byte-identical installed-payload shadow loading. These limits do not hide a failing required catalog or package check; no platform coverage waiver was used. No new defect was deferred.
