@@ -38,6 +38,8 @@ jobs:
         run: env PROBE_CARGO="$(rustup which cargo)" PROBE_RUSTC="$(rustup which rustc)" PROBE_NODE="$(command -v node)" python3 docs/agents/research/examples/cargo-private-mount.py --cargo > cargo-private-upload-result.json
       - name: Prepared transport lifecycle and actual tkt compatibility
         run: env PROBE_CARGO="$(rustup which cargo)" PROBE_RUSTC="$(rustup which rustc)" node scripts/release-cargo-upload.integration.mjs --tkt-repo .scratch/tkt-transport-input > cargo-prepared-transport-result.json
+      - name: Probe parent loss before intent and during upload
+        run: env PROBE_CARGO="$(rustup which cargo)" PROBE_RUSTC="$(rustup which rustc)" node scripts/release-cargo-lifecycle.integration.mjs > cargo-parent-loss-result.json
       - name: Retain result
         if: always()
         uses: actions/upload-artifact@v7
@@ -46,4 +48,5 @@ jobs:
           path: |
             cargo-private-*-result.json
             cargo-prepared-transport-result.json
+            cargo-parent-loss-result.json
           if-no-files-found: error
