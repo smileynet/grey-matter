@@ -37,3 +37,7 @@ Communicate between agents sparsely, via **context pointers** (spec-slug, ticket
 8. **Verify before closing.** For each ticket, confirm its acceptance criteria actually pass on the integration branch, don't trust an implementer's self-report. Then `tkt close` each with its resolution and ACs checked. (If this repo treats PRs as a request surface, which is off by default, mark the draft PR ready instead; see the issue-tracker doc.) Report the integration branch.
 
 9. Clean up the implementer worktrees. Detect merged branches by content, not ancestry: a squash-merge looks unmerged by ancestry, so a naive "fully-merged only" sweep leaves worktrees (and their build artifacts) dangling.
+
+If the delivery is worth surfacing visually, consider
+[delivery-dashboard](../../productivity/delivery-dashboard/SKILL.md) for the project's
+evolving view of what people can now do.

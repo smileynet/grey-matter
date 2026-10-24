@@ -7,6 +7,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 ## [Unreleased]
 
 ### Added
+- `delivery-dashboard` keeps one evolving HTML view of delivered value, distinguishing planned, partial and shipped experiences with visible labels.
 - `spike-options` compares competing designs with throwaway builds, then helps you choose an approach and track its integration.
 - Claude Code plugin: add the `smileynet/tkt` and `smileynet/grey-matter` marketplaces, then `/plugin install grey-matter@grey-matter`. It brings in tkt's workflow skills as a dependency. Skills are namespaced (`/grey-matter:code-review`), so they no longer shadow Claude's bundled `/code-review`.
 - Antigravity (`agy`) global deployment via a plugin package: `scripts/build-agy-plugin.mjs` assembles the skills into an `agy` plugin (`plugin.json` + flattened `skills/`), validates it with `agy plugin validate --strict`, and installs it with `agy plugin install`. On the probed agy, skill discovery is plugin-driven (not a bare-directory scan), so this is how the skills reach agy globally.

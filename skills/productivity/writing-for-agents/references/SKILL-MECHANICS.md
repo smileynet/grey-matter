@@ -11,6 +11,10 @@ portable field (Claude Code reads `disable-model-invocation`; Codex reads a side
 `agents/openai.yaml`), so a user-invoked skill sets both, kept in sync. The full cross-harness schema and the metadata rule live
 in `docs/agents/skill-frontmatter.md` at the repo root.
 
+When adding a skill, read `.claude-plugin/plugin.json`'s
+`metadata.deploy.skillLicenseFiles` and include those legal files in its directory.
+The distribution checks enforce this even when frontmatter validation passes.
+
 ## Invocation
 
 Two choices, trading the two loads:

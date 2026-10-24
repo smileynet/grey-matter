@@ -16,6 +16,7 @@ sync by [`curate-docs`](../meta/curate-docs/SKILL.md).
 
 ## Model-invoked
 
+- [delivery-dashboard](./delivery-dashboard/SKILL.md): maintain one evolving HTML view of delivered value, with labelled wireframe, mocked and live visuals.
 - [grilling](./grilling/SKILL.md): the interview primitive (rounds, frontier; facts are the agent's, decisions are yours).
 - [line-craft](./line-craft/SKILL.md): fiction prose and dialogue as acts and errands, checked against a self-testing shape catalog.
 - [writing-for-agents](./writing-for-agents/SKILL.md): the reference for writing documents agents consume.
