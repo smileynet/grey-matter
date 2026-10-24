@@ -1,7 +1,7 @@
 ---
 id: "77"
 title: "Validate native release candidates on Windows"
-status: in_progress
+status: done
 blocked_by: ["69"]
 spec: "release-readiness"
 priority: high
@@ -76,11 +76,11 @@ Close with five numbered evidence entries matching the criteria. If any required
 
 ## Acceptance criteria
 
-- [ ] The exact candidate identities, archive SHA-256 values, native OS/architecture and client versions are recorded in committed evidence.
-- [ ] Both plugin packages load with expected namespaces and exactly-once catalogs in every applicable native harness; unavailable clients are explicit blockers or approved exclusions.
-- [ ] Native install, upgrade, repeated deploy, enable/disable and foreign-content preservation controls have command/output evidence.
-- [ ] Applicable product, syntax, resource, invocation-policy and hook checks pass; unsupported checks are not counted as executed.
-- [ ] A cited platform report and machine-readable evidence are committed, linked to ticket 70, record no publication, and bind authorized cleanup to rollback backups and preservation of unique user skill content.
+- [x] The exact candidate identities, archive SHA-256 values, native OS/architecture and client versions are recorded in committed evidence.
+- [x] Both plugin packages load with expected namespaces and exactly-once catalogs in every applicable native harness; unavailable clients are explicit blockers or approved exclusions.
+- [x] Native install, upgrade, repeated deploy, enable/disable and foreign-content preservation controls have command/output evidence.
+- [x] Applicable product, syntax, resource, invocation-policy and hook checks pass; unsupported checks are not counted as executed.
+- [x] A cited platform report and machine-readable evidence are committed, linked to ticket 70, record no publication, and bind authorized cleanup to rollback backups and preservation of unique user skill content.
 
 ## SharkTank execution checkpoint (2026-10-24)
 
@@ -95,3 +95,14 @@ Windows legacy installer copies required explicit file-list/byte review before r
 The user explicitly requested: “Audit SharkTank’s actual skill catalog and clean up confirmed duplicates. Make sure each harness sees each skill exactly once, then finish Windows validation.” This supersedes the earlier no-user-state-mutation boundary only for the requested live audit/cleanup; criterion 5 now requires explicit backup and preservation evidence rather than pretending no state changed. No scope exclusion was approved or needed.
 
 The [completion report](../docs/agents/research/windows-native-validation-completion-20261024.md), [structured evidence](../docs/agents/research/evidence/windows-native-validation-completion-20261024.json) and 44-file raw ZIP prove the final result. Forty-eight confirmed installer-owned shared copies were removed after backup; three retained roots each have 50 managed skills; all six harness checks expose the 50 managed skills once, and 244 unique user files/links remain unchanged. Codex's complete frozen-candidate catalog/state probe now passes with exactly 51 non-system skills, without filtering external user entries. Fresh product gates and all six canonical native package rows pass. The prior partial report remains historical, not a current blocker. AGY native installed inventory plus byte-identical shadow loading is distinguished from its unauthenticated live OAuth catalog; no login/model call or personal provider change occurred. No publication or final-audit/staging receipt was granted.
+
+## Resolution (2026-10-24)
+
+done: completed exact-candidate Windows validation after backed-up cleanup of 48 confirmed live duplicates; all six managed catalogs load each of 50 skills once, with recorded authentication and foreign-content limits
+
+### Verification
+1. ✓ The exact candidate identities, archive SHA-256 values, native OS/architecture and client versions are recorded in committed evidence. — "Completion evidence JSON binds e071b7b03d02025dc1af6c3ff2c4f8369f777587 and 2b6ff173993c9fe413c40287fb1cb3f0a9879ca1, all six sealed archive hashes, Windows 11 x64, executable hashes and pinned client versions."
+2. ✓ Both plugin packages load with expected namespaces and exactly-once catalogs in every applicable native harness; unavailable clients are explicit blockers or approved exclusions. — "Six canonical native package rows pass. Complete Codex candidate catalog has exactly 51 non-system entries without external filtering; six live harness checks each contain all 50 managed skills once. AGY native installed inventory and byte-identical zero-turn shadow catalog are explicitly distinguished from live OAuth login."
+3. ✓ Native install, upgrade, repeated deploy, enable/disable and foreign-content preservation controls have command/output evidence. — "Native upgrade, cache repair, enable-disable, repeated deploy, junction separation and foreign sentinel controls pass for unchanged frozen candidates. Live cleanup removes 48 manifest-owned redundant shared copies after rollback backup, preserving 244 unique user files or link targets; no force overwrite used."
+4. ✓ Applicable product, syntax, resource, invocation-policy and hook checks pass; unsupported checks are not counted as executed. — "Fresh Windows grey gate passes all 12 groups; fresh tkt gate passes 36 Node cases with one explicit skip, fmt, Clippy and 295 Rust tests. Six fresh native rows and full Codex state controls pass. Unchanged-input Windows hook, CLI and remaining upgrade proofs are retained with their actual execution scope and skips."
+5. ✓ A cited platform report and machine-readable evidence are committed, linked to ticket 70, record no publication, and bind authorized cleanup to rollback backups and preservation of unique user skill content. — "Report and machine-readable evidence committed and pushed in ab97841, linked from audit70. Completion raw ZIP SHA256 667f668b3c7f63c1d4e7a50ce2790c65fd91fe808c87c6568b5eaf2a51cb0159; 43 member hashes verified. User explicitly authorized live cleanup; rollback backups and preservation proofs retained. No publication or staging approval performed."
