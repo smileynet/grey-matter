@@ -24,7 +24,7 @@ the root cause in the tool so other repos stop hitting it.
 
 ### Trap 1 — `tkt new` creates a ticket its own validator immediately flags
 `tkt new <slug> --title ...` (with or without `--vc`) seeds the body with template stubs
-(`## What to build` -> `TBD`, `## Acceptance criteria` -> `- [x] TBD`). On an **open** ticket
+(`## What to build` -> `TBD`, `## Acceptance criteria` -> `- [ ] TBD`). On an **open** ticket
 that trips `tkt validate`'s `stub-body` warning right away; a **backlog** ticket is exempt.
 
 Reproduced (tkt 0.4.0, `92d4833`):
