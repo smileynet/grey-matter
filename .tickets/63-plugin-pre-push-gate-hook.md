@@ -1,7 +1,7 @@
 ---
 id: "63"
 title: "Claude plugin hook: run check-repo.mjs before an agent's git push"
-status: open
+status: in_progress
 blocked_by: []
 priority: low
 validation_criteria:
