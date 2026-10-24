@@ -1,7 +1,7 @@
 ---
 id: "71"
 title: "Stage reviewed changelogs README files and release artifacts"
-status: open
+status: in_progress
 blocked_by: ["70"]
 priority: high
 spec: "release-readiness"
