@@ -1,7 +1,7 @@
 ---
 id: "77"
 title: "Validate native release candidates on Windows"
-status: open
+status: in_progress
 blocked_by: ["69"]
 spec: "release-readiness"
 priority: high
