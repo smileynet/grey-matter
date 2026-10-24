@@ -16,7 +16,7 @@ async function until(test, timeout = 15000) {
   while (!test()) { if (Date.now() > end) throw Error("lifecycle observation timed out"); await sleep(50); }
 }
 function processRecord(pid) {
-  try { const text = readFileSync(`/proc/${pid}/stat`, "utf8"), fields = text.slice(text.lastIndexOf(")") + 2).split(/\s+/); return { pid, state: fields[0], start: fields[19] }; }
+  try { const text = readFileSync(`/proc/${pid}/stat`, "utf8"), fields = text.slice(text.lastIndexOf(")") + 2).split(/\s+/); return { pid, command: text.slice(text.indexOf("(") + 1, text.lastIndexOf(")")), state: fields[0], start: fields[19], exitCode: Number(fields[49]) }; }
   catch (error) { if (error.code === "ENOENT") return null; throw error; }
 }
 function descendants(pid) {
@@ -88,7 +88,7 @@ async function main() {
         worker.kill("SIGKILL");
         await until(() => exited && children.every((old) => { const now = processRecord(old.pid); return !now || now.start !== old.start || now.state === "Z"; }));
         const removed = owned.every((path) => !existsSync(path));
-        rows.push({ name: duringUpload ? "parent-loss-during-upload" : "parent-loss-before-intent", stoppedDescendants: children.length, temporaryDirectoriesRemoved: removed, credentialCalls: messages.filter((row) => row.phase === "credential").length, puts: captures.length - putsBefore, uploadOutcome: duringUpload ? "unconfirmed-localhost-capture" : "not-attempted" });
+        rows.push({ name: duringUpload ? "parent-loss-during-upload" : "parent-loss-before-intent", stoppedDescendants: children.length, temporaryDirectoriesRemoved: removed, processExits: children.map((record) => ({ before: record, after: processRecord(record.pid) })), remainingTopLevel: owned.map((path) => existsSync(path) ? readdirSync(path) : []), credentialCalls: messages.filter((row) => row.phase === "credential").length, puts: captures.length - putsBefore, uploadOutcome: duringUpload ? "unconfirmed-localhost-capture" : "not-attempted" });
         assert.equal(rows.at(-1).credentialCalls, duringUpload ? 1 : 0); assert.equal(rows.at(-1).puts, duringUpload ? 1 : 0);
         if (duringUpload) assert.deepEqual(captures.at(-1), { sha256: config.crate.sha256, dummyAuthorizationMatched: true });
         assert.equal(removed, true, "parent loss left the owned temporary transport tree behind");
