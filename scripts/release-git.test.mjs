@@ -199,3 +199,47 @@ test("remote binding checks push URL overrides and pushInsteadOf, without making
   git(input.repo, ["config", "url.https://github.com/other/.pushInsteadOf", "https://github.com/owner/"]);
   assert.throws(() => requireGithubRemote({ repo: input.repo, repository: "owner/repo" }), /differs/);
 });
+
+
+function developmentFixture(t) {
+  const input = fixture(t), base = input.candidateSha;
+  git(input.repo, ["push", input.remotePath, `${base}:refs/heads/main`]);
+  git(input.repo, ["checkout", "-b", "release-candidate"]);
+  writeFileSync(join(input.repo, "release-version"), "1.0.0"); git(input.repo, ["add", "."]); git(input.repo, ["commit", "-m", "Candidate version"]);
+  input.candidateSha = git(input.repo, ["rev-parse", "HEAD"]).trim();
+  git(input.repo, ["tag", "-f", "-a", "v1.0.0", "-m", "Reviewed release"]); input.tagObject = git(input.repo, ["rev-parse", "v1.0.0"]).trim();
+  git(input.repo, ["checkout", "-b", "development", base]);
+  writeFileSync(join(input.repo, "development-only"), "Retain development work"); git(input.repo, ["add", "."]); git(input.repo, ["commit", "-m", "Development work"]);
+  const previousMain = git(input.repo, ["rev-parse", "HEAD"]).trim(); git(input.repo, ["push", input.remotePath, `${previousMain}:refs/heads/main`]);
+  git(input.repo, ["merge", "--no-ff", input.candidateSha, "-m", "Integrate reviewed candidate"]);
+  return { ...input, previousMain, developmentSha: git(input.repo, ["rev-parse", "HEAD"]).trim() };
+}
+
+test("candidate refs: verified development merge joins the same atomic transaction", (t) => {
+  const input = developmentFixture(t), before = git(input.repo, ["ls-remote", input.remotePath]);
+  assert.equal(pushCandidateRefs(input).complete, false); assert.equal(git(input.repo, ["ls-remote", input.remotePath]), before);
+  const result = pushCandidateRefs({ ...input, execute: true }); assert.equal(result.complete, true);
+  assert.equal(result.refs.development, input.developmentSha);
+  assert.deepEqual(git(input.repo, ["show", "-s", "--format=%P", input.developmentSha]).trim().split(" "), [input.previousMain, input.candidateSha]);
+  assert.equal(git(input.repo, ["rev-parse", `${input.tagObject}^{commit}`]).trim(), input.candidateSha);
+  assert.equal(git(input.repo, ["ls-remote", input.remotePath, "refs/heads/stable"]).trim(), "");
+  assert.equal(pushCandidateRefs({ ...input, execute: true }).complete, true);
+});
+
+test("candidate refs: unsupported three-ref atomic push leaves development and release refs intact", (t) => {
+  const input = developmentFixture(t), before = git(input.repo, ["ls-remote", input.remotePath]);
+  git(input.remotePath, ["config", "receive.advertiseAtomic", "false"]);
+  assert.throws(() => pushCandidateRefs({ ...input, execute: true }), /no sequential fallback/);
+  assert.equal(git(input.repo, ["ls-remote", input.remotePath]), before);
+});
+
+test("candidate refs: development integration cannot omit the candidate or replace advanced main", (t) => {
+  const input = developmentFixture(t), before = git(input.repo, ["ls-remote", input.remotePath]);
+  assert.throws(() => pushCandidateRefs({ ...input, developmentSha: input.previousMain, execute: true }), /contain the exact candidate/);
+  assert.throws(() => pushCandidateRefs({ ...input, branch: "refs/heads/main", execute: true }), /distinct/);
+  assert.equal(git(input.repo, ["ls-remote", input.remotePath]), before);
+  git(input.repo, ["commit", "--allow-empty", "-m", "Concurrent main work"]);
+  const advanced = git(input.repo, ["rev-parse", "HEAD"]).trim(); git(input.repo, ["push", input.remotePath, `${advanced}:refs/heads/main`]);
+  assert.throws(() => pushCandidateRefs({ ...input, execute: true }), /fetch and recheck/);
+  assert.equal(git(input.repo, ["ls-remote", input.remotePath, input.tag]).trim(), "");
+});

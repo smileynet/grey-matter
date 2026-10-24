@@ -1,15 +1,15 @@
 # Coordinated release contract
 
-Effective for the release-readiness work, ticket 66, 2026-10-23. This is the
-implementation contract for tickets 67–71. **Publication/resume is not implemented
-by the current entry points.** Preparation and product/native verification are partial
-implementations; legacy publication entry points are disabled. Current scope ends
-with reviewed, staged candidates.
+Effective for release-readiness work, ticket 66, 2026-10-23. This is the
+implementation contract for tickets 67–71. Current authorization ends with reviewed,
+staged candidates; publication capability is tested without publishing real releases.
 
-The [publisher recovery contract](research/publisher-recovery-contract.md) records
-current API/CI evidence and the shared reconciliation library tested with fake services. The
-library does not expose a publication command or validate final staging evidence;
-live adapters, atomic branch/tag push, registry and stable recovery remain ticket 68 work.
+Preparation and product/native verification exist. The grey-matter
+[publication command](release-publication.md) binds reviewed staging evidence,
+atomic refs, immutable GitHub reconciliation and stable recovery; default planning
+is read-only. tkt CI publication, crate-ledger integration and development-version
+reconciliation remain ticket 68 work. The [recovery research](research/publisher-recovery-contract.md)
+records primary sources and tested boundaries. No real publication has run.
 
 ## Release identity and version authority
 
@@ -36,8 +36,8 @@ fixes bump patch, additions minor and breaks major. Behavior-changing instructio
 count as product changes even when no binary changes. The highest applicable bump
 wins; purely development-only edits may wait for the next product release.
 
-Proposed candidates are grey-matter 0.2.0 and tkt 0.5.0. Approval is pending; record
-the user's answer and the included scope before preparing versioned candidates.
+The user approved staged candidates grey-matter 0.2.0 and tkt 0.5.0 on 2026-10-23.
+Final included scope and candidate audits still require completion.
 No preparation or recovery command silently chooses or increments a version.
 
 The [local draft mechanics](release-preparation.md) and [artifact layer](release-artifacts.md)
@@ -73,10 +73,14 @@ runtime resources and required legal artifacts, and exclude credentials, .git,
 ## One publisher per repository
 
 **grey-matter:** its local release tooling is the sole GitHub publisher.
-**tkt:** its generated cargo-dist workflow is the sole GitHub publisher; the local
-command prepares and dispatches the release identity, then observes CI. It never
-creates a second GitHub release. Change generated jobs through dist configuration
-and regeneration, not by editing generated YAML. Cargo/crates.io, GitHub and stable
+**tkt:** the intended sole GitHub publisher is its cargo-dist-based CI workflow.
+Integration remains pending. The local command prepares and dispatches the release
+identity, then observes CI; it never creates a second GitHub release. Maintain the
+dist build jobs through a versioned generator/wrapper that replaces built-in GitHub
+publication with one checked publisher. cargo-dist 0.32 hooks are additive and cannot
+replace its built-in publisher; [the pinned-source research](research/dist-publisher-hooks.md)
+records why a workflow wrapper is necessary. Hand edits to generated output are not
+the maintenance interface. Cargo/crates.io, GitHub and stable
 promotion are separately observed states; none is assumed atomic with another.
 
 The authorized publication path pushes only the intended branch and annotated tag
