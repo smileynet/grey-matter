@@ -2,6 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { resolve } from "node:path";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { cargoUploadPolicy, validateCargoUploadManifest, prepareCargoUpload } from "./release-cargo-upload.mjs";
 
 function fixture() {
@@ -9,6 +11,12 @@ function fixture() {
   const crate = { name: "tkt", version: "0.5.0", bytes, sha256: createHash("sha256").update(bytes).digest("hex") };
   return { repo: resolve("candidate"), candidateSha: "a".repeat(40), crate, cargo: resolve("runtime/cargo"), rustc: resolve("runtime/rustc"), getToken: () => { throw Error("preflight must not read a credential"); } };
 }
+
+test("snapshot preserves empty Git directories, directory modes and safe symlinks", { skip: process.platform === "win32" }, () => {
+  const result = spawnSync("python3", ["-B", fileURLToPath(new URL("./release-cargo-transport.test.py", import.meta.url))], { encoding: "utf8" });
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(JSON.parse(result.stdout), { status: "pass", metrics: { tests: 3 }, errors: [] });
+});
 
 test("transport policy binds reviewed bytes and defaults to the sole crates.io registry", () => {
   const options = fixture(), policy = cargoUploadPolicy(options);
