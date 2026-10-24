@@ -1,0 +1,27 @@
+name: Manual Cargo filesystem boundary probe
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  private-mounts:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - name: Refresh package index
+        run: sudo apt-get update
+      - name: Install boundary tool
+        run: sudo apt-get install --yes bubblewrap
+      - name: Probe disposable source and output isolation
+        run: sudo python3 docs/agents/research/examples/cargo-private-mount.py > cargo-private-mount-result.json
+      - name: Retain result
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cargo-private-mount-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cargo-private-mount-result.json
+          if-no-files-found: error
