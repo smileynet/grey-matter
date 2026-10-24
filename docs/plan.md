@@ -3,27 +3,31 @@
 The coordinated [release plan](agents/proposals/09-release-readiness.md) and
 [release contract](agents/release-contract.md) define scope and acceptance.
 User-approved staging versions: grey-matter 0.2.0 and tkt 0.5.0. Publication is
-not authorized. Finish the documentation freeze before rebuilding candidates, then
-run install/upgrade verification, final audit and artifact staging.
+not authorized. Candidate preparation is complete; run install/upgrade verification,
+then the final audit and artifact staging.
 
 ## Active release thread
 
 | ID | Work | Status |
 | --- | --- | --- |
 | 68 | Publish and resume coordinated GitHub and plugin releases safely | ✅ done |
-| 67 | Prepare version-consistent release candidates and plugin bundles | in_progress |
-| 69 | Verify plugin fresh installs and upgrades in isolated harness homes | open |
+| 67 | Prepare version-consistent release candidates and plugin bundles | ✅ done |
+| 69 | Verify plugin fresh installs and upgrades in isolated harness homes | in_progress |
 | 70 | Audit both projects before release staging | open |
 | 71 | Stage reviewed changelogs README files and release artifacts | open |
 
 Ticket 68 is complete, including prepared Cargo evidence, the sole CI publisher and
 dispatcher, lifecycle/recovery checks, deployment audit and independent integrated
-Standards/Spec review. The remaining sequence is 67 → 69 → 70 → 71.
+Standards/Spec review. Ticket 67 is complete on grey-matter candidate
+`bec5afee9f4f070ef898ac309d45d5061a5be7b5` and tkt candidate
+`cd96042a5a70123cfbfc656ddf34563c53cff7a0`. Both pass product/native preparation
+checks; grey Windows/Linux gates and tkt CI/five-target staging build pass.
 
-Before rebuilding 67's candidates, finish the source documentation freeze: correct
-known stale guidance and reconcile README/changelog coverage in one pass. Keep
-final 70's audit and 71's staging on those exact candidate revisions. Existing
-initial candidates are stale; candidate changes require new artifacts and evidence.
+The remaining sequence is 69 → 70 → 71. Previous-release probes include the
+v0.4 skill-link migration fixed by tkt 217. Keep audit and staging tied to these
+frozen candidates; runtime or release-documentation changes require new artifacts
+and affected evidence. This live plan and ticket receipts record later progress;
+embedded plans in frozen bundles remain snapshots of their source revisions.
 
 ## Parked work
 

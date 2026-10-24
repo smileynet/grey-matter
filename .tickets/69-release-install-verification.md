@@ -76,3 +76,11 @@ file capture provides complete parseable output. This is partial coverage: Kiro 
 Crush live catalogs, previous-release/native upgrade matrices, cache/enable/symlink
 controls, compatibility and platform approval remain to be verified. Do not close
 this ticket using these initial probes alone.
+
+Candidate `cd96042` has now passed the complete five-target staging build and seal
+(run 40076036798). [Bound CI artifact evidence](../docs/agents/research/evidence/tkt-candidate-stage-20261024.json)
+records the 16 release assets, exact Actions repository/workflow/run/attempt/job and
+artifact IDs, ZIP/seal hashes and sealed file inventory. The downloaded archive's
+SHA256 matches the upload digest; `readCiStage` re-observed run/artifact metadata
+before and after inspection and verified upload-log identity. Retain the original
+ZIP locally for 71; no registry/release/stable operation ran.
