@@ -1,7 +1,7 @@
 ---
 id: "78"
 title: "Validate native release candidates on Linux"
-status: open
+status: in_progress
 blocked_by: ["69"]
 spec: "release-readiness"
 priority: high
