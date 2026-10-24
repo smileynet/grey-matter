@@ -1,7 +1,7 @@
 ---
 id: "68"
 title: "Publish and resume coordinated GitHub and plugin releases safely"
-status: in_progress
+status: done
 blocked_by: ["66"]
 priority: high
 spec: "release-readiness"
@@ -47,12 +47,12 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 
 ## Acceptance criteria
 
-- [ ] A fixture proves one GitHub publisher per repo; existing matching drafts/releases are resumed while a mismatched tag/SHA or duplicate publisher fails clearly.
-- [ ] Publication verifies the remote release tag, uses --verify-tag, uploads the complete asset set before publishing an immutable draft, and verifies published asset hashes.
-- [ ] The branch and release tag use an atomic push; unsupported atomic pushes stop with recovery instructions, and no code pushes every local tag or deletes/moves a published release tag.
-- [ ] State-aware resume covers missing/draft/published GitHub states, interrupted asset upload, tkt crate publication and failed stable promotion without bumping again or replacing published bytes.
-- [ ] Stable advances only to the tested published release SHA, remains unchanged on failed pre-publication verification, and is re-verified after promotion; pinned consumers retain immutable refs.
-- [ ] The command reports per-channel status and URLs, distinguishes optional store submission from Git marketplace availability, and fixtures run without real publication.
+- [x] A fixture proves one GitHub publisher per repo; existing matching drafts/releases are resumed while a mismatched tag/SHA or duplicate publisher fails clearly.
+- [x] Publication verifies the remote release tag, uses --verify-tag, uploads the complete asset set before publishing an immutable draft, and verifies published asset hashes.
+- [x] The branch and release tag use an atomic push; unsupported atomic pushes stop with recovery instructions, and no code pushes every local tag or deletes/moves a published release tag.
+- [x] State-aware resume covers missing/draft/published GitHub states, interrupted asset upload, tkt crate publication and failed stable promotion without bumping again or replacing published bytes.
+- [x] Stable advances only to the tested published release SHA, remains unchanged on failed pre-publication verification, and is re-verified after promotion; pinned consumers retain immutable refs.
+- [x] The command reports per-channel status and URLs, distinguishes optional store submission from Git marketplace availability, and fixtures run without real publication.
 
 ## Implementation dependency
 
@@ -380,3 +380,50 @@ of asset bytes and nested credential-bearing causes. These exercise the librarie
 and shared output formatter, not a real publishing CLI invocation or production
 services. Complete the affected-path Standards/Spec re-review, including S1's
 trusted-runtime boundary, then reconcile acceptance evidence before closing 68.
+
+## Integrated review acceptance (2026-10-24)
+
+Independent Standards and Spec re-review run
+`remediation-20261024-553ce16-568a6a0` examined grey
+`553ce167b1a67fad8bb8773b0759b13f6d865cc1` and tkt
+`568a6a071ee296fdf9812cecc5d6b53ac095d9e5`. Both reviewers report all four
+findings resolved and no new actionable finding in the affected paths. Standards
+ran 17 targeted tests and matched all five provisioning source hashes to the
+hosted product receipt. Spec ran the actual verification/coordinator/Git files:
+96 tests passed, plus 10 tkt publisher tests. Root read both reports and saved
+command outputs before accepting those results.
+
+Root's required repository gate passes all 12 invariants; its release group has
+250 cases, 249 passed and one expected Linux-only entry skip on macOS. The hosted
+Linux transport evidence supplies the separately scoped native component proof.
+Tkt's 30 release-tool cases pass. After each completed runtime unit, one portfolio
+refresh ran; the last strict audit passes with 19 plugins, 4 packs, no findings or
+errors. Both implementation commits are pushed.
+
+Acceptance evidence covers one publisher and matching/mismatched remote states
+(`release-publish`, `release-verify`, tkt workflow tests); verified tag creation and
+complete asset digests (`release-github`, `release-publish`); explicit atomic refs
+and unsupported/racing servers (`release-git`); registry-intent/uncertain upload and
+stable-only recovery (`release-tkt-publication`, `release-verify`); pre/post stable
+re-observation (`release-git`); and the production formatter's channel results
+(`release-verify`). All referenced names are `scripts/*.test.mjs`, except tkt's
+`tools/release-publisher.test.mjs`.
+
+Limits: product probe source is 0.4.0, not the final 0.5.0 candidate. Failure
+fixtures use the exact CLI formatter with fake services, rather than executing a
+real publishing CLI failure or Actions result-artifact upload. Environment isolation
+does not protect against hostile same-user processes, credential files or malicious
+trusted toolchains. These limits do not authorize publication or certify release
+readiness. Continue with fresh 67 candidates, then 69, 70 and 71.
+
+## Resolution (2026-10-24)
+
+done: Implemented and independently reviewed sole publishers, sealed staged inputs, atomic candidate/development refs, prepared Cargo intent barrier, promotion-only recovery and structured channel outcomes. Capability tested without real publication; continue 67 then 69-71.
+
+### Verification
+1. ✓ A fixture proves one GitHub publisher per repo; existing matching drafts/releases are resumed while a mismatched tag/SHA or duplicate publisher fails clearly. — "At grey553ce16/tkt568a6a0, release-publish and release-verify fixtures plus tkt publisher/workflow tests prove sole publisher, matching draft reuse and mismatched tag/SHA refusal; Spec re-review 96 tests and tkt 10 tests pass."
+2. ✓ Publication verifies the remote release tag, uses --verify-tag, uploads the complete asset set before publishing an immutable draft, and verifies published asset hashes. — "release-github tests verify --verify-tag draft creation and exact typed bytes; release-publish fixtures require annotated sealed tag, complete asset inventory/digests and immutable published readback. All 12 repository invariants pass."
+3. ✓ The branch and release tag use an atomic push; unsupported atomic pushes stop with recovery instructions, and no code pushes every local tag or deletes/moves a published release tag. — "release-git fixtures verify explicit atomic candidate/tag/main refs, no implicit tags, rejection without partial updates on unsupported servers and race/divergence refusal. Included in fresh 96-test Spec review."
+4. ✓ State-aware resume covers missing/draft/published GitHub states, interrupted asset upload, tkt crate publication and failed stable promotion without bumping again or replacing published bytes. — "Registry-intent and prepared-transport fixtures cover uncertain attempts without duplicate uploads; new grey/tkt regressions prove later-main conflicts cannot block stable-only recovery and missing remote channels refuse. Linux parent-loss run40070114004 and product run40071721321 pass within recorded scope."
+5. ✓ Stable advances only to the tested published release SHA, remains unchanged on failed pre-publication verification, and is re-verified after promotion; pinned consumers retain immutable refs. — "release-git stable fixtures prove exact published SHA, no pre-publication change, fast-forward-only promotion and post-promotion identity checks; new wrappers bypass completed development/ref steps only after full remote reconciliation."
+6. ✓ The command reports per-channel status and URLs, distinguishes optional store submission from Git marketplace availability, and fixtures run without real publication. — "Failure JSON fixtures use the production formatter to retain C/R, observed GitHub/registry phases and URLs with unconfirmed stable, excluding bytes/credential causes; CLI catch handlers use that formatter. Success marks directory submission not-requested and exposes marketplace URL. Fake services only; no real publishing CLI failure executed."
