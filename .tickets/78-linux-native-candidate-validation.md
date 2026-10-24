@@ -1,7 +1,7 @@
 ---
 id: "78"
 title: "Validate native release candidates on Linux"
-status: in_progress
+status: done
 blocked_by: ["69"]
 spec: "release-readiness"
 priority: high
@@ -76,14 +76,25 @@ Close with five numbered evidence entries matching the criteria. If any required
 
 ## Acceptance criteria
 
-- [ ] The exact candidate identities, archive SHA-256 values, native OS/architecture and client versions are recorded in committed evidence.
-- [ ] Both plugin packages load with expected namespaces and exactly-once catalogs in every applicable native harness; unavailable clients are explicit blockers or approved exclusions.
-- [ ] Native install, upgrade, repeated deploy, enable/disable and foreign-content preservation controls have command/output evidence.
-- [ ] Applicable product, syntax, resource, invocation-policy and hook checks pass; unsupported checks are not counted as executed.
-- [ ] A cited platform report and machine-readable evidence are committed, linked to ticket 70 and contain no publication or real user-state mutation.
+- [x] The exact candidate identities, archive SHA-256 values, native OS/architecture and client versions are recorded in committed evidence.
+- [x] Both plugin packages load with expected namespaces and exactly-once catalogs in every applicable native harness; unavailable clients are explicit blockers or approved exclusions.
+- [x] Native install, upgrade, repeated deploy, enable/disable and foreign-content preservation controls have command/output evidence.
+- [x] Applicable product, syntax, resource, invocation-policy and hook checks pass; unsupported checks are not counted as executed.
+- [x] A cited platform report and machine-readable evidence are committed, linked to ticket 70 and contain no publication or real user-state mutation.
 
 ## Linux execution evidence (2026-10-24)
 
 User authorized SSH execution on `sam@randomserver`. The [Linux report](../docs/agents/research/linux-native-validation-20261024.md), [structured evidence](../docs/agents/research/evidence/linux-native-validation-20261024.json) and [39-file raw evidence archive](../docs/agents/research/evidence/linux-native-validation-20261024.zip) record the completed run. Exact original sealed archives were transferred and verified; both candidate worktrees remained clean. Product gates, all six product/native plugin rows, all six catalog/upgrade groups and the CI Linux release-binary command/context checks pass.
 
 Native client versions: Codex 0.147.0, Claude 2.1.310, AGY 1.4.6, Kiro 2.34.0, OpenCode 1.18.21 and Crush 0.98.1. Normal user CLI versions/installations were preserved; newer tools ran from an owned prefix. Disposable homes and credential allowlists were used. Network denial was attempted but unavailable (bubblewrap loopback setup returned Operation not permitted); no enforced-network-isolation claim is made. No model prompts, real provider credentials or publication operations were used. Host hook registration and direct Linux fixtures are distinguished from untested authenticated interactive invocation.
+
+## Resolution (2026-10-24)
+
+done: verified both approved candidates natively on randomserver Linux, preserved exact evidence and normal user CLI setup, and reconciled Linux coverage into audit70. Windows77 remains required; no release/stable/registry publication or scope waiver was performed.
+
+### Verification
+1. ✓ The exact candidate identities, archive SHA-256 values, native OS/architecture and client versions are recorded in committed evidence. — "Committed report 2516235 and evidence/linux-native-validation-20261024.json bind grey e071b7b and tkt 2b6ff17, the original six archive hashes, Linux x86_64/kernel/glibc, and seven executable hashes/versions on sam@randomserver."
+2. ✓ Both plugin packages load with expected namespaces and exactly-once catalogs in every applicable native harness; unavailable clients are explicit blockers or approved exclusions. — "Native product/host rows all pass; combined Codex, Claude, AGY, Kiro, OpenCode and Crush catalogs contain all 50 managed skills with expected names/namespaces/paths exactly once. Foreign sentinel and separate system entries are accounted for; no client was unavailable."
+3. ✓ Native install, upgrade, repeated deploy, enable/disable and foreign-content preservation controls have command/output evidence. — "Six retained probe reports and executable sources prove tagged bare migrations, synthetic AGY add/modify/remove upgrades, repeat-deploy payload identity, cache repair, disable/enable restoration and preserved foreign content. The 39-file raw evidence ZIP hash is 037322d68a8f9cc88a369e5c60b694f3ee51fc72013fb581cb2d34d3ee00b2c9."
+4. ✓ Applicable product, syntax, resource, invocation-policy and hook checks pass; unsupported checks are not counted as executed. — "Exact-candidate Linux product gates pass: grey all 12 groups; tkt 37 Node tests, fmt, Clippy and 296 Rust tests. Six native plugin rows pass. The CI Linux binary reports tkt 0.5.0 (2b6ff17); 21 commands/381 references/42 files and context restoration pass. Network enforcement and authenticated interactive invocation are explicitly not claimed."
+5. ✓ A cited platform report and machine-readable evidence are committed, linked to ticket 70 and contain no publication or real user-state mutation. — "Linux report, structured JSON and raw ZIP are committed/pushed at 2516235 and linked from audit70. Tests used disposable homes/config and owned tool prefix, no provider login/model prompts/publication. Normal Node/Claude/AGY/Kiro versions remain unchanged; setup cache writes and failed bubblewrap network isolation are documented."
