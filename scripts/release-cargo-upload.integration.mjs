@@ -13,6 +13,8 @@ import { prepareCargoUpload } from "./release-cargo-upload.mjs";
 import { reconcileTktPublication } from "./release-tkt-publication.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
+const completed = [];
+let currentCase;
 async function main() {
   const args = process.argv.slice(2);
   assert.ok(args.length === 0 || (args.length === 2 && args[0] === "--tkt-repo"), "usage: release-cargo-upload.integration.mjs [--tkt-repo DIR]");
@@ -22,7 +24,7 @@ async function main() {
   const root = mkdtempSync(join(tmpdir(), "Cargo adapter's integration "));
   const home = join(root, "baseline-home"); mkdirSync(home);
   const env = { PATH: "/usr/bin:/bin", HOME: home, CARGO_HOME: home, RUSTC: rustc, CARGO_HTTP_PROXY: "", NO_PROXY: "127.0.0.1", GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1", GIT_NO_REPLACE_OBJECTS: "1" };
-  const captures = [], rows = [];
+  const captures = [], rows = completed;
   let acceptUpload = false, indexRow;
   const server = createServer(async (request, response) => {
     if (request.method === "GET" && request.url === "/index/config.json") {
@@ -42,7 +44,7 @@ async function main() {
         indexRow = { name: metadata.name, vers: metadata.vers, deps: [], cksum: hash(bytes), features: {}, yanked: false };
         response.setHeader("Content-Type", "application/json"); response.end("{}"); return;
       }
-      response.statusCode = 400; response.setHeader("Content-Type", "application/json"); response.end(JSON.stringify({ errors: [{ detail: "Local capture deliberately refused" }] })); return;
+      response.statusCode = 400; response.setHeader("Content-Type", "application/json"); response.end(JSON.stringify({ errors: [{ detail: "Local capture deliberately refused; credential echo local-probe-only" }] })); return;
     }
     response.statusCode = 404; response.end("not found");
   });
@@ -73,6 +75,7 @@ async function main() {
     return { repo, candidateSha, target, path, readmeSha256: hash(readFileSync(join(repo, "README.md"))), crate: { name: "tkt", version, bytes, sha256: hash(bytes) } };
   }
   async function exercise(name, action, real = false) {
+    currentCase = name;
     acceptUpload = action === "coordinate"; indexRow = undefined;
     const input = await source(name, real), before = captures.length;
     let tokenCalls = 0, transport, intentConfirmed = false;
@@ -135,7 +138,7 @@ async function main() {
           assert.equal(events.filter((event) => event === "prepare").length, 1);
           assert.ok(events.indexOf("upload:tkt-registry-intent.json") < events.indexOf("credential"));
           assert.equal(events.filter((event) => event === "github-publish").length, 1);
-        } else await assert.rejects(transport.publish(input.crate), /cargo-publish/);
+        } else await assert.rejects(transport.publish(input.crate), (error) => { assert.match(error.message, /cargo-publish/); assert.doesNotMatch(error.message, /local-probe-only|ambient-token-must-not-win/); return true; });
       }
       finally { if (old === undefined) delete process.env.CARGO_REGISTRY_TOKEN; else process.env.CARGO_REGISTRY_TOKEN = old; }
       await assert.rejects(transport.publish(input.crate), /closed|already attempted/);
@@ -156,4 +159,4 @@ async function main() {
     console.log(JSON.stringify({ status: "pass", metrics: { cases: rows.length, puts: captures.length }, errors: [], rows, realRegistryPublication: false }, null, 2));
   } finally { await new Promise((resolve) => server.close(resolve)); rmSync(root, { recursive: true, force: true }); }
 }
-main().catch((error) => { console.error(JSON.stringify({ status: "error", errors: [error.message] })); process.exitCode = 2; });
+main().catch((error) => { console.log(JSON.stringify({ status: "error", case: currentCase, metrics: { completedCases: completed.length }, rows: completed, errors: [error.message] }, null, 2)); process.exitCode = 2; });
