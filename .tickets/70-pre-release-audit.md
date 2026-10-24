@@ -1,7 +1,7 @@
 ---
 id: "70"
 title: "Audit both projects before release staging"
-status: in_progress
+status: done
 blocked_by: ["64", "60", "65", "66", "67", "68", "69", "72", "73", "74", "75", "76", "77", "78"]
 priority: high
 spec: "release-readiness"
@@ -52,12 +52,12 @@ update this ticket's dependencies; an audit report alone cannot waive an active 
 
 ## Acceptance criteria
 
-- [ ] A committed audit report records exact grey-matter/tkt SHAs, tool versions, supported-platform coverage, source links, commands/output, severity and release disposition.
-- [ ] Every open ticket and known finding across both repos is classified include/block/defer with rationale and explicit user approval where required; tickets 54,55,59,60,63,64 and tkt 210 are explicitly considered without silently reopening completed work.
-- [ ] All six plugin conformance rows are current, every release-blocking finding is resolved, and any remediation discovered during audit has a linked ticket and blocks release staging.
-- [ ] Fresh grey-matter check-repo, tkt mise run check, native validators, release fixtures and candidate fresh-install/upgrade probes pass; unavailable checks remain visible blockers or explicitly approved exclusions.
-- [ ] The audit checks deployment provenance/collisions/vendor drift, documentation links/prose and README accuracy, changelog coverage, dependency/toolchain pins, packaged-file/secret exclusions and publication recovery.
-- [ ] The report supplies a go/no-go decision for staging and lists the exact gates to repeat after staging edits; it does not tag, publish, submit plugins or advance stable.
+- [x] A committed audit report records exact grey-matter/tkt SHAs, tool versions, supported-platform coverage, source links, commands/output, severity and release disposition.
+- [x] Every open ticket and known finding across both repos is classified include/block/defer with rationale and explicit user approval where required; tickets 54,55,59,60,63,64 and tkt 210 are explicitly considered without silently reopening completed work.
+- [x] All six plugin conformance rows are current, every release-blocking finding is resolved, and any remediation discovered during audit has a linked ticket and blocks release staging.
+- [x] Fresh grey-matter check-repo, tkt mise run check, native validators, release fixtures and candidate fresh-install/upgrade probes pass; unavailable checks remain visible blockers or explicitly approved exclusions.
+- [x] The audit checks deployment provenance/collisions/vendor drift, documentation links/prose and README accuracy, changelog coverage, dependency/toolchain pins, packaged-file/secret exclusions and publication recovery.
+- [x] The report supplies a go/no-go decision for staging and lists the exact gates to repeat after staging edits; it does not tag, publish, submit plugins or advance stable.
 
 Additional external blockers: tkt 212 (tracked scratch content in the crate) and 213 (wrong ancestor-Git hash in packaged binaries). Resolve and verify both before go/no-go; initial candidate package build success does not clear these failures. See [registry/package failure evidence](../docs/agents/research/evidence/registry-initial-package-findings-20261023.json) and the linked tickets in preparation 67. Check actual registry availability again at final staging; observed absence of 0.5.0 is not a reservation.
 
@@ -141,3 +141,15 @@ SSH validation on `sam@randomserver` passes for the current exact candidates: tw
 The [completion report](../docs/agents/research/windows-native-validation-completion-20261024.md) supersedes the earlier partial Windows checkpoint. Explicitly authorized cleanup removed 48 confirmed duplicate shared copies, preserved 244 unique user files/links and yielded 50 managed skills once in each of six harness checks. The complete, non-system frozen-candidate Codex catalog/state probe passes without filtering external skills; fresh product and six native package rows pass. No scope exclusion is used. Review the recorded AGY authentication/shadow distinction, foreign-skill portability limits and preserved historical metadata exposure when assessing overall audit scope. This supplies Windows evidence; it does not itself grant final-audit or staging approval.
 
 Windows 77 closed in `67cdaac` with five checked criteria and numbered evidence. Linux 78 is already closed. The active sequence is now **70 → 71**; final audit/staging receipts remain ungranted.
+
+## Resolution (2026-10-24)
+
+done: audited frozen grey-matter0.2.0 e071b7b and tkt0.5.0 2b6ff17; all required native platforms complete, no unresolved release blocker. Go for staging71 only; publication remains unauthorized.
+
+### Verification
+1. ✓ A committed audit report records exact grey-matter/tkt SHAs, tool versions, supported-platform coverage, source links, commands/output, severity and release disposition. — "Audit d7370df records exact C/S hashes, six archive rows, primary sources, pinned tools and three native platforms; audit70-closeout-20261024.json preserves fresh command output."
+2. ✓ Every open ticket and known finding across both repos is classified include/block/defer with rationale and explicit user approval where required; tickets 54,55,59,60,63,64 and tkt 210 are explicitly considered without silently reopening completed work. — "final-candidate-audit-20261024.json individually classifies 109 tickets; required grey54/55/59/60/63/64 and tkt210 are done; existing backlog retained without new deferral."
+3. ✓ All six plugin conformance rows are current, every release-blocking finding is resolved, and any remediation discovered during audit has a linked ticket and blocks release staging. — "All six source-document conformance rows pass with sealed contract-byte equivalence; remediation76 and platform77/78 closed; no unresolved release blocker."
+4. ✓ Fresh grey-matter check-repo, tkt mise run check, native validators, release fixtures and candidate fresh-install/upgrade probes pass; unavailable checks remain visible blockers or explicitly approved exclusions. — "Fresh grey check-repo all12 pass and tkt mise check pass; current exact candidate native/install/upgrade proof covers macOS/Linux/Windows, including complete Windows Codex catalog; no waiver."
+5. ✓ The audit checks deployment provenance/collisions/vendor drift, documentation links/prose and README accuracy, changelog coverage, dependency/toolchain pins, packaged-file/secret exclusions and publication recovery. — "Live Mac deploy audit clean; docs links and bounded guidance corrections verified; package/resource/legal/secret scans, pins and publication recovery fixtures recorded; final prose minor findings fixed."
+6. ✓ The report supplies a go/no-go decision for staging and lists the exact gates to repeat after staging edits; it does not tag, publish, submit plugins or advance stable. — "Committed audit decision is go for staging only; exact committed-reader/CI-expiry/notes/hash/registry repeat gates listed; no publication or tag/stable changes."
