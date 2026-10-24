@@ -80,10 +80,11 @@ The entry library now joins reviewed CI and plugin bytes, verifies immutable
 policy, checks development M, pushes scoped atomic refs and calls the existing
 intent/registry/GitHub/stable coordinator with the prepared Cargo adapter. Its
 default mode verifies and plans without credential callbacks or remote writes.
-Current integration tests use synthetic review receipts, mocked services and
-isolated repositories. The production workflow and dispatch/observer are now implemented in tkt; their
-mock tests pass. Runner-loss proof and integrated independent review remain required
-before ticket 68 closes. No live publication dispatch has run.
+Integration tests use synthetic review receipts, mocked services and isolated
+repositories. Before staging a candidate, verify the production workflow and
+dispatch/observer against runner-loss fixtures and an integrated independent
+review. These checks establish recovery behavior; candidate publication requires
+separate authorization and the real committed gate receipts.
 
 ## Review carrier for CI
 
