@@ -63,7 +63,7 @@ the required candidate evidence or publication authorization.
 
 ## Current implementation checkpoint
 
-Canonical release modules live in grey-matter `scripts/`; tkt vendors 18 owned
+Canonical release modules live in grey-matter `scripts/`; tkt vendors 19 owned
 files through `scripts/sync-release-tools.mjs`. Library and CLI fixtures use
 synthetic evidence, fake services and disposable Git remotes. No real release,
 registry upload, tag push or stable promotion has run.
@@ -194,3 +194,21 @@ and [private-mount audit](../docs/agents/research/cargo-immutable-source-mount-a
 They independently re-fetched protocol/manual sources and verified the exact Cargo
 archive against its official checksum. Runtime readiness is still unproved: build
 the credential-provider mock and Linux source/output mutation controls next.
+
+
+## Credential-provider implementation checkpoint (2026-10-23)
+
+`release-cargo-credentials.mjs` now implements protocol-v1 authorization with exact
+name/version/checksum/registry binding, fatal refusals, never-cache credentials and
+no operation-independent read token. Six Node fixtures pass. The provider is a
+self-contained owned vendor file in tkt; the inventory now contains 19 files.
+The [seven-case real-Cargo probe](../docs/agents/research/cargo-credential-checksum-probe.md)
+records one matching localhost PUT and five zero-PUT refusals. Its deliberate
+CLI-token bypass control uploads mismatched bytes only to the refusing mock,
+proving that override rejection remains mandatory in the production wrapper.
+
+Real invocation exposed that Cargo puts configured extra arguments in request
+JSON: `[node, script]` is not a valid executable prefix. The probe uses a small
+native Rust launcher to prepend the fixed Node/script path before forwarding
+Cargo's flags. The Linux/private-output transport and sole CI entry point are
+still unimplemented; this component does not close ticket 68 or authorize publishing.

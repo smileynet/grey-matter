@@ -79,3 +79,8 @@ staging and the [reviewed artifact reader](release-ci-artifacts.md) exist; the
 review-bound CI publisher, dispatch and crate recovery remain ticket 68 work. This
 command does not bypass that boundary. Neither a successful plan nor synthetic
 passing receipts establish final release readiness or human approval.
+
+The [Cargo checksum-provider probe](research/cargo-credential-checksum-probe.md)
+now verifies the supported authorization seam against a localhost registry.
+`release-cargo-credentials.mjs` is a tested component, not a production uploader;
+private input/output protection and token-override rejection still need the CI wrapper.
