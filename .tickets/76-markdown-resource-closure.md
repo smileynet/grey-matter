@@ -1,7 +1,7 @@
 ---
 id: "76"
 title: "Keep example text from hiding real packaged resource links"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -51,12 +51,21 @@ Historical candidate reports remain historical; no publication is authorized.
 
 ## Acceptance criteria
 
-- [ ] An unmatched bracket in a fenced example cannot hide a later valid local Markdown resource link.
-- [ ] Referenced resources are packaged and missing targets fail before archive creation; fresh source and artifact regression checks pass.
-- [ ] The vendored tkt deployer matches the canonical engine and rebuilt candidate archives resolve the previously missing evidence reference.
+- [x] An unmatched bracket in a fenced example cannot hide a later valid local Markdown resource link.
+- [x] Referenced resources are packaged and missing targets fail before archive creation; fresh source and artifact regression checks pass.
+- [x] The vendored tkt deployer matches the canonical engine and rebuilt candidate archives resolve the previously missing evidence reference.
 
 ## Parser remediation checkpoint (2026-10-24)
 
 Four artifact regressions failed before the source change (fenced and inline unmatched brackets, with present and absent resources), then all four passed after excluding an inner opening bracket from a link label match. Multiline and code-styled labels remain supported. The existing missing-resource test also retains the previous package until repair.
 
 Evidence: `node --test scripts/release-artifacts.test.mjs scripts/deploy.test.mjs` → 63 passed, zero failed. A direct resource-closure assertion now finds `docs/agents/research/evidence/claude-validation-20261023.json` among 251 canonical source resources. The tkt vendored deployer has the identical fix; `mise run check` passed 37 Node tests, formatting, Clippy and all 296 Rust tests. Candidate rebuild and archive verification remain required before closure.
+
+## Resolution (2026-10-24)
+
+done: Fixed Markdown resource closure after unmatched example brackets, synchronized the tkt deployer and rebuilt both approved candidates. All three grey-matter bundles now retain the previously omitted evidence file; remaining candidate-wide platform and compatibility gates belong to 70/71.
+
+### Verification
+1. ✓ An unmatched bracket in a fenced example cannot hide a later valid local Markdown resource link — "1: Four artifact regression cases failed before the parser fix and passed after it; fenced/inline example prefixes, multiline/code-styled labels and present/missing resources are covered."
+2. ✓ Referenced resources are packaged and missing targets fail before archive creation; fresh source and artifact regression checks pass — "2: node --test scripts/release-artifacts.test.mjs scripts/deploy.test.mjs: 63 passed. node scripts/check-repo.mjs: all 12 groups passed. Missing-resource fixtures preserve the last package before replacement."
+3. ✓ The vendored tkt deployer matches the canonical engine and rebuilt candidate archives resolve the previously missing evidence reference — "3: Canonical source 01106d2 and tkt mirror df4b652 match. tkt mise run check passed 37 Node and 296 Rust tests. Rebuilt grey candidate e071b7b archives were extracted and all three contain the exact previously omitted JSON sha256 9ec93e8ef28c13561d38360fc81cb968fbf56076994bf0a962dd7794ecf8f0e5; replacement tkt 2b6ff17 product/native verification passed."
