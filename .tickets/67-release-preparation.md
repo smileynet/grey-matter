@@ -1,7 +1,7 @@
 ---
 id: "67"
 title: "Prepare version-consistent release candidates and plugin bundles"
-status: in_progress
+status: done
 blocked_by: ["66", "74"]
 priority: high
 spec: "release-readiness"
@@ -48,12 +48,12 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 
 ## Acceptance criteria
 
-- [ ] Fixtures prove prepare --dry-run changes neither repository nor user state and creates no remote tag, GitHub release, registry publication or stable update.
-- [ ] Candidate preparation derives every version surface from its repo authority, updates the tagged crate lock version where applicable, and fails when any manifest/version differs.
-- [ ] Each prepared bundle is closed over runtime references and executable resources; extraction into a clean directory validates paths without the source checkout.
-- [ ] Bundles exclude .git, tickets, scratch, local credentials, target/node_modules and unrelated development output; checksums and machine-readable release metadata record the candidate SHA, versions, asset names, skill counts and tested compatibility.
-- [ ] Fixtures reject stale assets, missing files, wrong versions and unexpected archive entries; successful preparation can be repeated or resumed without another bump.
-- [ ] grey-matter check-repo, tkt mise run check, native package validation and release fixtures pass on the resulting candidate tree; platform coverage is explicit.
+- [x] Fixtures prove prepare --dry-run changes neither repository nor user state and creates no remote tag, GitHub release, registry publication or stable update.
+- [x] Candidate preparation derives every version surface from its repo authority, updates the tagged crate lock version where applicable, and fails when any manifest/version differs.
+- [x] Each prepared bundle is closed over runtime references and executable resources; extraction into a clean directory validates paths without the source checkout.
+- [x] Bundles exclude .git, tickets, scratch, local credentials, target/node_modules and unrelated development output; checksums and machine-readable release metadata record the candidate SHA, versions, asset names, skill counts and tested compatibility.
+- [x] Fixtures reject stale assets, missing files, wrong versions and unexpected archive entries; successful preparation can be repeated or resumed without another bump.
+- [x] grey-matter check-repo, tkt mise run check, native package validation and release fixtures pass on the resulting candidate tree; platform coverage is explicit.
 
 Native validation gate: [current Claude evidence](../docs/agents/research/claude-current-validation.md) proves root validation misses nested skill defects. Candidate preparation must run `scripts/probe-claude-validation.mjs` with a current validator for each candidate pack (explicit manifests plus exact components and seeded detection), alongside the other native checks. Preserve the isolated policy probe from ticket 73 for candidate compatibility checks.
 
@@ -258,3 +258,15 @@ guidance. It is implemented and closed; the tkt candidate above includes it.
 The earlier tkt `79302cb` candidate's successful five-target build is historical;
 new candidate `cd96042` has a separate in-progress staging build (40076036798).
 Final artifact staging and install/upgrade/compatibility approvals stay in 69–71.
+
+## Resolution (2026-10-24)
+
+done: prepared and verified approved 0.2.0/0.5.0 candidates and all six closed plugin bundles, with exact-commit product/native/platform evidence and explicit coverage limits; no tags, releases, registry publication or stable promotion. Continue install/upgrade ticket69, final audit70 and staging71.
+
+### Verification
+1. ✓ Fixtures prove prepare --dry-run changes neither repository nor user state and creates no remote tag, GitHub release, registry publication or stable update. — "Exact grey candidate bec5afee product gate includes the default/explicit CLI dry-run fixture, which compares source/Git/remote/harness-home bytes and prevents release/tag/registry/stable writes. Required check-repo passes locally and hosted Windows/Linux; preparation evidence committed at docs/agents/research/evidence/release-candidates-20261024.json."
+2. ✓ Candidate preparation derives every version surface from its repo authority, updates the tagged crate lock version where applicable, and fails when any manifest/version differs. — "Prepared grey 0.2.0 at bec5afee9f4f070ef898ac309d45d5061a5be7b5 and tkt 0.5.0 at cd96042a5a70123cfbfc656ddf34563c53cff7a0; version inspectors and source/lock/manifest mismatch controls pass. Tkt candidate full gate passes 37 Node and 296 Rust tests, including manifest/crate consistency."
+3. ✓ Each prepared bundle is closed over runtime references and executable resources; extraction into a clean directory validates paths without the source checkout. — "Each candidate built all three closed host bundles; independent extraction/resource/YAML/legal checks and native loading pass for all six rows. Artifact fixtures verify without the source checkout; native installed file hashes match 255/252 grey Codex/AGY files and 46/43 tkt files, with Claude seeded validators also passing."
+4. ✓ Bundles exclude .git, tickets, scratch, local credentials, target/node_modules and unrelated development output; checksums and machine-readable release metadata record the candidate SHA, versions, asset names, skill counts and tested compatibility. — "Committed preparation evidence retains metadata with candidate SHAs, authority versions, all asset names/file hashes and 46/4 skill counts, plus tested client/platform reports. Report, metadata, asset and product-log SHA256 were independently compared. Ticket/scratch/credential/development exclusions and hook host boundaries pass; compatibility/upgrade approvals remain distinct 69 gates."
+5. ✓ Fixtures reject stale assets, missing files, wrong versions and unexpected archive entries; successful preparation can be repeated or resumed without another bump. — "Exact-candidate release fixture groups pass stale assets, missing/extra entries, wrong versions, corrupted resume, interruption recovery and repeat-without-second-commit controls. Initial hardcoded-version fixture failures were reproduced and corrected without weakening source guards; current candidate gates are green."
+6. ✓ grey-matter check-repo, tkt mise run check, native package validation and release fixtures pass on the resulting candidate tree; platform coverage is explicit. — "Grey 12-invariant check-repo passes on macOS and hosted Windows/Linux run 40075385295; tkt full mise gate passes locally and Linux CI 40075956812, with MSRV and Windows/Linux hook checks. Native Codex0.147.0/Claude2.1.310/AGY1.4.6 pass six macOS arm64 rows. Native Windows/Linux checks are explicitly unclaimed. Tkt five-target build/seal run40076036798 is also success; final install/audit/staging remain 69–71."
