@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "observedAt": "2026-10-24T00:14:06.527Z",
+  "candidateSha": "8c4038574c2a5bb58086909859cd14b6071115f6",
+  "version": "0.5.0",
+  "crate": ".scratch/candidates/tkt-0.5.0-initial/crate-target/package/tkt-0.5.0.crate",
+  "sha256": "dadc21b77a24d064ec86101b382fa61fbf83bc82a6e6570c6967b53da3011a7f",
+  "size": 202552,
+  "packaging": {
+    "command": "cargo package --locked --package tkt --manifest-path CANDIDATE/Cargo.toml --target-dir OUTPUT/crate-target",
+    "result": "archive created and unpacked build passed; content/provenance checks failed"
+  },
+  "findings": [
+    {
+      "ticket": "tkt:212",
+      "type": "release-blocking",
+      "observed": "Archive includes .scratch/HANDOFF.md, which is tracked despite the scratch convention."
+    },
+    {
+      "ticket": "tkt:213",
+      "type": "release-blocking",
+      "observed": "Packaged binary reports tkt 0.5.0 (4e13504), taking an unrelated ancestor grey-matter Git hash instead of candidate 8c40385."
+    }
+  ],
+  "registry": {
+    "0.4.0": {
+      "phase": "published",
+      "sha256": "9faef2c9c8449c4c4501a81aeb6529734a8162fb11ab694b7874fdabe4d57590",
+      "yanked": false
+    },
+    "0.5.0": {
+      "phase": "missing",
+      "basis": "Validated existing tkt sparse index; no publication attempted"
+    }
+  },
+  "scope": "Initial candidate smoke only; no crate, tag, GitHub release or stable publication."
+}
