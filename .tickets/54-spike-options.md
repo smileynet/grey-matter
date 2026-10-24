@@ -1,7 +1,7 @@
 ---
 id: "54"
 title: "Add spike-options: spike every meaningful option, then review with user to form an integration plan"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
