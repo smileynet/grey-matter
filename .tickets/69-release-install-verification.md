@@ -1,7 +1,7 @@
 ---
 id: "69"
 title: "Verify plugin fresh installs and upgrades in isolated harness homes"
-status: in_progress
+status: done
 blocked_by: ["67", "68"]
 priority: high
 spec: "release-readiness"
@@ -47,12 +47,12 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 
 ## Acceptance criteria
 
-- [ ] Fresh-install and previous-release upgrade cases cover grey-matter/tkt Codex, Claude and Antigravity packages, recording actual client versions, source refs and discovered file paths.
-- [ ] Supported Kiro/OpenCode bare-root deployments and Crush project deployment are checked; any unsupported target/version or unavailable platform is explicitly a gap, not an assumed pass.
-- [ ] Fixtures verify added/modified/removed skills, invocation policy, namespaces, packaged references, stale cache/version scenarios and tkt CLI capability/version compatibility.
-- [ ] Physical roots plus live catalogs show each managed skill exactly once through install, upgrade, repeated deploy, enabled/disabled plugin and symlink scenarios; unrelated user files remain intact.
-- [ ] Release tests prove dry-run/isolation, refresh failure recovery and identical second-run state; no test reads or mutates real user caches, credentials, registry publications or global plugin installs.
-- [ ] Test results identify Windows/macOS/Linux coverage and link missing-platform remediation into the final audit; the release publisher consumes these results as gates.
+- [x] Fresh-install and previous-release upgrade cases cover grey-matter/tkt Codex, Claude and Antigravity packages, recording actual client versions, source refs and discovered file paths.
+- [x] Supported Kiro/OpenCode bare-root deployments and Crush project deployment are checked; any unsupported target/version or unavailable platform is explicitly a gap, not an assumed pass.
+- [x] Fixtures verify added/modified/removed skills, invocation policy, namespaces, packaged references, stale cache/version scenarios and tkt CLI capability/version compatibility.
+- [x] Physical roots plus live catalogs show each managed skill exactly once through install, upgrade, repeated deploy, enabled/disabled plugin and symlink scenarios; unrelated user files remain intact.
+- [x] Release tests prove dry-run/isolation, refresh failure recovery and identical second-run state; no test reads or mutates real user caches, credentials, registry publications or global plugin installs.
+- [x] Test results identify Windows/macOS/Linux coverage and link missing-platform remediation into the final audit; the release publisher consumes these results as gates.
 
 ## Initial candidate probes (2026-10-24)
 
@@ -165,3 +165,15 @@ requires all six named gate receipts and their digests; platform approval, final
 audit and staging remain separate pending gates. Ticket 71 must bind the real
 receipts in review carrier R before its reader can permit a publication plan.
 No release, registry, stable or public-directory operation was performed.
+
+## Resolution (2026-10-24)
+
+done: isolated fresh-install, historical bare migration and synthetic cache controls pass for the current candidate pair; compatibility and upgrade evidence is retained for final audit and staging without granting pending platform or publication approval
+
+### Verification
+1. ✓ Fresh-install and previous-release upgrade cases cover grey-matter/tkt Codex, Claude and Antigravity packages, recording actual client versions, source refs and discovered file paths. — "Current evidence commit 960bd78 binds grey bec5afee9f4f070ef898ac309d45d5061a5be7b5 and tkt af4703d7b737a772eb45fb7e601ce3ec6b9b9735. Fresh product/native receipts pass all six sealed packages. Executed previous v0.1.0/v0.4.0 bare installers migrate to Codex/Claude; AGY older-plugin controls are explicitly synthetic because prior tags had no plugin package."
+2. ✓ Supported Kiro/OpenCode bare-root deployments and Crush project deployment are checked; any unsupported target/version or unavailable platform is explicitly a gap, not an assumed pass. — "Executed Kiro 2.34.0 ACP, OpenCode 1.18.21 debug catalog, and Crush 0.98.1 workspace API each match 50 managed skills plus the preserved foreign sentinel. Bare dry-run and repeated payload state are unchanged; native Windows/Linux vendor loading remains an explicit final-audit gap."
+3. ✓ Fixtures verify added/modified/removed skills, invocation policy, namespaces, packaged references, stale cache/version scenarios and tkt CLI capability/version compatibility. — "Exact probe sources/hashes in plugin-compatibility-catalogs and Claude evidence verify AGY added/modified/removed payloads, invocation metadata, namespaces, sealed reference closure, Codex same-version cache repair and repeated catalogs. Current tkt binary reports 0.5.0 af4703d; 21 command surfaces across 42 files and scoped-context replay pass."
+4. ✓ Physical roots plus live catalogs show each managed skill exactly once through install, upgrade, repeated deploy, enabled/disabled plugin and symlink scenarios; unrelated user files remain intact. — "Live catalogs and physical disposable roots retain each managed skill once. Claude session commands are 50 enabled, zero disabled, identical 50 restored; Codex disabled bare fallback and Kiro symlink separation pass; AGY enable/disable and repeated state pass. Foreign sentinels remain intact in all tested paths."
+5. ✓ Release tests prove dry-run/isolation, refresh failure recovery and identical second-run state; no test reads or mutates real user caches, credentials, registry publications or global plugin installs. — "All six fresh probe groups pass using disposable homes, explicit isolated environments and metadata-only clients without model prompts; Node/npm bootstrap uses an owned cache. Exact candidate product/native evidence and all 12 repository invariants pass, including dry-run, ownership, failed-refresh preservation and repeat-state fixtures. No real harness installation, credentials or registry/release writes occur in these tests."
+6. ✓ Test results identify Windows/macOS/Linux coverage and link missing-platform remediation into the final audit; the release publisher consumes these results as gates. — "Committed release-platform-coverage-20261024.json binds successful exact candidate Windows/Linux CI and macOS native results, names OS skips and unverified native-platform scope, and routes platform disposition to 70. Four publisher-format compatibility/upgrade receipts match sealed candidate identities; staging reader requires separate scope/platform/audit/staging gates and 71 will bind review carrier R. Current tkt sealed build 40082044616 validates 16 assets and upload provenance."
