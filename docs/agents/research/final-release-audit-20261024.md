@@ -68,7 +68,7 @@ Publication implementation review and its four remediations are closed in ticket
 
 ## Go/no-go and staging rechecks
 
-**Current decision: Windows evidence is complete; no-go remains until final audit 70 finishes.** [Linux 78](linux-native-validation-20261024.md) passes with recorded isolation/runtime limits. [Windows 77](https://github.com/smileynet/grey-matter/blob/main/.tickets/77-windows-native-candidate-validation.md) has passing completion evidence to close its gate. No Windows coverage waiver was needed or approved; there are no unresolved observed technical release defects within the already tested scope.
+**Current decision: Windows evidence is complete; no-go remains until final audit 70 finishes.** [Linux 78](linux-native-validation-20261024.md) passes with recorded isolation/runtime limits. [Windows 77](https://github.com/smileynet/grey-matter/blob/main/.tickets/77-windows-native-candidate-validation.md) is closed with cited completion evidence. No Windows coverage waiver was needed or approved; there are no unresolved observed technical release defects within the already tested scope.
 
 After the platform evidence is reconciled and audit 70 closes, ticket 71 must commit a review carrier (the staging files pinned to one Git commit), including scope, compatibility, upgrade, platform-approval, final-audit and staging receipts for each exact candidate. Include both note drafts, checksums, all six plugin archives, tkt's reviewed CI provenance, the pinned annotated tag object record and exact later publish/resume commands. A tag object record is not a pushed tag.
 

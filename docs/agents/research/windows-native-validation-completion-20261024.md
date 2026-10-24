@@ -6,7 +6,7 @@ The [structured completion evidence](evidence/windows-native-validation-completi
 
 ## Live cleanup
 
-[L1:verified] The initial native Codex catalog contained 48 duplicate names, each pointing to both `.agents/skills` and `.codex/skills`. The deployer also found 48 duplicates visible to OpenCode through `.agents/skills` and `.claude/skills`. Ownership manifests identify all those grey-matter/tkt copies.
+[L1:verified] The initial native Codex catalog contained 48 duplicate names, each pointing to both `.agents/skills` and `.codex/skills`. The deployer also found 48 duplicates visible to OpenCode through `.agents/skills` and `.claude/skills`. Ownership manifests identify all those grey-matter/tkt copies. All 48 duplicated SKILL.md hashes and all 125 payload file hashes match across the four original roots.
 
 Before mutation, 192 managed skill directories across four roots were backed up to `D:\code\sharktank-cleanup-20261024\managed-skills-before.zip`; its SHA-256 is `d92793b1066f0c0688ae839653ef1b9739d277c78d42b023cd8a803addabb197`. Backup manifests and archive hashes are in the evidence; rollback payloads remain on SharkTank. Dry runs left every managed file unchanged. Each pack's canonical deployer then ran once for this cleanup, without `--force`.
 
@@ -48,4 +48,4 @@ The candidates remain grey-matter `e071b7b03d02025dc1af6c3ff2c4f8369f777587` and
 
 The earlier Windows Claude/AGY upgrade groups, Kiro/OpenCode/Crush fixture catalogs, four tkt SessionStart fixtures, push-gate fixtures and actual CI Windows CLI/context proofs remain bound to the same unchanged inputs. Their raw evidence is retained, rather than relabeled as fresh executions. Old Git Bash tkt copies still require the documented byte-reviewed manual migration path.
 
-Network isolation was not enforced. Initialization/catalog controls supplied no real credentials or model prompts. The initial report's user-metadata exposure remains historical evidence; this follow-up explicitly authorizes and records live user-state cleanup. Windows ticket 77 can close with these limits. Final audit 70 and staging 71 remain separate gates; neither is granted here.
+Network isolation was not enforced. Initialization/catalog controls supplied no real credentials or model prompts. The initial report's user-metadata exposure remains historical evidence; this follow-up explicitly authorizes and records live user-state cleanup. Windows ticket 77 is closed with these limits (commit `67cdaac`). Final audit 70 and staging 71 remain separate gates; neither is granted here.

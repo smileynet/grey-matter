@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "kind": "final-candidate-audit",
-  "observedAt": "2026-10-24T15:43:43.992Z",
+  "observedAt": "2026-10-24T15:49:38.154Z",
   "status": "pending-final-audit",
   "products": [
     {
@@ -2317,7 +2317,7 @@
           "78"
         ],
         "path": ".tickets/70-pre-release-audit.md",
-        "sourceSha256": "efe25f13020dddbda471a4006e74be1de48a205ac35cbdd831d9838a5a0f4a0e",
+        "sourceSha256": "81abb4bf800494388a05db4bf531a08c7163a1487cac90411d1c28e47a2255bb",
         "disposition": "include-final-audit",
         "rationale": "Required remaining close-out deliverable; this audit does not mark it complete."
       },
@@ -2393,14 +2393,14 @@
         "product": "grey-matter",
         "id": "77",
         "title": "Validate native release candidates on Windows",
-        "status": "in_progress",
+        "status": "done",
         "blockedBy": [
           "69"
         ],
         "path": ".tickets/77-windows-native-candidate-validation.md",
-        "sourceSha256": "9970d792f887f5a239fb54c6d36e91da990c6a098a982ad23acea9154b3b6077",
-        "disposition": "include-native-platform-validation",
-        "rationale": "Required remaining close-out deliverable; this audit does not mark it complete."
+        "sourceSha256": "96982d23e704555776a973644a1a9e79b8940a2f851247ea4c08c8b5cdde7e42",
+        "disposition": "include-completed",
+        "rationale": "Completed with ticket resolution and numbered evidence; preserve the recorded scope and verify applicable final candidate gates."
       },
       {
         "product": "grey-matter",

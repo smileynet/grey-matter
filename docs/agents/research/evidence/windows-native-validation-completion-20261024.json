@@ -16114,5 +16114,14 @@
     "No tag, GitHub release, crate publication, stable promotion, or final-audit/staging approval was performed."
   ],
   "gatesGranted": [],
-  "publicationPerformed": false
+  "publicationPerformed": false,
+  "ticketStatus": "done",
+  "ticketCloseCommit": "67cdaac",
+  "duplicateIdentityEvidence": {
+    "managedSkillNames": 48,
+    "payloadFilesPerRoot": 125,
+    "roots": 4,
+    "allPayloadBytesMatch": true,
+    "basis": "Original backup-manifest.json in the completion ZIP, excluding per-root ownership manifests; SKILL.md hashes independently match original inventory."
+  }
 }

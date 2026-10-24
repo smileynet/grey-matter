@@ -139,3 +139,5 @@ SSH validation on `sam@randomserver` passes for the current exact candidates: tw
 ## Windows validation completed after live cleanup (2026-10-24)
 
 The [completion report](../docs/agents/research/windows-native-validation-completion-20261024.md) supersedes the earlier partial Windows checkpoint. Explicitly authorized cleanup removed 48 confirmed duplicate shared copies, preserved 244 unique user files/links and yielded 50 managed skills once in each of six harness checks. The complete, non-system frozen-candidate Codex catalog/state probe passes without filtering external skills; fresh product and six native package rows pass. No scope exclusion is used. Review the recorded AGY authentication/shadow distinction, foreign-skill portability limits and preserved historical metadata exposure when assessing overall audit scope. This supplies Windows evidence; it does not itself grant final-audit or staging approval.
+
+Windows 77 closed in `67cdaac` with five checked criteria and numbered evidence. Linux 78 is already closed. The active sequence is now **70 → 71**; final audit/staging receipts remain ungranted.
