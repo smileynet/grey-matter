@@ -363,3 +363,20 @@ exact tag, notes and asset hashes; tkt also requires matching registry publicati
 Controls refuse removed remote assets and an absent registry observation without
 repeating development or Cargo. Partial-failure reporting remains unfinished;
 perform the affected-path independent re-review after it is fixed.
+
+## Partial-outcome reporting checkpoint (2026-10-23)
+
+The stable-failure reporting regression first failed because the thrown error had
+no publication identity or observations. Both publishers now attach a structured
+report to failures; their CLI handlers use the shared `publicationFailure`
+formatter. Reports retain C/R, product/version, last observed GitHub and registry
+phases, URLs and timestamps. Stable is `not-attempted`, `unconfirmed` after entering
+promotion, or `verified` only after the adapter confirms success. Grey persists
+that stable observation in its existing owned recovery state too.
+
+Fixtures serialize the exact shared CLI formatter after seeded stable failures,
+assert complete published channels and uncertain stable, and reject serialization
+of asset bytes and nested credential-bearing causes. These exercise the libraries
+and shared output formatter, not a real publishing CLI invocation or production
+services. Complete the affected-path Standards/Spec re-review, including S1's
+trusted-runtime boundary, then reconcile acceptance evidence before closing 68.

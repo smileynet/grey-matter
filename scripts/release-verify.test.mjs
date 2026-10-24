@@ -1,4 +1,5 @@
 import { publishStaged } from "./release-publication.mjs";
+import { publicationFailure } from "./release-publish.mjs";
 import { ciFixture } from "./release-ci-fixtures.mjs";
 import { readStagedCandidate, readStagedTktCandidate } from "./release-staging.mjs";
 import { test } from "node:test";
@@ -258,6 +259,20 @@ test("publication command: immutable publication resumes stable despite later de
   for (const event of ["refs", "create", "publish", "stable"]) assert.equal(pub.writes.filter(value => value === event).length, 1, event);
 }));
 
+test("publication command: failure JSON retains identity and last observed channels", () => fixture(async (f) => {
+  const pub = publicationFixture(f);
+  pub.services.promoteStable = () => { throw Error("seeded stable loss", { cause: { token: "private-fixture-credential" } }); };
+  await assert.rejects(pub.run({ execute: true }), error => {
+    const json = JSON.stringify(publicationFailure(error)), report = JSON.parse(json).publication;
+    assert.equal(report.candidateSha, f.sha); assert.equal(report.reviewSha, pub.options.reviewSha);
+    assert.equal(report.github.phase, "published"); assert.equal(report.github.immutable, true);
+    assert.equal(report.github.url, "https://example.invalid/release");
+    assert.equal(report.registry.phase, "not-applicable"); assert.equal(report.stable.phase, "unconfirmed");
+    assert.doesNotMatch(json, /private-fixture-credential|"bytes"|"cause"/);
+    return true;
+  });
+}));
+
 test("publication command: changed remote or foreign recovery state blocks all writes", () => fixture(async (f) => {
   const pub = publicationFixture(f);
   f.git("remote", "set-url", "origin", "https://github.com/other/repo.git");
@@ -438,6 +453,20 @@ test("tkt CI entry: stable recovery refuses a missing registry observation befor
   ci.services.prepareMain = async () => { throw Error("must not prepare development"); };
   await assert.rejects(ci.run({ execute: true }), /lacks confirmed matching registry/);
   assert.equal(ci.events.filter(value => value === "cargo").length, 1);
+}, undefined, "tkt"));
+
+test("tkt CI entry: failure JSON retains published channels and uncertain stable", () => fixture(async (f) => {
+  const ci = await tktCiFixture(f);
+  ci.services.promoteStable = async () => { throw Error("seeded stable loss", { cause: { token: "private-fixture-credential" } }); };
+  await assert.rejects(ci.run({ execute: true }), error => {
+    const json = JSON.stringify(publicationFailure(error)), report = JSON.parse(json).publication;
+    assert.equal(report.candidateSha, f.sha); assert.equal(report.reviewSha, ci.options.reviewSha);
+    assert.equal(report.github.phase, "published"); assert.equal(report.github.immutable, true);
+    assert.equal(report.registry.phase, "published"); assert.equal(report.registry.url, "https://crates.io/crates/tkt/0.1.0");
+    assert.equal(report.stable.phase, "unconfirmed"); assert.match(report.stable.url, /example\/tkt\/tree\/stable$/);
+    assert.doesNotMatch(json, /private-fixture-credential|"bytes"|"cause"/);
+    return true;
+  });
 }, undefined, "tkt"));
 
 test("publication command: stable recovery rechecks complete remote assets", () => fixture(async (f) => {
