@@ -336,3 +336,86 @@ test("tkt staging joins pinned plugin and CI bytes, retaining the original stage
   delete stage.entry.ci;
   await assert.rejects(readStagedTktCandidate({ ...options, reviewSha: stage.save() }), /reviewed CI identity digest/);
 }, undefined, "tkt"));
+
+async function tktCiFixture(f, mutate = () => {}) {
+  const { publishTktCi } = await import("./release-tkt-ci.mjs");
+  const stage = stagingFixture(f), ci = ciFixture(() => {}, { version: "0.1.0", candidateSha: f.sha });
+  put(join(f.repo, "staging/ci.json"), JSON.stringify(ci.expected));
+  stage.entry.ci = { file: "staging/ci.json", sha256: hash(JSON.stringify(ci.expected)) };
+  const branch = "refs/heads/codex/release-tkt-0.1.0-fixture";
+  const record = `object ${f.sha}\ntype commit\ntag v0.1.0\ntagger Fixture <fixture@example.invalid> 1792713600 +0000\n\nReviewed tag\n`;
+  const tagObject = createHash("sha1").update(`tag ${Buffer.byteLength(record)}\0`).update(record).digest("hex");
+  put(join(f.repo, "staging/tag.txt"), record);
+  stage.entry.publication = { workflowSha: f.sha, workflowId: 21, branch, tag: { file: "staging/tag.txt", objectSha: tagObject } };
+  mutate({ stage, ci });
+  const reviewSha = stage.save();
+  f.git("checkout", "--detach", f.sha); f.git("remote", "add", "origin", "https://github.com/example/tkt.git");
+  const options = { repo: f.repo, reviewRepo: f.repo, reviewSha, index: "staging/index.json", artifacts: f.artifacts, evidence: f.out, developmentOut: join(f.temp, "development"), cargo: "/usr/bin/cargo", rustc: "/usr/bin/rustc", getToken: async () => { events.push("credential"); return "dummy"; }, context: { event: "workflow_dispatch", repository: "example/tkt", sha: f.sha, ref: branch, workflowRef: `example/tkt/.github/workflows/publish.yml@${branch}`, runId: 30, attempt: 1 } };
+  const events = [], state = { release: null, assets: [], registry: { phase: "missing", name: "tkt", version: "0.1.0" } };
+  const actions = { ...ci.api, run: async (repo, id) => id === 30 ? { id: 30, run_attempt: 1, head_sha: f.sha, event: "workflow_dispatch", workflow_id: 21, path: ".github/workflows/publish.yml", status: "in_progress", repository: { full_name: "example/tkt", id: 11 }, head_repository: { id: 11 } } : ci.api.run(repo, id) };
+  const api = {
+    immutableEnabled: async () => true,
+    tag: async () => ({ sha: f.sha, annotated: true, objectSha: tagObject }),
+    releases: async () => state.release ? [structuredClone(state.release)] : [],
+    assets: async () => structuredClone(state.assets),
+    createDraft: async (_, input) => { events.push("draft"); state.release = { id: 17, tag_name: input.tag, name: input.title, body: input.notes, draft: true, immutable: false }; },
+    upload: async (_, id, input) => { events.push(`upload:${input.name}`); const asset = { id: state.assets.length + 1, name: input.name, state: "uploaded", size: input.bytes.length, digest: `sha256:${hash(input.bytes)}` }; state.assets.push(asset); return structuredClone(asset); },
+    publish: async () => { events.push("publish"); state.release.draft = false; state.release.immutable = true; },
+  };
+  const services = { actions, api, registry: { inspect: async () => structuredClone(state.registry) },
+    prepareMain: async () => { events.push("development"); return { status: "pass", candidateSha: f.sha, developmentSha: f.sha }; },
+    pushCandidate: async (input) => { events.push("refs"); assert.equal(input.tagObject, tagObject); assert.equal(f.git("cat-file", "-t", tagObject), "tag"); return { status: "pass", complete: true }; },
+    prepareUpload: async (input) => { events.push("prepare"); assert.equal(input.candidateSha, f.sha); return { publish: async () => { assert.ok(state.assets.some((asset) => asset.name === "tkt-registry-intent.json")); await input.getToken(); events.push("cargo"); state.registry = { phase: "published", name: "tkt", version: "0.1.0", sha256: input.crate.sha256, yanked: false }; }, close: async () => { events.push("close"); } }; },
+    promoteStable: async ({ candidate, publisher }) => { assert.equal(publisher, "cargo-dist"); assert.equal(state.release.immutable, true); assert.ok(candidate.assets.some((asset) => asset.name === "tkt-registry-intent.json")); events.push("stable"); return { status: "pass", complete: true, sha: f.sha }; },
+  };
+  return { options, services, state, events, ci, run: (extra = {}) => publishTktCi({ ...options, ...extra }, services) };
+}
+
+test("tkt CI entry: dry-run validates reviewed build bytes without credentials or ref changes", () => fixture(async (f) => {
+  const ci = await tktCiFixture(f), before = tree(f.temp), result = await ci.run();
+  assert.equal(result.mode, "dry-run"); assert.equal(result.assetNames.length, 8); assert.deepEqual(ci.events, []); assert.deepEqual(tree(f.temp), before);
+}, undefined, "tkt"));
+
+test("tkt CI entry: reviewed tag, build bytes, intent and delayed transport are connected", () => fixture(async (f) => {
+  const ci = await tktCiFixture(f), result = await ci.run({ execute: true });
+  assert.equal(result.status, "pass"); assert.equal(result.stable.sha, f.sha); assert.equal(result.ciStage.runId, 12);
+  assert.deepEqual(ci.events.slice(0, 3), ["development", "refs", "prepare"]);
+  assert.ok(ci.events.indexOf("credential") > ci.events.indexOf("upload:tkt-registry-intent.json"));
+  assert.deepEqual(ci.events.slice(-4), ["cargo", "publish", "stable", "close"]);
+  await ci.run({ execute: true }); assert.equal(ci.events.filter((event) => event === "cargo").length, 1); assert.equal(ci.events.filter((event) => event === "prepare").length, 1);
+}, undefined, "tkt"));
+
+test("tkt CI entry: foreign/stale dispatches and disabled immutability never reach ref writes", () => fixture(async (f) => {
+  const ci = await tktCiFixture(f);
+  for (const context of [{ ...ci.options.context, event: "push" }, { ...ci.options.context, sha: "f".repeat(40) }, { ...ci.options.context, ref: "refs/heads/main" }, { ...ci.options.context, attempt: 2 }]) await assert.rejects(ci.run({ execute: true, context }), /dispatch|workflow identity/);
+  ci.services.api.immutableEnabled = async () => false; await assert.rejects(ci.run({ execute: true }), /immutability/);
+  assert.deepEqual(ci.events, []);
+}, undefined, "tkt"));
+
+test("tkt CI entry: altered reviewed tag is refused", () => fixture(async (f) => {
+  await assert.rejects(tktCiFixture(f, ({ stage }) => { stage.entry.publication.tag.objectSha = "f".repeat(40); }).then((ci) => ci.run()), /tag record differs/);
+}, undefined, "tkt"));
+
+test("tkt CI entry: failed candidate push cannot create drafts or prepare credentials", () => fixture(async (f) => {
+  const ci = await tktCiFixture(f); ci.services.pushCandidate = async () => ({ status: "pass", complete: false });
+  await assert.rejects(ci.run({ execute: true }), /candidate refs/); assert.deepEqual(ci.events, ["development"]);
+}, undefined, "tkt"));
+
+test("tkt CI entry: failed stable resumes observed registry without preparing another upload", () => fixture(async (f) => {
+  const ci = await tktCiFixture(f), promote = ci.services.promoteStable;
+  ci.services.promoteStable = async () => { throw Error("seeded stable loss"); };
+  await assert.rejects(ci.run({ execute: true }), /stable loss/); assert.equal(ci.events.at(-1), "close");
+  ci.services.promoteStable = promote; await ci.run({ execute: true });
+  assert.equal(ci.events.filter((event) => event === "cargo").length, 1); assert.equal(ci.events.filter((event) => event === "publish").length, 1);
+}, undefined, "tkt"));
+
+test("tkt CI entry: missing publication binding fails closed", () => fixture(async (f) => {
+  const ci = await tktCiFixture(f, ({ stage }) => { delete stage.entry.publication; });
+  await assert.rejects(ci.run({ execute: true }), /lacks the reviewed publication binding/); assert.deepEqual(ci.events, []);
+}, undefined, "tkt"));
+
+test("tkt CI entry: dispatch identity is rechecked after development work", () => fixture(async (f) => {
+  const ci = await tktCiFixture(f), prepare = ci.services.prepareMain, run = ci.services.actions.run;
+  ci.services.prepareMain = async (...args) => { const result = await prepare(...args); ci.services.actions.run = async (...input) => ({ ...await run(...input), status: "completed" }); return result; };
+  await assert.rejects(ci.run({ execute: true }), /workflow identity/); assert.deepEqual(ci.events, ["development"]);
+}, undefined, "tkt"));

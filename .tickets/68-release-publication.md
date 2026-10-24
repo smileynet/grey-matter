@@ -63,7 +63,7 @@ the required candidate evidence or publication authorization.
 
 ## Current implementation checkpoint
 
-Canonical release modules live in grey-matter `scripts/`; tkt vendors 19 owned
+Canonical release modules live in grey-matter `scripts/`; tkt vendors 22 owned
 files through `scripts/sync-release-tools.mjs`. Library and CLI fixtures use
 synthetic evidence, fake services and disposable Git remotes. No real release,
 registry upload, tag push or stable promotion has run.
@@ -89,7 +89,7 @@ registry upload, tag push or stable promotion has run.
   Stable promotion requires the complete immutable release and rechecks it afterward.
 - `release-registry.mjs`: exact sparse-index identity/checksum/yanked checks,
   harmless matching-version replay and explicit retry after an uncertain attempt.
-  The real upload adapter is not implemented. `release-tkt-publication.mjs` now stages ordinary assets, creates a deterministic registry-intent receipt, reconciles Cargo/GitHub, then promotes stable. Initial attempt permission requires a successful receipt-creation response and matching asset-ID readback; an existing receipt with no registry observation requires explicit recovery. Fourteen mock-service fixtures cover interrupted phases. The receipt is mutable until GitHub publication and relies on serialized publishers and no out-of-band draft deletion.
+  The prepared upload adapter is implemented and native-tested (latest checkpoints below). `release-tkt-publication.mjs` now stages ordinary assets, creates a deterministic registry-intent receipt, reconciles Cargo/GitHub, then promotes stable. Initial attempt permission requires a successful receipt-creation response and matching asset-ID readback; an existing receipt with no registry observation requires explicit recovery. Fourteen mock-service fixtures cover interrupted phases. The receipt is mutable until GitHub publication and relies on serialized publishers and no out-of-band draft deletion.
 - tkt `tools/generate-release-workflow.mjs`: checked cargo-dist 0.32.0 wrapper
   retains generated platform builds, replaces mutating planning, removes host and
   announce jobs, and adds clean crate packaging plus exact-file sealing. Manual
@@ -247,3 +247,19 @@ runner-loss and integrated failure/recovery behavior, then request one independe
 review of the complete path before regenerating 67's candidates. Keep 69 → 70 → 71
 as the subsequent verification/audit/staging order. Do not reopen completed source
 research without a concrete new uncertainty. No publication is authorized.
+
+## Reviewed CI entry library checkpoint (2026-10-23)
+
+`release-tkt-ci.mjs` now connects `readStagedTktCandidate`, exact reviewed tag-object
+import, CI run/repository/workflow binding, development M, scoped atomic refs and
+the prepared Cargo adapter through the intent/registry/GitHub/stable coordinator.
+A committed optional `publication` descriptor is mandatory for this entry; it binds
+workflow SHA/ID, candidate branch and raw annotated tag bytes to review R. Library
+default mode is read-only. The canonical module is vendored into tkt (22 owned files).
+
+Focused integration fixtures cover delayed credential ordering, replay, stable
+failure recovery, dry-run preservation, wrong tag/dispatch, disabled immutability,
+failed ref observation and dispatch revalidation after development work. This
+checkpoint does not claim production workflow/dispatch wiring or close ticket 68.
+Next implement the reviewed input transfer and sole publication workflow plus its
+local dispatch/observer; prove runner-loss cleanup, then review the integrated path.

@@ -53,3 +53,33 @@ Current coverage uses committed synthetic receipts and disposable repositories.
 It proves identity/hash binding and refusal behavior, not final release readiness.
 Tickets 70 and 71 must supply real audit/staging receipts after the remaining gates
 pass. See the [release contract](release-contract.md) for the publication boundary.
+
+## Reviewed tkt CI publisher binding
+
+The tkt entry additionally carries `publication` before it can be executed by
+`release-tkt-ci.mjs`. This is a binding, not an approval grant:
+
+```json
+{
+  "workflowSha": "<exact candidate C>",
+  "workflowId": 123,
+  "branch": "refs/heads/codex/release-tkt-0.5.0-example",
+  "tag": { "file": "staging/tkt-tag.txt", "objectSha": "<annotated tag object SHA-1>" }
+}
+```
+
+The tag file is its complete `git cat-file tag` record committed at review R.
+The reader checks its Git object hash and direct candidate/version headers. CI
+imports that exact object rather than creating a new timestamped tag. The workflow
+SHA is C; workflow ID is the repository's publication workflow, distinct from the
+build-only staging workflow ID. The publisher checks both the dispatch context
+and current Actions run identity, including the source repository ID, twice before
+pushing refs. It accepts a detached, clean checkout of C.
+
+The entry library now joins reviewed CI and plugin bytes, verifies immutable
+policy, checks development M, pushes scoped atomic refs and calls the existing
+intent/registry/GitHub/stable coordinator with the prepared Cargo adapter. Its
+default mode verifies and plans without credential callbacks or remote writes.
+Current integration tests use synthetic review receipts, mocked services and
+isolated repositories. The production workflow, dispatch/observer, runner-loss
+probe and integrated independent review remain required before ticket 68 closes.
