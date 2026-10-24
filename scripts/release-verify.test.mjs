@@ -224,7 +224,7 @@ function publicationFixture(f) {
     upload: (_, id, asset) => { writes.push(`upload:${asset.name}`); state.assets.push({ name: asset.name, size: asset.bytes.length, digest: `sha256:${hash(asset.bytes)}`, state: "uploaded" }); },
     publish: () => { writes.push("publish"); state.release.draft = false; state.release.immutable = true; },
   };
-  const services = { api, pushCandidate: () => { writes.push("refs"); return { complete: true }; }, promoteStable: () => { writes.push("stable"); return { complete: true }; } };
+  const services = { api, prepareMain: () => ({ status: "pass", candidateSha: f.sha, developmentSha: f.sha }), pushCandidate: () => { writes.push("refs"); return { complete: true }; }, promoteStable: () => { writes.push("stable"); return { complete: true }; } };
   return { stage, options, state, writes, services, run: (extra = {}) => publishStaged({ ...options, ...extra }, services) };
 }
 
@@ -290,3 +290,15 @@ test("publication CLI: parsed default mode plans from a foreign cwd without writ
 test("publication command: local tkt publication refuses before repository or API access", async () => {
   await assert.rejects(publishStaged({ mode: "publish", product: "tkt", execute: true }), /cargo-dist CI/);
 });
+
+test("publication command: development must pass before release refs or GitHub writes", () => fixture(async (f) => {
+  const pub = publicationFixture(f); pub.services.prepareMain = () => { throw new Error("development gate failed"); };
+  await assert.rejects(pub.run({ execute: true }), /development gate failed/); assert.deepEqual(pub.writes, []);
+  pub.services.prepareMain = () => ({ status: "pass", candidateSha: "b".repeat(40), developmentSha: f.sha });
+  await assert.rejects(pub.run({ mode: "resume", execute: true }), /not verified/); assert.deepEqual(pub.writes, []);
+  const integrationSha = "c".repeat(40);
+  pub.services.prepareMain = () => ({ status: "pass", candidateSha: f.sha, developmentSha: integrationSha });
+  pub.services.pushCandidate = (input) => { assert.equal(input.developmentSha, integrationSha); assert.equal(input.candidateSha, f.sha); pub.writes.push("refs"); return { complete: true }; };
+  const result = await pub.run({ mode: "resume", execute: true }); assert.equal(result.development.developmentSha, integrationSha);
+  assert.equal(JSON.parse(readFileSync(pub.options.state)).development.developmentSha, integrationSha);
+}));

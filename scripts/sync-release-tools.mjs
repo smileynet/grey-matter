@@ -6,7 +6,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ReleaseError } from "./release-version.mjs";
-export const releaseFiles = ["release.mjs", "release-artifacts.mjs", "release-version.mjs", "release-git.mjs", "release-product.mjs", "release-native.mjs", "release-verify.mjs", "release-publish.mjs", "release-github.mjs", "release-staging.mjs", "release-publication.mjs", "release-registry.mjs", "check-skill-syntax.mjs", "probe-claude-validation.mjs"];
+export const releaseFiles = ["release.mjs", "release-artifacts.mjs", "release-version.mjs", "release-git.mjs", "release-product.mjs", "release-native.mjs", "release-verify.mjs", "release-publish.mjs", "release-github.mjs", "release-staging.mjs", "release-publication.mjs", "release-registry.mjs", "release-development.mjs", "check-skill-syntax.mjs", "probe-claude-validation.mjs"];
 const here = dirname(fileURLToPath(import.meta.url)), hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const encode = (value) => JSON.stringify(value, null, 2) + "\n";
 function atomic(path, bytes) {

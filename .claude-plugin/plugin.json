@@ -58,7 +58,8 @@
         "scripts/release-github.mjs",
         "scripts/release-staging.mjs",
         "scripts/release-publication.mjs",
-        "scripts/release-registry.mjs"
+        "scripts/release-registry.mjs",
+        "scripts/release-development.mjs"
       ]
     }
   }

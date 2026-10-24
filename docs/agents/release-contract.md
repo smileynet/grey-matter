@@ -7,8 +7,9 @@ staged candidates; publication capability is tested without publishing real rele
 Preparation and product/native verification exist. The grey-matter
 [publication command](release-publication.md) binds reviewed staging evidence,
 atomic refs, immutable GitHub reconciliation and stable recovery; default planning
-is read-only. tkt CI publication, crate-ledger integration and development-version
-reconciliation remain ticket 68 work. The [recovery research](research/publisher-recovery-contract.md)
+is read-only. Development integration now constructs and fully checks the merge before the
+three-ref transaction. tkt CI publication and crate-ledger integration remain
+ticket 68 work. The [recovery research](research/publisher-recovery-contract.md)
 records primary sources and tested boundaries. No real publication has run.
 
 ## Release identity and version authority

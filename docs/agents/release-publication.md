@@ -36,11 +36,20 @@ their existing modes; publication uses this explicit Node entry point.
 ## Authorized execution
 
 After publication is authorized, repeat the same command with `--execute`. It checks
-immutable-release policy before pushing refs, pushes only the candidate branch/tag
-atomically, creates or resumes the matching draft, uploads the complete five-asset
+immutable-release policy, prepares and fully checks a development integration in an
+owned clone, then pushes main/candidate/tag atomically. It creates or resumes the matching draft, uploads the complete five-asset
 set, publishes, verifies immutable bytes and promotes stable. Unsupported atomic
 pushes stop without sequential fallback. Stable promotion is a separate verified
 step after publication.
+
+Development integration lives beside recovery state in `STATE.development`. It
+fetches main, keeps the exact candidate commit, and either fast-forwards or constructs
+a clean merge with both parents. Conflicts and inconsistent/regressed versions stop
+before any push. Dependency setup uses pinned public-registry packages with isolated
+npm config/cache and disabled install scripts; the full product gate runs at the
+integration SHA. The candidate checkout and local main remain unchanged. After a
+successful publication, refresh the local development checkout from remote main
+before further maintenance.
 
 Recovery state stays outside the candidate checkout and binds the review revision,
 candidate, remote name, branch, tag object, notes and asset hashes. Observed release
@@ -52,6 +61,10 @@ submission as `not-requested`.
 ## Resume and limits
 
 Use `resume` with the same arguments, state path and `--execute` after an interruption.
+The owned clone preserves the integration object through failed checks. If remote
+main advances, resume constructs and checks its updated integration before another
+ref push. A modified/foreign clone is preserved and refused. Git must support
+`merge-tree --write-tree`; unsupported clients stop before the push.
 It inspects completed steps again instead of bumping, creating a second release or
 replacing bytes. A failed stable promotion retries promotion after observing the
 published release. Partial completion remains recorded even when later steps fail.
