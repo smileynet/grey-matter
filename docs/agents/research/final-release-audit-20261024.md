@@ -1,6 +1,6 @@
 # Final release candidate audit — 2026-10-24
 
-**Technical checks pass. Staging remains on hold for an explicit native-platform coverage decision.** No release tag, GitHub release, registry publication, stable promotion or public plugin-directory submission was performed. This report covers the approved grey-matter 0.2.0 and tkt 0.5.0 candidates; it does not authorize publication.
+**Technical checks pass within the measured scope. Staging waits for native Windows/Linux validation in tickets 77 and 78.** No release tag, GitHub release, registry publication, stable promotion or public plugin-directory submission was performed. This report covers the approved grey-matter 0.2.0 and tkt 0.5.0 candidates; it does not authorize publication.
 
 ## Exact candidates and evidence
 
@@ -46,7 +46,7 @@ Native versions: Codex 0.147.0, Claude 2.1.310, Antigravity 1.4.6, Kiro 2.34.0, 
 | Historical ticket 07 unchecked criteria | Existing warning preserved with its supersession rationale. It is not a current failing close gate; ticket 33 remains parked. |
 | Claude listing icon / source-root context advice | Optional listing icon advice is nonblocking; source-root CLAUDE.md advice is absent from sealed payload validation. No public-directory listing eligibility is asserted. |
 | Archive README install prerequisites | Staging must include the coordinated install guide: register/install the extracted tkt package before grey-matter, then install the tkt CLI separately. The compact archive README commands assume dependency marketplaces are registered. An extra fresh-home run of those compact commands timed out with network denied; it is inconclusive and is not substituted for the successful dependency-first candidate probes. |
-| Native Windows/Linux vendor loading | Unverified. These OSes pass product/deploy/hook fixtures; vendor-native catalogs/upgrades were measured on macOS only. Ticket 70 requires an explicit approved exclusion before its platform gate can pass. |
+| Native Windows/Linux vendor loading | Unverified. These OSes pass product/deploy/hook fixtures; vendor-native catalogs/upgrades were measured on macOS only. The user will run native checks on the respective machines in tickets 77/78; both block ticket 70. No coverage exclusion has been approved. |
 
 ## Scope and ticket reconciliation
 
@@ -68,8 +68,8 @@ Publication implementation review and its four remediations are closed in ticket
 
 ## Go/no-go and staging rechecks
 
-**Current decision: no-go until native-platform scope is explicitly approved.** There are no unresolved observed technical release defects in the tested scope. Approval would permit candidate staging with macOS native vendor coverage and Windows/Linux product/deployment coverage; it would not claim native vendor loading on the latter OSes or authorize publication.
+**Current decision: no-go pending native Windows/Linux evidence.** The user requested separate machine-run validation tickets: [Windows 77](https://github.com/smileynet/grey-matter/blob/main/.tickets/77-windows-native-candidate-validation.md) and [Linux 78](https://github.com/smileynet/grey-matter/blob/main/.tickets/78-linux-native-candidate-validation.md). Both block audit 70. No coverage waiver was approved; there are no unresolved observed technical release defects within the already tested scope.
 
-After that decision, ticket 71 must commit a review carrier (the staging files pinned to one Git commit), including scope, compatibility, upgrade, platform-approval, final-audit and staging receipts for each exact candidate. Include both note drafts, checksums, all six plugin archives, tkt's reviewed CI provenance, the pinned annotated tag object record and exact later publish/resume commands. A tag object record is not a pushed tag.
+After the platform evidence is reconciled and audit 70 closes, ticket 71 must commit a review carrier (the staging files pinned to one Git commit), including scope, compatibility, upgrade, platform-approval, final-audit and staging receipts for each exact candidate. Include both note drafts, checksums, all six plugin archives, tkt's reviewed CI provenance, the pinned annotated tag object record and exact later publish/resume commands. A tag object record is not a pushed tag.
 
 Recheck staged bytes with `readStagedCandidate` for both products and `readStagedTktCandidate` for the joined CI assets; verify regular committed blobs and their hashes, unchanged candidate worktrees, resource closure, version consistency, links/prose and current duplicate audit. Changes to source behavior or release-facing candidate documents require replacement artifacts and affected evidence. Ticket/plan status and the review-carrier audit do not change frozen candidate bytes. Preserve earlier reviews and their hashes rather than relabeling them as fresh executions.

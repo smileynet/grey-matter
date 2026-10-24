@@ -2,7 +2,7 @@
 id: "70"
 title: "Audit both projects before release staging"
 status: in_progress
-blocked_by: ["64", "60", "65", "66", "67", "68", "69", "72", "73", "74", "75", "76"]
+blocked_by: ["64", "60", "65", "66", "67", "68", "69", "72", "73", "74", "75", "76", "77", "78"]
 priority: high
 spec: "release-readiness"
 validation_criteria:
@@ -123,3 +123,7 @@ The [final candidate audit](../docs/agents/research/final-release-audit-20261024
 Independent primary-source reviews are retained with a complete sealed-file comparison: replacement manifests, marketplaces, skills, sidecars, hooks and legal bytes are unchanged. Parser/resource remediation 76 is closed and all three grey archives contain the formerly omitted evidence JSON. Individual ticket dispositions are recorded in the audit evidence; all four explicitly required features and mandatory 60/64 remain done. Six minor prose-review findings were corrected.
 
 One decision remains: native vendor loading/upgrades were executed on macOS, while Windows/Linux have product/deploy/hook-fixture coverage. A user coverage decision is pending under acceptance criterion 4; no platform-approval, final-audit or staging receipt has been granted. The staged companion install guide must register/install the tkt package before grey-matter and distinguish the separate CLI prerequisite. Do not replace the successful dependency-first probes with the inconclusive compact-README fresh-home timeout.
+
+## Native machine handoff (2026-10-24)
+
+The user will run native platform validation on the respective machines. [Windows 77](77-windows-native-candidate-validation.md) and [Linux 78](78-linux-native-candidate-validation.md) are independent high-priority frontier tickets and now block this audit. This replaces the pending coverage-waiver question with evidence collection; no exclusion was approved. Both tickets bind the current exact candidates, durable inputs, platform runbooks, isolation limits and five evidence criteria. Reconcile their reports before granting platform-approval or closing 70.
