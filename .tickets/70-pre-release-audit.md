@@ -67,9 +67,10 @@ Ticket-health disposition to retain in the final report: `tkt validate --brief` 
 
 Crate closure follow-up: tkt 214 is fixed at `62250e4`: root-anchored Cargo inputs exclude plugin/maintainer files, including nested README/license/build-script names. A clean package rebuild retains matching VCS/binary identity. Evidence: `docs/agents/research/evidence/crate-runtime-closure-20261023.json`. This is source-version smoke evidence; refresh approved candidates before final staging.
 
-Dependency/toolchain finding (2026-10-23): tkt declares Rust 1.80 while its locked
-normal Clap dependencies require Rust 1.85 and edition 2024. This is a release
-blocker until the support contract and a hosted locked-build check agree. No Rust
-1.80 compilation has run yet; do not describe the metadata finding as an observed
-compiler failure. Cargo lockfile v4 itself is supported by Cargo 1.80. See
-[MSRV evidence and primary sources](../docs/agents/research/tkt-msrv-evidence.md).
+Dependency/toolchain finding resolved: tkt ticket 215 declares Rust 1.85.0 and
+checks that exact floor in CI. Hosted run 40054220986 reproduces the previous
+1.80.1 edition2024 failure; run 40054566229 passes the 1.85.0 locked binary check
+and the stable full gate. Ticket 216 fixes the separately observed cold-cache
+identity fixture prerequisite, verified by that same clean full run. Both are
+closed with numbered evidence. See [MSRV evidence and primary sources](../docs/agents/research/tkt-msrv-evidence.md).
+Repeat candidate checks after preparing final 0.5.0; source smoke is not candidate proof.
