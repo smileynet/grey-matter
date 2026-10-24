@@ -115,3 +115,11 @@ clauses to their existing skill owners; clarify that tkt Rust-check exemptions
 retain applicable Node/generation checks; reconcile the stale Claude "only after
 release" update assertion with main-backed marketplace behavior. These are bounded
 documentation findings, not evidence that final release gates have passed.
+
+## Frozen replacement audit checkpoint (2026-10-24)
+
+The [final candidate audit](../docs/agents/research/final-release-audit-20261024.md) is committed at `3673e6f`. Current candidates are grey-matter `e071b7b03d02025dc1af6c3ff2c4f8369f777587` and tkt `2b6ff173993c9fe413c40287fb1cb3f0a9879ca1`. Both pass product/native verification and all six install/upgrade probe groups. Hosted grey-matter run 40085165446 and tkt CI 40085001417 pass Windows/Linux gates; tkt build-only run 40085017493 supplies 16 provenance-verified assets. The downloaded ARM64 macOS binary reports the exact candidate identity; crate VCS/exclusions pass.
+
+Independent primary-source reviews are retained with a complete sealed-file comparison: replacement manifests, marketplaces, skills, sidecars, hooks and legal bytes are unchanged. Parser/resource remediation 76 is closed and all three grey archives contain the formerly omitted evidence JSON. Individual ticket dispositions are recorded in the audit evidence; all four explicitly required features and mandatory 60/64 remain done. Six minor prose-review findings were corrected.
+
+One decision remains: native vendor loading/upgrades were executed on macOS, while Windows/Linux have product/deploy/hook-fixture coverage. A user coverage decision is pending under acceptance criterion 4; no platform-approval, final-audit or staging receipt has been granted. The staged companion install guide must register/install the tkt package before grey-matter and distinguish the separate CLI prerequisite. Do not replace the successful dependency-first probes with the inconclusive compact-README fresh-home timeout.
