@@ -63,6 +63,6 @@ The probe removes its own disposable fixture trees on exit.
 See the [prepared transport report](cargo-prepared-transport-probe.md),
 [private filesystem decision](../decisions/0004-private-cargo-filesystem.md),
 [exact Cargo source contract](cargo-publish-source-contract.md) and
-[ticket 68](../../../.tickets/68-release-publication.md). The next gate is one
+[ticket 68](https://github.com/smileynet/grey-matter/blob/153dad4e0cbe663ab27cad339ff72fc3dcbea68e/.tickets/68-release-publication.md). The next gate is one
 independent review of the integrated publication/recovery path, before candidate
 rebuilding and installation/audit/staging work.

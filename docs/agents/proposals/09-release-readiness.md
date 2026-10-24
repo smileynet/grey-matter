@@ -157,15 +157,15 @@ machine-mappable validation criteria. Ticket files carry current execution statu
 
 | Ticket | Deliverable | Blocked by |
 | --- | --- | --- |
-| [64](../../../.tickets/64-unified-deployer.md) | Remaining portfolio/cache/provenance findings | None |
-| [60](../../../.tickets/60-check-repo-green-windows-then-pre-push.md) | Existing Windows failures/push gate | None |
-| [65](../../../.tickets/65-plugin-conformance.md) | Six plugin conformance rows against primary sources | None |
-| [66](../../../.tickets/66-release-contract.md) | Reviewed release skills and guidance | 65 |
-| [67](../../../.tickets/67-release-preparation.md) | Versioned candidate preparation and complete bundles | 66, 74 |
-| [68](../../../.tickets/68-release-publication.md) | One publisher per repo, draft/resume and stable promotion | 66 |
-| [69](../../../.tickets/69-release-install-verification.md) | Isolated fresh-install/upgrade evidence | 67, 68 |
-| [70](../../../.tickets/70-pre-release-audit.md) | Final cross-project go/no-go audit | 64, 60, 65-69, 72-74 |
-| [71](../../../.tickets/71-release-staging.md) | Reviewed release artifacts, with gates re-run after edits | 70 |
+| [64](https://github.com/smileynet/grey-matter/blob/153dad4e0cbe663ab27cad339ff72fc3dcbea68e/.tickets/64-unified-deployer.md) | Remaining portfolio/cache/provenance findings | None |
+| [60](https://github.com/smileynet/grey-matter/blob/153dad4e0cbe663ab27cad339ff72fc3dcbea68e/.tickets/60-check-repo-green-windows-then-pre-push.md) | Existing Windows failures/push gate | None |
+| [65](https://github.com/smileynet/grey-matter/blob/153dad4e0cbe663ab27cad339ff72fc3dcbea68e/.tickets/65-plugin-conformance.md) | Six plugin conformance rows against primary sources | None |
+| [66](https://github.com/smileynet/grey-matter/blob/153dad4e0cbe663ab27cad339ff72fc3dcbea68e/.tickets/66-release-contract.md) | Reviewed release skills and guidance | 65 |
+| [67](https://github.com/smileynet/grey-matter/blob/153dad4e0cbe663ab27cad339ff72fc3dcbea68e/.tickets/67-release-preparation.md) | Versioned candidate preparation and complete bundles | 66, 74 |
+| [68](https://github.com/smileynet/grey-matter/blob/153dad4e0cbe663ab27cad339ff72fc3dcbea68e/.tickets/68-release-publication.md) | One publisher per repo, draft/resume and stable promotion | 66 |
+| [69](https://github.com/smileynet/grey-matter/blob/153dad4e0cbe663ab27cad339ff72fc3dcbea68e/.tickets/69-release-install-verification.md) | Isolated fresh-install/upgrade evidence | 67, 68 |
+| [70](https://github.com/smileynet/grey-matter/blob/153dad4e0cbe663ab27cad339ff72fc3dcbea68e/.tickets/70-pre-release-audit.md) | Final cross-project go/no-go audit | 64, 60, 65-69, 72-74 |
+| [71](https://github.com/smileynet/grey-matter/blob/153dad4e0cbe663ab27cad339ff72fc3dcbea68e/.tickets/71-release-staging.md) | Reviewed release artifacts, with gates re-run after edits | 70 |
 
 Release-scope decisions may intentionally defer unrelated open work, but no silent
 deferral clears a blocker. Newly discovered release blockers become linked tickets and
@@ -210,6 +210,6 @@ The [consolidated report](../research/plugin-conformance.md) records all six nat
 syntax/loading passes and their exact tested revisions. Tickets 72 and 73 resolved
 resource/namespace and invocation-policy findings. Independent YAML parsing repaired
 a source defect and is now a repository invariant.
-[Ticket 74](../../../.tickets/74-plugin-license-notices.md) resolved required license
+[Ticket 74](https://github.com/smileynet/grey-matter/blob/153dad4e0cbe663ab27cad339ff72fc3dcbea68e/.tickets/74-plugin-license-notices.md) resolved required license
 and attribution artifacts. Syntax/loading passes on those source revisions do not
 clear final-candidate, install/upgrade or audit gates.

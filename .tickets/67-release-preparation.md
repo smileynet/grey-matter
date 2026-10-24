@@ -196,3 +196,21 @@ tkt's 30 release-tool/workflow fixtures pass; both diff checks pass; the canonic
 plan matches ticket 68's done status. Fresh candidate preparation, product/native
 and platform checks remain required. Preserve the reviewed documentation in the
 candidate commits rather than editing it after install/upgrade verification.
+
+## Candidate closure control (2026-10-24)
+
+Preparation from source `153dad4` produced local version commit
+`bf81a4b09f1a535f7183aa178a2a3f19fa46c220`, then correctly refused artifact creation:
+`excluded development/credential path: .tickets/60-check-repo-green-windows-then-pre-push.md`.
+That failed draft is not a release candidate. Its owned preparation state and old
+branch remain for inspection; no remote release ref or publication was created.
+
+The resource graph reached historical probe/ADR/proposal documents, whose local
+ticket links pulled development records into package inputs. Link existence had
+passed, but source-bundle closure had not been checked after the integrated work.
+The proposal and parent-loss report now cite the same tickets through pinned
+GitHub links. Observations and packaging exclusions remain intact. A direct check
+of the canonical resource graph first failed, then passed with 250 resources and
+no ticket paths. The release workflow now requires a source-version bundle smoke
+before candidate version commits. Build/verify that smoke, then regenerate from
+the corrected source; do not reuse the failed `bf81a4b` draft.

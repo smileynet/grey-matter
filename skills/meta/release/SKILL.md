@@ -21,6 +21,9 @@ Publication is a separate action from preparing or staging a candidate.
    accurate user-facing changes, install/update/migration guidance and prerequisites.
    Dry-run reports proposed edits without writing them; apply approved edits only
    during prepare/stage. Retain legal artifacts, compatibility and platform limits.
+   Before committing candidate versions, build a source-version smoke bundle using
+   the [artifact guide](../../../docs/agents/release-artifacts.md). Local Markdown
+   links are transitive package inputs, including links in historical references.
 3. **Propose the version.** Use [versioning](references/versioning.md), state the
    reasoning and get approval before preparing versioned candidates. Record the
    approved version and scope; recovery reuses them rather than bumping again.

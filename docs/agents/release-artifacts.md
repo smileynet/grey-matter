@@ -44,6 +44,12 @@ files needed by commands or dynamic lookups that Markdown links cannot express.
 The deploy engine exports its pack/resource logic for this shared construction path;
 its CLI remains dependency-free and tkt vendors identical bytes.
 
+Local Markdown links are transitive package inputs, even in research and ADRs.
+Use pinned upstream links for development-ticket citations so the reference stays
+available without drawing `.tickets/` into runtime bundles. Build a source-version
+smoke bundle after documentation changes and before committing candidate versions;
+link-existence checks alone do not verify package exclusions.
+
 Only the computed resource set and manifests/catalogs enter source-layout bundles;
 AGY's generated tree is checked in full. Development directories, environment files,
 common credential filenames and non-regular files are rejected. Archives reject
