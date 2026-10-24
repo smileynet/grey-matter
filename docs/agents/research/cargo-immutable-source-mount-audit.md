@@ -1,0 +1,28 @@
+# Audit: immutable Cargo source through private data mounts
+
+Date: 2026-10-23. Independent source audit of [the proposal](cargo-immutable-source-mount.md), using the research-audit skill. Sources were fetched again; no installation, namespace execution, privileged operation or registry request was performed.
+
+**Trust score: 9/10 for the source-level argument; runtime readiness remains unproven.** The central distinction—private copied backing rather than inherited memfd seals—is correct. No unsupported factual claim was found. Proposed checks are requirements, not completed evidence.
+
+## Claim verdicts
+
+| Claim | Verdict and independently checked support |
+| --- | --- |
+| v0.6.1 data mounts copy into a new backing file, mount read-only and unlink its temporary name | **Supported [L1:verified, source inspection].** [bubblewrap.c, 1297–1332](https://github.com/containers/bubblewrap/blob/v0.6.1/bubblewrap.c#L1297-L1332): `mkstemp`, `copy_file_data`, input `close`, `BIND_READONLY`, then `unlink`. A memfd's inode is not mounted directly. |
+| The original checkout's inodes cannot change those copied bytes | **Supported as an inference [L1:inferred]**, conditional on complete reconstruction and no alternate input path. The source operation above creates separate backing; the claim correctly excludes arbitrary host process control. This is not measured mutation evidence. |
+| All four requested seals prevent content and size changes; FUTURE_WRITE is insufficient | **Supported [L2:verified].** [Linux F_GET_SEALS manual, DESCRIPTION](https://man7.org/linux/man-pages/man2/F_GET_SEALS.2const.html): “Seals are a property of an inode.” WRITE rejects content writes and new writable shared mappings; existing writable shared mappings prevent adding WRITE. GROW/SHRINK cover size changes; SEAL prevents adding seals. FUTURE_WRITE permits existing writable mappings. These are API semantics, not confirmation of the runner kernel. |
+| Exec handoff, shared offsets and FD limits need explicit handling | **Supported [L2:verified].** [memfd_create DESCRIPTION/ERRORS](https://man7.org/linux/man-pages/man2/memfd_create.2.html) specifies CLOEXEC, ordinary fork/exec inheritance and EMFILE/ENOMEM. [dup DESCRIPTION](https://man7.org/linux/man-pages/man2/dup.2.html) says duplicates “share file offset and file status flags.” [v0.6.1 utils.c, 475–500](https://github.com/containers/bubblewrap/blob/v0.6.1/utils.c#L475-L500) uses ordinary `read`, with no rewind. Sealing bytes does not freeze the offset. |
+| New tmpfs, per-file modes, symlinks and argument-file options exist in v0.6.1 | **Supported [L2:verified].** [Versioned manual](https://raw.githubusercontent.com/containers/bubblewrap/v0.6.1/bwrap.xml), lines 82–87, 192–211, 250–306, documents ordered setup, NUL-separated arguments, modes and reconstruction operations. It describes data mounts as “Copy from the file descriptor”. |
+| Freezing the parent mount is necessary and does not recursively freeze children | **Supported [L2:verified].** The same manual, lines 238–239, explicitly limits remount-ro to its specified mount point. Therefore every file mount must already be read-only, directories must belong to the frozen private tmpfs, and writable descendants must be absent. This correctly avoids relying on read-only file mounts alone. |
+| Input FDs may close after copying without losing mounted files | **Supported [L1:verified, source inspection].** The copy branch closes input before mount creation and unlinks temporary backing after mounting; lifetime is not tied to the input memfd. |
+| Bubblewrap is not a complete policy or hostile-host defense | **Supported [L4:verified].** [Upstream README, Sandbox security](https://github.com/containers/bubblewrap/blob/main/README.md#sandbox-security): “entirely determined by the arguments passed to bubblewrap.” This current general warning is not used to establish v0.6.1 implementation details. |
+| Complete Git inventory, mounted verification, identical package hash and lifecycle integration are needed | **Supported as design obligations [L1:inferred]**, not implementation facts. The report explicitly leaves these unverified. The required negative control and mutation/capture probe would test the central distinction; their specification does not prove they have passed. |
+
+## Findings and remaining gates
+
+No producer correction is required for the copying/sealing distinction. Two clarifications should accompany implementation:
+
+- Make the no-process-control assumption operational: prevent the Cargo child from acquiring mount privileges, remounting the private tree, entering another namespace or reaching original inputs through inherited FDs, procfs, environment/configuration or symlink aliases. A read-only mount is not an irrevocable seal against a process able to change mounts. The report's policy warning supports this requirement but does not specify the complete launcher policy.
+- Verify that the reviewed inventory covers `.git` configuration, object dependencies and every Cargo input, rather than accepting only matching HEAD and clean status. Those checks alone cannot establish a coherent or complete snapshot. Reject external references as the proposal requires.
+
+Coverage: **source/manual semantics fully checked; runner compatibility, real tkt packaging equality, mutation resistance, mount/FD scale and coordinator integration not executed or established.** Linux manuals are maintained API documentation rather than a pinned runner-kernel specification. v0.6.1 source/manual match the claimed version; the mutable README supplies only the general policy warning. Retain the proposed harmless Linux probe as a release gate before adopting this transport.

@@ -74,3 +74,24 @@ and the stable full gate. Ticket 216 fixes the separately observed cold-cache
 identity fixture prerequisite, verified by that same clean full run. Both are
 closed with numbered evidence. See [MSRV evidence and primary sources](../docs/agents/research/tkt-msrv-evidence.md).
 Repeat candidate checks after preparing final 0.5.0; source smoke is not candidate proof.
+
+
+## Hook scope progress (2026-10-23)
+
+Included scope now contains grey-matter 54/55 and tkt 210, all implemented and
+closed. Grey-matter 63 is implemented at `90482ee`; its exact Windows/Linux
+platform run 40058361224 is green and ticket 63 is closed with both criteria verified. [Hook contract and primary sources](../docs/agents/research/claude-plugin-hooks.md)
+and [source-smoke evidence](../docs/agents/research/evidence/claude-hooks-20261023.json)
+record host isolation, native validation, the corrected Windows fixture and limits.
+These source-version results do not replace final 0.2.0/0.5.0 candidate gates.
+
+The current Claude client additionally reports a source-root CLAUDE.md context
+advisory and an optional listing-icon advisory. Final audit must record their
+source-versus-extracted-artifact disposition; native manifest success alone does
+not mean all directory advisories are absent. No scope exclusion or publication
+has been approved by these checks.
+
+
+User scope confirmation: explicitly include grey-matter 54, 55, 63 and tkt 210
+before staging. This supersedes the earlier deferral question; no deferral of those
+four is authorized. Staging still waits for all remaining release gates.

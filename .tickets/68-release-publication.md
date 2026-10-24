@@ -168,3 +168,29 @@ bind constrains Cargo and descendants but cannot prevent a concurrent host write
 from mutating the backing checkout. No boundary execution has run. Preserve this
 limitation; either enforce exclusive trusted host ownership or verify stronger
 immutable backing before claiming the production guard is complete.
+
+
+## Cargo transport research checkpoint (2026-10-23)
+
+New primary-source work resolves the previous exact-Cargo-source retrieval gap:
+[Cargo 1.99.1 source contract](../docs/agents/research/cargo-publish-source-contract.md)
+verifies the official source archive SHA and matching Cargo commit. Cargo's supported
+credential-provider protocol exposes the freshly packaged archive checksum before
+reading that same open file handle into the upload body. A provider must prohibit
+cached operation-independent tokens, command-line tokens and fallback; a private
+archive inode must prevent post-check writes. This is a promising enforcement seam,
+not an implemented transport or permission to publish.
+
+[Private source-mount research](../docs/agents/research/cargo-immutable-source-mount.md)
+explains how sealed inputs, private data-backed mounts and frozen directories can
+isolate changes to the original checkout. It explicitly does not claim inherited
+memfd seals on copied backing files or protection against a hostile privileged host.
+Independent source audits and Linux/mock execution remain required before adoption.
+
+
+Independent audits now support both source arguments at 9/10 within their stated
+scope: [Cargo checksum/provider audit](../docs/agents/research/cargo-publish-source-contract-audit.md)
+and [private-mount audit](../docs/agents/research/cargo-immutable-source-mount-audit.md).
+They independently re-fetched protocol/manual sources and verified the exact Cargo
+archive against its official checksum. Runtime readiness is still unproved: build
+the credential-provider mock and Linux source/output mutation controls next.

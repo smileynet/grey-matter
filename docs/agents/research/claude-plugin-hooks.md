@@ -17,7 +17,7 @@ commands, grey-matter runs `scripts/check-repo.mjs` under `CLAUDE_PROJECT_DIR`, 
 that launch project as the child cwd. A missing checker means no-op. Checker
 failure, crash or a 900-second child timeout produces blocking exit 2 with available
 checker diagnostics. The hook has a 960-second outer timeout and `onFailure: block`.
-The margin accommodates the observed nine-minute Windows full gate; a shorter
+The margin accommodates the [observed nine-minute Windows full gate](https://github.com/smileynet/grey-matter/actions/runs/40056491062/job/120760516712); a shorter
 four-minute limit would reject a legitimate slow check.
 
 Detection is best effort. It does not interpret arbitrary shell syntax, aliases or
@@ -90,8 +90,10 @@ no findings. AGY's vendor manifest schema has no hooks property. Sources:
 
 - [L1:verified] Four direct push-handler fixtures cover project cwd, Bash/PowerShell,
   blocking diagnostics, malformed input, checker crash and unrelated repositories.
-- [L1:verified] Three direct session-handler fixtures cover ordered frontier/WIP
-  queries, launch cwd, missing guards and discarding partial output on failure.
+- [L1:verified] Four direct session-handler fixtures cover ordered frontier/WIP
+  queries, launch cwd, missing guards, discarding partial output on failure and
+  preserving the first native subcommand. [Windows and Linux CI](https://github.com/smileynet/tkt/actions/runs/40058339724)
+  passes at `6bb7751`, including the full Rust/Node gate and exact MSRV check.
 - [L1:verified] The release-artifact fixture verifies private-file inclusion only in
   Claude, absence of conventional hook roots, and removal of the Claude declaration
   from the Codex archive. Other archive fixtures verify retained resources and hashes.
@@ -100,8 +102,10 @@ no findings. AGY's vendor manifest schema has no hooks property. Sources:
   hook. Plugin-manifest validation returns success. Native inventory is component
   discovery, not evidence of a model session executing a hook.
 
-Direct tests ran on macOS. Windows execution, actual model-session context delivery,
-and timeout expiry have not yet been observed. Keep those limits visible in final
+Push-handler tests pass on macOS and in the [Windows/Linux full gate](https://github.com/smileynet/grey-matter/actions/runs/40058361224)
+at `90482ee`.
+The session handler also passes Windows and Linux fixtures. Actual model-session
+context delivery and timeout expiry have not yet been observed. Keep those limits visible in final
 candidate/platform evidence. Source-directory validation also reports the existing
 CLAUDE.md context warning and an optional missing listing icon; record their final
 artifact disposition during audit rather than treating manifest success as a claim

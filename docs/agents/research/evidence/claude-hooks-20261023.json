@@ -1,0 +1,140 @@
+{
+  "schema": 1,
+  "purpose": "Claude-hook source smoke, not approved release-candidate evidence",
+  "native": {
+    "grey": {
+      "candidateSha": "90482ee2a85e86a5d2a0be5ef956d57fc1ca5c3b",
+      "version": "0.1.0",
+      "status": "pass",
+      "evidenceSha256": "b341fe361e0da47107744c872cb6afba3fd1b0b0596a11bd212103d8bec71fe0",
+      "hosts": [
+        {
+          "host": "codex",
+          "status": "pass",
+          "nativeVersion": "codex-cli 0.147.0",
+          "assetSha256": "28a50e7923723d756ff21c41c6bf9961fed83dfe5bdd2b57bef483740d20ce71",
+          "skills": 46
+        },
+        {
+          "host": "claude",
+          "status": "pass",
+          "nativeVersion": "2.1.310 (Claude Code)",
+          "assetSha256": "19502d0b13e262079f818db8bf01fdab6fa183b12c8fbc59a8f512ad8046d01b",
+          "skills": 46,
+          "seededValidation": {
+            "runs": 3,
+            "invalidDescriptionDetected": true,
+            "missingReadmeDetected": true
+          }
+        },
+        {
+          "host": "agy",
+          "status": "pass",
+          "nativeVersion": "1.4.6",
+          "assetSha256": "d82804d9cab0c10d8db85afa3a59250590dcfcef5acab2891031f9e8d7188229",
+          "skills": 46
+        }
+      ]
+    },
+    "tkt": {
+      "candidateSha": "72afcc998f0924ee85040b9ea4177be3a7742632",
+      "version": "0.4.0",
+      "status": "pass",
+      "evidenceSha256": "69e154ff010a559abfd6996a17d05f4997b7b3a6849fb8fa0388cfd5f6874679",
+      "hosts": [
+        {
+          "host": "codex",
+          "status": "pass",
+          "nativeVersion": "codex-cli 0.147.0",
+          "assetSha256": "4cf15b3194d23f47cc58c5340522dab34734b4bf6aa80557e0e7f91ed244d86c",
+          "skills": 4
+        },
+        {
+          "host": "claude",
+          "status": "pass",
+          "nativeVersion": "2.1.310 (Claude Code)",
+          "assetSha256": "397d52979bb5786f472633f59ef518308d5dc47132e12a73a8a8dcc3a359eb7d",
+          "skills": 4,
+          "seededValidation": {
+            "runs": 3,
+            "invalidDescriptionDetected": true,
+            "missingReadmeDetected": true
+          }
+        },
+        {
+          "host": "agy",
+          "status": "pass",
+          "nativeVersion": "1.4.6",
+          "assetSha256": "defbf2785b379306f564095b2e03ce889763a9469d0e76156a29b3a59ec07382",
+          "skills": 4
+        }
+      ]
+    }
+  },
+  "tests": {
+    "greyRepositoryInvariants": 12,
+    "greyReleaseFixtures": 221,
+    "greyHookFixtures": 4,
+    "tktNodeChecks": 18,
+    "tktRustTests": 296,
+    "tktHookFixtures": 4
+  },
+  "tktCI": {
+    "sourceSha": "6bb77510f70051bbdf30b3bbe73cba8386ed6f8b",
+    "run": 40058339724,
+    "url": "https://github.com/smileynet/tkt/actions/runs/40058339724",
+    "status": "success",
+    "windowsJob": 120766191506,
+    "linuxJob": 120766191229,
+    "fullGateJob": 120766191466,
+    "msrvJob": 120766191416
+  },
+  "windowsFixtureRegression": {
+    "redRun": 40058136642,
+    "redSource": "72afcc998f0924ee85040b9ea4177be3a7742632",
+    "redJob": 120765572949,
+    "cause": "Node fixture normalized its first CLI argument as a script path",
+    "fix": "Normalize the fixture argument back to a subcommand; production hook unchanged",
+    "localRegression": "failed before fix and passed after"
+  },
+  "greyPlatform": {
+    "sourceSha": "90482ee2a85e86a5d2a0be5ef956d57fc1ca5c3b",
+    "run": 40058361224,
+    "url": "https://github.com/smileynet/grey-matter/actions/runs/40058361224",
+    "status": "success",
+    "windowsFullGateJob": 120766260402,
+    "linuxFullGateJob": 120766260403,
+    "windowsRegressionJob": 120766260250
+  },
+  "limits": [
+    "Native tkt bundles are from 72afcc9; 6bb7751 changes only the excluded test fixture.",
+    "Direct handler and native component discovery do not prove execution in an actual model session.",
+    "Timeout expiry was not waited out.",
+    "Source directory CLAUDE.md and optional icon advisories remain for final audit disposition.",
+    "No release, tag, registry or stable publication occurred."
+  ],
+  "deployment": {
+    "mode": "corrected portfolio refresh after live-test fixes",
+    "auditStatus": "pass",
+    "metrics": {
+      "plugins": 19,
+      "packs": 4
+    },
+    "findings": 0,
+    "errors": 0,
+    "notes": [
+      "Initial refresh preceded the live JSON-output and timeout corrections; the corrected refresh updates both packs once through the portfolio entry point.",
+      "No legacy wrapper or extra per-pack deploy was run."
+    ]
+  },
+  "scope": {
+    "userInstruction": "Include grey-matter 54, 55, 63 and tkt 210 before staging",
+    "tickets": {
+      "grey-matter:54": "done",
+      "grey-matter:55": "done",
+      "grey-matter:63": "done",
+      "tkt:210": "done"
+    },
+    "releaseReadiness": "remaining gates 67-71 are not complete"
+  }
+}
