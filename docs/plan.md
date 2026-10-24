@@ -3,8 +3,8 @@
 The coordinated [release plan](agents/proposals/09-release-readiness.md) and
 [release contract](agents/release-contract.md) define scope and acceptance.
 User-approved staging versions: grey-matter 0.2.0 and tkt 0.5.0. Publication is
-not authorized. Candidate preparation and install/upgrade verification are complete. Finish the
-final audit and artifact staging. Native Linux and Windows validation are verified.
+not authorized. Candidate preparation, install/upgrade verification, final audit and
+artifact staging are complete. Native Linux and Windows validation are verified.
 
 ## Active release thread
 
@@ -16,7 +16,7 @@ final audit and artifact staging. Native Linux and Windows validation are verifi
 | 77 | Validate native release candidates on Windows (SharkTank) | ✅ done |
 | 78 | Validate native release candidates on Linux (randomserver) | ✅ done |
 | 70 | Audit both projects before release staging | ✅ done |
-| 71 | Stage reviewed changelogs README files and release artifacts | in_progress |
+| 71 | Stage reviewed changelogs README files and release artifacts | ✅ done |
 
 Tickets 67–69 are complete, including the independent integrated publication review,
 prepared Cargo evidence, sole CI publisher/dispatcher, candidate preparation and
@@ -30,15 +30,17 @@ probe groups, Windows/Linux product gates and tkt's five-target build-only stage
 The [final audit](agents/research/final-release-audit-20261024.md) records evidence,
 ticket dispositions and the completed native platform evidence. Linux ticket 78 is complete after SSH validation on randomserver. [Windows ticket 77](agents/research/windows-native-validation-completion-20261024.md) is complete after authorized live duplicate cleanup and a passing complete Codex candidate catalog/state probe, with no scope exclusion.
 
-Audit 70 is complete; finish the staging 71 closeout. Keep staging tied to these frozen candidates;
+Audit 70 and staging 71 are complete. The [staging closeout](agents/research/release-staging-20261024.md) pins review commit
+`c24720f77f252544659a376a1493fd5c53985018` and the dedicated review branch.
+No further release execution is authorized. Keep staging tied to these frozen candidates;
 source behavior or release-documentation changes require replacement artifacts and
 affected evidence. This live plan and ticket receipts record later progress; embedded
 plans in frozen bundles remain snapshots of their source revisions.
 
 ## Parked work
 
-These are existing backlog items, not newly approved release scope. Ticket 70 must
-record explicit release dispositions; this table does not clear any blocker.
+These are existing backlog items, not newly approved release scope. Audit 70 records
+their release dispositions; this table does not clear any blocker.
 
 | ID | Work | Status |
 | --- | --- | --- |
