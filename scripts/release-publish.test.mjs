@@ -170,3 +170,17 @@ test("sealed annotated tag object is checked even when its peeled commit still m
   const f = fixture(); f.candidate.tagObject = "b".repeat(40); f.state.tag.objectSha = "c".repeat(40);
   await assert.rejects(f.run({ execute: true }), /sealed object/); assert.deepEqual(f.writes, []);
 });
+
+test("draft-only staging uploads complete bytes without undrafting and replays unchanged", async () => {
+  const f = fixture("tkt"), staged = await f.run({ execute: true, publish: false });
+  assert.equal(staged.phase, "draft"); assert.equal(staged.mode, "draft-reconciliation"); assert.deepEqual(staged.missingAssets, []);
+  assert.deepEqual(f.writes.map(([action]) => action), ["create", "upload", "upload"]);
+  const count = f.writes.length; await f.run({ execute: true, publish: false }); assert.equal(f.writes.length, count);
+  assert.equal((await f.run({ execute: true })).phase, "published"); assert.equal(f.writes.filter(([action]) => action === "publish").length, 1);
+});
+test("draft-only staging refuses non-boolean flags and changed final asset inventory", async () => {
+  for (const publish of ["false", "true", null, 0]) { const f = fixture(); await assert.rejects(f.run({ execute: true, publish }), /must be boolean/); assert.deepEqual(f.writes, []); }
+  const f = fixture(), assets = f.api.assets; let completeReads = 0;
+  f.api.assets = async (...args) => { const items = await assets(...args); if (items.length === 2 && ++completeReads === 2) return items.slice(1); return items; };
+  await assert.rejects(f.run({ execute: true, publish: false }), /assets changed/); assert.equal(f.writes.some(([action]) => action === "publish"), false);
+});
