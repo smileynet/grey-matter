@@ -95,3 +95,13 @@ has been approved by these checks.
 User scope confirmation: explicitly include grey-matter 54, 55, 63 and tkt 210
 before staging. This supersedes the earlier deferral question; no deferral of those
 four is authorized. Staging still waits for all remaining release gates.
+
+Review sequencing (user direction, 2026-10-23): follow the plan's
+[review order and evidence reuse](../docs/agents/proposals/09-release-readiness.md#review-order-and-evidence-reuse).
+Resolve the design/runtime uncertainties and integrated publication review in 68
+before preparing final candidates. This ticket audits frozen candidates after
+67/69; it does not repeatedly commission broad reviews of intermediate components.
+Track each remediation's evidence impact and repeat the affected gates, preserving
+the SHA attached to reusable source evidence. Changed candidate identities require
+new bound artifacts and receipts. Complete technical corrections before final
+prose review and staging in 71.

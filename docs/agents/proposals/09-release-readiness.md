@@ -39,6 +39,45 @@ Trade-offs: tkt lockstep releases can rebuild an unchanged CLI; stable adds one 
 
 Implementation order: version consistency gates; draft/resume behavior; release-source channel and install docs; bundle/in-place upgrade tests; stable promotion and per-channel verification. Keep tkt's generated dist workflow configured through its generator rather than hand-editing generated jobs.
 
+## Review order and evidence reuse
+
+User direction, 2026-10-23: prioritize critical reviews before downstream work to
+avoid repeated implementation, documentation and staging churn. Apply reviews at
+these boundaries:
+
+1. **Resolve decisions that could invalidate the design first.** Review the
+   publication identity, authority, recovery and pre-upload byte boundary before
+   integrating the production transport. Existing source audits remain evidence
+   for unchanged contracts; do not commission another broad research pass unless
+   a specific uncertainty or contradiction remains. Prove unresolved runtime
+   assumptions with small mock probes before expanding the implementation.
+2. **Finish the integrated workflow in 68.** Use focused tests while changing it.
+   Review the complete publication path, including failure and resume behavior,
+   once it works end to end with fake services. Resolve blocking findings together
+   before rebuilding release candidates. This review must precede expensive
+   candidate preparation and platform/install matrices.
+3. **Freeze the source and prepare final candidates in 67.** Finish version,
+   changelog, README and install-guidance edits before the candidate verification
+   run. Run fresh-install/upgrade checks in 69 against those exact candidates.
+4. **Audit the frozen candidates in 70.** Review all six plugin formats against
+   their primary documentation, reconcile scope and findings, and assess the
+   collected test evidence. Reuse earlier research where the source contract and
+   relevant client version still apply; check for changes rather than repeating
+   the entire investigation. Review prose after technical content is stable.
+5. **Stage verified artifacts in 71.** Assemble the reviewed bytes and evidence;
+   avoid source or editorial edits during this step. A needed edit returns to its
+   owning preparation or implementation step before staging resumes.
+
+For a finding, record the affected contract, files and evidence before fixing it.
+Rerun the failed check and checks affected by the fix; a change to shared packaging,
+deployment or release identity requires the corresponding broader matrix. Unchanged
+results stay attached to their original SHA and must never be relabeled as checks
+of a new candidate. Candidate identity changes invalidate its bound artifacts and
+receipts even when a focused source check passes. Existing required commit/push
+gates still apply; this sequencing reduces discretionary repeated reviews, not
+mandatory verification. Refresh the local plugin portfolio once per completed
+skill/guidance unit through the canonical deploy command.
+
 ## Durable research
 
 - [GitHub release mechanics and recovery](../research/github-release-strategy.md).
