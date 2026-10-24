@@ -1,3 +1,4 @@
+import { publishStaged } from "./release-publication.mjs";
 import { readStagedCandidate } from "./release-staging.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -205,3 +206,87 @@ test("staging reader requires receipt digests and rejects committed symlink blob
   f.git("-c", `core.hooksPath=${join(f.temp, "no hooks")}`, "commit", "-m", "seed symlink notes blob");
   assert.throws(() => stage.read(f.git("rev-parse", "HEAD")), /committed regular file/);
 }));
+
+function publicationFixture(f) {
+  const stage = stagingFixture(f), reviewSha = stage.save();
+  f.git("-c", `core.hooksPath=${join(f.temp, "no hooks")}`, "checkout", "-b", "codex/release-grey-matter-0.1.0-fixture", f.sha);
+  f.git("-c", "tag.gpgsign=false", "tag", "-a", "v0.1.0", "-m", "fixture", f.sha);
+  const tagObject = f.git("rev-parse", "v0.1.0");
+  f.git("remote", "add", "origin", "https://github.com/example/grey-matter.git");
+  const options = { mode: "publish", repo: f.repo, reviewRepo: f.repo, reviewSha, index: "staging/index.json", product: "grey-matter", artifacts: f.artifacts, evidence: f.out, tagObject, state: join(f.temp, "publication.json") };
+  const candidate = stage.read(reviewSha), state = { release: null, assets: [] }, writes = [];
+  const api = {
+    tag: () => ({ sha: f.sha, annotated: true, objectSha: tagObject }),
+    releases: () => state.release ? [{ ...state.release }] : [],
+    assets: () => state.assets,
+    immutableEnabled: () => true,
+    createDraft: () => { writes.push("create"); state.release = { id: 17, tag_name: "v0.1.0", name: candidate.title, body: candidate.notes, draft: true, immutable: false, html_url: "https://example.invalid/release" }; },
+    upload: (_, id, asset) => { writes.push(`upload:${asset.name}`); state.assets.push({ name: asset.name, size: asset.bytes.length, digest: `sha256:${hash(asset.bytes)}`, state: "uploaded" }); },
+    publish: () => { writes.push("publish"); state.release.draft = false; state.release.immutable = true; },
+  };
+  const services = { api, pushCandidate: () => { writes.push("refs"); return { complete: true }; }, promoteStable: () => { writes.push("stable"); return { complete: true }; } };
+  return { stage, options, state, writes, services, run: (extra = {}) => publishStaged({ ...options, ...extra }, services) };
+}
+
+test("publication command: default planning leaves files, refs and fake APIs unchanged", () => fixture(async (f) => {
+  const pub = publicationFixture(f), before = tree(f.temp);
+  const plan = await pub.run(); assert.equal(plan.mode, "dry-run"); assert.deepEqual(pub.writes, []);
+  assert.deepEqual(tree(f.temp), before); assert.equal(existsSync(pub.options.state), false);
+}));
+
+test("publication command: interruption persists the release ID and resumes without another release", () => fixture(async (f) => {
+  const pub = publicationFixture(f), promote = pub.services.promoteStable;
+  pub.services.promoteStable = () => { throw new Error("seeded stable rejection"); };
+  await assert.rejects(pub.run({ execute: true }), /stable rejection/);
+  const interrupted = JSON.parse(readFileSync(pub.options.state));
+  assert.equal(interrupted.releaseId, 17); assert.equal(interrupted.phase, "interrupted");
+  assert.equal(pub.writes.filter((item) => item === "create").length, 1);
+  pub.services.promoteStable = promote;
+  const result = await pub.run({ mode: "resume", execute: true }); assert.equal(result.status, "pass");
+  assert.equal(pub.writes.filter((item) => item === "create").length, 1);
+  assert.equal(pub.writes.filter((item) => item === "publish").length, 1);
+  const finished = JSON.parse(readFileSync(pub.options.state)); assert.equal(finished.phase, "complete"); assert.equal(finished.error, undefined);
+}));
+
+test("publication command: changed remote or foreign recovery state blocks all writes", () => fixture(async (f) => {
+  const pub = publicationFixture(f);
+  f.git("remote", "set-url", "origin", "https://github.com/other/repo.git");
+  await assert.rejects(pub.run({ execute: true }), /differs/); assert.deepEqual(pub.writes, []);
+  f.git("remote", "set-url", "origin", "https://github.com/example/grey-matter.git");
+  put(pub.options.state, "foreign bytes");
+  await assert.rejects(pub.run({ execute: true }), /recovery state/); assert.equal(readFileSync(pub.options.state, "utf8"), "foreign bytes");
+  assert.deepEqual(pub.writes, []);
+}));
+
+test("publication command: disabled immutability or an existing lock permits no remote writes", () => fixture(async (f) => {
+  const pub = publicationFixture(f); pub.services.api.immutableEnabled = () => false;
+  await assert.rejects(pub.run({ execute: true }), /immutability/); assert.deepEqual(pub.writes, []);
+  assert.equal(existsSync(`${pub.options.state}.lock`), false);
+  pub.services.api.immutableEnabled = () => true;
+  put(`${pub.options.state}.lock`, "foreign lock");
+  await assert.rejects(pub.run({ mode: "resume", execute: true }), /locked/);
+  assert.equal(readFileSync(`${pub.options.state}.lock`, "utf8"), "foreign lock"); assert.deepEqual(pub.writes, []);
+}));
+
+test("publication command: a replacement release cannot inherit interrupted state", () => fixture(async (f) => {
+  const pub = publicationFixture(f); pub.services.promoteStable = () => { throw new Error("stop before stable"); };
+  await assert.rejects(pub.run({ execute: true }), /before stable/);
+  const before = [...pub.writes]; pub.state.release.id = 18;
+  await assert.rejects(pub.run({ mode: "resume", execute: true }), /release ID changed/);
+  assert.deepEqual(pub.writes.filter((item) => item !== "refs"), before.filter((item) => item !== "refs"));
+  assert.equal(JSON.parse(readFileSync(pub.options.state)).releaseId, 17);
+}));
+
+test("publication CLI: parsed default mode plans from a foreign cwd without writes", () => fixture(async (f) => {
+  const pub = publicationFixture(f), args = [join(scripts, "release-publication.mjs"), "publish"];
+  for (const [key, value] of Object.entries(pub.options)) {
+    if (key !== "mode") args.push(`--${key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}`, value);
+  }
+  const before = tree(f.temp), result = spawnSync(process.execPath, args, { cwd: f.temp, encoding: "utf8" });
+  assert.equal(result.status, 0, result.stderr); assert.equal(JSON.parse(result.stdout).mode, "dry-run");
+  assert.deepEqual(tree(f.temp), before);
+}));
+
+test("publication command: local tkt publication refuses before repository or API access", async () => {
+  await assert.rejects(publishStaged({ mode: "publish", product: "tkt", execute: true }), /cargo-dist CI/);
+});

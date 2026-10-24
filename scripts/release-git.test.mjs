@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promotePublishedStable } from "./release-publish.mjs";
 import { createHash } from "node:crypto";
-import { git, pushCandidateRefs } from "./release-git.mjs";
+import { git, pushCandidateRefs, requireGithubRemote } from "./release-git.mjs";
 
 function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), "release-refs-"));
@@ -172,4 +172,30 @@ test("stable: a changed release ID fails post-promotion verification without rol
   proof.api.releases = () => { if (++reads === 2) proof.state.id = 2; return original(); };
   await assert.rejects(proof.run(true), /release ID changed/);
   assert.match(git(input.repo, ["ls-remote", input.remotePath, "refs/heads/stable"]), new RegExp(`^${input.candidateSha}`));
+});
+
+test("remote binding: HTTPS and Git SSH resolve to the reviewed GitHub repository", (t) => {
+  const input = fixture(t);
+  for (const url of ["https://github.com/Owner/Repo.git", "git@github.com:owner/repo.git", "ssh://git@github.com/owner/repo", "ssh://git@github.com:22/owner/repo.git"]) {
+    git(input.repo, ["remote", "set-url", "origin", url]);
+    assert.equal(requireGithubRemote({ repo: input.repo, repository: "owner/repo" }).status, "pass");
+  }
+});
+
+test("remote binding: mismatches, credentials, lookalike hosts and local transports refuse", (t) => {
+  const input = fixture(t);
+  for (const url of [input.remotePath, "https://github.com/other/repo.git", "https://github.com.attacker.invalid/owner/repo", "https://github.com@attacker.invalid/owner/repo", "https://user:secret@github.com/owner/repo", "http://github.com/owner/repo", "https://github.com/owner/repo?token=secret", "https://github.com/owner/repo#fragment", "ssh://user@github.com/owner/repo", "ssh://git@github.com:443/owner/repo", "ext::unexpected command"]) {
+    git(input.repo, ["remote", "set-url", "origin", url]);
+    assert.throws(() => requireGithubRemote({ repo: input.repo, repository: "owner/repo" }));
+  }
+});
+
+test("remote binding checks push URL overrides and pushInsteadOf, without making a network call", (t) => {
+  const input = fixture(t);
+  git(input.repo, ["remote", "set-url", "origin", "https://github.com/owner/repo.git"]);
+  git(input.repo, ["config", "remote.origin.pushurl", "https://github.com/other/repo.git"]);
+  assert.throws(() => requireGithubRemote({ repo: input.repo, repository: "owner/repo" }), /differs/);
+  git(input.repo, ["config", "--unset", "remote.origin.pushurl"]);
+  git(input.repo, ["config", "url.https://github.com/other/.pushInsteadOf", "https://github.com/owner/"]);
+  assert.throws(() => requireGithubRemote({ repo: input.repo, repository: "owner/repo" }), /differs/);
 });

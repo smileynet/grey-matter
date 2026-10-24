@@ -25,14 +25,16 @@ a tag, release or asset.
 inspection makes no writes. Execution is tested only against fake services. Its gate
 record must match the candidate commit and have no pending checks; this checks the
 record's shape and identity, not the authenticity of external audit evidence. The
-future staging/publisher integration must validate that evidence before calling it.
+[publication integration](../release-publication.md) now validates pinned staging
+receipts and local report/log hashes before calling it.
 `release-github.mjs` now provides a GitHub.com adapter with read-only defaults,
 authenticated pagination, annotated-tag verification, exact binary uploads and typed
 publication fields. Four injected-command fixtures pass. Actual read-only discovery
 found zero releases in grey-matter and five in tkt. Immutable releases were disabled
-in both repositories. Mutation
-requests remain fixture-tested only. There is no publication CLI; entry points still reject
-`publish` and `resume`.
+in both repositories. Mutation requests remain fixture-tested only. The explicit
+grey-matter publication CLI plans by default and saves observed release IDs for
+resume; preparation wrappers retain their existing modes. tkt CI/crate integration
+remains unfinished.
 
 ## tkt integration and recovery seams
 

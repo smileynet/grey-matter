@@ -37,9 +37,9 @@ Publication is a separate action from preparing or staging a candidate.
    checksum, recovery, platform and fresh-install/upgrade gates on that candidate.
    Obtain the final audit disposition, stage notes/README/changelog and repeat gates
    after edits. Report a staging index with SHAs, hashes, compatibility and blockers.
-6. **Publish or resume only when requested.** Use the contract's assigned publisher;
-   tkt local tooling dispatches/observes CI and never creates a competing GitHub
-   release. Inspect remote state before resuming. Preserve published tags/assets;
+6. **Publish or resume only when requested.** Use the contract's assigned publisher.
+   For grey-matter, follow the [publication command](../../../docs/agents/release-publication.md).
+   tkt's CI/crate integration remains ticket 68; preserve its sole CI publisher. Inspect remote state before resuming. Preserve published tags/assets;
    promote stable only to the verified published commit. Report each channel's state
    and URL, including partial completion and exact recovery commands.
 

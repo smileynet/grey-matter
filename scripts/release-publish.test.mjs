@@ -165,3 +165,8 @@ test("a draft cannot claim immutable published state", async () => {
   const f = fixture(); f.state.releases.push({ ...f.release(), immutable: true });
   await assert.rejects(f.run({ execute: true }), /state is invalid/); assert.deepEqual(f.writes, []);
 });
+
+test("sealed annotated tag object is checked even when its peeled commit still matches", async () => {
+  const f = fixture(); f.candidate.tagObject = "b".repeat(40); f.state.tag.objectSha = "c".repeat(40);
+  await assert.rejects(f.run({ execute: true }), /sealed object/); assert.deepEqual(f.writes, []);
+});

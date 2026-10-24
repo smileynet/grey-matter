@@ -40,7 +40,7 @@ test("GitHub adapter validates annotated tag name, type and peeled commit", () =
   const tagSha = "b".repeat(40), sha = "a".repeat(40);
   const ref = { ref: "refs/tags/v1.0.0", object: { type: "tag", sha: tagSha } };
   const object = { sha: tagSha, tag: "v1.0.0", object: { type: "commit", sha } };
-  assert.deepEqual(fixture([ref, object]).api.tag("owner/repo", "v1.0.0"), { sha, annotated: true });
+  assert.deepEqual(fixture([ref, object]).api.tag("owner/repo", "v1.0.0"), { sha, annotated: true, objectSha: tagSha });
   assert.throws(() => fixture([ref, { ...object, tag: "v2.0.0" }]).api.tag("owner/repo", "v1.0.0"), /identity/);
   assert.throws(() => fixture([{ ...ref, object: { type: "commit", sha } }]).api.tag("owner/repo", "v1.0.0"), /annotated/);
 });

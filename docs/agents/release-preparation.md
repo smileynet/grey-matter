@@ -4,7 +4,7 @@ Ticket 67 implementation: local draft mechanics, not release readiness. The rele
 contract still gates production use on complete preparation/native/platform checks.
 Preparation produces `mode: draft`, `publishable: false` and explicit
 pending product, native, scope and platform validation. Publication is not implemented
-here; proposed real candidate versions remain subject to approval.
+here. Use explicitly approved candidate versions; draft success does not authorize publication.
 
 ## Entry points and shared ownership
 
@@ -13,7 +13,8 @@ The shell wrappers expose `prepare`, `verify`, `verify-product` and `verify-nati
 forward explicit arguments and preserve the Node tools' default inspection mode.
 tkt also exposes `mise run release -- MODE ...`. The old version/patch/minor/major
 shell modes and automatic mise bump aliases are removed. No wrapper runs cargo-release,
-creates a GitHub release or pushes a ref. Publication/resume remains ticket 68.
+creates a GitHub release or pushes a ref. The separate [publication entry point](release-publication.md) handles grey-matter;
+tkt CI/crate integration remains ticket 68.
 
 Canonical modules live in grey-matter. After changing them, check tkt with
 `node scripts/sync-release-tools.mjs --target /path/to/tkt`; use `--write` to update
