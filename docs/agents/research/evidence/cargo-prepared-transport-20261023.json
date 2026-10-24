@@ -1,0 +1,153 @@
+{
+  "status": "pass",
+  "sourceCommit": "4162afa3d9389717bf63bb0c0e8548532a43cf2b",
+  "tktVendorCommit": "ba8f23b18c2d807365cf3dfba41d588feacb5350",
+  "runUrl": "https://github.com/smileynet/grey-matter/actions/runs/40065935400",
+  "attempt": 1,
+  "jobId": 120789087483,
+  "artifact": {
+    "id": 12548804573,
+    "apiDigest": "sha256:70b14b9a6f666a8d93c4ae1b8a2455fa7dd06f55fd6618014b93537b5c0b25e3",
+    "independentZipDigestVerified": false
+  },
+  "resultSha256": "d530aa9ded5bf5b7a38e00f2c3424bd2d168b1346151d48ac72b078bd448db8b",
+  "sourceSha256": {
+    "scripts/release-cargo-upload.mjs": "dcded68ef82b73dc33edd77f6181fdb7cc4bd52011bc3e46238b32fe4d6ea794",
+    "scripts/release-cargo-transport.py": "819595bf3edbccf03a98e5a62c204d2f8f9b366e5438ee7268d812557927d755",
+    "scripts/release-cargo-upload.integration.mjs": "3069138e9aabc6fd50fdec53f443e74c245afe04ac3830cc26cd875207607d49",
+    "scripts/release-cargo-upload.test.mjs": "474806d2124da2c1a52a0d574d323d22aadd29977451168e469457c79ee0846a",
+    "scripts/release-cargo-transport.test.py": "bcbadf66ec1031df4c42aef73dc80fcdc957375e2454c8834c4209c024085b35"
+  },
+  "result": {
+    "status": "pass",
+    "metrics": {
+      "cases": 6,
+      "puts": 3
+    },
+    "errors": [],
+    "rows": [
+      {
+        "name": "fixture-capture",
+        "candidateSha": "8fb36756b42164d4a89a37fb4be42eae7c8a7820",
+        "version": "0.0.1",
+        "evidence": {
+          "status": "pass",
+          "phase": "prepared",
+          "candidateSha": "8fb36756b42164d4a89a37fb4be42eae7c8a7820",
+          "sha256": "3ff40840563b15fc5d05c367a324a92434862466f6c2de0f1bf45b74969c7dbf",
+          "size": 911,
+          "inventorySha256": "8142e72aff3b4e962dfec38455c1e4f970a2b75cc4f92164b6fcd9aacbab2586",
+          "files": 14
+        },
+        "captured": {
+          "sha256": "3ff40840563b15fc5d05c367a324a92434862466f6c2de0f1bf45b74969c7dbf",
+          "size": 911,
+          "name": "tkt",
+          "version": "0.0.1",
+          "readmeSha256": "127dae3d76a2ea594707000f56d54f9daf24f1c7918554056c41e20f47abdff4",
+          "dummyAuthorizationMatched": true
+        },
+        "tokenCalls": 1,
+        "puts": 1,
+        "expectedMockRefusal": true,
+        "syntheticGithub": false,
+        "events": [
+          "credential"
+        ]
+      },
+      {
+        "name": "fixture-cancel",
+        "result": "closed-before-intent",
+        "tokenCalls": 0,
+        "puts": 0
+      },
+      {
+        "name": "fixture-wrong-seal",
+        "result": "preflight-refused",
+        "tokenCalls": 0,
+        "puts": 0
+      },
+      {
+        "name": "fixture-real-token",
+        "result": "real-token-refused",
+        "tokenCalls": 1,
+        "puts": 0
+      },
+      {
+        "name": "fixture-coordinated",
+        "candidateSha": "66458e38a74508315e0dfdf28bec77315f46f9f7",
+        "version": "0.0.1",
+        "evidence": {
+          "status": "pass",
+          "phase": "prepared",
+          "candidateSha": "66458e38a74508315e0dfdf28bec77315f46f9f7",
+          "sha256": "007623bb64135f4b1d8c167b6cea48ca660bcfe295c05c6de33f3a289f51b5fe",
+          "size": 907,
+          "inventorySha256": "181d8707980c5e1c7471f51d1ecb6227200b1e05c80136697be25433e902ae89",
+          "files": 14
+        },
+        "captured": {
+          "sha256": "007623bb64135f4b1d8c167b6cea48ca660bcfe295c05c6de33f3a289f51b5fe",
+          "size": 907,
+          "name": "tkt",
+          "version": "0.0.1",
+          "readmeSha256": "127dae3d76a2ea594707000f56d54f9daf24f1c7918554056c41e20f47abdff4",
+          "dummyAuthorizationMatched": true
+        },
+        "tokenCalls": 1,
+        "puts": 1,
+        "expectedMockRefusal": false,
+        "syntheticGithub": true,
+        "events": [
+          "prepare",
+          "draft",
+          "upload:tkt-0.0.1.crate",
+          "upload:plugin.tar.gz",
+          "upload:tkt-registry-intent.json",
+          "credential",
+          "github-publish",
+          "stable-observed",
+          "stable-observed"
+        ]
+      },
+      {
+        "name": "actual-tkt-coordinated",
+        "candidateSha": "640acb4ad078b13f1719a8323d93b176897b48ce",
+        "version": "0.4.0",
+        "evidence": {
+          "status": "pass",
+          "phase": "prepared",
+          "candidateSha": "640acb4ad078b13f1719a8323d93b176897b48ce",
+          "sha256": "a5169e904f8c7b35d30805898103d3ab9d0616406851141855ece350c590c098",
+          "size": 119647,
+          "inventorySha256": "130ed76932748c87fb2aa47be78764ad48b7d3bafe2f57600c2929841dba48f6",
+          "files": 357
+        },
+        "captured": {
+          "sha256": "a5169e904f8c7b35d30805898103d3ab9d0616406851141855ece350c590c098",
+          "size": 119647,
+          "name": "tkt",
+          "version": "0.4.0",
+          "readmeSha256": "00662fc09dd8487d7ff642592e84b83a11dc08d4387b1a5a267a8a0afb3ceb0b",
+          "dummyAuthorizationMatched": true
+        },
+        "tokenCalls": 1,
+        "puts": 1,
+        "expectedMockRefusal": false,
+        "syntheticGithub": true,
+        "events": [
+          "prepare",
+          "draft",
+          "upload:tkt-0.4.0.crate",
+          "upload:plugin.tar.gz",
+          "upload:tkt-registry-intent.json",
+          "credential",
+          "github-publish",
+          "stable-observed",
+          "stable-observed"
+        ]
+      }
+    ],
+    "realRegistryPublication": false
+  }
+}

@@ -105,3 +105,13 @@ Track each remediation's evidence impact and repeat the affected gates, preservi
 the SHA attached to reusable source evidence. Changed candidate identities require
 new bound artifacts and receipts. Complete technical corrections before final
 prose review and staging in 71.
+
+## Cleanup role-review follow-up (2026-10-23)
+
+Fresh read-only review covered grey-matter GLOSSARY/AGENTS and tkt AGENTS; all
+12 AGENTS Markdown link occurrences resolved. During final documentation audit:
+make the glossary's ambiguous ADR 0002 pointer explicit; route procedural glossary
+clauses to their existing skill owners; clarify that tkt Rust-check exemptions
+retain applicable Node/generation checks; reconcile the stale Claude "only after
+release" update assertion with main-backed marketplace behavior. These are bounded
+documentation findings, not evidence that final release gates have passed.

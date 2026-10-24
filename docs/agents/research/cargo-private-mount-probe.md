@@ -103,3 +103,10 @@ wrong identities/checksums and the deliberately demonstrated CLI-token bypass.
   bind. Networking is shared; no OS egress filter is claimed.
 - No production adapter, real registry publication, GitHub release, tag push or
   stable promotion ran. Ticket 68 remains in progress.
+
+## Follow-up
+
+The [prepared adapter integration](cargo-prepared-transport-probe.md) now tests
+actual tkt dependencies and coordinated intent/credential/replay behavior. The
+limits above describe this earlier fixture run; the follow-up does not authorize
+publication or replace final-candidate verification.

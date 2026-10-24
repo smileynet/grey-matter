@@ -231,3 +231,19 @@ review. Implement the prepared adapter next, then test actual tkt dependencies,
 delayed token availability and the registry-intent lifecycle through that adapter.
 Review the integrated path before regenerating final release candidates, following
 the plan's review order. This is not production readiness or final-candidate proof.
+
+## Prepared adapter checkpoint (2026-10-23)
+
+The [prepared transport report](../docs/agents/research/cargo-prepared-transport-probe.md)
+and its committed JSON supersede the earlier unimplemented-adapter checkpoint.
+Grey `4162afa` and tkt `ba8f23b` contain the adapter and its corrections; the owned
+release-tool inventory is now 21 files. Hosted run 40065935400 passes all six cases,
+including actual tkt 0.4.0 source, delayed credential/intent ordering, cancellation,
+wrong-seal refusal and replay without duplicate upload. All external publication
+services remain mocked; this is not final-candidate or production-publication proof.
+
+Next: finish the review-bound sole CI publisher and local dispatch/observer; verify
+runner-loss and integrated failure/recovery behavior, then request one independent
+review of the complete path before regenerating 67's candidates. Keep 69 → 70 → 71
+as the subsequent verification/audit/staging order. Do not reopen completed source
+research without a concrete new uncertainty. No publication is authorized.
