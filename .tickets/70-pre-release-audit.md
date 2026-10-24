@@ -1,7 +1,7 @@
 ---
 id: "70"
 title: "Audit both projects before release staging"
-status: open
+status: in_progress
 blocked_by: ["64", "60", "65", "66", "67", "68", "69", "72", "73", "74", "75"]
 priority: high
 spec: "release-readiness"
