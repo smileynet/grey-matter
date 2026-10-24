@@ -1,7 +1,7 @@
 ---
 id: "75"
 title: "Refresh Claude local plugins when source changes without a version bump"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -53,11 +53,11 @@ its own completion evidence without claiming Claude has refreshed.
 
 ## Acceptance criteria
 
-- [ ] One portfolio deploy makes a same-version source addition visible in Claude's installed plugin.
-- [ ] Foreign marketplace bindings and failed refreshes preserve the working deployment.
-- [ ] Fixtures prove one source verification or refresh per pack, no extra bare copies, and harmless replay.
-- [ ] Guidance, sync, and the vendored tkt engine agree with the supported refresh path.
-- [ ] Strict live portfolio audit passes for both packs.
+- [x] One portfolio deploy makes a same-version source addition visible in Claude's installed plugin.
+- [x] Foreign marketplace bindings and failed refreshes preserve the working deployment.
+- [x] Fixtures prove one source verification or refresh per pack, no extra bare copies, and harmless replay.
+- [x] Guidance, sync, and the vendored tkt engine agree with the supported refresh path.
+- [x] Strict live portfolio audit passes for both packs.
 
 ## Verified implementation direction
 
@@ -85,3 +85,12 @@ binds the canonical engine hash and vendor equality. Local checks pass all 12
 grey invariants (including 32 deploy fixtures), 14 tkt Node checks and six tkt
 Rust deployment tests. Source-selection evidence is not a new-chat model capture;
 hosted Windows/Linux checks and final candidate probes remain separate gates.
+
+## Resolution (2026-10-24)
+
+done: verify active Claude local folders before pruning and audit those folders rather than historical caches; keep one portfolio deploy, preserve failure states, and align both engines and guidance. Tkt hosted CI 40056440063 passes; grey Windows/Ubuntu run 40056491062 at 70ac34e is queued for the broader final-audit platform gate, not claimed complete here.
+
+### Verification
+1. ✓ A same-version source change reaches the installed Claude plugin through one portfolio deploy. — "One portfolio deploy verified Claude 2.1.310 readFromFolder/folderVersion for grey-matter 0.1.0 and tkt 0.4.0; live strict audit sees 45 and four skills, including spike-options, with zero findings. No Claude reinstall or release-version edit ran."
+2. ✓ Refresh verifies the local marketplace binding and preserves the prior deployment on failure. — "32 isolated deploy fixtures pass, including pre-prune source validation, foreign/legacy/ambiguous/failing CLI preservation, disabled-plugin bare coverage and replay. Tkt six Rust deployment tests pass; both engine copies are byte-identical at version 1.5.0."
+3. ✓ Strict portfolio audit reports no source mismatch after adding a skill; normal deploy verifies or refreshes each enabled plugin once. — "Strict portfolio audit passes across 19 plugins/four entries after one deploy. Two-pack fixture proves one read-only Claude verification per pack and rejects update/install calls. Updated sync/AGENTS/distribution guidance passed independent prose review; all 12 grey invariants and 14 tkt Node checks pass. Source 70ac34e and tkt 9bc4d51; durable proof docs/agents/research/evidence/claude-active-source-20261023.json."
