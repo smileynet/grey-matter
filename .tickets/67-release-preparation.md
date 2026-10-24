@@ -173,3 +173,26 @@ External release blockers discovered during real Cargo packaging: [tkt 212](http
 Remediation verified (2026-10-23): tkt 212 and 213 are fixed and closed. Source commits `a924678` (scratch exclusion) and `b849d43` (packaged/checkout build identity) pass the full tkt gate. A fresh crate rebuilt beneath grey-matter reports its own `b849d43` hash, excludes scratch and retains matching clean archive VCS metadata. Durable evidence: `docs/agents/research/evidence/crate-remediation-20261023.json`. These source-smoke results do not validate the old approved-version drafts: regenerate 0.2.0/0.5.0 after the remaining source changes, then run the final candidate gates.
 
 Crate closure follow-up: tkt 214 is fixed at `62250e4`: root-anchored Cargo inputs exclude plugin/maintainer files, including nested README/license/build-script names. A clean package rebuild retains matching VCS/binary identity. Evidence: `docs/agents/research/evidence/crate-runtime-closure-20261023.json`. This is source-version smoke evidence; refresh approved candidates before final staging.
+
+## Documentation freeze checkpoint (2026-10-24)
+
+Ticket 68 is closed after integrated Standards/Spec review and four verified fixes.
+Before regenerating candidates, two read-only documentation audits and two fresh
+prose passes covered public README/changelog/glossary and operational release
+guidance. Current instructions now describe the implemented sole publishers and
+retain 67/69–71's final gates. README/changelog coverage includes Codex/Claude/agy
+delivery, maintainer requirements, default-ref versus stable delivery, recovery and
+crate/resource closure. No published-release claim or version edit was introduced.
+
+The glossary now names the adoption ADR explicitly and leaves procedures in their
+owning skills. tkt's Node gate equivalent and tooling exemption agree with mise;
+Claude update wording distinguishes cached versions from new default-ref installs.
+The proposal labels initial findings as historical. Internal parent-field groundwork
+was explicitly excluded from public release notes after query/output source showed
+no new CLI behavior.
+
+Evidence: documentation consistency and invocation checks pass (46 skills);
+tkt's 30 release-tool/workflow fixtures pass; both diff checks pass; the canonical
+plan matches ticket 68's done status. Fresh candidate preparation, product/native
+and platform checks remain required. Preserve the reviewed documentation in the
+candidate commits rather than editing it after install/upgrade verification.

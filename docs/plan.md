@@ -3,23 +3,27 @@
 The coordinated [release plan](agents/proposals/09-release-readiness.md) and
 [release contract](agents/release-contract.md) define scope and acceptance.
 User-approved staging versions: grey-matter 0.2.0 and tkt 0.5.0. Publication is
-not authorized. Complete integration and its critical review before rebuilding
-candidates, then install/upgrade verification, final audit and artifact staging.
+not authorized. Finish the documentation freeze before rebuilding candidates, then
+run install/upgrade verification, final audit and artifact staging.
 
 ## Active release thread
 
 | ID | Work | Status |
 | --- | --- | --- |
-| 68 | Publish and resume coordinated GitHub and plugin releases safely | in_progress |
+| 68 | Publish and resume coordinated GitHub and plugin releases safely | ✅ done |
 | 67 | Prepare version-consistent release candidates and plugin bundles | in_progress |
 | 69 | Verify plugin fresh installs and upgrades in isolated harness homes | open |
 | 70 | Audit both projects before release staging | open |
 | 71 | Stage reviewed changelogs README files and release artifacts | open |
 
-Ticket 68 includes durable recording of prepared Cargo evidence, one local portfolio
-refresh, the sole CI publisher/dispatch integration, lifecycle/recovery checks and
-one integrated independent review. Existing initial candidates are stale. Keep
-results attached to their tested SHA; final candidate changes require new artifacts.
+Ticket 68 is complete, including prepared Cargo evidence, the sole CI publisher and
+dispatcher, lifecycle/recovery checks, deployment audit and independent integrated
+Standards/Spec review. The remaining sequence is 67 → 69 → 70 → 71.
+
+Before rebuilding 67's candidates, finish the source documentation freeze: correct
+known stale guidance and reconcile README/changelog coverage in one pass. Keep
+final 70's audit and 71's staging on those exact candidate revisions. Existing
+initial candidates are stale; candidate changes require new artifacts and evidence.
 
 ## Parked work
 

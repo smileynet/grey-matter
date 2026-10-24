@@ -13,8 +13,9 @@ The shell wrappers expose `prepare`, `verify`, `verify-product` and `verify-nati
 forward explicit arguments and preserve the Node tools' default inspection mode.
 tkt also exposes `mise run release -- MODE ...`. The old version/patch/minor/major
 shell modes and automatic mise bump aliases are removed. No wrapper runs cargo-release,
-creates a GitHub release or pushes a ref. The separate [publication entry point](release-publication.md) handles grey-matter;
-tkt CI/crate integration remains ticket 68.
+creates a GitHub release or pushes a ref. The separate
+[publication entry point](release-publication.md) handles grey-matter; tkt uses its
+[reviewed CI publisher](https://github.com/smileynet/tkt/blob/main/docs/releasing.md).
 
 Canonical modules live in grey-matter. After changing them, check tkt with
 `node scripts/sync-release-tools.mjs --target /path/to/tkt`; use `--write` to update
@@ -186,5 +187,7 @@ comment/lock/notes handling, eight interrupted phases, real CLI termination, app
 worktrees, symlink/junction alias protection, paths with spaces, Git environment scoping,
 foreign edits and corrupted artifacts. These are macOS results until actual Windows/Linux
 runs exist. Product and native commands now exist. Fresh approved-candidate results, reviewed
-scope/compatibility, full orchestration and platform validation remain pending. Ticket 67 stays open; 68–71 still own publication recovery,
-upgrade probes, final audit and staged release artifacts.
+scope/compatibility and platform validation remain pending. Ticket 67 stays open;
+69–71 retain upgrade probes, final audit and staged release artifacts. Ticket 68's
+publication/recovery implementation and independent review are complete; their
+source evidence does not validate the final approved candidates.

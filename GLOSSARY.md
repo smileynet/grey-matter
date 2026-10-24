@@ -29,8 +29,9 @@ as the field name (fine in prose; the field is `blocked_by`); prose: "blocker".
 
 ### parent / child
 Containment: a **child** ticket belongs to an epic **parent**. Distinct from
-`blocked_by` (ordering). Native in tkt once tkt tickets 192-199 land; until then
-emulated (see `docs/agents/tkt-conventions.md`, "Epics"). Context: both.
+`blocked_by` (ordering). tkt's data model has an optional parent field; user-facing
+epic operations still use the interim [epic conventions](docs/agents/tkt-conventions.md).
+Context: both.
 _Avoid_: "sub-issue" (skills term; map to child).
 
 ### epic
@@ -140,18 +141,18 @@ overwrite; classify each existing artifact and integrate around it. **clobber** 
 it avoids: overwriting or shadowing what's already there. Context: skills.
 
 ### install-semantics / subsume-semantics
-The two polarities of adopt-project's reconcile/seed/wire steps. **install**: no incumbent
-agent layer — scaffold grey-matter conventions (carefully). **subsume**: an incumbent agent
-layer exists and is **being replaced** — migrate its content worth keeping (governance rules,
-backlog, decisions) into grey-matter's structures, then replace it; lossless and gated by
-default (automatic only if the user asks). Context: skills. (See ADR 0002.) _Avoid_:
+The two adoption polarities: **install** applies without an incumbent agent layer;
+**subsume** applies when an incumbent layer is being replaced. The
+[adoption polarity decision](docs/adr/0002-adopt-project-soft-lens-polarity-gate.md)
+and [adopt-project](skills/meta/adopt-project/SKILL.md) own migration and approval rules.
+Context: skills. _Avoid_:
 "negotiate-semantics" (the earlier name; adopt-project subsumes the incumbent, it does not
 defer to it).
 
 ### incumbent agent layer
-Pre-existing agent scaffolding in a target repo — an AGENTS.md doctrine, a tracker of any
-kind, or existing skills — whose presence flips adopt-project into subsume-semantics (migrate
-its value, then replace it). Context: skills. _Avoid_: treating a non-grey-matter tracker as
+Pre-existing agent scaffolding in a target repo: instructions, a tracker or skills
+that distinguish subsume-semantics from install-semantics. Context: skills.
+_Avoid_: treating a non-grey-matter tracker as
 "absent" just because it isn't tkt.
 
 ### conformance-audit
@@ -173,23 +174,19 @@ skills (engineering). _Avoid_: "spike" for a one-off prototype with no compariso
 just a `prototype`), and the agile "spike = any timeboxed investigation" sense.
 
 ### meaningful option
-An approach genuinely in contention to win a decision — distinct enough that it could
-change the answer, not a trivial variant. A spike run spikes **every** meaningful option;
-there is **no fixed count**. Context: skills. _Avoid_: capping the count, or spiking
-near-duplicates (the waste `prototype`'s "diverge in structure, not colour" rule guards).
+An approach in contention to win a decision, distinct enough to change the answer
+rather than a cosmetic variant. Context: skills. The
+[spike-options skill](skills/engineering/spike-options/SKILL.md) owns comparison scope.
 
 ### deciding question
 The single question a spike run exists to answer — the uncertainty that reasoning alone
-can't settle and only building reveals. Every spike in the run answers the *same* deciding
-question, and each is "done enough" the instant it answers it (not when it works).
+can't settle and only building reveals, shared by every option in the run.
 Context: skills.
 
 ### verdict
-The outcome of reviewing a spike run with the user (via `grilling`): which option won,
-which lost, and **why**. Recorded as a context pointer on the originating ticket, alongside
-the spike branch names, plus integration ticket(s) for the winner (the "integration plan").
-An ADR is offered only when the decision clears domain-modeling's three-part gate. Context:
-skills.
+The agreed outcome of a spike comparison: which option won, which lost and why.
+[Spike-options](skills/engineering/spike-options/SKILL.md) owns the recording and
+integration procedure. Context: skills.
 
 ## delivery-dashboard terms
 
@@ -198,27 +195,22 @@ The vocabulary for the completion-communication artifact
 text) — the dashboard is the living, relevant-now, visual surface.
 
 ### delivery dashboard
-A single durable, evolving HTML artifact per project that communicates delivered work to the
-user in the **JTBD register**. Organized into **tabs by concern/workstream**; each tab carries
-a current-state view plus a **short rolling history** of what's currently relevant. Tabs are
-**curated and retired** as features integrate — it reflects the present and recent, not a full
-archive. Value-language follows `changelog`; HTML rules follow `report-format.md`. Context:
-skills (productivity). _Avoid_: "report" (a per-run report is a different artifact), treating
-it as append-only (the history rolls).
+A single evolving HTML view of delivered work in the **JTBD register**, distinct
+from an archival changelog or per-run report. The
+[delivery-dashboard skill](skills/productivity/delivery-dashboard/SKILL.md) owns its
+tabs, rolling history and update rules. Context: skills (productivity).
 
 ### JTBD register
-The writing register for the delivery dashboard: every explanation reads as if for the person
-whose **job-to-be-done** the work serves — the value, what's new about the experience, how it
-affects their JTBD — with no jargon, no sausage-making, low cognitive load. The value-language
-discipline is `changelog`'s, surfaced visually. Context: skills.
+The dashboard's writing perspective: the person's **job-to-be-done**, the delivered
+value and what changes in their experience. Context: skills.
 
 ### fidelity ladder
-The three-rung rule for how real a dashboard visual is, matched to the feature's build state and
-**always labelled with its rung**: **wireframe** (nothing built — a greybox/sketch of the
-intended experience), **mocked** (partially built — real layout, representative/stubbed data),
-**live** (shipped — real data / the actual thing). Climbing the ladder is the visible progress
-signal in a tab's current-state view. The rung label is load-bearing: an unlabelled wireframe
-reads as a promise. Context: skills.
+The visual's build/data state: **wireframe** (nothing built), **mocked** (partially
+built, representative data) or **live** (shipped, actual data). Labeling and evidence
+rules belong to [delivery-dashboard](skills/productivity/delivery-dashboard/SKILL.md).
+Context: skills.
+
+## Cross-context mapping
 
 Match strength is honest (exact / close / broad / narrow); a blank counterpart is
 a real gap, not forced equivalence.
@@ -231,7 +223,7 @@ a real gap, not forced equivalence.
 | Fully-specified, agent-can-start | - | ready-for-agent | (no tkt eq.) | **triage:ready-for-agent** (never bare "ready") |
 | Requirements document | - | spec | narrow->slug | **spec** (the document) |
 | Doc pointer / ref | spec field | - | broad->doc | **spec-slug** (CLI flag `--spec`) |
-| Parent/child | parent (192+) | sub-issue / child | close->exact | **parent** / **child** |
+| Parent/child | parent data field; epic CLI pending | sub-issue / child | close | **parent** / **child** |
 | Category | tags | category role (bug/enhancement) | broad | **kind:** tag |
 | Triage disposition | tags | triage role/state | broad | **triage:** tag |
 | Claim / WIP | claim -> in_progress | claim (by assignee) | close | **claim** (-> in_progress; assignee 194+) |

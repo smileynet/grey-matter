@@ -62,8 +62,10 @@ submission as `not-requested`.
 
 Use `resume` with the same arguments, state path and `--execute` after an interruption.
 The owned clone preserves the integration object through failed checks. If remote
-main advances, resume constructs and checks its updated integration before another
-ref push. A modified/foreign clone is preserved and refused. Git must support
+main advances before publication completes, resume constructs and checks its updated
+integration before another ref push. Once the exact complete immutable release is
+observed, recovery skips development and candidate refs and resumes stable only.
+A modified/foreign clone is preserved and refused when development work is needed. Git must support
 `merge-tree --write-tree`; unsupported clients stop before the push.
 It inspects completed steps again instead of bumping, creating a second release or
 replacing bytes. A failed stable promotion retries promotion after observing the
@@ -74,16 +76,22 @@ inspect its receipt and confirm the owning process is no longer active before re
 an abandoned lock. Never remove another running publisher's lock or start the same
 release under a second state path. The lock is local, not a distributed GitHub lease.
 
-Local tkt publication is refused. Its intended sole publisher is CI. Build-only
-staging and the [reviewed artifact reader](release-ci-artifacts.md) exist; the
-review-bound CI publisher, dispatch and crate recovery remain ticket 68 work. This
-command does not bypass that boundary. Neither a successful plan nor synthetic
-passing receipts establish final release readiness or human approval.
+Local tkt publication is refused. Its sole manual CI publisher consumes the later
+review commit and the [reviewed artifact reader](release-ci-artifacts.md).
+[tkt release maintenance](https://github.com/smileynet/tkt/blob/main/docs/releasing.md)
+describes the separate publisher, local dispatch/observer and durable registry
+intent. Neither a successful plan nor synthetic passing receipts establishes final
+release readiness or human approval.
 
 The [Cargo checksum-provider probe](research/cargo-credential-checksum-probe.md)
-now verifies the supported authorization seam against a localhost registry.
-`release-cargo-credentials.mjs` is a tested component, not a production uploader;
-private input/output protection and token-override rejection still need the CI wrapper.
-The [private-mount execution probe](research/cargo-private-mount-probe.md) now
-demonstrates source/output isolation and exact localhost Cargo bytes on Linux.
-Actual tkt inputs, lifecycle integration and the sole publisher remain pending.
+verifies the authorization seam against a localhost registry. Prepared transport
+adds private Linux source/output mounts, sealed-input and token-override checks.
+The [parent-loss probe](research/cargo-parent-loss-probe.md) records cleanup and
+uncertain-upload controls; [the product receipt](research/evidence/publication-product-20261024.json)
+records the real tkt 0.4.0 development gate with the publisher's toolchain. Ticket
+68's independent review accepted these scoped capabilities. They do not prove the
+final 0.5.0 candidate, hostile same-user isolation or production publication.
+
+On failure, the CLI retains C/R and last observed channel states/URLs in its JSON
+report. An attempted stable promotion remains `unconfirmed` until verified. Reports
+omit asset bytes and nested error causes; inspect actual remote state before recovery.

@@ -58,7 +58,8 @@ When a change touches skills, the plugin manifests, or tkt's plugin:
   active folder rather than a historical `installPath` cache. See
   [observations and version limits](research/claude-local-refresh.md).
   For a GitHub install, run `claude plugin marketplace update grey-matter`, then
-  `claude plugin update grey-matter@grey-matter` (this only changes anything after a release).
+  `claude plugin update grey-matter@grey-matter`. Cached updates depend on the
+  manifest version; new default-ref installs can receive unreleased files.
 - **One install path per harness (guarded).** A skill must never load twice in one harness.
   `deploy.mjs` enforces this from its harness table: a root that a harness with an installed
   plugin reads gets no copy, and copies it left there earlier are removed. Foreign dirs are

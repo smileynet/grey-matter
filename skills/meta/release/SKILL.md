@@ -27,8 +27,9 @@ Publication is a separate action from preparing or staging a candidate.
 4. **Dry-run and prepare.** Inspect the product's release entry point and its current
    capabilities. The [release.sh](references/release.sh) wrapper exposes prepare, verify,
    verify-product and verify-native only; legacy publication is disabled. These
-   tools default to inspection and retain pending gates. Until tickets 67–69
-   finish integration, use their evidence as partial results. Prepare only with an
+   tools default to inspection and retain pending gates. Tickets 67/69 retain
+   candidate and install/upgrade verification; 70/71 retain final audit and staging.
+   Prepare only with an
    approved version/scope, in a dedicated clean candidate branch/worktree. Record
    the exact commit and artifacts.
 5. **Verify and stage.** Use the product entry point's `verify` mode with the prepared
@@ -39,7 +40,9 @@ Publication is a separate action from preparing or staging a candidate.
    after edits. Report a staging index with SHAs, hashes, compatibility and blockers.
 6. **Publish or resume only when requested.** Use the contract's assigned publisher.
    For grey-matter, follow the [publication command](../../../docs/agents/release-publication.md).
-   tkt's CI/crate integration remains ticket 68; preserve its sole CI publisher. Inspect remote state before resuming. Preserve published tags/assets;
+   tkt's [release guide](https://github.com/smileynet/tkt/blob/main/docs/releasing.md)
+   describes its sole reviewed CI publisher and local dispatch/observer. Inspect
+   remote state before resuming. Preserve published tags/assets;
    promote stable only to the verified published commit. Report each channel's state
    and URL, including partial completion and exact recovery commands.
 

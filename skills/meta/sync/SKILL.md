@@ -6,10 +6,9 @@ disable-model-invocation: true
 
 # Sync
 
-The **inbound twin of `release`**. `release` tags and pushes the repo *outward*; `sync`
-pulls *inward*, re-synchronizes the four things that move in lockstep, and redeploys the
-skills to the harnesses. A bare `git pull` desyncs them silently — this skill is the single
-command that gets current *safely*.
+The **inbound counterpart of `release`**. Sync pulls the configured source, aligns
+its coupled state and refreshes local skills/plugins. Release handles versioned
+preparation, staging and separately authorized publication.
 
 The four couplings it keeps aligned:
 
@@ -149,8 +148,6 @@ refresh. Preserve existing copies when a refresh fails.
 
 - **Requires `git`, `node`, and `tkt`.** The pull and the installer are cross-platform;
   `tkt` is local.
-- **Inbound twin of `release`.** `release` is the outbound half (tag + publish the repo);
-  `sync` is the inbound half (pull + redeploy locally). Neither runs the other.
 - **Not `orient`.** `orient` is bias-to-action onto the frontier at session start; `sync`
   is a deliberate maintenance pass. If you just pulled, run `sync` *before* `orient` so the
   board and the deployed skills are current before you pick up work.

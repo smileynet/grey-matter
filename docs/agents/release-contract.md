@@ -7,10 +7,12 @@ staged candidates; publication capability is tested without publishing real rele
 Preparation and product/native verification exist. The grey-matter
 [publication command](release-publication.md) binds reviewed staging evidence,
 atomic refs, immutable GitHub reconciliation and stable recovery; default planning
-is read-only. Development integration now constructs and fully checks the merge before the
-three-ref transaction. tkt CI publication and crate-ledger integration remain
-ticket 68 work. The [recovery research](research/publisher-recovery-contract.md)
-records primary sources and tested boundaries. No real publication has run.
+is read-only. Development integration constructs and fully checks the merge before
+the three-ref transaction. Ticket 68 completed both publishers, prepared Cargo
+transport, recovery and independent integrated review. The
+[recovery research](research/publisher-recovery-contract.md) records primary sources
+and tested boundaries. Final 67/69–71 candidate, install, audit and staging gates
+remain open. No real publication has run.
 
 ## Release identity and version authority
 
@@ -42,13 +44,14 @@ Final included scope and candidate audits still require completion.
 No preparation or recovery command silently chooses or increments a version.
 
 The [local draft mechanics](release-preparation.md) and [artifact layer](release-artifacts.md)
-now exist, with explicit pending validation. They are not a completed preparation or
-publication implementation.
+exist alongside publication capability. Their source and fixture evidence does not
+complete approved-candidate preparation or final release validation.
 
 ## Modes and mutation boundaries
 
-The release skill orchestrates these modes. Tickets 67–69 provide the executable
-interfaces and seeded fixtures; the table is not a claim that they already exist.
+The release skill orchestrates these modes through the implemented entry points and
+seeded fixtures. The table defines completion requirements; it does not certify
+that an approved candidate has passed them.
 
 | Mode | Required result | Permitted mutation |
 | --- | --- | --- |
@@ -74,15 +77,15 @@ runtime resources and required legal artifacts, and exclude credentials, .git,
 ## One publisher per repository
 
 **grey-matter:** its local release tooling is the sole GitHub publisher.
-**tkt:** the intended sole GitHub publisher is its cargo-dist-based CI workflow.
-Build-only manual staging is implemented through tkt's checked generator wrapper;
-publication integration remains pending. A later manual publication dispatch must
-carry the review commit produced after staging. The local command prepares and
-dispatches the release identity, then observes CI; it never creates a second GitHub
-release. [ADR-0002](decisions/0002-reviewed-ci-staging.md) records the ordering and
-artifact-retention constraints. Maintain the
-dist build jobs through a versioned generator/wrapper that replaces built-in GitHub
-publication with one checked publisher. cargo-dist 0.32 hooks are additive and cannot
+**tkt:** the separate manual `.github/workflows/publish.yml` is the sole GitHub
+publisher and calls `tools/publish-reviewed.mjs`. The checked cargo-dist wrapper
+generates build-only `.github/workflows/release.yml`; maintain those build jobs
+through the generator. Publication dispatch carries the review commit produced
+after staging. Local `tools/dispatch-publication.mjs` plans, dispatches and observes
+CI; it never creates a second GitHub release.
+[ADR-0002](decisions/0002-reviewed-ci-staging.md) records the ordering and artifact
+retention. The wrapper removes built-in GitHub publication from generated output;
+cargo-dist 0.32 hooks are additive and cannot
 replace its built-in publisher; [the pinned-source research](research/dist-publisher-hooks.md)
 records why a workflow wrapper is necessary. Hand edits to generated output are not
 the maintenance interface. Cargo/crates.io, GitHub and stable

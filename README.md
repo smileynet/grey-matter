@@ -38,25 +38,34 @@ harness's global instructions file with `node scripts/install-agents-md.mjs` (`-
 [`docs/agents/harnesses.md`](./docs/agents/harnesses.md).
 
 Wrappers `scripts/install-skills.sh` and `scripts/install-skills.ps1` call the same
-Node script. By default it installs into every known harness user root present on the
-machine (`~/.kiro/skills`, `~/.codex/skills`, `~/.claude/skills`, `~/.agents/skills`),
-since each harness scans its own root. `--project` installs into `<cwd>/.agents/skills`,
-the shared project-level root read by agy, Crush, OpenCode, and Claude Code. It copies by
-default (`--link` opts into symlink/junction), accepts explicit `--root <dir>` overrides,
-tracks what it installed in a manifest, and never touches skills it didn't install. A
-Claude Code plugin package is a later addition (see
-`docs/agents/proposals/03-distribution-packaging.md`).
+deployer. It selects roots to avoid duplicates, copies by default (`--link` opts into
+symlink/junction), and accepts explicit `--root <dir>` overrides. Its ownership
+manifest protects skills installed by other sources. Use `--project` for a shared
+project-level install; enabled plugins still count as the copy for their harness.
+
+### Claude Code plugin
+
+```sh
+claude plugin marketplace add smileynet/tkt
+claude plugin marketplace add smileynet/grey-matter
+claude plugin install grey-matter@grey-matter
+```
+
+The dependency installs tkt's workflow skills. Install the
+[`tkt` CLI](https://github.com/smileynet/tkt#install) separately. The Claude push hook
+requires Claude 2.1.310+ and Node 22+; Codex and agy receive no Claude hooks.
 
 ### Codex plugin
 
-Install the workflow skills from the Codex marketplace:
+Register the marketplace and install the workflow skills:
 
 ```sh
 codex plugin marketplace add smileynet/grey-matter
 codex plugin add grey-matter@grey-matter
 ```
 
-Install `tkt@tkt` separately from `smileynet/tkt` for ticket tracking.
+Install `tkt@tkt` separately from `smileynet/tkt` for ticket workflow skills, and
+install the tkt CLI separately.
 User-level standing rules still use `scripts/install-agents-md.mjs`.
 
 For local development, replace `smileynet/grey-matter` with the checkout's absolute path.
@@ -64,6 +73,13 @@ After edits, run `node scripts/deploy.mjs` once to refresh the cached plugin and
 then start a new chat. The skill installer skips Codex scan roots when this plugin
 is enabled, removing only copies it previously installed. `--allow-dual` overrides
 that guard.
+
+The GitHub marketplace examples follow the development default branch. Stable
+delivery uses the release-only `stable` ref after verified publication; a version
+field does not pin a default-branch install. See the
+[channel contract](docs/agents/release-contract.md#development-stable-and-pinned-delivery)
+and [update procedures](docs/agents/distribution-maintenance.md). Restart chats
+after a plugin refresh. Staging a candidate does not make it a published release.
 
 ### Harness support
 
@@ -87,8 +103,10 @@ Native validation, source-documentation audits, and update procedures are descri
 
 ## Status
 
-The active engineering + productivity skill sets are reviewed and authored; beta/frozen
-upstream skills and distribution hardening are tracked in `.tickets/` (run `tkt ready`).
+The set contains 46 skills, with Claude, Codex and Antigravity plugin packaging plus
+deployment for the other supported harnesses. Release preparation, verification and
+recovery are implemented; each release still needs its own candidate, install/upgrade
+and final audit evidence. Remaining work is tracked in `.tickets/` (`tkt ready`).
 
 ## License
 

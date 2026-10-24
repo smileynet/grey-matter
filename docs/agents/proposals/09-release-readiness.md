@@ -124,7 +124,12 @@ Antigravity: run `agy plugin --help` and `agy plugin validate --help`; locate th
 vendor-published plugin specification or shipped schema, capture its verified source
 URL/path and version, and document any unavailable authoritative guidance as a gap.
 
-## Outstanding findings and scope boundaries
+## Initial findings and scope boundaries (2026-10-23)
+
+These findings record the proposal's starting state. Tickets 59, 60, 63–66 and
+72–75, and tkt 210, are now closed with scoped evidence. Current work and ordering
+are in [the plan](../../plan.md); 67/69–71 retain final candidate, install, audit and
+staging gates. The inventory counts below are historical machine observations.
 
 - Ticket 64 owns remaining portfolio inventory, cross-pack name collision detection,
   vendored-deployer drift checks, and the full installed Codex-plugin inventory. Current
@@ -204,7 +209,7 @@ The [Codex](../research/codex-plugin-conformance.md), [Claude](../research/claud
 The [consolidated report](../research/plugin-conformance.md) records all six native
 syntax/loading passes and their exact tested revisions. Tickets 72 and 73 resolved
 resource/namespace and invocation-policy findings. Independent YAML parsing repaired
-a source defect and is now a repository invariant. Newly discovered
-[ticket 74](../../../.tickets/74-plugin-license-notices.md) preserves required license
-and attribution artifacts; it blocks candidate preparation 67 and final audit 70.
-Syntax/loading passes do not clear these remaining release gates.
+a source defect and is now a repository invariant.
+[Ticket 74](../../../.tickets/74-plugin-license-notices.md) resolved required license
+and attribution artifacts. Syntax/loading passes on those source revisions do not
+clear final-candidate, install/upgrade or audit gates.

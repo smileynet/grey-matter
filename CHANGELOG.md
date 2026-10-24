@@ -7,13 +7,15 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 ## [Unreleased]
 
 ### Added
+- Codex marketplace packaging supplies namespaced skills, with local cache refresh through the same deployer used by the other harnesses.
+- `orient` and `wrap-session` connect session pickup and handoff to the current plan and tickets; `conformance-audit` checks adopted repositories against current guidance.
 - Claude Code checks the launch project's repository invariants before recognized agent `git push` commands; the Git pre-push gate continues to cover other push paths. Requires Claude 2.1.310+ and Node 22+.
 - `delivery-dashboard` keeps one evolving HTML view of delivered value, distinguishing planned, partial and shipped experiences with visible labels.
 - `spike-options` compares competing designs with throwaway builds, then helps you choose an approach and track its integration.
 - Claude Code plugin: add the `smileynet/tkt` and `smileynet/grey-matter` marketplaces, then `/plugin install grey-matter@grey-matter`. It brings in tkt's workflow skills as a dependency. Skills are namespaced (`/grey-matter:code-review`), so they no longer shadow Claude's bundled `/code-review`.
-- Antigravity (`agy`) global deployment via a plugin package: `scripts/build-agy-plugin.mjs` assembles the skills into an `agy` plugin (`plugin.json` + flattened `skills/`), validates it with `agy plugin validate --strict`, and installs it with `agy plugin install`. On the probed agy, skill discovery is plugin-driven (not a bare-directory scan), so this is how the skills reach agy globally.
+- Antigravity (`agy`) plugins deliver the skills and their referenced resources through the canonical deployer.
 - `sync` skill: the inbound twin of `release` — pull the repo current and re-synchronize the coupled pieces (deployed skills, the tkt command surface, ticket IDs, repo invariants), then redeploy the skills to every harness. Orchestrates `verify-tkt-usage`, `check-repo.mjs`, and the installer; reports findings rather than gating the deploy.
-- Release tooling: a `release` command that updates the changelog and README, picks the version, then tags, pushes, and publishes a GitHub release, composing the new `changelog` and `readme` skills.
+- Release tooling prepares approved local candidates, notes, plugin bundles and checksums without publication. Product and native checks bind evidence to the exact candidate; separately authorized publication uses reviewed artifacts and retries incomplete publication without changing the version.
 - `cheat-sheet` skill: a styled, live-generated reference card of every skill by category.
 - `adopt-project` relocates a dot-prefixed knowledge folder such as `.memory/` into grey-matter paths with a bundled script that keeps every link resolving and leaves recorded evidence untouched. It now also sets up Git LFS, untracks sensitive files, completes the `.references/` clone index, and reshapes AGENTS.md around who actually reads it.
 - `adopt-project` portfolio mode: survey every sibling repo, rank them by freshness, and adopt the freshest first or all of them in batches, each with its own approval gate.
@@ -25,12 +27,13 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 ### Changed
 - One deployer, `scripts/deploy.mjs`, replaces the installer and the agy packager. It picks skill roots so every harness on the machine sees each skill exactly once, counting an installed Claude or Codex plugin. It takes back copies it left elsewhere, and adds `check` and `audit` (unowned dirs, skills a harness sees twice). `install-skills.mjs` and `build-agy-plugin.mjs` still work and forward to it.
 - `install-skills.mjs` won't copy skills where Claude Code already loads them from the grey-matter plugin, and it removes copies it put there before, so a skill is never listed twice. `--allow-dual` overrides.
-- `release` also sets the version in `.claude-plugin/plugin.json` when a repo has one, so installed plugins pick up the new release.
+- Release preparation derives every plugin version from the repository's product version. Publication verifies immutable GitHub assets before stable promotion and reports each channel's status and URL, including incomplete outcomes.
+- Code reviews compare repository standards and originating requirements, then require findings to be verified before fixes.
 - `adopt-project` treats skills a repo ships to its users as product: it audits them but no longer restructures them. `conformance-audit` reports grey-matter's own layout rules as not applicable on such repos.
 
 ### Fixed
 - Local Claude plugin audits use the active checkout rather than stale cache folders. Failed or foreign source checks preserve existing skill copies during deployment.
-- `release` works on macOS: its changelog edits no longer rely on GNU-only `sed` syntax.
+- Plugin bundles retain referenced scripts/resources and required license notices when extracted away from the source checkout.
 
 ## [0.1.0] - 2026-10-19
 
