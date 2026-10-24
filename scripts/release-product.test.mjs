@@ -29,6 +29,23 @@ test("passed product evidence records exact commit, command, log and pending gat
 test("a failed product command is retained as failure, never verified", () => fixture(({ run, out }) => {
   const result = run({ execute: true }); assert.equal(result.status, "fail"); assert.equal(result.checks[0].exit, 7); assert.equal(JSON.parse(readFileSync(join(out, "product-evidence.json"))).status, "fail");
 }, 'console.error("seeded failed gate"); process.exit(7);'));
+test("product checks cannot inherit publishing credentials", () => {
+  const keys = ["RELEASE_CARGO_TOKEN", "CARGO_REGISTRY_TOKEN", "GH_TOKEN", "GITHUB_TOKEN", "NODE_AUTH_TOKEN", "NPM_TOKEN", "CUSTOM_PUBLISH_CREDENTIAL"];
+  const previous = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
+  try {
+    for (const key of keys) process.env[key] = "dummy-publication-credential";
+    fixture(({ run }) => {
+      const result = run({ execute: true });
+      assert.equal(result.status, "pass", "product check inherited a publication credential");
+    }, `const keys = ${JSON.stringify(keys)}; if (keys.some(key => process.env[key])) process.exit(9);`);
+    for (const key of keys) assert.equal(process.env[key], "dummy-publication-credential");
+  } finally {
+    for (const key of keys) {
+      if (previous[key] === undefined) delete process.env[key];
+      else process.env[key] = previous[key];
+    }
+  }
+});
 test("successful exit cannot hide candidate changes", () => fixture(({ run }) => {
   const result = run({ execute: true }); assert.equal(result.status, "fail"); assert.match(result.candidateError, /clean/);
 }, 'import {writeFileSync} from "node:fs"; writeFileSync("foreign.txt", "seeded");'));

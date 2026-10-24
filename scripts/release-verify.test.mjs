@@ -54,13 +54,9 @@ test("failed native gate preserves product proof and blocks verified status", ()
   for (const evidence of [result.productEvidence, result.nativeEvidence]) assert.equal(hash(readFileSync(join(out, evidence.file))), evidence.sha256);
   assert.ok(result.pending.includes("final-audit")); await assert.rejects(run({ execute: true }), /new directory/);
 }));
-test("changed artifacts during the product gate cannot acquire native or overall success", () => fixture(async ({ run, artifacts, out }) => {
-  const previous = process.env.RELEASE_FIXTURE_ASSET;
-  try {
-    const metadata = JSON.parse(readFileSync(join(artifacts, "release-metadata.json"))); process.env.RELEASE_FIXTURE_ASSET = join(artifacts, metadata.assets[0].name);
-    const result = await run({ execute: true }); assert.equal(result.status, "fail"); assert.match(result.errors[0], /stale or corrupted/); assert.equal(result.phases.native, "not-run"); assert.equal(existsSync(join(out, "native")), false);
-  } finally { if (previous === undefined) delete process.env.RELEASE_FIXTURE_ASSET; else process.env.RELEASE_FIXTURE_ASSET = previous; }
-}, 'import {writeFileSync} from "node:fs"; writeFileSync(process.env.RELEASE_FIXTURE_ASSET, "changed");'));
+test("changed artifacts during the product gate cannot acquire native or overall success", () => fixture(async ({ run, out }) => {
+  const result = await run({ execute: true }); assert.equal(result.status, "fail"); assert.match(result.errors[0], /stale or corrupted/); assert.equal(result.phases.native, "not-run"); assert.equal(existsSync(join(out, "native")), false);
+}, 'import {readFileSync, writeFileSync} from "node:fs"; const metadata = JSON.parse(readFileSync("../artifacts/release-metadata.json")); writeFileSync("../artifacts/" + metadata.assets[0].name, "changed");'));
 test("foreign output and checkout/artifact aliases are refused without overwrite", () => fixture(async ({ run, out, temp, repo, artifacts }) => {
   mkdirSync(out); put(join(out, "foreign"), "keep"); await assert.rejects(run({ execute: true }), /new directory/); assert.equal(readFileSync(join(out, "foreign"), "utf8"), "keep");
   for (const [name, root] of [["source", repo], ["assets", artifacts]]) { const alias = join(temp, name); symlinkSync(root, alias, process.platform === "win32" ? "junction" : "dir"); await assert.rejects(run({ execute: true, out: join(alias, "evidence") }), /outside/); assert.equal(existsSync(join(root, "evidence")), false); }

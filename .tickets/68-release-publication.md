@@ -296,3 +296,36 @@ The runtime phase gate is now satisfied within the report's stated scope. Next:
 one independent integrated Standards/Spec review, reproduce and resolve findings,
 then reconcile all six acceptance criteria with fresh evidence before closing68.
 Do not regenerate final candidates until those blockers are resolved.
+
+## Integrated review findings (2026-10-23)
+
+Standards and Spec review run `8f1352a4-ad00-4a18-80de-621b54d8afd5`
+examined grey `d61b772` and tkt `93f83c5`. Four findings remain within this
+ticket's existing publication/recovery scope; none is deferred:
+
+1. **Standards S1, P1 — credential inheritance.** A fresh local fixture failed
+   because a product subprocess inherited dummy publication credentials. Product
+   and npm bootstrap children now share an allowlist of host/toolchain environment
+   variables, excluding both known tokens and arbitrary publisher variables.
+   The parent retains credentials for the delayed upload callback. Product and
+   development fixtures pass (24 tests). This establishes environment isolation,
+   not protection against hostile same-user process inspection or credential files;
+   the broader trusted-runtime boundary still needs the affected-path review.
+2. **Standards S2, P1 — publisher prerequisites.** Source inspection identifies
+   missing mise, cargo-dist 0.32.0 and Rust components required by the actual tkt
+   product gate. Provision them, handle trust for the owned development clone,
+   and prove the real gate in a nonpublishing hosted integration probe.
+3. **Spec P1, P2 — stable-only recovery.** Re-entry currently prepares development
+   and candidate refs before observing already published registry/GitHub state.
+   Confirm with a failing regression, then make verified completed publication
+   resume stable promotion without repeating development integration or ref pushes.
+4. **Spec P2, P2 — partial failure reports.** CLI error output loses channel states
+   and URLs when stable fails after registry/GitHub publication. Preserve safe,
+   structured observations and candidate/review identity on failure; test the CLI
+   result rather than relying only on coordinator success fixtures.
+
+Coverage correction: the Standards reviewer originally named a nonexistent CI test
+file in its test command. That result does not establish fresh CI-entry coverage;
+the report was corrected. The next affected-path review must include the actual
+CI cases in `scripts/release-verify.test.mjs` and the new regressions. Complete
+these fixes before that review, then reconcile all six acceptance criteria.

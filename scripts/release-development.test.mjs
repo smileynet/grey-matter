@@ -87,6 +87,19 @@ test("development preparation: npm bootstrap ignores inherited user configuratio
   finally { if (previous === undefined) delete process.env.NPM_CONFIG_USERCONFIG; else process.env.NPM_CONFIG_USERCONFIG = previous; }
 });
 
+test("development preparation: merged product checks receive no publisher credentials", (t) => {
+  const f = fixture(t), key = "RELEASE_CARGO_TOKEN", previous = process.env[key];
+  writeFileSync(join(f.repo, "scripts/check-repo.mjs"), 'if (process.env.RELEASE_CARGO_TOKEN) process.exit(9); console.log("credential-free gate");\n');
+  const candidateSha = f.commit("Check credential isolation");
+  process.env[key] = "dummy-publication-credential";
+  try {
+    const result = f.run({ execute: true, candidateSha });
+    assert.equal(result.status, "pass");
+    assert.match(readFileSync(join(result.evidence, "1-product.log"), "utf8"), /credential-free gate/);
+    assert.equal(process.env[key], "dummy-publication-credential");
+  } finally { if (previous === undefined) delete process.env[key]; else process.env[key] = previous; }
+});
+
 test("development preparation: interruption before checkout reuses the recorded integration", (t) => {
   const f = fixture(t); git(f.repo, ["checkout", "main"]); writeFileSync(join(f.repo, "later"), "Later\n"); f.commit("Main change"); git(f.repo, ["push", "origin", "main"]); git(f.repo, ["checkout", "candidate"]);
   const first = f.run({ execute: true }), receipt = join(f.out, "development.json"), state = JSON.parse(readFileSync(receipt));
