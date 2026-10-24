@@ -81,5 +81,30 @@ policy, checks development M, pushes scoped atomic refs and calls the existing
 intent/registry/GitHub/stable coordinator with the prepared Cargo adapter. Its
 default mode verifies and plans without credential callbacks or remote writes.
 Current integration tests use synthetic review receipts, mocked services and
-isolated repositories. The production workflow, dispatch/observer, runner-loss
-probe and integrated independent review remain required before ticket 68 closes.
+isolated repositories. The production workflow and dispatch/observer are now implemented in tkt; their
+mock tests pass. Runner-loss proof and integrated independent review remain required
+before ticket 68 closes. No live publication dispatch has run.
+
+## Review carrier for CI
+
+For the tkt publisher, place the reviewed plugin assets in `tkt/artifacts/` and
+verification reports/logs in `tkt/evidence/`, relative to the committed index's
+parent directory. Preserve exact bytes and regular Git blobs on the dedicated
+review branch R. The CI publisher checks out R separately from candidate C and
+reads this carrier; it does not rebuild bundles or regenerate successful reports.
+The separate dist/crate ZIP stays in its reviewed Actions artifact and is verified
+through the existing provenance reader. Artifact expiration requires new staging
+and review. Record the carrier inventory in final staging evidence.
+
+The manual tkt `publish.yml` runs only on explicit dispatch and defaults to a
+read-only plan. Its local dispatcher records the request before POST, binds the
+returned run ID (or correlates an uncertain response by its unique title), and
+never resends the saved request automatically. It reports workflow state without
+claiming that a green run alone proves publication.
+
+[L2:verified] [GitHub workflow dispatch API](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event),
+read 2026-10-23 with API version 2026-03-10, documents branch/tag `ref`, workflow
+inputs and a 200 response containing `workflow_run_id`, `run_url` and `html_url`.
+The implementation still treats a failed/missing response as uncertain and saves
+initial attempt permission before the request. No real publication dispatch has
+been issued to test it; current dispatch tests use fake API responses.

@@ -263,3 +263,21 @@ failed ref observation and dispatch revalidation after development work. This
 checkpoint does not claim production workflow/dispatch wiring or close ticket 68.
 Next implement the reviewed input transfer and sole publication workflow plus its
 local dispatch/observer; prove runner-loss cleanup, then review the integrated path.
+
+## Sole workflow and dispatcher checkpoint (2026-10-23)
+
+Tkt now has a separate manual `publish.yml`, `tools/publish-reviewed.mjs` and
+`tools/dispatch-publication.mjs`. The generated dist workflow remains build-only.
+The sole publisher checks separate exact C/R checkouts, uses pinned Cargo 1.99.1,
+serializes all versions without cancellation, and defaults to planning. The local
+client verifies the candidate branch/workflow, persists intent before dispatch,
+correlates unknown responses and observes/replays without a second POST. The
+review carrier layout and the current GitHub dispatch response contract are in
+the staging guide; final 71 must commit the exact carrier on review branch R.
+
+Nine focused publisher/dispatch fixtures pass with fake services, including a
+response lost after dispatch and a request temporarily absent from run listings.
+No production workflow dispatch, registry upload, tag or stable promotion ran.
+Remaining 68 work: runner-loss cleanup proof, one integrated independent review,
+fixes/retesting and requirement-by-requirement closure evidence. The final candidate
+and installation/audit/staging tickets stay open; do not reuse old drafts.
