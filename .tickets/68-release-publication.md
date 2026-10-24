@@ -158,3 +158,10 @@ must refuse until separately authorized enablement; do not change settings now.
 - [CI staging/attempt evidence](../docs/agents/research/ci-staging-and-registry-intent.md),
   [registry recovery](../docs/agents/research/registry-recovery.md) and
   [Cargo transport follow-up](../docs/agents/research/cargo-sealed-transport.md)
+
+Source-write boundary research: [Cargo read-only boundary](../docs/agents/research/cargo-readonly-boundary.md)
+documents bubblewrap mount semantics and a harmless hosted probe. A read-only
+bind constrains Cargo and descendants but cannot prevent a concurrent host writer
+from mutating the backing checkout. No boundary execution has run. Preserve this
+limitation; either enforce exclusive trusted host ownership or verify stronger
+immutable backing before claiming the production guard is complete.

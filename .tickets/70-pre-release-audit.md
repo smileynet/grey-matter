@@ -66,3 +66,10 @@ Remediation verified (2026-10-23): tkt 212 and 213 are fixed and closed. Source 
 Ticket-health disposition to retain in the final report: `tkt validate --brief` passes with one advisory for closed ticket 07's unchecked ACs. Its resolution explicitly closed it as a duplicate of 14, rather than claiming those ACs independently passed; do not fabricate checks to silence the warning. Ticket 14 is closed with dated evidence and explicit ancillary gaps. Its old claim that Codex does not read the shared root is superseded by 64's newer live catalog evidence; use the current conformance/portfolio reports for release readiness.
 
 Crate closure follow-up: tkt 214 is fixed at `62250e4`: root-anchored Cargo inputs exclude plugin/maintainer files, including nested README/license/build-script names. A clean package rebuild retains matching VCS/binary identity. Evidence: `docs/agents/research/evidence/crate-runtime-closure-20261023.json`. This is source-version smoke evidence; refresh approved candidates before final staging.
+
+Dependency/toolchain finding (2026-10-23): tkt declares Rust 1.80 while its locked
+normal Clap dependencies require Rust 1.85 and edition 2024. This is a release
+blocker until the support contract and a hosted locked-build check agree. No Rust
+1.80 compilation has run yet; do not describe the metadata finding as an observed
+compiler failure. Cargo lockfile v4 itself is supported by Cargo 1.80. See
+[MSRV evidence and primary sources](../docs/agents/research/tkt-msrv-evidence.md).
