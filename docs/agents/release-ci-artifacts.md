@@ -2,12 +2,15 @@
 
 `release-ci-artifacts.mjs` reads tkt's staged files from their exact GitHub artifact
 ID and verifies the reviewed byte seals. It downloads and decodes the ZIP in
-memory, returning asset buffers without extracting or rebuilding them. It performs
+memory, returning asset buffers without extracting or rebuilding them. The original `tkt-stage.json` bytes are
+retained as a release asset alongside the plugin and CI assets. It performs
 only GET requests and does not grant publication approval.
 
 The expected record must come from the later pinned review commit, not a mutable
-working file or newly downloaded seal. Publication integration still needs to bind
-that record through the reviewed staging index. It contains:
+working file or newly downloaded seal. The tkt staging entry requires `ci: {file,
+sha256}` pointing to that committed record. `readStagedTktCandidate` reads it at the
+pinned review SHA, checks product/repository/version/candidate identity, then calls
+`readCiStage`. The record contains:
 
 - `repository`, numeric `repositoryId`, `workflowId` and exact `candidateSha`;
 - product `version`, numeric `runId`, `runAttempt` and `sealJobId`;
@@ -43,3 +46,10 @@ records the successful five-platform run and a live read through this adapter.
 It is not approved-version install/upgrade evidence. [Attempt research](research/ci-staging-and-registry-intent.md)
 explains why names/run IDs alone are insufficient. The private maintainer dependency
 and lockfiles pin the ZIP reader in both repos; see its [API and safety options](https://github.com/thejoshwolfe/yauzl).
+
+The combined inventory rejects names that collide, including case differences.
+Plugin `SHA256SUMS` and cargo-dist `sha256.sum` keep their original bytes and scopes;
+the former covers plugin bundles/metadata, the latter cargo-dist outputs. The
+reviewed CI ZIP/seal binds the full native inventory. No combined checksum file is
+silently regenerated. The publication entry point still needs to connect this
+reader to the sole CI publisher and prepared Cargo transport.

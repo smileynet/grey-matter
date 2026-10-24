@@ -126,11 +126,14 @@ The initial 0.2.0/0.5.0 drafts predate these changes and must be regenerated.
 
 ## Remaining work before closure
 
-1. Integrate the new `release-ci-artifacts.mjs` reader into publication. Its eight
-   fixtures and live read bind run/attempt/jobs, upload-log ID/digest, API metadata,
-   ZIP digest, safe bounded flat-file decoding, exact inventory and reviewed seal.
-   It re-observes remote state after download. Live rerun behavior remains
-   unverified; require a complete fresh attempt.
+1. Connect `readStagedTktCandidate` to the CI publication entry point. The staging
+   reader now binds the CI identity file/digest at pinned review R, checks identity
+   against the plugin candidate, reads verified CI bytes and joins both inventories.
+   It retains original stage JSON bytes and refuses colliding asset names. Fixtures
+   cover unreviewed/changed/missing identities and collisions. Its underlying eight
+   reader fixtures and live read bind run/attempt/jobs, upload-log ID/digest, API
+   metadata, ZIP digest, bounded decoding and exact inventory. Live rerun behavior
+   remains unverified; require a complete fresh attempt.
 2. Implement the later review-bound CI publisher and local dispatch/observer.
    It must download reviewed staged bytes, never rebuild or reseal them. Preserve
    one GitHub publisher, exact annotated tag, development M and stable C.

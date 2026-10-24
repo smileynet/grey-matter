@@ -1,5 +1,6 @@
 import { publishStaged } from "./release-publication.mjs";
-import { readStagedCandidate } from "./release-staging.mjs";
+import { ciFixture } from "./release-ci-fixtures.mjs";
+import { readStagedCandidate, readStagedTktCandidate } from "./release-staging.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
@@ -18,14 +19,14 @@ function tree(dir) {
   const walk = (at) => { for (const item of readdirSync(at, { withFileTypes: true })) { const file = join(at, item.name); if (item.isDirectory()) walk(file); else if (item.isFile()) files[relative(dir, file)] = hash(readFileSync(file)); } };
   walk(dir); return files;
 }
-async function fixture(fn, check = 'console.log("fixture gate passed");') {
+async function fixture(fn, check = 'console.log("fixture gate passed");', product = "grey-matter") {
   const temp = mkdtempSync(join(tmpdir(), "candidate verify ")), repo = join(temp, "repo"), artifacts = join(temp, "artifacts"), out = join(temp, "evidence");
   const git = (...args) => execFileSync("git", ["-C", repo, ...args], { encoding: "utf8", stdio: "pipe" }).trim();
   try {
     mkdirSync(repo); git("init", "-b", "main"); git("config", "user.name", "Fixture"); git("config", "user.email", "fixture@example.invalid"); git("config", "core.autocrlf", "false");
-    const manifest = { name: "grey-matter", version: "0.1.0", description: "Fixture", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE"] } } };
-    put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(manifest)); put(join(repo, ".codex-plugin/plugin.json"), '{"name":"grey-matter","version":"0.1.0","skills":"./skills/"}');
-    put(join(repo, ".claude-plugin/marketplace.json"), '{"name":"grey-matter","plugins":[{"name":"grey-matter","source":"./"}]}');
+    const manifest = { name: product, version: "0.1.0", description: "Fixture", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE"] } } };
+    put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(manifest)); put(join(repo, ".codex-plugin/plugin.json"), JSON.stringify({name: product, version: "0.1.0", skills: "./skills/"}));
+    put(join(repo, ".claude-plugin/marketplace.json"), JSON.stringify({name: product, plugins: [{name: product, source: "./"}]}));
     put(join(repo, "skills/example/SKILL.md"), "---\nname: example\ndescription: Candidate fixture\n---\nFixture.\n"); put(join(repo, "LICENSE"), "Fixture notice\n");
     cpSync(join(scripts, "deploy.mjs"), join(repo, "scripts/deploy.mjs")); put(join(repo, "scripts/check-repo.mjs"), check);
     const commit = () => { git("add", "."); git("-c", `core.hooksPath=${join(temp, "no hooks")}`, "commit", "-m", "Fixture"); return git("rev-parse", "HEAD"); };
@@ -140,13 +141,14 @@ test("bound evidence rejects report path traversal and symlinked product logs", 
 
 function stagingFixture(f) {
   const proof = evidenceFixture(f), verificationSha256 = proof.save();
-  const identity = { product: "grey-matter", version: "0.1.0", candidateSha: f.sha };
-  const entry = { ...identity, repository: "example/grey-matter", metadataSha256: hash(readFileSync(join(f.artifacts, "release-metadata.json"))), verificationSha256, gates: {} };
+  const product = JSON.parse(readFileSync(join(f.artifacts, "release-metadata.json"))).name;
+  const identity = { product, version: "0.1.0", candidateSha: f.sha };
+  const entry = { ...identity, repository: `example/${product}`, metadataSha256: hash(readFileSync(join(f.artifacts, "release-metadata.json"))), verificationSha256, gates: {} };
   const reports = {};
   for (const gate of proof.index.pending) reports[gate] = { schema: 1, kind: "release-gate", ...identity, gate, status: "pass", blockers: [], summary: "Synthetic staging fixture only", evidence: ["Synthetic fixture; not actual release approval"] };
   const notes = "Reviewed fixture notes\n";
   put(join(f.repo, "staging/notes.md"), notes); entry.notes = { file: "staging/notes.md", sha256: hash(notes) };
-  const index = { schema: 1, kind: "release-staging", status: "staged", entries: [entry, { product: "tkt", version: "0.5.0", candidateSha: "b".repeat(40), repository: "example/tkt" }] };
+  const index = { schema: 1, kind: "release-staging", status: "staged", entries: [entry, { product: product === "tkt" ? "grey-matter" : "tkt", version: "0.5.0", candidateSha: "b".repeat(40), repository: "example/other" }] };
   function save() {
     for (const [gate, report] of Object.entries(reports)) {
       const file = `staging/${gate}.json`, bytes = JSON.stringify(report); put(join(f.repo, file), bytes); entry.gates[gate] = { file, sha256: hash(bytes) };
@@ -302,3 +304,35 @@ test("publication command: development must pass before release refs or GitHub w
   const result = await pub.run({ mode: "resume", execute: true }); assert.equal(result.development.developmentSha, integrationSha);
   assert.equal(JSON.parse(readFileSync(pub.options.state)).development.developmentSha, integrationSha);
 }));
+
+test("tkt staging joins pinned plugin and CI bytes, retaining the original stage record", () => fixture(async (f) => {
+  const stage = stagingFixture(f), ci = ciFixture(() => {}, { candidateSha: f.sha, version: "0.1.0" });
+  const identity = JSON.stringify(ci.expected);
+  put(join(f.repo, "staging/ci.json"), identity);
+  stage.entry.ci = { file: "staging/ci.json", sha256: hash(identity) };
+  const reviewSha = stage.save();
+  const options = { reviewRepo: f.repo, reviewSha, indexFile: "staging/index.json", artifacts: f.artifacts, evidence: f.out, api: ci.api };
+  const result = await readStagedTktCandidate(options);
+  assert.equal(result.assets.length, 8);
+  const seal = result.assets.find((asset) => asset.name === "tkt-stage.json");
+  assert.equal(hash(seal.bytes), ci.expected.sealSha256);
+  assert.equal(seal.bytes.toString(), JSON.stringify(ci.record));
+  assert.equal(result.ciStage.artifactId, ci.expected.artifactId);
+  put(join(f.repo, "staging/ci.json"), JSON.stringify({ ...ci.expected, artifactId: 99 }));
+  assert.equal((await readStagedTktCandidate(options)).ciStage.artifactId, ci.expected.artifactId);
+  const changed = f.commit();
+  await assert.rejects(readStagedTktCandidate({ ...options, reviewSha: changed }), /digest differs/);
+  for (const delta of [{ version: "0.2.0" }, { candidateSha: "b".repeat(40) }, { repository: "example/foreign" }]) {
+    const wrong = JSON.stringify({ ...ci.expected, ...delta });
+    put(join(f.repo, "staging/ci.json"), wrong); stage.entry.ci.sha256 = hash(wrong);
+    await assert.rejects(readStagedTktCandidate({ ...options, reviewSha: stage.save() }), /different commit|repository differs/);
+  }
+  const collision = ciFixture(({ entries, record }) => {
+    entries[1].name = result.assets[0].name.toUpperCase(); record.files[1].name = entries[1].name;
+  }, { candidateSha: f.sha, version: "0.1.0" });
+  const collidingIdentity = JSON.stringify(collision.expected);
+  put(join(f.repo, "staging/ci.json"), collidingIdentity); stage.entry.ci.sha256 = hash(collidingIdentity);
+  await assert.rejects(readStagedTktCandidate({ ...options, api: collision.api, reviewSha: stage.save() }), /colliding names/);
+  delete stage.entry.ci;
+  await assert.rejects(readStagedTktCandidate({ ...options, reviewSha: stage.save() }), /reviewed CI identity digest/);
+}, undefined, "tkt"));
