@@ -214,3 +214,20 @@ of the canonical resource graph first failed, then passed with 250 resources and
 no ticket paths. The release workflow now requires a source-version bundle smoke
 before candidate version commits. Build/verify that smoke, then regenerate from
 the corrected source; do not reuse the failed `bf81a4b` draft.
+
+## Candidate version-fixture controls (2026-10-24)
+
+Drafts grey `92f66df3c884cd3adcf22d816eee9c65411a534c` and tkt
+`2fec15c5e1aa0dd0fe9488a92f592eaa110ce610` built closed bundles, but their exact
+product gates failed before native validation. Grey had three deployment fixtures
+reporting a hardcoded Claude folderVersion 0.1.0 for the 0.2.0 source. Tkt had two
+CI-seal fixtures combining copied 0.5.0 manifests with a hardcoded 0.4.0 plan/crate.
+Production source/version guards correctly refused those inconsistent inputs.
+
+The fixture defaults now derive identity from their copied pack/Cargo authority;
+explicit stale-version controls remain stale. Fresh targeted commands reproduced
+all five failures. Fixed-fixture overlays then ran the complete 32 deployment and
+7 CI-seal cases against the unchanged failed candidate trees: 39 passed. The
+overlays changed only test path/import context, not either candidate or production
+checks; both candidate trees remain clean. Regenerate from the committed fixture
+fixes and rerun product/native verification. Neither failed draft is final evidence.

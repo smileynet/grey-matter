@@ -23,6 +23,7 @@ import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+const PACK_VERSION = JSON.parse(readFileSync(join(HERE, "..", ".claude-plugin", "plugin.json"), "utf8")).version;
 const SKILL_COUNT = readdirSync(join(dirname(HERE), "skills"), { recursive: true, withFileTypes: true }).filter((entry) => entry.isFile() && entry.name === "SKILL.md").length;
 const INSTALLER = join(HERE, "deploy.mjs");
 const MANIFEST_NAME = ".installed-by-grey-matter.json";
@@ -151,7 +152,7 @@ function dualSandbox({ plugin }) {
   const base = mkdtempSync(join(tmpdir(), "gm-dual-"));
   const plugins = join(base, "plugins");
   mkdirSync(plugins, { recursive: true });
-  const ids = plugin ? { [plugin]: [{ scope: "user", version: "0.1.0" }] } : {};
+  const ids = plugin ? { [plugin]: [{ scope: "user", version: PACK_VERSION }] } : {};
   writeFileSync(join(plugins, "installed_plugins.json"), JSON.stringify({ version: 2, plugins: ids }));
   return { base, env: { ...process.env, CLAUDE_CODE_PLUGIN_CACHE_DIR: plugins, CODEX_HOME: base } };
 }
@@ -256,7 +257,7 @@ function homeSandbox({ harnesses = [], claude = false, codex = false } = {}) {
     writeFileSync(join(home, ".codex", "config.toml"), '[plugins."grey-matter@grey-matter"]\nenabled = true\n');
   }
   if (codex) {
-  const cached = join(home, ".codex", "plugins", "cache", "grey-matter", "grey-matter", "0.1.0");
+  const cached = join(home, ".codex", "plugins", "cache", "grey-matter", "grey-matter", PACK_VERSION);
   mkdirSync(join(cached, ".codex-plugin"), { recursive: true });
   cpSync(join(HERE, "..", "skills"), join(cached, "skills"), { recursive: true });
   cpSync(join(HERE, "..", ".codex-plugin", "plugin.json"), join(cached, ".codex-plugin", "plugin.json"));
@@ -278,11 +279,11 @@ fs.appendFileSync(path.join(home, harness + "-calls.jsonl"), JSON.stringify(args
 if (harness === "claude") {
   if (process.env.TEST_CLAUDE_FAIL) process.exit(1);
   if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
-  console.log(process.env.TEST_CLAUDE_PLUGIN_LIST || JSON.stringify([{id: "grey-matter@grey-matter", enabled: true, installPath: path.join(home, "old-cache"), readFromFolder: pack, folderVersion: "0.1.0"}]));
+  console.log(process.env.TEST_CLAUDE_PLUGIN_LIST || JSON.stringify([{id: "grey-matter@grey-matter", enabled: true, installPath: path.join(home, "old-cache"), readFromFolder: pack, folderVersion: ${JSON.stringify(PACK_VERSION)}}]));
   process.exit(0);
 }
 if (args[1] === "list") {
-  console.log(process.env.TEST_PLUGIN_LIST || JSON.stringify({installed: [{pluginId: "grey-matter@grey-matter", name: "grey-matter", marketplaceName: "grey-matter", version: "0.1.0", enabled: true, source: {source: "local", path: process.env.TEST_PLUGIN_SOURCE || pack}}]}));
+  console.log(process.env.TEST_PLUGIN_LIST || JSON.stringify({installed: [{pluginId: "grey-matter@grey-matter", name: "grey-matter", marketplaceName: "grey-matter", version: ${JSON.stringify(PACK_VERSION)}, enabled: true, source: {source: "local", path: process.env.TEST_PLUGIN_SOURCE || pack}}]}));
 } else {
   if (process.env.TEST_REFRESH_FAIL) process.exit(1);
   const dest = path.join(home, "plugin-cache");
@@ -497,14 +498,14 @@ test("audit: enumerate multiple cached Codex plugins and detect actual source mi
   const sb = homeSandbox({ harnesses: ["codex"], codex: true });
   try {
     const cache = join(sb.home, ".codex", "plugins", "cache");
-    rmSync(join(cache, "grey-matter", "grey-matter", "0.1.0", "skills", "meta", "sync"), { recursive: true });
+    rmSync(join(cache, "grey-matter", "grey-matter", PACK_VERSION, "skills", "meta", "sync"), { recursive: true });
     const at = join(cache, "team", "extra", "1.0.0");
     mkdirSync(join(at, ".codex-plugin"), { recursive: true });
     writeFileSync(join(at, ".codex-plugin", "plugin.json"), JSON.stringify({ name: "extra", skills: "./skills" }));
     mkdirSync(join(at, "skills", "nested", "orient"), { recursive: true });
     writeFileSync(join(at, "skills", "nested", "orient", "SKILL.md"), "---\nname: orient\n---\nExample");
     const installed = [
-      { pluginId: "grey-matter@grey-matter", name: "grey-matter", marketplaceName: "grey-matter", version: "0.1.0", enabled: true },
+      { pluginId: "grey-matter@grey-matter", name: "grey-matter", marketplaceName: "grey-matter", version: PACK_VERSION, enabled: true },
       { pluginId: "extra@team", name: "extra", marketplaceName: "team", version: "1.0.0", enabled: true },
     ];
     const r = runWithEnv(["audit", "--json"], { ...sb.env, TEST_PLUGIN_LIST: JSON.stringify({ installed }) });
@@ -669,7 +670,7 @@ test("Claude: foreign, stale-version, legacy and failed source observations pres
   try {
     const bare = join(sb.home, ".claude", "skills");
     assert.equal(runWithEnv(["--root", bare, "--allow-dual"], sb.env).status, 0);
-    const row = {id: "grey-matter@grey-matter", enabled: true, readFromFolder: dirname(HERE), folderVersion: "0.1.0"};
+    const row = {id: "grey-matter@grey-matter", enabled: true, readFromFolder: dirname(HERE), folderVersion: PACK_VERSION};
     for (const extra of [
       {TEST_CLAUDE_FAIL: "1"},
       {TEST_CLAUDE_PLUGIN_LIST: "{}"},
@@ -689,7 +690,7 @@ test("Claude: foreign, stale-version, legacy and failed source observations pres
 test("Claude audit: active folder supersedes a stale cache; disabled plugins and failed reads stay explicit", () => {
   const sb = homeSandbox({ harnesses: ["claude"], claude: true });
   try {
-    const row = {id: "grey-matter@grey-matter", enabled: true, installPath: join(sb.home, "stale-cache"), readFromFolder: dirname(HERE), folderVersion: "0.1.0"};
+    const row = {id: "grey-matter@grey-matter", enabled: true, installPath: join(sb.home, "stale-cache"), readFromFolder: dirname(HERE), folderVersion: PACK_VERSION};
     const env = {...sb.env, TEST_CLAUDE_PLUGIN_LIST: JSON.stringify([row])};
     const result = runWithEnv(["audit", "--json", "--strict"], env);
     assert.equal(result.status, 0, result.stdout);
@@ -721,7 +722,7 @@ test("Claude portfolio: verify each local pack once without invoking update or i
     writeFileSync(join(sb.home, ".claude", "plugins", "installed_plugins.json"), JSON.stringify({version: 2, plugins: {"grey-matter@grey-matter": [{}], "other@other": [{}]}}));
     const portfolio = join(sb.home, "packs.json");
     writeFileSync(portfolio, JSON.stringify({packs: [{name: "grey-matter", path: dirname(HERE)}, {name: "other", path: other}]}));
-    const rows = [{id: "grey-matter@grey-matter", enabled: true, readFromFolder: dirname(HERE), folderVersion: "0.1.0"}, {id: "other@other", enabled: true, readFromFolder: other, folderVersion: "1.0.0"}];
+    const rows = [{id: "grey-matter@grey-matter", enabled: true, readFromFolder: dirname(HERE), folderVersion: PACK_VERSION}, {id: "other@other", enabled: true, readFromFolder: other, folderVersion: "1.0.0"}];
     const result = runWithEnv(["--portfolio", portfolio, "--no-agy"], {...sb.env, TEST_CLAUDE_PLUGIN_LIST: JSON.stringify(rows)});
     assert.equal(result.status, 0, result.stdout);
     assert.equal((result.stdout.match(/verified Claude plugin/g) ?? []).length, 2);
