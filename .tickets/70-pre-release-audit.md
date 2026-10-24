@@ -127,3 +127,7 @@ One decision remains: native vendor loading/upgrades were executed on macOS, whi
 ## Native machine handoff (2026-10-24)
 
 The user will run native platform validation on the respective machines. [Windows 77](77-windows-native-candidate-validation.md) and [Linux 78](78-linux-native-candidate-validation.md) are independent high-priority frontier tickets and now block this audit. This replaces the pending coverage-waiver question with evidence collection; no exclusion was approved. Both tickets bind the current exact candidates, durable inputs, platform runbooks, isolation limits and five evidence criteria. Reconcile their reports before granting platform-approval or closing 70.
+
+## Linux native coverage verified (2026-10-24)
+
+SSH validation on `sam@randomserver` passes for the current exact candidates: two full product gates, six native plugin rows, six catalog/upgrade groups, and the actual CI Linux release binary. See the [Linux report](../docs/agents/research/linux-native-validation-20261024.md) and its structured/raw evidence. Disposable user/config roots were used; network isolation was not enforceable and is reported explicitly. Windows 77 remains outstanding. This evidence does not grant final-audit/staging/publication gates or authorize a Windows exclusion.

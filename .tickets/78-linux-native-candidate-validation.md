@@ -81,3 +81,9 @@ Close with five numbered evidence entries matching the criteria. If any required
 - [ ] Native install, upgrade, repeated deploy, enable/disable and foreign-content preservation controls have command/output evidence.
 - [ ] Applicable product, syntax, resource, invocation-policy and hook checks pass; unsupported checks are not counted as executed.
 - [ ] A cited platform report and machine-readable evidence are committed, linked to ticket 70 and contain no publication or real user-state mutation.
+
+## Linux execution evidence (2026-10-24)
+
+User authorized SSH execution on `sam@randomserver`. The [Linux report](../docs/agents/research/linux-native-validation-20261024.md), [structured evidence](../docs/agents/research/evidence/linux-native-validation-20261024.json) and [39-file raw evidence archive](../docs/agents/research/evidence/linux-native-validation-20261024.zip) record the completed run. Exact original sealed archives were transferred and verified; both candidate worktrees remained clean. Product gates, all six product/native plugin rows, all six catalog/upgrade groups and the CI Linux release-binary command/context checks pass.
+
+Native client versions: Codex 0.147.0, Claude 2.1.310, AGY 1.4.6, Kiro 2.34.0, OpenCode 1.18.21 and Crush 0.98.1. Normal user CLI versions/installations were preserved; newer tools ran from an owned prefix. Disposable homes and credential allowlists were used. Network denial was attempted but unavailable (bubblewrap loopback setup returned Operation not permitted); no enforced-network-isolation claim is made. No model prompts, real provider credentials or publication operations were used. Host hook registration and direct Linux fixtures are distinguished from untested authenticated interactive invocation.

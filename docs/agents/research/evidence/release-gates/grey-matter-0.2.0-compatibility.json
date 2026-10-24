@@ -12,7 +12,8 @@
     "docs/agents/research/evidence/plugin-compatibility-catalogs-20261024.json: exact probe sources and candidate identities; Codex, Antigravity, Kiro, Crush, bare/OpenCode results pass.",
     "docs/agents/research/evidence/claude-upgrade-session-catalog-20261024.json: actual Claude packages and hooks; 50 enabled commands, zero disabled, identical 50 restored.",
     "docs/agents/research/evidence/tkt-final-candidate-verification-20261024.json: current product/native receipts and executed CLI compatibility.",
-    "docs/agents/research/evidence/release-platform-coverage-20261024.json: Windows/Linux product checks and explicit native-platform limits."
+    "docs/agents/research/evidence/release-platform-coverage-20261024.json: Windows/Linux product checks and explicit native-platform limits.",
+    "docs/agents/research/evidence/linux-native-validation-20261024.json: randomserver exact-candidate product/native gates, six catalog/upgrade groups and CI release-binary checks pass; raw evidence archive is retained."
   ],
-  "limits": "Native harness coverage is macOS. Final audit 70 owns platform disposition; these receipts grant neither platform approval, final audit, staging nor publication."
+  "limits": "Native harness coverage is macOS and Linux, with recorded runtime/isolation limits. Windows native validation remains ticket77. These receipts grant neither platform approval, final audit, staging nor publication."
 }

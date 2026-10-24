@@ -867,7 +867,7 @@
   ],
   "macOS": "Both exact candidates passed fresh product and all three plugin native package checks; six harness catalog/upgrade groups also passed. See current candidate and compatibility evidence.",
   "limits": [
-    "Native Codex, Claude, Antigravity, Kiro, OpenCode and Crush catalog/upgrade observations are macOS-only. No native Windows/Linux vendor-loading pass is claimed.",
+    "Native Codex, Claude, Antigravity, Kiro, OpenCode and Crush catalogs/upgrade controls passed on macOS and Linux. Native Windows vendor loading remains ticket77; no pass or exclusion is claimed.",
     "Windows tkt intentionally skips the relative-symlink migration Node fixture and excludes the Unix-only push-rejection integration test. Remaining Node cases and all platform-applicable Rust tests pass.",
     "Final audit 70 must classify these coverage limits; platform-approval, final-audit and staging gates are not granted by this report."
   ],
@@ -875,5 +875,17 @@
     "219": "Closed; native canonical Windows temp paths, portable Cargo path assertions, canonical Node deploy fixtures, permanent full Linux/Windows CI.",
     "220": "Closed; deterministic pre-receive hook rejects the push without fragile recursive metadata mutation."
   },
-  "publicationPerformed": false
+  "publicationPerformed": false,
+  "nativeAdditionalEvidence": {
+    "linux": {
+      "status": "pass",
+      "ticket": "78",
+      "report": "docs/agents/research/evidence/linux-native-validation-20261024.json",
+      "rawEvidenceSha256": "037322d68a8f9cc88a369e5c60b694f3ee51fc72013fb581cb2d34d3ee00b2c9"
+    },
+    "windows": {
+      "status": "pending",
+      "ticket": "77"
+    }
+  }
 }
