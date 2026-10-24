@@ -4,7 +4,7 @@ The coordinated [release plan](agents/proposals/09-release-readiness.md) and
 [release contract](agents/release-contract.md) define scope and acceptance.
 User-approved staging versions: grey-matter 0.2.0 and tkt 0.5.0. Publication is
 not authorized. Candidate preparation and install/upgrade verification are complete. Finish the
-final audit and artifact staging after native Windows/Linux validation on the user's machines.
+final audit and artifact staging after the remaining native Windows validation. Linux is verified.
 
 ## Active release thread
 
@@ -14,7 +14,7 @@ final audit and artifact staging after native Windows/Linux validation on the us
 | 67 | Prepare version-consistent release candidates and plugin bundles | ✅ done |
 | 69 | Verify plugin fresh installs and upgrades in isolated harness homes | ✅ done |
 | 77 | Validate native release candidates on Windows (user machine) | open |
-| 78 | Validate native release candidates on Linux (user machine) | open |
+| 78 | Validate native release candidates on Linux (randomserver) | ✅ done |
 | 70 | Audit both projects before release staging | in_progress |
 | 71 | Stage reviewed changelogs README files and release artifacts | open |
 
@@ -28,10 +28,10 @@ Current frozen candidates are grey-matter
 `2b6ff173993c9fe413c40287fb1cb3f0a9879ca1`. Product/native checks, all six harness
 probe groups, Windows/Linux product gates and tkt's five-target build-only stage pass.
 The [final audit](agents/research/final-release-audit-20261024.md) records evidence,
-ticket dispositions and the native-platform coverage gap. The user will run tickets
-77 and 78 on the respective machines; both block the final audit.
+ticket dispositions and the remaining native Windows coverage gap. Linux ticket 78
+is complete after SSH validation on randomserver; Windows ticket 77 remains required.
 
-The remaining sequence is parallel 77/78 → 70 → 71. Keep staging tied to these frozen candidates;
+The remaining sequence is 77 → 70 → 71. Keep staging tied to these frozen candidates;
 source behavior or release-documentation changes require replacement artifacts and
 affected evidence. This live plan and ticket receipts record later progress; embedded
 plans in frozen bundles remain snapshots of their source revisions.

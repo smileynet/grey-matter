@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "kind": "final-candidate-audit",
-  "observedAt": "2026-10-24T14:14:48.825Z",
+  "observedAt": "2026-10-24T14:19:43.376Z",
   "status": "pending-native-platform-validation",
   "products": [
     {
@@ -2406,14 +2406,14 @@
         "product": "grey-matter",
         "id": "78",
         "title": "Validate native release candidates on Linux",
-        "status": "in_progress",
+        "status": "done",
         "blockedBy": [
           "69"
         ],
         "path": ".tickets/78-linux-native-candidate-validation.md",
-        "sourceSha256": "5c66d7042283a1abdbd8b33162fc0d43d8937301651e07fca6ab4af8d70347dc",
-        "disposition": "include-native-platform-validation",
-        "rationale": "Required remaining close-out deliverable; this audit does not mark it complete."
+        "sourceSha256": "305ebb6348338a02957fea543b160d690208429e2a7f9578971f138738f79bb6",
+        "disposition": "include-completed",
+        "rationale": "Completed with ticket resolution and numbered evidence; preserve the recorded scope and verify applicable final candidate gates."
       },
       {
         "product": "tkt",
