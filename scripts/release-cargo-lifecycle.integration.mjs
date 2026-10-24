@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { spawn, execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { createServer } from "node:http";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, watch, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 const rows = [];
@@ -74,6 +74,8 @@ async function main() {
   process.on("message",async action=>{if(action==="publish"){try{await transport.publish(options.crate);}catch{process.send({phase:"upload-ended"});}}});`;
     for (const duringUpload of [false, true]) {
       const before = new Set(readdirSync(tmpdir()).filter((name) => name.startsWith("release-cargo-"))), putsBefore = captures.length;
+      const observed = new Set();
+      const watcher = watch(tmpdir(), (_event, name) => { if (typeof name === "string" && name.startsWith("release-cargo-") && !before.has(name)) observed.add(join(tmpdir(), name)); });
       const worker = spawn(process.execPath, ["--input-type=module", "-e", workerSource, JSON.stringify(config)], { env: { PATH: "/usr/bin:/bin" }, stdio: ["ignore", "ignore", "pipe", "ipc"] });
       const messages = []; let diagnostic = "", exited = false, owned = [];
       worker.stderr.on("data", (data) => { diagnostic = (diagnostic + data).slice(0, 8192); });
@@ -81,18 +83,21 @@ async function main() {
       try {
         await until(() => messages.some((row) => row.phase === "prepared") || exited, 120000);
         assert.equal(exited, false, diagnostic); assert.ok(messages.some((row) => row.phase === "prepared"));
-        owned = readdirSync(tmpdir()).filter((name) => name.startsWith("release-cargo-") && !before.has(name)).map((name) => join(tmpdir(), name));
+        await until(() => observed.size > 0);
+        owned = [...observed];
         assert.equal(owned.length, 1, "one owned temporary transport tree expected");
+        assert.ok(owned.every((path) => !existsSync(path)), "host staging inputs must be removed before intent");
         if (duringUpload) { worker.send("publish"); await until(() => captures.length === putsBefore + 1 && messages.some((row) => row.phase === "credential")); }
         const children = descendants(worker.pid); assert.ok(children.length >= 3);
         worker.kill("SIGKILL");
         await until(() => exited && children.every((old) => { const now = processRecord(old.pid); return !now || now.start !== old.start || now.state === "Z"; }));
         const removed = owned.every((path) => !existsSync(path));
-        rows.push({ name: duringUpload ? "parent-loss-during-upload" : "parent-loss-before-intent", stoppedDescendants: children.length, temporaryDirectoriesRemoved: removed, processExits: children.map((record) => ({ before: record, after: processRecord(record.pid) })), remainingTopLevel: owned.map((path) => existsSync(path) ? readdirSync(path) : []), credentialCalls: messages.filter((row) => row.phase === "credential").length, puts: captures.length - putsBefore, uploadOutcome: duringUpload ? "unconfirmed-localhost-capture" : "not-attempted" });
+        rows.push({ name: duringUpload ? "parent-loss-during-upload" : "parent-loss-before-intent", stoppedDescendants: children.length, temporaryDirectoriesRemoved: removed, removedBeforeIntent: true, processExits: children.map((record) => ({ before: record, after: processRecord(record.pid) })), remainingTopLevel: owned.map((path) => existsSync(path) ? readdirSync(path) : []), credentialCalls: messages.filter((row) => row.phase === "credential").length, puts: captures.length - putsBefore, uploadOutcome: duringUpload ? "unconfirmed-localhost-capture" : "not-attempted" });
         assert.equal(rows.at(-1).credentialCalls, duringUpload ? 1 : 0); assert.equal(rows.at(-1).puts, duringUpload ? 1 : 0);
         if (duringUpload) assert.deepEqual(captures.at(-1), { sha256: config.crate.sha256, dummyAuthorizationMatched: true });
         assert.equal(removed, true, "parent loss left the owned temporary transport tree behind");
       } finally {
+        watcher.close();
         if (!exited) worker.kill("SIGKILL");
         for (const path of owned) rmSync(path, { recursive: true, force: true });
       }
