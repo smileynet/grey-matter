@@ -1,5 +1,6 @@
 {
   "name": "grey-matter",
+  "hooks": [],
   "version": "0.1.0",
   "description": "Agent skills for game-centric and app development: engineering (build), productivity (think/communicate), and meta (tend the set). Start with the compass router.",
   "author": {

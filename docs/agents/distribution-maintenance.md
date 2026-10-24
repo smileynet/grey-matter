@@ -28,6 +28,15 @@ tkt's marketplace, so add both: `/plugin marketplace add smileynet/tkt`,
 
 ### Keeping the Claude plugin current
 
+Claude-only hooks use `.claude-plugin/claude-hooks.json`; keep their files in
+`metadata.deploy.claudeFiles`, never shared `runtimeFiles` or Markdown resource links.
+Codex explicitly selects no hooks. Release packaging includes the private files only
+in the Claude archive and removes the Claude hook declaration from the Codex archive.
+The push gate checks the launch project's `scripts/check-repo.mjs` for recognizable
+`git push` commands in Bash or PowerShell. Keep the Git pre-push gate for aliases,
+wrappers and commands that redirect to another repository. These hooks target Claude
+2.1.310+ and Node 22+. See [the hook contract](research/claude-plugin-hooks.md).
+
 When a change touches skills, the plugin manifests, or tkt's plugin:
 
 - **New or changed skill:** no manifest edit. `plugin.json` lists bucket dirs, so the skill is

@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/.claude-plugin/hooks/pre-push.mjs"],
+            "timeout": 960,
+            "onFailure": "block"
+          }
+        ]
+      }
+    ]
+  }
+}

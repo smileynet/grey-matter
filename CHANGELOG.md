@@ -7,6 +7,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 ## [Unreleased]
 
 ### Added
+- Claude Code checks the launch project's repository invariants before recognized agent `git push` commands; the Git pre-push gate continues to cover other push paths. Requires Claude 2.1.310+ and Node 22+.
 - `delivery-dashboard` keeps one evolving HTML view of delivered value, distinguishing planned, partial and shipped experiences with visible labels.
 - `spike-options` compares competing designs with throwaway builds, then helps you choose an approach and track its integration.
 - Claude Code plugin: add the `smileynet/tkt` and `smileynet/grey-matter` marketplaces, then `/plugin install grey-matter@grey-matter`. It brings in tkt's workflow skills as a dependency. Skills are namespaced (`/grey-matter:code-review`), so they no longer shadow Claude's bundled `/code-review`.

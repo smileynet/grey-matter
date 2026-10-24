@@ -57,6 +57,29 @@ test("three bundles retain resources/notices/modes, exclude unrelated files, and
   assert.equal(verifyArtifacts(out).candidateSha, metadata.candidateSha);
 }));
 
+test("Claude-only hooks ship closed in Claude and are absent from other host bundles", () => fixture(({ dir, repo, commit, build }) => {
+  const manifestPath = join(repo, ".claude-plugin/plugin.json");
+  const manifest = JSON.parse(readFileSync(manifestPath));
+  manifest.hooks = "./.claude-plugin/claude-hooks.json";
+  manifest.metadata.deploy.claudeFiles = [".claude-plugin/claude-hooks.json", ".claude-plugin/hooks/run.mjs"];
+  put(manifestPath, JSON.stringify(manifest));
+  put(join(repo, ".claude-plugin/claude-hooks.json"), JSON.stringify({ hooks: { SessionStart: [] } }));
+  put(join(repo, ".claude-plugin/hooks/run.mjs"), "// Claude-only handler\n");
+  commit();
+  const metadata = build();
+  for (const asset of metadata.assets) {
+    for (const path of manifest.metadata.deploy.claudeFiles) assert.equal(Boolean(asset.files[path]), asset.host === "claude", `${asset.host}: ${path}`);
+    assert.equal(Boolean(asset.files["hooks/hooks.json"]), false);
+    assert.equal(Boolean(asset.files["hooks.json"]), false);
+    if (asset.host !== "codex") continue;
+    const tree = join(dir, "codex-extracted");
+    extractArtifact(join(dir, "out", asset.name), tree, asset.files);
+    const compatibilityManifest = JSON.parse(readFileSync(join(tree, ".claude-plugin/plugin.json")));
+    assert.equal(compatibilityManifest.hooks, undefined);
+    assert.equal(compatibilityManifest.metadata.deploy.claudeFiles, undefined);
+  }
+}));
+
 test("build uses committed bytes and repeats without changing output or git state", () => fixture(({ repo, out, build }) => {
   const before = git(repo, "show-ref");
   const first = build();
@@ -73,6 +96,9 @@ for (const [name, mutate, expected] of [
   ["missing notice", ({ repo }) => rmSync(join(repo, "NOTICE")), /required legal artifact/],
   ["malformed YAML", ({ repo }) => put(join(repo, "skills/example/SKILL.md"), "---\nname: example\ndescription: invalid: colon\n---\n"), /skill validation failed/],
   ["declared credential file", ({ repo }) => { const p = join(repo, ".claude-plugin/plugin.json"), value = JSON.parse(readFileSync(p)); value.metadata.deploy.runtimeFiles.push(".env"); put(p, JSON.stringify(value)); }, /excluded development\/credential path/],
+  ["private hook config missing from closure", ({ repo }) => { const p = join(repo, ".claude-plugin/plugin.json"), value = JSON.parse(readFileSync(p)); value.hooks = "./.claude-plugin/hooks.json"; put(p, JSON.stringify(value)); }, /hook config must be declared/],
+  ["private file outside Claude subtree", ({ repo }) => { const p = join(repo, ".claude-plugin/plugin.json"), value = JSON.parse(readFileSync(p)); value.metadata.deploy.claudeFiles = ["scripts/command.mjs"]; put(p, JSON.stringify(value)); }, /must stay under/],
+  ["private file in shared closure", ({ repo }) => { const p = join(repo, ".claude-plugin/plugin.json"), value = JSON.parse(readFileSync(p)); value.metadata.deploy.claudeFiles = [".claude-plugin/private.mjs"]; value.metadata.deploy.runtimeFiles.push(".claude-plugin/private.mjs"); put(join(repo, ".claude-plugin/private.mjs"), "// private\n"); put(p, JSON.stringify(value)); }, /must not enter shared resource closure/],
 ]) test(`rejects ${name} before installing output`, () => fixture((context) => {
   mutate(context); context.commit();
   assert.throws(() => context.build(), expected);

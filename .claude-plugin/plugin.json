@@ -9,6 +9,7 @@
   "homepage": "https://github.com/smileynet/grey-matter",
   "repository": "https://github.com/smileynet/grey-matter",
   "license": "MIT AND Apache-2.0",
+  "hooks": "./.claude-plugin/claude-hooks.json",
   "keywords": [
     "skills",
     "agent-skills",
@@ -31,6 +32,10 @@
   ],
   "metadata": {
     "deploy": {
+      "claudeFiles": [
+        ".claude-plugin/claude-hooks.json",
+        ".claude-plugin/hooks/pre-push.mjs"
+      ],
       "legalFiles": [
         "LICENSE",
         "NOTICE",
