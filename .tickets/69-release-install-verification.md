@@ -84,3 +84,42 @@ artifact IDs, ZIP/seal hashes and sealed file inventory. The downloaded archive'
 SHA256 matches the upload digest; `readCiStage` re-observed run/artifact metadata
 before and after inspection and verified upload-log identity. Retain the original
 ZIP locally for 71; no registry/release/stable operation ran.
+
+
+## Current candidate evidence (2026-10-24)
+
+The current pair is grey-matter `bec5afee9f4f070ef898ac309d45d5061a5be7b5`
+and tkt `b2425c93f94a0b56a87cb6496ecbadaf381922bf`. The tkt candidate
+supersedes `cd96042` after [tkt 218](https://github.com/smileynet/tkt/blob/main/.tickets/218-workflow-query-guidance.md)
+corrected invalid query flags discovered during compatibility checks. Earlier
+candidate reports above are historical, not evidence for the replacement candidate.
+
+Durable current evidence:
+
+- [Claude installed-plugin transitions](../docs/agents/research/evidence/claude-upgrade-session-catalog-20261024.json):
+  real previous tagged bare installers, current sealed Claude assets and hooks,
+  migration/pruning, repeated deploy, dependency disable guard, and native session
+  command catalog **50 enabled → 0 disabled → identical 50 restored**. Initialization
+  only; no user/model prompt. Command metadata does not prove hidden skill execution.
+- [Other harness catalogs and upgrade controls](../docs/agents/research/evidence/plugin-compatibility-catalogs-20261024.json):
+  exact executed probes and source digests for Codex, Antigravity, Kiro, Crush and
+  bare roots/OpenCode. Each retains actual candidate identities, physical paths,
+  foreign sentinels, repeated-state checks and native catalog scope. Antigravity's
+  older-plugin controls are synthetic because historical tags had no plugin package.
+- [Current tkt product/native and CLI verification](../docs/agents/research/evidence/tkt-final-candidate-verification-20261024.json):
+  fresh product/native receipt digests, 21 command surfaces across 42 files, and an
+  executed frozen-candidate context example. Planned migration map/apply templates
+  are explicitly excluded from claims about current CLI capabilities.
+- [Current tkt sealed hosted build](../docs/agents/research/evidence/tkt-candidate-stage-b2425c9-20261024.json):
+  successful run 40078742961; 16 sealed assets, matching uploaded ZIP hash, and
+  independently re-observed Actions run/attempt/artifact/seal-job identity.
+
+Remaining work before closure: resolve the Windows full-check probe results,
+consolidate platform coverage and missing-platform remediation into the final audit,
+and connect compatibility/upgrade evidence to staging's required gate records.
+Native vendor-client catalog observations above are macOS observations, not
+Windows/Linux native loading proof. The first supplementary Windows run
+40079229283 failed four Node tests (missing dist/mise prerequisites, checkout
+byte mismatch and package-path assertion); probe-only follow-up 40079658409
+retains the same candidate and installs prerequisites/preserves Git file bytes.
+No Windows pass is claimed while that run is incomplete.
