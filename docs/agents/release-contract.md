@@ -75,8 +75,12 @@ runtime resources and required legal artifacts, and exclude credentials, .git,
 
 **grey-matter:** its local release tooling is the sole GitHub publisher.
 **tkt:** the intended sole GitHub publisher is its cargo-dist-based CI workflow.
-Integration remains pending. The local command prepares and dispatches the release
-identity, then observes CI; it never creates a second GitHub release. Maintain the
+Build-only manual staging is implemented through tkt's checked generator wrapper;
+publication integration remains pending. A later manual publication dispatch must
+carry the review commit produced after staging. The local command prepares and
+dispatches the release identity, then observes CI; it never creates a second GitHub
+release. [ADR-0002](decisions/0002-reviewed-ci-staging.md) records the ordering and
+artifact-retention constraints. Maintain the
 dist build jobs through a versioned generator/wrapper that replaces built-in GitHub
 publication with one checked publisher. cargo-dist 0.32 hooks are additive and cannot
 replace its built-in publisher; [the pinned-source research](research/dist-publisher-hooks.md)

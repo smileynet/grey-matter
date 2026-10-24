@@ -2,6 +2,7 @@
 
 Research date: 2026-10-23. This records implementation constraints for ticket 68.
 The manual CI publisher and durable registry attempt barrier remain unfinished.
+Consumed by [ADR-0002](../decisions/0002-reviewed-ci-staging.md).
 No release, tag, registry upload or stable promotion ran during this research.
 
 ## Staging and later review
