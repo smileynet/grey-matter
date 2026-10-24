@@ -1,7 +1,7 @@
 ---
 id: "55"
 title: "Add delivery-dashboard: durable, evolving, tabbed HTML dashboard communicating delivered work in the JTBD register"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
