@@ -382,7 +382,7 @@ test("agy: missing resources fail before replacing the last package; repaired li
     mkdirSync(skill, { recursive: true });
     mkdirSync(join(pack, ".claude-plugin"));
     writeFileSync(join(pack, ".claude-plugin", "plugin.json"), JSON.stringify({ name: "example", version: "1.0.0", skills: ["./skills/bucket"] }));
-    writeFileSync(join(skill, "SKILL.md"), "---\nname: example\ndescription: Resource fixture\n---\n[Guide](../../../guide.md)\n`[Example](missing-inline.md)`\n```md\n[Example](missing-fenced.md)\n```\n");
+    writeFileSync(join(skill, "SKILL.md"), "---\nname: example\ndescription: Resource fixture\n---\n```text\nunclosed[\n```\n[Guide](../../../guide.md)\n`[Example](missing-inline.md)`\n```md\n[Example](missing-fenced.md)\n```\n");
     const out = join(sb.home, "package");
     mkdirSync(out);
     writeFileSync(join(out, "previous.txt"), "last good package");

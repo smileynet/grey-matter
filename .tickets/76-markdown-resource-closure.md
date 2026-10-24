@@ -54,3 +54,9 @@ Historical candidate reports remain historical; no publication is authorized.
 - [ ] An unmatched bracket in a fenced example cannot hide a later valid local Markdown resource link.
 - [ ] Referenced resources are packaged and missing targets fail before archive creation; fresh source and artifact regression checks pass.
 - [ ] The vendored tkt deployer matches the canonical engine and rebuilt candidate archives resolve the previously missing evidence reference.
+
+## Parser remediation checkpoint (2026-10-24)
+
+Four artifact regressions failed before the source change (fenced and inline unmatched brackets, with present and absent resources), then all four passed after excluding an inner opening bracket from a link label match. Multiline and code-styled labels remain supported. The existing missing-resource test also retains the previous package until repair.
+
+Evidence: `node --test scripts/release-artifacts.test.mjs scripts/deploy.test.mjs` → 63 passed, zero failed. A direct resource-closure assertion now finds `docs/agents/research/evidence/claude-validation-20261023.json` among 251 canonical source resources. The tkt vendored deployer has the identical fix; `mise run check` passed 37 Node tests, formatting, Clippy and all 296 Rust tests. Candidate rebuild and archive verification remain required before closure.

@@ -57,6 +57,25 @@ test("three bundles retain resources/notices/modes, exclude unrelated files, and
   assert.equal(verifyArtifacts(out).candidateSha, metadata.candidateSha);
 }));
 
+for (const [kind, guide] of [
+  ["fenced", "```text\nunclosed[\n```\n[Recorded\nevidence](evidence.json)\n"],
+  ["inline", "`unclosed[` [**`Recorded evidence`**](evidence.json)\n"],
+]) for (const present of [true, false]) test(`unmatched example brackets: ${kind}, resource ${present ? "present" : "missing"}`, () => fixture(({ repo, out, commit, build }) => {
+  put(join(repo, "docs/guide.md"), guide);
+  const evidence = '{"status":"pass"}\n';
+  if (present) put(join(repo, "docs/evidence.json"), evidence);
+  commit();
+  if (!present) {
+    assert.throws(build, /package resource missing.*evidence\.json/);
+    assert.equal(existsSync(out), false);
+    return;
+  }
+  const metadata = build();
+  for (const asset of metadata.assets) assert.ok(asset.files["docs/evidence.json"], asset.host);
+  rmSync(repo, { recursive: true });
+  assert.equal(verifyArtifacts(out).candidateSha, metadata.candidateSha);
+}));
+
 test("Claude-only hooks ship closed in Claude and are absent from other host bundles", () => fixture(({ dir, repo, commit, build }) => {
   const manifestPath = join(repo, ".claude-plugin/plugin.json");
   const manifest = JSON.parse(readFileSync(manifestPath));
