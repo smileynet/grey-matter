@@ -160,3 +160,9 @@ The [2026-10-23 platform evidence](research/evidence/windows-prepush-20261023.js
 records a passing 12-invariant gate on Windows/Git Bash, Ubuntu and macOS. The
 targeted Windows job also checks worktree recovery, archive links, deployment and hooks.
 Native Windows plugin-client validation remains a separate release gate in ticket 69.
+
+### Windows native probe boundaries
+
+The [SharkTank report](research/windows-native-validation-20261024.md) records exact executable paths, pinned downloads and remaining scope. Use real Node/CLI executables when SSH cannot launch mise/WinGet/Bun shims. Set Kiro's documented `KIRO_HOME` in the actual ACP child environment; HOME/USERPROFILE alone did not isolate its catalog. Codex 0.147.0 separately discovers the Windows Known Folder user skill root, so full isolation requires a clean Windows account/VM or an explicitly approved narrower scope. Do not delete personal roots to make a probe pass.
+
+For pinned AGY checks, disable its updater inside the executable launcher: the native helper's environment allowlist drops an ambient `AGY_CLI_DISABLE_AUTO_UPDATE`. Preserve the payload hash separately from the launcher hash and require terminal success, including cleanup; a passing report written before a cleanup lock is insufficient. Old Git Bash tkt installs may contain regular copies rather than links. The migration tool preserves those for review; compare the complete old source/file bytes before removing any explicitly owned fixture copy. The release companion guide must describe this manual path.

@@ -55,3 +55,7 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 - [ ] No release tag is pushed, registry/GitHub release published, stable ref promoted or public plugin-directory submission made; closing this ticket reports staged status only.
 
 Native Claude 2.1.309 reports nonblocking icon and current marketplace install-line advice for both repos. Include these in artifact polish or explicitly resolve their applicability in the audit; do not drop them because schema validation passes. See [dated validation evidence](../docs/agents/research/claude-current-validation.md). Root CLAUDE.md is repository guidance and must not be advertised as automatically loaded plugin context.
+
+## Windows companion-guide additions (2026-10-24)
+
+Use the [native Windows report](../docs/agents/research/windows-native-validation-20261024.md) when staging installation/migration guidance. Explain that old Git Bash tkt installs may be regular copies, which the symlink migration tool preserves for explicit source/file-byte review; do not recommend forced deletion of arbitrary user directories. Reproduction guidance must pin AGY through an updater-disabling child launcher, set KIRO_HOME for native Kiro, and retain Codex's Windows Known Folder isolation limit until 77 resolves it. These are companion-guide requirements, not permission to alter frozen candidates, grant a scope exclusion or stage before 70.

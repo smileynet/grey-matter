@@ -13,7 +13,7 @@ final audit and artifact staging after the remaining native Windows validation. 
 | 68 | Publish and resume coordinated GitHub and plugin releases safely | ✅ done |
 | 67 | Prepare version-consistent release candidates and plugin bundles | ✅ done |
 | 69 | Verify plugin fresh installs and upgrades in isolated harness homes | ✅ done |
-| 77 | Validate native release candidates on Windows (user machine) | open |
+| 77 | Validate native release candidates on Windows (SharkTank; Codex profile gate remains) | in_progress |
 | 78 | Validate native release candidates on Linux (randomserver) | ✅ done |
 | 70 | Audit both projects before release staging | in_progress |
 | 71 | Stage reviewed changelogs README files and release artifacts | open |
@@ -29,7 +29,7 @@ Current frozen candidates are grey-matter
 probe groups, Windows/Linux product gates and tkt's five-target build-only stage pass.
 The [final audit](agents/research/final-release-audit-20261024.md) records evidence,
 ticket dispositions and the remaining native Windows coverage gap. Linux ticket 78
-is complete after SSH validation on randomserver; Windows ticket 77 remains required.
+is complete after SSH validation on randomserver. Windows ticket 77 has passing product/native fixture evidence from SharkTank, but full Codex catalog isolation needs a clean Windows profile or an explicit scope exclusion.
 
 The remaining sequence is 77 → 70 → 71. Keep staging tied to these frozen candidates;
 source behavior or release-documentation changes require replacement artifacts and

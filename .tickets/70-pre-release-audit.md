@@ -131,3 +131,7 @@ The user will run native platform validation on the respective machines. [Window
 ## Linux native coverage verified (2026-10-24)
 
 SSH validation on `sam@randomserver` passes for the current exact candidates: two full product gates, six native plugin rows, six catalog/upgrade groups, and the actual CI Linux release binary. See the [Linux report](../docs/agents/research/linux-native-validation-20261024.md) and its structured/raw evidence. Disposable user/config roots were used; network isolation was not enforceable and is reported explicitly. Windows 77 remains outstanding. This evidence does not grant final-audit/staging/publication gates or authorize a Windows exclusion.
+
+## Windows native evidence checkpoint (2026-10-24)
+
+[SharkTank evidence](../docs/agents/research/windows-native-validation-20261024.md) records successful exact-candidate product gates, six native package rows, five complete harness groups and fixture-scoped Codex state controls. Windows 77 stays in progress: Codex's Known Folder user root exposes 48 external skills and prevents a full isolated catalog assertion. Complete that check under a clean Windows profile or record an explicitly approved fixture-scope exclusion; no decision has been granted. The report also captures initial Kiro metadata exposure, corrected KIRO_HOME isolation, reviewed old Windows copies, the pinned AGY launcher and exact native test skips. This is partial platform evidence, not a platform-approval or final-audit receipt.

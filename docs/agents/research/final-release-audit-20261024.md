@@ -1,6 +1,6 @@
 # Final release candidate audit — 2026-10-24
 
-**Technical checks pass within the measured scope. Linux native validation now passes in ticket 78. Staging waits for native Windows validation in ticket 77.** No release tag, GitHub release, registry publication, stable promotion or public plugin-directory submission was performed. This report covers the approved grey-matter 0.2.0 and tkt 0.5.0 candidates; it does not authorize publication.
+**Technical checks pass within the measured scope. Linux native validation now passes in ticket 78. Windows product/native fixture checks pass; staging waits for the full Codex profile-isolation check or an approved scope exclusion in ticket 77.** No release tag, GitHub release, registry publication, stable promotion or public plugin-directory submission was performed. This report covers the approved grey-matter 0.2.0 and tkt 0.5.0 candidates; it does not authorize publication.
 
 ## Exact candidates and evidence
 
@@ -46,7 +46,7 @@ Native versions: Codex 0.147.0, Claude 2.1.310, Antigravity 1.4.6, Kiro 2.34.0, 
 | Historical ticket 07 unchecked criteria | Existing warning preserved with its supersession rationale. It is not a current failing close gate; ticket 33 remains parked. |
 | Claude listing icon / source-root context advice | Optional listing icon advice is nonblocking; source-root CLAUDE.md advice is absent from sealed payload validation. No public-directory listing eligibility is asserted. |
 | Archive README install prerequisites | Staging must include the coordinated install guide: register/install the extracted tkt package before grey-matter, then install the tkt CLI separately. The compact archive README commands assume dependency marketplaces are registered. An extra fresh-home run of those compact commands timed out with network denied; it is inconclusive and is not substituted for the successful dependency-first candidate probes. |
-| Native Windows/Linux vendor loading | [Linux native validation](linux-native-validation-20261024.md) now passes on randomserver, including all six clients and upgrade controls. Windows native validation remains ticket 77; its existing product/deploy/hook fixtures are not a vendor-loading pass. No coverage exclusion has been approved. |
+| Native Windows/Linux vendor loading | [Linux native validation](linux-native-validation-20261024.md) now passes on randomserver, including all six clients and upgrade controls. [Windows native evidence](windows-native-validation-20261024.md) now includes all six package rows and fixture controls. Ticket 77 remains open because Codex discovers 48 skills from the real Windows Known Folder profile outside its disposable home. No coverage exclusion has been approved. |
 
 ## Scope and ticket reconciliation
 
@@ -68,7 +68,7 @@ Publication implementation review and its four remediations are closed in ticket
 
 ## Go/no-go and staging rechecks
 
-**Current decision: no-go pending native Windows evidence.** [Linux 78](linux-native-validation-20261024.md) passes with recorded isolation/runtime limits. [Windows 77](https://github.com/smileynet/grey-matter/blob/main/.tickets/77-windows-native-candidate-validation.md) remains a blocker of audit 70. No Windows coverage waiver was approved; there are no unresolved observed technical release defects within the already tested scope.
+**Current decision: no-go pending the remaining Windows Codex profile-isolation gate.** [Linux 78](linux-native-validation-20261024.md) passes with recorded isolation/runtime limits. [Windows 77](https://github.com/smileynet/grey-matter/blob/main/.tickets/77-windows-native-candidate-validation.md) remains a blocker of audit 70. No Windows coverage waiver was approved; there are no unresolved observed technical release defects within the already tested scope.
 
 After the platform evidence is reconciled and audit 70 closes, ticket 71 must commit a review carrier (the staging files pinned to one Git commit), including scope, compatibility, upgrade, platform-approval, final-audit and staging receipts for each exact candidate. Include both note drafts, checksums, all six plugin archives, tkt's reviewed CI provenance, the pinned annotated tag object record and exact later publish/resume commands. A tag object record is not a pushed tag.
 
