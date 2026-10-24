@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "kind": "release-gate",
+  "gate": "compatibility",
+  "product": "grey-matter",
+  "version": "0.2.0",
+  "candidateSha": "bec5afee9f4f070ef898ac309d45d5061a5be7b5",
+  "status": "pass",
+  "blockers": [],
+  "summary": "Fresh sealed plugin packages and supported bare roots match native catalogs and current tkt CLI surfaces on tested hosts.",
+  "evidence": [
+    "docs/agents/research/evidence/plugin-compatibility-catalogs-20261024.json: exact probe sources and candidate identities; Codex, Antigravity, Kiro, Crush, bare/OpenCode results pass.",
+    "docs/agents/research/evidence/claude-upgrade-session-catalog-20261024.json: actual Claude packages and hooks; 50 enabled commands, zero disabled, identical 50 restored.",
+    "docs/agents/research/evidence/tkt-final-candidate-verification-20261024.json: current product/native receipts and executed CLI compatibility.",
+    "docs/agents/research/evidence/release-platform-coverage-20261024.json: Windows/Linux product checks and explicit native-platform limits."
+  ],
+  "limits": "Native harness coverage is macOS. Final audit 70 owns platform disposition; these receipts grant neither platform approval, final audit, staging nor publication."
+}

@@ -5,8 +5,8 @@
   "scope": "Claude 2.1.310 previous-tag bare installations to sealed candidate Claude plugins, including installed-plugin session command disable and re-enable. No model prompt sent. macOS native coverage only.",
   "reproduce": {
     "instructions": "From the grey-matter checkout with pinned candidate artifact directories present, write probeSourceUtf8 exactly to .scratch/probe-claude-previous-release.mjs, then run node .scratch/probe-claude-previous-release.mjs .scratch/claude-replay.json. The probe uses disposable homes and removes them on exit. Absolute candidate paths identify this recorded run; map them to identical verified candidate artifacts for another machine. Requires installed Claude, macOS sandbox-exec, Node dependencies, bash and Git. Bootstrap downloads pinned npm dependencies into a fresh owned cache before offline native installation.",
-    "probeSourceUtf8": "import assert from 'node:assert/strict';\nimport {parse as parseYaml} from 'yaml';\nimport {mkdtempSync,mkdirSync,readFileSync,writeFileSync,rmSync,readdirSync,cpSync} from 'node:fs';\nimport {tmpdir} from 'node:os';import {join,basename,dirname,resolve} from 'node:path';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';\nimport {isolatedEnvironment} from '../scripts/release-native.mjs';import {extractArtifact,verifyArtifacts} from '../scripts/release-artifacts.mjs';\nconst specs=[['grey-matter','/Users/sambiggins/code/grey-matter','v0.1.0','/Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-9e8a047/artifacts','scripts/deploy.mjs'],['tkt','/Users/sambiggins/code/tkt','v0.4.0','/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/artifacts','tools/deploy.mjs']];\nconst root=mkdtempSync(join(tmpdir(),'release-claude-upgrade-')),home=join(root,'home'),workspace=join(home,'workspace');mkdirSync(workspace,{recursive:true});mkdirSync(join(home,'.claude'));\nconst env={...isolatedEnvironment(home),npm_config_cache:join(home,'.npm-cache'),npm_config_offline:'true',npm_config_userconfig:join(home,'empty-npmrc'),npm_config_globalconfig:join(home,'empty-global-npmrc')},checks=[],report={schema:1,status:'fail',kind:'previous-release-to-claude',checks,phases:[],scope:'Actual previous tagged bare installers migrated to current sealed Claude plugins; no historical plugin format is asserted.'};\nconst profile='(version 1)(allow default)(deny network*)(allow network-outbound (remote ip \"localhost:*\"))(allow network-inbound (local ip \"localhost:*\"))';\nconst run=(binary,args,cwd=workspace)=>{if(binary==='claude')args=['--debug-file',join(home,'debug-'+checks.length+'.log'),...args];const stdout=execFileSync('/usr/bin/sandbox-exec',['-p',profile,binary,...args],{env,cwd,encoding:'utf8',timeout:45000,maxBuffer:8*1024*1024});checks.push({command:[binary,...args],cwd,exit:0,stdout});return stdout;};\ntry {\n const paths=[];for(const [name,repo,tag,artifacts,engine]of specs){const old=join(root,'old-'+name);mkdirSync(old);run('git',['archive','--format=tar','--output',join(root,name+'.tar'),tag],repo);run('tar',['-xf',join(root,name+'.tar'),'-C',old]);\n  const metadata=verifyArtifacts(artifacts),asset=metadata.assets.find(a=>a.host==='claude'),pack=join(root,name);assert.equal(asset.host,'claude');extractArtifact(join(artifacts,asset.name),pack,asset.files);paths.push({name,old,pack,engine,metadata,asset});\n }\n const warm=join(root,'npm-warm');mkdirSync(warm);for(const name of ['package.json','package-lock.json'])cpSync(join(paths[1].pack,name),join(warm,name));writeFileSync(env.npm_config_userconfig,'');writeFileSync(env.npm_config_globalconfig,'');\n const bootstrapArgs=['ci','--ignore-scripts','--no-audit','--no-fund'];const bootstrap=execFileSync('npm',bootstrapArgs,{env:{...env,npm_config_offline:'false'},cwd:warm,encoding:'utf8',timeout:45000,maxBuffer:8*1024*1024});report.npmBootstrap={command:['npm',...bootstrapArgs],cwd:warm,cache:env.npm_config_cache,lockSha256:createHash('sha256').update(readFileSync(join(warm,'package-lock.json'))).digest('hex'),exit:0,stdout:bootstrap,scope:'Fresh owned cache; public lockfile downloads before network-isolated native install. No user npm config/cache or credentials.'};\n const grey=paths[0],tkt=paths[1],bare=join(home,'.claude/skills'),shared=join(home,'.agents/skills');\n run(process.execPath,[join(grey.old,'scripts/install-skills.mjs'),'--root',bare,'--root',shared]);run('/opt/homebrew/bin/bash',[join(tkt.old,'tools/deploy-skills.sh')]);\n mkdirSync(join(bare,'foreign'));writeFileSync(join(bare,'foreign/SKILL.md'),'---\\nname: foreign\\ndescription: Preserved user fixture\\n---\\nForeign sentinel\\n');\n const oldNames=readdirSync(bare).filter(n=>!n.startsWith('.'));assert.ok(oldNames.includes('tkt'));report.phases.push({phase:'previous-release-installed',bareNames:oldNames});\n for(const p of [...paths].reverse()){const market=JSON.parse(readFileSync(join(p.pack,'.claude-plugin/marketplace.json'))).name;run('claude',['plugin','marketplace','add',p.pack]);run('claude',['plugin','install',`${p.name}@${market}`,'--json']);}\n run(process.execPath,['/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/tools/migrate-legacy-skills.mjs','--source',join(tkt.old,'skills/tkt'),'--execute']);\n for(const p of paths)run(process.execPath,[join(p.pack,p.engine),'--no-agy']);\n const sessionCatalog=()=>{\n  const args=['-p','--input-format','stream-json','--output-format','stream-json','--verbose','--setting-sources','user'];\n  const request={type:'control_request',request_id:'release-catalog',request:{subtype:'initialize'}};\n  const stdout=execFileSync('/usr/bin/sandbox-exec',['-p',profile,'claude',...args],{env,cwd:workspace,input:JSON.stringify(request)+'\\n',encoding:'utf8',timeout:45000,maxBuffer:8*1024*1024});\n  const frame=stdout.trim().split('\\n').map(line=>JSON.parse(line)).find(frame=>frame.type==='control_response'&&frame.response.request_id===request.request_id);\n  assert.equal(frame.response.subtype,'success');\n  const commands=frame.response.response.commands;assert.ok(Array.isArray(commands));\n  return commands.filter(command=>/^(grey-matter|tkt):/.test(command.name)).map(command=>command.name).sort();\n };\n const expectedCommands=paths.flatMap(p=>Object.keys(p.asset.files).filter(f=>f.endsWith('/SKILL.md')).flatMap(f=>{\n  const text=readFileSync(join(p.pack,f),'utf8');const metadata=parseYaml(text.split('---')[1]);\n  return metadata['user-invocable']===false?[]:[p.name+':'+(metadata.name||basename(dirname(f)))];\n })).sort();\n report.enabledSessionCommands=sessionCatalog();assert.deepEqual(report.enabledSessionCommands,expectedCommands);\n const list=JSON.parse(run('claude',['plugin','list','--json']));report.inventory=list;\n const catalogs=paths.map(p=>{const details=run('claude',['plugin','details',p.name]);const expected=Object.keys(p.asset.files).filter(f=>f.endsWith('/SKILL.md')).map(f=>basename(dirname(f))).sort();assert.equal(Number(/Skills \\((\\d+)\\)/.exec(details)?.[1]),expected.length);for(const name of expected)assert.ok(details.includes(name),'missing skill '+name);assert.match(details,/Hooks \\(1\\)/,'Claude bundle must load its hook');return {product:p.name,expected,details};});report.catalogs=catalogs;\n assert.deepEqual(readdirSync(bare).filter(n=>!n.startsWith('.')),['foreign']);assert.deepEqual(readdirSync(shared).filter(n=>!n.startsWith('.')),[]);assert.match(readFileSync(join(bare,'foreign/SKILL.md'),'utf8'),/Foreign sentinel/);\n for(const p of paths)run(process.execPath,[join(p.pack,p.engine),'--no-agy']);\n const repeated=paths.map(p=>run('claude',['plugin','details',p.name]));assert.deepEqual(repeated,catalogs.map(c=>c.details));\n let dependencyRefused=false;try{run('claude',['plugin','disable','tkt@tkt']);}catch(error){assert.match(error.stderr.toString(),/still required by grey-matter/);dependencyRefused=true;report.expectedDependencyRefusal={command:['claude','plugin','disable','tkt@tkt'],exit:error.status,reason:'dependency-required',stderrSha256:createHash('sha256').update(error.stderr).digest('hex')};}assert.ok(dependencyRefused);report.dependencyDisableGuard=true;\n for(const p of paths){run('claude',['plugin','disable',p.name+'@'+p.name]);const disabled=JSON.parse(run('claude',['plugin','list','--json']));assert.equal(disabled.find(r=>r.id===p.name+'@'+p.name).enabled,false);}\n report.disabledSessionCommands=sessionCatalog();assert.deepEqual(report.disabledSessionCommands,[]);\n for(const p of [...paths].reverse())run('claude',['plugin','enable',p.name+'@'+p.name]);\n for(const p of paths)assert.equal(JSON.parse(run('claude',['plugin','list','--json'])).find(r=>r.id===p.name+'@'+p.name).enabled,true);\n report.reenabledSessionCommands=sessionCatalog();assert.deepEqual(report.reenabledSessionCommands,expectedCommands);report.sessionCatalogScope='User-invocable command metadata only; initialize control frame, no user prompt or model request; hidden skills excluded by declared policy.';\n report.status='pass';report.nativeVersion=run('claude',['--version']).trim();report.catalogCount=catalogs.reduce((n,c)=>n+c.expected.length,0);report.disableEnablePassed=true;report.repeatedCatalogIdentical=true;report.foreignPreserved=true;report.removedBareNames=oldNames.filter(n=>n!=='foreign');report.candidates=paths.map(p=>({product:p.name,previousTag:specs.find(s=>s[0]===p.name)[2],candidateSha:p.metadata.candidateSha,host:p.asset.host,asset:p.asset.name,assetSha256:p.asset.sha256}));\n}catch(error){report.errors=[error.stack];process.exitCode=1;}\nfinally{report.debugLogs=readdirSync(home).filter(n=>n.startsWith('debug-')).map(n=>({name:n,text:readFileSync(join(home,n),'utf8')}));report.probeSha256=createHash('sha256').update(readFileSync(new URL(import.meta.url))).digest('hex');writeFileSync(resolve(process.argv[2]),JSON.stringify(report,null,2)+'\\n');rmSync(root,{recursive:true,force:true});}\nconsole.log(JSON.stringify({status:report.status,catalogCount:report.catalogCount,errors:report.errors}));\n",
-    "probeSha256": "61308453eaf685dfc1495bf8b420b1c19c895344b0064d9e08d6333ade0eec95"
+    "probeSourceUtf8": "import assert from 'node:assert/strict';\nimport {parse as parseYaml} from 'yaml';\nimport {mkdtempSync,mkdirSync,readFileSync,writeFileSync,rmSync,readdirSync,cpSync} from 'node:fs';\nimport {tmpdir} from 'node:os';import {join,basename,dirname,resolve} from 'node:path';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';\nimport {isolatedEnvironment} from '../scripts/release-native.mjs';import {extractArtifact,verifyArtifacts} from '../scripts/release-artifacts.mjs';\nconst specs=[['grey-matter','/Users/sambiggins/code/grey-matter','v0.1.0','/Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-9e8a047/artifacts','scripts/deploy.mjs'],['tkt','/Users/sambiggins/code/tkt','v0.4.0','/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/artifacts','tools/deploy.mjs']];\nconst root=mkdtempSync(join(tmpdir(),'release-claude-upgrade-')),home=join(root,'home'),workspace=join(home,'workspace');mkdirSync(workspace,{recursive:true});mkdirSync(join(home,'.claude'));\nconst env={...isolatedEnvironment(home),npm_config_cache:join(home,'.npm-cache'),npm_config_offline:'true',npm_config_userconfig:join(home,'empty-npmrc'),npm_config_globalconfig:join(home,'empty-global-npmrc')},checks=[],report={schema:1,status:'fail',kind:'previous-release-to-claude',checks,phases:[],scope:'Actual previous tagged bare installers migrated to current sealed Claude plugins; no historical plugin format is asserted.'};\nconst profile='(version 1)(allow default)(deny network*)(allow network-outbound (remote ip \"localhost:*\"))(allow network-inbound (local ip \"localhost:*\"))';\nconst run=(binary,args,cwd=workspace)=>{if(binary==='claude')args=['--debug-file',join(home,'debug-'+checks.length+'.log'),...args];const stdout=execFileSync('/usr/bin/sandbox-exec',['-p',profile,binary,...args],{env,cwd,encoding:'utf8',timeout:45000,maxBuffer:8*1024*1024});checks.push({command:[binary,...args],cwd,exit:0,stdout});return stdout;};\ntry {\n const paths=[];for(const [name,repo,tag,artifacts,engine]of specs){const old=join(root,'old-'+name);mkdirSync(old);run('git',['archive','--format=tar','--output',join(root,name+'.tar'),tag],repo);run('tar',['-xf',join(root,name+'.tar'),'-C',old]);\n  const metadata=verifyArtifacts(artifacts),asset=metadata.assets.find(a=>a.host==='claude'),pack=join(root,name);assert.equal(asset.host,'claude');extractArtifact(join(artifacts,asset.name),pack,asset.files);paths.push({name,old,pack,engine,metadata,asset});\n }\n const warm=join(root,'npm-warm');mkdirSync(warm);for(const name of ['package.json','package-lock.json'])cpSync(join(paths[1].pack,name),join(warm,name));writeFileSync(env.npm_config_userconfig,'');writeFileSync(env.npm_config_globalconfig,'');\n const bootstrapArgs=['ci','--ignore-scripts','--no-audit','--no-fund'];const bootstrap=execFileSync('npm',bootstrapArgs,{env:{...env,npm_config_offline:'false'},cwd:warm,encoding:'utf8',timeout:45000,maxBuffer:8*1024*1024});report.npmBootstrap={command:['npm',...bootstrapArgs],cwd:warm,cache:env.npm_config_cache,lockSha256:createHash('sha256').update(readFileSync(join(warm,'package-lock.json'))).digest('hex'),exit:0,stdout:bootstrap,scope:'Fresh owned cache; public lockfile downloads before network-isolated native install. No user npm config/cache or credentials.'};\n const grey=paths[0],tkt=paths[1],bare=join(home,'.claude/skills'),shared=join(home,'.agents/skills');\n run(process.execPath,[join(grey.old,'scripts/install-skills.mjs'),'--root',bare,'--root',shared]);run('/opt/homebrew/bin/bash',[join(tkt.old,'tools/deploy-skills.sh')]);\n mkdirSync(join(bare,'foreign'));writeFileSync(join(bare,'foreign/SKILL.md'),'---\\nname: foreign\\ndescription: Preserved user fixture\\n---\\nForeign sentinel\\n');\n const oldNames=readdirSync(bare).filter(n=>!n.startsWith('.'));assert.ok(oldNames.includes('tkt'));report.phases.push({phase:'previous-release-installed',bareNames:oldNames});\n for(const p of [...paths].reverse()){const market=JSON.parse(readFileSync(join(p.pack,'.claude-plugin/marketplace.json'))).name;run('claude',['plugin','marketplace','add',p.pack]);run('claude',['plugin','install',`${p.name}@${market}`,'--json']);}\n run(process.execPath,['/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/tools/migrate-legacy-skills.mjs','--source',join(tkt.old,'skills/tkt'),'--execute']);\n for(const p of paths)run(process.execPath,[join(p.pack,p.engine),'--no-agy']);\n const sessionCatalog=()=>{\n  const args=['-p','--input-format','stream-json','--output-format','stream-json','--verbose','--setting-sources','user'];\n  const request={type:'control_request',request_id:'release-catalog',request:{subtype:'initialize'}};\n  const stdout=execFileSync('/usr/bin/sandbox-exec',['-p',profile,'claude',...args],{env,cwd:workspace,input:JSON.stringify(request)+'\\n',encoding:'utf8',timeout:45000,maxBuffer:8*1024*1024});\n  const frame=stdout.trim().split('\\n').map(line=>JSON.parse(line)).find(frame=>frame.type==='control_response'&&frame.response.request_id===request.request_id);\n  assert.equal(frame.response.subtype,'success');\n  const commands=frame.response.response.commands;assert.ok(Array.isArray(commands));\n  return commands.filter(command=>/^(grey-matter|tkt):/.test(command.name)).map(command=>command.name).sort();\n };\n const expectedCommands=paths.flatMap(p=>Object.keys(p.asset.files).filter(f=>f.endsWith('/SKILL.md')).flatMap(f=>{\n  const text=readFileSync(join(p.pack,f),'utf8');const metadata=parseYaml(text.split('---')[1]);\n  return metadata['user-invocable']===false?[]:[p.name+':'+(metadata.name||basename(dirname(f)))];\n })).sort();\n report.enabledSessionCommands=sessionCatalog();assert.deepEqual(report.enabledSessionCommands,expectedCommands);\n const list=JSON.parse(run('claude',['plugin','list','--json']));report.inventory=list;\n const catalogs=paths.map(p=>{const details=run('claude',['plugin','details',p.name]);const expected=Object.keys(p.asset.files).filter(f=>f.endsWith('/SKILL.md')).map(f=>basename(dirname(f))).sort();assert.equal(Number(/Skills \\((\\d+)\\)/.exec(details)?.[1]),expected.length);for(const name of expected)assert.ok(details.includes(name),'missing skill '+name);assert.match(details,/Hooks \\(1\\)/,'Claude bundle must load its hook');return {product:p.name,expected,details};});report.catalogs=catalogs;\n assert.deepEqual(readdirSync(bare).filter(n=>!n.startsWith('.')),['foreign']);assert.deepEqual(readdirSync(shared).filter(n=>!n.startsWith('.')),[]);assert.match(readFileSync(join(bare,'foreign/SKILL.md'),'utf8'),/Foreign sentinel/);\n for(const p of paths)run(process.execPath,[join(p.pack,p.engine),'--no-agy']);\n const repeated=paths.map(p=>run('claude',['plugin','details',p.name]));assert.deepEqual(repeated,catalogs.map(c=>c.details));\n let dependencyRefused=false;try{run('claude',['plugin','disable','tkt@tkt']);}catch(error){assert.match(error.stderr.toString(),/still required by grey-matter/);dependencyRefused=true;report.expectedDependencyRefusal={command:['claude','plugin','disable','tkt@tkt'],exit:error.status,reason:'dependency-required',stderrSha256:createHash('sha256').update(error.stderr).digest('hex')};}assert.ok(dependencyRefused);report.dependencyDisableGuard=true;\n for(const p of paths){run('claude',['plugin','disable',p.name+'@'+p.name]);const disabled=JSON.parse(run('claude',['plugin','list','--json']));assert.equal(disabled.find(r=>r.id===p.name+'@'+p.name).enabled,false);}\n report.disabledSessionCommands=sessionCatalog();assert.deepEqual(report.disabledSessionCommands,[]);\n for(const p of [...paths].reverse())run('claude',['plugin','enable',p.name+'@'+p.name]);\n for(const p of paths)assert.equal(JSON.parse(run('claude',['plugin','list','--json'])).find(r=>r.id===p.name+'@'+p.name).enabled,true);\n report.reenabledSessionCommands=sessionCatalog();assert.deepEqual(report.reenabledSessionCommands,expectedCommands);report.sessionCatalogScope='User-invocable command metadata only; initialize control frame, no user prompt or model request; hidden skills excluded by declared policy.';\n report.status='pass';report.nativeVersion=run('claude',['--version']).trim();report.catalogCount=catalogs.reduce((n,c)=>n+c.expected.length,0);report.disableEnablePassed=true;report.repeatedCatalogIdentical=true;report.foreignPreserved=true;report.removedBareNames=oldNames.filter(n=>n!=='foreign');report.candidates=paths.map(p=>({product:p.name,previousTag:specs.find(s=>s[0]===p.name)[2],candidateSha:p.metadata.candidateSha,host:p.asset.host,asset:p.asset.name,assetSha256:p.asset.sha256}));\n}catch(error){report.errors=[error.stack];process.exitCode=1;}\nfinally{report.debugLogs=readdirSync(home).filter(n=>n.startsWith('debug-')).map(n=>({name:n,text:readFileSync(join(home,n),'utf8')}));report.probeSha256=createHash('sha256').update(readFileSync(new URL(import.meta.url))).digest('hex');writeFileSync(resolve(process.argv[2]),JSON.stringify(report,null,2)+'\\n');rmSync(root,{recursive:true,force:true});}\nconsole.log(JSON.stringify({status:report.status,catalogCount:report.catalogCount,errors:report.errors}));\n",
+    "probeSha256": "67021d64bef013954cd3dfdbde7a9efcc107a4a76ca48f88d0cafad7a0cdb55b"
   },
   "evidence": {
     "schema": 1,
@@ -19,7 +19,7 @@
           "archive",
           "--format=tar",
           "--output",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/grey-matter.tar",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/grey-matter.tar",
           "v0.1.0"
         ],
         "cwd": "/Users/sambiggins/code/grey-matter",
@@ -33,11 +33,11 @@
         "command": [
           "tar",
           "-xf",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/grey-matter.tar",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/grey-matter.tar",
           "-C",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/old-grey-matter"
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/old-grey-matter"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -50,7 +50,7 @@
           "archive",
           "--format=tar",
           "--output",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/tkt.tar",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/tkt.tar",
           "v0.4.0"
         ],
         "cwd": "/Users/sambiggins/code/tkt",
@@ -64,11 +64,11 @@
         "command": [
           "tar",
           "-xf",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/tkt.tar",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/tkt.tar",
           "-C",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/old-tkt"
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/old-tkt"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -78,28 +78,28 @@
       {
         "command": [
           "/Users/sambiggins/.local/share/fnm/node-versions/v24.14.1/installation/bin/node",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/old-grey-matter/scripts/install-skills.mjs",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/old-grey-matter/scripts/install-skills.mjs",
           "--root",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/.claude/skills",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/.claude/skills",
           "--root",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/.agents/skills"
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/.agents/skills"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "d1d54cb3449e6aaff46f58bfcb0592fbe4558bf44a4e02c648172efa5cb66a90",
+          "sha256": "715b9713256e70c34d8ca251fe9a8037337af57ad2384a29a3e19e540408cfd5",
           "bytes": 1690
         }
       },
       {
         "command": [
           "/opt/homebrew/bin/bash",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/old-tkt/tools/deploy-skills.sh"
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/old-tkt/tools/deploy-skills.sh"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "144dc12a05a957f4469a3db899f0bd1335f509b34b6603e09d1ef45940196355",
+          "sha256": "320d78d026ff710bcc2fe79917a625769a0db58fe84ef376a4f592310d43cd69",
           "bytes": 433
         }
       },
@@ -107,13 +107,13 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-6.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-6.log",
           "plugin",
           "marketplace",
           "add",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/tkt"
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/tkt"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "a45b43febd98eb4aa614c8c31de8eea59fe2091196ea503e52be99ae90231535",
@@ -124,13 +124,13 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-7.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-7.log",
           "plugin",
           "install",
           "tkt@tkt",
           "--json"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "4bde35722dd77c60fa91a918bb5599dfd2774c2c9ead2386620d0a8b2b526ce6",
@@ -141,13 +141,13 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-8.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-8.log",
           "plugin",
           "marketplace",
           "add",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/grey-matter"
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/grey-matter"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "18aef983077891a0ec069bf04767422772ff60f6ec5e0d22a6fe8562e281f364",
@@ -158,13 +158,13 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-9.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-9.log",
           "plugin",
           "install",
           "grey-matter@grey-matter",
           "--json"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "13cf6dd265f23a1f7292ac5819e5dd3cd068dab019a14446e6c6db645410ebaf",
@@ -174,41 +174,41 @@
       {
         "command": [
           "/Users/sambiggins/.local/share/fnm/node-versions/v24.14.1/installation/bin/node",
-          "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/tools/migrate-legacy-skills.mjs",
+          "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/tools/migrate-legacy-skills.mjs",
           "--source",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/old-tkt/skills/tkt",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/old-tkt/skills/tkt",
           "--execute"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "a0c31fde320530e9149c474e37639f9824ffd9736112c950dd925f954c6f0a62",
+          "sha256": "0017963a0ede651a5620db3aa7cdbf7bf9b0c1f0cd376d2b5991c83d41c80728",
           "bytes": 942
         }
       },
       {
         "command": [
           "/Users/sambiggins/.local/share/fnm/node-versions/v24.14.1/installation/bin/node",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/grey-matter/scripts/deploy.mjs",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/grey-matter/scripts/deploy.mjs",
           "--no-agy"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "82548f2fc4f7c197e17adb4c9da37b9b6d5e7393440691fe3bb6d024cb44ae20",
+          "sha256": "dd09a451900cdd240537c2b5f42ddaeb2250000477b2013fd6342a1cda3a2a8c",
           "bytes": 2050
         }
       },
       {
         "command": [
           "/Users/sambiggins/.local/share/fnm/node-versions/v24.14.1/installation/bin/node",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/tkt/tools/deploy.mjs",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/tkt/tools/deploy.mjs",
           "--no-agy"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "4bf1c85d66e5a4bfcc5b92933db56d4caf6f7ba5f9d7d7f2cb9ea1744ac267bf",
+          "sha256": "2b8ee62834be7fce352d38b44ce92b5facdbb138ffa992e6a008893c44ac9f7b",
           "bytes": 227
         }
       },
@@ -216,15 +216,15 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-13.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-13.log",
           "plugin",
           "list",
           "--json"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "11c95b3a246920d51f591207b30ca65485d40dfa0f8f732c520fd9cf101029ab",
+          "sha256": "8c122903a80026384a4e63a419e02f0bf06b19b1019e5e2d8efc3898596d23ef",
           "bytes": 1039
         }
       },
@@ -232,12 +232,12 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-14.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-14.log",
           "plugin",
           "details",
           "grey-matter"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "d7b7e141f4175688e2de1fdcc5a57d0183768201cc558fb851b679748c5c131c",
@@ -248,12 +248,12 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-15.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-15.log",
           "plugin",
           "details",
           "tkt"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "dd9a77a882443e8d7551249dde73b66eee06f0aab0e7aee571f4c508b67bb82d",
@@ -263,26 +263,26 @@
       {
         "command": [
           "/Users/sambiggins/.local/share/fnm/node-versions/v24.14.1/installation/bin/node",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/grey-matter/scripts/deploy.mjs",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/grey-matter/scripts/deploy.mjs",
           "--no-agy"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "be2ae217818d1f3ed135e868141386b97346dd81a2ad35f16449ac0798310d32",
+          "sha256": "9cb617fd669e84bb14a74823c63dbbd0866d62ec6a489be606c4268a8a167b0d",
           "bytes": 268
         }
       },
       {
         "command": [
           "/Users/sambiggins/.local/share/fnm/node-versions/v24.14.1/installation/bin/node",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/tkt/tools/deploy.mjs",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/tkt/tools/deploy.mjs",
           "--no-agy"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "4bf1c85d66e5a4bfcc5b92933db56d4caf6f7ba5f9d7d7f2cb9ea1744ac267bf",
+          "sha256": "2b8ee62834be7fce352d38b44ce92b5facdbb138ffa992e6a008893c44ac9f7b",
           "bytes": 227
         }
       },
@@ -290,12 +290,12 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-18.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-18.log",
           "plugin",
           "details",
           "grey-matter"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "d7b7e141f4175688e2de1fdcc5a57d0183768201cc558fb851b679748c5c131c",
@@ -306,12 +306,12 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-19.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-19.log",
           "plugin",
           "details",
           "tkt"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "dd9a77a882443e8d7551249dde73b66eee06f0aab0e7aee571f4c508b67bb82d",
@@ -322,12 +322,12 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-20.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-20.log",
           "plugin",
           "disable",
           "grey-matter@grey-matter"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "d9336a40e0dec2ee49138a2b9cc76afcb4c334ec4f2c9d58ce9a41e19f07a44a",
@@ -338,15 +338,15 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-21.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-21.log",
           "plugin",
           "list",
           "--json"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "8f2bba7eb8db55ea5c742340fada5bcd64e9d25b9a2e501be394b8d18e55c99c",
+          "sha256": "0a99d23318ee1ba6dde026d3124f010857bcec8c4ec6c47031ad1428a26d978a",
           "bytes": 1040
         }
       },
@@ -354,12 +354,12 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-22.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-22.log",
           "plugin",
           "disable",
           "tkt@tkt"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "07374be600c3f1b99bb207d9d06ba9771b87056346c1997107435ce7c503ba7f",
@@ -370,15 +370,15 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-23.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-23.log",
           "plugin",
           "list",
           "--json"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "017ac5100b0f7931624785946c59a3fd7c1ea2cfe62b5d833bb1e34de9919cfe",
+          "sha256": "974e6f23458ae2477efc2fb457084d13b57aa258095e9d7bf8bc0c302d389327",
           "bytes": 1041
         }
       },
@@ -386,12 +386,12 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-24.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-24.log",
           "plugin",
           "enable",
           "tkt@tkt"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "2d06efd6da262ba60925b1729cf8d0f6d3291c3435ed085831357ddfc8678516",
@@ -402,12 +402,12 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-25.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-25.log",
           "plugin",
           "enable",
           "grey-matter@grey-matter"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "19d8101de3f668290b7a742adb684f99643a73e38dd3b6c7fcbafae832abf822",
@@ -418,15 +418,15 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-26.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-26.log",
           "plugin",
           "list",
           "--json"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "11c95b3a246920d51f591207b30ca65485d40dfa0f8f732c520fd9cf101029ab",
+          "sha256": "8c122903a80026384a4e63a419e02f0bf06b19b1019e5e2d8efc3898596d23ef",
           "bytes": 1039
         }
       },
@@ -434,15 +434,15 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-27.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-27.log",
           "plugin",
           "list",
           "--json"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
-          "sha256": "11c95b3a246920d51f591207b30ca65485d40dfa0f8f732c520fd9cf101029ab",
+          "sha256": "8c122903a80026384a4e63a419e02f0bf06b19b1019e5e2d8efc3898596d23ef",
           "bytes": 1039
         }
       },
@@ -450,10 +450,10 @@
         "command": [
           "claude",
           "--debug-file",
-          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/debug-28.log",
+          "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/debug-28.log",
           "--version"
         ],
-        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/workspace",
+        "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/workspace",
         "exit": 0,
         "stdoutDigest": {
           "sha256": "03c71ebd08ddd569558734d42a29ae8c6a2a049e4a7fb78126979867e6f941d2",
@@ -512,15 +512,15 @@
         "--no-audit",
         "--no-fund"
       ],
-      "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/npm-warm",
-      "cache": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/.npm-cache",
+      "cwd": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/npm-warm",
+      "cache": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/.npm-cache",
       "lockSha256": "34f2d9f7e2c3cab3c92bf2545190c687c265986753059933ed6c83ea83ab042f",
       "exit": 0,
-      "scope": "Fresh owned cache; public lockfile downloads before network-isolated native install. No user npm config/cache or credentials.",
       "stdoutDigest": {
-        "sha256": "b2479266c403beff0025e39e90c0c7ae133341edb3b24a2e7968384890b49852",
+        "sha256": "7c086d830c6bd385f285f4ba9ff29d2464501b6c21c1bbfe181f31a277a9546b",
         "bytes": 28
-      }
+      },
+      "scope": "Fresh owned cache; public lockfile downloads before network-isolated native install. No user npm config/cache or credentials."
     },
     "enabledSessionCommands": [
       "grey-matter:adopt-project",
@@ -580,11 +580,11 @@
         "version": "0.2.0",
         "scope": "user",
         "enabled": true,
-        "installPath": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/.claude/plugins/cache/grey-matter/grey-matter/0.2.0",
-        "readFromFolder": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/grey-matter",
+        "installPath": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/.claude/plugins/cache/grey-matter/grey-matter/0.2.0",
+        "readFromFolder": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/grey-matter",
         "folderVersion": "0.2.0",
-        "installedAt": "2026-10-24T08:51:38.482Z",
-        "lastUpdated": "2026-10-24T08:51:38.482Z",
+        "installedAt": "2026-10-24T09:27:28.457Z",
+        "lastUpdated": "2026-10-24T09:27:28.457Z",
         "projectEnabled": false
       },
       {
@@ -592,11 +592,11 @@
         "version": "0.5.0",
         "scope": "user",
         "enabled": true,
-        "installPath": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/home/.claude/plugins/cache/tkt/tkt/0.5.0",
-        "readFromFolder": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-V1ynhV/tkt",
+        "installPath": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/home/.claude/plugins/cache/tkt/tkt/0.5.0",
+        "readFromFolder": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-claude-upgrade-tHYBi4/tkt",
         "folderVersion": "0.5.0",
-        "installedAt": "2026-10-24T08:51:37.841Z",
-        "lastUpdated": "2026-10-24T08:51:37.841Z",
+        "installedAt": "2026-10-24T09:27:27.548Z",
+        "lastUpdated": "2026-10-24T09:27:27.548Z",
         "projectEnabled": false
       }
     ],
@@ -783,137 +783,20 @@
       {
         "product": "tkt",
         "previousTag": "v0.4.0",
-        "candidateSha": "b2425c93f94a0b56a87cb6496ecbadaf381922bf",
+        "candidateSha": "af4703d7b737a772eb45fb7e601ce3ec6b9b9735",
         "host": "claude",
         "asset": "tkt-0.5.0-claude.tar.gz",
-        "assetSha256": "a5984a3e94cf221400ffbc4a7f2fb769be142f196e99558790aad0160ec347ef"
+        "assetSha256": "b51af4d26fa3dabd02f88e6d98711226272245f47f1748c675cfd28989530182"
       }
     ],
-    "debugLogs": [
-      {
-        "name": "debug-13.log",
-        "digest": {
-          "sha256": "ea87622fecedeaac87b1278b5a88dceb8ed7aadb35085cac001f369fa63aa17e",
-          "bytes": 2496
-        }
-      },
-      {
-        "name": "debug-14.log",
-        "digest": {
-          "sha256": "a7b3bfa7b574bc3ae9316d9edc1c6a4248296d818a4c612ed790252f563d32f7",
-          "bytes": 3142
-        }
-      },
-      {
-        "name": "debug-15.log",
-        "digest": {
-          "sha256": "16721c9f94ebcd4988e016586f4c71873f335b6b6c44cf17a9ad8b12b92d14a2",
-          "bytes": 3041
-        }
-      },
-      {
-        "name": "debug-18.log",
-        "digest": {
-          "sha256": "026d8b8d7a1007951f704d3490ff7fa588380e4df662b8a9b2b1c86bd0917e37",
-          "bytes": 3142
-        }
-      },
-      {
-        "name": "debug-19.log",
-        "digest": {
-          "sha256": "3f97c717e8917ec90049f48be72b6dca652376e8c349cd6b970ac1c37f5643f3",
-          "bytes": 3438
-        }
-      },
-      {
-        "name": "debug-20.log",
-        "digest": {
-          "sha256": "6db7e26b3c811e07db1c27b623a8da5503b258ff2f51303e2cf9775c3b908058",
-          "bytes": 6918
-        }
-      },
-      {
-        "name": "debug-21.log",
-        "digest": {
-          "sha256": "49635856c9cc247671f5f4461a3fdee7ceffda470df50a1f7e67f7633210711c",
-          "bytes": 2505
-        }
-      },
-      {
-        "name": "debug-22.log",
-        "digest": {
-          "sha256": "62b58c812f7963ff92d355c0bb782f042af6d441a41bba12d4a9d176a18028d4",
-          "bytes": 4116
-        }
-      },
-      {
-        "name": "debug-23.log",
-        "digest": {
-          "sha256": "ab03d49fb1b2a3071fb1076256f1d0314b04606bcce979af654ac4d18f8875aa",
-          "bytes": 2531
-        }
-      },
-      {
-        "name": "debug-24.log",
-        "digest": {
-          "sha256": "1e804527929f9370d5244db745788b04aa8247398df02e340c1f79f3f64aad2b",
-          "bytes": 4990
-        }
-      },
-      {
-        "name": "debug-25.log",
-        "digest": {
-          "sha256": "45d672b246979ab557ee24929f4036b237d52a2df2521221bd7536bb96abbacc",
-          "bytes": 5812
-        }
-      },
-      {
-        "name": "debug-26.log",
-        "digest": {
-          "sha256": "287469502c631c706ed337b8ad03cc61e3aa9e046e274d8519b560841d04f10f",
-          "bytes": 2496
-        }
-      },
-      {
-        "name": "debug-27.log",
-        "digest": {
-          "sha256": "09d95f5db4df88155b99cfef74ae8f79cefe2dab6a9779a3525a17fbb6d4313d",
-          "bytes": 2496
-        }
-      },
-      {
-        "name": "debug-6.log",
-        "digest": {
-          "sha256": "e1945d4e29e9fb509981ff9d7c340e76585011f89b11aad019fa65be93504484",
-          "bytes": 10048
-        }
-      },
-      {
-        "name": "debug-7.log",
-        "digest": {
-          "sha256": "bfb4a79e31d1a9fbd934710c45459c3e31e73d3528af36576e20dd2c8a7cfa49",
-          "bytes": 6719
-        }
-      },
-      {
-        "name": "debug-8.log",
-        "digest": {
-          "sha256": "0195d1674a4275d4c764dd7fedf7fd932397295cd9e10f84e3a7834529bb70bc",
-          "bytes": 4196
-        }
-      },
-      {
-        "name": "debug-9.log",
-        "digest": {
-          "sha256": "387fcb195ff97982805ba6a0dac801ea1a0f30029f2f1ae4b545a63b20189fb1",
-          "bytes": 6366
-        }
-      }
-    ],
-    "probeSha256": "61308453eaf685dfc1495bf8b420b1c19c895344b0064d9e08d6333ade0eec95"
+    "debugLogsDigest": {
+      "sha256": "536da3814bf72c1a429cbe70a56bd743181ad6ee8137df4f826a92e9d60ba050",
+      "bytes": 75912
+    },
+    "probeSha256": "67021d64bef013954cd3dfdbde7a9efcc107a4a76ca48f88d0cafad7a0cdb55b"
   },
   "rawReportDigest": {
-    "sha256": "913e599a004fb56a6a2fca394c88c0a2bf372a585bcbc4be8df478028862e3ce",
-    "bytes": 123598
+    "sha256": "534d3e3b3172cfceeb5bb4869eb87099e18241d39d37df1fba47fc834570e2ab",
+    "bytes": 123700
   }
 }

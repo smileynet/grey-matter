@@ -86,7 +86,7 @@ before and after inspection and verified upload-log identity. Retain the origina
 ZIP locally for 71; no registry/release/stable operation ran.
 
 
-## Current candidate evidence (2026-10-24)
+## Prior candidate evidence (b2425c9; superseded below)
 
 The current pair is grey-matter `bec5afee9f4f070ef898ac309d45d5061a5be7b5`
 and tkt `b2425c93f94a0b56a87cb6496ecbadaf381922bf`. The tkt candidate
@@ -132,3 +132,36 @@ Cargo package-path failures remain. [tkt 219](https://github.com/smileynet/tkt/b
 owns this release-blocking remediation; resolve it and refresh affected candidate
 evidence before closure. The ownership hash mismatch is verified checkout CRLF
 conversion, and the corrected probe's ownership/mise wrapper checks pass.
+
+
+## Verified replacement candidate pair (2026-10-24)
+
+Current candidates: grey-matter `bec5afee9f4f070ef898ac309d45d5061a5be7b5`
+and tkt `af4703d7b737a772eb45fb7e601ce3ec6b9b9735`. Tkt source
+`468684dd6ff13b7c33c7d59e43d234400f392d80` contains the verified portability
+corrections. Tickets 219 and 220 are closed after full source CI 40081866652
+passed on Windows/Linux. Closure-only main commits do not change the candidate.
+
+All six compatibility probe groups were rerun against this pair and passed. The
+current generic evidence files linked above now contain this replacement tkt SHA,
+exact executed probe sources and hashes. The current tkt product/native receipt
+also passes, as do 21 CLI command surfaces and the executed context example.
+
+[Bound replacement CI stage](../docs/agents/research/evidence/tkt-candidate-stage-af4703d-20261024.json)
+verifies all 16 assets from build-only run 40082044616, the upload ZIP/seal hashes,
+and before/after Actions identity observations. Original ZIP is retained locally.
+Candidate CI 40082019316 also passes all five jobs at the exact replacement SHA.
+
+[Platform coverage](../docs/agents/research/evidence/release-platform-coverage-20261024.json)
+records the exact candidate Windows/Linux jobs and output, alongside macOS native
+coverage. Native Windows/Linux vendor catalogs remain unverified. The Windows
+relative-symlink Node case and Unix-only CLI fixture exclusions are named. Final
+audit 70 must classify these limits; this ticket does not grant platform approval.
+
+The publisher-format compatibility and upgrade receipts are committed for each
+product under `docs/agents/research/evidence/release-gates/`. They bind these exact
+candidate identities and reference the measured reports. `readStagedCandidate`
+requires all six named gate receipts and their digests; platform approval, final
+audit and staging remain separate pending gates. Ticket 71 must bind the real
+receipts in review carrier R before its reader can permit a publication plan.
+No release, registry, stable or public-directory operation was performed.

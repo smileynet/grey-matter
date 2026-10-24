@@ -1,0 +1,877 @@
+{
+  "schema": 1,
+  "kind": "release-platform-coverage",
+  "status": "pass",
+  "scope": "Executed product/fixture gates only; not universal native-harness platform approval.",
+  "rows": [
+    {
+      "product": "grey-matter",
+      "candidateSha": "bec5afee9f4f070ef898ac309d45d5061a5be7b5",
+      "run": {
+        "conclusion": "success",
+        "headSha": "bec5afee9f4f070ef898ac309d45d5061a5be7b5",
+        "jobs": [
+          {
+            "completedAt": "2026-10-24T07:47:02Z",
+            "conclusion": "success",
+            "databaseId": 120817496551,
+            "name": "windows-regressions",
+            "startedAt": "2026-10-24T07:45:30Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-24T07:45:32Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-24T07:45:31Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:45:40Z",
+                "conclusion": "success",
+                "name": "Run actions/checkout@v6",
+                "number": 2,
+                "startedAt": "2026-10-24T07:45:32Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:45:52Z",
+                "conclusion": "success",
+                "name": "Run actions/setup-node@v7",
+                "number": 3,
+                "startedAt": "2026-10-24T07:45:40Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:46:01Z",
+                "conclusion": "success",
+                "name": "Run npm ci --ignore-scripts",
+                "number": 4,
+                "startedAt": "2026-10-24T07:45:52Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:46:07Z",
+                "conclusion": "success",
+                "name": "Original Windows failures",
+                "number": 5,
+                "startedAt": "2026-10-24T07:46:01Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:46:16Z",
+                "conclusion": "success",
+                "name": "Worktree identity and recovery",
+                "number": 6,
+                "startedAt": "2026-10-24T07:46:07Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:46:17Z",
+                "conclusion": "success",
+                "name": "Archive symlink rejection",
+                "number": 7,
+                "startedAt": "2026-10-24T07:46:16Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:46:58Z",
+                "conclusion": "success",
+                "name": "Native deployment and hook fixtures",
+                "number": 8,
+                "startedAt": "2026-10-24T07:46:17Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:46:58Z",
+                "conclusion": "success",
+                "name": "Post Run actions/setup-node@v7",
+                "number": 15,
+                "startedAt": "2026-10-24T07:46:58Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:47:00Z",
+                "conclusion": "success",
+                "name": "Post Run actions/checkout@v6",
+                "number": 16,
+                "startedAt": "2026-10-24T07:46:58Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:47:00Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 17,
+                "startedAt": "2026-10-24T07:47:00Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/smileynet/grey-matter/actions/runs/40075385295/job/120817496551"
+          },
+          {
+            "completedAt": "2026-10-24T07:54:59Z",
+            "conclusion": "success",
+            "databaseId": 120817496751,
+            "name": "full-gate (windows-latest)",
+            "startedAt": "2026-10-24T07:45:29Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-24T07:45:31Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-24T07:45:30Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:45:38Z",
+                "conclusion": "success",
+                "name": "Run actions/checkout@v6",
+                "number": 2,
+                "startedAt": "2026-10-24T07:45:31Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:45:44Z",
+                "conclusion": "success",
+                "name": "Run actions/setup-node@v7",
+                "number": 3,
+                "startedAt": "2026-10-24T07:45:38Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:45:49Z",
+                "conclusion": "success",
+                "name": "Run npm ci --ignore-scripts",
+                "number": 4,
+                "startedAt": "2026-10-24T07:45:44Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:45:56Z",
+                "conclusion": "success",
+                "name": "Run dtolnay/rust-toolchain@stable",
+                "number": 5,
+                "startedAt": "2026-10-24T07:45:49Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:47:50Z",
+                "conclusion": "success",
+                "name": "Install pinned tkt check dependency",
+                "number": 6,
+                "startedAt": "2026-10-24T07:45:56Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:54:54Z",
+                "conclusion": "success",
+                "name": "Complete repository gate",
+                "number": 7,
+                "startedAt": "2026-10-24T07:47:50Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:54:54Z",
+                "conclusion": "success",
+                "name": "Post Run actions/setup-node@v7",
+                "number": 13,
+                "startedAt": "2026-10-24T07:54:54Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:54:57Z",
+                "conclusion": "success",
+                "name": "Post Run actions/checkout@v6",
+                "number": 14,
+                "startedAt": "2026-10-24T07:54:54Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:54:57Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 15,
+                "startedAt": "2026-10-24T07:54:57Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/smileynet/grey-matter/actions/runs/40075385295/job/120817496751"
+          },
+          {
+            "completedAt": "2026-10-24T07:47:12Z",
+            "conclusion": "success",
+            "databaseId": 120817496790,
+            "name": "full-gate (ubuntu-latest)",
+            "startedAt": "2026-10-24T07:45:29Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-24T07:45:31Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-24T07:45:30Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:45:31Z",
+                "conclusion": "success",
+                "name": "Run actions/checkout@v6",
+                "number": 2,
+                "startedAt": "2026-10-24T07:45:31Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:45:32Z",
+                "conclusion": "success",
+                "name": "Run actions/setup-node@v7",
+                "number": 3,
+                "startedAt": "2026-10-24T07:45:31Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:45:33Z",
+                "conclusion": "success",
+                "name": "Run npm ci --ignore-scripts",
+                "number": 4,
+                "startedAt": "2026-10-24T07:45:32Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:45:43Z",
+                "conclusion": "success",
+                "name": "Run dtolnay/rust-toolchain@stable",
+                "number": 5,
+                "startedAt": "2026-10-24T07:45:33Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:46:22Z",
+                "conclusion": "success",
+                "name": "Install pinned tkt check dependency",
+                "number": 6,
+                "startedAt": "2026-10-24T07:45:43Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:47:11Z",
+                "conclusion": "success",
+                "name": "Complete repository gate",
+                "number": 7,
+                "startedAt": "2026-10-24T07:46:22Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:47:11Z",
+                "conclusion": "success",
+                "name": "Post Run actions/setup-node@v7",
+                "number": 13,
+                "startedAt": "2026-10-24T07:47:11Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:47:11Z",
+                "conclusion": "success",
+                "name": "Post Run actions/checkout@v6",
+                "number": 14,
+                "startedAt": "2026-10-24T07:47:11Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T07:47:11Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 15,
+                "startedAt": "2026-10-24T07:47:11Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/smileynet/grey-matter/actions/runs/40075385295/job/120817496790"
+          }
+        ],
+        "status": "completed",
+        "url": "https://github.com/smileynet/grey-matter/actions/runs/40075385295"
+      },
+      "runMetadataSha256": "06161346335fa8eeec54bd2d4b0f98188ebec3236cdd3f1263a818109dd8bdfa",
+      "logSha256": "c2d0c5dec41a0676725c52b92d606c1680b7a9704304e5ce2362f13c5907c812",
+      "logBytes": 760168,
+      "selectedOutput": [
+        "windows-regressions\tOriginal Windows failures\t2026-10-24T07:46:07.2876587Z # pass 12",
+        "windows-regressions\tOriginal Windows failures\t2026-10-24T07:46:07.2876944Z # fail 0",
+        "windows-regressions\tOriginal Windows failures\t2026-10-24T07:46:07.2877648Z # skipped 0",
+        "windows-regressions\tWorktree identity and recovery\t2026-10-24T07:46:16.3485906Z # pass 3",
+        "windows-regressions\tWorktree identity and recovery\t2026-10-24T07:46:16.3488097Z # fail 0",
+        "windows-regressions\tWorktree identity and recovery\t2026-10-24T07:46:16.3492566Z # skipped 0",
+        "windows-regressions\tArchive symlink rejection\t2026-10-24T07:46:17.4723590Z # pass 1",
+        "windows-regressions\tArchive symlink rejection\t2026-10-24T07:46:17.4725559Z # fail 0",
+        "windows-regressions\tArchive symlink rejection\t2026-10-24T07:46:17.4727645Z # skipped 0",
+        "windows-regressions\tNative deployment and hook fixtures\t2026-10-24T07:46:58.0180305Z # pass 37",
+        "windows-regressions\tNative deployment and hook fixtures\t2026-10-24T07:46:58.0180640Z # fail 0",
+        "windows-regressions\tNative deployment and hook fixtures\t2026-10-24T07:46:58.0181477Z # skipped 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:25.4969493Z # pass 32",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:25.4969850Z # fail 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:25.4970663Z # skipped 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:30.6141374Z # pass 9",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:30.6141786Z # fail 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:30.6142529Z # skipped 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:31.3043943Z # pass 5",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:31.3044388Z # fail 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:31.3045163Z # skipped 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:32.0502713Z # pass 3",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:32.0503117Z # fail 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:32.0504371Z # skipped 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:34.1749418Z # pass 1",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:34.1749777Z # fail 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:48:34.1750543Z # skipped 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:49:11.3769982Z ok 34 - snapshot preserves empty Git directories, directory modes and safe symlinks # SKIP",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:49:11.3824223Z ok 40 - Linux entry rejects option injection before even reading the candidate # SKIP",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:54:48.6045717Z # pass 248",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:54:48.6046186Z # fail 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:54:48.6047235Z # skipped 2",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:54:54.4727749Z # pass 9",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:54:54.4730277Z # fail 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:54:54.4731246Z # skipped 0",
+        "full-gate (windows-latest)\tComplete repository gate\t2026-10-24T07:54:54.4744382Z All repository-consistency invariants pass.",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:27.9115964Z # pass 32",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:27.9116289Z # fail 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:27.9117010Z # skipped 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.2851751Z # pass 9",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.2852132Z # fail 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.2852863Z # skipped 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.5845059Z # pass 5",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.5845221Z # fail 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.5845559Z # skipped 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.7789037Z # pass 3",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.7789475Z # fail 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.7790381Z # skipped 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.9875455Z # pass 1",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.9875803Z # fail 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:28.9876530Z # skipped 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:46:33.9432219Z ok 39 - unsupported hosts refuse before reading credentials or starting a child # SKIP",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:47:09.7155626Z # pass 249",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:47:09.7163766Z # fail 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:47:09.7168801Z # skipped 1",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:47:11.0392227Z # pass 9",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:47:11.0392949Z # fail 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:47:11.0403863Z # skipped 0",
+        "full-gate (ubuntu-latest)\tComplete repository gate\t2026-10-24T07:47:11.0456476Z All repository-consistency invariants pass."
+      ]
+    },
+    {
+      "product": "tkt",
+      "candidateSha": "af4703d7b737a772eb45fb7e601ce3ec6b9b9735",
+      "run": {
+        "conclusion": "success",
+        "headSha": "af4703d7b737a772eb45fb7e601ce3ec6b9b9735",
+        "jobs": [
+          {
+            "completedAt": "2026-10-24T09:27:49Z",
+            "conclusion": "success",
+            "databaseId": 120837349521,
+            "name": "Claude hook fixtures (windows-latest)",
+            "startedAt": "2026-10-24T09:27:28Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-24T09:27:30Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-24T09:27:29Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:35Z",
+                "conclusion": "success",
+                "name": "Run actions/checkout@v6",
+                "number": 2,
+                "startedAt": "2026-10-24T09:27:30Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:41Z",
+                "conclusion": "success",
+                "name": "Run actions/setup-node@v7",
+                "number": 3,
+                "startedAt": "2026-10-24T09:27:35Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:45Z",
+                "conclusion": "success",
+                "name": "Verify guarded session context",
+                "number": 4,
+                "startedAt": "2026-10-24T09:27:41Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:45Z",
+                "conclusion": "success",
+                "name": "Post Run actions/setup-node@v7",
+                "number": 7,
+                "startedAt": "2026-10-24T09:27:45Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:47Z",
+                "conclusion": "success",
+                "name": "Post Run actions/checkout@v6",
+                "number": 8,
+                "startedAt": "2026-10-24T09:27:45Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:47Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 9,
+                "startedAt": "2026-10-24T09:27:47Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/smileynet/tkt/actions/runs/40082019316/job/120837349521"
+          },
+          {
+            "completedAt": "2026-10-24T09:27:48Z",
+            "conclusion": "success",
+            "databaseId": 120837349666,
+            "name": "Minimum supported Rust",
+            "startedAt": "2026-10-24T09:27:28Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-24T09:27:29Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-24T09:27:29Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:30Z",
+                "conclusion": "success",
+                "name": "Run actions/checkout@v6",
+                "number": 2,
+                "startedAt": "2026-10-24T09:27:29Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:30Z",
+                "conclusion": "success",
+                "name": "Read declared minimum",
+                "number": 3,
+                "startedAt": "2026-10-24T09:27:30Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:38Z",
+                "conclusion": "success",
+                "name": "Install declared minimum",
+                "number": 4,
+                "startedAt": "2026-10-24T09:27:30Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:46Z",
+                "conclusion": "success",
+                "name": "Check locked binary at minimum Rust",
+                "number": 5,
+                "startedAt": "2026-10-24T09:27:38Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:47Z",
+                "conclusion": "success",
+                "name": "Post Run actions/checkout@v6",
+                "number": 10,
+                "startedAt": "2026-10-24T09:27:46Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:47Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-24T09:27:47Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/smileynet/tkt/actions/runs/40082019316/job/120837349666"
+          },
+          {
+            "completedAt": "2026-10-24T09:28:31Z",
+            "conclusion": "success",
+            "databaseId": 120837349680,
+            "name": "Full verification (ubuntu-latest)",
+            "startedAt": "2026-10-24T09:27:28Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-24T09:27:32Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-24T09:27:29Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:32Z",
+                "conclusion": "success",
+                "name": "Preserve repository file bytes",
+                "number": 2,
+                "startedAt": "2026-10-24T09:27:32Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:34Z",
+                "conclusion": "success",
+                "name": "Run actions/checkout@v6",
+                "number": 3,
+                "startedAt": "2026-10-24T09:27:32Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:39Z",
+                "conclusion": "success",
+                "name": "Install maintainer Node runtime",
+                "number": 4,
+                "startedAt": "2026-10-24T09:27:34Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:42Z",
+                "conclusion": "success",
+                "name": "Install locked maintainer dependencies",
+                "number": 5,
+                "startedAt": "2026-10-24T09:27:39Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:46Z",
+                "conclusion": "success",
+                "name": "Install mise",
+                "number": 6,
+                "startedAt": "2026-10-24T09:27:42Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:28:00Z",
+                "conclusion": "success",
+                "name": "Install Rust toolchain",
+                "number": 7,
+                "startedAt": "2026-10-24T09:27:46Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:28:02Z",
+                "conclusion": "success",
+                "name": "Install pinned workflow generator",
+                "number": 8,
+                "startedAt": "2026-10-24T09:28:00Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:28:02Z",
+                "conclusion": "skipped",
+                "name": "Install verified Windows workflow generator",
+                "number": 9,
+                "startedAt": "2026-10-24T09:28:02Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:28:03Z",
+                "conclusion": "success",
+                "name": "Fetch locked test dependencies",
+                "number": 10,
+                "startedAt": "2026-10-24T09:28:02Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:28:28Z",
+                "conclusion": "success",
+                "name": "Verification gate",
+                "number": 11,
+                "startedAt": "2026-10-24T09:28:03Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:28:28Z",
+                "conclusion": "success",
+                "name": "Post Install mise",
+                "number": 20,
+                "startedAt": "2026-10-24T09:28:28Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:28:28Z",
+                "conclusion": "success",
+                "name": "Post Install maintainer Node runtime",
+                "number": 21,
+                "startedAt": "2026-10-24T09:28:28Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:28:28Z",
+                "conclusion": "success",
+                "name": "Post Run actions/checkout@v6",
+                "number": 22,
+                "startedAt": "2026-10-24T09:28:28Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:28:28Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 23,
+                "startedAt": "2026-10-24T09:28:28Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/smileynet/tkt/actions/runs/40082019316/job/120837349680"
+          },
+          {
+            "completedAt": "2026-10-24T09:27:36Z",
+            "conclusion": "success",
+            "databaseId": 120837349686,
+            "name": "Claude hook fixtures (ubuntu-latest)",
+            "startedAt": "2026-10-24T09:27:28Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-24T09:27:29Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-24T09:27:29Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:30Z",
+                "conclusion": "success",
+                "name": "Run actions/checkout@v6",
+                "number": 2,
+                "startedAt": "2026-10-24T09:27:30Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:33Z",
+                "conclusion": "success",
+                "name": "Run actions/setup-node@v7",
+                "number": 3,
+                "startedAt": "2026-10-24T09:27:30Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:34Z",
+                "conclusion": "success",
+                "name": "Verify guarded session context",
+                "number": 4,
+                "startedAt": "2026-10-24T09:27:33Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:34Z",
+                "conclusion": "success",
+                "name": "Post Run actions/setup-node@v7",
+                "number": 7,
+                "startedAt": "2026-10-24T09:27:34Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:34Z",
+                "conclusion": "success",
+                "name": "Post Run actions/checkout@v6",
+                "number": 8,
+                "startedAt": "2026-10-24T09:27:34Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:34Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 9,
+                "startedAt": "2026-10-24T09:27:34Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/smileynet/tkt/actions/runs/40082019316/job/120837349686"
+          },
+          {
+            "completedAt": "2026-10-24T09:29:41Z",
+            "conclusion": "success",
+            "databaseId": 120837349688,
+            "name": "Full verification (windows-latest)",
+            "startedAt": "2026-10-24T09:27:28Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-24T09:27:31Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-24T09:27:29Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:31Z",
+                "conclusion": "success",
+                "name": "Preserve repository file bytes",
+                "number": 2,
+                "startedAt": "2026-10-24T09:27:31Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:36Z",
+                "conclusion": "success",
+                "name": "Run actions/checkout@v6",
+                "number": 3,
+                "startedAt": "2026-10-24T09:27:31Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:40Z",
+                "conclusion": "success",
+                "name": "Install maintainer Node runtime",
+                "number": 4,
+                "startedAt": "2026-10-24T09:27:36Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:44Z",
+                "conclusion": "success",
+                "name": "Install locked maintainer dependencies",
+                "number": 5,
+                "startedAt": "2026-10-24T09:27:40Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:50Z",
+                "conclusion": "success",
+                "name": "Install mise",
+                "number": 6,
+                "startedAt": "2026-10-24T09:27:44Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:55Z",
+                "conclusion": "success",
+                "name": "Install Rust toolchain",
+                "number": 7,
+                "startedAt": "2026-10-24T09:27:50Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:55Z",
+                "conclusion": "skipped",
+                "name": "Install pinned workflow generator",
+                "number": 8,
+                "startedAt": "2026-10-24T09:27:55Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:27:57Z",
+                "conclusion": "success",
+                "name": "Install verified Windows workflow generator",
+                "number": 9,
+                "startedAt": "2026-10-24T09:27:55Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:28:04Z",
+                "conclusion": "success",
+                "name": "Fetch locked test dependencies",
+                "number": 10,
+                "startedAt": "2026-10-24T09:27:57Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:29:36Z",
+                "conclusion": "success",
+                "name": "Verification gate",
+                "number": 11,
+                "startedAt": "2026-10-24T09:28:04Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:29:37Z",
+                "conclusion": "success",
+                "name": "Post Install mise",
+                "number": 20,
+                "startedAt": "2026-10-24T09:29:36Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:29:37Z",
+                "conclusion": "success",
+                "name": "Post Install maintainer Node runtime",
+                "number": 21,
+                "startedAt": "2026-10-24T09:29:37Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:29:39Z",
+                "conclusion": "success",
+                "name": "Post Run actions/checkout@v6",
+                "number": 22,
+                "startedAt": "2026-10-24T09:29:37Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-24T09:29:39Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 23,
+                "startedAt": "2026-10-24T09:29:39Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/smileynet/tkt/actions/runs/40082019316/job/120837349688"
+          }
+        ],
+        "status": "completed",
+        "url": "https://github.com/smileynet/tkt/actions/runs/40082019316"
+      },
+      "runMetadataSha256": "0f3afb7ca35702ae6e098f119cc7e6ab82686f26f41f73a70a677af61a0e2f47",
+      "logSha256": "e39e386543434ae3a6230a4cc026491301c8611215679d771cb7658ab7bbd67d",
+      "logBytes": 439564,
+      "selectedOutput": [
+        "Claude hook fixtures (windows-latest)\tVerify guarded session context\t2026-10-24T09:27:44.8669578Z # pass 4",
+        "Claude hook fixtures (windows-latest)\tVerify guarded session context\t2026-10-24T09:27:44.8670870Z # fail 0",
+        "Claude hook fixtures (windows-latest)\tVerify guarded session context\t2026-10-24T09:27:44.8673040Z # skipped 0",
+        "Full verification (ubuntu-latest)\tVerification gate\t2026-10-24T09:28:08.7393944Z # pass 37",
+        "Full verification (ubuntu-latest)\tVerification gate\t2026-10-24T09:28:08.7394193Z # fail 0",
+        "Full verification (ubuntu-latest)\tVerification gate\t2026-10-24T09:28:08.7394682Z # skipped 0",
+        "Full verification (ubuntu-latest)\tVerification gate\t2026-10-24T09:28:23.4418340Z test result: ok. 191 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s",
+        "Full verification (ubuntu-latest)\tVerification gate\t2026-10-24T09:28:23.7238645Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s",
+        "Full verification (ubuntu-latest)\tVerification gate\t2026-10-24T09:28:28.1027850Z test result: ok. 96 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.38s",
+        "Full verification (ubuntu-latest)\tVerification gate\t2026-10-24T09:28:28.1043322Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "Claude hook fixtures (ubuntu-latest)\tVerify guarded session context\t2026-10-24T09:27:34.1319572Z # pass 4",
+        "Claude hook fixtures (ubuntu-latest)\tVerify guarded session context\t2026-10-24T09:27:34.1319980Z # fail 0",
+        "Claude hook fixtures (ubuntu-latest)\tVerify guarded session context\t2026-10-24T09:27:34.1321860Z # skipped 0",
+        "Full verification (windows-latest)\tVerification gate\t2026-10-24T09:28:29.9370770Z ok 17 - legacy migration resolves a relative link without following the target # SKIP",
+        "Full verification (windows-latest)\tVerification gate\t2026-10-24T09:28:29.9556754Z # pass 36",
+        "Full verification (windows-latest)\tVerification gate\t2026-10-24T09:28:29.9557271Z # fail 0",
+        "Full verification (windows-latest)\tVerification gate\t2026-10-24T09:28:29.9558127Z # skipped 1",
+        "Full verification (windows-latest)\tVerification gate\t2026-10-24T09:28:57.7922889Z test result: ok. 191 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s",
+        "Full verification (windows-latest)\tVerification gate\t2026-10-24T09:28:58.2525405Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s",
+        "Full verification (windows-latest)\tVerification gate\t2026-10-24T09:29:36.8228093Z test result: ok. 95 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 38.56s",
+        "Full verification (windows-latest)\tVerification gate\t2026-10-24T09:29:36.8346194Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    }
+  ],
+  "macOS": "Both exact candidates passed fresh product and all three plugin native package checks; six harness catalog/upgrade groups also passed. See current candidate and compatibility evidence.",
+  "limits": [
+    "Native Codex, Claude, Antigravity, Kiro, OpenCode and Crush catalog/upgrade observations are macOS-only. No native Windows/Linux vendor-loading pass is claimed.",
+    "Windows tkt intentionally skips the relative-symlink migration Node fixture and excludes the Unix-only push-rejection integration test. Remaining Node cases and all platform-applicable Rust tests pass.",
+    "Final audit 70 must classify these coverage limits; platform-approval, final-audit and staging gates are not granted by this report."
+  ],
+  "remediation": {
+    "219": "Closed; native canonical Windows temp paths, portable Cargo path assertions, canonical Node deploy fixtures, permanent full Linux/Windows CI.",
+    "220": "Closed; deterministic pre-receive hook rejects the push without fragile recursive metadata mutation."
+  },
+  "publicationPerformed": false
+}

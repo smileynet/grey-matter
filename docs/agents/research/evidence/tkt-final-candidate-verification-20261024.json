@@ -1,16 +1,16 @@
 {
   "schema": 1,
   "status": "pass",
-  "candidateSha": "b2425c93f94a0b56a87cb6496ecbadaf381922bf",
+  "candidateSha": "af4703d7b737a772eb45fb7e601ce3ec6b9b9735",
   "verification": {
     "schema": 1,
     "status": "pass",
     "mode": "candidate-verification",
     "publishable": false,
-    "candidateSha": "b2425c93f94a0b56a87cb6496ecbadaf381922bf",
+    "candidateSha": "af4703d7b737a772eb45fb7e601ce3ec6b9b9735",
     "product": "tkt",
     "version": "0.5.0",
-    "metadataSha256": "a2b17e89c5ce336bd32bf10e8b27c5cc10ea79394af03f7c574c0f3bd46b7d2c",
+    "metadataSha256": "a874b3809c2d94f51503389977190f06f76f7d6f3f0f3cb9e8441c4ce5d8c09b",
     "phases": {
       "product": "pass",
       "native": "pass"
@@ -27,19 +27,19 @@
         {
           "host": "codex",
           "asset": "tkt-0.5.0-codex.tar.gz",
-          "sha256": "e4a18ba1fb4d07f4faa30d7935e7a7786874fc3f1f8928ba05d99cb11dbee321",
+          "sha256": "a57ff28155076ff291c8c811b1f0e39cd73e8a9a28f1d2fc0ea93aab9c40817a",
           "binary": "codex"
         },
         {
           "host": "claude",
           "asset": "tkt-0.5.0-claude.tar.gz",
-          "sha256": "a5984a3e94cf221400ffbc4a7f2fb769be142f196e99558790aad0160ec347ef",
+          "sha256": "b51af4d26fa3dabd02f88e6d98711226272245f47f1748c675cfd28989530182",
           "binary": "claude"
         },
         {
           "host": "agy",
           "asset": "tkt-0.5.0-agy.tar.gz",
-          "sha256": "650809d2da5a2c1ca36183b7a3b392826fbcafee09f48b61031111c950c94983",
+          "sha256": "391a5a2182237c1e558fc9adcd67914aeaf3ff6b068c28b132ea42d08cbb52ff",
           "binary": "agy"
         }
       ]
@@ -52,10 +52,10 @@
       "final-audit",
       "staging"
     ],
-    "started": "2026-10-24T08:34:21.866Z",
+    "started": "2026-10-24T09:26:09.538Z",
     "productEvidence": {
       "file": "product/product-evidence.json",
-      "sha256": "b972de060c17cf98ef72e7fb9b562bfaf335abeff2d02367fa3152a92eb378d7",
+      "sha256": "9bc69d0fc151149d59200bedb67bc3d58c61839794ae02804f0eeac03625372b",
       "platform": {
         "os": "darwin",
         "release": "25.6.0",
@@ -65,7 +65,7 @@
     },
     "nativeEvidence": {
       "file": "native/native-evidence.json",
-      "sha256": "82a77e7839da2081c54972090b6cebe19dbc5517395bab3cb2ed1b360dfe70cf",
+      "sha256": "b4af01b95baea002dd0aa5ac4edae8817aa58d075c6ad669d561aa25bff627b7",
       "platform": {
         "os": "darwin",
         "release": "25.6.0",
@@ -77,7 +77,7 @@
         "network": "loopback-only sandbox"
       }
     },
-    "finished": "2026-10-24T08:34:58.220Z"
+    "finished": "2026-10-24T09:26:44.078Z"
   },
   "underlyingEvidence": {
     "product": {
@@ -85,7 +85,7 @@
       "status": "pass",
       "mode": "product-evidence",
       "publishable": false,
-      "candidateSha": "b2425c93f94a0b56a87cb6496ecbadaf381922bf",
+      "candidateSha": "af4703d7b737a772eb45fb7e601ce3ec6b9b9735",
       "product": "tkt",
       "version": "0.5.0",
       "platform": {
@@ -108,13 +108,13 @@
             "run",
             "check"
           ],
-          "started": "2026-10-24T08:34:21.933Z",
-          "finished": "2026-10-24T08:34:55.722Z",
+          "started": "2026-10-24T09:26:09.630Z",
+          "finished": "2026-10-24T09:26:41.582Z",
           "exit": 0,
           "signal": null,
           "error": null,
           "log": "1-product.log",
-          "sha256": "faf07806e0f3b32526562b0b36adc9998cca186b4416626de678341f96457355"
+          "sha256": "f4119ca601d20e4648afbefd3403840c9449be61f584d4eb708448fb9723cb35"
         }
       ],
       "pending": [
@@ -129,7 +129,7 @@
       "status": "pass",
       "mode": "native-evidence",
       "publishable": false,
-      "candidateSha": "b2425c93f94a0b56a87cb6496ecbadaf381922bf",
+      "candidateSha": "af4703d7b737a772eb45fb7e601ce3ec6b9b9735",
       "product": "tkt",
       "version": "0.5.0",
       "platform": {
@@ -146,19 +146,19 @@
         {
           "host": "codex",
           "asset": "tkt-0.5.0-codex.tar.gz",
-          "sha256": "e4a18ba1fb4d07f4faa30d7935e7a7786874fc3f1f8928ba05d99cb11dbee321",
+          "sha256": "a57ff28155076ff291c8c811b1f0e39cd73e8a9a28f1d2fc0ea93aab9c40817a",
           "binary": "codex"
         },
         {
           "host": "claude",
           "asset": "tkt-0.5.0-claude.tar.gz",
-          "sha256": "a5984a3e94cf221400ffbc4a7f2fb769be142f196e99558790aad0160ec347ef",
+          "sha256": "b51af4d26fa3dabd02f88e6d98711226272245f47f1748c675cfd28989530182",
           "binary": "claude"
         },
         {
           "host": "agy",
           "asset": "tkt-0.5.0-agy.tar.gz",
-          "sha256": "650809d2da5a2c1ca36183b7a3b392826fbcafee09f48b61031111c950c94983",
+          "sha256": "391a5a2182237c1e558fc9adcd67914aeaf3ff6b068c28b132ea42d08cbb52ff",
           "binary": "agy"
         }
       ],
@@ -166,7 +166,7 @@
         {
           "host": "codex",
           "asset": "tkt-0.5.0-codex.tar.gz",
-          "assetSha256": "e4a18ba1fb4d07f4faa30d7935e7a7786874fc3f1f8928ba05d99cb11dbee321",
+          "assetSha256": "a57ff28155076ff291c8c811b1f0e39cd73e8a9a28f1d2fc0ea93aab9c40817a",
           "status": "pass",
           "expectedSkills": [
             "tkt-core",
@@ -182,7 +182,7 @@
               ],
               "exit": 0,
               "stdout": "codex-cli 0.147.0\n",
-              "stderr": "WARNING: proceeding, even though we could not create PATH aliases: CODEX_HOME points to \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/codex-home/.codex\", but that path does not exist\n"
+              "stderr": "WARNING: proceeding, even though we could not create PATH aliases: CODEX_HOME points to \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/codex-home/.codex\", but that path does not exist\n"
             },
             {
               "command": [
@@ -190,11 +190,11 @@
                 "plugin",
                 "marketplace",
                 "add",
-                "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/codex",
+                "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/codex",
                 "--json"
               ],
               "exit": 0,
-              "stdout": "{\n  \"marketplaceName\": \"tkt\",\n  \"installedRoot\": \"/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/codex\",\n  \"alreadyAdded\": false\n}\n",
+              "stdout": "{\n  \"marketplaceName\": \"tkt\",\n  \"installedRoot\": \"/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/codex\",\n  \"alreadyAdded\": false\n}\n",
               "stderr": ""
             },
             {
@@ -206,7 +206,7 @@
                 "--json"
               ],
               "exit": 0,
-              "stdout": "{\n  \"pluginId\": \"tkt@tkt\",\n  \"name\": \"tkt\",\n  \"marketplaceName\": \"tkt\",\n  \"version\": \"0.5.0\",\n  \"installedPath\": \"/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/codex-home/.codex/plugins/cache/tkt/tkt/0.5.0\",\n  \"authPolicy\": \"ON_INSTALL\"\n}\n",
+              "stdout": "{\n  \"pluginId\": \"tkt@tkt\",\n  \"name\": \"tkt\",\n  \"marketplaceName\": \"tkt\",\n  \"version\": \"0.5.0\",\n  \"installedPath\": \"/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/codex-home/.codex/plugins/cache/tkt/tkt/0.5.0\",\n  \"authPolicy\": \"ON_INSTALL\"\n}\n",
               "stderr": ""
             }
           ],
@@ -215,19 +215,19 @@
             "skills": [
               {
                 "name": "tkt:tkt-core",
-                "path": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/codex-home/.codex/plugins/cache/tkt/tkt/0.5.0/skills/tkt-core/SKILL.md"
+                "path": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/codex-home/.codex/plugins/cache/tkt/tkt/0.5.0/skills/tkt-core/SKILL.md"
               },
               {
                 "name": "tkt:tkt-orient",
-                "path": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/codex-home/.codex/plugins/cache/tkt/tkt/0.5.0/skills/tkt-orient/SKILL.md"
+                "path": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/codex-home/.codex/plugins/cache/tkt/tkt/0.5.0/skills/tkt-orient/SKILL.md"
               },
               {
                 "name": "tkt:tkt-reconcile",
-                "path": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/codex-home/.codex/plugins/cache/tkt/tkt/0.5.0/skills/tkt-reconcile/SKILL.md"
+                "path": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/codex-home/.codex/plugins/cache/tkt/tkt/0.5.0/skills/tkt-reconcile/SKILL.md"
               },
               {
                 "name": "tkt:tkt-work",
-                "path": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/codex-home/.codex/plugins/cache/tkt/tkt/0.5.0/skills/tkt-work/SKILL.md"
+                "path": "/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/codex-home/.codex/plugins/cache/tkt/tkt/0.5.0/skills/tkt-work/SKILL.md"
               }
             ],
             "errors": [],
@@ -237,7 +237,7 @@
         {
           "host": "claude",
           "asset": "tkt-0.5.0-claude.tar.gz",
-          "assetSha256": "a5984a3e94cf221400ffbc4a7f2fb769be142f196e99558790aad0160ec347ef",
+          "assetSha256": "b51af4d26fa3dabd02f88e6d98711226272245f47f1748c675cfd28989530182",
           "status": "pass",
           "expectedSkills": [
             "tkt-core",
@@ -260,20 +260,20 @@
                 "/opt/homebrew/Cellar/node/26.7.0/bin/node",
                 "/Users/sambiggins/code/tkt/tools/probe-claude-validation.mjs",
                 "--pack",
-                "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/claude",
+                "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/claude",
                 "--snapshot",
                 "--binary",
                 "claude"
               ],
               "exit": 0,
-              "stdout": "{\n  \"status\": \"pass\",\n  \"metrics\": {\n    \"skills\": 4,\n    \"nativeChecks\": 3,\n    \"copiedSkillsMatched\": 4,\n    \"trackedSnapshotFiles\": 48\n  },\n  \"version\": \"2.1.310 (Claude Code)\",\n  \"pack\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/claude\",\n  \"sourceSnapshot\": \"extracted snapshot bytes\",\n  \"runs\": [\n    {\n      \"args\": [\n        \"plugin\",\n        \"validate\",\n        \"/tmp/claude-validation-UHllbi/source/.claude-plugin/plugin.json\",\n        \"--json\"\n      ],\n      \"exit\": 0,\n      \"stderr\": \"\",\n      \"result\": {\n        \"success\": true,\n        \"strict\": false,\n        \"target\": \"/tmp/claude-validation-UHllbi/source/.claude-plugin/plugin.json\",\n        \"manifest\": {\n          \"file\": \"/tmp/claude-validation-UHllbi/source/.claude-plugin/plugin.json\",\n          \"type\": \"plugin\",\n          \"errors\": [],\n          \"warnings\": [],\n          \"notes\": [],\n          \"gatingHooks\": []\n        },\n        \"contents\": [],\n        \"advice\": [],\n        \"directory\": {\n          \"profile\": null,\n          \"findings\": [\n            {\n              \"code\": \"ICON_MISSING\",\n              \"title\": \"No icon\",\n              \"severity\": \"warning\",\n              \"blocking\": false,\n              \"hold\": false,\n              \"file\": \".claude-plugin/plugin.json\",\n              \"field\": \"icon\",\n              \"message\": \"No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.\",\n              \"fix\": \"Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon.\"\n            }\n          ],\n          \"undecided\": [],\n          \"incomplete\": false,\n          \"failure\": null,\n          \"notes\": [\n            \"This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder.\"\n          ]\n        }\n      }\n    },\n    {\n      \"args\": [\n        \"plugin\",\n        \"validate\",\n        \"/tmp/claude-validation-UHllbi/source/.claude-plugin/marketplace.json\",\n        \"--json\"\n      ],\n      \"exit\": 0,\n      \"stderr\": \"\",\n      \"result\": {\n        \"success\": true,\n        \"strict\": false,\n        \"target\": \"/tmp/claude-validation-UHllbi/source/.claude-plugin/marketplace.json\",\n        \"manifest\": {\n          \"file\": \"/tmp/claude-validation-UHllbi/source/.claude-plugin/marketplace.json\",\n          \"type\": \"marketplace\",\n          \"errors\": [],\n          \"warnings\": [],\n          \"notes\": [],\n          \"gatingHooks\": []\n        },\n        \"contents\": [],\n        \"advice\": [],\n        \"directory\": null\n      }\n    },\n    {\n      \"args\": [\n        \"plugin\",\n        \"validate\",\n        \"/tmp/claude-validation-UHllbi/components/skills\",\n        \"--strict\",\n        \"--json\"\n      ],\n      \"exit\": 0,\n      \"stderr\": \"\",\n      \"result\": {\n        \"success\": true,\n        \"strict\": true,\n        \"target\": \"/tmp/claude-validation-UHllbi/components/skills\",\n        \"manifest\": null,\n        \"contents\": [],\n        \"advice\": [],\n        \"directory\": null\n      }\n    }\n  ],\n  \"seed\": {\n    \"exit\": 1,\n    \"detected\": true,\n    \"result\": {\n      \"success\": false,\n      \"strict\": true,\n      \"target\": \"/tmp/claude-validation-UHllbi/components/skills\",\n      \"manifest\": null,\n      \"contents\": [\n        {\n          \"file\": \"/tmp/claude-validation-UHllbi/components/skills/tkt-core/SKILL.md\",\n          \"type\": \"skill\",\n          \"errors\": [\n            {\n              \"path\": \"description\",\n              \"message\": \"description must be a string, got array. At runtime this value is dropped.\",\n              \"code\": null\n            }\n          ],\n          \"warnings\": [],\n          \"notes\": [],\n          \"gatingHooks\": []\n        }\n      ],\n      \"advice\": [],\n      \"directory\": null\n    }\n  },\n  \"readmeControl\": {\n    \"exit\": 0,\n    \"detected\": true,\n    \"result\": {\n      \"success\": true,\n      \"strict\": false,\n      \"target\": \"/tmp/claude-validation-UHllbi/source/.claude-plugin/plugin.json\",\n      \"manifest\": {\n        \"file\": \"/tmp/claude-validation-UHllbi/source/.claude-plugin/plugin.json\",\n        \"type\": \"plugin\",\n        \"errors\": [],\n        \"warnings\": [],\n        \"notes\": [],\n        \"gatingHooks\": []\n      },\n      \"contents\": [],\n      \"advice\": [],\n      \"directory\": {\n        \"profile\": null,\n        \"findings\": [\n          {\n            \"code\": \"README_MISSING\",\n            \"title\": \"README missing\",\n            \"severity\": \"error\",\n            \"blocking\": true,\n            \"hold\": false,\n            \"file\": \"README.md\",\n            \"field\": \"\",\n            \"message\": \"This plugin has no README.md. People who install it and the directory's automated review read the README to learn what it does; the first line of a README in the plugin folder also stands in as the listing summary when plugin.json has no description.\",\n            \"fix\": \"Add a README.md to the plugin folder describing what the plugin does, how to use it, and any setup it needs, in at least 40 words. A README at the repository root also counts for a plugin in a sub-folder.\"\n          },\n          {\n            \"code\": \"ICON_MISSING\",\n            \"title\": \"No icon\",\n            \"severity\": \"warning\",\n            \"blocking\": false,\n            \"hold\": false,\n            \"file\": \".claude-plugin/plugin.json\",\n            \"field\": \"icon\",\n            \"message\": \"No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.\",\n            \"fix\": \"Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon.\"\n          }\n        ],\n        \"undecided\": [],\n        \"incomplete\": false,\n        \"failure\": null,\n        \"notes\": [\n          \"This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder.\"\n        ]\n      }\n    }\n  },\n  \"hashes\": [\n    {\n      \"name\": \"tkt-core\",\n      \"sha256\": \"490e0f4d59d1b551f10be094eb69f74d092d8588959393cc35a65e7368ccd8ef\"\n    },\n    {\n      \"name\": \"tkt-orient\",\n      \"sha256\": \"61e5de7e4e9acad5dedc275ffd759eb5bca728f92f3d42452c5b2ac338657f34\"\n    },\n    {\n      \"name\": \"tkt-reconcile\",\n      \"sha256\": \"4e755404304d55fe503d4815ede288bdd10da21e3e01f09843f2140dbd824efc\"\n    },\n    {\n      \"name\": \"tkt-work\",\n      \"sha256\": \"855fe417a00b7251a1b7e24f21554e4b6f0e8ca0600630c5f159d0f0f85b5961\"\n    }\n  ],\n  \"errors\": []\n}\n",
+              "stdout": "{\n  \"status\": \"pass\",\n  \"metrics\": {\n    \"skills\": 4,\n    \"nativeChecks\": 3,\n    \"copiedSkillsMatched\": 4,\n    \"trackedSnapshotFiles\": 48\n  },\n  \"version\": \"2.1.310 (Claude Code)\",\n  \"pack\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/claude\",\n  \"sourceSnapshot\": \"extracted snapshot bytes\",\n  \"runs\": [\n    {\n      \"args\": [\n        \"plugin\",\n        \"validate\",\n        \"/tmp/claude-validation-bQSMMC/source/.claude-plugin/plugin.json\",\n        \"--json\"\n      ],\n      \"exit\": 0,\n      \"stderr\": \"\",\n      \"result\": {\n        \"success\": true,\n        \"strict\": false,\n        \"target\": \"/tmp/claude-validation-bQSMMC/source/.claude-plugin/plugin.json\",\n        \"manifest\": {\n          \"file\": \"/tmp/claude-validation-bQSMMC/source/.claude-plugin/plugin.json\",\n          \"type\": \"plugin\",\n          \"errors\": [],\n          \"warnings\": [],\n          \"notes\": [],\n          \"gatingHooks\": []\n        },\n        \"contents\": [],\n        \"advice\": [],\n        \"directory\": {\n          \"profile\": null,\n          \"findings\": [\n            {\n              \"code\": \"ICON_MISSING\",\n              \"title\": \"No icon\",\n              \"severity\": \"warning\",\n              \"blocking\": false,\n              \"hold\": false,\n              \"file\": \".claude-plugin/plugin.json\",\n              \"field\": \"icon\",\n              \"message\": \"No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.\",\n              \"fix\": \"Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon.\"\n            }\n          ],\n          \"undecided\": [],\n          \"incomplete\": false,\n          \"failure\": null,\n          \"notes\": [\n            \"This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder.\"\n          ]\n        }\n      }\n    },\n    {\n      \"args\": [\n        \"plugin\",\n        \"validate\",\n        \"/tmp/claude-validation-bQSMMC/source/.claude-plugin/marketplace.json\",\n        \"--json\"\n      ],\n      \"exit\": 0,\n      \"stderr\": \"\",\n      \"result\": {\n        \"success\": true,\n        \"strict\": false,\n        \"target\": \"/tmp/claude-validation-bQSMMC/source/.claude-plugin/marketplace.json\",\n        \"manifest\": {\n          \"file\": \"/tmp/claude-validation-bQSMMC/source/.claude-plugin/marketplace.json\",\n          \"type\": \"marketplace\",\n          \"errors\": [],\n          \"warnings\": [],\n          \"notes\": [],\n          \"gatingHooks\": []\n        },\n        \"contents\": [],\n        \"advice\": [],\n        \"directory\": null\n      }\n    },\n    {\n      \"args\": [\n        \"plugin\",\n        \"validate\",\n        \"/tmp/claude-validation-bQSMMC/components/skills\",\n        \"--strict\",\n        \"--json\"\n      ],\n      \"exit\": 0,\n      \"stderr\": \"\",\n      \"result\": {\n        \"success\": true,\n        \"strict\": true,\n        \"target\": \"/tmp/claude-validation-bQSMMC/components/skills\",\n        \"manifest\": null,\n        \"contents\": [],\n        \"advice\": [],\n        \"directory\": null\n      }\n    }\n  ],\n  \"seed\": {\n    \"exit\": 1,\n    \"detected\": true,\n    \"result\": {\n      \"success\": false,\n      \"strict\": true,\n      \"target\": \"/tmp/claude-validation-bQSMMC/components/skills\",\n      \"manifest\": null,\n      \"contents\": [\n        {\n          \"file\": \"/tmp/claude-validation-bQSMMC/components/skills/tkt-core/SKILL.md\",\n          \"type\": \"skill\",\n          \"errors\": [\n            {\n              \"path\": \"description\",\n              \"message\": \"description must be a string, got array. At runtime this value is dropped.\",\n              \"code\": null\n            }\n          ],\n          \"warnings\": [],\n          \"notes\": [],\n          \"gatingHooks\": []\n        }\n      ],\n      \"advice\": [],\n      \"directory\": null\n    }\n  },\n  \"readmeControl\": {\n    \"exit\": 0,\n    \"detected\": true,\n    \"result\": {\n      \"success\": true,\n      \"strict\": false,\n      \"target\": \"/tmp/claude-validation-bQSMMC/source/.claude-plugin/plugin.json\",\n      \"manifest\": {\n        \"file\": \"/tmp/claude-validation-bQSMMC/source/.claude-plugin/plugin.json\",\n        \"type\": \"plugin\",\n        \"errors\": [],\n        \"warnings\": [],\n        \"notes\": [],\n        \"gatingHooks\": []\n      },\n      \"contents\": [],\n      \"advice\": [],\n      \"directory\": {\n        \"profile\": null,\n        \"findings\": [\n          {\n            \"code\": \"README_MISSING\",\n            \"title\": \"README missing\",\n            \"severity\": \"error\",\n            \"blocking\": true,\n            \"hold\": false,\n            \"file\": \"README.md\",\n            \"field\": \"\",\n            \"message\": \"This plugin has no README.md. People who install it and the directory's automated review read the README to learn what it does; the first line of a README in the plugin folder also stands in as the listing summary when plugin.json has no description.\",\n            \"fix\": \"Add a README.md to the plugin folder describing what the plugin does, how to use it, and any setup it needs, in at least 40 words. A README at the repository root also counts for a plugin in a sub-folder.\"\n          },\n          {\n            \"code\": \"ICON_MISSING\",\n            \"title\": \"No icon\",\n            \"severity\": \"warning\",\n            \"blocking\": false,\n            \"hold\": false,\n            \"file\": \".claude-plugin/plugin.json\",\n            \"field\": \"icon\",\n            \"message\": \"No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.\",\n            \"fix\": \"Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon.\"\n          }\n        ],\n        \"undecided\": [],\n        \"incomplete\": false,\n        \"failure\": null,\n        \"notes\": [\n          \"This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder.\"\n        ]\n      }\n    }\n  },\n  \"hashes\": [\n    {\n      \"name\": \"tkt-core\",\n      \"sha256\": \"490e0f4d59d1b551f10be094eb69f74d092d8588959393cc35a65e7368ccd8ef\"\n    },\n    {\n      \"name\": \"tkt-orient\",\n      \"sha256\": \"61e5de7e4e9acad5dedc275ffd759eb5bca728f92f3d42452c5b2ac338657f34\"\n    },\n    {\n      \"name\": \"tkt-reconcile\",\n      \"sha256\": \"4e755404304d55fe503d4815ede288bdd10da21e3e01f09843f2140dbd824efc\"\n    },\n    {\n      \"name\": \"tkt-work\",\n      \"sha256\": \"855fe417a00b7251a1b7e24f21554e4b6f0e8ca0600630c5f159d0f0f85b5961\"\n    }\n  ],\n  \"errors\": []\n}\n",
               "stderr": ""
             },
             {
               "command": [
                 "claude",
                 "--plugin-dir",
-                "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/claude",
+                "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/claude",
                 "plugin",
                 "details",
                 "tkt"
@@ -293,14 +293,14 @@
               "trackedSnapshotFiles": 48
             },
             "version": "2.1.310 (Claude Code)",
-            "pack": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/claude",
+            "pack": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/claude",
             "sourceSnapshot": "extracted snapshot bytes",
             "runs": [
               {
                 "args": [
                   "plugin",
                   "validate",
-                  "/tmp/claude-validation-UHllbi/source/.claude-plugin/plugin.json",
+                  "/tmp/claude-validation-bQSMMC/source/.claude-plugin/plugin.json",
                   "--json"
                 ],
                 "exit": 0,
@@ -308,9 +308,9 @@
                 "result": {
                   "success": true,
                   "strict": false,
-                  "target": "/tmp/claude-validation-UHllbi/source/.claude-plugin/plugin.json",
+                  "target": "/tmp/claude-validation-bQSMMC/source/.claude-plugin/plugin.json",
                   "manifest": {
-                    "file": "/tmp/claude-validation-UHllbi/source/.claude-plugin/plugin.json",
+                    "file": "/tmp/claude-validation-bQSMMC/source/.claude-plugin/plugin.json",
                     "type": "plugin",
                     "errors": [],
                     "warnings": [],
@@ -347,7 +347,7 @@
                 "args": [
                   "plugin",
                   "validate",
-                  "/tmp/claude-validation-UHllbi/source/.claude-plugin/marketplace.json",
+                  "/tmp/claude-validation-bQSMMC/source/.claude-plugin/marketplace.json",
                   "--json"
                 ],
                 "exit": 0,
@@ -355,9 +355,9 @@
                 "result": {
                   "success": true,
                   "strict": false,
-                  "target": "/tmp/claude-validation-UHllbi/source/.claude-plugin/marketplace.json",
+                  "target": "/tmp/claude-validation-bQSMMC/source/.claude-plugin/marketplace.json",
                   "manifest": {
-                    "file": "/tmp/claude-validation-UHllbi/source/.claude-plugin/marketplace.json",
+                    "file": "/tmp/claude-validation-bQSMMC/source/.claude-plugin/marketplace.json",
                     "type": "marketplace",
                     "errors": [],
                     "warnings": [],
@@ -373,7 +373,7 @@
                 "args": [
                   "plugin",
                   "validate",
-                  "/tmp/claude-validation-UHllbi/components/skills",
+                  "/tmp/claude-validation-bQSMMC/components/skills",
                   "--strict",
                   "--json"
                 ],
@@ -382,7 +382,7 @@
                 "result": {
                   "success": true,
                   "strict": true,
-                  "target": "/tmp/claude-validation-UHllbi/components/skills",
+                  "target": "/tmp/claude-validation-bQSMMC/components/skills",
                   "manifest": null,
                   "contents": [],
                   "advice": [],
@@ -396,11 +396,11 @@
               "result": {
                 "success": false,
                 "strict": true,
-                "target": "/tmp/claude-validation-UHllbi/components/skills",
+                "target": "/tmp/claude-validation-bQSMMC/components/skills",
                 "manifest": null,
                 "contents": [
                   {
-                    "file": "/tmp/claude-validation-UHllbi/components/skills/tkt-core/SKILL.md",
+                    "file": "/tmp/claude-validation-bQSMMC/components/skills/tkt-core/SKILL.md",
                     "type": "skill",
                     "errors": [
                       {
@@ -424,9 +424,9 @@
               "result": {
                 "success": true,
                 "strict": false,
-                "target": "/tmp/claude-validation-UHllbi/source/.claude-plugin/plugin.json",
+                "target": "/tmp/claude-validation-bQSMMC/source/.claude-plugin/plugin.json",
                 "manifest": {
-                  "file": "/tmp/claude-validation-UHllbi/source/.claude-plugin/plugin.json",
+                  "file": "/tmp/claude-validation-bQSMMC/source/.claude-plugin/plugin.json",
                   "type": "plugin",
                   "errors": [],
                   "warnings": [],
@@ -494,7 +494,7 @@
         {
           "host": "agy",
           "asset": "tkt-0.5.0-agy.tar.gz",
-          "assetSha256": "650809d2da5a2c1ca36183b7a3b392826fbcafee09f48b61031111c950c94983",
+          "assetSha256": "391a5a2182237c1e558fc9adcd67914aeaf3ff6b068c28b132ea42d08cbb52ff",
           "status": "pass",
           "expectedSkills": [
             "tkt-core",
@@ -517,12 +517,12 @@
                 "agy",
                 "plugin",
                 "validate",
-                "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy",
+                "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy",
                 "--strict",
                 "--json"
               ],
               "exit": 0,
-              "stdout": "{\n  \"dir\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy\",\n  \"manifest\": \"plugin.json\",\n  \"name\": \"tkt\",\n  \"agentPluginsSpec\": false,\n  \"components\": {\n    \"agents\": 0,\n    \"hooks\": 0,\n    \"mcpServers\": 0,\n    \"rules\": 0,\n    \"sidecars\": 0,\n    \"skills\": 4\n  },\n  \"findings\": []\n}\n",
+              "stdout": "{\n  \"dir\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy\",\n  \"manifest\": \"plugin.json\",\n  \"name\": \"tkt\",\n  \"agentPluginsSpec\": false,\n  \"components\": {\n    \"agents\": 0,\n    \"hooks\": 0,\n    \"mcpServers\": 0,\n    \"rules\": 0,\n    \"sidecars\": 0,\n    \"skills\": 4\n  },\n  \"findings\": []\n}\n",
               "stderr": ""
             },
             {
@@ -530,7 +530,7 @@
                 "agy",
                 "plugin",
                 "install",
-                "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy"
+                "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy"
               ],
               "exit": 0,
               "stdout": "  [ok]    tkt\n          \u2714 skills      : 4 processed\n          - agents      : skipped (not found)\n          - commands    : skipped (not found)\n          - mcpServers  : skipped (not found)\n          - hooks       : skipped (not found)\n",
@@ -545,7 +545,7 @@
                 "/skills"
               ],
               "exit": 0,
-              "stdout": "{\"conversation_id\":\"\",\"status\":\"SUCCESS\",\"response\":\"agy-customizations\\tComprehensive guide and reference for the Antigravity Customization System. Use to explain how customizations work, their loading priority, discovery mechanisms, and to guide the creation of skills, rules, plugins, hooks, and MCP servers.\\nantigravity-guide\\tProvides a comprehensive guide, quick reference, and sitemap for Google Antigravity (AGY), including the Antigravity CLI (agy), Antigravity 2.0, Antigravity IDE, Python SDK, slash commands, keybindings, and customizations (skills, rules, MCP, sidecars). Activate this skill when the user asks questions about how to use, configure, or customize Antigravity, AGY, the agy CLI, the Antigravity IDE, or Antigravity 2.0.\\nautomation\\tInteractive guide to design and create a scheduled background automation. Use this skill when the user wants to create an automated or recurring scheduled task (e.g. \\\"summarize my emails every morning\\\", \\\"every Monday send me a to-do list\\\"). Also triggered by the /automation slash command.\\nmigrate-workflows\\tAutomatically migrate legacy workflows to modern skills across global and workspace configurations. Scans for existing workflows, creates target SKILL.md files, and safely archives old workflow files.\\nrun-workflow\\tHow to write and run a dynamic workflow script with the `run_workflow` tool: a Python script that orchestrates many agents with `agent`, `parallel`, `pipeline`, and `phase`. Use when a task splits into many independent or staged pieces of agent work (fan out over files, modules, bugs, or review angles, then aggregate), or when the user asks for a workflow. Don't use for a single delegated task (use a subagent) or for legacy workflow files (see migrate-workflows).\\ntkt:tkt-core\\tTrack tasks as markdown files in your git repo. Use when managing tickets, checking the frontier (what's ready), claiming work, closing tasks, creating tickets, decomposing work into a task graph, or validating project health. Trigger: tkt, tickets, what to work on, create ticket, validate tickets, decompose, break into tasks, work breakdown, task graph, ticket format, blocked by, backlog, park this, defer.\\ntkt:tkt-orient\\tStart-of-session pickup from the reconciled plan and tickets: read the frontier, in-progress threads, and plan ordering that tkt-reconcile left behind, flag stale WIP, and propose the next step. Use when starting a session, resuming after a break, or asking 'where were we?' / 'what's next?' / 'pick up where we left off'. Trigger: start of session, orient, resume, pick up where we left off, where were we, what's next, catch me up, continue, session start, what's on the board.\\ntkt:tkt-reconcile\\tEnd-of-session ticket + plan pass: make every ticket current, capture all open work as tickets, and re-prioritize/re-sequence the plan to match current priorities and work streams. Use when wrapping up a session, auditing ticket health, after planning, when work feels untracked, or asking 'is everything captured?' / 'update the plan'. Trigger: sync tickets, update the plan, re-prioritize, end of session ticket pass, ticket review, are tickets current, is everything tracked, ticket audit, ticket hygiene, wrap up tickets, tag scope, work stream.\\ntkt:tkt-work\\tClaim and execute a ticket from the frontier: pick the next ready ticket, claim it, verify its premises against primary sources, do the work, verify acceptance criteria, and close with evidence. The execution loop between tkt-orient (propose) and tkt-reconcile (wrap up). Use when working a ticket, picking up the next task, or asked 'work the frontier' / 'do the next ticket' / 'start on NN'. Trigger: work the frontier, do the next ticket, pick up work, claim and work, start ticket, next on the frontier, work a ticket, execute ticket, close ticket with evidence.\\n\",\"duration_seconds\":0,\"num_turns\":0,\"usage\":{\"input_tokens\":0,\"output_tokens\":0,\"thinking_tokens\":0,\"cache_read_tokens\":0,\"total_tokens\":0},\"command\":{\"name\":\"skills\",\"data\":{\"skills\":[{\"name\":\"agy-customizations\",\"description\":\"Comprehensive guide and reference for the Antigravity Customization System. Use to explain how customizations work, their loading priority, discovery mechanisms, and to guide the creation of skills, rules, plugins, hooks, and MCP servers.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/antigravity-cli/builtin/skills/agy-customizations/SKILL.md\",\"builtin\":true,\"model_invocable\":true},{\"name\":\"antigravity-guide\",\"description\":\"Provides a comprehensive guide, quick reference, and sitemap for Google Antigravity (AGY), including the Antigravity CLI (agy), Antigravity 2.0, Antigravity IDE, Python SDK, slash commands, keybindings, and customizations (skills, rules, MCP, sidecars). Activate this skill when the user asks questions about how to use, configure, or customize Antigravity, AGY, the agy CLI, the Antigravity IDE, or Antigravity 2.0.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/antigravity-cli/builtin/skills/antigravity_guide/SKILL.md\",\"builtin\":true,\"model_invocable\":true},{\"name\":\"automation\",\"description\":\"Interactive guide to design and create a scheduled background automation. Use this skill when the user wants to create an automated or recurring scheduled task (e.g. \\\"summarize my emails every morning\\\", \\\"every Monday send me a to-do list\\\"). Also triggered by the /automation slash command.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/antigravity-cli/builtin/skills/automation/SKILL.md\",\"builtin\":true,\"model_invocable\":true},{\"name\":\"migrate-workflows\",\"description\":\"Automatically migrate legacy workflows to modern skills across global and workspace configurations. Scans for existing workflows, creates target SKILL.md files, and safely archives old workflow files.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/antigravity-cli/builtin/skills/migrate-workflows/SKILL.md\",\"builtin\":true,\"model_invocable\":true},{\"name\":\"run-workflow\",\"description\":\"How to write and run a dynamic workflow script with the `run_workflow` tool: a Python script that orchestrates many agents with `agent`, `parallel`, `pipeline`, and `phase`. Use when a task splits into many independent or staged pieces of agent work (fan out over files, modules, bugs, or review angles, then aggregate), or when the user asks for a workflow. Don't use for a single delegated task (use a subagent) or for legacy workflow files (see migrate-workflows).\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/antigravity-cli/builtin/skills/run-workflow/SKILL.md\",\"builtin\":true,\"model_invocable\":true},{\"name\":\"tkt:tkt-core\",\"description\":\"Track tasks as markdown files in your git repo. Use when managing tickets, checking the frontier (what's ready), claiming work, closing tasks, creating tickets, decomposing work into a task graph, or validating project health. Trigger: tkt, tickets, what to work on, create ticket, validate tickets, decompose, break into tasks, work breakdown, task graph, ticket format, blocked by, backlog, park this, defer.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/config/plugins/tkt/skills/tkt-core/SKILL.md\",\"plugin\":\"tkt\",\"builtin\":false,\"model_invocable\":true},{\"name\":\"tkt:tkt-orient\",\"description\":\"Start-of-session pickup from the reconciled plan and tickets: read the frontier, in-progress threads, and plan ordering that tkt-reconcile left behind, flag stale WIP, and propose the next step. Use when starting a session, resuming after a break, or asking 'where were we?' / 'what's next?' / 'pick up where we left off'. Trigger: start of session, orient, resume, pick up where we left off, where were we, what's next, catch me up, continue, session start, what's on the board.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/config/plugins/tkt/skills/tkt-orient/SKILL.md\",\"plugin\":\"tkt\",\"builtin\":false,\"model_invocable\":true},{\"name\":\"tkt:tkt-reconcile\",\"description\":\"End-of-session ticket + plan pass: make every ticket current, capture all open work as tickets, and re-prioritize/re-sequence the plan to match current priorities and work streams. Use when wrapping up a session, auditing ticket health, after planning, when work feels untracked, or asking 'is everything captured?' / 'update the plan'. Trigger: sync tickets, update the plan, re-prioritize, end of session ticket pass, ticket review, are tickets current, is everything tracked, ticket audit, ticket hygiene, wrap up tickets, tag scope, work stream.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/config/plugins/tkt/skills/tkt-reconcile/SKILL.md\",\"plugin\":\"tkt\",\"builtin\":false,\"model_invocable\":true},{\"name\":\"tkt:tkt-work\",\"description\":\"Claim and execute a ticket from the frontier: pick the next ready ticket, claim it, verify its premises against primary sources, do the work, verify acceptance criteria, and close with evidence. The execution loop between tkt-orient (propose) and tkt-reconcile (wrap up). Use when working a ticket, picking up the next task, or asked 'work the frontier' / 'do the next ticket' / 'start on NN'. Trigger: work the frontier, do the next ticket, pick up work, claim and work, start ticket, next on the frontier, work a ticket, execute ticket, close ticket with evidence.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/config/plugins/tkt/skills/tkt-work/SKILL.md\",\"plugin\":\"tkt\",\"builtin\":false,\"model_invocable\":true}]}}}\n",
+              "stdout": "{\"conversation_id\":\"\",\"status\":\"SUCCESS\",\"response\":\"agy-customizations\\tComprehensive guide and reference for the Antigravity Customization System. Use to explain how customizations work, their loading priority, discovery mechanisms, and to guide the creation of skills, rules, plugins, hooks, and MCP servers.\\nantigravity-guide\\tProvides a comprehensive guide, quick reference, and sitemap for Google Antigravity (AGY), including the Antigravity CLI (agy), Antigravity 2.0, Antigravity IDE, Python SDK, slash commands, keybindings, and customizations (skills, rules, MCP, sidecars). Activate this skill when the user asks questions about how to use, configure, or customize Antigravity, AGY, the agy CLI, the Antigravity IDE, or Antigravity 2.0.\\nautomation\\tInteractive guide to design and create a scheduled background automation. Use this skill when the user wants to create an automated or recurring scheduled task (e.g. \\\"summarize my emails every morning\\\", \\\"every Monday send me a to-do list\\\"). Also triggered by the /automation slash command.\\nmigrate-workflows\\tAutomatically migrate legacy workflows to modern skills across global and workspace configurations. Scans for existing workflows, creates target SKILL.md files, and safely archives old workflow files.\\nrun-workflow\\tHow to write and run a dynamic workflow script with the `run_workflow` tool: a Python script that orchestrates many agents with `agent`, `parallel`, `pipeline`, and `phase`. Use when a task splits into many independent or staged pieces of agent work (fan out over files, modules, bugs, or review angles, then aggregate), or when the user asks for a workflow. Don't use for a single delegated task (use a subagent) or for legacy workflow files (see migrate-workflows).\\ntkt:tkt-core\\tTrack tasks as markdown files in your git repo. Use when managing tickets, checking the frontier (what's ready), claiming work, closing tasks, creating tickets, decomposing work into a task graph, or validating project health. Trigger: tkt, tickets, what to work on, create ticket, validate tickets, decompose, break into tasks, work breakdown, task graph, ticket format, blocked by, backlog, park this, defer.\\ntkt:tkt-orient\\tStart-of-session pickup from the reconciled plan and tickets: read the frontier, in-progress threads, and plan ordering that tkt-reconcile left behind, flag stale WIP, and propose the next step. Use when starting a session, resuming after a break, or asking 'where were we?' / 'what's next?' / 'pick up where we left off'. Trigger: start of session, orient, resume, pick up where we left off, where were we, what's next, catch me up, continue, session start, what's on the board.\\ntkt:tkt-reconcile\\tEnd-of-session ticket + plan pass: make every ticket current, capture all open work as tickets, and re-prioritize/re-sequence the plan to match current priorities and work streams. Use when wrapping up a session, auditing ticket health, after planning, when work feels untracked, or asking 'is everything captured?' / 'update the plan'. Trigger: sync tickets, update the plan, re-prioritize, end of session ticket pass, ticket review, are tickets current, is everything tracked, ticket audit, ticket hygiene, wrap up tickets, tag scope, work stream.\\ntkt:tkt-work\\tClaim and execute a ticket from the frontier: pick the next ready ticket, claim it, verify its premises against primary sources, do the work, verify acceptance criteria, and close with evidence. The execution loop between tkt-orient (propose) and tkt-reconcile (wrap up). Use when working a ticket, picking up the next task, or asked 'work the frontier' / 'do the next ticket' / 'start on NN'. Trigger: work the frontier, do the next ticket, pick up work, claim and work, start ticket, next on the frontier, work a ticket, execute ticket, close ticket with evidence.\\n\",\"duration_seconds\":0,\"num_turns\":0,\"usage\":{\"input_tokens\":0,\"output_tokens\":0,\"thinking_tokens\":0,\"cache_read_tokens\":0,\"total_tokens\":0},\"command\":{\"name\":\"skills\",\"data\":{\"skills\":[{\"name\":\"agy-customizations\",\"description\":\"Comprehensive guide and reference for the Antigravity Customization System. Use to explain how customizations work, their loading priority, discovery mechanisms, and to guide the creation of skills, rules, plugins, hooks, and MCP servers.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/antigravity-cli/builtin/skills/agy-customizations/SKILL.md\",\"builtin\":true,\"model_invocable\":true},{\"name\":\"antigravity-guide\",\"description\":\"Provides a comprehensive guide, quick reference, and sitemap for Google Antigravity (AGY), including the Antigravity CLI (agy), Antigravity 2.0, Antigravity IDE, Python SDK, slash commands, keybindings, and customizations (skills, rules, MCP, sidecars). Activate this skill when the user asks questions about how to use, configure, or customize Antigravity, AGY, the agy CLI, the Antigravity IDE, or Antigravity 2.0.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/antigravity-cli/builtin/skills/antigravity_guide/SKILL.md\",\"builtin\":true,\"model_invocable\":true},{\"name\":\"automation\",\"description\":\"Interactive guide to design and create a scheduled background automation. Use this skill when the user wants to create an automated or recurring scheduled task (e.g. \\\"summarize my emails every morning\\\", \\\"every Monday send me a to-do list\\\"). Also triggered by the /automation slash command.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/antigravity-cli/builtin/skills/automation/SKILL.md\",\"builtin\":true,\"model_invocable\":true},{\"name\":\"migrate-workflows\",\"description\":\"Automatically migrate legacy workflows to modern skills across global and workspace configurations. Scans for existing workflows, creates target SKILL.md files, and safely archives old workflow files.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/antigravity-cli/builtin/skills/migrate-workflows/SKILL.md\",\"builtin\":true,\"model_invocable\":true},{\"name\":\"run-workflow\",\"description\":\"How to write and run a dynamic workflow script with the `run_workflow` tool: a Python script that orchestrates many agents with `agent`, `parallel`, `pipeline`, and `phase`. Use when a task splits into many independent or staged pieces of agent work (fan out over files, modules, bugs, or review angles, then aggregate), or when the user asks for a workflow. Don't use for a single delegated task (use a subagent) or for legacy workflow files (see migrate-workflows).\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/antigravity-cli/builtin/skills/run-workflow/SKILL.md\",\"builtin\":true,\"model_invocable\":true},{\"name\":\"tkt:tkt-core\",\"description\":\"Track tasks as markdown files in your git repo. Use when managing tickets, checking the frontier (what's ready), claiming work, closing tasks, creating tickets, decomposing work into a task graph, or validating project health. Trigger: tkt, tickets, what to work on, create ticket, validate tickets, decompose, break into tasks, work breakdown, task graph, ticket format, blocked by, backlog, park this, defer.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/config/plugins/tkt/skills/tkt-core/SKILL.md\",\"plugin\":\"tkt\",\"builtin\":false,\"model_invocable\":true},{\"name\":\"tkt:tkt-orient\",\"description\":\"Start-of-session pickup from the reconciled plan and tickets: read the frontier, in-progress threads, and plan ordering that tkt-reconcile left behind, flag stale WIP, and propose the next step. Use when starting a session, resuming after a break, or asking 'where were we?' / 'what's next?' / 'pick up where we left off'. Trigger: start of session, orient, resume, pick up where we left off, where were we, what's next, catch me up, continue, session start, what's on the board.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/config/plugins/tkt/skills/tkt-orient/SKILL.md\",\"plugin\":\"tkt\",\"builtin\":false,\"model_invocable\":true},{\"name\":\"tkt:tkt-reconcile\",\"description\":\"End-of-session ticket + plan pass: make every ticket current, capture all open work as tickets, and re-prioritize/re-sequence the plan to match current priorities and work streams. Use when wrapping up a session, auditing ticket health, after planning, when work feels untracked, or asking 'is everything captured?' / 'update the plan'. Trigger: sync tickets, update the plan, re-prioritize, end of session ticket pass, ticket review, are tickets current, is everything tracked, ticket audit, ticket hygiene, wrap up tickets, tag scope, work stream.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/config/plugins/tkt/skills/tkt-reconcile/SKILL.md\",\"plugin\":\"tkt\",\"builtin\":false,\"model_invocable\":true},{\"name\":\"tkt:tkt-work\",\"description\":\"Claim and execute a ticket from the frontier: pick the next ready ticket, claim it, verify its premises against primary sources, do the work, verify acceptance criteria, and close with evidence. The execution loop between tkt-orient (propose) and tkt-reconcile (wrap up). Use when working a ticket, picking up the next task, or asked 'work the frontier' / 'do the next ticket' / 'start on NN'. Trigger: work the frontier, do the next ticket, pick up work, claim and work, start ticket, next on the frontier, work a ticket, execute ticket, close ticket with evidence.\",\"path\":\"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/config/plugins/tkt/skills/tkt-work/SKILL.md\",\"plugin\":\"tkt\",\"builtin\":false,\"model_invocable\":true}]}}}\n",
               "stderr": ""
             }
           ],
@@ -555,7 +555,7 @@
               {
                 "name": "tkt:tkt-core",
                 "description": "Track tasks as markdown files in your git repo. Use when managing tickets, checking the frontier (what's ready), claiming work, closing tasks, creating tickets, decomposing work into a task graph, or validating project health. Trigger: tkt, tickets, what to work on, create ticket, validate tickets, decompose, break into tasks, work breakdown, task graph, ticket format, blocked by, backlog, park this, defer.",
-                "path": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/config/plugins/tkt/skills/tkt-core/SKILL.md",
+                "path": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/config/plugins/tkt/skills/tkt-core/SKILL.md",
                 "plugin": "tkt",
                 "builtin": false,
                 "model_invocable": true
@@ -563,7 +563,7 @@
               {
                 "name": "tkt:tkt-orient",
                 "description": "Start-of-session pickup from the reconciled plan and tickets: read the frontier, in-progress threads, and plan ordering that tkt-reconcile left behind, flag stale WIP, and propose the next step. Use when starting a session, resuming after a break, or asking 'where were we?' / 'what's next?' / 'pick up where we left off'. Trigger: start of session, orient, resume, pick up where we left off, where were we, what's next, catch me up, continue, session start, what's on the board.",
-                "path": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/config/plugins/tkt/skills/tkt-orient/SKILL.md",
+                "path": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/config/plugins/tkt/skills/tkt-orient/SKILL.md",
                 "plugin": "tkt",
                 "builtin": false,
                 "model_invocable": true
@@ -571,7 +571,7 @@
               {
                 "name": "tkt:tkt-reconcile",
                 "description": "End-of-session ticket + plan pass: make every ticket current, capture all open work as tickets, and re-prioritize/re-sequence the plan to match current priorities and work streams. Use when wrapping up a session, auditing ticket health, after planning, when work feels untracked, or asking 'is everything captured?' / 'update the plan'. Trigger: sync tickets, update the plan, re-prioritize, end of session ticket pass, ticket review, are tickets current, is everything tracked, ticket audit, ticket hygiene, wrap up tickets, tag scope, work stream.",
-                "path": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/config/plugins/tkt/skills/tkt-reconcile/SKILL.md",
+                "path": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/config/plugins/tkt/skills/tkt-reconcile/SKILL.md",
                 "plugin": "tkt",
                 "builtin": false,
                 "model_invocable": true
@@ -579,7 +579,7 @@
               {
                 "name": "tkt:tkt-work",
                 "description": "Claim and execute a ticket from the frontier: pick the next ready ticket, claim it, verify its premises against primary sources, do the work, verify acceptance criteria, and close with evidence. The execution loop between tkt-orient (propose) and tkt-reconcile (wrap up). Use when working a ticket, picking up the next task, or asked 'work the frontier' / 'do the next ticket' / 'start on NN'. Trigger: work the frontier, do the next ticket, pick up work, claim and work, start ticket, next on the frontier, work a ticket, execute ticket, close ticket with evidence.",
-                "path": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-Tu7MGM/agy-home/.gemini/config/plugins/tkt/skills/tkt-work/SKILL.md",
+                "path": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/release-native-IQEN0r/agy-home/.gemini/config/plugins/tkt/skills/tkt-work/SKILL.md",
                 "plugin": "tkt",
                 "builtin": false,
                 "model_invocable": true
@@ -598,29 +598,29 @@
         "upgrade",
         "remaining-platforms"
       ],
-      "started": "2026-10-24T08:34:55.813Z",
+      "started": "2026-10-24T09:26:41.669Z",
       "tooling": {
         "release-native.mjs": "7f20a08ff225852a16e21d772425d4a5debeba51fa010ce9a6121c203b5725e4",
         "release-artifacts.mjs": "b719eae3637dff1d017db76eff28e9dd6ca8d9ed86b9a7bbe4394195ef588540",
         "probe-claude-validation.mjs": "eb91b5cce1610f6c8c4da1c40c7e0c8a8b3222cf093f408583114bbc7f5fafcb"
       },
-      "finished": "2026-10-24T08:34:58.059Z"
+      "finished": "2026-10-24T09:26:43.908Z"
     }
   },
   "compatibilityChecks": [
     {
       "probePath": ".scratch/verify-final-tkt-surface.mjs",
-      "probeSourceUtf8": "import {readFileSync,readdirSync,writeFileSync} from 'node:fs';import {execFileSync} from 'node:child_process';import {join,resolve} from 'node:path';import {isolatedEnvironment} from '../scripts/release-native.mjs';\nconst c=JSON.parse(readFileSync('.scratch/tkt-candidate-capabilities.json')),env={...isolatedEnvironment(c.home),DO_NOT_TRACK:'1',TKT_NO_USER_CONFIG:'1'},help=execFileSync(c.binary,['--help'],{env,encoding:'utf8'}),commands=[...help.matchAll(/^  ([a-z][a-z-]+)\\s/gm)].map(m=>m[1]);\nconst roots=['/Users/sambiggins/.codex/worktrees/release-grey-matter-0-2-0/grey-matter','/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree'],hits=[];\nfor(const root of roots){const files=readdirSync(join(root,'skills'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()&&/\\.(md|sh|mjs)$/.test(e.name)).map(e=>join(e.parentPath,e.name));if(root===roots[0])files.push(join(root,'docs/agents/tkt-conventions.md'));for(const file of files){const text=readFileSync(file,'utf8');for(const m of text.matchAll(/\\btkt\\s+([a-z][a-z-]*)([^\\n`]*)/g))hits.push({file,line:text.slice(0,m.index).split('\\n').length,command:m[1],tail:m[2],flags:[...m[2].split(/\\btkt\\s+/)[0].matchAll(/--[a-z][a-z-]*/g)].map(x=>x[0])});}}\nconst results=[],planned=[],failures=[];\nfor(const command of [...new Set(hits.map(h=>h.command))].filter(n=>commands.includes(n)).sort()){\n const schema=c.capabilities.commands[command],actual=execFileSync(c.binary,[command,'--help'],{env,encoding:'utf8'}),refs=hits.filter(h=>h.command===command),flags=[...new Set(refs.flatMap(h=>h.flags))];\n for(const ref of refs)for(const flag of ref.flags)if(!actual.includes(flag)){\n  if(command==='migrate'&&['--map','--apply'].includes(flag)&&ref.file.endsWith('/tkt-core/references/migration-assist.md')){const text=readFileSync(ref.file,'utf8');if(!text.includes('planned but not yet implemented'))throw Error('planned exception lost its disclosure');planned.push({...ref,flag,disposition:'Explicitly planned map-file template; current --from/--dry-run/--confirm workflow is documented separately'});}else failures.push({...ref,flag});\n }\n results.push({command,manifestPresent:!!schema,inputSchema:schema?.inputSchema,help:actual,referencedFlags:flags});\n}\nconst report={schema:1,status:failures.length?'fail':'pass',candidateSha:c.candidateSha,version:c.version,binarySource:c.binarySource,roots,invocationHits:hits.length,files:new Set(hits.map(h=>h.file)).size,results,plannedNotCurrentCLI:planned,proseMatches:hits.filter(h=>!commands.includes(h.command)),failures};writeFileSync(resolve(process.argv[2]),JSON.stringify(report,null,2)+'\\n');console.log(JSON.stringify({status:report.status,version:c.version,commands:results.length,hits:hits.length,files:report.files,plannedExceptions:planned.length,failures}));if(failures.length)process.exitCode=1;\n",
-      "probeSha256": "adffb6da19c33bba26ca24dec1b5ca2a20857255117f4b9a5e1e2e52f12987a1",
+      "probeSourceUtf8": "import {readFileSync,readdirSync,writeFileSync} from 'node:fs';import {execFileSync} from 'node:child_process';import {join,resolve} from 'node:path';import {isolatedEnvironment} from '../scripts/release-native.mjs';\nconst c=JSON.parse(readFileSync('.scratch/tkt-candidate-capabilities.json')),env={...isolatedEnvironment(c.home),DO_NOT_TRACK:'1',TKT_NO_USER_CONFIG:'1'},help=execFileSync(c.binary,['--help'],{env,encoding:'utf8'}),commands=[...help.matchAll(/^  ([a-z][a-z-]+)\\s/gm)].map(m=>m[1]);\nconst roots=['/Users/sambiggins/.codex/worktrees/release-grey-matter-0-2-0/grey-matter','/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree'],hits=[];\nfor(const root of roots){const files=readdirSync(join(root,'skills'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()&&/\\.(md|sh|mjs)$/.test(e.name)).map(e=>join(e.parentPath,e.name));if(root===roots[0])files.push(join(root,'docs/agents/tkt-conventions.md'));for(const file of files){const text=readFileSync(file,'utf8');for(const m of text.matchAll(/\\btkt\\s+([a-z][a-z-]*)([^\\n`]*)/g))hits.push({file,line:text.slice(0,m.index).split('\\n').length,command:m[1],tail:m[2],flags:[...m[2].split(/\\btkt\\s+/)[0].matchAll(/--[a-z][a-z-]*/g)].map(x=>x[0])});}}\nconst results=[],planned=[],failures=[];\nfor(const command of [...new Set(hits.map(h=>h.command))].filter(n=>commands.includes(n)).sort()){\n const schema=c.capabilities.commands[command],actual=execFileSync(c.binary,[command,'--help'],{env,encoding:'utf8'}),refs=hits.filter(h=>h.command===command),flags=[...new Set(refs.flatMap(h=>h.flags))];\n for(const ref of refs)for(const flag of ref.flags)if(!actual.includes(flag)){\n  if(command==='migrate'&&['--map','--apply'].includes(flag)&&ref.file.endsWith('/tkt-core/references/migration-assist.md')){const text=readFileSync(ref.file,'utf8');if(!text.includes('planned but not yet implemented'))throw Error('planned exception lost its disclosure');planned.push({...ref,flag,disposition:'Explicitly planned map-file template; current --from/--dry-run/--confirm workflow is documented separately'});}else failures.push({...ref,flag});\n }\n results.push({command,manifestPresent:!!schema,inputSchema:schema?.inputSchema,help:actual,referencedFlags:flags});\n}\nconst report={schema:1,status:failures.length?'fail':'pass',candidateSha:c.candidateSha,version:c.version,binarySource:c.binarySource,roots,invocationHits:hits.length,files:new Set(hits.map(h=>h.file)).size,results,plannedNotCurrentCLI:planned,proseMatches:hits.filter(h=>!commands.includes(h.command)),failures};writeFileSync(resolve(process.argv[2]),JSON.stringify(report,null,2)+'\\n');console.log(JSON.stringify({status:report.status,version:c.version,commands:results.length,hits:hits.length,files:report.files,plannedExceptions:planned.length,failures}));if(failures.length)process.exitCode=1;\n",
+      "probeSha256": "656a5f5589fc3cb042f0068ca1339b04b9387dd15d70383f0862ccdd57db6eaa",
       "evidence": {
         "schema": 1,
         "status": "pass",
-        "candidateSha": "b2425c93f94a0b56a87cb6496ecbadaf381922bf",
-        "version": "tkt 0.5.0 (b2425c9)",
+        "candidateSha": "af4703d7b737a772eb45fb7e601ce3ec6b9b9735",
+        "version": "tkt 0.5.0 (af4703d)",
         "binarySource": "Exact candidate product-gate-built debug binary; separate CI release assets pending",
         "roots": [
           "/Users/sambiggins/.codex/worktrees/release-grey-matter-0-2-0/grey-matter",
-          "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree"
+          "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree"
         ],
         "invocationHits": 381,
         "files": 42,
@@ -1110,7 +1110,7 @@
         ],
         "plannedNotCurrentCLI": [
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/references/migration-assist.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/references/migration-assist.md",
             "line": 76,
             "command": "migrate",
             "tail": " --map .tickets/migrate.toml --apply",
@@ -1122,7 +1122,7 @@
             "disposition": "Explicitly planned map-file template; current --from/--dry-run/--confirm workflow is documented separately"
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/references/migration-assist.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/references/migration-assist.md",
             "line": 76,
             "command": "migrate",
             "tail": " --map .tickets/migrate.toml --apply",
@@ -1731,77 +1731,77 @@
             "flags": []
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/SKILL.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/SKILL.md",
             "line": 9,
             "command": "computes",
             "tail": " what's ready to work on next.",
             "flags": []
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/SKILL.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/SKILL.md",
             "line": 170,
             "command": "retries",
             "tail": " with new ID (new/batch) or reports the conflict.",
             "flags": []
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-work/SKILL.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-work/SKILL.md",
             "line": 89,
             "command": "absent",
             "tail": "):**",
             "flags": []
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/references/migration-assist.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/references/migration-assist.md",
             "line": 23,
             "command": "format",
             "tail": "",
             "flags": []
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/references/migration-assist.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/references/migration-assist.md",
             "line": 25,
             "command": "doesn",
             "tail": "'t have a built-in adapter for",
             "flags": []
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/references/migration-assist.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/references/migration-assist.md",
             "line": 51,
             "command": "equivalent",
             "tail": ", needs value mapping, or unmapped",
             "flags": []
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/references/migration-assist.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/references/migration-assist.md",
             "line": 55,
             "command": "native",
             "tail": " | tk format | GitHub-style | Custom |",
             "flags": []
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/references/migration-assist.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/references/migration-assist.md",
             "line": 69,
             "command": "equivalent",
             "tail": ", inform user what's lost (",
             "flags": []
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/references/migration-assist.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/references/migration-assist.md",
             "line": 70,
             "command": "already",
             "tail": " supports it",
             "flags": []
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/references/migration-assist.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/references/migration-assist.md",
             "line": 84,
             "command": "doesn",
             "tail": "'t track assignees",
             "flags": []
           },
           {
-            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-core/references/migration-assist.md",
+            "file": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-core/references/migration-assist.md",
             "line": 142,
             "command": "equivalent",
             "tail": " (inform, don't silently drop)",
@@ -1813,12 +1813,12 @@
     },
     {
       "probePath": ".scratch/probe-tkt-context.mjs",
-      "probeSourceUtf8": "import assert from 'node:assert/strict';\nimport {readFileSync,writeFileSync,mkdirSync,mkdtempSync,rmSync} from 'node:fs';\nimport {tmpdir} from 'node:os';import {join,resolve} from 'node:path';import {execFileSync} from 'node:child_process';\nimport {isolatedEnvironment} from '../scripts/release-native.mjs';\nconst c=JSON.parse(readFileSync('.scratch/tkt-candidate-capabilities.json')),root=mkdtempSync(join(tmpdir(),'tkt-context-proof-')),home=join(root,'home');mkdirSync(home);mkdirSync(join(root,'.tickets'));\nconst env={...isolatedEnvironment(home),DO_NOT_TRACK:'1',TKT_NO_USER_CONFIG:'1'},checks=[];\nexecFileSync('git',['init',root],{env,encoding:'utf8',stdio:'pipe'});\nfunction run(args,override){const stdout=execFileSync(c.binary,args,{env:override?{...env,TKT_CONTEXT:override}:env,cwd:root,encoding:'utf8'});checks.push({command:['tkt',...args],contextOverride:override,exit:0,stdout});return stdout;}\ntry {\n for(const[id,tag]of[['01','ink'],['02','platform'],['03',null]])writeFileSync(join(root,'.tickets',id+'-fixture.md'),`---\\nid: \"${id}\"\\ntitle: \"Fixture ${id}\"\\nstatus: open\\nblocked_by: []\\n${tag?'tags: [\"'+tag+'\"]\\n':''}---\\n# Fixture\\n`);\n run(['context','platform']);const prior=readFileSync(join(root,'.tickets/.context'),'utf8');\n const skill=readFileSync('/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/skills/tkt-reconcile/SKILL.md','utf8'),block=skill.match(/```bash\\n([\\s\\S]*?)```/)[1];\n for(const line of block.trim().split('\\n')){const command=line.split('#')[0].trim().replace('<stream>','ink');if(command)run(command.split(/\\s+/).slice(1));}\n const originalRows=run(['query']).trim().split('\\n').map(l=>JSON.parse(l));assert.deepEqual(originalRows.map(x=>x.id),['02','03']);\n const rows=run(['query'],'ink').trim().split('\\n').map(l=>JSON.parse(l));assert.deepEqual(rows.map(x=>x.id),['01','03']);assert.ok(rows.every(x=>!('tags'in x)));assert.equal(readFileSync(join(root,'.tickets/.context'),'utf8'),prior);\n assert.deepEqual(run(['query'],'platform').trim().split('\\n').map(l=>JSON.parse(l).id),['02','03']);assert.deepEqual(run(['query']).trim().split('\\n').map(l=>JSON.parse(l).id),['02','03']);assert.equal(readFileSync(join(root,'.tickets/.context'),'utf8'),prior);\n const report={schema:1,status:'pass',version:c.version,checks,scopedIds:['01','03'],restoredIds:['02','03'],untaggedIncluded:true,originalContextRestored:true};writeFileSync(resolve(process.argv[2]),JSON.stringify(report,null,2)+'\\n');console.log(JSON.stringify({status:'pass',version:c.version,scopedIds:report.scopedIds,restoredIds:report.restoredIds,untaggedIncluded:true}));\n}finally{rmSync(root,{recursive:true,force:true});}\n",
-      "probeSha256": "67c30a48a2f31af77428b494baea29c7d6b05204dc67a6bcfe050f8bddc8e92b",
+      "probeSourceUtf8": "import assert from 'node:assert/strict';\nimport {readFileSync,writeFileSync,mkdirSync,mkdtempSync,rmSync} from 'node:fs';\nimport {tmpdir} from 'node:os';import {join,resolve} from 'node:path';import {execFileSync} from 'node:child_process';\nimport {isolatedEnvironment} from '../scripts/release-native.mjs';\nconst c=JSON.parse(readFileSync('.scratch/tkt-candidate-capabilities.json')),root=mkdtempSync(join(tmpdir(),'tkt-context-proof-')),home=join(root,'home');mkdirSync(home);mkdirSync(join(root,'.tickets'));\nconst env={...isolatedEnvironment(home),DO_NOT_TRACK:'1',TKT_NO_USER_CONFIG:'1'},checks=[];\nexecFileSync('git',['init',root],{env,encoding:'utf8',stdio:'pipe'});\nfunction run(args,override){const stdout=execFileSync(c.binary,args,{env:override?{...env,TKT_CONTEXT:override}:env,cwd:root,encoding:'utf8'});checks.push({command:['tkt',...args],contextOverride:override,exit:0,stdout});return stdout;}\ntry {\n for(const[id,tag]of[['01','ink'],['02','platform'],['03',null]])writeFileSync(join(root,'.tickets',id+'-fixture.md'),`---\\nid: \"${id}\"\\ntitle: \"Fixture ${id}\"\\nstatus: open\\nblocked_by: []\\n${tag?'tags: [\"'+tag+'\"]\\n':''}---\\n# Fixture\\n`);\n run(['context','platform']);const prior=readFileSync(join(root,'.tickets/.context'),'utf8');\n const skill=readFileSync('/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/skills/tkt-reconcile/SKILL.md','utf8'),block=skill.match(/```bash\\n([\\s\\S]*?)```/)[1];\n for(const line of block.trim().split('\\n')){const command=line.split('#')[0].trim().replace('<stream>','ink');if(command)run(command.split(/\\s+/).slice(1));}\n const originalRows=run(['query']).trim().split('\\n').map(l=>JSON.parse(l));assert.deepEqual(originalRows.map(x=>x.id),['02','03']);\n const rows=run(['query'],'ink').trim().split('\\n').map(l=>JSON.parse(l));assert.deepEqual(rows.map(x=>x.id),['01','03']);assert.ok(rows.every(x=>!('tags'in x)));assert.equal(readFileSync(join(root,'.tickets/.context'),'utf8'),prior);\n assert.deepEqual(run(['query'],'platform').trim().split('\\n').map(l=>JSON.parse(l).id),['02','03']);assert.deepEqual(run(['query']).trim().split('\\n').map(l=>JSON.parse(l).id),['02','03']);assert.equal(readFileSync(join(root,'.tickets/.context'),'utf8'),prior);\n const report={schema:1,status:'pass',version:c.version,checks,scopedIds:['01','03'],restoredIds:['02','03'],untaggedIncluded:true,originalContextRestored:true};writeFileSync(resolve(process.argv[2]),JSON.stringify(report,null,2)+'\\n');console.log(JSON.stringify({status:'pass',version:c.version,scopedIds:report.scopedIds,restoredIds:report.restoredIds,untaggedIncluded:true}));\n}finally{rmSync(root,{recursive:true,force:true});}\n",
+      "probeSha256": "db08a47d355bbb78dd0ff6af2d35390e5929d80f6dd1611e184310c99fc47495",
       "evidence": {
         "schema": 1,
         "status": "pass",
-        "version": "tkt 0.5.0 (b2425c9)",
+        "version": "tkt 0.5.0 (af4703d)",
         "checks": [
           {
             "command": [
@@ -1894,10 +1894,10 @@
     }
   ],
   "capabilitiesInput": {
-    "binary": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-a5e26a2/worktree/target/debug/tkt",
-    "home": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/tkt-final-cli-Oc615W",
-    "version": "tkt 0.5.0 (b2425c9)",
-    "candidateSha": "b2425c93f94a0b56a87cb6496ecbadaf381922bf",
+    "binary": "/Users/sambiggins/code/grey-matter/.scratch/candidates/tkt-0.5.0-468684d/worktree/target/debug/tkt",
+    "home": "/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/tkt-final-cli-11keBQ",
+    "version": "tkt 0.5.0 (af4703d)",
+    "candidateSha": "af4703d7b737a772eb45fb7e601ce3ec6b9b9735",
     "binarySource": "Exact candidate product-gate-built debug binary; separate CI release assets pending",
     "capabilities": {
       "commands": {
