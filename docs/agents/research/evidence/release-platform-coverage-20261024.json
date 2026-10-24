@@ -867,7 +867,7 @@
   ],
   "macOS": "Both exact candidates passed fresh product and all three plugin native package checks; six harness catalog/upgrade groups also passed. See current candidate and compatibility evidence.",
   "limits": [
-    "Native Windows package checks and owned-fixture controls pass for six clients; full Codex user-root isolation remains ticket77. Native macOS/Linux coverage remains passing. No Windows exclusion is approved.",
+    "Native Windows completion evidence passes after authorized duplicate cleanup, including the complete Codex candidate catalog without filtering external entries. macOS/Linux evidence remains passing. No Windows coverage exclusion was used.",
     "Windows tkt intentionally skips the relative-symlink migration Node fixture and excludes the Unix-only push-rejection integration test. Remaining Node cases and all platform-applicable Rust tests pass.",
     "Final audit 70 must classify these coverage limits; platform-approval, final-audit and staging gates are not granted by this report."
   ],
@@ -884,11 +884,11 @@
       "rawEvidenceSha256": "037322d68a8f9cc88a369e5c60b694f3ee51fc72013fb581cb2d34d3ee00b2c9"
     },
     "windows": {
-      "status": "partial",
+      "status": "pass",
       "ticket": "77",
-      "report": "docs/agents/research/evidence/windows-native-validation-20261024.json",
-      "rawEvidenceSha256": "d8a4db0010dfd9a258c7b93c2d79cb1e06a543cdfe4819a33f36797d310284b3",
-      "remaining": "Full Codex catalog isolation under a clean Windows profile or explicitly approved fixture-scope exclusion."
+      "report": "docs/agents/research/evidence/windows-native-validation-completion-20261024.json",
+      "rawEvidenceSha256": "667f668b3c7f63c1d4e7a50ce2790c65fd91fe808c87c6568b5eaf2a51cb0159",
+      "scope": "Fresh product and six canonical native rows, complete Codex candidate state probe, six live managed catalogs after authorized duplicate cleanup; authentication/foreign-content limits explicitly retained."
     }
   }
 }

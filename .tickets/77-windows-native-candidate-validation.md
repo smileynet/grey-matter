@@ -10,7 +10,7 @@ validation_criteria:
   - "Both plugin packages load with expected namespaces and exactly-once catalogs in every applicable native harness; unavailable clients are explicit blockers or approved exclusions."
   - "Native install, upgrade, repeated deploy, enable/disable and foreign-content preservation controls have command/output evidence."
   - "Applicable product, syntax, resource, invocation-policy and hook checks pass; unsupported checks are not counted as executed."
-  - "A cited platform report and machine-readable evidence are committed, linked to ticket 70 and contain no publication or real user-state mutation."
+  - "A cited platform report and machine-readable evidence are committed, linked to ticket 70, record no publication, and bind authorized cleanup to rollback backups and preservation of unique user skill content."
 tags: ["stream:tooling"]
 requires: [windows]
 ---
@@ -80,7 +80,7 @@ Close with five numbered evidence entries matching the criteria. If any required
 - [ ] Both plugin packages load with expected namespaces and exactly-once catalogs in every applicable native harness; unavailable clients are explicit blockers or approved exclusions.
 - [ ] Native install, upgrade, repeated deploy, enable/disable and foreign-content preservation controls have command/output evidence.
 - [ ] Applicable product, syntax, resource, invocation-policy and hook checks pass; unsupported checks are not counted as executed.
-- [ ] A cited platform report and machine-readable evidence are committed, linked to ticket 70 and contain no publication or real user-state mutation.
+- [ ] A cited platform report and machine-readable evidence are committed, linked to ticket 70, record no publication, and bind authorized cleanup to rollback backups and preservation of unique user skill content.
 
 ## SharkTank execution checkpoint (2026-10-24)
 
@@ -89,3 +89,9 @@ User-authorized SSH validation updated both clean source checkouts and tested th
 **Remain in progress:** Codex 0.147.0 reads 48 existing user skills through the Windows Known Folder Profile API despite HOME/USERPROFILE/CODEX_HOME redirection. Full catalog isolation is not proved. No directories were removed to conceal this finding. Complete the unfiltered catalog/state probe in a clean Windows account/VM, or obtain an explicit supported-scope exclusion from the user through audit 70. A question presenting those two concrete options is pending; no exclusion is assumed. Initial Kiro probes also exposed user metadata before the documented KIRO_HOME override was verified; session metadata may have been created. The report discloses this limit rather than claiming no personal state was accessed.
 
 Windows legacy installer copies required explicit file-list/byte review before removing owned fixtures; automatic symlink migration is not claimed for those copies. AGY updater locks were reproduced, the private payload restored from the pinned ZIP, and final canonical helper runs passed through a retained updater-disabling native launcher. No production source/candidate change or publication occurred. Criteria 1/3/4 have evidence within these limits; 2 and the full boundary in 5 remain unfulfilled, so no close operation is authorized by these results.
+
+## Completion after authorized live cleanup (2026-10-24)
+
+The user explicitly requested: “Audit SharkTank’s actual skill catalog and clean up confirmed duplicates. Make sure each harness sees each skill exactly once, then finish Windows validation.” This supersedes the earlier no-user-state-mutation boundary only for the requested live audit/cleanup; criterion 5 now requires explicit backup and preservation evidence rather than pretending no state changed. No scope exclusion was approved or needed.
+
+The [completion report](../docs/agents/research/windows-native-validation-completion-20261024.md), [structured evidence](../docs/agents/research/evidence/windows-native-validation-completion-20261024.json) and 44-file raw ZIP prove the final result. Forty-eight confirmed installer-owned shared copies were removed after backup; three retained roots each have 50 managed skills; all six harness checks expose the 50 managed skills once, and 244 unique user files/links remain unchanged. Codex's complete frozen-candidate catalog/state probe now passes with exactly 51 non-system skills, without filtering external user entries. Fresh product gates and all six canonical native package rows pass. The prior partial report remains historical, not a current blocker. AGY native installed inventory plus byte-identical shadow loading is distinguished from its unauthenticated live OAuth catalog; no login/model call or personal provider change occurred. No publication or final-audit/staging receipt was granted.

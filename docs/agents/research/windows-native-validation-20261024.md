@@ -1,6 +1,6 @@
 # Windows native candidate validation — 2026-10-24
 
-**Partial: product and owned-fixture checks pass; full Codex catalog isolation remains open in ticket 77.** SSH execution used `uosmi@sharktank` on Windows 11 Pro 10.0.26300 x64. No publication or coverage exclusion is granted.
+**Historical partial report; Windows validation now passes in the [completion report](windows-native-validation-completion-20261024.md).** The findings below describe the initial run before the user authorized live duplicate cleanup. SSH execution used `uosmi@sharktank` on Windows 11 Pro 10.0.26300 x64. No publication or coverage exclusion is granted.
 
 [Structured evidence](evidence/windows-native-validation-20261024.json) contains the reports, tool hashes, source research and limitations. The [raw evidence ZIP](evidence/windows-native-validation-20261024.zip) retains 54 files, including executed probe/launcher sources, product logs and per-member hashes. Its SHA-256 is `d8a4db0010dfd9a258c7b93c2d79cb1e06a543cdfe4819a33f36797d310284b3`; all 53 manifested member hashes and both product-log hashes were checked after transfer.
 
@@ -43,7 +43,7 @@ GitHub credential prompting failed over SSH. Both clean source checkouts were fa
 
 No OS filesystem or network sandbox is claimed. Environment allowlists, disposable application directories and initialization/catalog requests reduced exposure, but the initial Kiro/Codex metadata exposure above prevents a blanket claim that no personal state was accessed. No real credentials or model prompts were supplied. Hook fixtures and native registration pass; authenticated interactive hook execution and model activation of every skill are outside the measured scope.
 
-## Reproduction and remaining gate
+## Initial reproduction and remaining gate (resolved by the completion report)
 
 Retained Windows inputs live under `D:\code\windows-pinned-tools`, `windows-grey-artifacts`, `windows-tkt-artifacts` and the two detached candidate worktrees. Executed scripts and exact commands are in the ZIP. Invoke real executables rather than the broken mise/WinGet/Bun launchers found in the SSH PATH. Use Node 22.23.1; the tkt gate resolved Rust 1.95.0. Pin downloads using the official [Codex release](https://api.github.com/repos/openai/codex/releases/tags/rust-v0.147.0), [Claude manifest](https://downloads.claude.ai/claude-code-releases/2.1.310/manifest.json), [AGY release](https://api.github.com/repos/google-antigravity/antigravity-cli/releases/tags/1.4.6), [OpenCode release](https://api.github.com/repos/anomalyco/opencode/releases/tags/v1.18.21), [Crush release](https://api.github.com/repos/charmbracelet/crush/releases/tags/v0.98.1), and [versioned Kiro MSI](https://prod.download.cli.kiro.dev/stable/2.34.0/kiro-cli-x86_64-pc-windows-msvc.msi). The MSI was administratively extracted, not installed.
 
