@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Probe private source/output mounts on Linux; no Cargo upload or credentials.
+"""Probe private source/output mounts using disposable localhost captures.
 
-Usage: sudo python3 docs/agents/research/examples/cargo-private-mount.py [--cargo]
+Usage: python3 docs/agents/research/examples/cargo-private-mount.py [--cargo]
 Requires bubblewrap, Git and Linux memfd sealing. All writes use a disposable tree.
+Run as the toolchain owner; unprivileged user namespaces must be available.
+--cargo requires absolute PROBE_CARGO, PROBE_RUSTC and PROBE_NODE executable paths.
+Only the fixed dummy credential reaches the refusing localhost registry.
 """
 import errno
 import fcntl
@@ -99,7 +102,7 @@ print(json.dumps({'phase': 'verified', 'head': head, 'inventory': inventory(), '
 
 def main():
     if sys.argv[1:] not in [[], ["--cargo"]] or sys.platform != "linux":
-        raise ValueError("usage: sudo python3 cargo-private-mount.py [--cargo] (Linux only)")
+        raise ValueError("usage: python3 cargo-private-mount.py [--cargo] (Linux only)")
     cargo_mode = sys.argv[1:] == ["--cargo"]
     bwrap = shutil.which("bwrap")
     if not bwrap:
