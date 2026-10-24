@@ -1,0 +1,25 @@
+{
+  "sourceSha": "b849d433450d63b4d8bf3757adeb4345018024f2",
+  "version": "0.4.0",
+  "scope": "no-upload source remediation smoke; regenerate approved 0.5.0 candidate later",
+  "archiveSha256": "018e36f0f937065259de8d3f1358825260d0dc6474d0b02b2c6508b7fe47c742",
+  "bytes": 207970,
+  "files": 100,
+  "scratchExcluded": true,
+  "vcsMetadataMatches": true,
+  "packagedBinaryVersion": "tkt 0.4.0 (b849d43)",
+  "packageBuild": "pass",
+  "regression": "old source reproduced ancestor hash; repaired seven-fixture Node gate passes including consecutive ordinary/linked/packed/detached builds",
+  "rustGate": "fmt, clippy -D warnings, 296 tests pass",
+  "scratchRemediation": {
+    "ticket": "tkt:212",
+    "sourceSha": "a924678c509da445050514b072fa58956f1e7398",
+    "repeatedArchiveSha256": "cf98292d07b4c7f6eabadf0809b5f183432573c42a94f3fa2031c685b303f6e1",
+    "identicalReplay": true
+  },
+  "identityRemediation": {
+    "ticket": "tkt:213",
+    "installedVersion": "tkt 0.4.0 (b849d43)",
+    "ticketValidationFindings": 0
+  }
+}
