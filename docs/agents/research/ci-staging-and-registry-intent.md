@@ -78,3 +78,33 @@ provenance, pinned Cargo transport probe, durable receipt ownership and CI dispa
 recovery. Observe effective retention and rerun artifact behavior in a harmless
 staging run. Keep approved-version candidate validation separate from source-smoke
 fixtures and earlier hosted platform runs.
+
+## Attempt provenance and first smoke run
+
+[L1:verified] The first manual staging run,
+[40048479836](https://github.com/smileynet/tkt/actions/runs/40048479836),
+resolved candidate `23c494023fa211667e008b9a83e8967c758c67bc`. Planning and
+clean crate packaging passed. Windows failed at Install dist because the wrapper
+forced bash over cargo-dist's PowerShell bootstrap (`irm`/`iex`, exit 127). A local
+regression reproduced the shell mismatch; the wrapper now preserves native defaults.
+This failed run is diagnostic evidence, not a staged candidate.
+
+[L2:verified] Artifact REST metadata has no producing job or attempt field. The
+attempt API's artifact URL remains run-scoped. Artifact IDs identify concrete
+immutable uploads, but do not encode attempt. The download action's ID path can
+warn about a missing subset instead of enforcing exact inventory. Use unique
+attempt-qualified intermediate names, exact expected IDs/digests, attempt-specific
+job/upload logs and the embedded seal identity. The wrapper now qualifies every
+intermediate upload/download by attempt, intending to reject inputs from earlier
+attempts. Use a complete fresh attempt; live rerun behavior remains unverified.
+Sources: [artifact API](https://docs.github.com/en/rest/actions/artifacts),
+[attempt API](https://docs.github.com/en/rest/actions/workflow-runs#get-a-workflow-run-attempt),
+[download action source](https://github.com/actions/download-artifact/blob/main/src/download-artifact.ts),
+[upload immutability](https://github.com/actions/upload-artifact#overwriting-an-artifact).
+Mutable action source informed this finding; pin and review the executed revision
+when the publication downloader is implemented. A completed seal and live rerun
+provenance check remain unverified.
+
+[Cargo transport follow-up](cargo-sealed-transport.md) records the observed 1.99.1
+CLI, failed pinned-source retrieval and a bounded localhost probe design. It does
+not establish sealed-byte transport. That gap remains open in ticket 68.
