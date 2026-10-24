@@ -1,7 +1,7 @@
 ---
 id: "75"
 title: "Refresh Claude local plugins when source changes without a version bump"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
