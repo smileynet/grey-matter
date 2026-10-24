@@ -123,3 +123,12 @@ Windows/Linux native loading proof. The first supplementary Windows run
 byte mismatch and package-path assertion); probe-only follow-up 40079658409
 retains the same candidate and installs prerequisites/preserves Git file bytes.
 No Windows pass is claimed while that run is incomplete.
+
+
+Windows follow-up 40079658409 is terminal failure: Node 34 passed / 2 failed /
+1 skipped; fmt/Clippy and 191 Rust unit tests pass, then six deployment integration
+fixtures fail by invoking the WSL bash launcher. Generator temporary-workspace and
+Cargo package-path failures remain. [tkt 219](https://github.com/smileynet/tkt/blob/main/.tickets/219-windows-maintainer-verification.md)
+owns this release-blocking remediation; resolve it and refresh affected candidate
+evidence before closure. The ownership hash mismatch is verified checkout CRLF
+conversion, and the corrected probe's ownership/mise wrapper checks pass.
