@@ -1,7 +1,7 @@
 ---
 id: "69"
 title: "Verify plugin fresh installs and upgrades in isolated harness homes"
-status: open
+status: in_progress
 blocked_by: ["67", "68"]
 priority: high
 spec: "release-readiness"
