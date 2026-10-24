@@ -15,8 +15,8 @@ final audit and artifact staging. Native Linux and Windows validation are verifi
 | 69 | Verify plugin fresh installs and upgrades in isolated harness homes | ✅ done |
 | 77 | Validate native release candidates on Windows (SharkTank) | ✅ done |
 | 78 | Validate native release candidates on Linux (randomserver) | ✅ done |
-| 70 | Audit both projects before release staging | in_progress |
-| 71 | Stage reviewed changelogs README files and release artifacts | open |
+| 70 | Audit both projects before release staging | ✅ done |
+| 71 | Stage reviewed changelogs README files and release artifacts | in_progress |
 
 Tickets 67–69 are complete, including the independent integrated publication review,
 prepared Cargo evidence, sole CI publisher/dispatcher, candidate preparation and
@@ -30,7 +30,7 @@ probe groups, Windows/Linux product gates and tkt's five-target build-only stage
 The [final audit](agents/research/final-release-audit-20261024.md) records evidence,
 ticket dispositions and the completed native platform evidence. Linux ticket 78 is complete after SSH validation on randomserver. [Windows ticket 77](agents/research/windows-native-validation-completion-20261024.md) is complete after authorized live duplicate cleanup and a passing complete Codex candidate catalog/state probe, with no scope exclusion.
 
-The remaining sequence is 70 → 71. Keep staging tied to these frozen candidates;
+Audit 70 is complete; finish the staging 71 closeout. Keep staging tied to these frozen candidates;
 source behavior or release-documentation changes require replacement artifacts and
 affected evidence. This live plan and ticket receipts record later progress; embedded
 plans in frozen bundles remain snapshots of their source revisions.
