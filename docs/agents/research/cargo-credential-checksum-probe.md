@@ -1,5 +1,7 @@
 # Cargo credential checksum gate: executed probe
 
+Consumed by: [ADR-0003](../decisions/0003-cargo-checksum-authorization.md).
+
 Checked 2026-10-23 on macOS arm64 with Cargo 1.99.1 and Node 24.14.1.
 This implements and tests the credential-provider component of ticket 68. The
 production transport, private filesystem boundary and sole CI publisher remain

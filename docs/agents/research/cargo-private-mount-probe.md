@@ -7,6 +7,8 @@ confidence: medium
 
 # Cargo private-mount execution probe
 
+Consumed by: [ADR-0004](../decisions/0004-private-cargo-filesystem.md).
+
 ## Summary
 
 The dependency-free Linux fixture preserves its source and Git identity while the

@@ -12,11 +12,22 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
           package-manager-cache: false
       - uses: dtolnay/rust-toolchain@1.99.1
+      - name: Install pinned helper dependencies
+        run: npm ci --ignore-scripts
+      - name: Fetch actual tkt source for transport compatibility
+        uses: actions/checkout@v6
+        with:
+          repository: smileynet/tkt
+          ref: 640acb4ad078b13f1719a8323d93b176897b48ce
+          path: .scratch/tkt-transport-input
+          persist-credentials: false
       - name: Refresh package index
         run: sudo apt-get update
       - name: Install boundary tool
@@ -25,10 +36,14 @@ jobs:
         run: python3 docs/agents/research/examples/cargo-private-mount.py > cargo-private-mount-result.json
       - name: Capture sealed Cargo bytes after concurrent host mutations
         run: env PROBE_CARGO="$(rustup which cargo)" PROBE_RUSTC="$(rustup which rustc)" PROBE_NODE="$(command -v node)" python3 docs/agents/research/examples/cargo-private-mount.py --cargo > cargo-private-upload-result.json
+      - name: Prepared transport lifecycle and actual tkt compatibility
+        run: env PROBE_CARGO="$(rustup which cargo)" PROBE_RUSTC="$(rustup which rustc)" node scripts/release-cargo-upload.integration.mjs --tkt-repo .scratch/tkt-transport-input > cargo-prepared-transport-result.json
       - name: Retain result
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: cargo-private-mount-${{ github.run_id }}-${{ github.run_attempt }}
-          path: cargo-private-*-result.json
+          path: |
+            cargo-private-*-result.json
+            cargo-prepared-transport-result.json
           if-no-files-found: error

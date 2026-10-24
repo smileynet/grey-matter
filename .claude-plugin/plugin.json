@@ -67,7 +67,9 @@
         "scripts/release-development.mjs",
         "scripts/release-ci-artifacts.mjs",
         "scripts/release-tkt-publication.mjs",
-        "scripts/release-cargo-credentials.mjs"
+        "scripts/release-cargo-credentials.mjs",
+        "scripts/release-cargo-upload.mjs",
+        "scripts/release-cargo-transport.py"
       ]
     }
   }
