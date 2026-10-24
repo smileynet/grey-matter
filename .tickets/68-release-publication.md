@@ -329,3 +329,37 @@ file in its test command. That result does not establish fresh CI-entry coverage
 the report was corrected. The next affected-path review must include the actual
 CI cases in `scripts/release-verify.test.mjs` and the new regressions. Complete
 these fixes before that review, then reconcile all six acceptance criteria.
+
+## Review remediation checkpoint (2026-10-23)
+
+Credential environment isolation is committed at grey `445a32d` / tkt `86e8dbf`.
+All 12 grey repository invariants pass. One portfolio refresh and strict audit
+pass (19 plugins, 4 packs, zero findings/errors).
+
+Tkt `862e57f` adds one shared publication-toolchain action and a separate read-only
+product probe. The action supplies Node 22, Rust/Cargo 1.99.1 with rustfmt/clippy,
+mise 2026.10.18, cargo-dist 0.32.0 and bubblewrap. Both callers use it; the probe
+executes actual `prepareDevelopment` and `mise run check`, without publication
+credentials or Git ref mutations. [Hosted run 40071721321](https://github.com/smileynet/tkt/actions/runs/40071721321)
+passes on exact source `862e57fb8227335440e73cb2dfddaeff3c2341da`: 30 Node tests,
+296 Rust tests, formatting, clippy with denied warnings, and real dist generation.
+The downloaded product report and log digests were independently checked against
+their receipts. [Committed evidence](../docs/agents/research/evidence/publication-product-20261024.json)
+retains the reports, source hashes, observed checks and hosted artifact identity.
+This is source 0.4.0 product-gate evidence, not final-candidate or publication proof.
+
+The exact owned clone is the sole `MISE_TRUSTED_CONFIG_PATHS` entry for the gate;
+the shared setup neither loads project env nor persists its GitHub token.
+Primary references read: [mise trust](https://mise.jdx.dev/cli/trust.html),
+[trusted config paths](https://mise.jdx.dev/configuration/settings.html#trusted-config-paths),
+and [mise-action inputs](https://github.com/jdx/mise-action/blob/v5/action.yml).
+Current mise can automatically trust configs for commands that run project code;
+the explicit path avoids relying on trust inherited from the original checkout.
+
+Both stable-only recovery regressions first failed on a seeded later-main conflict.
+The entry points now observe and validate complete immutable publication before
+skipping development integration/candidate ref pushes. Recovery still validates
+exact tag, notes and asset hashes; tkt also requires matching registry publication.
+Controls refuse removed remote assets and an absent registry observation without
+repeating development or Cargo. Partial-failure reporting remains unfinished;
+perform the affected-path independent re-review after it is fixed.

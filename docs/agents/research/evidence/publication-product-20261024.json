@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "scope": "Read-only hosted product-gate probe; no release, registry upload, release tag, or stable promotion. Source version 0.4.0, not the final 0.5.0 candidate.",
+  "run": {
+    "url": "https://github.com/smileynet/tkt/actions/runs/40071721321",
+    "id": 40071721321,
+    "attempt": 1,
+    "sourceSha": "862e57fb8227335440e73cb2dfddaeff3c2341da",
+    "permissions": {
+      "contents": "read"
+    },
+    "artifact": {
+      "id": 12551562738,
+      "name": "publication-product-40071721321-1",
+      "size": 8664,
+      "reportedDigest": "sha256:ab0cc37eb55dcef7ed29757c8430dda360559b269b2daf7980655af6fbc0c261",
+      "archiveDigestIndependentlyVerified": false
+    }
+  },
+  "result": {
+    "status": "pass",
+    "mode": "development-integration",
+    "candidateSha": "862e57fb8227335440e73cb2dfddaeff3c2341da",
+    "developmentSha": "862e57fb8227335440e73cb2dfddaeff3c2341da",
+    "mainSha": "862e57fb8227335440e73cb2dfddaeff3c2341da",
+    "evidence": "/home/runner/work/_temp/tkt-product-development/product-435bf3ac-bc9b-425e-aa6a-c8d016a53070",
+    "reportSha256": "1d3cd19109d8c98e14c510f8c99f7d5fc1b9d0b346c560f39b7f6d04ac5c20b8"
+  },
+  "productReport": {
+    "schema": 1,
+    "status": "pass",
+    "mode": "product-evidence",
+    "publishable": false,
+    "candidateSha": "862e57fb8227335440e73cb2dfddaeff3c2341da",
+    "product": "tkt",
+    "version": "0.4.0",
+    "platform": {
+      "os": "linux",
+      "release": "6.8.0-1064-azure",
+      "arch": "x64",
+      "node": "v22.23.3"
+    },
+    "commands": [
+      [
+        "mise",
+        "run",
+        "check"
+      ]
+    ],
+    "checks": [
+      {
+        "command": [
+          "mise",
+          "run",
+          "check"
+        ],
+        "started": "2026-10-24T06:50:05.405Z",
+        "finished": "2026-10-24T06:50:30.835Z",
+        "exit": 0,
+        "signal": null,
+        "error": null,
+        "log": "1-product.log",
+        "sha256": "57fd3160bba96a073acda443444f4d20e3f2302f9fe1e5b50075cc78f05f835c"
+      }
+    ],
+    "pending": [
+      "native",
+      "scope",
+      "compatibility",
+      "remaining-platforms"
+    ]
+  },
+  "verifiedLocalFileDigests": {
+    "product-evidence.json": "1d3cd19109d8c98e14c510f8c99f7d5fc1b9d0b346c560f39b7f6d04ac5c20b8",
+    "1-product.log": "57fd3160bba96a073acda443444f4d20e3f2302f9fe1e5b50075cc78f05f835c"
+  },
+  "observedChecks": {
+    "nodeTests": 30,
+    "nodeFailures": 0,
+    "rustTests": [
+      191,
+      6,
+      96,
+      3
+    ],
+    "rustFailures": 0,
+    "fmt": "pass",
+    "clippy": "pass, warnings denied",
+    "actualWorkflowGeneration": "pass, cargo-dist 0.32.0"
+  },
+  "installedTools": {
+    "node": "22.23.3",
+    "rustc": "1.99.1 (58cf8f9c3 2026-10-13)",
+    "mise": "2026.10.18",
+    "cargoDist": "0.32.0"
+  },
+  "sourceFiles": {
+    ".github/actions/publication-toolchain/action.yml": "bd67435777b6fc55526e458406fb5a83b4e275f6dcf901b2a7ce536d684057f1",
+    ".github/workflows/publication-product-probe.yml": "11d72d30533cfa099c59603db2b8c000f562f21b019e134f7a178b2d55428fcf",
+    ".github/workflows/publish.yml": "81b3189b494bea55826f1a88e32b3f620a7ba8e7e67960751aaea0af42e54fcb",
+    "tools/release-development.mjs": "da576b0f363533cb84896c8e67e3aab61bcc3ff7d9c2259538e92c3020b04847",
+    "tools/release-product.mjs": "31a892b9a013b409c07c7842734d114d1794bf0e3f2ebf7e88decb3e1a04c9b9"
+  },
+  "sources": [
+    "https://mise.jdx.dev/configuration/settings.html#trusted-config-paths",
+    "https://mise.jdx.dev/cli/trust.html",
+    "https://github.com/jdx/mise-action/blob/v5/action.yml"
+  ]
+}

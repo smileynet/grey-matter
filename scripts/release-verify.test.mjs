@@ -246,6 +246,18 @@ test("publication command: interruption persists the release ID and resumes with
   const finished = JSON.parse(readFileSync(pub.options.state)); assert.equal(finished.phase, "complete"); assert.equal(finished.error, undefined);
 }));
 
+test("publication command: immutable publication resumes stable despite later development conflicts", () => fixture(async (f) => {
+  const pub = publicationFixture(f), promote = pub.services.promoteStable;
+  pub.services.promoteStable = () => { throw Error("seeded stable rejection"); };
+  await assert.rejects(pub.run({ execute: true }), /stable rejection/);
+  pub.services.promoteStable = promote;
+  pub.services.prepareMain = () => { throw Error("later main conflicts"); };
+  pub.services.pushCandidate = () => { throw Error("candidate refs must remain untouched"); };
+  const result = await pub.run({ mode: "resume", execute: true });
+  assert.equal(result.status, "pass");
+  for (const event of ["refs", "create", "publish", "stable"]) assert.equal(pub.writes.filter(value => value === event).length, 1, event);
+}));
+
 test("publication command: changed remote or foreign recovery state blocks all writes", () => fixture(async (f) => {
   const pub = publicationFixture(f);
   f.git("remote", "set-url", "origin", "https://github.com/other/repo.git");
@@ -404,6 +416,39 @@ test("tkt CI entry: failed stable resumes observed registry without preparing an
   ci.services.promoteStable = promote; await ci.run({ execute: true });
   assert.equal(ci.events.filter((event) => event === "cargo").length, 1); assert.equal(ci.events.filter((event) => event === "publish").length, 1);
 }, undefined, "tkt"));
+
+test("tkt CI entry: published candidate resumes stable without development or candidate ref writes", () => fixture(async (f) => {
+  const ci = await tktCiFixture(f), promote = ci.services.promoteStable;
+  ci.services.promoteStable = async () => { throw Error("seeded stable loss"); };
+  await assert.rejects(ci.run({ execute: true }), /stable loss/);
+  assert.equal(ci.state.release.immutable, true); assert.equal(ci.state.registry.phase, "published");
+  ci.services.promoteStable = promote;
+  ci.services.prepareMain = async () => { throw Error("later main conflicts"); };
+  ci.services.pushCandidate = async () => { throw Error("candidate refs must remain untouched"); };
+  const result = await ci.run({ execute: true });
+  assert.equal(result.status, "pass"); assert.equal(result.stable.sha, f.sha);
+  for (const event of ["development", "refs", "cargo", "publish", "stable"]) assert.equal(ci.events.filter(value => value === event).length, 1, event);
+}, undefined, "tkt"));
+
+test("tkt CI entry: stable recovery refuses a missing registry observation before development", () => fixture(async (f) => {
+  const ci = await tktCiFixture(f);
+  ci.services.promoteStable = async () => { throw Error("seeded stable loss"); };
+  await assert.rejects(ci.run({ execute: true }), /stable loss/);
+  ci.state.registry = { phase: "missing", name: "tkt", version: "0.1.0" };
+  ci.services.prepareMain = async () => { throw Error("must not prepare development"); };
+  await assert.rejects(ci.run({ execute: true }), /lacks confirmed matching registry/);
+  assert.equal(ci.events.filter(value => value === "cargo").length, 1);
+}, undefined, "tkt"));
+
+test("publication command: stable recovery rechecks complete remote assets", () => fixture(async (f) => {
+  const pub = publicationFixture(f);
+  pub.services.promoteStable = () => { throw Error("seeded stable rejection"); };
+  await assert.rejects(pub.run({ execute: true }), /stable rejection/);
+  pub.state.assets.pop();
+  pub.services.prepareMain = () => { throw Error("must not prepare development"); };
+  await assert.rejects(pub.run({ mode: "resume", execute: true }), /missing assets/);
+  assert.equal(pub.writes.filter(value => value === "refs").length, 1);
+}));
 
 test("tkt CI entry: missing publication binding fails closed", () => fixture(async (f) => {
   const ci = await tktCiFixture(f, ({ stage }) => { delete stage.entry.publication; });
