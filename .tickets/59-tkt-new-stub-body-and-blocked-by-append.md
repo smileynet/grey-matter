@@ -1,7 +1,7 @@
 ---
 id: "59"
 title: "tkt: new's stub body trips its own stub-body validator, and edit --blocked-by replaces instead of appends -- two agent footguns"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -24,7 +24,7 @@ the root cause in the tool so other repos stop hitting it.
 
 ### Trap 1 — `tkt new` creates a ticket its own validator immediately flags
 `tkt new <slug> --title ...` (with or without `--vc`) seeds the body with template stubs
-(`## What to build` -> `TBD`, `## Acceptance criteria` -> `- [ ] TBD`). On an **open** ticket
+(`## What to build` -> `TBD`, `## Acceptance criteria` -> `- [x] TBD`). On an **open** ticket
 that trips `tkt validate`'s `stub-body` warning right away; a **backlog** ticket is exempt.
 
 Reproduced (tkt 0.4.0, `92d4833`):
@@ -75,7 +75,21 @@ is a proposal to the tool's skill, not a grey-matter edit.
 
 ## Acceptance criteria
 
-- [ ] A proposal exists (filed upstream to tkt and/or captured here) for tkt new to not leave an open ticket in a self-flagged stub-body state -- e.g. a --body/--no-stub option, or stub-body only firing once a ticket leaves backlog
-- [ ] A proposal exists for an append-friendly blocked_by edit -- e.g. tkt edit --add-blocked-by / --remove-blocked-by, so adding one edge does not silently drop the rest
-- [ ] tkt-core skill guidance (commands.md / SKILL.md) gains a prominent note on both traps until the tool changes: new seeds a TBD body that trips stub-body on open tickets; edit --blocked-by replaces the whole list
-- [ ] Cross-referenced with ticket 33 (the sibling upstream-tkt agent-stumble ticket) and ticket 04 (native-tkt migration)
+- [x] A proposal exists (filed upstream to tkt and/or captured here) for tkt new to not leave an open ticket in a self-flagged stub-body state -- e.g. a --body/--no-stub option, or stub-body only firing once a ticket leaves backlog
+- [x] A proposal exists for an append-friendly blocked_by edit -- e.g. tkt edit --add-blocked-by / --remove-blocked-by, so adding one edge does not silently drop the rest
+- [x] tkt-core skill guidance (commands.md / SKILL.md) gains a prominent note on both traps until the tool changes: new seeds a TBD body that trips stub-body on open tickets; edit --blocked-by replaces the whole list
+- [x] Cross-referenced with ticket 33 (the sibling upstream-tkt agent-stumble ticket) and ticket 04 (native-tkt migration)
+
+## Verification (2026-10-23)
+
+The two tool-change proposals are captured above; implementation of those new CLI flags is not claimed. The interim tool-owned guidance shipped in tkt `cebc2c2`, in `skills/tkt-core/SKILL.md` and `references/commands.md`. Source inspection confirms stub generation in `src/core/ticket.rs` and whole-list replacement in `src/commands/edit.rs`; installed `tkt new --help` / `edit --help` confirms the proposed body and append/remove flags do not exist. The sibling tickets remain 33 and 04, as linked in Context. `mise run check` passes seven Node fixtures, fmt/clippy and all 296 Rust tests; `check-skill-syntax --pack ../tkt` parses four skills with no errors. Fresh prose review is CLEAN. One portfolio deploy refreshed the changed pack; Codex/Kiro/OpenCode copies match source SHA-256 `490e0f4d59d1b551f10be094eb69f74d092d8588959393cc35a65e7368ccd8ef`; strict portfolio audit is clean with no harness duplicates.
+
+## Resolution (2026-10-24)
+
+done: capture both upstream proposals and ship verified interim guidance in the tool-owned tkt-core skill; proposed CLI features remain proposals
+
+### Verification
+1. ✓ A proposal exists (filed upstream to tkt and/or captured here) for tkt new to not leave an open ticket in a self-flagged stub-body state -- e.g. a --body/--no-stub option, or stub-body only firing once a ticket leaves backlog — "Ticket59 captures body/body-file and creation-hint proposals; no unsupported flags are claimed implemented."
+2. ✓ A proposal exists for an append-friendly blocked_by edit -- e.g. tkt edit --add-blocked-by / --remove-blocked-by, so adding one edge does not silently drop the rest — "Ticket59 captures explicit add/remove blocker proposals while retaining full-replace semantics."
+3. ✓ tkt-core skill guidance (commands.md / SKILL.md) gains a prominent note on both traps until the tool changes: new seeds a TBD body that trips stub-body on open tickets; edit --blocked-by replaces the whole list — "tkt cebc2c2 adds prominent warnings to tkt-core and commands.md. CLI/source checked, prose CLEAN, full tkt gate and syntax parse pass; one portfolio deployment and strict duplicate audit pass."
+4. ✓ Cross-referenced with ticket 33 (the sibling upstream-tkt agent-stumble ticket) and ticket 04 (native-tkt migration) — "Context explicitly cross-references sibling ticket33 and native-tkt umbrella04."
