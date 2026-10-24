@@ -60,7 +60,8 @@
         "scripts/release-publication.mjs",
         "scripts/release-registry.mjs",
         "scripts/release-development.mjs",
-        "scripts/release-ci-artifacts.mjs"
+        "scripts/release-ci-artifacts.mjs",
+        "scripts/release-tkt-publication.mjs"
       ]
     }
   }

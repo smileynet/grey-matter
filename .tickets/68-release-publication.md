@@ -63,7 +63,7 @@ the required candidate evidence or publication authorization.
 
 ## Current implementation checkpoint
 
-Canonical release modules live in grey-matter `scripts/`; tkt vendors 17 owned
+Canonical release modules live in grey-matter `scripts/`; tkt vendors 18 owned
 files through `scripts/sync-release-tools.mjs`. Library and CLI fixtures use
 synthetic evidence, fake services and disposable Git remotes. No real release,
 registry upload, tag push or stable promotion has run.
@@ -89,7 +89,7 @@ registry upload, tag push or stable promotion has run.
   Stable promotion requires the complete immutable release and rechecks it afterward.
 - `release-registry.mjs`: exact sparse-index identity/checksum/yanked checks,
   harmless matching-version replay and explicit retry after an uncertain attempt.
-  The real upload adapter and durable attempt ledger are not implemented.
+  The real upload adapter is not implemented. `release-tkt-publication.mjs` now stages ordinary assets, creates a deterministic registry-intent receipt, reconciles Cargo/GitHub, then promotes stable. Initial attempt permission requires a successful receipt-creation response and matching asset-ID readback; an existing receipt with no registry observation requires explicit recovery. Fourteen mock-service fixtures cover interrupted phases. The receipt is mutable until GitHub publication and relies on serialized publishers and no out-of-band draft deletion.
 - tkt `tools/generate-release-workflow.mjs`: checked cargo-dist 0.32.0 wrapper
   retains generated platform builds, replaces mutating planning, removes host and
   announce jobs, and adds clean crate packaging plus exact-file sealing. Manual
@@ -134,7 +134,7 @@ The initial 0.2.0/0.5.0 drafts predate these changes and must be regenerated.
 2. Implement the later review-bound CI publisher and local dispatch/observer.
    It must download reviewed staged bytes, never rebuild or reseal them. Preserve
    one GitHub publisher, exact annotated tag, development M and stable C.
-3. Implement the durable registry-attempt barrier and the production Cargo upload
+3. Connect the tested registry-intent barrier to the production Cargo upload
    boundary. Four localhost capture cases now verify clean-source reproducibility,
    replacement of corrupt output, default dirty-source refusal and changed bytes
    under --allow-dirty; they do not complete the production transport guard. A dry-run comparison plus a checksum
