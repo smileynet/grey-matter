@@ -3,8 +3,8 @@
 The coordinated [release plan](agents/proposals/09-release-readiness.md) and
 [release contract](agents/release-contract.md) define scope and acceptance.
 User-approved staging versions: grey-matter 0.2.0 and tkt 0.5.0. Publication is
-not authorized. Candidate preparation is complete; run install/upgrade verification,
-then the final audit and artifact staging.
+not authorized. Candidate preparation and install/upgrade verification are complete. Finish the
+final audit and artifact staging; native-platform scope remains an explicit decision.
 
 ## Active release thread
 
@@ -12,22 +12,26 @@ then the final audit and artifact staging.
 | --- | --- | --- |
 | 68 | Publish and resume coordinated GitHub and plugin releases safely | ✅ done |
 | 67 | Prepare version-consistent release candidates and plugin bundles | ✅ done |
-| 69 | Verify plugin fresh installs and upgrades in isolated harness homes | in_progress |
-| 70 | Audit both projects before release staging | open |
+| 69 | Verify plugin fresh installs and upgrades in isolated harness homes | ✅ done |
+| 70 | Audit both projects before release staging | in_progress |
 | 71 | Stage reviewed changelogs README files and release artifacts | open |
 
-Ticket 68 is complete, including prepared Cargo evidence, the sole CI publisher and
-dispatcher, lifecycle/recovery checks, deployment audit and independent integrated
-Standards/Spec review. Ticket 67 is complete on grey-matter candidate
-`bec5afee9f4f070ef898ac309d45d5061a5be7b5` and tkt candidate
-`cd96042a5a70123cfbfc656ddf34563c53cff7a0`. Both pass product/native preparation
-checks; grey Windows/Linux gates and tkt CI/five-target staging build pass.
+Tickets 67–69 are complete, including the independent integrated publication review,
+prepared Cargo evidence, sole CI publisher/dispatcher, candidate preparation and
+isolated fresh-install/upgrade checks. Audit-discovered resource closure ticket 76 is
+also complete; the restored evidence file is verified in all three grey-matter bundles.
 
-The remaining sequence is 69 → 70 → 71. Previous-release probes include the
-v0.4 skill-link migration fixed by tkt 217. Keep audit and staging tied to these
-frozen candidates; runtime or release-documentation changes require new artifacts
-and affected evidence. This live plan and ticket receipts record later progress;
-embedded plans in frozen bundles remain snapshots of their source revisions.
+Current frozen candidates are grey-matter
+`e071b7b03d02025dc1af6c3ff2c4f8369f777587` and tkt
+`2b6ff173993c9fe413c40287fb1cb3f0a9879ca1`. Product/native checks, all six harness
+probe groups, Windows/Linux product gates and tkt's five-target build-only stage pass.
+The [final audit](agents/research/final-release-audit-20261024.md) records evidence,
+ticket dispositions and the remaining native-platform coverage decision.
+
+The remaining sequence is 70 → 71. Keep staging tied to these frozen candidates;
+source behavior or release-documentation changes require replacement artifacts and
+affected evidence. This live plan and ticket receipts record later progress; embedded
+plans in frozen bundles remain snapshots of their source revisions.
 
 ## Parked work
 

@@ -1,0 +1,44 @@
+[
+  {
+    "product": "grey-matter",
+    "target": "grey-matter/.claude-plugin/plugin.json",
+    "exit": 0,
+    "stdout": "{\n  \"success\": true,\n  \"strict\": false,\n  \"target\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/final-claude-audit-vjfq50x6/grey-matter/.claude-plugin/plugin.json\",\n  \"manifest\": {\n    \"file\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/final-claude-audit-vjfq50x6/grey-matter/.claude-plugin/plugin.json\",\n    \"type\": \"plugin\",\n    \"errors\": [],\n    \"warnings\": [],\n    \"notes\": [],\n    \"gatingHooks\": []\n  },\n  \"contents\": [],\n  \"advice\": [],\n  \"directory\": {\n    \"profile\": null,\n    \"findings\": [\n      {\n        \"code\": \"ICON_MISSING\",\n        \"title\": \"No icon\",\n        \"severity\": \"warning\",\n        \"blocking\": false,\n        \"hold\": false,\n        \"file\": \".claude-plugin/plugin.json\",\n        \"field\": \"icon\",\n        \"message\": \"No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.\",\n        \"fix\": \"Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon.\"\n      }\n    ],\n    \"undecided\": [],\n    \"incomplete\": false,\n    \"failure\": null,\n    \"notes\": [\n      \"This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder.\"\n    ]\n  }\n}\n",
+    "stderr": ""
+  },
+  {
+    "product": "grey-matter",
+    "target": "grey-matter/.claude-plugin/marketplace.json",
+    "exit": 0,
+    "stdout": "{\n  \"success\": true,\n  \"strict\": false,\n  \"target\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/final-claude-audit-vjfq50x6/grey-matter/.claude-plugin/marketplace.json\",\n  \"manifest\": {\n    \"file\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/final-claude-audit-vjfq50x6/grey-matter/.claude-plugin/marketplace.json\",\n    \"type\": \"marketplace\",\n    \"errors\": [],\n    \"warnings\": [],\n    \"notes\": [],\n    \"gatingHooks\": []\n  },\n  \"contents\": [],\n  \"advice\": [],\n  \"directory\": null\n}\n",
+    "stderr": ""
+  },
+  {
+    "product": "grey-matter",
+    "target": "flat exact skill directories",
+    "exit": 0,
+    "stdout": "{\n  \"success\": true,\n  \"strict\": true,\n  \"target\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/final-claude-audit-vjfq50x6/grey-matter-flat/skills\",\n  \"manifest\": null,\n  \"contents\": [],\n  \"advice\": [],\n  \"directory\": null\n}\n",
+    "stderr": ""
+  },
+  {
+    "product": "tkt",
+    "target": "tkt/.claude-plugin/plugin.json",
+    "exit": 0,
+    "stdout": "{\n  \"success\": true,\n  \"strict\": false,\n  \"target\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/final-claude-audit-vjfq50x6/tkt/.claude-plugin/plugin.json\",\n  \"manifest\": {\n    \"file\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/final-claude-audit-vjfq50x6/tkt/.claude-plugin/plugin.json\",\n    \"type\": \"plugin\",\n    \"errors\": [],\n    \"warnings\": [],\n    \"notes\": [],\n    \"gatingHooks\": []\n  },\n  \"contents\": [],\n  \"advice\": [],\n  \"directory\": {\n    \"profile\": null,\n    \"findings\": [\n      {\n        \"code\": \"ICON_MISSING\",\n        \"title\": \"No icon\",\n        \"severity\": \"warning\",\n        \"blocking\": false,\n        \"hold\": false,\n        \"file\": \".claude-plugin/plugin.json\",\n        \"field\": \"icon\",\n        \"message\": \"No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.\",\n        \"fix\": \"Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon.\"\n      }\n    ],\n    \"undecided\": [],\n    \"incomplete\": false,\n    \"failure\": null,\n    \"notes\": [\n      \"This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder.\"\n    ]\n  }\n}\n",
+    "stderr": ""
+  },
+  {
+    "product": "tkt",
+    "target": "tkt/.claude-plugin/marketplace.json",
+    "exit": 0,
+    "stdout": "{\n  \"success\": true,\n  \"strict\": false,\n  \"target\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/final-claude-audit-vjfq50x6/tkt/.claude-plugin/marketplace.json\",\n  \"manifest\": {\n    \"file\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/final-claude-audit-vjfq50x6/tkt/.claude-plugin/marketplace.json\",\n    \"type\": \"marketplace\",\n    \"errors\": [],\n    \"warnings\": [],\n    \"notes\": [],\n    \"gatingHooks\": []\n  },\n  \"contents\": [],\n  \"advice\": [],\n  \"directory\": null\n}\n",
+    "stderr": ""
+  },
+  {
+    "product": "tkt",
+    "target": "flat exact skill directories",
+    "exit": 0,
+    "stdout": "{\n  \"success\": true,\n  \"strict\": true,\n  \"target\": \"/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/final-claude-audit-vjfq50x6/tkt-flat/skills\",\n  \"manifest\": null,\n  \"contents\": [],\n  \"advice\": [],\n  \"directory\": null\n}\n",
+    "stderr": ""
+  }
+]

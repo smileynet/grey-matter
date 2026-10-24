@@ -4,7 +4,7 @@
   "gate": "compatibility",
   "product": "tkt",
   "version": "0.5.0",
-  "candidateSha": "af4703d7b737a772eb45fb7e601ce3ec6b9b9735",
+  "candidateSha": "2b6ff173993c9fe413c40287fb1cb3f0a9879ca1",
   "status": "pass",
   "blockers": [],
   "summary": "Fresh sealed plugin packages and supported bare roots match native catalogs and current tkt CLI surfaces on tested hosts.",

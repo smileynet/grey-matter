@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "candidateSha": "2b6ff173993c9fe413c40287fb1cb3f0a9879ca1",
+  "crateFiles": 50,
+  "crateVcs": {
+    "git": {
+      "sha1": "2b6ff173993c9fe413c40287fb1cb3f0a9879ca1"
+    },
+    "path_in_vcs": ""
+  },
+  "excludedDevelopmentPaths": true,
+  "binaryAsset": "tkt-aarch64-apple-darwin.tar.gz",
+  "binarySha256": "85403080f1fd6d10c5c31d23b2da7c03e2ca977c528ffc82c370edb7d458a085",
+  "command": [
+    "tkt",
+    "--version"
+  ],
+  "stdout": "tkt 0.5.0 (2b6ff17)\n",
+  "exit": 0,
+  "scope": "Executed macOS ARM64 release binary from provenance-verified CI ZIP in disposable home with network denied. Other target binaries built but not executed on this machine."
+}

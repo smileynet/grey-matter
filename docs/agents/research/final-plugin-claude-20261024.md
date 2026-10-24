@@ -1,0 +1,47 @@
+> Independent review snapshot of the predecessor BEC/AF candidate pair. Current replacement identities and the exact contract-byte comparison are in [the final candidate audit](final-release-audit-20261024.md). Historical hashes below are preserved rather than relabeled as fresh review.
+
+# Final frozen-candidate audit: Claude Code
+
+Audited 2026-10-24. Scope: both sealed Claude archives, their metadata and current primary Anthropic documentation. No installation, model prompt, source change, publication, credential use or user configuration change occurred during this audit. Native validation used disposable extracted payloads and fresh CLAUDE_CONFIG_DIR, an environment allowlist and nonessential traffic/update disabling; HOME was not overridden. This is explicit-path validation, not complete home/runtime isolation.
+
+## Exact products and disposition
+
+All values below are SHA256 except candidate Git SHAs. Manifest means `.claude-plugin/plugin.json`; marketplace means `.claude-plugin/marketplace.json`, read from the sealed Claude archive.
+
+| Product | Exact candidate and sealed identities | Verified facts and disposition |
+| --- | --- | --- |
+| grey-matter 0.2.0 | Candidate `bec5afee9f4f070ef898ac309d45d5061a5be7b5`; archive `1d63ef0200fc837ad006f513200514fe59a4095b23f94698cab913146e1d9fe7`; manifest `c5376382dc6d672b251c9cbf32cb13cd0121cb5ecea3f0e5e531840087f7db9d`; marketplace `a63257717ed22c71f977c20b4d790c1461826add91a2da0949774fe6b91997d4`; release-metadata `210e8c1fe09dd8e17d26abaa0013161a33f874a7857167321fd233d246662817` | [L1:verified] All 257 archive members match sealed metadata. Three existing custom skill roots contain 46 skills; 20 declare human-only invocation. Namespaced as `grey-matter:<name>`. Matching marketplace/plugin name, root source `./`, unversioned `tkt@tkt` dependency and root allowlist agree. One PreToolUse hook, no servers/agents. Fresh native manifest, marketplace and strict flat-component validation pass. No actionable Claude conformance blocker found; staging-only bounded pass. |
+| tkt 0.5.0 | Candidate `af4703d7b737a772eb45fb7e601ce3ec6b9b9735`; archive `b51af4d26fa3dabd02f88e6d98711226272245f47f1748c675cfd28989530182`; manifest `cbcd7bacee5a3b3c7ef3cee4a051de681381b7140def8d06dacb01d261fb5c4c`; marketplace `569cf0702a3bb0d0b627559b7c237ff2f75a697b232c00e530b67f00cfc37093`; release-metadata `a874b3809c2d94f51503389977190f06f76f7d6f3f0f3cb9e8441c4ce5d8c09b` | [L1:verified] All 48 archive members match sealed metadata. Four default-layout skills, default user/model invocation, namespaced `tkt:<name>`. Matching names and root source `./`; no plugin dependency. Requires separately installed tkt CLI on PATH. One SessionStart hook, no servers/agents. Fresh native manifest, marketplace and strict flat-component validation pass. No actionable Claude conformance blocker found; staging-only bounded pass. |
+
+## Sources read today and their application
+
+These are governing host references, not prior project reports. Retrieval date is not publication date.
+
+- [L4:verified] [Manifest reference](https://code.claude.com/docs/en/plugins-reference): custom skill directories and hook JSON paths are supported; namespaces derive from name; metadata is inert. Both names, contained existing paths and wrapped hook files conform. Directory listing fields are ignored at load time.
+- [L4:verified] [Create a marketplace](https://code.claude.com/docs/en/plugin-marketplaces): required marketplace fields, matching entry/plugin names, relative root sources and namespaced skill commands. Both marketplace roots and `./` sources conform.
+- [L4:verified] [Skill reference](https://code.claude.com/docs/en/skills): `disable-model-invocation: true` prevents automatic loading; `user-invocable: false` controls user visibility separately. The sealed files use these supported declarations; native command inventory is not proof of model enforcement.
+- [L4:verified] [Dependencies](https://code.claude.com/docs/en/plugins/dependencies): cross-marketplace installation uses the root marketplace allowlist. Unconstrained dependencies follow newer releases, creating compatibility risk; grey-matter deliberately leaves tkt unconstrained. Installed dependency disable guard was observed in the candidate-specific evidence. Dependency range/tag-resolution rules are not exercised by these manifests.
+- [L4:verified] [Publish and distribute](https://code.claude.com/docs/en/plugins/publish): explicit remote versions require bumps for updates; own-marketplace auto-update defaults off. Names are permanent identifiers. Both candidates bump their plugin versions. `source: "./"` is the documented same-repository shape. Tar.gz artifacts must be extracted for directory loading; this audit does not claim direct tar.gz loading.
+- [L4:verified] [Hooks reference](https://code.claude.com/docs/en/hooks): exec-form args substitute plugin-root paths without shell splitting; Node is resolved on PATH. grey-matter uses PreToolUse exit 2 and `onFailure: "block"` (requires 2.1.295+) to block detected pushes; tkt SessionStart stdout supplies context and failures are nonblocking. Both scripts exist in the archives. No deprecated field identified among the candidates' declared fields.
+
+The loading URL `https://code.claude.com/docs/en/plugins/loading` could not be retrieved today. Its old report assertions are not treated as independently reverified authority. Current manifest/publish docs establish the version/local-in-place distinction; remote cache behavior relies on explicitly bounded observable evidence.
+
+## Fresh observable evidence
+
+[L1:verified] `claude --version` → `2.1.310 (Claude Code)`.
+
+Evidence: six explicit native commands (`claude plugin validate <plugin.json> --json`, `<marketplace.json> --json`, copied flat skill directories `--strict --json`, each product) → all exit 0, success=true, no manifest errors/warnings, no incomplete directory scan. Exact results: `.scratch/final-audit-claude-native.json`. The flat copies contain the sealed skill folders; this avoids the previously controlled nested-custom-root scanner omission. Native acceptance still does not replace the independent YAML syntax gate; prior malformed-YAML controls demonstrated that limitation.
+
+Evidence: Python tarfile/hashlib inspection against each `release-metadata.json` → all 257/48 members and both archive hashes match; candidate SHA fields match assignment. This audit read the actual hook scripts: grey-matter checks detected push commands against the target project's `scripts/check-repo.mjs` when present; shell aliases/wrappers are outside its matcher. tkt emits frontier/WIP only when `.tickets` exists and gracefully skips missing CLI. These are observable implementations, not guarantees that a host executed them.
+
+[L1:verified from retained evidence] `docs/agents/research/evidence/claude-upgrade-session-catalog-20261024.json` records these exact archive hashes and candidate SHAs under Claude 2.1.310: 46+4 skills, one hook each, all 50 namespaced user commands, disable removes commands and enable restores them, repeated deployment preserves catalog and foreign sentinel, legacy bare roots migrate, and disabling required tkt is refused. These are already observed isolated operations, not rerun installations during this read-only audit. Initialization metadata is not interactive invocation or a model request. Earlier `claude-plugin-conformance.md` and `claude-current-validation.md` were read as historical evidence: their 44-skill/no-hook inventories do not describe these frozen candidates.
+
+## Blockers, advisories and limits
+
+- **Actionable blockers found: none for current-Claude manifest/path/catalog conformance.** This does not authorize publication or waive other release gates.
+- **Nonblocking listing advice, both products:** fresh native plugin scans report `ICON_MISSING`, explicitly blocking=false and hold=false. Icons/listing privacy/support URLs are optional for these own marketplaces. Add directory branding only if submitting; no reason to rebuild a staged payload solely for this advice. Root CLAUDE.md warning from source-root reports is absent in these sealed payload scans.
+- **Compatibility advisory:** retain tkt 0.5.0 as the tested pairing for grey-matter 0.2.0. An unconstrained future tkt release can drift. This is valid syntax and an accepted policy risk, not a missing mandatory version constraint.
+- **Runtime prerequisite/scope:** Node on PATH is required by both hooks; tkt additionally requires its CLI. Correct current exec-form syntax and existing scripts do not prove hooks ran on every host. The policy hook has the documented 2.1.295 minimum for fail-closed startup/timeout semantics; do not describe older Claude versions as equivalently protected.
+- **Evidence boundary:** macOS native metadata/validation only. Windows/Linux vendor loading, actual interactive invocation enforcement for these exact final payloads, future remote fetch/update behavior, full script security and Anthropic directory approval remain unverified here. Existing candidate/upgrade evidence narrows installation/catalog uncertainty but does not convert metadata into execution proof. No blanket cross-platform certification.
+
+Coverage: ✅ both sealed payloads/manifests/marketplaces, hashes, policy declarations, skill roots/namespaces, dependencies, hook scripts, update contract and current native validation; ⚠️ actual invocation/hook execution and unsupported OS/vendor runtime scope remain bounded. Only scratch audit outputs were written.

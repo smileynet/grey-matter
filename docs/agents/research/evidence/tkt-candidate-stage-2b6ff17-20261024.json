@@ -1,0 +1,450 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "observedAt": "2026-10-24T10:20:38.656Z",
+  "expected": {
+    "repository": "smileynet/tkt",
+    "repositoryId": 1316150092,
+    "workflowId": 330592177,
+    "runId": 40085017493,
+    "runAttempt": 1,
+    "artifactId": 12556662999,
+    "sealJobId": 120846674006,
+    "zipSize": 7682927,
+    "zipSha256": "ada187e85a77479331bb54b5c7ac8d0f298c93c1840576a45e24886a5f1b89c8",
+    "sealSha256": "fd325168b9723e7d4f20627b3b1ba3227526b19acd1bcd4bb9e7a115b32da07d",
+    "candidateSha": "2b6ff173993c9fe413c40287fb1cb3f0a9879ca1",
+    "version": "0.5.0"
+  },
+  "provenance": {
+    "repository": "smileynet/tkt",
+    "repositoryId": 1316150092,
+    "candidateSha": "2b6ff173993c9fe413c40287fb1cb3f0a9879ca1",
+    "workflowId": 330592177,
+    "runId": 40085017493,
+    "runAttempt": 1,
+    "artifactId": 12556662999,
+    "artifactName": "tkt-sealed-stage-40085017493-1",
+    "sealJobId": 120846674006
+  },
+  "record": {
+    "schema": 1,
+    "status": "pass",
+    "product": "tkt",
+    "version": "0.5.0",
+    "candidateSha": "2b6ff173993c9fe413c40287fb1cb3f0a9879ca1",
+    "tag": "v0.5.0",
+    "repository": "smileynet/tkt",
+    "runId": "40085017493",
+    "runAttempt": "1",
+    "workflow": ".github/workflows/release.yml",
+    "manifests": [
+      {
+        "name": "aarch64-apple-darwin-dist-manifest.json",
+        "sha256": "78124b283c08d5ce61a7f178afea3ef91456aa4492aa4e3ce4f6c0660bfabffb",
+        "distVersion": "0.32.0",
+        "systems": {
+          "build:local:aarch64-apple-darwin": {
+            "id": "build:local:aarch64-apple-darwin",
+            "cargo_version_line": "cargo 1.98.0 (797e8a9bc 2026-08-05)",
+            "build_environment": {
+              "macos": {
+                "os_version": "14.8.9"
+              }
+            }
+          },
+          "plan:all:": {
+            "id": "plan:all:",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "aarch64-unknown-linux-gnu-dist-manifest.json",
+        "sha256": "0f08ec80eb65aed685aca172d8180b2c0c6c42670c38cd0754e82853a62f0ed9",
+        "distVersion": "0.32.0",
+        "systems": {
+          "build:local:aarch64-unknown-linux-gnu": {
+            "id": "build:local:aarch64-unknown-linux-gnu",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          },
+          "plan:all:": {
+            "id": "plan:all:",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "global-dist-manifest.json",
+        "sha256": "c6ab69a2b7b170d09f267e405931cd587872e903808481735dec8f79882f3639",
+        "distVersion": "0.32.0",
+        "systems": {
+          "build:global:": {
+            "id": "build:global:",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          },
+          "build:local:aarch64-apple-darwin": {
+            "id": "build:local:aarch64-apple-darwin",
+            "cargo_version_line": "cargo 1.98.0 (797e8a9bc 2026-08-05)",
+            "build_environment": {
+              "macos": {
+                "os_version": "14.8.9"
+              }
+            }
+          },
+          "build:local:aarch64-unknown-linux-gnu": {
+            "id": "build:local:aarch64-unknown-linux-gnu",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          },
+          "build:local:x86_64-apple-darwin": {
+            "id": "build:local:x86_64-apple-darwin",
+            "cargo_version_line": "cargo 1.98.0 (797e8a9bc 2026-08-05)",
+            "build_environment": {
+              "macos": {
+                "os_version": "15.7.9"
+              }
+            }
+          },
+          "build:local:x86_64-pc-windows-msvc": {
+            "id": "build:local:x86_64-pc-windows-msvc",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": "windows"
+          },
+          "build:local:x86_64-unknown-linux-gnu": {
+            "id": "build:local:x86_64-unknown-linux-gnu",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          },
+          "plan:all:": {
+            "id": "plan:all:",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "plan-dist-manifest.json",
+        "sha256": "f2bf83b5a5e53ae36a785c5caf514218d7b3cdb582ac7ab22b5bc5ff88e42e39",
+        "distVersion": "0.32.0",
+        "systems": {
+          "plan:all:": {
+            "id": "plan:all:",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "x86_64-apple-darwin-dist-manifest.json",
+        "sha256": "33d788b3dcbd16e42872edd738ea0fe304fde07dd1c88a9cdd0f47990962086f",
+        "distVersion": "0.32.0",
+        "systems": {
+          "build:local:x86_64-apple-darwin": {
+            "id": "build:local:x86_64-apple-darwin",
+            "cargo_version_line": "cargo 1.98.0 (797e8a9bc 2026-08-05)",
+            "build_environment": {
+              "macos": {
+                "os_version": "15.7.9"
+              }
+            }
+          },
+          "plan:all:": {
+            "id": "plan:all:",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "x86_64-pc-windows-msvc-dist-manifest.json",
+        "sha256": "3d58b90956235b7f43e9d3d4fab7bd366a32f05f380a80a7c97d80b8e58239c6",
+        "distVersion": "0.32.0",
+        "systems": {
+          "build:local:x86_64-pc-windows-msvc": {
+            "id": "build:local:x86_64-pc-windows-msvc",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": "windows"
+          },
+          "plan:all:": {
+            "id": "plan:all:",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "x86_64-unknown-linux-gnu-dist-manifest.json",
+        "sha256": "d9516518aeaf981a75b1edb2877fb63df18b23abe3b82d8b3fa05c4b098b89be",
+        "distVersion": "0.32.0",
+        "systems": {
+          "build:local:x86_64-unknown-linux-gnu": {
+            "id": "build:local:x86_64-unknown-linux-gnu",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          },
+          "plan:all:": {
+            "id": "plan:all:",
+            "cargo_version_line": "cargo 1.99.0 (5f94df478 2026-08-27)",
+            "build_environment": {
+              "linux": {
+                "glibc_version": {
+                  "major": 2,
+                  "series": 35
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "files": [
+      {
+        "name": "sha256.sum",
+        "size": 578,
+        "sha256": "f3260e8081cf4e54d5a7aa79535493dc1ab05fed858a96812cbcee4f4bfe996c"
+      },
+      {
+        "name": "source.tar.gz",
+        "size": 528090,
+        "sha256": "ea68bd4705e50c52b3ce4bf759850008ebb05591e651fae042fd048f85c15bcf"
+      },
+      {
+        "name": "source.tar.gz.sha256",
+        "size": 81,
+        "sha256": "99ffeb01af794cb7ef5911a9432d4c2e46805680f62f6608ac22c89b36dec8f0"
+      },
+      {
+        "name": "tkt-0.5.0.crate",
+        "size": 121057,
+        "sha256": "ac475f7970d8d05aea67e7794cb2cc828915dfc9c67c6a6f3f3f7b1e06661ded"
+      },
+      {
+        "name": "tkt-aarch64-apple-darwin.tar.gz",
+        "size": 1312235,
+        "sha256": "6d46f6461dd87d2c0410b51dfe009d6c278b4f0b11ae2202b583edff4af333c7"
+      },
+      {
+        "name": "tkt-aarch64-apple-darwin.tar.gz.sha256",
+        "size": 99,
+        "sha256": "6b7d85300159131fd2e16c47cac737fa1fbc1d123c92e62467145c0e206a9be7"
+      },
+      {
+        "name": "tkt-aarch64-unknown-linux-gnu.tar.gz",
+        "size": 1359742,
+        "sha256": "b3e13200b1a0c28665c0df0fece01dc87881bf1a72e7af3d28e326df60acdc7d"
+      },
+      {
+        "name": "tkt-aarch64-unknown-linux-gnu.tar.gz.sha256",
+        "size": 104,
+        "sha256": "2af6b2fa9727887e66e707ee8e8af2567688014d49e44cedf1b85a42206b0bcb"
+      },
+      {
+        "name": "tkt-installer.ps1",
+        "size": 22122,
+        "sha256": "132929a8f362c5bc6ce4538b95ec79f06706a4075b48d7320cb2045a351ed671"
+      },
+      {
+        "name": "tkt-installer.sh",
+        "size": 53832,
+        "sha256": "4f78229deb85ccd06c96d4f434bcab57fb5daf550c2abc3393358e4222bd6fe8"
+      },
+      {
+        "name": "tkt-x86_64-apple-darwin.tar.gz",
+        "size": 1398721,
+        "sha256": "6622aa231831280c127c22d07e17731c154912a84d34340ce3ec58964aa7e0b6"
+      },
+      {
+        "name": "tkt-x86_64-apple-darwin.tar.gz.sha256",
+        "size": 98,
+        "sha256": "c9450d5c9c1897b95421cdca5a88aebfe25d199cb5a2f753a1ea6fc8e61c2de9"
+      },
+      {
+        "name": "tkt-x86_64-pc-windows-msvc.zip",
+        "size": 1510425,
+        "sha256": "38a413aa916899a21157a23eebce15ccdda031f73eddc36ca3fac2256f27920a"
+      },
+      {
+        "name": "tkt-x86_64-pc-windows-msvc.zip.sha256",
+        "size": 98,
+        "sha256": "d086323cee6d1f8f816ade32dbbbdbc4f26fed32a6257811ba1f1813363286ed"
+      },
+      {
+        "name": "tkt-x86_64-unknown-linux-gnu.tar.gz",
+        "size": 1451037,
+        "sha256": "23498311d6acc124e32dba7e16c6bb345297025d1924ce5d1238feff4ddec613"
+      },
+      {
+        "name": "tkt-x86_64-unknown-linux-gnu.tar.gz.sha256",
+        "size": 103,
+        "sha256": "3173aa18c8584c5ca9070fe395e9ebb98d6e45e78fd5ecb776a2e2efe4bb9ac3"
+      }
+    ],
+    "publicationPerformed": false
+  },
+  "assets": [
+    {
+      "name": "sha256.sum",
+      "size": 578,
+      "sha256": "f3260e8081cf4e54d5a7aa79535493dc1ab05fed858a96812cbcee4f4bfe996c"
+    },
+    {
+      "name": "source.tar.gz",
+      "size": 528090,
+      "sha256": "ea68bd4705e50c52b3ce4bf759850008ebb05591e651fae042fd048f85c15bcf"
+    },
+    {
+      "name": "source.tar.gz.sha256",
+      "size": 81,
+      "sha256": "99ffeb01af794cb7ef5911a9432d4c2e46805680f62f6608ac22c89b36dec8f0"
+    },
+    {
+      "name": "tkt-0.5.0.crate",
+      "size": 121057,
+      "sha256": "ac475f7970d8d05aea67e7794cb2cc828915dfc9c67c6a6f3f3f7b1e06661ded"
+    },
+    {
+      "name": "tkt-aarch64-apple-darwin.tar.gz",
+      "size": 1312235,
+      "sha256": "6d46f6461dd87d2c0410b51dfe009d6c278b4f0b11ae2202b583edff4af333c7"
+    },
+    {
+      "name": "tkt-aarch64-apple-darwin.tar.gz.sha256",
+      "size": 99,
+      "sha256": "6b7d85300159131fd2e16c47cac737fa1fbc1d123c92e62467145c0e206a9be7"
+    },
+    {
+      "name": "tkt-aarch64-unknown-linux-gnu.tar.gz",
+      "size": 1359742,
+      "sha256": "b3e13200b1a0c28665c0df0fece01dc87881bf1a72e7af3d28e326df60acdc7d"
+    },
+    {
+      "name": "tkt-aarch64-unknown-linux-gnu.tar.gz.sha256",
+      "size": 104,
+      "sha256": "2af6b2fa9727887e66e707ee8e8af2567688014d49e44cedf1b85a42206b0bcb"
+    },
+    {
+      "name": "tkt-installer.ps1",
+      "size": 22122,
+      "sha256": "132929a8f362c5bc6ce4538b95ec79f06706a4075b48d7320cb2045a351ed671"
+    },
+    {
+      "name": "tkt-installer.sh",
+      "size": 53832,
+      "sha256": "4f78229deb85ccd06c96d4f434bcab57fb5daf550c2abc3393358e4222bd6fe8"
+    },
+    {
+      "name": "tkt-x86_64-apple-darwin.tar.gz",
+      "size": 1398721,
+      "sha256": "6622aa231831280c127c22d07e17731c154912a84d34340ce3ec58964aa7e0b6"
+    },
+    {
+      "name": "tkt-x86_64-apple-darwin.tar.gz.sha256",
+      "size": 98,
+      "sha256": "c9450d5c9c1897b95421cdca5a88aebfe25d199cb5a2f753a1ea6fc8e61c2de9"
+    },
+    {
+      "name": "tkt-x86_64-pc-windows-msvc.zip",
+      "size": 1510425,
+      "sha256": "38a413aa916899a21157a23eebce15ccdda031f73eddc36ca3fac2256f27920a"
+    },
+    {
+      "name": "tkt-x86_64-pc-windows-msvc.zip.sha256",
+      "size": 98,
+      "sha256": "d086323cee6d1f8f816ade32dbbbdbc4f26fed32a6257811ba1f1813363286ed"
+    },
+    {
+      "name": "tkt-x86_64-unknown-linux-gnu.tar.gz",
+      "size": 1451037,
+      "sha256": "23498311d6acc124e32dba7e16c6bb345297025d1924ce5d1238feff4ddec613"
+    },
+    {
+      "name": "tkt-x86_64-unknown-linux-gnu.tar.gz.sha256",
+      "size": 103,
+      "sha256": "3173aa18c8584c5ca9070fe395e9ebb98d6e45e78fd5ecb776a2e2efe4bb9ac3"
+    }
+  ],
+  "publicationPerformed": false,
+  "scope": "Read-only Actions provenance, ZIP and sealed file validation. readCiStage observes run and artifact metadata before and after inspection and checks seal-job upload log identity. Original ZIP retained locally for staging; no rebuilding."
+}

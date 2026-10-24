@@ -1,0 +1,42 @@
+{
+  "status": "pass",
+  "scope": "Known private-key/GitHub/OpenAI token signatures, regular-file archives and generated README content; not exhaustive credential detection.",
+  "rows": [
+    {
+      "asset": "grey-matter-0.2.0-agy.tar.gz",
+      "files": 253,
+      "credentialSignatureFindings": [],
+      "readme": "# grey-matter\n\nAgent skills for game-centric and app development: engineering (build), productivity (think/communicate), and meta (tend the set). Start with the compass router.\n\nThis agy plugin archive contains version 0.2.0, with 46 workflow skills and their supporting resources. It was built from commit e071b7b03d02025dc1af6c3ff2c4f8369f777587.\n\n## Install\n\nExtract this archive into its own directory, then use the host's native plugin installer:\n\n```sh\nagy plugin install /absolute/path/to/extracted-plugin\n```\n\nRestart or reload the host after installing. Read each bundled SKILL.md for workflow-specific prerequisites; install any required command-line tools separately. This archive supplies skills and references, not third-party executables. Retain all bundled license and attribution notices when redistributing it.\n\n## Maintainer helpers\n\nBundled maintenance helpers need Node 22+, Git and their pinned Node dependencies. Run `npm ci --ignore-scripts` in a disposable extracted copy before invoking them. Preparation and product checks take an explicit --repo pointing to a clean Git checkout. Installing this plugin alone does not prepare or publish a release.\n"
+    },
+    {
+      "asset": "grey-matter-0.2.0-claude.tar.gz",
+      "files": 258,
+      "credentialSignatureFindings": [],
+      "readme": "# grey-matter\n\nAgent skills for game-centric and app development: engineering (build), productivity (think/communicate), and meta (tend the set). Start with the compass router.\n\nThis claude plugin archive contains version 0.2.0, with 46 workflow skills and their supporting resources. It was built from commit e071b7b03d02025dc1af6c3ff2c4f8369f777587.\n\n## Install\n\nExtract this archive into its own directory, then use the host's native plugin installer:\n\n```sh\nclaude plugin marketplace add /absolute/path/to/extracted-plugin\nclaude plugin install grey-matter@grey-matter\n```\n\nRestart or reload the host after installing. Read each bundled SKILL.md for workflow-specific prerequisites; install any required command-line tools separately. This archive supplies skills and references, not third-party executables. Retain all bundled license and attribution notices when redistributing it.\n\n## Maintainer helpers\n\nBundled maintenance helpers need Node 22+, Git and their pinned Node dependencies. Run `npm ci --ignore-scripts` in a disposable extracted copy before invoking them. Preparation and product checks take an explicit --repo pointing to a clean Git checkout. Installing this plugin alone does not prepare or publish a release.\n"
+    },
+    {
+      "asset": "grey-matter-0.2.0-codex.tar.gz",
+      "files": 256,
+      "credentialSignatureFindings": [],
+      "readme": "# grey-matter\n\nAgent skills for game-centric and app development: engineering (build), productivity (think/communicate), and meta (tend the set). Start with the compass router.\n\nThis codex plugin archive contains version 0.2.0, with 46 workflow skills and their supporting resources. It was built from commit e071b7b03d02025dc1af6c3ff2c4f8369f777587.\n\n## Install\n\nExtract this archive into its own directory, then use the host's native plugin installer:\n\n```sh\ncodex plugin marketplace add /absolute/path/to/extracted-plugin\ncodex plugin add grey-matter@grey-matter\n```\n\nRestart or reload the host after installing. Read each bundled SKILL.md for workflow-specific prerequisites; install any required command-line tools separately. This archive supplies skills and references, not third-party executables. Retain all bundled license and attribution notices when redistributing it.\n\n## Maintainer helpers\n\nBundled maintenance helpers need Node 22+, Git and their pinned Node dependencies. Run `npm ci --ignore-scripts` in a disposable extracted copy before invoking them. Preparation and product checks take an explicit --repo pointing to a clean Git checkout. Installing this plugin alone does not prepare or publish a release.\n"
+    },
+    {
+      "asset": "tkt-0.5.0-agy.tar.gz",
+      "files": 43,
+      "credentialSignatureFindings": [],
+      "readme": "# tkt\n\nGit-native ticket tracker and workflow skills (tkt-core, tkt-orient, tkt-work, tkt-reconcile): track tasks as markdown files in .tickets/ and work the dependency-graph frontier. Requires the tkt CLI on PATH.\n\nThis agy plugin archive contains version 0.5.0, with 4 workflow skills and their supporting resources. It was built from commit 2b6ff173993c9fe413c40287fb1cb3f0a9879ca1.\n\n## Install\n\nExtract this archive into its own directory, then use the host's native plugin installer:\n\n```sh\nagy plugin install /absolute/path/to/extracted-plugin\n```\n\nRestart or reload the host after installing. Read each bundled SKILL.md for workflow-specific prerequisites; install any required command-line tools separately. This archive supplies skills and references, not third-party executables. Retain all bundled license and attribution notices when redistributing it.\n\n## Maintainer helpers\n\nBundled maintenance helpers need Node 22+, Git and their pinned Node dependencies. Run `npm ci --ignore-scripts` in a disposable extracted copy before invoking them. Preparation and product checks take an explicit --repo pointing to a clean Git checkout. Installing this plugin alone does not prepare or publish a release.\n"
+    },
+    {
+      "asset": "tkt-0.5.0-claude.tar.gz",
+      "files": 48,
+      "credentialSignatureFindings": [],
+      "readme": "# tkt\n\nGit-native ticket tracker and workflow skills (tkt-core, tkt-orient, tkt-work, tkt-reconcile): track tasks as markdown files in .tickets/ and work the dependency-graph frontier. Requires the tkt CLI on PATH.\n\nThis claude plugin archive contains version 0.5.0, with 4 workflow skills and their supporting resources. It was built from commit 2b6ff173993c9fe413c40287fb1cb3f0a9879ca1.\n\n## Install\n\nExtract this archive into its own directory, then use the host's native plugin installer:\n\n```sh\nclaude plugin marketplace add /absolute/path/to/extracted-plugin\nclaude plugin install tkt@tkt\n```\n\nRestart or reload the host after installing. Read each bundled SKILL.md for workflow-specific prerequisites; install any required command-line tools separately. This archive supplies skills and references, not third-party executables. Retain all bundled license and attribution notices when redistributing it.\n\n## Maintainer helpers\n\nBundled maintenance helpers need Node 22+, Git and their pinned Node dependencies. Run `npm ci --ignore-scripts` in a disposable extracted copy before invoking them. Preparation and product checks take an explicit --repo pointing to a clean Git checkout. Installing this plugin alone does not prepare or publish a release.\n"
+    },
+    {
+      "asset": "tkt-0.5.0-codex.tar.gz",
+      "files": 46,
+      "credentialSignatureFindings": [],
+      "readme": "# tkt\n\nGit-native ticket tracker and workflow skills (tkt-core, tkt-orient, tkt-work, tkt-reconcile): track tasks as markdown files in .tickets/ and work the dependency-graph frontier. Requires the tkt CLI on PATH.\n\nThis codex plugin archive contains version 0.5.0, with 4 workflow skills and their supporting resources. It was built from commit 2b6ff173993c9fe413c40287fb1cb3f0a9879ca1.\n\n## Install\n\nExtract this archive into its own directory, then use the host's native plugin installer:\n\n```sh\ncodex plugin marketplace add /absolute/path/to/extracted-plugin\ncodex plugin add tkt@tkt\n```\n\nRestart or reload the host after installing. Read each bundled SKILL.md for workflow-specific prerequisites; install any required command-line tools separately. This archive supplies skills and references, not third-party executables. Retain all bundled license and attribution notices when redistributing it.\n\n## Maintainer helpers\n\nBundled maintenance helpers need Node 22+, Git and their pinned Node dependencies. Run `npm ci --ignore-scripts` in a disposable extracted copy before invoking them. Preparation and product checks take an explicit --repo pointing to a clean Git checkout. Installing this plugin alone does not prepare or publish a release.\n"
+    }
+  ]
+}

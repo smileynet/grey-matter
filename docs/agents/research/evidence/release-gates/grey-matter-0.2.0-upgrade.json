@@ -4,7 +4,7 @@
   "gate": "upgrade",
   "product": "grey-matter",
   "version": "0.2.0",
-  "candidateSha": "bec5afee9f4f070ef898ac309d45d5061a5be7b5",
+  "candidateSha": "e071b7b03d02025dc1af6c3ff2c4f8369f777587",
   "status": "pass",
   "blockers": [],
   "summary": "Actual historical bare installations and explicitly synthetic plugin-cache controls upgrade without managed duplicates or loss of foreign content.",
