@@ -6,6 +6,8 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-24
+
 ### Added
 - Codex marketplace packaging supplies namespaced skills, with local cache refresh through the same deployer used by the other harnesses.
 - `orient` and `wrap-session` connect session pickup and handoff to the current plan and tickets; `conformance-audit` checks adopted repositories against current guidance.
