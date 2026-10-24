@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "mode": "candidate-verification",
+  "publishable": false,
+  "candidateSha": "e071b7b03d02025dc1af6c3ff2c4f8369f777587",
+  "product": "grey-matter",
+  "version": "0.2.0",
+  "metadataSha256": "1bce97579c57040bb83456a3d38f1846bee1dbbc838ac77a6a804122d75ad7c0",
+  "phases": {
+    "product": "pass",
+    "native": "pass"
+  },
+  "plan": {
+    "product": [
+      [
+        "/Users/sambiggins/.local/share/fnm/node-versions/v24.14.1/installation/bin/node",
+        "scripts/check-repo.mjs",
+        "--require-tools"
+      ]
+    ],
+    "native": [
+      {
+        "host": "codex",
+        "asset": "grey-matter-0.2.0-codex.tar.gz",
+        "sha256": "9b2a1bf7a32811bca8ee7fe7b3d15604125169c9208a17ec05f13a23b75a668a",
+        "binary": "codex"
+      },
+      {
+        "host": "claude",
+        "asset": "grey-matter-0.2.0-claude.tar.gz",
+        "sha256": "730e2a6410cf9aef62f80880b50deb19d578e73b5f260b369adfa68e31405089",
+        "binary": "claude"
+      },
+      {
+        "host": "agy",
+        "asset": "grey-matter-0.2.0-agy.tar.gz",
+        "sha256": "b0064837165f74ee505cc1801730b278932dab3e7911bf4288d52d331074973d",
+        "binary": "agy"
+      }
+    ]
+  },
+  "pending": [
+    "scope",
+    "compatibility",
+    "upgrade",
+    "platform-approval",
+    "final-audit",
+    "staging"
+  ],
+  "started": "2026-10-24T10:12:26.592Z",
+  "productEvidence": {
+    "file": "product/product-evidence.json",
+    "sha256": "be4ddb554bfb97e5da698364459b16b6c29949309ce7d9acaac347693c3f7769",
+    "platform": {
+      "os": "darwin",
+      "release": "25.6.0",
+      "arch": "arm64",
+      "node": "v24.14.1"
+    }
+  },
+  "nativeEvidence": {
+    "file": "native/native-evidence.json",
+    "sha256": "8a2ee10d316bcf1d91fc51e9d66a8852e81910c25cf2c19797dc44e58086ab22",
+    "platform": {
+      "os": "darwin",
+      "release": "25.6.0",
+      "arch": "arm64"
+    },
+    "isolation": {
+      "homes": "disposable",
+      "credentials": "environment allowlist; no user configuration",
+      "network": "loopback-only sandbox"
+    }
+  },
+  "finished": "2026-10-24T10:13:18.527Z"
+}

@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "kind": "release-gate",
+  "gate": "scope",
+  "product": "tkt",
+  "version": "0.5.0",
+  "candidateSha": "2b6ff173993c9fe413c40287fb1cb3f0a9879ca1",
+  "status": "pass",
+  "blockers": [],
+  "summary": "Approved minor candidate version and required features are included; existing backlog remains outside scope.",
+  "evidence": [
+    "docs/agents/research/final-release-audit-20261024.md: current six conformance rows, ticket dispositions and staging go decision.",
+    "docs/agents/research/evidence/windows-native-validation-completion-20261024.json: complete candidate Codex state/catalog and six package rows pass after authorized cleanup.",
+    "docs/agents/research/evidence/linux-native-validation-20261024.json: exact-candidate product, native package, catalog and upgrade proof."
+  ],
+  "limits": "Staging readiness only. Catalog initialization is not universal model activation; native authenticated interactive hooks were not exercised. Windows/Linux network isolation was unavailable. AGY Windows live inventory plus byte-identical shadow loading is distinguished from authenticated live loading. No publication authorization."
+}

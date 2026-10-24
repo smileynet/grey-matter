@@ -1,0 +1,687 @@
+
+=== 1. deployer: ownership, plugin guards, root selection ===
+file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:373
+    if (!exists(at)) throw new PackError(`package resource missing: ${rel}`);
+                           ^
+
+PackError: package resource missing: guide.md
+    at include (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:373:28)
+    at file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:385:63
+    at file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:362:23
+    at String.replace (<anonymous>)
+    at markdownResources (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:356:15)
+    at include (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:385:5)
+    at include (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:378:43)
+    at agyResources (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:387:36)
+    at agyDeploy (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:403:21)
+    at file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:681:32
+
+Node.js v24.14.1
+install aborted, lint failed:
+  - skills/demo-core/SKILL.md references skills outside the pack: wrap-session
+node:internal/errors:985
+  const err = new Error(message);
+              ^
+
+Error: Command failed: codex plugin add grey-matter@grey-matter --json
+    at genericNodeError (node:internal/errors:985:15)
+    at wrappedFn (node:internal/errors:539:14)
+    at checkExecSyncError (node:child_process:925:11)
+    at execFileSync (node:child_process:961:15)
+    at refreshCodex (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:183:3)
+    at doInstall (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:293:5)
+    at file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:689:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 72892,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v24.14.1
+file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:181
+    throw new Error(`${id} must use this checkout as its local marketplace before deploy: codex plugin marketplace add ${pack.dir}`);
+          ^
+
+Error: grey-matter@grey-matter must use this checkout as its local marketplace before deploy: codex plugin marketplace add /Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree
+    at refreshCodex (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:181:11)
+    at doInstall (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:293:5)
+    at file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:689:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.1
+{"status":"fail","metrics":{"packs":2},"errors":["portfolio other: vendored deployer drift at /var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-CfHfGP/other/deploy.mjs","cross-pack collision: orient (grey-matter, other)"]}
+agy build aborted, lint failed:
+  - required legal artifact missing, empty or outside pack: LICENSE
+plugin-manifest check FAILED (2):
+  - required legal artifact missing, empty or outside pack: LICENSE
+  - claude plugin validate .claude-plugin/plugin.json failed:
+/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12
+  if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+                                               ^
+
+Error: unexpected Claude mutation
+    at Object.<anonymous> (/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12:54)
+    at Module._compile (node:internal/modules/cjs/loader:1812:14)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.14.1
+
+agy build aborted, lint failed:
+  - required legal artifact missing, empty or outside pack: LICENSE
+plugin-manifest check FAILED (2):
+  - required legal artifact missing, empty or outside pack: LICENSE
+  - claude plugin validate .claude-plugin/plugin.json failed:
+/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12
+  if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+                                               ^
+
+Error: unexpected Claude mutation
+    at Object.<anonymous> (/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12:54)
+    at Module._compile (node:internal/modules/cjs/loader:1812:14)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.14.1
+
+agy build aborted, lint failed:
+  - required legal artifact missing, empty or outside pack: NOTICE
+plugin-manifest check FAILED (2):
+  - required legal artifact missing, empty or outside pack: NOTICE
+  - claude plugin validate .claude-plugin/plugin.json failed:
+/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12
+  if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+                                               ^
+
+Error: unexpected Claude mutation
+    at Object.<anonymous> (/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12:54)
+    at Module._compile (node:internal/modules/cjs/loader:1812:14)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.14.1
+
+agy build aborted, lint failed:
+  - required legal artifact missing, empty or outside pack: NOTICE
+plugin-manifest check FAILED (2):
+  - required legal artifact missing, empty or outside pack: NOTICE
+  - claude plugin validate .claude-plugin/plugin.json failed:
+/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12
+  if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+                                               ^
+
+Error: unexpected Claude mutation
+    at Object.<anonymous> (/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12:54)
+    at Module._compile (node:internal/modules/cjs/loader:1812:14)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.14.1
+
+agy build aborted, lint failed:
+  - required legal artifact missing, empty or outside pack: skills/example/LICENSE
+plugin-manifest check FAILED (2):
+  - required legal artifact missing, empty or outside pack: skills/example/LICENSE
+  - claude plugin validate .claude-plugin/plugin.json failed:
+/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12
+  if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+                                               ^
+
+Error: unexpected Claude mutation
+    at Object.<anonymous> (/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12:54)
+    at Module._compile (node:internal/modules/cjs/loader:1812:14)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.14.1
+
+agy build aborted, lint failed:
+  - required legal artifact missing, empty or outside pack: skills/example/LICENSE
+plugin-manifest check FAILED (2):
+  - required legal artifact missing, empty or outside pack: skills/example/LICENSE
+  - claude plugin validate .claude-plugin/plugin.json failed:
+/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12
+  if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+                                               ^
+
+Error: unexpected Claude mutation
+    at Object.<anonymous> (/private/var/folders/fw/z0mm4znn647d9n5_nvtjyqtm0000gn/T/gm-home-gtOeMR/bin/claude:12:54)
+    at Module._compile (node:internal/modules/cjs/loader:1812:14)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.14.1
+
+file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:142
+  if (result.error || result.status !== 0) throw new PackError(`Claude installed inventory unavailable: ${result.error?.message ?? result.stderr}`);
+                                                 ^
+
+PackError: Claude installed inventory unavailable: 
+    at claudeInventory (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:142:50)
+    at verifyClaudeSource (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:151:16)
+    at doInstall (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:292:5)
+    at file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:689:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.1
+file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:144
+  if (!Array.isArray(rows) || rows.some((row) => typeof row?.id !== "string" || typeof row.enabled !== "boolean")) throw new PackError("invalid Claude installed inventory");
+                                                                                                                         ^
+
+PackError: invalid Claude installed inventory
+    at claudeInventory (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:144:122)
+    at verifyClaudeSource (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:151:16)
+    at doInstall (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:292:5)
+    at file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:689:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.1
+file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:154
+    throw new PackError(`${pack.name}: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace`);
+          ^
+
+PackError: grey-matter: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace
+    at verifyClaudeSource (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:154:11)
+    at doInstall (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:292:5)
+    at file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:689:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.1
+file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:154
+    throw new PackError(`${pack.name}: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace`);
+          ^
+
+PackError: grey-matter: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace
+    at verifyClaudeSource (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:154:11)
+    at doInstall (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:292:5)
+    at file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:689:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.1
+file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:154
+    throw new PackError(`${pack.name}: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace`);
+          ^
+
+PackError: grey-matter: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace
+    at verifyClaudeSource (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:154:11)
+    at doInstall (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:292:5)
+    at file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:689:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.1
+file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:154
+    throw new PackError(`${pack.name}: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace`);
+          ^
+
+PackError: grey-matter: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace
+    at verifyClaudeSource (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:154:11)
+    at doInstall (file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:292:5)
+    at file:///Users/sambiggins/code/grey-matter/.scratch/candidates/grey-matter-0.2.0-d997841/worktree/scripts/deploy.mjs:689:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.14.1
+✔ refused foreign destination is absent from the written manifest (AC1) (107.373459ms)
+✔ repeat install then uninstall leave a refused foreign dir byte-for-byte intact (AC2) (292.050708ms)
+✔ forced replacement is the only path that replaces a foreign dir (AC3) (250.442041ms)
+✔ a clean install into an empty root owns what it installed and uninstall removes only those (AC4 happy path) (171.591208ms)
+✔ an unrelated foreign dir (no name collision) is never touched (AC2 corollary) (170.217125ms)
+✔ plugin installed: a .claude/skills root is skipped and nothing is copied (58.831791ms)
+✔ plugin installed: earlier copies are removed, a foreign dir is left alone (183.407792ms)
+✔ plugin installed: a project .agents/skills root is skipped too (63.830334ms)
+✔ plugin installed: roots Claude doesn't read still install; --allow-dual overrides (371.536292ms)
+✔ Codex plugin removes owned copies, preserves foreign skills, and honors disable/override (468.443792ms)
+✔ default roots: each harness gets one copy; OpenCode is served by ~/.claude/skills (279.448166ms)
+✔ default roots: plugins count as the copy, and stale copies are taken back (1139.170542ms)
+✔ default roots: prefer the own root on an equal-cost shared-root choice (126.863625ms)
+✔ default roots: no known harness falls back to the shared ~/.agents/skills (110.376833ms)
+✔ agy: with ~/.gemini present and no agy CLI, the plugin is packaged and copied (273.608291ms)
+✔ agy: missing resources fail before replacing the last package; repaired links build in isolation (93.134416ms)
+✔ audit: reports unowned dirs and a skill a harness sees twice (88.907459ms)
+✔ lint: metadata.deploy.forbidRefs blocks a skill naming one outside the pack (50.520792ms)
+✔ default roots: separate a plugin root symlink and preserve both harnesses' foreign skills (681.250958ms)
+✔ Codex: default deploy refreshes the installed plugin once; dry-run and explicit roots do not (470.033792ms)
+✔ Codex: a failed refresh or different marketplace source preserves existing copies (448.521209ms)
+✔ audit: includes Codex plugin coverage when reporting bare duplicates (445.04575ms)
+✔ audit: enumerate multiple cached Codex plugins and detect actual source mismatches (344.867667ms)
+✔ portfolio: reject cross-pack name collisions and vendored drift before writing (41.553ms)
+✔ Codex: verified shared root supplies coverage without a redundant own copy (142.153958ms)
+✔ portfolio: deploy each registered active pack once without scanning other siblings (208.200042ms)
+✔ audit: retained legacy content stays unowned and changed bytes need review (76.821791ms)
+✔ legal artifacts: bundles and bare skills retain notices, and missing or empty requirements block replacement (897.543833ms)
+✔ Claude: default deploy verifies the active source once; dry-run and explicit roots do not (550.582708ms)
+✔ Claude: foreign, stale-version, legacy and failed source observations preserve bare copies (867.61475ms)
+✔ Claude audit: active folder supersedes a stale cache; disabled plugins and failed reads stay explicit (568.275042ms)
+✔ Claude portfolio: verify each local pack once without invoking update or install (265.06675ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10369.466208
+
+=== 2. invocation sidecars + README groups ===
+invocation-policy check OK: 46 skills, 20 user-invoked (frontmatter, sidecar policy, and README groupings all agree).
+
+=== 3. doc indexes + relative links ===
+docs-consistency check OK: 46 skills — each listed once in its bucket README and mentioned in compass; all real relative links in docs/ and skills/ resolve.
+
+=== 4. ticket health (tkt validate) ===
+[tkt:debug] session=01a16d65e6f4-1fbb project=worktree cmd=validate
+{"status":"pass","findings":[{"file":"07-verify-harness-frontmatter.md","rule":"unchecked-acs-on-done","message":"4 unchecked box(es)","severity":"warning"}]}
+[tkt:debug] exit=0 duration=0.0s
+
+=== 5. knowledge relocation (adopt-project) ===
+✔ dry-run changes nothing and reports the plan (63.761709ms)
+✔ apply: moves files, re-relativizes links across a depth change and between moved files (95.797833ms)
+✔ apply: recorded evidence is moved but never rewritten (95.28575ms)
+✔ unmapped old-root mentions are reported as leftovers, not rewritten (49.209584ms)
+✔ refuses to move onto an existing destination (52.674709ms)
+✔ check-links skips code fences and inline code, and still FAILS on a real broken link (58.813083ms)
+✔ --evidence-dir protects non-JSON records by path, and check-links --skip excludes a tree (78.361583ms)
+✔ links inside fenced code and inline code are not rewritten (63.373459ms)
+✔ the CLI runs when invoked through a symlinked path (51.845084ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 658.492292
+
+=== 6. global AGENTS.md (budget + ownership) ===
+✔ source global/AGENTS.md is within the always-on size budget (0.977583ms)
+✔ install creates nested targets with the owner mark; reinstall is a no-op (61.729584ms)
+✔ install refuses a foreign file without --force and leaves it untouched (63.460334ms)
+✔ dry-run writes nothing (31.744542ms)
+✔ uninstall removes only owned files, never foreign ones (95.569625ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 300.103333
+
+=== 7. crew-research uninstall scope ===
+✔ dry-run removes nothing (42.445042ms)
+✔ apply removes exactly the manifest-named and crew-owned items, and snapshots first (66.420708ms)
+✔ a grey-matter-owned dir and a non-crew codex AGENTS.md are kept (67.225708ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 221.113459
+
+=== 8. repo survey tiers (adopt-project portfolio) ===
+✔ tiers repos by freshness, tree state, and agent layer (477.890583ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 521.446709
+
+=== 9. Claude plugin manifest ===
+plugin-manifest check OK: grey-matter v0.2.0, 46 skills from 4 dirs.
+
+=== 10. YAML syntax and core types ===
+{
+  "status": "pass",
+  "metrics": {
+    "skills": 46,
+    "sidecars": 34
+  },
+  "errors": []
+}
+
+=== 11. release draft, artifact and publisher safety ===
+✔ three bundles retain resources/notices/modes, exclude unrelated files, and verify after source removal (447.214875ms)
+✔ unmatched example brackets: fenced, resource present (442.575625ms)
+✔ unmatched example brackets: fenced, resource missing (266.539208ms)
+✔ unmatched example brackets: inline, resource present (575.827792ms)
+✔ unmatched example brackets: inline, resource missing (300.607625ms)
+✔ Claude-only hooks ship closed in Claude and are absent from other host bundles (611.200333ms)
+✔ build uses committed bytes and repeats without changing output or git state (562.660959ms)
+✔ rejects mismatched version before installing output (330.154708ms)
+✔ rejects missing resource before installing output (309.610542ms)
+✔ rejects missing notice before installing output (503.049917ms)
+✔ rejects malformed YAML before installing output (359.556209ms)
+✔ rejects declared credential file before installing output (250.577709ms)
+✔ rejects private hook config missing from closure before installing output (279.001125ms)
+✔ rejects private file outside Claude subtree before installing output (372.853916ms)
+✔ rejects private file in shared closure before installing output (248.578291ms)
+✔ changed committed source cannot replace an existing artifact identity (498.844833ms)
+✔ Cargo authority and lock: matching (341.357709ms)
+✔ Cargo authority and lock: wrong-authority (228.052625ms)
+✔ Cargo authority and lock: stale-lock (203.479583ms)
+✔ committed symlinks are rejected before extraction or output writes (200.679709ms)
+✔ verify rejects corrupted asset (273.147708ms)
+✔ verify rejects missing asset (289.791625ms)
+✔ verify rejects unexpected output (293.075708ms)
+✔ verify rejects wrong index (316.395084ms)
+✔ CLI validation failures use structured fail/exit 1 (194.18525ms)
+✔ verify rejects resealed archive with extra defect (297.418792ms)
+✔ verify rejects resealed archive with missing defect (299.30975ms)
+✔ verify rejects resealed archive with version defect (303.322334ms)
+✔ verify rejects resealed archive with dangling defect (291.281209ms)
+✔ verify rejects resealed archive with short-readme defect (294.782125ms)
+✔ sealed runtime includes its dependency manifest and wrapper works in each host layout (644.888084ms)
+✔ publish credentials bind the exact seal and cannot be cached across operations (1.516625ms)
+✔ identity, registry, protocol and override mismatches are fatal without disclosing credentials (0.63025ms)
+✔ invalid seal policies and missing credentials cannot authorize a request (0.252791ms)
+✔ CLI answers Cargo's line protocol before stdin closes (78.279417ms)
+✔ CLI malformed JSON and policy failures return fatal protocol errors with no secret echo (187.505042ms)
+✔ CLI refuses token flags and extra arguments (67.78925ms)
+✔ snapshot preserves empty Git directories, directory modes and safe symlinks (497.748875ms)
+✔ transport policy binds reviewed bytes and defaults to the sole crates.io registry (0.619708ms)
+✔ token, config, dirty-source and invocation overrides cannot enter preparation (0.807542ms)
+✔ only the fixed localhost probe form is accepted as a registry override (0.982416ms)
+✔ manifest gate rejects external inputs while accepting tkt's registry-only dependency model (1.49625ms)
+✔ unsupported hosts refuse before reading credentials or starting a child (0.645416ms)
+﹣ Linux entry rejects option injection before even reading the candidate (0.082792ms) # SKIP
+✔ reviewed CI ZIP verifies exact file bytes without extraction or rebuild (10.7045ms)
+✔ CI ZIP refuses unsafe paths, duplicate names, symlinks and size abuse (16.126167ms)
+✔ CI ZIP refuses changed, extra or missing files and wrong execution records (35.976333ms)
+✔ CI provenance binds latest successful attempt, upload ID/digest and repeated observations (5.222167ms)
+✔ CI provenance refuses uncertain metadata and logs before downloading bytes (1.808291ms)
+✔ Actions adapter makes typed read-only requests and paginates exact collections (1.043875ms)
+✔ Actions log and ZIP reads explicitly capture raw bytes without terminal filtering (0.273458ms)
+✔ CI upload log IDs/digests require complete tokens and expiry must be a string (0.828ms)
+✔ development preparation: default creates no files, refs or remote changes (533.25375ms)
+✔ development preparation: fast-forward uses exact candidate and records a full gate (1547.787666ms)
+✔ development preparation: disjoint merge preserves candidate and reuses the same merge on retry (2475.875125ms)
+✔ development preparation: changed remote main is integrated and checked again (2184.946417ms)
+✔ development preparation: merge conflicts leave all public refs unchanged (673.076083ms)
+✔ development preparation: failed gate never imports an unchecked merge (1189.592166ms)
+✔ development preparation: foreign output and modified owned checkout are preserved (1183.212291ms)
+✔ development preparation: already-contained candidate cannot hide a regressed version (748.877833ms)
+✔ development preparation: npm bootstrap ignores inherited user configuration (859.488417ms)
+✔ development preparation: merged product checks receive no publisher credentials (856.350166ms)
+✔ development preparation: interruption before checkout reuses the recorded integration (1588.867208ms)
+✔ development preparation: existing newer release tags block an older integration (499.612167ms)
+✔ development preparation: candidate-local output and aliases cannot receive integration files (287.751667ms)
+✔ development preparation: ambient Git configuration cannot redirect the checkout (783.924375ms)
+✔ wrapper finds shared tools and preserves arguments from skills/meta/release/references/release.sh (446.528542ms)
+✔ wrapper finds shared tools and preserves arguments from skills/release/references/release.sh (427.49875ms)
+✔ wrapper finds shared tools and preserves arguments from tools/release.sh (403.870166ms)
+✔ legacy version and publishing modes stop before any release operation (104.036875ms)
+✔ vendor default is read-only; explicit sync/check replay the same reviewed inventory (58.162208ms)
+✔ foreign or locally modified vendor files are preserved, with no partial sync (26.600708ms)
+✔ foreign ownership and mismatched maintainer dependencies block sync (16.11225ms)
+✔ runtime manifest contains every shared release module and dependency lock (0.248708ms)
+✔ candidate refs: dry-run leaves remote refs untouched (390.421542ms)
+✔ candidate refs: exact annotated objects and no implicit tags (575.951208ms)
+✔ candidate refs: unsupported atomic server changes no refs (347.068333ms)
+✔ candidate refs: foreign tag, stable, lightweight tags and multiple destinations refuse (589.183208ms)
+✔ candidate refs: divergent branch cannot create the release tag (518.6395ms)
+✔ candidate refs: mirror configuration cannot widen or delete refs (710.07225ms)
+✔ candidate refs: an annotated tag with another embedded name is refused (291.64825ms)
+✔ candidate refs: a receive-time competing branch update rejects the whole candidate (1119.511625ms)
+✔ candidate refs: a race on an already-matching branch stops after tag-only success (1013.824125ms)
+✔ stable: dry-run, initial creation and replay require immutable published bytes (449.040875ms)
+✔ stable: unpublished, mutable and incomplete releases cannot change refs (538.051208ms)
+✔ stable: fast-forward succeeds and divergence preserves the channel (487.655666ms)
+✔ stable: a rejected promotion resumes without repeating publication (551.337ms)
+✔ stable: a changed release ID fails post-promotion verification without rollback (296.705167ms)
+✔ remote binding: HTTPS and Git SSH resolve to the reviewed GitHub repository (216.698458ms)
+✔ remote binding: mismatches, credentials, lookalike hosts and local transports refuse (347.457125ms)
+✔ remote binding checks push URL overrides and pushInsteadOf, without making a network call (183.999584ms)
+✔ candidate refs: verified development merge joins the same atomic transaction (979.076709ms)
+✔ candidate refs: unsupported three-ref atomic push leaves development and release refs intact (748.593541ms)
+✔ candidate refs: development integration cannot omit the candidate or replace advanced main (761.528292ms)
+✔ GitHub adapter authenticates draft discovery and flattens every page (1.188167ms)
+✔ GitHub adapter errors never become absent releases or disabled settings (0.2ms)
+✔ GitHub adapter validates annotated tag name, type and peeled commit (0.247375ms)
+✔ GitHub writes require opt-in and use verified tags, exact bytes and typed JSON (0.230166ms)
+✔ exact-name gate rejects missing, extra and duplicated skills despite equal totals (1.911ms)
+✔ native Claude gate rejects missing-control (0.220833ms)
+✔ native Claude gate rejects readme-control (0.06625ms)
+✔ native Claude gate rejects missing-run (0.051167ms)
+✔ native Claude gate rejects exit (0.07175ms)
+✔ native Claude gate rejects success (0.05325ms)
+✔ native Claude gate rejects blocker (0.057084ms)
+✔ native Claude gate rejects incomplete (0.044542ms)
+✔ native Claude gate rejects failure (0.057834ms)
+✔ native environment excludes inherited credentials, Git context and user config (0.250542ms)
+✔ dry-run validates bundles without executing binaries, output or identity changes (318.397042ms)
+✔ corrupt sealed asset fails before any native process or output (258.866917ms)
+✔ missing native binary preserves failed evidence and never claims verification (332.685541ms)
+✔ foreign output is preserved and never mistaken for previous success (320.966208ms)
+✔ output aliases cannot write inside sealed artifacts (308.773542ms)
+✔ product dry-run creates no output and requires strict tooling (194.617209ms)
+✔ passed product evidence records exact commit, command, log and pending gates (276.5355ms)
+✔ a failed product command is retained as failure, never verified (271.357125ms)
+✔ product checks cannot inherit publishing credentials (278.52775ms)
+✔ successful exit cannot hide candidate changes (332.338375ms)
+✔ dirty and moved candidates fail before creating evidence (180.433208ms)
+✔ foreign evidence and candidate-local output are refused without overwrite (247.142125ms)
+✔ symlink or junction output aliases cannot bypass candidate boundary (176.822917ms)
+✔ tkt selects its Cargo authority and full mise gate (444.433208ms)
+✔ aggregate strict mode fails instead of skipping missing tkt (1332.944292ms)
+✔ dry-run discovers the draft but creates, uploads and publishes nothing (17.052209ms)
+✔ truthy configuration strings cannot turn inspection into publication (7.140375ms)
+✔ one publisher stages missing bytes, publishes once and resumes without writes (1.582417ms)
+✔ local tkt publisher and unresolved candidate gates fail before API access (0.32075ms)
+✔ matching partial drafts upload only missing assets (0.694834ms)
+✔ assets completed by the assigned publisher between inspections are not uploaded again (0.249042ms)
+✔ remote tag, duplicate drafts, notes, titles and foreign assets fail closed (0.348959ms)
+✔ incomplete, duplicate, changed or digest-less assets are never clobbered (0.301167ms)
+✔ observed success after createDraft timeout is resumed without repeating it (0.213792ms)
+✔ observed success after upload timeout is resumed without repeating it (0.193333ms)
+✔ observed success after publish timeout is resumed without repeating it (0.143833ms)
+✔ a failed upload retains a resumable draft; retry never repeats completed uploads (0.490666ms)
+✔ immutable settings and published state are independently checked (0.155875ms)
+✔ tag movement or release replacement during upload blocks publication (0.289084ms)
+✔ bad local bytes or duplicate asset names fail before API access (0.129083ms)
+✔ persisted release IDs cannot silently disappear or resolve to replacements (0.119291ms)
+✔ successful API responses without observed progress stop instead of looping (0.294791ms)
+✔ a draft cannot claim immutable published state (0.060458ms)
+✔ sealed annotated tag object is checked even when its peeled commit still matches (0.109917ms)
+✔ draft-only staging uploads complete bytes without undrafting and replays unchanged (0.597542ms)
+✔ draft-only staging refuses non-boolean flags and changed final asset inventory (0.237083ms)
+✔ sparse registry: exact versions, explicit missing version and uncached read-only request (1.67525ms)
+✔ sparse registry: failures and malformed, duplicate or colliding versions never become absence (0.428792ms)
+✔ registry reconciliation: planning never publishes and completed publication replays without writes (0.871666ms)
+✔ registry reconciliation: timeout after upload is observed without publishing twice (0.117792ms)
+✔ registry reconciliation: unknown attempts require an explicit retry and keep the same bytes (0.289333ms)
+✔ registry reconciliation: wrong bytes, changed checksums and yanked versions refuse publication (0.162833ms)
+✔ registry intent bytes are deterministic and bind only the sealed product identity (2.05775ms)
+✔ tkt publication plans all channels without preparation or mutations (0.892125ms)
+✔ initial publication stages ordinary bytes, intent, Cargo, GitHub and stable in order (1.165125ms)
+✔ partial ordinary draft resumes without replacing assets or creating a second release (0.533541ms)
+✔ preexisting registry intent requires explicit retry while the index remains missing (1.300584ms)
+✔ lost receipt upload response consumes initial permission even when readback matches (0.464375ms)
+✔ unconfirmed receipt creation response or changed receipt ID cannot authorize Cargo (3.17ms)
+✔ another publisher's new receipt is never mistaken for initial attempt ownership (0.330334ms)
+✔ Cargo response loss after registry commit is reconciled without a duplicate upload (0.5885ms)
+✔ unobserved Cargo attempt leaves a draft and receipt; later matching index resumes (2.586125ms)
+✔ transport and immutable-policy failures occur before any publication writes (0.956333ms)
+✔ GitHub response loss and failed stable promotion resume without repeating Cargo (0.559167ms)
+✔ wrong crate, yanked versions and invalid reviewed gates never reach preparation (0.214458ms)
+✔ post-stable observation must still confirm both published channels (0.343417ms)
+✔ different product, version or commit cannot share verification evidence (1.511709ms)
+✔ default and explicit CLI dry-run preserve repository, artifacts and output bytes (707.499166ms)
+✔ new checkout commit cannot reuse the old sealed bundle identity (476.06ms)
+✔ failed product gate records failure and never launches native validation (693.744ms)
+✔ failed native gate preserves product proof and blocks verified status (666.015167ms)
+✔ changed artifacts during the product gate cannot acquire native or overall success (604.905416ms)
+✔ foreign output and checkout/artifact aliases are refused without overwrite (676.332125ms)
+✔ interrupted orchestration records unfinished gates and refuses stale output reuse (450.192291ms)
+✔ conflicting execution modes are rejected before state changes (383.856875ms)
+✔ bound evidence checks index, child reports and logs without granting publication (289.062833ms)
+✔ bound evidence refuses changed index, cleared gates and cross-identity reports (231.288083ms)
+✔ bound evidence refuses incomplete native rows and failed product commands (275.240583ms)
+✔ bound evidence rejects report path traversal and symlinked product logs (265.675583ms)
+✔ staging reader binds a committed index, six receipts, notes and complete assets (611.860333ms)
+✔ staging reader rejects blocked, mismatched or missing gate receipts (814.295667ms)
+✔ staging reader refuses changed artifacts and unpinned review identities (553.905291ms)
+✔ staging reader ignores local Git replacements of the pinned review commit (503.865792ms)
+✔ staging reader requires receipt digests and rejects committed symlink blobs (687.934792ms)
+✔ publication command: default planning leaves files, refs and fake APIs unchanged (984.885583ms)
+✔ publication command: interruption persists the release ID and resumes without another release (2362.709042ms)
+✔ publication command: immutable publication resumes stable despite later development conflicts (2184.742667ms)
+✔ publication command: failure JSON retains identity and last observed channels (1282.137833ms)
+✔ publication command: changed remote or foreign recovery state blocks all writes (908.864417ms)
+✔ publication command: disabled immutability or an existing lock permits no remote writes (1135.604083ms)
+✔ publication command: a replacement release cannot inherit interrupted state (2061.372167ms)
+✔ publication CLI: parsed default mode plans from a foreign cwd without writes (690.352208ms)
+✔ publication command: local tkt publication refuses before repository or API access (0.142583ms)
+✔ publication command: development must pass before release refs or GitHub writes (2196.710208ms)
+✔ tkt staging joins pinned plugin and CI bytes, retaining the original stage record (992.807541ms)
+✔ tkt CI entry: dry-run validates reviewed build bytes without credentials or ref changes (596.221958ms)
+✔ tkt CI entry: reviewed tag, build bytes, intent and delayed transport are connected (800.644333ms)
+✔ tkt CI entry: foreign/stale dispatches and disabled immutability never reach ref writes (1007.303375ms)
+✔ tkt CI entry: altered reviewed tag is refused (237.86325ms)
+✔ tkt CI entry: failed candidate push cannot create drafts or prepare credentials (396.72675ms)
+✔ tkt CI entry: failed stable resumes observed registry without preparing another upload (639.432791ms)
+✔ tkt CI entry: published candidate resumes stable without development or candidate ref writes (620.157ms)
+✔ tkt CI entry: stable recovery refuses a missing registry observation before development (610.65125ms)
+✔ tkt CI entry: failure JSON retains published channels and uncertain stable (416.815208ms)
+✔ publication command: stable recovery rechecks complete remote assets (1613.254042ms)
+✔ tkt CI entry: missing publication binding fails closed (342.823666ms)
+✔ tkt CI entry: dispatch identity is rechecked after development work (396.788834ms)
+✔ last Unreleased section omits version footer links and hidden comments from notes (14.040542ms)
+✔ empty visible notes rejected: "" (3.245125ms)
+✔ empty visible notes rejected: "### Added\n" (0.219625ms)
+✔ empty visible notes rejected: "<!-- editorial only -->\n" (1.393833ms)
+✔ empty visible notes rejected: "[Unreleased]: https://example.invalid\n" (1.2945ms)
+✔ invalid date 2026-02-30 rejected (2.890209ms)
+✔ invalid date 2026-99-10 rejected (0.12025ms)
+✔ invalid date today rejected (0.81875ms)
+✔ invalid date 2026-1-1 rejected (0.267125ms)
+✔ duplicate Unreleased and existing candidate heading rejected (0.583583ms)
+✔ product names must be strings and catalogs cannot duplicate the version authority (0.629708ms)
+✔ malformed TOML and duplicate root lock entries fail version inspection (5.515375ms)
+✔ default and explicit CLI dry-run leave source, Git bytes, remote and harness home unchanged (579.631833ms)
+✔ draft skill preparation updates all surfaces once and replays the same identity (1342.174208ms)
+✔ draft Cargo preparation updates all surfaces once and replays the same identity (1562.255958ms)
+✔ resume after interrupted worktree reuses one version and one commit (1359.694833ms)
+✔ resume after interrupted file-intent reuses one version and one commit (1073.125542ms)
+✔ resume after interrupted file-written reuses one version and one commit (1149.702625ms)
+✔ resume after interrupted file-promoted reuses one version and one commit (1165.289ms)
+✔ resume after interrupted file reuses one version and one commit (1090.87875ms)
+✔ resume after interrupted versioned reuses one version and one commit (852.191ms)
+✔ resume after interrupted committed reuses one version and one commit (983.423791ms)
+✔ resume after interrupted draft reuses one version and one commit (1018.466625ms)
+✔ a terminated CLI process resumes from its owned worktree without a second commit (729.048042ms)
+✔ existing branch app-managed worktree preserves its source checkout (511.194416ms)
+✔ existing detached app-managed worktree preserves its source checkout (510.505209ms)
+✔ foreign output and unrelated candidate changes are preserved and refused (533.1635ms)
+✔ resume rejects different version/date/notes and a moved candidate history (724.315709ms)
+✔ invalid or non-increasing version 0.1.0 creates no output (126.065083ms)
+✔ invalid or non-increasing version 0.0.9 creates no output (122.341834ms)
+✔ invalid or non-increasing version 00.2.0 creates no output (119.066667ms)
+✔ invalid or non-increasing version 1.0 creates no output (119.739542ms)
+✔ invalid or non-increasing version 0.2.0-rc.1 creates no output (119.067833ms)
+✔ newer local release tag and dirty source block preparation (165.556292ms)
+✔ ambient Git index cannot redirect preparation into user state (443.906292ms)
+✔ freshly fetched upstream advancement blocks draft creation even without branch tracking (415.653875ms)
+✔ corrupted draft assets stop resume without moving the candidate or replacing bytes (866.718083ms)
+✔ source checkout and a symlink/junction alias cannot be used as the candidate (235.146083ms)
+✔ owned partial staging files recover while similarly named user files remain untouched (690.508125ms)
+✔ core, host extension and sidecar policy parse together (12.233916ms)
+✔ reject malformed YAML missed by native validator (3.912834ms)
+✔ reject duplicate key (3.38125ms)
+✔ reject description array (1.495834ms)
+✔ reject unquoted description colon (1.482333ms)
+✔ reject metadata shape (1.382875ms)
+✔ reject quoted policy boolean (1.316125ms)
+✔ reject malformed sidecar (1.518333ms)
+✔ reject non-mapping frontmatter (2.376417ms)
+✔ library imports from Node stdin do not resolve the dash marker as a file (87.773208ms)
+ℹ tests 254
+ℹ suites 0
+ℹ pass 253
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 32353.482917
+
+=== 12. Git and Claude plugin hooks ===
+✔ push gate runs the project checker with project cwd for Bash and PowerShell (125.742ms)
+✔ checker failure is blocking exit 2 with named diagnostics (61.215417ms)
+✔ unrelated commands, tools and repositories are no-ops (176.068667ms)
+✔ checker crash and malformed hook input block without stdout (92.78925ms)
+✔ pre-push installer is opt-in, idempotent and refuses foreign hooks (254.251833ms)
+✔ installer respects custom hooksPath and preserves tracked hook source (187.667375ms)
+✔ pre-commit remains the default (108.60875ms)
+✔ installer resolves the effective hooks directory from a linked worktree (126.958ms)
+✔ installed pre-push permits green push and blocks a real YAML invariant failure (876.684167ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1599.161125
+
+==================== repo-check summary ====================
+  [ok  ] 1. deployer: ownership, plugin guards, root selection
+  [ok  ] 2. invocation sidecars + README groups
+  [ok  ] 3. doc indexes + relative links
+  [ok  ] 4. ticket health (tkt validate)
+  [ok  ] 5. knowledge relocation (adopt-project)
+  [ok  ] 6. global AGENTS.md (budget + ownership)
+  [ok  ] 7. crew-research uninstall scope
+  [ok  ] 8. repo survey tiers (adopt-project portfolio)
+  [ok  ] 9. Claude plugin manifest
+  [ok  ] 10. YAML syntax and core types
+  [ok  ] 11. release draft, artifact and publisher safety
+  [ok  ] 12. Git and Claude plugin hooks
+============================================================
+
+All repository-consistency invariants pass.

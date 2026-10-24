@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "mode": "candidate-verification",
+  "publishable": false,
+  "candidateSha": "2b6ff173993c9fe413c40287fb1cb3f0a9879ca1",
+  "product": "tkt",
+  "version": "0.5.0",
+  "metadataSha256": "99b6e0894468f78c013d665ea7309c81f2d13807118d7e45f7b209d29b4cf339",
+  "phases": {
+    "product": "pass",
+    "native": "pass"
+  },
+  "plan": {
+    "product": [
+      [
+        "mise",
+        "run",
+        "check"
+      ]
+    ],
+    "native": [
+      {
+        "host": "codex",
+        "asset": "tkt-0.5.0-codex.tar.gz",
+        "sha256": "5644d295398f3953b6a9068f10e770ef179508fff14459000d42dd3a3018f6e9",
+        "binary": "codex"
+      },
+      {
+        "host": "claude",
+        "asset": "tkt-0.5.0-claude.tar.gz",
+        "sha256": "e45a1329306effeea115f111061c991b41a20cd5f072bb9ae43ff7fb3c421d47",
+        "binary": "claude"
+      },
+      {
+        "host": "agy",
+        "asset": "tkt-0.5.0-agy.tar.gz",
+        "sha256": "840e7015eac5f8734a52bd721cb88bfbc3c4186ec661f310d5e144a535815b16",
+        "binary": "agy"
+      }
+    ]
+  },
+  "pending": [
+    "scope",
+    "compatibility",
+    "upgrade",
+    "platform-approval",
+    "final-audit",
+    "staging"
+  ],
+  "started": "2026-10-24T10:11:12.587Z",
+  "productEvidence": {
+    "file": "product/product-evidence.json",
+    "sha256": "16b839092190b284319577ba640c722ddac05becac73bb5f8ae30ee77e07713a",
+    "platform": {
+      "os": "darwin",
+      "release": "25.6.0",
+      "arch": "arm64",
+      "node": "v26.7.0"
+    }
+  },
+  "nativeEvidence": {
+    "file": "native/native-evidence.json",
+    "sha256": "5535b154de0ea9cbd5cc738db77f52f3d00190ea0d2c582a921938c8b60b51e7",
+    "platform": {
+      "os": "darwin",
+      "release": "25.6.0",
+      "arch": "arm64"
+    },
+    "isolation": {
+      "homes": "disposable",
+      "credentials": "environment allowlist; no user configuration",
+      "network": "loopback-only sandbox"
+    }
+  },
+  "finished": "2026-10-24T10:11:47.794Z"
+}

@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "sourceSha": "df4b652aa16e98fceda1fc58ec226691c11bbc0d",
+  "candidateSha": "2b6ff173993c9fe413c40287fb1cb3f0a9879ca1",
+  "version": "0.5.0",
+  "date": "2026-10-24",
+  "branch": "codex/release-tkt-0.5.0-df4b652a",
+  "fileHashes": {
+    ".claude-plugin/plugin.json": "cbcd7bacee5a3b3c7ef3cee4a051de681381b7140def8d06dacb01d261fb5c4c",
+    ".codex-plugin/plugin.json": "b70ce3cc0524a81ec819dd5e2a38861667a00e181d8a3c0bd907fbe6bcc4a02e",
+    "plugin.json": "918fd5c278ba790018a1f814521b9e3abfa1e29d24bcbea4e2716fcb99c58c11",
+    "Cargo.toml": "ea376dfa2688c8c2d4f4dc1a9a5b48224e0367cad60a40b5cb0baadb9ff2693a",
+    "Cargo.lock": "bba595f1a8828063788e55d9e3b258dbe9fb93284d551dfd7756aa0324c09736",
+    "CHANGELOG.md": "e7101afefa62d08e5b8df39dc383bec6b4d8879f9228079d0a94f177c3d563d5"
+  },
+  "notesSha256": "cee26bf62db21d565a89140e61061e64ca6acf023a2bedbed37e5100e72a4482"
+}

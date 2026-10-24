@@ -1,0 +1,588 @@
+{
+  "schema": 1,
+  "name": "tkt",
+  "version": "0.5.0",
+  "skills": 4,
+  "candidateSha": "2b6ff173993c9fe413c40287fb1cb3f0a9879ca1",
+  "tag": "v0.5.0",
+  "compatibility": {
+    "status": "not-run",
+    "pairs": []
+  },
+  "verification": {
+    "structural": "pass",
+    "native": "not-run",
+    "platforms": []
+  },
+  "assets": [
+    {
+      "host": "codex",
+      "name": "tkt-0.5.0-codex.tar.gz",
+      "sha256": "5644d295398f3953b6a9068f10e770ef179508fff14459000d42dd3a3018f6e9",
+      "files": {
+        ".agents/plugins/marketplace.json": {
+          "sha256": "4dc04e11c00d73ca1461ec9e47185b0cfa2da0d247c6e071f70310df9b06d025",
+          "executable": 0
+        },
+        ".claude-plugin/marketplace.json": {
+          "sha256": "569cf0702a3bb0d0b627559b7c237ff2f75a697b232c00e530b67f00cfc37093",
+          "executable": 0
+        },
+        ".claude-plugin/plugin.json": {
+          "sha256": "2ab98eadd0225942cbf8c5cffe060ec8aca5e29bfbff36f8331ae79917eb766b",
+          "executable": 0
+        },
+        ".codex-plugin/plugin.json": {
+          "sha256": "b70ce3cc0524a81ec819dd5e2a38861667a00e181d8a3c0bd907fbe6bcc4a02e",
+          "executable": 0
+        },
+        "LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "NOTICE": {
+          "sha256": "af72808dec32372af7e9c0585ea0da3316a4542b62ffb66bac69097566bcc823",
+          "executable": 0
+        },
+        "README.md": {
+          "sha256": "265017643733254466881cf2e6085f7e08bdd29174978127588c4839b2d48fcb",
+          "executable": 0
+        },
+        "package-lock.json": {
+          "sha256": "34f2d9f7e2c3cab3c92bf2545190c687c265986753059933ed6c83ea83ab042f",
+          "executable": 0
+        },
+        "package.json": {
+          "sha256": "8a34a12bf557f57f8de3a5c5d5815ed7c7af2c742464aa81eafa07937a8136f4",
+          "executable": 0
+        },
+        "skills/tkt-core/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-core/SKILL.md": {
+          "sha256": "490e0f4d59d1b551f10be094eb69f74d092d8588959393cc35a65e7368ccd8ef",
+          "executable": 0
+        },
+        "skills/tkt-core/references/audit-quality.md": {
+          "sha256": "e398d6938ab56524c6f201ee5d39f4ec90c5891b97cd2de8820501850adf3ef7",
+          "executable": 0
+        },
+        "skills/tkt-core/references/commands.md": {
+          "sha256": "9b90fff4695a4030bbdcce3225907528b94aa106cd1222153e9e989457cbe555",
+          "executable": 0
+        },
+        "skills/tkt-core/references/migration-assist.md": {
+          "sha256": "41bfd4d686b1a77a0751eac600bbdb01a1e3fa24db518fade96513c0bbbd9626",
+          "executable": 0
+        },
+        "skills/tkt-core/references/ticket-format.md": {
+          "sha256": "bfcec156dafae5d01ad3cd69c2e59efe5c41cf41b5803298a9aa1efc735746f1",
+          "executable": 0
+        },
+        "skills/tkt-core/references/ticket-standards.md": {
+          "sha256": "87bb03407eaf89531c27296f34a791211cbc0f43dc11b3dcc26aa417781fcc0b",
+          "executable": 0
+        },
+        "skills/tkt-core/references/wide-refactors.md": {
+          "sha256": "ff7abe65a60f753eb3fe68853a5667327e9a6b2600519fcf37483a9c0f21fe99",
+          "executable": 0
+        },
+        "skills/tkt-orient/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-orient/SKILL.md": {
+          "sha256": "61e5de7e4e9acad5dedc275ffd759eb5bca728f92f3d42452c5b2ac338657f34",
+          "executable": 0
+        },
+        "skills/tkt-reconcile/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-reconcile/SKILL.md": {
+          "sha256": "4e755404304d55fe503d4815ede288bdd10da21e3e01f09843f2140dbd824efc",
+          "executable": 0
+        },
+        "skills/tkt-work/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-work/SKILL.md": {
+          "sha256": "855fe417a00b7251a1b7e24f21554e4b6f0e8ca0600630c5f159d0f0f85b5961",
+          "executable": 0
+        },
+        "tools/LICENSE-grey-matter.txt": {
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "executable": 0
+        },
+        "tools/check-skill-syntax.mjs": {
+          "sha256": "35c3f52e0ccd9b6fb628b4dba03b5ff15d08314a8ce77a686b352ac857b67c8d",
+          "executable": 0
+        },
+        "tools/deploy.mjs": {
+          "sha256": "73d0c5724382e1652f227c081a4f62cdf0492d8f41ae34f2a0dc554f359e77b4",
+          "executable": 0
+        },
+        "tools/probe-claude-validation.mjs": {
+          "sha256": "eb91b5cce1610f6c8c4da1c40c7e0c8a8b3222cf093f408583114bbc7f5fafcb",
+          "executable": 0
+        },
+        "tools/release-artifacts.mjs": {
+          "sha256": "b719eae3637dff1d017db76eff28e9dd6ca8d9ed86b9a7bbe4394195ef588540",
+          "executable": 0
+        },
+        "tools/release-cargo-credentials.mjs": {
+          "sha256": "38b0249b810b5523fc7933679f3d70b0f625390edd802b5b01e0ae99b5f6dbfc",
+          "executable": 0
+        },
+        "tools/release-cargo-transport.py": {
+          "sha256": "cd0115a8579406838fca6652d65db5f9031f0c8b188245ebf59fd374d775b0f8",
+          "executable": 0
+        },
+        "tools/release-cargo-upload.mjs": {
+          "sha256": "dcded68ef82b73dc33edd77f6181fdb7cc4bd52011bc3e46238b32fe4d6ea794",
+          "executable": 0
+        },
+        "tools/release-ci-artifacts.mjs": {
+          "sha256": "7d5d84d2a9766f2daed58d7dff2fac6509c7599b546a49d875f1d0f47fd5f7ca",
+          "executable": 0
+        },
+        "tools/release-development.mjs": {
+          "sha256": "da576b0f363533cb84896c8e67e3aab61bcc3ff7d9c2259538e92c3020b04847",
+          "executable": 0
+        },
+        "tools/release-git.mjs": {
+          "sha256": "ee25375dc7b4bbb9e80d520ae069d667a4898124587072783f773e1d6b6c311c",
+          "executable": 0
+        },
+        "tools/release-github.mjs": {
+          "sha256": "2a16cae7e4b3bfe7843cd29e68c778574c6fe20392e393bdf49d78f4e77d03e0",
+          "executable": 0
+        },
+        "tools/release-native.mjs": {
+          "sha256": "7f20a08ff225852a16e21d772425d4a5debeba51fa010ce9a6121c203b5725e4",
+          "executable": 0
+        },
+        "tools/release-product.mjs": {
+          "sha256": "31a892b9a013b409c07c7842734d114d1794bf0e3f2ebf7e88decb3e1a04c9b9",
+          "executable": 0
+        },
+        "tools/release-publication.mjs": {
+          "sha256": "af9446ffc0aaea00e02078672d672736abd4e9b39cd084dc2c880482bd62db86",
+          "executable": 0
+        },
+        "tools/release-publish.mjs": {
+          "sha256": "1ece360b681e2556ca7f0eab90b81bdf1e76d950e3210099278019dd0d05df79",
+          "executable": 0
+        },
+        "tools/release-registry.mjs": {
+          "sha256": "73d0e49fc1eb9a92969d2d1b3b5d6dc2233dfed5e42fdcd56987e6a07b2f6d75",
+          "executable": 0
+        },
+        "tools/release-staging.mjs": {
+          "sha256": "07efe3abbcdff1ab8e59f769ca34f390378cd6376fa60e277d414550a41e7ea0",
+          "executable": 0
+        },
+        "tools/release-tkt-ci.mjs": {
+          "sha256": "6407a6945055435c0429236fae6d7d6e504ad9a7ab1e767cf2ac142d3e8537a0",
+          "executable": 0
+        },
+        "tools/release-tkt-publication.mjs": {
+          "sha256": "6f615e2004365fb0a065dac36ac9b36ecc8dbfc2f0189e38ea79583ed1a10f11",
+          "executable": 0
+        },
+        "tools/release-verify.mjs": {
+          "sha256": "ac03dfa912811f53e6f736c372379e3c2056710af037bdb1945437389963d86f",
+          "executable": 0
+        },
+        "tools/release-version.mjs": {
+          "sha256": "c00161120615abb0e848161854493046b1f94a48d8355e9232ffcebc2e140c5f",
+          "executable": 0
+        },
+        "tools/release.mjs": {
+          "sha256": "80cc78ebd88b1431a133edb4c7856b345657976a4865ce05b08d623022d75d9c",
+          "executable": 0
+        }
+      }
+    },
+    {
+      "host": "claude",
+      "name": "tkt-0.5.0-claude.tar.gz",
+      "sha256": "e45a1329306effeea115f111061c991b41a20cd5f072bb9ae43ff7fb3c421d47",
+      "files": {
+        ".agents/plugins/marketplace.json": {
+          "sha256": "4dc04e11c00d73ca1461ec9e47185b0cfa2da0d247c6e071f70310df9b06d025",
+          "executable": 0
+        },
+        ".claude-plugin/claude-hooks.json": {
+          "sha256": "5013a21d80cae7a431fad5245ea78c971ab3ce7a540e49cc59efd982e61e94b7",
+          "executable": 0
+        },
+        ".claude-plugin/hooks/session-start.mjs": {
+          "sha256": "c01dc78a4e2aa636c5fb196be6dddf902cdbb20f118a5a36478ef1e19934457e",
+          "executable": 0
+        },
+        ".claude-plugin/marketplace.json": {
+          "sha256": "569cf0702a3bb0d0b627559b7c237ff2f75a697b232c00e530b67f00cfc37093",
+          "executable": 0
+        },
+        ".claude-plugin/plugin.json": {
+          "sha256": "cbcd7bacee5a3b3c7ef3cee4a051de681381b7140def8d06dacb01d261fb5c4c",
+          "executable": 0
+        },
+        ".codex-plugin/plugin.json": {
+          "sha256": "b70ce3cc0524a81ec819dd5e2a38861667a00e181d8a3c0bd907fbe6bcc4a02e",
+          "executable": 0
+        },
+        "LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "NOTICE": {
+          "sha256": "af72808dec32372af7e9c0585ea0da3316a4542b62ffb66bac69097566bcc823",
+          "executable": 0
+        },
+        "README.md": {
+          "sha256": "df9ea4e410149fabbe312fc153cf9fd2c13a50743ee6d15a0a5222556f77ae7f",
+          "executable": 0
+        },
+        "package-lock.json": {
+          "sha256": "34f2d9f7e2c3cab3c92bf2545190c687c265986753059933ed6c83ea83ab042f",
+          "executable": 0
+        },
+        "package.json": {
+          "sha256": "8a34a12bf557f57f8de3a5c5d5815ed7c7af2c742464aa81eafa07937a8136f4",
+          "executable": 0
+        },
+        "skills/tkt-core/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-core/SKILL.md": {
+          "sha256": "490e0f4d59d1b551f10be094eb69f74d092d8588959393cc35a65e7368ccd8ef",
+          "executable": 0
+        },
+        "skills/tkt-core/references/audit-quality.md": {
+          "sha256": "e398d6938ab56524c6f201ee5d39f4ec90c5891b97cd2de8820501850adf3ef7",
+          "executable": 0
+        },
+        "skills/tkt-core/references/commands.md": {
+          "sha256": "9b90fff4695a4030bbdcce3225907528b94aa106cd1222153e9e989457cbe555",
+          "executable": 0
+        },
+        "skills/tkt-core/references/migration-assist.md": {
+          "sha256": "41bfd4d686b1a77a0751eac600bbdb01a1e3fa24db518fade96513c0bbbd9626",
+          "executable": 0
+        },
+        "skills/tkt-core/references/ticket-format.md": {
+          "sha256": "bfcec156dafae5d01ad3cd69c2e59efe5c41cf41b5803298a9aa1efc735746f1",
+          "executable": 0
+        },
+        "skills/tkt-core/references/ticket-standards.md": {
+          "sha256": "87bb03407eaf89531c27296f34a791211cbc0f43dc11b3dcc26aa417781fcc0b",
+          "executable": 0
+        },
+        "skills/tkt-core/references/wide-refactors.md": {
+          "sha256": "ff7abe65a60f753eb3fe68853a5667327e9a6b2600519fcf37483a9c0f21fe99",
+          "executable": 0
+        },
+        "skills/tkt-orient/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-orient/SKILL.md": {
+          "sha256": "61e5de7e4e9acad5dedc275ffd759eb5bca728f92f3d42452c5b2ac338657f34",
+          "executable": 0
+        },
+        "skills/tkt-reconcile/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-reconcile/SKILL.md": {
+          "sha256": "4e755404304d55fe503d4815ede288bdd10da21e3e01f09843f2140dbd824efc",
+          "executable": 0
+        },
+        "skills/tkt-work/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-work/SKILL.md": {
+          "sha256": "855fe417a00b7251a1b7e24f21554e4b6f0e8ca0600630c5f159d0f0f85b5961",
+          "executable": 0
+        },
+        "tools/LICENSE-grey-matter.txt": {
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "executable": 0
+        },
+        "tools/check-skill-syntax.mjs": {
+          "sha256": "35c3f52e0ccd9b6fb628b4dba03b5ff15d08314a8ce77a686b352ac857b67c8d",
+          "executable": 0
+        },
+        "tools/deploy.mjs": {
+          "sha256": "73d0c5724382e1652f227c081a4f62cdf0492d8f41ae34f2a0dc554f359e77b4",
+          "executable": 0
+        },
+        "tools/probe-claude-validation.mjs": {
+          "sha256": "eb91b5cce1610f6c8c4da1c40c7e0c8a8b3222cf093f408583114bbc7f5fafcb",
+          "executable": 0
+        },
+        "tools/release-artifacts.mjs": {
+          "sha256": "b719eae3637dff1d017db76eff28e9dd6ca8d9ed86b9a7bbe4394195ef588540",
+          "executable": 0
+        },
+        "tools/release-cargo-credentials.mjs": {
+          "sha256": "38b0249b810b5523fc7933679f3d70b0f625390edd802b5b01e0ae99b5f6dbfc",
+          "executable": 0
+        },
+        "tools/release-cargo-transport.py": {
+          "sha256": "cd0115a8579406838fca6652d65db5f9031f0c8b188245ebf59fd374d775b0f8",
+          "executable": 0
+        },
+        "tools/release-cargo-upload.mjs": {
+          "sha256": "dcded68ef82b73dc33edd77f6181fdb7cc4bd52011bc3e46238b32fe4d6ea794",
+          "executable": 0
+        },
+        "tools/release-ci-artifacts.mjs": {
+          "sha256": "7d5d84d2a9766f2daed58d7dff2fac6509c7599b546a49d875f1d0f47fd5f7ca",
+          "executable": 0
+        },
+        "tools/release-development.mjs": {
+          "sha256": "da576b0f363533cb84896c8e67e3aab61bcc3ff7d9c2259538e92c3020b04847",
+          "executable": 0
+        },
+        "tools/release-git.mjs": {
+          "sha256": "ee25375dc7b4bbb9e80d520ae069d667a4898124587072783f773e1d6b6c311c",
+          "executable": 0
+        },
+        "tools/release-github.mjs": {
+          "sha256": "2a16cae7e4b3bfe7843cd29e68c778574c6fe20392e393bdf49d78f4e77d03e0",
+          "executable": 0
+        },
+        "tools/release-native.mjs": {
+          "sha256": "7f20a08ff225852a16e21d772425d4a5debeba51fa010ce9a6121c203b5725e4",
+          "executable": 0
+        },
+        "tools/release-product.mjs": {
+          "sha256": "31a892b9a013b409c07c7842734d114d1794bf0e3f2ebf7e88decb3e1a04c9b9",
+          "executable": 0
+        },
+        "tools/release-publication.mjs": {
+          "sha256": "af9446ffc0aaea00e02078672d672736abd4e9b39cd084dc2c880482bd62db86",
+          "executable": 0
+        },
+        "tools/release-publish.mjs": {
+          "sha256": "1ece360b681e2556ca7f0eab90b81bdf1e76d950e3210099278019dd0d05df79",
+          "executable": 0
+        },
+        "tools/release-registry.mjs": {
+          "sha256": "73d0e49fc1eb9a92969d2d1b3b5d6dc2233dfed5e42fdcd56987e6a07b2f6d75",
+          "executable": 0
+        },
+        "tools/release-staging.mjs": {
+          "sha256": "07efe3abbcdff1ab8e59f769ca34f390378cd6376fa60e277d414550a41e7ea0",
+          "executable": 0
+        },
+        "tools/release-tkt-ci.mjs": {
+          "sha256": "6407a6945055435c0429236fae6d7d6e504ad9a7ab1e767cf2ac142d3e8537a0",
+          "executable": 0
+        },
+        "tools/release-tkt-publication.mjs": {
+          "sha256": "6f615e2004365fb0a065dac36ac9b36ecc8dbfc2f0189e38ea79583ed1a10f11",
+          "executable": 0
+        },
+        "tools/release-verify.mjs": {
+          "sha256": "ac03dfa912811f53e6f736c372379e3c2056710af037bdb1945437389963d86f",
+          "executable": 0
+        },
+        "tools/release-version.mjs": {
+          "sha256": "c00161120615abb0e848161854493046b1f94a48d8355e9232ffcebc2e140c5f",
+          "executable": 0
+        },
+        "tools/release.mjs": {
+          "sha256": "80cc78ebd88b1431a133edb4c7856b345657976a4865ce05b08d623022d75d9c",
+          "executable": 0
+        }
+      }
+    },
+    {
+      "host": "agy",
+      "name": "tkt-0.5.0-agy.tar.gz",
+      "sha256": "840e7015eac5f8734a52bd721cb88bfbc3c4186ec661f310d5e144a535815b16",
+      "files": {
+        "LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "NOTICE": {
+          "sha256": "af72808dec32372af7e9c0585ea0da3316a4542b62ffb66bac69097566bcc823",
+          "executable": 0
+        },
+        "README.md": {
+          "sha256": "59897931ec72c136237b77c3296d35c6850ab861307e5b189faa7bd7c80dd376",
+          "executable": 0
+        },
+        "package-lock.json": {
+          "sha256": "34f2d9f7e2c3cab3c92bf2545190c687c265986753059933ed6c83ea83ab042f",
+          "executable": 0
+        },
+        "package.json": {
+          "sha256": "8a34a12bf557f57f8de3a5c5d5815ed7c7af2c742464aa81eafa07937a8136f4",
+          "executable": 0
+        },
+        "plugin.json": {
+          "sha256": "5e3eb23fa028a692a719ef2202be868fff8d799d55147f2179bf155185084527",
+          "executable": 0
+        },
+        "skills/tkt-core/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-core/SKILL.md": {
+          "sha256": "490e0f4d59d1b551f10be094eb69f74d092d8588959393cc35a65e7368ccd8ef",
+          "executable": 0
+        },
+        "skills/tkt-core/references/audit-quality.md": {
+          "sha256": "e398d6938ab56524c6f201ee5d39f4ec90c5891b97cd2de8820501850adf3ef7",
+          "executable": 0
+        },
+        "skills/tkt-core/references/commands.md": {
+          "sha256": "9b90fff4695a4030bbdcce3225907528b94aa106cd1222153e9e989457cbe555",
+          "executable": 0
+        },
+        "skills/tkt-core/references/migration-assist.md": {
+          "sha256": "41bfd4d686b1a77a0751eac600bbdb01a1e3fa24db518fade96513c0bbbd9626",
+          "executable": 0
+        },
+        "skills/tkt-core/references/ticket-format.md": {
+          "sha256": "bfcec156dafae5d01ad3cd69c2e59efe5c41cf41b5803298a9aa1efc735746f1",
+          "executable": 0
+        },
+        "skills/tkt-core/references/ticket-standards.md": {
+          "sha256": "87bb03407eaf89531c27296f34a791211cbc0f43dc11b3dcc26aa417781fcc0b",
+          "executable": 0
+        },
+        "skills/tkt-core/references/wide-refactors.md": {
+          "sha256": "ff7abe65a60f753eb3fe68853a5667327e9a6b2600519fcf37483a9c0f21fe99",
+          "executable": 0
+        },
+        "skills/tkt-orient/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-orient/SKILL.md": {
+          "sha256": "61e5de7e4e9acad5dedc275ffd759eb5bca728f92f3d42452c5b2ac338657f34",
+          "executable": 0
+        },
+        "skills/tkt-reconcile/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-reconcile/SKILL.md": {
+          "sha256": "4e755404304d55fe503d4815ede288bdd10da21e3e01f09843f2140dbd824efc",
+          "executable": 0
+        },
+        "skills/tkt-work/LICENSE": {
+          "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+          "executable": 0
+        },
+        "skills/tkt-work/SKILL.md": {
+          "sha256": "855fe417a00b7251a1b7e24f21554e4b6f0e8ca0600630c5f159d0f0f85b5961",
+          "executable": 0
+        },
+        "tools/LICENSE-grey-matter.txt": {
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "executable": 0
+        },
+        "tools/check-skill-syntax.mjs": {
+          "sha256": "35c3f52e0ccd9b6fb628b4dba03b5ff15d08314a8ce77a686b352ac857b67c8d",
+          "executable": 0
+        },
+        "tools/deploy.mjs": {
+          "sha256": "73d0c5724382e1652f227c081a4f62cdf0492d8f41ae34f2a0dc554f359e77b4",
+          "executable": 0
+        },
+        "tools/probe-claude-validation.mjs": {
+          "sha256": "eb91b5cce1610f6c8c4da1c40c7e0c8a8b3222cf093f408583114bbc7f5fafcb",
+          "executable": 0
+        },
+        "tools/release-artifacts.mjs": {
+          "sha256": "b719eae3637dff1d017db76eff28e9dd6ca8d9ed86b9a7bbe4394195ef588540",
+          "executable": 0
+        },
+        "tools/release-cargo-credentials.mjs": {
+          "sha256": "38b0249b810b5523fc7933679f3d70b0f625390edd802b5b01e0ae99b5f6dbfc",
+          "executable": 0
+        },
+        "tools/release-cargo-transport.py": {
+          "sha256": "cd0115a8579406838fca6652d65db5f9031f0c8b188245ebf59fd374d775b0f8",
+          "executable": 0
+        },
+        "tools/release-cargo-upload.mjs": {
+          "sha256": "dcded68ef82b73dc33edd77f6181fdb7cc4bd52011bc3e46238b32fe4d6ea794",
+          "executable": 0
+        },
+        "tools/release-ci-artifacts.mjs": {
+          "sha256": "7d5d84d2a9766f2daed58d7dff2fac6509c7599b546a49d875f1d0f47fd5f7ca",
+          "executable": 0
+        },
+        "tools/release-development.mjs": {
+          "sha256": "da576b0f363533cb84896c8e67e3aab61bcc3ff7d9c2259538e92c3020b04847",
+          "executable": 0
+        },
+        "tools/release-git.mjs": {
+          "sha256": "ee25375dc7b4bbb9e80d520ae069d667a4898124587072783f773e1d6b6c311c",
+          "executable": 0
+        },
+        "tools/release-github.mjs": {
+          "sha256": "2a16cae7e4b3bfe7843cd29e68c778574c6fe20392e393bdf49d78f4e77d03e0",
+          "executable": 0
+        },
+        "tools/release-native.mjs": {
+          "sha256": "7f20a08ff225852a16e21d772425d4a5debeba51fa010ce9a6121c203b5725e4",
+          "executable": 0
+        },
+        "tools/release-product.mjs": {
+          "sha256": "31a892b9a013b409c07c7842734d114d1794bf0e3f2ebf7e88decb3e1a04c9b9",
+          "executable": 0
+        },
+        "tools/release-publication.mjs": {
+          "sha256": "af9446ffc0aaea00e02078672d672736abd4e9b39cd084dc2c880482bd62db86",
+          "executable": 0
+        },
+        "tools/release-publish.mjs": {
+          "sha256": "1ece360b681e2556ca7f0eab90b81bdf1e76d950e3210099278019dd0d05df79",
+          "executable": 0
+        },
+        "tools/release-registry.mjs": {
+          "sha256": "73d0e49fc1eb9a92969d2d1b3b5d6dc2233dfed5e42fdcd56987e6a07b2f6d75",
+          "executable": 0
+        },
+        "tools/release-staging.mjs": {
+          "sha256": "07efe3abbcdff1ab8e59f769ca34f390378cd6376fa60e277d414550a41e7ea0",
+          "executable": 0
+        },
+        "tools/release-tkt-ci.mjs": {
+          "sha256": "6407a6945055435c0429236fae6d7d6e504ad9a7ab1e767cf2ac142d3e8537a0",
+          "executable": 0
+        },
+        "tools/release-tkt-publication.mjs": {
+          "sha256": "6f615e2004365fb0a065dac36ac9b36ecc8dbfc2f0189e38ea79583ed1a10f11",
+          "executable": 0
+        },
+        "tools/release-verify.mjs": {
+          "sha256": "ac03dfa912811f53e6f736c372379e3c2056710af037bdb1945437389963d86f",
+          "executable": 0
+        },
+        "tools/release-version.mjs": {
+          "sha256": "c00161120615abb0e848161854493046b1f94a48d8355e9232ffcebc2e140c5f",
+          "executable": 0
+        },
+        "tools/release.mjs": {
+          "sha256": "80cc78ebd88b1431a133edb4c7856b345657976a4865ce05b08d623022d75d9c",
+          "executable": 0
+        }
+      }
+    }
+  ]
+}

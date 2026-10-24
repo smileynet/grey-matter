@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "mode": "product-evidence",
+  "publishable": false,
+  "candidateSha": "2b6ff173993c9fe413c40287fb1cb3f0a9879ca1",
+  "product": "tkt",
+  "version": "0.5.0",
+  "platform": {
+    "os": "darwin",
+    "release": "25.6.0",
+    "arch": "arm64",
+    "node": "v26.7.0"
+  },
+  "commands": [
+    [
+      "mise",
+      "run",
+      "check"
+    ]
+  ],
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "check"
+      ],
+      "started": "2026-10-24T10:11:12.678Z",
+      "finished": "2026-10-24T10:11:45.193Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "log": "1-product.log",
+      "sha256": "5b69f5b377bb000c9eb627dc08aafa9e5d997020d99690d0d2c47b464c8ecce8"
+    }
+  ],
+  "pending": [
+    "native",
+    "scope",
+    "compatibility",
+    "remaining-platforms"
+  ]
+}

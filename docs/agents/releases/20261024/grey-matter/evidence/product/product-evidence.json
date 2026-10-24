@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "mode": "product-evidence",
+  "publishable": false,
+  "candidateSha": "e071b7b03d02025dc1af6c3ff2c4f8369f777587",
+  "product": "grey-matter",
+  "version": "0.2.0",
+  "platform": {
+    "os": "darwin",
+    "release": "25.6.0",
+    "arch": "arm64",
+    "node": "v24.14.1"
+  },
+  "commands": [
+    [
+      "/Users/sambiggins/.local/share/fnm/node-versions/v24.14.1/installation/bin/node",
+      "scripts/check-repo.mjs",
+      "--require-tools"
+    ]
+  ],
+  "checks": [
+    {
+      "command": [
+        "/Users/sambiggins/.local/share/fnm/node-versions/v24.14.1/installation/bin/node",
+        "scripts/check-repo.mjs",
+        "--require-tools"
+      ],
+      "started": "2026-10-24T10:12:26.680Z",
+      "finished": "2026-10-24T10:13:14.458Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "log": "1-product.log",
+      "sha256": "4d2229f69e4c08a909499e78b8b38a650be7f9b7c26bf4164b59961f703e33a2"
+    }
+  ],
+  "pending": [
+    "native",
+    "scope",
+    "compatibility",
+    "remaining-platforms"
+  ]
+}

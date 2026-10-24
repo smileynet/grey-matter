@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "kind": "release-gate",
+  "gate": "staging",
+  "product": "grey-matter",
+  "version": "0.2.0",
+  "candidateSha": "e071b7b03d02025dc1af6c3ff2c4f8369f777587",
+  "status": "pass",
+  "blockers": [],
+  "summary": "Exact prepared bytes, note drafts, snapshots, child reports and real gate receipts assembled for pinned-commit verification; staged only.",
+  "evidence": [
+    "Audit70 d7370df970c777c09b60c9c7a47350689d10e377: staging go decision and completed platform evidence.",
+    "Carrier inventory.json binds every copied asset, report, log, note and gate; readStagedCandidate validates committed regular blobs at review R.",
+    "Companion installation guide records dependency-first install, update/migration prerequisites and measured limitations."
+  ],
+  "publicationPerformed": false
+}
