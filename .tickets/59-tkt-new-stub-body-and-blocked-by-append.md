@@ -1,7 +1,7 @@
 ---
 id: "59"
 title: "tkt: new's stub body trips its own stub-body validator, and edit --blocked-by replaces instead of appends -- two agent footguns"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
