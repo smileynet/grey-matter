@@ -231,3 +231,30 @@ all five failures. Fixed-fixture overlays then ran the complete 32 deployment an
 overlays changed only test path/import context, not either candidate or production
 checks; both candidate trees remain clean. Regenerate from the committed fixture
 fixes and rerun product/native verification. Neither failed draft is final evidence.
+
+## Verified candidate preparation (2026-10-24)
+
+Current candidates are grey `bec5afee9f4f070ef898ac309d45d5061a5be7b5`
+from source `9e8a047`, and tkt `cd96042a5a70123cfbfc656ddf34563c53cff7a0`
+from source `39d8bdf`. Both dedicated candidate branches are pushed. Each has
+three sealed, independently verified bundles and fresh exact-commit product/native
+reports. [Committed preparation evidence](../docs/agents/research/evidence/release-candidates-20261024.json)
+retains identities, metadata, file inventories, hashes, reports, hosted jobs and
+explicit platform limits. Report, metadata, archive and product-log hashes were
+independently compared to the retained local files.
+
+Grey's exact candidate passed all 12 repository invariants on macOS and hosted
+Windows/Linux (run 40075385295); tkt's exact candidate passed its local full gate
+and hosted CI (40075956812), including 37 Node tests, 296 Rust tests, MSRV and
+Windows/Linux Claude hook fixtures. Native Codex 0.147.0, Claude 2.1.310 and AGY
+1.4.6 pass all six candidate rows on macOS arm64, including seeded Claude defects,
+exact Codex/AGY catalogs and installed-file hash comparisons. Native checks on
+Windows/Linux remain outside this preparation evidence, not assumed passes.
+
+A previous-release migration probe found that the original v0.4.0 tkt installer
+left an unowned old `tkt` link beside the new four skills. [tkt 217](https://github.com/smileynet/tkt/blob/main/.tickets/217-legacy-skill-upgrade.md)
+adds an explicit-source, preview-first migration, seven safety tests and upgrade
+guidance. It is implemented and closed; the tkt candidate above includes it.
+The earlier tkt `79302cb` candidate's successful five-target build is historical;
+new candidate `cd96042` has a separate in-progress staging build (40076036798).
+Final artifact staging and install/upgrade/compatibility approvals stay in 69–71.

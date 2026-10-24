@@ -53,3 +53,26 @@ repo-local tkt implementation ticket rather than duplicating its scope.
 - [ ] Physical roots plus live catalogs show each managed skill exactly once through install, upgrade, repeated deploy, enabled/disabled plugin and symlink scenarios; unrelated user files remain intact.
 - [ ] Release tests prove dry-run/isolation, refresh failure recovery and identical second-run state; no test reads or mutates real user caches, credentials, registry publications or global plugin installs.
 - [ ] Test results identify Windows/macOS/Linux coverage and link missing-platform remediation into the final audit; the release publisher consumes these results as gates.
+
+## Initial candidate probes (2026-10-24)
+
+Use grey candidate `bec5afee9f4f070ef898ac309d45d5061a5be7b5` and tkt candidate
+`cd96042a5a70123cfbfc656ddf34563c53cff7a0`. Their product/native preparation
+evidence is committed by ticket 67. Previous tags v0.1.0/v0.4.0 contain no plugin
+manifests, so previous-release cases must test bare-skill migration; synthetic
+older plugin caches are separate version/cache controls, not historical releases.
+
+The original tkt v0.4.0 installer reproduced a readable obsolete `tkt` symlink
+beside the four new skills. [tkt 217](https://github.com/smileynet/tkt/blob/main/.tickets/217-legacy-skill-upgrade.md)
+fixes that upgrade path with explicit old-source matching and foreign-content
+preservation. It is closed and included in the new tkt candidate; retain the
+migration in every previous-release fixture instead of silently deleting leftovers.
+
+Initial isolated bare-root probes pass for Kiro/OpenCode and Crush project roots:
+46 grey + 4 tkt skills plus one foreign sentinel, dry-run unchanged, repeated payload
+bytes unchanged, foreign bytes preserved. OpenCode 1.18.21's live debug catalog
+matches all 51 names. The initial piped catalog was truncated by the CLI; direct
+file capture provides complete parseable output. This is partial coverage: Kiro and
+Crush live catalogs, previous-release/native upgrade matrices, cache/enable/symlink
+controls, compatibility and platform approval remain to be verified. Do not close
+this ticket using these initial probes alone.
