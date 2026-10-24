@@ -23,6 +23,7 @@ import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+const SKILL_COUNT = readdirSync(join(dirname(HERE), "skills"), { recursive: true, withFileTypes: true }).filter((entry) => entry.isFile() && entry.name === "SKILL.md").length;
 const INSTALLER = join(HERE, "deploy.mjs");
 const MANIFEST_NAME = ".installed-by-grey-matter.json";
 
@@ -479,7 +480,7 @@ test("audit: includes Codex plugin coverage when reporting bare duplicates", () 
   try {
     assert.equal(runWithEnv(["--root", join(sb.home, ".codex", "skills"), "--allow-dual"], sb.env).status, 0);
     const r = runWithEnv(["audit"], sb.env);
-    assert.match(r.stdout, /codex sees 44 skill\(s\) twice/);
+    assert.match(r.stdout, new RegExp(String.raw`codex sees ${SKILL_COUNT} skill\(s\) twice`));
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
@@ -502,7 +503,7 @@ test("audit: enumerate multiple cached Codex plugins and detect actual source mi
     assert.equal(r.status, 0, r.stdout);
     const data = JSON.parse(r.stdout);
     assert.equal(data.metrics.plugins, 2);
-    assert.equal(data.inventory.find((p) => p.id === "grey-matter@grey-matter").skills.length, 43);
+    assert.equal(data.inventory.find((p) => p.id === "grey-matter@grey-matter").skills.length, SKILL_COUNT - 1);
     assert.ok(data.findings.some((s) => s.includes("source mismatch") && s.includes("sync")));
     assert.ok(data.findings.some((s) => s.includes("codex sees 1 skill(s) twice: orient")));
     rmSync(at, { recursive: true });
@@ -563,7 +564,7 @@ test("portfolio: deploy each registered active pack once without scanning other 
     assert.equal(result.status, 0, result.stdout);
     assert.ok(sb.has(".agents/skills"));
     assert.ok(existsSync(join(sb.home, ".agents", "skills", "other-core", "SKILL.md")));
-    assert.equal((result.stdout.match(/installed 44 skills/g) ?? []).length, 1);
+    assert.equal((result.stdout.match(new RegExp(`installed ${SKILL_COUNT} skills`, "g")) ?? []).length, 1);
     assert.equal((result.stdout.match(/installed 1 skills/g) ?? []).length, 1);
     assert.equal(runWithEnv(["--portfolio", portfolio, "--no-agy"], sb.env).status, 0);
   } finally { rmSync(sb.home, { recursive: true, force: true }); }

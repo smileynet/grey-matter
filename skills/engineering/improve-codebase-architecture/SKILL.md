@@ -84,3 +84,7 @@ Side effects happen inline as decisions crystallise; call the Skill tool with "d
 - **User rejects the candidate with a load-bearing reason?** Offer an ADR: _"Want me to record this as an ADR so future architecture reviews don't re-suggest it?"_ Only offer when the reason would actually be needed by a future explorer to avoid re-suggesting the same thing; skip ephemeral reasons ("not worth it right now") and self-evident ones.
 - **User accepts a candidate to act on?** It becomes tracked work: file it as a tkt ticket (see `docs/agents/tkt-conventions.md`) with the candidate's problem/solution and the deletion-test result as context, rather than sliding straight into implementation, this skill plans, a separate flow implements.
 - **Want to explore alternative interfaces for a deepened module?** Call the Skill tool with "codebase-design" and use its design-it-twice parallel sub-agent pattern.
+
+When competing choices need empirical evidence, see
+[spike-options](../spike-options/SKILL.md): use it when the choice is hard to reverse,
+cheap to spike, and reasoning alone cannot settle it.

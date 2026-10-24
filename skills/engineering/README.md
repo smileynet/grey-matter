@@ -25,6 +25,7 @@ sync by [`curate-docs`](../meta/curate-docs/SKILL.md).
 - [pr](./pr/SKILL.md): shape a PR body (smallest visual, evidence, merge-danger call).
 - [diagnosing-bugs](./diagnosing-bugs/SKILL.md): a tight-feedback-loop method for the hard bugs.
 - [prototype](./prototype/SKILL.md): throwaway code to answer one design question (logic / UI / game branch).
+- [spike-options](./spike-options/SKILL.md): compare every meaningful option empirically, then agree a verdict and integration tickets.
 - [research](./research/SKILL.md): background agent investigates primary sources, leaves a cited file.
 - [research-audit](./research-audit/SKILL.md): fresh-context validator that scores a research file.
 - [wizard](./wizard/SKILL.md): generate an interactive bash wizard for human-only setup steps.
