@@ -2,6 +2,10 @@
 
 Date: 2026-10-23. Research only; no installation, runner dispatch, publication or boundary execution. Scope: [existing transport requirements](cargo-sealed-transport.md) (repository path: `docs/agents/research/cargo-sealed-transport.md`).
 
+Execution follow-up: the later [private data-mount probe](cargo-private-mount-probe.md)
+passes a Linux/Cargo fixture and demonstrates the ordinary-bind limitation. The
+unexecuted labels below describe this earlier proposal, not the current fixture status.
+
 ## Finding
 
 [L4:verified] Bubblewrap provides a supported read-only bind mount and separate writable mounts in a private mount namespace. [Version 0.6.1 manual](https://raw.githubusercontent.com/containers/bubblewrap/v0.6.1/bwrap.xml) documents these options. [L4:verified] Its maintainers explicitly say policy depends on the arguments and that it is not a complete sandbox; it disables privilege escalation through setuid execution. [Upstream README](https://github.com/containers/bubblewrap/blob/main/README.md).

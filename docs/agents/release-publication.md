@@ -84,3 +84,6 @@ The [Cargo checksum-provider probe](research/cargo-credential-checksum-probe.md)
 now verifies the supported authorization seam against a localhost registry.
 `release-cargo-credentials.mjs` is a tested component, not a production uploader;
 private input/output protection and token-override rejection still need the CI wrapper.
+The [private-mount execution probe](research/cargo-private-mount-probe.md) now
+demonstrates source/output isolation and exact localhost Cargo bytes on Linux.
+Actual tkt inputs, lifecycle integration and the sole publisher remain pending.

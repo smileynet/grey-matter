@@ -163,9 +163,10 @@ must refuse until separately authorized enablement; do not change settings now.
   [Cargo transport follow-up](../docs/agents/research/cargo-sealed-transport.md)
 
 Source-write boundary research: [Cargo read-only boundary](../docs/agents/research/cargo-readonly-boundary.md)
-documents bubblewrap mount semantics and a harmless hosted probe. A read-only
+documents bubblewrap mount semantics and the original hosted-probe plan. A read-only
 bind constrains Cargo and descendants but cannot prevent a concurrent host writer
-from mutating the backing checkout. No boundary execution has run. Preserve this
+from mutating the backing checkout. Later execution of private data-backed mounts
+is recorded below; the ordinary-bind limitation remains. Preserve this
 limitation; either enforce exclusive trusted host ownership or verify stronger
 immutable backing before claiming the production guard is complete.
 
@@ -212,3 +213,21 @@ JSON: `[node, script]` is not a valid executable prefix. The probe uses a small
 native Rust launcher to prepend the fixed Node/script path before forwarding
 Cargo's flags. The Linux/private-output transport and sole CI entry point are
 still unimplemented; this component does not close ticket 68 or authorize publishing.
+
+## Linux boundary checkpoint (2026-10-23)
+
+The [private-mount execution probe](../docs/agents/research/cargo-private-mount-probe.md)
+now passes as the ordinary Ubuntu runner user at `45f11d0`, run 40062286350.
+Both the filesystem control and real Cargo/provider capture pass. After successful
+private preflight, host mutations change the original source, Git HEAD and old
+archive while the mounted source/Git inventory and private output remain intact.
+The single dummy-auth localhost PUT exactly matches the independently sealed
+872-byte fixture crate. Six child source writes fail with EROFS; an ordinary bind
+reflects host changes as the negative control. The first root invocation's
+toolchain-permission failure and correction are retained in the report/evidence.
+
+This resolves the fixture-level runtime uncertainty without another broad source
+review. Implement the prepared adapter next, then test actual tkt dependencies,
+delayed token availability and the registry-intent lifecycle through that adapter.
+Review the integrated path before regenerating final release candidates, following
+the plan's review order. This is not production readiness or final-candidate proof.

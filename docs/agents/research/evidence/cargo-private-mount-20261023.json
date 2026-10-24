@@ -1,0 +1,547 @@
+{
+  "schema": 1,
+  "date": "2026-10-23",
+  "run": {
+    "id": 40062286350,
+    "attempt": 1,
+    "url": "https://github.com/smileynet/grey-matter/actions/runs/40062286350",
+    "sourceSha": "45f11d07c4ca604e0445dacb8c057eb518a21f69",
+    "jobId": 120778182243,
+    "artifact": {
+      "id": 12547957011,
+      "name": "cargo-private-mount-40062286350-1",
+      "digest": "sha256:6d8c4699bd837fdc09b270486bb1aeaa428c18614631fd44939c7e90b07842e6",
+      "size": 7518
+    }
+  },
+  "probeSourceSha256": "6181de0a2ae1672e288f21d170ca59dcae4a7eb0fcdbfbfc3e1e26a3198b5155",
+  "providerSourceSha256": "38b0249b810b5523fc7933679f3d70b0f625390edd802b5b01e0ae99b5f6dbfc",
+  "files": {
+    "cargo-private-mount-result.json": {
+      "sha256": "ac0a8470ace6105f7c6e85fa8a2174644501103c16dc2a2daeb68d87b581b8f2",
+      "result": {
+        "status": "pass",
+        "metrics": {
+          "filesSealed": 31,
+          "sourceWriteDenials": 6,
+          "hostMutations": 7,
+          "puts": 0
+        },
+        "errors": [],
+        "kernel": "6.8.0-1064-azure",
+        "bubblewrap": "bubblewrap 0.6.1",
+        "uid": 1001,
+        "cargoVersion": null,
+        "candidateSha": "175d0571ee64d73d96880e5b0ac01ae9f6a20605",
+        "inventorySha256": "42d51f3a30fafbd429c3fff2bbc1bf1e96de47d1281077121a3cf93851e57e87",
+        "result": {
+          "phase": "verified",
+          "head": "175d0571ee64d73d96880e5b0ac01ae9f6a20605",
+          "inventory": {
+            ".git/COMMIT_EDITMSG": {
+              "sha256": "426b53932ba2cf3938a9f7a09f9058092cf5bc2e8fc3d0fd6d39cbdf4f847713",
+              "mode": 420
+            },
+            ".git/HEAD": {
+              "sha256": "f6f2b945f6c411b02ba3da9c7ace88dcf71b6af65ba2e0d89aa82900042b5a10",
+              "mode": 420
+            },
+            ".git/config": {
+              "sha256": "cfe7ba1238c9a78be7535d7c63bcaf5a4d5011d46b07c9b45d3bbf7d6c312dfe",
+              "mode": 420
+            },
+            ".git/description": {
+              "sha256": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee",
+              "mode": 493
+            },
+            ".git/hooks/applypatch-msg.sample": {
+              "sha256": "0223497a0b8b033aa58a3a521b8629869386cf7ab0e2f101963d328aa62193f7",
+              "mode": 493
+            },
+            ".git/hooks/commit-msg.sample": {
+              "sha256": "efc1401b0e99d1ff51494d154d98b46c1e99059bcd8bf9f73cecde19fd3eb23b",
+              "mode": 493
+            },
+            ".git/hooks/fsmonitor-watchman.sample": {
+              "sha256": "9159720099ad5595b8e66645cbfd47763c1e920f46e0b50ae75e642bbec57ef0",
+              "mode": 493
+            },
+            ".git/hooks/post-update.sample": {
+              "sha256": "81765af2daef323061dcbc5e61fc16481cb74b3bac9ad8a174b186523586f6c5",
+              "mode": 493
+            },
+            ".git/hooks/pre-applypatch.sample": {
+              "sha256": "e15c5b469ea3e0a695bea6f2c82bcf8e62821074939ddd85b77e0007ff165475",
+              "mode": 493
+            },
+            ".git/hooks/pre-commit.sample": {
+              "sha256": "57185b7b9f05239d7ab52db045f5b89eb31348d7b2177eab214f5eb872e1971b",
+              "mode": 493
+            },
+            ".git/hooks/pre-merge-commit.sample": {
+              "sha256": "d3825a70337940ebbd0a5c072984e13245920cdf8898bd225c8d27a6dfc9cb53",
+              "mode": 493
+            },
+            ".git/hooks/pre-push.sample": {
+              "sha256": "ecce9c7e04d3f5dd9d8ada81753dd1d549a9634b26770042b58dda00217d086a",
+              "mode": 493
+            },
+            ".git/hooks/pre-rebase.sample": {
+              "sha256": "4febce867790052338076f4e66cc47efb14879d18097d1d61c8261859eaaa7b3",
+              "mode": 493
+            },
+            ".git/hooks/pre-receive.sample": {
+              "sha256": "a4c3d2b9c7bb3fd8d1441c31bd4ee71a595d66b44fcf49ddb310252320169989",
+              "mode": 493
+            },
+            ".git/hooks/prepare-commit-msg.sample": {
+              "sha256": "e9ddcaa4189fddd25ed97fc8c789eca7b6ca16390b2392ae3276f0c8e1aa4619",
+              "mode": 493
+            },
+            ".git/hooks/push-to-checkout.sample": {
+              "sha256": "a53d0741798b287c6dd7afa64aee473f305e65d3f49463bb9d7408ec3b12bf5f",
+              "mode": 493
+            },
+            ".git/hooks/sendemail-validate.sample": {
+              "sha256": "44ebfc923dc5466bc009602f0ecf067b9c65459abfe8868ddc49b78e6ced7a92",
+              "mode": 493
+            },
+            ".git/hooks/update.sample": {
+              "sha256": "8d5f2fa83e103cf08b57eaa67521df9194f45cbdbcb37da52ad586097a14d106",
+              "mode": 493
+            },
+            ".git/index": {
+              "sha256": "366ba615ab645e4936812ae150237e416da4c303b151a79787a9fbd1704e72a0",
+              "mode": 420
+            },
+            ".git/info/exclude": {
+              "sha256": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1",
+              "mode": 493
+            },
+            ".git/logs/HEAD": {
+              "sha256": "751670564e4168423aa135fff25dd097d59e432b5a3140ad8e61054125113bd3",
+              "mode": 420
+            },
+            ".git/logs/refs/heads/master": {
+              "sha256": "751670564e4168423aa135fff25dd097d59e432b5a3140ad8e61054125113bd3",
+              "mode": 420
+            },
+            ".git/objects/17/5d0571ee64d73d96880e5b0ac01ae9f6a20605": {
+              "sha256": "49b2c86f1c92fcf5fb83aca7b10a7f3a3e4dd154b8711cb81a4a5d37d07de8a4",
+              "mode": 292
+            },
+            ".git/objects/1c/4164db8f1af4e42e50c7766e43a36c8fc08d69": {
+              "sha256": "4dfea554f0efaaa9e661a83d041bcfb6c0aef5ebf25c89babfb07aa091d14122",
+              "mode": 292
+            },
+            ".git/objects/5f/2113aca9c301a0a310227e7baea5a4203b9ed6": {
+              "sha256": "a14fcaa134967c9b1870ef48f9f61a250a98577d9541e2a7ad2ab2be0bdeeae2",
+              "mode": 292
+            },
+            ".git/objects/60/78dbbcf2fef4319c620bf26c007b164d4c23d3": {
+              "sha256": "8e1bdb72ecded88e2213e8f55efa600d060a22e0f5ba710cb24a004340634a03",
+              "mode": 292
+            },
+            ".git/objects/63/72542646253a792cd108abbc080d1a053215e9": {
+              "sha256": "b59ebfc9fe30173e31f10fd204a374550260aa74249b59f9f55715a609b4c7a3",
+              "mode": 292
+            },
+            ".git/refs/heads/master": {
+              "sha256": "179aace661fb86795d4ff6f78f4d7d4005c21099971b8cc4c18e721e2859caa2",
+              "mode": 420
+            },
+            "rename.txt": {
+              "sha256": "1f88a1a7db96abe301a757c402bb63eff04e756538b34a523d3ab7276a7633a8",
+              "mode": 420
+            },
+            "replace.txt": {
+              "sha256": "585474b5194ec86f1ec8540f0e490bb5bca326138fd96d119f340e4d8ef0cc87",
+              "mode": 420
+            },
+            "source.txt": {
+              "sha256": "67a56bbbf31832610a17acf8f421dba6ff5235cb27506f014e484b3976b14c7b",
+              "mode": 420
+            }
+          },
+          "denials": [
+            {
+              "operation": "rewrite",
+              "errno": 30
+            },
+            {
+              "operation": "create",
+              "errno": 30
+            },
+            {
+              "operation": "rename",
+              "errno": 30
+            },
+            {
+              "operation": "unlink",
+              "errno": 30
+            },
+            {
+              "operation": "chmod",
+              "errno": 30
+            },
+            {
+              "operation": "git-head",
+              "errno": 30
+            }
+          ],
+          "ordinaryBindFollowsHost": true,
+          "privateOutputUnchanged": true,
+          "mountinfo": [
+            "609 608 0:53 / /tmp/candidate ro,nosuid,nodev,relatime - tmpfs tmpfs rw,mode=755,uid=1001,gid=1001,inode64",
+            "610 608 0:54 / /tmp/target rw,nosuid,nodev,relatime - tmpfs tmpfs rw,mode=755,uid=1001,gid=1001,inode64",
+            "614 609 0:46 /bindfilenA4CKO//deleted /tmp/candidate/.git/COMMIT_EDITMSG ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "615 609 0:46 /bindfile259Yz0//deleted /tmp/candidate/.git/HEAD ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "616 609 0:46 /bindfiletAXZVs//deleted /tmp/candidate/.git/config ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "617 609 0:46 /bindfilegShBNI//deleted /tmp/candidate/.git/description ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "618 609 0:46 /bindfileNlU4KX//deleted /tmp/candidate/.git/hooks/applypatch-msg.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "652 609 0:46 /bindfileNPv721//deleted /tmp/candidate/.git/hooks/commit-msg.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "653 609 0:46 /bindfileHYKYit//deleted /tmp/candidate/.git/hooks/fsmonitor-watchman.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "654 609 0:46 /bindfilegAlV5W//deleted /tmp/candidate/.git/hooks/post-update.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "655 609 0:46 /bindfileVDS8yj//deleted /tmp/candidate/.git/hooks/pre-applypatch.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "656 609 0:46 /bindfile8bNk0H//deleted /tmp/candidate/.git/hooks/pre-commit.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "657 609 0:46 /bindfilefbNzbt//deleted /tmp/candidate/.git/hooks/pre-merge-commit.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "658 609 0:46 /bindfileewlBoM//deleted /tmp/candidate/.git/hooks/pre-push.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "659 609 0:46 /bindfileTcxmWD//deleted /tmp/candidate/.git/hooks/pre-rebase.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "660 609 0:46 /bindfileZx0vQ5//deleted /tmp/candidate/.git/hooks/pre-receive.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "661 609 0:46 /bindfileWei9cF//deleted /tmp/candidate/.git/hooks/prepare-commit-msg.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "662 609 0:46 /bindfile5qaGBZ//deleted /tmp/candidate/.git/hooks/push-to-checkout.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "664 609 0:46 /bindfileObXc2G//deleted /tmp/candidate/.git/hooks/sendemail-validate.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "665 609 0:46 /bindfileyUkKmC//deleted /tmp/candidate/.git/hooks/update.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "666 609 0:46 /bindfileNAPUCZ//deleted /tmp/candidate/.git/index ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "667 609 0:46 /bindfileLKYJnq//deleted /tmp/candidate/.git/info/exclude ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "668 609 0:46 /bindfileO37xVS//deleted /tmp/candidate/.git/logs/HEAD ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "669 609 0:46 /bindfileGUmRQw//deleted /tmp/candidate/.git/logs/refs/heads/master ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "670 609 0:46 /bindfile2elfdo//deleted /tmp/candidate/.git/objects/17/5d0571ee64d73d96880e5b0ac01ae9f6a20605 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "671 609 0:46 /bindfileVQtwmC//deleted /tmp/candidate/.git/objects/1c/4164db8f1af4e42e50c7766e43a36c8fc08d69 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "672 609 0:46 /bindfileB7zxAm//deleted /tmp/candidate/.git/objects/5f/2113aca9c301a0a310227e7baea5a4203b9ed6 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "673 609 0:46 /bindfilejydBhu//deleted /tmp/candidate/.git/objects/60/78dbbcf2fef4319c620bf26c007b164d4c23d3 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "674 609 0:46 /bindfilePnace9//deleted /tmp/candidate/.git/objects/63/72542646253a792cd108abbc080d1a053215e9 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "675 609 0:46 /bindfile6jmQO1//deleted /tmp/candidate/.git/refs/heads/master ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "676 609 0:46 /bindfiledQTyte//deleted /tmp/candidate/rename.txt ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "677 609 0:46 /bindfileZvI9Pq//deleted /tmp/candidate/replace.txt ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "678 609 0:46 /bindfileIpWS9B//deleted /tmp/candidate/source.txt ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64"
+          ],
+          "cargo": null
+        },
+        "captures": [],
+        "limits": [
+          "Disposable dependency-free fixture; actual tkt dependencies and production transport lifecycle remain untested",
+          "Dummy credential and localhost refusing capture only; no real registry publication",
+          "No hostile root, ptrace, process replacement or mount-namespace entry claim",
+          "Host runtime remains trusted through a read-only root bind",
+          "Data-backed mounts copy sealed inputs; destination inodes do not inherit seals"
+        ]
+      }
+    },
+    "cargo-private-upload-result.json": {
+      "sha256": "61259a3a07f4e0a75cecfa8bed1ce76a217c86134b0242d396bd54c2c4b8c031",
+      "result": {
+        "status": "pass",
+        "metrics": {
+          "filesSealed": 45,
+          "sourceWriteDenials": 6,
+          "hostMutations": 9,
+          "puts": 1
+        },
+        "errors": [],
+        "kernel": "6.8.0-1064-azure",
+        "bubblewrap": "bubblewrap 0.6.1",
+        "uid": 1001,
+        "cargoVersion": "cargo 1.99.1 (5f94df478 2026-08-27)",
+        "candidateSha": "a3effaf0bf560006f346b678adfad6cb78482f1c",
+        "inventorySha256": "3031a85716c041e5b5b570057337c3d70040ae5e2ff90a743b236b41c7c8c3da",
+        "result": {
+          "phase": "verified",
+          "head": "a3effaf0bf560006f346b678adfad6cb78482f1c",
+          "inventory": {
+            ".git/COMMIT_EDITMSG": {
+              "sha256": "426b53932ba2cf3938a9f7a09f9058092cf5bc2e8fc3d0fd6d39cbdf4f847713",
+              "mode": 420
+            },
+            ".git/HEAD": {
+              "sha256": "f6f2b945f6c411b02ba3da9c7ace88dcf71b6af65ba2e0d89aa82900042b5a10",
+              "mode": 420
+            },
+            ".git/config": {
+              "sha256": "cfe7ba1238c9a78be7535d7c63bcaf5a4d5011d46b07c9b45d3bbf7d6c312dfe",
+              "mode": 420
+            },
+            ".git/description": {
+              "sha256": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee",
+              "mode": 493
+            },
+            ".git/hooks/applypatch-msg.sample": {
+              "sha256": "0223497a0b8b033aa58a3a521b8629869386cf7ab0e2f101963d328aa62193f7",
+              "mode": 493
+            },
+            ".git/hooks/commit-msg.sample": {
+              "sha256": "efc1401b0e99d1ff51494d154d98b46c1e99059bcd8bf9f73cecde19fd3eb23b",
+              "mode": 493
+            },
+            ".git/hooks/fsmonitor-watchman.sample": {
+              "sha256": "9159720099ad5595b8e66645cbfd47763c1e920f46e0b50ae75e642bbec57ef0",
+              "mode": 493
+            },
+            ".git/hooks/post-update.sample": {
+              "sha256": "81765af2daef323061dcbc5e61fc16481cb74b3bac9ad8a174b186523586f6c5",
+              "mode": 493
+            },
+            ".git/hooks/pre-applypatch.sample": {
+              "sha256": "e15c5b469ea3e0a695bea6f2c82bcf8e62821074939ddd85b77e0007ff165475",
+              "mode": 493
+            },
+            ".git/hooks/pre-commit.sample": {
+              "sha256": "57185b7b9f05239d7ab52db045f5b89eb31348d7b2177eab214f5eb872e1971b",
+              "mode": 493
+            },
+            ".git/hooks/pre-merge-commit.sample": {
+              "sha256": "d3825a70337940ebbd0a5c072984e13245920cdf8898bd225c8d27a6dfc9cb53",
+              "mode": 493
+            },
+            ".git/hooks/pre-push.sample": {
+              "sha256": "ecce9c7e04d3f5dd9d8ada81753dd1d549a9634b26770042b58dda00217d086a",
+              "mode": 493
+            },
+            ".git/hooks/pre-rebase.sample": {
+              "sha256": "4febce867790052338076f4e66cc47efb14879d18097d1d61c8261859eaaa7b3",
+              "mode": 493
+            },
+            ".git/hooks/pre-receive.sample": {
+              "sha256": "a4c3d2b9c7bb3fd8d1441c31bd4ee71a595d66b44fcf49ddb310252320169989",
+              "mode": 493
+            },
+            ".git/hooks/prepare-commit-msg.sample": {
+              "sha256": "e9ddcaa4189fddd25ed97fc8c789eca7b6ca16390b2392ae3276f0c8e1aa4619",
+              "mode": 493
+            },
+            ".git/hooks/push-to-checkout.sample": {
+              "sha256": "a53d0741798b287c6dd7afa64aee473f305e65d3f49463bb9d7408ec3b12bf5f",
+              "mode": 493
+            },
+            ".git/hooks/sendemail-validate.sample": {
+              "sha256": "44ebfc923dc5466bc009602f0ecf067b9c65459abfe8868ddc49b78e6ced7a92",
+              "mode": 493
+            },
+            ".git/hooks/update.sample": {
+              "sha256": "8d5f2fa83e103cf08b57eaa67521df9194f45cbdbcb37da52ad586097a14d106",
+              "mode": 493
+            },
+            ".git/index": {
+              "sha256": "2a108e67747b17a5137afe0054753a5990985daf681c3735bc18dbd63b7a161c",
+              "mode": 420
+            },
+            ".git/info/exclude": {
+              "sha256": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1",
+              "mode": 493
+            },
+            ".git/logs/HEAD": {
+              "sha256": "89d0e31b892c40a4f28d3c92bc434d4ef1a8038d58962cf521a96e5bbe5d23a7",
+              "mode": 420
+            },
+            ".git/logs/refs/heads/master": {
+              "sha256": "89d0e31b892c40a4f28d3c92bc434d4ef1a8038d58962cf521a96e5bbe5d23a7",
+              "mode": 420
+            },
+            ".git/objects/1c/4164db8f1af4e42e50c7766e43a36c8fc08d69": {
+              "sha256": "4dfea554f0efaaa9e661a83d041bcfb6c0aef5ebf25c89babfb07aa091d14122",
+              "mode": 292
+            },
+            ".git/objects/34/c12068be214dce5845909ccdec78ca03da34ef": {
+              "sha256": "0d01fb1e7067a87a21c3dee0e20592a984ac8f2dc15b5f303a57d983439322f2",
+              "mode": 292
+            },
+            ".git/objects/4f/184aa51084789accc80a90f87841eb39225f7e": {
+              "sha256": "cc7eb15edc2aae16d7f43268ad500de43fb70f78d7fcdeb4e5520b2d568ec0e2",
+              "mode": 292
+            },
+            ".git/objects/5d/90422423db5ef6b431e8b9e60e0baf04b8742a": {
+              "sha256": "aa6cba99a0db7cc31a8377c5aa9df2543eae45298011142c2476c125bfecdd6e",
+              "mode": 292
+            },
+            ".git/objects/60/78dbbcf2fef4319c620bf26c007b164d4c23d3": {
+              "sha256": "8e1bdb72ecded88e2213e8f55efa600d060a22e0f5ba710cb24a004340634a03",
+              "mode": 292
+            },
+            ".git/objects/63/72542646253a792cd108abbc080d1a053215e9": {
+              "sha256": "b59ebfc9fe30173e31f10fd204a374550260aa74249b59f9f55715a609b4c7a3",
+              "mode": 292
+            },
+            ".git/objects/7e/b17b513653ebeaf5702e61a39b4b5739e5f730": {
+              "sha256": "60268f811de28db634fd2f378c409869631ba82d0c460b8c37c2b00fe1f29396",
+              "mode": 292
+            },
+            ".git/objects/9c/2eb90bbb754e20fbb623d6eb3f19c03c329915": {
+              "sha256": "af2385b9d86d75c6590715658dc4de935fe42a02f54ab48e5597d152d31e0344",
+              "mode": 292
+            },
+            ".git/objects/a3/effaf0bf560006f346b678adfad6cb78482f1c": {
+              "sha256": "902a90908fa4c75d2389af0102f383e284cd66dd3cae9b7ce995979ee0f2fd3e",
+              "mode": 292
+            },
+            ".git/objects/b1/2d9f73820b1930f7cc6171ab392a2caa165a11": {
+              "sha256": "718a29b9815022e950c2ff3aea37c903a2bd77e12d568dad2d8c9ad8718dae55",
+              "mode": 292
+            },
+            ".git/objects/f3/28e4d9d04c31d0d70d16d21a07d1613be9d577": {
+              "sha256": "1d3c9f53b4a5d5ca9962342e5165eaad2972fdcb5925e884e5085c3835935fde",
+              "mode": 292
+            },
+            ".git/objects/f4/aaba5109e83ce499897248288d018f314941e5": {
+              "sha256": "1c13d54c1676ee01b813973b77dedcbfe51c82e73e6c6f2c5956c76a397c31b6",
+              "mode": 292
+            },
+            ".git/refs/heads/master": {
+              "sha256": "8c592795e3cfb493c92eed5b5031439bb8c038460d7b4665d6675d69ae11d739",
+              "mode": 420
+            },
+            ".probe/provider": {
+              "sha256": "96a68e393cc70a0e1e3a58e5c2c7d44bf55be8ec339325a440c2b82dd0155367",
+              "mode": 493
+            },
+            ".probe/provider.mjs": {
+              "sha256": "38b0249b810b5523fc7933679f3d70b0f625390edd802b5b01e0ae99b5f6dbfc",
+              "mode": 420
+            },
+            "Cargo.lock": {
+              "sha256": "da4818238ac54f1d16545f71d0ed94f4adbce085c0fe57c78b7c0be2d24b6edd",
+              "mode": 420
+            },
+            "Cargo.toml": {
+              "sha256": "4258bb46b3de6cc1c3b872c5477afbe12dee736b098f4e91923d87100338cb57",
+              "mode": 420
+            },
+            "rename.txt": {
+              "sha256": "1f88a1a7db96abe301a757c402bb63eff04e756538b34a523d3ab7276a7633a8",
+              "mode": 420
+            },
+            "replace.txt": {
+              "sha256": "585474b5194ec86f1ec8540f0e490bb5bca326138fd96d119f340e4d8ef0cc87",
+              "mode": 420
+            },
+            "source.txt": {
+              "sha256": "67a56bbbf31832610a17acf8f421dba6ff5235cb27506f014e484b3976b14c7b",
+              "mode": 420
+            },
+            "src/main.rs": {
+              "sha256": "536e506bb90914c243a12b397b9a998f85ae2cbd9ba02dfd03a9e155ca5ca0f4",
+              "mode": 420
+            }
+          },
+          "denials": [
+            {
+              "operation": "rewrite",
+              "errno": 30
+            },
+            {
+              "operation": "create",
+              "errno": 30
+            },
+            {
+              "operation": "rename",
+              "errno": 30
+            },
+            {
+              "operation": "unlink",
+              "errno": 30
+            },
+            {
+              "operation": "chmod",
+              "errno": 30
+            },
+            {
+              "operation": "git-head",
+              "errno": 30
+            }
+          ],
+          "ordinaryBindFollowsHost": true,
+          "privateOutputUnchanged": true,
+          "mountinfo": [
+            "609 608 0:53 / /tmp/candidate ro,nosuid,nodev,relatime - tmpfs tmpfs rw,mode=755,uid=1001,gid=1001,inode64",
+            "610 608 0:54 / /tmp/target rw,nosuid,nodev,relatime - tmpfs tmpfs rw,mode=755,uid=1001,gid=1001,inode64",
+            "615 609 0:46 /bindfilerlbNRe//deleted /tmp/candidate/.git/COMMIT_EDITMSG ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "616 609 0:46 /bindfilez1lKhV//deleted /tmp/candidate/.git/HEAD ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "617 609 0:46 /bindfileyeGyOi//deleted /tmp/candidate/.git/config ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "618 609 0:46 /bindfileH2gR4G//deleted /tmp/candidate/.git/description ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "652 609 0:46 /bindfilejwKUOV//deleted /tmp/candidate/.git/hooks/applypatch-msg.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "653 609 0:46 /bindfileRY7bXF//deleted /tmp/candidate/.git/hooks/commit-msg.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "654 609 0:46 /bindfileeZivzd//deleted /tmp/candidate/.git/hooks/fsmonitor-watchman.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "655 609 0:46 /bindfileqFTMH0//deleted /tmp/candidate/.git/hooks/post-update.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "656 609 0:46 /bindfilejFjoWl//deleted /tmp/candidate/.git/hooks/pre-applypatch.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "657 609 0:46 /bindfilepmC7I5//deleted /tmp/candidate/.git/hooks/pre-commit.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "658 609 0:46 /bindfileMmEYWd//deleted /tmp/candidate/.git/hooks/pre-merge-commit.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "659 609 0:46 /bindfileaGfJEY//deleted /tmp/candidate/.git/hooks/pre-push.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "660 609 0:46 /bindfile6caywi//deleted /tmp/candidate/.git/hooks/pre-rebase.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "661 609 0:46 /bindfile73uyoT//deleted /tmp/candidate/.git/hooks/pre-receive.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "662 609 0:46 /bindfileWhQqUZ//deleted /tmp/candidate/.git/hooks/prepare-commit-msg.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "664 609 0:46 /bindfileh1og9U//deleted /tmp/candidate/.git/hooks/push-to-checkout.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "665 609 0:46 /bindfilekX6xd6//deleted /tmp/candidate/.git/hooks/sendemail-validate.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "666 609 0:46 /bindfile3Ylcby//deleted /tmp/candidate/.git/hooks/update.sample ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "667 609 0:46 /bindfileiPHPnb//deleted /tmp/candidate/.git/index ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "668 609 0:46 /bindfileBAux3G//deleted /tmp/candidate/.git/info/exclude ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "669 609 0:46 /bindfileLCmM1L//deleted /tmp/candidate/.git/logs/HEAD ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "670 609 0:46 /bindfile5DPpzX//deleted /tmp/candidate/.git/logs/refs/heads/master ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "671 609 0:46 /bindfileaBbyyc//deleted /tmp/candidate/.git/objects/1c/4164db8f1af4e42e50c7766e43a36c8fc08d69 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "672 609 0:46 /bindfilehbdaVK//deleted /tmp/candidate/.git/objects/34/c12068be214dce5845909ccdec78ca03da34ef ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "673 609 0:46 /bindfileeYkMGN//deleted /tmp/candidate/.git/objects/4f/184aa51084789accc80a90f87841eb39225f7e ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "674 609 0:46 /bindfileAgNuSn//deleted /tmp/candidate/.git/objects/5d/90422423db5ef6b431e8b9e60e0baf04b8742a ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "675 609 0:46 /bindfileHR8UOQ//deleted /tmp/candidate/.git/objects/60/78dbbcf2fef4319c620bf26c007b164d4c23d3 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "676 609 0:46 /bindfileejEZ7D//deleted /tmp/candidate/.git/objects/63/72542646253a792cd108abbc080d1a053215e9 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "677 609 0:46 /bindfileu5xPO5//deleted /tmp/candidate/.git/objects/7e/b17b513653ebeaf5702e61a39b4b5739e5f730 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "678 609 0:46 /bindfilegsOrji//deleted /tmp/candidate/.git/objects/9c/2eb90bbb754e20fbb623d6eb3f19c03c329915 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "679 609 0:46 /bindfileJZ4Neh//deleted /tmp/candidate/.git/objects/a3/effaf0bf560006f346b678adfad6cb78482f1c ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "682 609 0:46 /bindfile8eSj4c//deleted /tmp/candidate/.git/objects/b1/2d9f73820b1930f7cc6171ab392a2caa165a11 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "683 609 0:46 /bindfilen84kp1//deleted /tmp/candidate/.git/objects/f3/28e4d9d04c31d0d70d16d21a07d1613be9d577 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "717 609 0:46 /bindfile45mJN2//deleted /tmp/candidate/.git/objects/f4/aaba5109e83ce499897248288d018f314941e5 ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "718 609 0:46 /bindfileCA1MXE//deleted /tmp/candidate/.git/refs/heads/master ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "719 609 0:46 /bindfileO6383q//deleted /tmp/candidate/.probe/provider ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "720 609 0:46 /bindfileGvY1FS//deleted /tmp/candidate/.probe/provider.mjs ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "721 609 0:46 /bindfileHZiKAL//deleted /tmp/candidate/Cargo.lock ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "722 609 0:46 /bindfile97y4qW//deleted /tmp/candidate/Cargo.toml ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "723 609 0:46 /bindfileDvKpBm//deleted /tmp/candidate/rename.txt ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "724 609 0:46 /bindfiletrFDJZ//deleted /tmp/candidate/replace.txt ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "725 609 0:46 /bindfileY5ZPpR//deleted /tmp/candidate/source.txt ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64",
+            "730 609 0:46 /bindfileHjYP1S//deleted /tmp/candidate/src/main.rs ro,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1001,gid=1001,inode64"
+          ],
+          "cargo": {
+            "cargoExit": 101,
+            "sealedSha256": "4b9fb6701ee40ae695187c548ab83f4cdabdc86357d7b4170bc0f0fe0faea951",
+            "repackagedSha256": "4b9fb6701ee40ae695187c548ab83f4cdabdc86357d7b4170bc0f0fe0faea951",
+            "stderr": "    Updating `probe` index\n   Packaging tkt-mount-fixture v0.0.1 (/tmp/candidate)\n    Packaged 5 files, 1.2KiB (872B compressed)\n   Uploading tkt-mount-fixture v0.0.1 (/tmp/candidate)\nerror: failed to publish tkt-mount-fixture v0.0.1 to registry at http://127.0.0.1:41057\n\nCaused by:\n  the remote server responded with an error (status 400 Bad Request): Local capture deliberately refused\n"
+          }
+        },
+        "captures": [
+          {
+            "sha256": "4b9fb6701ee40ae695187c548ab83f4cdabdc86357d7b4170bc0f0fe0faea951",
+            "size": 872,
+            "dummyAuthorizationMatched": true
+          }
+        ],
+        "limits": [
+          "Disposable dependency-free fixture; actual tkt dependencies and production transport lifecycle remain untested",
+          "Dummy credential and localhost refusing capture only; no real registry publication",
+          "No hostile root, ptrace, process replacement or mount-namespace entry claim",
+          "Host runtime remains trusted through a read-only root bind",
+          "Data-backed mounts copy sealed inputs; destination inodes do not inherit seals"
+        ]
+      }
+    }
+  },
+  "priorRootFailure": {
+    "runId": 40062087705,
+    "sourceSha": "11859adcc133b7d890aa75fffba2ea678c698d90",
+    "result": {
+      "status": "error",
+      "metrics": {},
+      "errors": [
+        "private mount setup failed: Traceback (most recent call last):\n  File \"<string>\", line 17, in <module>\n  File \"<string>\", line 14, in cargo\n  File \"/usr/lib/python3.10/subprocess.py\", line 503, in run\n    with Popen(*popenargs, **kwargs) as process:\n  File \"/usr/lib/python3.10/subprocess.py\", line 971, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.10/subprocess.py\", line 1863, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nPermissionError: [Errno 13] Permission denied: '/home/runner/.rustup/toolchains/1.99.1-x86_64-unknown-linux-gnu/bin/cargo'\n"
+      ]
+    }
+  },
+  "publicationAuthorized": false,
+  "productionTransportComplete": false
+}

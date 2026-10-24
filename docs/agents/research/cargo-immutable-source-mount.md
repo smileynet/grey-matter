@@ -2,6 +2,11 @@
 
 Date: 2026-10-23. Research only. No tools installed, runner execution or registry calls. Read the existing Cargo transport and read-only-boundary research first.
 
+Execution follow-up: the later [Linux/private-Cargo probe](cargo-private-mount-probe.md)
+verifies the dependency-free fixture on bubblewrap 0.6.1. The research-only and
+unverified labels below describe this original source investigation; actual tkt
+inputs and the production lifecycle still require integration tests.
+
 ## Answer
 
 [L4:inferred] Yes for concurrent writers changing the **original checkout**: capture verified bytes into sealed memfds, then construct a separate complete source tree with `--ro-bind-data`. Cargo must read only that tree. Host changes to the old checkout then have no shared source inode to modify. This is a credible implementation candidate, not executed evidence or a general defense against a hostile host process with ptrace/root privileges.
