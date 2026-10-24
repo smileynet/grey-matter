@@ -281,3 +281,18 @@ No production workflow dispatch, registry upload, tag or stable promotion ran.
 Remaining 68 work: runner-loss cleanup proof, one integrated independent review,
 fixes/retesting and requirement-by-requirement closure evidence. The final candidate
 and installation/audit/staging tickets stay open; do not reuse old drafts.
+
+## Parent-loss verification checkpoint (2026-10-23)
+
+The [parent-loss report](../docs/agents/research/cargo-parent-loss-probe.md) and
+committed JSON retain three failed controls and successful run 40070114004 at
+grey309a739/tkt93f83c5. Removing host staging inputs before prepared/intent now
+passes both parent-kill cases: four/five descendants stop, host inputs are already
+gone, before-intent has zero callback/PUT, and a held-upload case has one exact
+localhost capture with an explicitly unconfirmed outcome. All six prepared
+transport regressions also pass. No production publication was exercised.
+
+The runtime phase gate is now satisfied within the report's stated scope. Next:
+one independent integrated Standards/Spec review, reproduce and resolve findings,
+then reconcile all six acceptance criteria with fresh evidence before closing68.
+Do not regenerate final candidates until those blockers are resolved.

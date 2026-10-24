@@ -1,0 +1,481 @@
+{
+  "status": "pass",
+  "date": "2026-10-23",
+  "scope": "Linux parent loss after private preparation; localhost only",
+  "sourceCommit": "309a739b626fc1c24d932e97a40c25f00d64fc87",
+  "tktVendorCommit": "93f83c58e4965f1d4b7bd033189c444e9912345e",
+  "artifact": {
+    "id": 12551300725,
+    "name": "cargo-private-mount-40070114004-1",
+    "jobId": 120801532011,
+    "apiDigest": "sha256:174608be884d42089467e9cf3a2819eaf7d5b63267716ed6b586643cdca243c1",
+    "independentZipDigestVerified": false
+  },
+  "sourceSha256": {
+    "scripts/release-cargo-transport.py": "cd0115a8579406838fca6652d65db5f9031f0c8b188245ebf59fd374d775b0f8",
+    "scripts/release-cargo-lifecycle.integration.mjs": "0aa1623a92d51df3d968a21858efbe62b72152920e90544dcad32e4c376a8470",
+    "scripts/release-cargo-upload.mjs": "dcded68ef82b73dc33edd77f6181fdb7cc4bd52011bc3e46238b32fe4d6ea794",
+    ".github/workflows/cargo-boundary-probe.yml": "8ebcffa4f1ff6bf600b8010445f5ca4e27f8be1c29fc7dd1b34688e3f0542bc5"
+  },
+  "runs": [
+    {
+      "runId": 40068935783,
+      "runUrl": "https://github.com/smileynet/grey-matter/actions/runs/40068935783",
+      "sourceCommit": "d9af55dab739397c8d55599227249df5db284fd0",
+      "resultSha256": "cac753397d5f788ce5b80de790df14afc64afa541e932f4ac5b34e28d09bdc08",
+      "result": {
+        "status": "fail",
+        "rows": [
+          {
+            "name": "parent-loss-before-intent",
+            "stoppedDescendants": 4,
+            "temporaryDirectoriesRemoved": false,
+            "credentialCalls": 0,
+            "puts": 0,
+            "uploadOutcome": "not-attempted"
+          }
+        ],
+        "errors": [
+          "parent loss left the owned temporary transport tree behind\n\nfalse !== true\n"
+        ],
+        "realRegistryPublication": false
+      }
+    },
+    {
+      "runId": 40069175062,
+      "runUrl": "https://github.com/smileynet/grey-matter/actions/runs/40069175062",
+      "sourceCommit": "5e7109ef34dc79adaf1e6d31a74c6114b9e59d1b",
+      "resultSha256": "cc35868937399249b083a800fb27460694a3cdd93fc93f2549a120eb504145bf",
+      "result": {
+        "status": "fail",
+        "rows": [
+          {
+            "name": "parent-loss-before-intent",
+            "stoppedDescendants": 4,
+            "temporaryDirectoriesRemoved": true,
+            "credentialCalls": 0,
+            "puts": 0,
+            "uploadOutcome": "not-attempted"
+          },
+          {
+            "name": "parent-loss-during-upload",
+            "stoppedDescendants": 5,
+            "temporaryDirectoriesRemoved": false,
+            "credentialCalls": 1,
+            "puts": 1,
+            "uploadOutcome": "unconfirmed-localhost-capture"
+          }
+        ],
+        "errors": [
+          "parent loss left the owned temporary transport tree behind\n\nfalse !== true\n"
+        ],
+        "realRegistryPublication": false
+      }
+    },
+    {
+      "runId": 40069712173,
+      "runUrl": "https://github.com/smileynet/grey-matter/actions/runs/40069712173",
+      "sourceCommit": "3b19c2466debfb3ecee23cea5b1ca89a2c92e06a",
+      "resultSha256": "c893815c57bd6f014a0cedb05e9868e7cf084aad684e5f07b891e1d5a6a1c513",
+      "result": {
+        "status": "fail",
+        "rows": [
+          {
+            "name": "parent-loss-before-intent",
+            "stoppedDescendants": 4,
+            "temporaryDirectoriesRemoved": true,
+            "processExits": [
+              {
+                "before": {
+                  "pid": 3514,
+                  "command": "python3",
+                  "state": "S",
+                  "start": "14264",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3541,
+                  "command": "bwrap",
+                  "state": "S",
+                  "start": "14276",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3542,
+                  "command": "bwrap",
+                  "state": "S",
+                  "start": "14276",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3543,
+                  "command": "python3",
+                  "state": "S",
+                  "start": "14277",
+                  "exitCode": 0
+                },
+                "after": null
+              }
+            ],
+            "remainingTopLevel": [
+              []
+            ],
+            "credentialCalls": 0,
+            "puts": 0,
+            "uploadOutcome": "not-attempted"
+          },
+          {
+            "name": "parent-loss-during-upload",
+            "stoppedDescendants": 5,
+            "temporaryDirectoriesRemoved": false,
+            "processExits": [
+              {
+                "before": {
+                  "pid": 3569,
+                  "command": "python3",
+                  "state": "S",
+                  "start": "14294",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3596,
+                  "command": "bwrap",
+                  "state": "S",
+                  "start": "14309",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3597,
+                  "command": "bwrap",
+                  "state": "S",
+                  "start": "14309",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3598,
+                  "command": "python3",
+                  "state": "S",
+                  "start": "14310",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3618,
+                  "command": "cargo",
+                  "state": "S",
+                  "start": "14320",
+                  "exitCode": 0
+                },
+                "after": null
+              }
+            ],
+            "remainingTopLevel": [
+              [
+                "candidate",
+                "cargo-home",
+                "helpers"
+              ]
+            ],
+            "credentialCalls": 1,
+            "puts": 1,
+            "uploadOutcome": "unconfirmed-localhost-capture"
+          }
+        ],
+        "errors": [
+          "parent loss left the owned temporary transport tree behind\n\nfalse !== true\n"
+        ],
+        "realRegistryPublication": false
+      }
+    },
+    {
+      "runId": 40070114004,
+      "runUrl": "https://github.com/smileynet/grey-matter/actions/runs/40070114004",
+      "sourceCommit": "309a739b626fc1c24d932e97a40c25f00d64fc87",
+      "resultSha256": "5728537df3ffc03167481134be663b4ffee442662010fc5778a5dc57185d6627",
+      "result": {
+        "status": "pass",
+        "metrics": {
+          "cases": 2,
+          "puts": 1
+        },
+        "rows": [
+          {
+            "name": "parent-loss-before-intent",
+            "stoppedDescendants": 4,
+            "temporaryDirectoriesRemoved": true,
+            "removedBeforeIntent": true,
+            "processExits": [
+              {
+                "before": {
+                  "pid": 3385,
+                  "command": "python3",
+                  "state": "S",
+                  "start": "7532",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3412,
+                  "command": "bwrap",
+                  "state": "S",
+                  "start": "7545",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3413,
+                  "command": "bwrap",
+                  "state": "S",
+                  "start": "7545",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3414,
+                  "command": "python3",
+                  "state": "S",
+                  "start": "7546",
+                  "exitCode": 0
+                },
+                "after": null
+              }
+            ],
+            "remainingTopLevel": [
+              []
+            ],
+            "credentialCalls": 0,
+            "puts": 0,
+            "uploadOutcome": "not-attempted"
+          },
+          {
+            "name": "parent-loss-during-upload",
+            "stoppedDescendants": 5,
+            "temporaryDirectoriesRemoved": true,
+            "removedBeforeIntent": true,
+            "processExits": [
+              {
+                "before": {
+                  "pid": 3440,
+                  "command": "python3",
+                  "state": "S",
+                  "start": "7570",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3467,
+                  "command": "bwrap",
+                  "state": "S",
+                  "start": "7582",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3468,
+                  "command": "bwrap",
+                  "state": "S",
+                  "start": "7582",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3469,
+                  "command": "python3",
+                  "state": "S",
+                  "start": "7583",
+                  "exitCode": 0
+                },
+                "after": null
+              },
+              {
+                "before": {
+                  "pid": 3489,
+                  "command": "cargo",
+                  "state": "S",
+                  "start": "7594",
+                  "exitCode": 0
+                },
+                "after": null
+              }
+            ],
+            "remainingTopLevel": [
+              []
+            ],
+            "credentialCalls": 1,
+            "puts": 1,
+            "uploadOutcome": "unconfirmed-localhost-capture"
+          }
+        ],
+        "realRegistryPublication": false
+      }
+    }
+  ],
+  "preparedTransportRegression": {
+    "resultSha256": "122a28e5277b72073d3cb569b81593db2d5aace7f8f529a18c7042102c4a11eb",
+    "result": {
+      "status": "pass",
+      "metrics": {
+        "cases": 6,
+        "puts": 3
+      },
+      "errors": [],
+      "rows": [
+        {
+          "name": "fixture-capture",
+          "candidateSha": "59f22b3af7687bd8c4ace33235cff30b647dd456",
+          "version": "0.0.1",
+          "evidence": {
+            "status": "pass",
+            "phase": "prepared",
+            "candidateSha": "59f22b3af7687bd8c4ace33235cff30b647dd456",
+            "sha256": "9d90f1b154652345e18f7919f136b0efbb8ecf96aeb2fc44a7dca5486147d2d4",
+            "size": 908,
+            "inventorySha256": "4d9c8498b32d71ac3aa5ea17ee3840263e0c4c9a82f2e9f3cf78e77aae37a252",
+            "files": 14
+          },
+          "captured": {
+            "sha256": "9d90f1b154652345e18f7919f136b0efbb8ecf96aeb2fc44a7dca5486147d2d4",
+            "size": 908,
+            "name": "tkt",
+            "version": "0.0.1",
+            "readmeSha256": "127dae3d76a2ea594707000f56d54f9daf24f1c7918554056c41e20f47abdff4",
+            "dummyAuthorizationMatched": true
+          },
+          "tokenCalls": 1,
+          "puts": 1,
+          "expectedMockRefusal": true,
+          "syntheticGithub": false,
+          "events": [
+            "credential"
+          ]
+        },
+        {
+          "name": "fixture-cancel",
+          "result": "closed-before-intent",
+          "tokenCalls": 0,
+          "puts": 0
+        },
+        {
+          "name": "fixture-wrong-seal",
+          "result": "preflight-refused",
+          "tokenCalls": 0,
+          "puts": 0
+        },
+        {
+          "name": "fixture-real-token",
+          "result": "real-token-refused",
+          "tokenCalls": 1,
+          "puts": 0
+        },
+        {
+          "name": "fixture-coordinated",
+          "candidateSha": "e4fdde86c843141484a140e3e9e4eaf1fcd749fb",
+          "version": "0.0.1",
+          "evidence": {
+            "status": "pass",
+            "phase": "prepared",
+            "candidateSha": "e4fdde86c843141484a140e3e9e4eaf1fcd749fb",
+            "sha256": "74f5169511d9813ee0f28569ce32042d82f27c3a42c8c99e7754e74a4a61996a",
+            "size": 907,
+            "inventorySha256": "da1b7822e4b59c750246e04c8e0d1179a8a92050aed9ae613ad6ca883a259860",
+            "files": 14
+          },
+          "captured": {
+            "sha256": "74f5169511d9813ee0f28569ce32042d82f27c3a42c8c99e7754e74a4a61996a",
+            "size": 907,
+            "name": "tkt",
+            "version": "0.0.1",
+            "readmeSha256": "127dae3d76a2ea594707000f56d54f9daf24f1c7918554056c41e20f47abdff4",
+            "dummyAuthorizationMatched": true
+          },
+          "tokenCalls": 1,
+          "puts": 1,
+          "expectedMockRefusal": false,
+          "syntheticGithub": true,
+          "events": [
+            "prepare",
+            "draft",
+            "upload:tkt-0.0.1.crate",
+            "upload:plugin.tar.gz",
+            "upload:tkt-registry-intent.json",
+            "credential",
+            "github-publish",
+            "stable-observed",
+            "stable-observed"
+          ]
+        },
+        {
+          "name": "actual-tkt-coordinated",
+          "candidateSha": "640acb4ad078b13f1719a8323d93b176897b48ce",
+          "version": "0.4.0",
+          "evidence": {
+            "status": "pass",
+            "phase": "prepared",
+            "candidateSha": "640acb4ad078b13f1719a8323d93b176897b48ce",
+            "sha256": "a5169e904f8c7b35d30805898103d3ab9d0616406851141855ece350c590c098",
+            "size": 119647,
+            "inventorySha256": "bc104144809f202aa8f47a831754336f85f5f5ebf99898e69afb33ef5fbe184e",
+            "files": 357
+          },
+          "captured": {
+            "sha256": "a5169e904f8c7b35d30805898103d3ab9d0616406851141855ece350c590c098",
+            "size": 119647,
+            "name": "tkt",
+            "version": "0.4.0",
+            "readmeSha256": "00662fc09dd8487d7ff642592e84b83a11dc08d4387b1a5a267a8a0afb3ceb0b",
+            "dummyAuthorizationMatched": true
+          },
+          "tokenCalls": 1,
+          "puts": 1,
+          "expectedMockRefusal": false,
+          "syntheticGithub": true,
+          "events": [
+            "prepare",
+            "draft",
+            "upload:tkt-0.4.0.crate",
+            "upload:plugin.tar.gz",
+            "upload:tkt-registry-intent.json",
+            "credential",
+            "github-publish",
+            "stable-observed",
+            "stable-observed"
+          ]
+        }
+      ],
+      "realRegistryPublication": false
+    }
+  },
+  "realRegistryPublication": false
+}

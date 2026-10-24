@@ -43,8 +43,8 @@ a localhost mock; GitHub/stable operations in coordinated cases are synthetic.
 No production credential, release, tag, crate or stable promotion is exercised.
 
 This component does not complete the review-bound sole CI publisher or local
-dispatch/observer. Explicit close is tested; runner-loss cleanup needs separate
-verification. Trusted runtime/OS assumptions remain; no hostile-root, ptrace or
+dispatch/observer. Explicit close and subsequent [parent-loss cleanup](cargo-parent-loss-probe.md)
+are tested; the latter report retains its phase limits. Trusted runtime/OS assumptions remain; no hostile-root, ptrace or
 network egress-filter protection is claimed. Final candidate/platform/install
 verification and integrated independent review remain required by ticket 68 and
 the [review sequence](../proposals/09-release-readiness.md#review-order-and-evidence-reuse).
