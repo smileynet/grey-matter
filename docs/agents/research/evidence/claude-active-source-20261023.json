@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "observedAt": "2026-10-24T02:58:23.652234+00:00",
+  "status": "pass",
+  "engineVersion": "1.5.0",
+  "engineSha256": "c674b2b22ca33e104c4a31dee8c8a805b0fab2a698615cb122e4e497fd918afd",
+  "vendorMatches": true,
+  "deployCommand": "node scripts/deploy.mjs --portfolio skill-packs.json",
+  "deployInvocations": 1,
+  "auditCommand": "node scripts/deploy.mjs audit --strict --json --portfolio skill-packs.json",
+  "audit": {
+    "status": "pass",
+    "metrics": {
+      "plugins": 19,
+      "packs": 4
+    },
+    "findings": [],
+    "errors": []
+  },
+  "plugins": [
+    {
+      "harness": "claude",
+      "id": "grey-matter@grey-matter",
+      "path": "/Users/sambiggins/code/grey-matter",
+      "skills": 45,
+      "spikeOptionsPresent": true
+    },
+    {
+      "harness": "claude",
+      "id": "tkt@tkt",
+      "path": "/Users/sambiggins/code/tkt",
+      "skills": 4,
+      "spikeOptionsPresent": false
+    },
+    {
+      "harness": "codex",
+      "id": "grey-matter@grey-matter",
+      "path": "/Users/sambiggins/.codex/plugins/cache/grey-matter/grey-matter/0.1.0",
+      "skills": 45,
+      "spikeOptionsPresent": true
+    },
+    {
+      "harness": "codex",
+      "id": "tkt@tkt",
+      "path": "/Users/sambiggins/.codex/plugins/cache/tkt/tkt/0.4.0",
+      "skills": 4,
+      "spikeOptionsPresent": false
+    }
+  ],
+  "checks": {
+    "greyInvariants": 12,
+    "deployFixtures": 32,
+    "tktNodeChecks": 14,
+    "tktRustDeployTests": 6
+  },
+  "limits": [
+    "CLI active-source selection and disk/audit evidence; no fresh-session model-context capture for spike-options.",
+    "Local macOS checks; hosted Windows/Linux source revision validation remains to run."
+  ]
+}

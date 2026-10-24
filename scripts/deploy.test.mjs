@@ -261,7 +261,7 @@ function homeSandbox({ harnesses = [], claude = false, codex = false } = {}) {
   cpSync(join(HERE, "..", "skills"), join(cached, "skills"), { recursive: true });
   cpSync(join(HERE, "..", ".codex-plugin", "plugin.json"), join(cached, ".codex-plugin", "plugin.json"));
   }
-  // A fake CLI keeps plugin refresh tests offline and away from the real Codex cache.
+  // Fake CLIs keep plugin observations offline and away from real user state.
   const bin = join(home, "bin");
   mkdirSync(bin);
   const cli = join(bin, process.platform === "win32" ? "codex.exe" : "codex");
@@ -269,11 +269,18 @@ function homeSandbox({ harnesses = [], claude = false, codex = false } = {}) {
   writeFileSync(script, `#!${process.execPath}
 const fs = require("node:fs");
 const path = require("node:path");
-if (process.platform !== "win32" || path.basename(process.execPath).toLowerCase() === "codex.exe") {
+if (process.platform !== "win32" || ["codex.exe", "claude.exe"].includes(path.basename(process.execPath).toLowerCase())) {
 const home = process.env.HOME;
 const pack = process.env.TEST_PACK;
 const args = process.platform === "win32" ? [path.basename(process.argv[1]), ...process.argv.slice(2)] : process.argv.slice(2);
-fs.appendFileSync(path.join(home, "codex-calls.jsonl"), JSON.stringify(args) + "\\n");
+const harness = path.basename(process.platform === "win32" ? process.execPath : process.argv[1]).startsWith("claude") ? "claude" : "codex";
+fs.appendFileSync(path.join(home, harness + "-calls.jsonl"), JSON.stringify(args) + "\\n");
+if (harness === "claude") {
+  if (process.env.TEST_CLAUDE_FAIL) process.exit(1);
+  if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+  console.log(process.env.TEST_CLAUDE_PLUGIN_LIST || JSON.stringify([{id: "grey-matter@grey-matter", enabled: true, installPath: path.join(home, "old-cache"), readFromFolder: pack, folderVersion: "0.1.0"}]));
+  process.exit(0);
+}
 if (args[1] === "list") {
   console.log(process.env.TEST_PLUGIN_LIST || JSON.stringify({installed: [{pluginId: "grey-matter@grey-matter", name: "grey-matter", marketplaceName: "grey-matter", version: "0.1.0", enabled: true, source: {source: "local", path: process.env.TEST_PLUGIN_SOURCE || pack}}]}));
 } else {
@@ -289,6 +296,7 @@ process.exit(0);
   // Windows execFile needs a native executable; preload the fixture only in its copy.
   if (process.platform === "win32") cpSync(process.execPath, cli);
   chmodSync(cli, 0o755);
+  cpSync(cli, join(bin, process.platform === "win32" ? "claude.exe" : "claude"));
   const env = { ...process.env, HOME: home, USERPROFILE: home, PATH: bin + delimiter + dirname(process.execPath), TEST_PACK: dirname(HERE) };
   if (process.platform === "win32") env.NODE_OPTIONS = `--require ${JSON.stringify(script.replaceAll("\\", "/"))}`;
   delete env.CODEX_HOME;
@@ -632,4 +640,92 @@ test("legal artifacts: bundles and bare skills retain notices, and missing or em
     assert.equal(runWithEnv(["install", "--pack", pack, "--root", bare, "--no-agy"], sb.env).status, 0);
     assert.equal(readFileSync(join(bare, "example", "LICENSE"), "utf8"), "retained copyright and license\n");
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+
+test("Claude: default deploy verifies the active source once; dry-run and explicit roots do not", () => {
+  const sb = homeSandbox({ harnesses: ["claude"], claude: true });
+  try {
+    const bare = join(sb.home, ".claude", "skills");
+    assert.equal(runWithEnv(["--root", bare, "--allow-dual"], sb.env).status, 0);
+    mkdirSync(join(bare, "foreign"));
+    for (let count = 1; count <= 2; count++) {
+      const result = runWithEnv(["--no-agy"], sb.env);
+      assert.equal(result.status, 0, result.stdout);
+      assert.match(result.stdout, /verified Claude plugin grey-matter@grey-matter/);
+      const calls = readFileSync(join(sb.home, "claude-calls.jsonl"), "utf8").trim().split("\n").map(JSON.parse);
+      assert.deepEqual(calls, Array.from({length: count}, () => ["plugin", "list", "--json"]));
+      assert.ok(!sb.has(".claude/skills")); assert.ok(existsSync(join(bare, "foreign")));
+    }
+    const before = readFileSync(join(sb.home, "claude-calls.jsonl"), "utf8");
+    assert.equal(runWithEnv(["--dry-run", "--no-agy"], sb.env).status, 0);
+    assert.equal(runWithEnv(["--root", join(sb.home, ".kiro", "skills")], sb.env).status, 0);
+    assert.equal(readFileSync(join(sb.home, "claude-calls.jsonl"), "utf8"), before);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("Claude: foreign, stale-version, legacy and failed source observations preserve bare copies", () => {
+  const sb = homeSandbox({ harnesses: ["claude"], claude: true });
+  try {
+    const bare = join(sb.home, ".claude", "skills");
+    assert.equal(runWithEnv(["--root", bare, "--allow-dual"], sb.env).status, 0);
+    const row = {id: "grey-matter@grey-matter", enabled: true, readFromFolder: dirname(HERE), folderVersion: "0.1.0"};
+    for (const extra of [
+      {TEST_CLAUDE_FAIL: "1"},
+      {TEST_CLAUDE_PLUGIN_LIST: "{}"},
+      {TEST_CLAUDE_PLUGIN_LIST: JSON.stringify([{...row, readFromFolder: sb.home}])},
+      {TEST_CLAUDE_PLUGIN_LIST: JSON.stringify([{...row, folderVersion: "0.0.1"}])},
+      {TEST_CLAUDE_PLUGIN_LIST: JSON.stringify([{id: row.id, enabled: true, installPath: sb.home}])},
+      {TEST_CLAUDE_PLUGIN_LIST: JSON.stringify([row, {...row, id: "grey-matter@other"}])},
+    ]) {
+      const result = runWithEnv(["--no-agy"], {...sb.env, ...extra});
+      assert.notEqual(result.status, 0, result.stdout); assert.ok(sb.has(".claude/skills"));
+    }
+    assert.equal(runWithEnv(["--no-agy"], {...sb.env, TEST_CLAUDE_PLUGIN_LIST: JSON.stringify([{...row, enabled: false}])}).status, 0);
+    assert.ok(sb.has(".claude/skills"), "disabled plugin needs a bare copy");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("Claude audit: active folder supersedes a stale cache; disabled plugins and failed reads stay explicit", () => {
+  const sb = homeSandbox({ harnesses: ["claude"], claude: true });
+  try {
+    const row = {id: "grey-matter@grey-matter", enabled: true, installPath: join(sb.home, "stale-cache"), readFromFolder: dirname(HERE), folderVersion: "0.1.0"};
+    const env = {...sb.env, TEST_CLAUDE_PLUGIN_LIST: JSON.stringify([row])};
+    const result = runWithEnv(["audit", "--json", "--strict"], env);
+    assert.equal(result.status, 0, result.stdout);
+    const data = JSON.parse(result.stdout);
+    assert.equal(data.inventory[0].path, dirname(HERE)); assert.equal(data.inventory[0].skills.length, SKILL_COUNT);
+    const foreign = join(sb.home, "foreign-source");
+    cpSync(join(dirname(HERE), "skills"), join(foreign, "skills"), {recursive: true});
+    mkdirSync(join(foreign, ".claude-plugin"));
+    cpSync(join(dirname(HERE), ".claude-plugin", "plugin.json"), join(foreign, ".claude-plugin", "plugin.json"));
+    const wrong = runWithEnv(["audit", "--json", "--strict"], {...env, TEST_CLAUDE_PLUGIN_LIST: JSON.stringify([{...row, readFromFolder: foreign}])});
+    assert.equal(wrong.status, 1); assert.ok(JSON.parse(wrong.stdout).findings.some((finding) => finding.includes("active folder differs")));
+    const disabled = runWithEnv(["audit", "--json", "--strict"], {...env, TEST_CLAUDE_PLUGIN_LIST: JSON.stringify([{...row, enabled: false}])});
+    assert.equal(disabled.status, 0, disabled.stdout); assert.equal(JSON.parse(disabled.stdout).inventory.length, 0);
+    const legacy = runWithEnv(["audit", "--json", "--strict"], {...env, TEST_CLAUDE_PLUGIN_LIST: JSON.stringify([{id: row.id, enabled: true, installPath: dirname(HERE)}])});
+    assert.equal(legacy.status, 1); assert.ok(JSON.parse(legacy.stdout).findings.some((finding) => finding.includes("local source selection unverified")));
+    const failed = runWithEnv(["audit", "--json", "--strict"], {...env, TEST_CLAUDE_FAIL: "1"});
+    assert.equal(failed.status, 1); assert.ok(JSON.parse(failed.stdout).findings.some((finding) => finding.includes("Claude installed inventory unavailable")));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("Claude portfolio: verify each local pack once without invoking update or install", () => {
+  const sb = homeSandbox({harnesses: ["claude"], claude: true});
+  try {
+    const other = join(sb.home, "other");
+    mkdirSync(join(other, ".claude-plugin"), {recursive: true});
+    writeFileSync(join(other, ".claude-plugin", "plugin.json"), JSON.stringify({name: "other", version: "1.0.0"}));
+    mkdirSync(join(other, "skills", "other-core"), {recursive: true});
+    writeFileSync(join(other, "skills", "other-core", "SKILL.md"), "---\nname: other-core\n---\nOther pack");
+    writeFileSync(join(sb.home, ".claude", "plugins", "installed_plugins.json"), JSON.stringify({version: 2, plugins: {"grey-matter@grey-matter": [{}], "other@other": [{}]}}));
+    const portfolio = join(sb.home, "packs.json");
+    writeFileSync(portfolio, JSON.stringify({packs: [{name: "grey-matter", path: dirname(HERE)}, {name: "other", path: other}]}));
+    const rows = [{id: "grey-matter@grey-matter", enabled: true, readFromFolder: dirname(HERE), folderVersion: "0.1.0"}, {id: "other@other", enabled: true, readFromFolder: other, folderVersion: "1.0.0"}];
+    const result = runWithEnv(["--portfolio", portfolio, "--no-agy"], {...sb.env, TEST_CLAUDE_PLUGIN_LIST: JSON.stringify(rows)});
+    assert.equal(result.status, 0, result.stdout);
+    assert.equal((result.stdout.match(/verified Claude plugin/g) ?? []).length, 2);
+    assert.deepEqual(readFileSync(join(sb.home, "claude-calls.jsonl"), "utf8").trim().split("\n").map(JSON.parse), [["plugin", "list", "--json"], ["plugin", "list", "--json"]]);
+    assert.ok(!sb.has(".claude/skills"));
+  } finally { rmSync(sb.home, {recursive: true, force: true}); }
 });

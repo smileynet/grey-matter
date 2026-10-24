@@ -81,6 +81,12 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   skips Claude-read roots while the plugin is installed (`--allow-dual` overrides).
   **Test locally**: `claude --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`
   lists the components without a model call.
+- **Local source verification** (CLI 2.1.310): `claude plugin list --json` reports
+  `readFromFolder` and `folderVersion` for enabled directory-marketplace plugins.
+  Default deploy verifies this checkout/version once per pack before pruning copies.
+  Audit reads that active folder; the old `installPath` cache can remain stale.
+  Reload plugins or start a new chat after edits. A failed/foreign/legacy source
+  observation stops deploy and preserves copies; see [refresh evidence](research/claude-local-refresh.md).
 
 ### agy (ancillary, Google Antigravity CLI)
 

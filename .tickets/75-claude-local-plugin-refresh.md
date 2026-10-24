@@ -68,3 +68,20 @@ reports direct folder loading with reload/new-session semantics. No extra
 installation or cache edit is needed. Verify this source selection in normal
 deploy before pruning, and audit the active folder rather than the historical
 cache; reject legacy/foreign/failed CLI observations. See the research follow-up.
+
+## Implementation and live evidence
+
+Engine 1.5.0 verifies enabled Claude `readFromFolder`/`folderVersion` against the
+checkout before pruning. Disabled plugins permit bare-root coverage; failed,
+foreign, ambiguous and legacy source observations preserve existing copies.
+Audit uses enabled CLI rows, selects active folders ahead of historical caches,
+and makes unverifiable local selection an explicit strict finding.
+
+One live portfolio deploy verified both Claude packs once and refreshed both
+Codex caches once. Strict audit passes: 19 plugins across four portfolio entries,
+zero findings/errors; grey-matter has 45 skills and tkt four through Claude and
+Codex. [Recorded evidence](../docs/agents/research/evidence/claude-active-source-20261023.json)
+binds the canonical engine hash and vendor equality. Local checks pass all 12
+grey invariants (including 32 deploy fixtures), 14 tkt Node checks and six tkt
+Rust deployment tests. Source-selection evidence is not a new-chat model capture;
+hosted Windows/Linux checks and final candidate probes remain separate gates.

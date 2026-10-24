@@ -108,7 +108,7 @@ refresh. Preserve existing copies when a refresh fails.
 
    ```bash
    node scripts/deploy.mjs --dry-run   # if step 1 showed a surprising count delta
-   node scripts/deploy.mjs             # refresh Codex, choose roots, and refresh agy once
+   node scripts/deploy.mjs             # verify Claude source, refresh Codex, choose roots, refresh agy once
    node scripts/deploy.mjs audit       # report unowned dirs and skills a harness sees twice
    ```
 
@@ -120,6 +120,10 @@ refresh. Preserve existing copies when a refresh fails.
    skills removed upstream. It picks user-level roots from its harness table so each harness
    sees each skill once (an installed Claude or Codex plugin counts as the copy), and refreshes
    the enabled Codex plugin cache and, when `~/.gemini` exists, the Antigravity plugin.
+   For enabled Claude plugins, it verifies the CLI's active `readFromFolder` and
+   `folderVersion` against this checkout before pruning; audit uses that folder,
+   not a historical cache. Reload Claude plugins or start a new chat after edits.
+   A failed, foreign or legacy source observation is a mechanical stop.
    Codex must use this
    checkout as its local marketplace; a refresh failure stops deployment before copies are
    removed. Run this command once; legacy wrappers are alternatives, not additional steps.

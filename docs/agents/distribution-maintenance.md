@@ -40,7 +40,14 @@ When a change touches skills, the plugin manifests, or tkt's plugin:
   that workflow. Stable/pinned delivery policy is defined by the [release contract](release-contract.md).
 - **Refresh this machine's install** as part of "Deploy by default." Use a marketplace added
   from the local checkout (`claude plugin marketplace add <path-to-grey-matter>`, once). It
-  loads the files in place, so run `/reload-plugins` or start a new session to pick up edits.
+  must appear as the enabled plugin's `readFromFolder` in `claude plugin list --json`,
+  with this checkout's version in `folderVersion`. Default deploy verifies that binding
+  before pruning bare copies. Current Claude reads the folder directly; no reinstall or
+  version bump is needed for local edits. Run `/reload-plugins` or start a new session.
+  A legacy client without this evidence, foreign folder, or failed CLI stops deployment;
+  update Claude/register the correct local marketplace before retrying. Audit uses the
+  active folder rather than a historical `installPath` cache. See
+  [observations and version limits](research/claude-local-refresh.md).
   For a GitHub install, run `claude plugin marketplace update grey-matter`, then
   `claude plugin update grey-matter@grey-matter` (this only changes anything after a release).
 - **One install path per harness (guarded).** A skill must never load twice in one harness.

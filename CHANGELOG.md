@@ -27,6 +27,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 - `adopt-project` treats skills a repo ships to its users as product: it audits them but no longer restructures them. `conformance-audit` reports grey-matter's own layout rules as not applicable on such repos.
 
 ### Fixed
+- Local Claude plugin audits use the active checkout rather than stale cache folders. Failed or foreign source checks preserve existing skill copies during deployment.
 - `release` works on macOS: its changelog edits no longer rely on GNU-only `sed` syntax.
 
 ## [0.1.0] - 2026-10-19
