@@ -26,6 +26,25 @@ tkt's marketplace, so add both: `/plugin marketplace add smileynet/tkt`,
 (tkt installs with it). The design is in
 [`docs/agents/proposals/07-claude-code-plugin.md`](./proposals/07-claude-code-plugin.md).
 
+### Self-contained copy-mode installs
+
+Bare copy-mode installs include each skill's files plus transitive Markdown-linked
+resources and declared runtime/legal files. Shared files live in an installer-owned
+`.resources-<pack>` directory inside the skill root; links are rewritten to the
+installed layout, including links between skills. The source checkout is not needed
+at runtime. Hidden resource directories do not add another copy of each skill to
+the harness catalog.
+
+The ownership manifest tracks the shared directory. Refresh removes obsolete owned
+resources; uninstall removes that pack's resources and preserves foreign content.
+Missing or escaping source resources fail before replacing an existing install.
+A same-named foreign resource directory is refused, even with `--force`.
+`audit --strict` checks installed resource links as well as duplicate discovery.
+
+`--link` remains an optional source-dependent development mode. Running the default
+copy-mode deploy replaces owned skill links with independent copies; no manual
+removal or source-link workaround is required.
+
 ### Keeping the Claude plugin current
 
 Claude-only hooks use `.claude-plugin/claude-hooks.json`; keep their files in

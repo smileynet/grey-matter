@@ -730,3 +730,181 @@ test("Claude portfolio: verify each local pack once without invoking update or i
     assert.ok(!sb.has(".claude/skills"));
   } finally { rmSync(sb.home, {recursive: true, force: true}); }
 });
+
+function bareResourceFixture(home) {
+  const pack = join(home, "source");
+  const skill = join(pack, "skills", "bucket", "example");
+  const peer = join(pack, "skills", "bucket", "peer");
+  mkdirSync(skill, { recursive: true });
+  mkdirSync(peer);
+  mkdirSync(join(pack, "docs"));
+  mkdirSync(join(pack, ".claude-plugin"));
+  writeFileSync(join(pack, ".claude-plugin", "plugin.json"), JSON.stringify({ name: "example", version: "1.0.0", skills: ["./skills/bucket"] }));
+  writeFileSync(join(skill, "SKILL.md"), "---\nname: example\ndescription: Copy resource fixture\n---\n[Guide](../../../docs/reader%20guide.md#overview)\n[Peer](../peer/SKILL.md)\n`[Sample](missing-inline.md)`\n```md\n[Sample](missing-fenced.md)\n```\n");
+  writeFileSync(join(peer, "SKILL.md"), "---\nname: peer\ndescription: Peer fixture\n---\nPeer instructions\n");
+  writeFileSync(join(pack, "docs", "reader guide.md"), "# Overview\n[More](details.md)\n[Skill](../skills/bucket/example/SKILL.md)\n");
+  writeFileSync(join(pack, "docs", "details.md"), "Reader detail\n[Guide](reader%20guide.md)\n");
+  return pack;
+}
+
+function followResource(file, label) {
+  const target = readFileSync(file, "utf8").match(new RegExp(`\\[${label}\\]\\(([^)]+)\\)`))[1];
+  return join(dirname(file), decodeURIComponent(target.split("#")[0]));
+}
+
+test("bare copy: shared guidance remains readable after the source checkout is removed", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = bareResourceFixture(sb.home);
+    const dest = join(sb.home, "installed");
+    const r = runWithEnv(["--pack", pack, "--root", dest], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    rmSync(pack, { recursive: true });
+    const skill = join(dest, "example", "SKILL.md");
+    const guide = followResource(skill, "Guide");
+    assert.match(readFileSync(guide, "utf8"), /# Overview/);
+    assert.match(readFileSync(followResource(guide, "More"), "utf8"), /Reader detail/);
+    assert.equal(readFileSync(followResource(guide, "Skill"), "utf8"), readFileSync(skill, "utf8"));
+    assert.match(readFileSync(followResource(skill, "Peer"), "utf8"), /Peer instructions/);
+    assert.match(readFileSync(skill, "utf8"), /#overview\)/);
+    assert.match(readFileSync(skill, "utf8"), /`\[Sample\]\(missing-inline\.md\)`/);
+    assert.match(readFileSync(skill, "utf8"), /\[Sample\]\(missing-fenced\.md\)/);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("bare copy: a missing transitive resource preserves the previous install", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = bareResourceFixture(sb.home);
+    const dest = join(sb.home, "installed");
+    const args = ["--pack", pack, "--root", dest];
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    const skill = join(dest, "example", "SKILL.md");
+    const original = readFileSync(skill, "utf8");
+    const guide = followResource(skill, "Guide");
+    const originalGuide = readFileSync(guide, "utf8");
+    rmSync(join(pack, "docs", "details.md"));
+    const failed = runWithEnv(args, sb.env);
+    assert.notEqual(failed.status, 0);
+    assert.match(failed.stdout, /resource missing/);
+    assert.equal(readFileSync(skill, "utf8"), original);
+    assert.equal(readFileSync(guide, "utf8"), originalGuide);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("bare copy: refresh prunes old resources and uninstall preserves foreign content", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = bareResourceFixture(sb.home);
+    const dest = join(sb.home, "installed");
+    const args = ["--pack", pack, "--root", dest];
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    const guide = followResource(join(dest, "example", "SKILL.md"), "Guide");
+    const old = followResource(guide, "More");
+    writeFileSync(join(pack, "docs", "reader guide.md"), "Updated overview\n");
+    rmSync(join(pack, "docs", "details.md"));
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    assert.equal(readFileSync(guide, "utf8"), "Updated overview\n");
+    assert.ok(!existsSync(old), "unreferenced resources are removed on refresh");
+    mkdirSync(join(dest, "foreign"));
+    writeFileSync(join(dest, "foreign", "SKILL.md"), "Foreign skill\n");
+    assert.equal(runWithEnv(["uninstall", "--pack", pack, "--root", dest], sb.env).status, 0);
+    assert.ok(!existsSync(guide), "uninstall removes the owned shared resources");
+    assert.equal(readFileSync(join(dest, "foreign", "SKILL.md"), "utf8"), "Foreign skill\n");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("bare copy: audit detects a missing installed shared document", () => {
+  const sb = homeSandbox({ harnesses: ["kiro"] });
+  try {
+    const pack = bareResourceFixture(sb.home);
+    const dest = join(sb.home, ".kiro", "skills");
+    assert.equal(runWithEnv(["--pack", pack, "--root", dest], sb.env).status, 0);
+    const guide = followResource(join(dest, "example", "SKILL.md"), "Guide");
+    rmSync(guide);
+    const r = runWithEnv(["audit", "--strict", "--json", "--pack", pack], sb.env);
+    assert.equal(r.status, 1);
+    assert.ok(JSON.parse(r.stdout).findings.some(finding => /resource.*missing/.test(finding)), r.stdout);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("bare copy: a foreign shared-resource directory is never overwritten or adopted", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = bareResourceFixture(sb.home);
+    const dest = join(sb.home, "installed");
+    const foreign = join(dest, ".resources-example");
+    mkdirSync(foreign, { recursive: true });
+    writeFileSync(join(foreign, "sentinel.txt"), "Foreign resources\n");
+    const r = runWithEnv(["--pack", pack, "--root", dest, "--force"], sb.env);
+    assert.notEqual(r.status, 0);
+    assert.match(r.stdout, /foreign resource directory/);
+    assert.equal(readFileSync(join(foreign, "sentinel.txt"), "utf8"), "Foreign resources\n");
+    assert.ok(!existsSync(join(dest, ".installed-by-example.json")));
+    assert.ok(!existsSync(join(dest, "example")));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("bare copy: switching from source links produces an independent installation", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = bareResourceFixture(sb.home);
+    const dest = join(sb.home, "installed");
+    const args = ["--pack", pack, "--root", dest];
+    assert.equal(runWithEnv([...args, "--link"], sb.env).status, 0);
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    assert.ok(existsSync(join(pack, "skills", "bucket", "example", "SKILL.md")), "replacing an owned symlink preserves its source");
+    rmSync(pack, { recursive: true });
+    const guide = followResource(join(dest, "example", "SKILL.md"), "Guide");
+    assert.match(readFileSync(followResource(guide, "More"), "utf8"), /Reader detail/);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("bare copy: source resources cannot escape the pack before an upgrade", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = bareResourceFixture(sb.home);
+    const dest = join(sb.home, "installed");
+    const args = ["--pack", pack, "--root", dest];
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    const before = readFileSync(join(dest, "example", "SKILL.md"), "utf8");
+    writeFileSync(join(sb.home, "private.md"), "Outside pack\n");
+    writeFileSync(join(pack, "docs", "details.md"), "[Private](../../private.md)\n");
+    const r = runWithEnv(args, sb.env);
+    assert.notEqual(r.status, 0);
+    assert.match(r.stdout, /resource escapes pack/);
+    assert.equal(readFileSync(join(dest, "example", "SKILL.md"), "utf8"), before);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+
+test("bare copy: directory links do not preempt peer installation", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = bareResourceFixture(sb.home);
+    writeFileSync(join(pack, "docs", "reader guide.md"), "[Peer directory](../skills/bucket/peer/)\n[Empty](empty/)\n");
+    mkdirSync(join(pack, "docs", "empty"));
+    const dest = join(sb.home, "installed");
+    assert.equal(runWithEnv(["--pack", pack, "--root", dest], sb.env).status, 0);
+    rmSync(pack, { recursive: true });
+    const guide = followResource(join(dest, "example", "SKILL.md"), "Guide");
+    assert.ok(existsSync(join(followResource(guide, "Peer directory"), "SKILL.md")));
+    assert.ok(existsSync(followResource(guide, "Empty")));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+
+test("bare copy: empty shared directories are owned without shared files", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = bareResourceFixture(sb.home);
+    mkdirSync(join(pack, "docs", "empty"));
+    writeFileSync(join(pack, "skills", "bucket", "example", "SKILL.md"), "---\nname: example\ndescription: Example\n---\n[Empty](../../../docs/empty/)\n");
+    const dest = join(sb.home, "installed");
+    assert.equal(runWithEnv(["--pack", pack, "--root", dest], sb.env).status, 0);
+    const empty = followResource(join(dest, "example", "SKILL.md"), "Empty");
+    assert.ok(existsSync(empty));
+    assert.equal(runWithEnv(["uninstall", "--pack", pack, "--root", dest], sb.env).status, 0);
+    assert.ok(!existsSync(empty));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
