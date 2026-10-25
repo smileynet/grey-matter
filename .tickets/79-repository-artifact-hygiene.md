@@ -1,7 +1,7 @@
 ---
 id: "79"
 title: "Decide repository artifact hygiene scope and invocation"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "A committed proposal identifies one owner for artifact classification and existing report/Git/doc owners."
