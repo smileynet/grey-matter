@@ -1,7 +1,7 @@
 ---
 id: "79"
 title: "Decide repository artifact hygiene scope and invocation"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "A committed proposal identifies one owner for artifact classification and existing report/Git/doc owners."
@@ -42,9 +42,9 @@ spending changes. Project-specific actions follow their own task authorization.
 ## Acceptance criteria
 
 - [x] A committed proposal identifies classification ownership and the existing report, Git and document owners.
-- [ ] Record the user's approved invocation and offline report retention contract before implementation starts.
-- [ ] The inspector fixtures and complete repository gate pass on the implemented source.
-- [ ] The canonical local deployer exposes the skill and bundled script without duplicate loading.
+- [x] Record the user's approved invocation and offline report retention contract before implementation starts.
+- [x] The inspector fixtures and complete repository gate pass on the implemented source.
+- [x] The canonical local deployer exposes the skill and bundled script without duplicate loading.
 
 ## Validation notes
 
@@ -56,3 +56,13 @@ Source/LFS restoration was hash-verified from a clean remote cache for current
 and historical revisions; a consumer's full rebuild still requires its ignored
 private inputs, which were preserved and not published. Windows/Linux native
 integration is not claimed from macOS checks.
+
+## Resolution (2026-10-25)
+
+Shipped repository-artifact-hygiene with read-only staged/tree/bounded-history inspector, optional explicit policies, recovery guidance and existing-owner integrations. Independent reviews resolved3 policy gaps. Two real pilots pass; Windows/Linux native integration not claimed.
+
+### Verification
+1. ✓ A committed proposal identifies one owner for artifact classification and existing report/Git/doc owners. — "Proposal10 and feature commit0539cb4 retain classification/report/Git/doc ownership and root router registration."
+2. ✓ The ticket records the approved invocation and offline report retention contract before implementation starts. — "User approved implementation and both invocation modes on2026-10-25; ticket and proposal record offline local-assets/portable/bundle contract."
+3. ✓ node --test scripts/repository-artifact-hygiene.test.mjs and node scripts/check-repo.mjs pass. — "macOS inspector fixtures23/23, syntax10/10 and all13 check-repo invariants pass; red regressions reproduced and fixed."
+4. ✓ Canonical local deployment exposes the new skill and its inspector exactly once per enabled harness. — "Canonical deploy completed: Claude reads checkout, Codex plugin refreshed, Kiro/OpenCode scripts hash-match source, AGY includes inspector; deploy check passes."
