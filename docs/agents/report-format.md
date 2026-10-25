@@ -25,12 +25,22 @@ generated reports/dashboards, not the repo's working docs.)
 
 ## HTML rules
 
-- **Self-contained single file.** Everything inline; opening the file is all it takes.
+- **Offline opening contract.** A portable deliverable may remain one self-contained
+  file. An evolving dashboard can ship with separately versioned local assets to
+  avoid repeating large payloads on every update. Opening the file or documented
+  extracted bundle must work offline; pin bundle version/hash and retrieval where
+  needed. Inspect that route from a fresh copy, not only from a populated cache.
+- **Choose a retention role.** Use
+  [repository-artifact-hygiene](../../skills/meta/repository-artifact-hygiene/SKILL.md)
+  before adding substantial media or generated evidence. Preserve intentional
+  standalone deliverables; embedding alone is not a defect. Keep per-run evidence
+  separate from source originals and the small evolving dashboard. Promote selected
+  proof or a pinned frozen bundle when it must survive a fresh clone.
 - **Graceful degradation, no hard network dependency.** An agent may run offline,
   sandboxed, or in CI. If the HTML pulls styling or diagram libs from a CDN (e.g.
   Tailwind, Mermaid), it must degrade legibly when the network is absent: readable
-  content and visible diagram source, never a blank or broken page. Prefer inlined assets
-  where practical; when a CDN is used, say so.
+  content and visible diagram source, never a blank or broken page. Bundle essential
+  assets locally or inline them deliberately; when a CDN is used, say so.
 - **Diagrams are grounded.** Any diagram claiming to depict real code/structure must be
   derived from and cite the actual files/symbols it shows; mark inferred or hypothetical
   edges as such. A polished diagram is trusted more than prose, so it must not

@@ -2,27 +2,19 @@
 
 Detected in Step 1, wired in Step 5, decided at the Step 6 gate.
 
-## Git LFS
+## Artifact storage
 
-1. **Detect.** List tracked binaries by extension (`git ls-files` filtered to png/jpg/gif/webp/
-   pdf/pptx/docx/fonts/zip/video/audio/engine assets) and by size. Check `.gitattributes` for
-   `filter=lfs`, and `git lfs ls-files` for what is already stored there.
-2. **Decide.** If binaries are tracked, or the repo is asset-heavy (game, deck, art, docs with
-   screenshots), propose LFS. Keep diffable source as plain text: SVG, JSON, YAML, CSV, and
-   anything a human reviews in a diff.
-3. **Wire.**
-   - Write `.gitattributes` rules (`*.png filter=lfs diff=lfs merge=lfs -text`, ...), with a
-     comment saying clones need `git lfs install`.
-   - Run `git lfs install --local`. It installs the pre-push hook; without it, pointers push
-     with no objects behind them.
-   - Run `git add --renormalize` on the matched paths so the **current tree** converts.
-4. **Don't rewrite history.** `git lfs migrate import --everything` rewrites every commit and
-   needs a force-push. It is a separate HITL decision, never part of the adoption commit.
-5. **Verify.**
-   - After pushing, the push output shows LFS objects uploading.
-   - A fresh clone gets real files: `file <some.png>` reports image data, not ASCII text.
-   - Add one AGENTS.md gotcha: run `git lfs install` once per machine, or files read as
-     ~130-byte pointer stubs.
+Use [repository-artifact-hygiene](../../repository-artifact-hygiene/SKILL.md) for
+classification and storage/recovery assessment during Step 1. Inspect a committed
+tree for adoption; staged candidates alone may be empty. Bring its concrete plan
+to the existing adoption gate and apply only the authorized storage changes in
+Step 5. Binary presence is a review signal, not an automatic LFS recommendation.
+
+When the approved plan selects LFS, preserve existing/foreign hooks while
+installing its upload hook, convert only the selected current paths, and document
+the client's retrieval setup. Adoption does not rewrite existing history. Use the
+classification workflow's empty-cache current/historical hash and build checks;
+upload progress or one file's MIME type alone is insufficient recovery evidence.
 
 ## Sensitive or out-of-place tracked content
 

@@ -12,6 +12,10 @@ help you *build software* (engineering), *think and communicate* (productivity),
 
 Current members of `skills/meta/`:
 
+- **repository-artifact-hygiene**: read-only artifact classification and storage,
+  retention and retrieval planning. Callable during work or for a requested audit;
+  report format, placement, Git operations and account administration stay separate.
+
 - **init-project**: the precondition, sets up a repo's tkt tracker, triage tags, and doc
   layout so the other skills have what they assume.
 - **adopt-project**: the brownfield counterpart to init-project — brings the workflow into a

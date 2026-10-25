@@ -1,9 +1,11 @@
 # Repository artifact hygiene
 
-Status: proposed, 2026-10-25. The user requested a grey-matter proposal after a
-repository-storage investigation exposed recurring generated-evidence growth.
-This document proposes policy and implementation boundaries; it does not install
-a skill, change project storage, or authorize deletion, billing or history changes.
+Status: approved for implementation, 2026-10-25. The user accepted this proposal
+and requested the skill after a repository-storage investigation exposed recurring
+generated-evidence growth. The
+[skill](../../../skills/meta/repository-artifact-hygiene/SKILL.md) now owns the
+workflow; this document retains the rationale. Project migration, deletion,
+spending and history changes still follow their own task authorization.
 
 ## Recommendation
 
@@ -13,10 +15,9 @@ source history, how their payload is retrieved, and what recovery must preserve.
 It applies across Git hosts. GitHub billing, account permissions, branch policy,
 release publishing and machine-wide disk cleanup have different owners.
 
-Proposed invocation: callable by the user and model when adding media, generated
-reports, screenshots, datasets or reference bundles. Confirm that invocation
-model before authoring the skill. Inspect staged candidates by default; broader
-history analysis requires an explicit audit request.
+Approved invocation: callable by the user and model when adding media, generated
+reports, screenshots, datasets or reference bundles. Inspect staged candidates by
+default; broader history analysis requires an explicit audit request.
 
 ## Evidence and the rules that caused friction
 
@@ -24,10 +25,10 @@ history analysis requires an explicit audit request.
   reachable versions represented about 200 MiB of logical Git blob content.
   Image-extension LFS rules cannot catch media embedded in HTML. These figures
   describe one incident, not universal thresholds or physically reclaimable bytes.
-- The existing [adoption hygiene rubric](../../../skills/meta/adopt-project/references/repo-hygiene.md)
-  proposes LFS when any binaries are tracked, including screenshots. File role,
+- The prior [adoption hygiene rubric](../../../skills/meta/adopt-project/references/repo-hygiene.md)
+  proposed LFS when any binaries were tracked, including screenshots. File role,
   size, revision churn and retrieval needs should drive that choice instead.
-- The [report format convention](../report-format.md) requires fully inline,
+- The prior [report format convention](../report-format.md) required fully inline,
   single-file HTML. That makes a portable deliverable but also encourages repeated
   payloads in changing dashboards. Resolve presentation and retention together.
 - A forward-only LFS conversion preserves earlier ordinary Git blobs. Reverting
@@ -137,6 +138,6 @@ usage when making a provider recommendation without becoming an account admin.
 - Run the distribution, syntax, index/link and detector gates; deploy the approved
   skill once through the existing workflow. No release publication is implied.
 
-Open decisions: approval of the proposed invocation, whether a project policy
-schema earns its complexity after the pilot, and which repo supplies the first
-fixture-backed pilot. These are proposal decisions, not defaults already enacted.
+Project-specific decisions remain: artifact roles, warning thresholds, policy
+limits, exceptions and retention. The optional inspector policy is enabled only
+when explicitly supplied; no universal size or retention gate was enacted.

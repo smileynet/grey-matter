@@ -7,6 +7,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 ## [Unreleased]
 
 ### Added
+- `repository-artifact-hygiene` separates source assets from generated evidence, measures staged Git artifacts read-only, and helps choose storage and recovery without automatic migration or deletion.
 - Codex marketplace packaging supplies namespaced skills, with local cache refresh through the same deployer used by the other harnesses.
 - `orient` and `wrap-session` connect session pickup and handoff to the current plan and tickets; `conformance-audit` checks adopted repositories against current guidance.
 - Claude Code checks the launch project's repository invariants before recognized agent `git push` commands; the Git pre-push gate continues to cover other push paths. Requires Claude 2.1.310+ and Node 22+.
@@ -25,6 +26,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 - `line-craft` skill: write fiction prose and dialogue so feeling is carried by acts and errands. It includes a revision pass and a self-testing catalog of sentimental shapes, which grows from lines the author rejects, plus a standalone checker. The moves come from a study of LucasArts adventure dialogue.
 
 ### Changed
+- Reports can retain offline usability with versioned local assets or frozen bundles; intentional self-contained HTML remains supported without making every changing dashboard carry embedded evidence.
 - One deployer, `scripts/deploy.mjs`, replaces the installer and the agy packager. It picks skill roots so every harness on the machine sees each skill exactly once, counting an installed Claude or Codex plugin. It takes back copies it left elsewhere, and adds `check` and `audit` (unowned dirs, skills a harness sees twice). `install-skills.mjs` and `build-agy-plugin.mjs` still work and forward to it.
 - `install-skills.mjs` won't copy skills where Claude Code already loads them from the grey-matter plugin, and it removes copies it put there before, so a skill is never listed twice. `--allow-dual` overrides.
 - Release preparation derives every plugin version from the repository's product version. Publication verifies immutable GitHub assets before stable promotion and reports each channel's status and URL, including incomplete outcomes.

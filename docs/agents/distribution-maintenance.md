@@ -111,6 +111,11 @@ behind the latest tag, marketplace entry present). It is
 harness skill root) and needs **no harness authentication or network** (tkt is local and
 degrades to a skipped-with-warning if absent). Run it before a
 release or a distribution change. Exit 0 = all invariants hold; nonzero names what failed.
+The artifact-hygiene invariant runs
+`node --test scripts/repository-artifact-hygiene.test.mjs` against disposable
+repositories. Its distributed inspector lives with
+[repository-artifact-hygiene](../../skills/meta/repository-artifact-hygiene/SKILL.md);
+the fixtures need Git but no provider login, network or LFS payload download.
 Fixtures proving each invariant fails when seeded live in `scripts/check-repo.test.mjs`
 (`node --test`).
 

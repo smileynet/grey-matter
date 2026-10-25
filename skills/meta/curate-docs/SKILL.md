@@ -10,6 +10,10 @@ A periodic sweep of the repo's agent-facing knowledge, deciding what to **promot
 
 User-invoked: a human runs it when the knowledge base needs tending, as `wrap-session` does for the session.
 
+For retained media, embedded reports or artifact retrieval, use
+[repository-artifact-hygiene](../repository-artifact-hygiene/SKILL.md) to classify
+storage choices. This skill still owns knowledge promotion, relocation and pruning.
+
 ## What it decides
 
 Two independent axes, applied to each candidate.

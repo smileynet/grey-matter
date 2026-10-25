@@ -28,8 +28,11 @@ description: "Maintain one evolving HTML dashboard showing what delivered work l
    Keep planned and partial experiences visibly distinguishable from shipped work.
 
 4. **Update the user-facing view.** Read
-   [report-format.md](../../../docs/agents/report-format.md) for the HTML rules and
-   use [changelog](../../meta/changelog/SKILL.md) for user-value wording. Reuse the
+   [report-format.md](../../../docs/agents/report-format.md) for the HTML rules. Use
+   [repository-artifact-hygiene](../../meta/repository-artifact-hygiene/SKILL.md)
+   when adding substantial generated evidence or media payload; this skill keeps
+   ownership of presentation and fidelity. Use
+   [changelog](../../meta/changelog/SKILL.md) for user-value wording. Reuse the
    corresponding `[Unreleased]` wording in the rolling history where applicable.
    Explain each concern through the person's job-to-be-done and what changed in
    their experience, with the evidence needed to assess the claim.

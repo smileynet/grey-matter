@@ -96,6 +96,11 @@ skill product, its own installer), report them as N/A, not as findings. Audit th
 the open standard instead: frontmatter shape and name rules, and links that resolve **where the
 skills are installed**, not only in the source repo.
 
+For stored media or generated-evidence growth, consume
+[repository-artifact-hygiene](../repository-artifact-hygiene/SKILL.md) observations.
+Storage/retention choices remain needs-judgment. A warning or binary extension is
+not nonconformance; only an explicit project policy defines a mechanical violation.
+
 ## Incumbent repos (polarity)
 
 Fixes apply **regardless of an incumbent agent layer**. Under `adopt-project`'s **subsume-and-replace**

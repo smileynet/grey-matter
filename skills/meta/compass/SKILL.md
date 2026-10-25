@@ -54,6 +54,7 @@ Not feature work, just upkeep.
 - **improve-codebase-architecture** keeps the codebase good for agents to operate in. It surfaces **deepening opportunities** (classified by regime: deep modules for services, data-oriented for a game's frame loop); picking one _generates an idea_ you take into the main flow at grill-with-docs. **codebase-design** is the bench you design the chosen one on.
 - **curate-docs** keeps the knowledge base tended: promote a mature note into a skill, move a skill's private reference into its `references/`, prune stale docs. (It also owns keeping this map honest.)
 - **conformance-audit** measures a repo's skills, tool scripts, agent guidance, and docs against grey-matter's *current* standards, then applies the mechanically-safe fixes behind an approval gate (judgment calls are surfaced, not auto-applied). Standalone it re-conforms a repo as the guidance drifts; `adopt-project` calls it as a pipeline step.
+- **repository-artifact-hygiene** classifies source assets, generated evidence and reproducible inputs before choosing Git, LFS or bundles. Inspect staged candidates during work; use a selected tree or bounded history for an explicit audit. It owns storage/retention/retrieval assessment, while report format, Git operations, billing and cleanup retain their owners.
 
 ## Vocabulary underneath
 

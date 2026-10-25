@@ -78,7 +78,7 @@ if the harness has one, otherwise `git ls-files` plus targeted grep; surface the
 modules — **don't read everything**, and state what wasn't examined.
 
 Also detect **repo hygiene** (detail: [references/repo-hygiene.md](references/repo-hygiene.md)):
-tracked binaries without Git LFS, sensitive or out-of-place tracked content, and whether
+artifact roles/storage through **repository-artifact-hygiene**, sensitive or out-of-place tracked content, and whether
 `.references/` has a committed rehydration index.
 
 Then: **name the archetype(s)**, **classify each agent artifact by role** (agent layer vs shipped),
@@ -151,7 +151,7 @@ to an existing `AGENTS.md`), and the consistency checks. It runs *after* reconci
 safe, so it fills real gaps rather than bailing on a non-empty repo.
 
 Then the hygiene wiring from Step 1 ([references/repo-hygiene.md](references/repo-hygiene.md)):
-Git LFS for binary assets (current tree only; `git lfs install --local` for the push hook), untrack
+the approved artifact storage plan (current tree only, preserving hook ownership), untrack
 sensitive content, and complete the `.references/` index with a clone command per entry.
 
 - **subsume-semantics:** the replacement supersedes the incumbent plumbing; never `tkt init` beside a

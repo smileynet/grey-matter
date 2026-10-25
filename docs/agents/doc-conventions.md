@@ -23,6 +23,9 @@ location.
 
 Generated reports/dashboards follow [`report-format.md`](./report-format.md) (markdown for
 light skims, HTML for full-bodied deliverables).
+When artifact payload, retention or retrieval is the question, use
+[`repository-artifact-hygiene`](../../skills/meta/repository-artifact-hygiene/SKILL.md).
+This convention remains the owner of audience, placement and promotion.
 
 ## Prose tells in user-facing writing
 
