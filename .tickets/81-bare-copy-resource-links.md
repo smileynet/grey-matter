@@ -1,7 +1,7 @@
 ---
 id: "81"
 title: "Preserve shared guidance links in bare copy-mode skill installs"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "An isolated copy-mode installation can open shared report-format and doc-conventions guidance from deployed skills"
