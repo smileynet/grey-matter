@@ -37,10 +37,13 @@ description: "Maintain one evolving HTML dashboard showing what delivered work l
    Explain each concern through the person's job-to-be-done and what changed in
    their experience, with the evidence needed to assess the claim.
 
-5. **Inspect and hand back the same artifact.** Open the HTML and inspect every tab,
-   including offline behavior. Check each visual's label against its evidence and
-   remove stale claims or history. Finish when the single dashboard reflects the
-   current work, its tabs and labels are accurate, and the user has its path.
+5. **Inspect and hand back the same artifact.** Inspect every tab, including
+   offline behavior. Check fidelity labels against evidence and remove stale
+   claims or history. Hand back the relevant dashboard view using
+   [report-format's open/refresh contract](../../../docs/agents/report-format.md#html-rules),
+   with a direct link for return visits. Finish when the dashboard reflects the
+   current work, its tabs and labels are accurate, and the user can reach the
+   relevant view through that contract.
 
 Use this for the evolving delivery view. Use changelog for release history and
 the implementation workflows for building the features it depicts.

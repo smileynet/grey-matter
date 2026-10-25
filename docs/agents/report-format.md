@@ -2,7 +2,8 @@
 
 A repo-wide convention for choosing the format of a **document, report, or dashboard** an
 agent produces for a human. Markdown and HTML are **two kinds of deliverable for two
-purposes**, not source-and-render of one thing. Pick by purpose.
+purposes**, not source-and-render of one thing. Pick by purpose. For wording, follow the
+[human-facing writing guidance](./doc-conventions.md#human-facing-writing).
 
 ## The two formats, two jobs
 
@@ -10,11 +11,10 @@ purposes**, not source-and-render of one thing. Pick by purpose.
   short analyses, a terse artifact a reader (or the agent itself) scans in seconds.
   Diffable, version-controlled, easy to re-read. Reach for it when a light document is
   the right tool, and when the agent needs an artifact it can reason over later.
-- **HTML is the full-bodied document.** The end work: the considered, visual,
-  communicative artifact that represents our output and conveys ideas to users, diagrams,
-  before/after visuals, badges, layout, editorial structure. It is a deliverable in its
-  own right, not a rendering of the markdown. Reach for it when the job is to *communicate
-  a finished idea* to a user, not just record one.
+- **HTML is the visual or interactive document.** Choose it when the reader needs
+  a visual explanation, browsable comparison, interactive demonstration, or feedback
+  page. Open questions and unfinished proposals are valid content. It is a deliverable
+  in its own right, not a rendering of the markdown.
 
 They are **siblings selected by purpose**, not a pipeline. A light skim is a markdown
 document; a full-bodied communicative document is HTML. Neither is "the source" of the
@@ -24,6 +24,13 @@ ADRs, glossaries, and tkt tickets stay plain markdown regardless, this conventio
 generated reports/dashboards, not the repo's working docs.)
 
 ## HTML rules
+
+- **Open the relevant view.** When the current environment supports it, open the
+  page, tab, or view relevant to the user's review. After revisions, refresh or
+  reopen it. Include a direct link for return visits. If opening is unavailable,
+  state that limitation and provide a link or absolute path as a fallback. Use the
+  available viewer or application; the contract is tool-independent and does not
+  bypass access controls or change permissions.
 
 - **Offline opening contract.** A portable deliverable may remain one self-contained
   file. An evolving dashboard can ship with separately versioned local assets to
@@ -52,8 +59,6 @@ generated reports/dashboards, not the repo's working docs.)
 
 ## Why
 
-Markdown and HTML serve different readers and moments: a skim versus a studied read of
-finished work. Treating HTML as a first-class full-bodied deliverable (not a CDN-only
-temp-dir afterthought) gives users a genuinely good artifact to inspect; keeping markdown
-as the light, skimmable form keeps the fast look fast. Choose the format the job calls
-for.
+Markdown and HTML serve different tasks: a quick skim, a visual explanation, or
+an interactive review. Choose the format that lets the reader inspect the work,
+compare options, or respond without unnecessary navigation.

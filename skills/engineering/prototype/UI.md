@@ -85,7 +85,22 @@ Put the switcher in one shared component so both sub-shapes reuse it.
 
 ### 5. Hand it over
 
-Surface the URL and the `?variant=` keys. The interesting feedback is usually **"I want the header from B with the sidebar from C"**, which is the actual design they want.
+When practical, show screenshots, mocks, or embedded interactive views in the
+review dashboard so the user can inspect and compare without navigating away and
+finding their place again. Use a working embed when the behavior can be tested
+there; otherwise use screenshots or mocks, clearly labelled with their fidelity
+and limits.
+
+Name the task to try and the question it helps answer. Provide the comparison URL
+and `?variant=` keys for deeper interaction or a return visit. When the dashboard
+cannot support the needed interaction, open the relevant comparison view using
+[report-format's handoff contract](../../../docs/agents/report-format.md#html-rules).
+Refresh the review view after revisions, and invite feedback on useful parts from
+different variants (e.g. the header from B with the sidebar from C).
+
+Use an existing review dashboard when available. A lightweight in-page comparison
+can be enough; this does not require a separate dashboard or embedding every
+prototype. Keep the existing throwaway-code, comparison, and capture rules.
 
 ### 6. Capture the answer and clean up
 

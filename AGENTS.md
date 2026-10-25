@@ -20,7 +20,7 @@ harness reads one source.
   invocation control, and what belongs in `metadata` (inert data only).
 - [`docs/agents/report-format.md`](./docs/agents/report-format.md): generated documents, reports, and
   dashboards pick a format by purpose, **markdown for light, skimmable documents** and
-  **HTML for full-bodied documents that communicate finished ideas to users** (siblings,
+  **HTML for visual explanations and interactive review** (siblings,
   not source-and-render).
 - [`docs/agents/doc-conventions.md`](./docs/agents/doc-conventions.md): where things live.
   `SKILL.md` and this file are **agent-facing** (terse); **`docs/` is for user-facing

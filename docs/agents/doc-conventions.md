@@ -27,15 +27,30 @@ When artifact payload, retention or retrieval is the question, use
 [`repository-artifact-hygiene`](../../skills/meta/repository-artifact-hygiene/SKILL.md).
 This convention remains the owner of audience, placement and promotion.
 
-## Prose tells in user-facing writing
+## Human-facing writing
 
-For prose a person reads (README, changelog, PR bodies, docs), judge AI tells **in clusters,
-not singly**. One em dash means nothing. Em dashes plus forced triples plus "robust",
-"seamless", "leverage", or "delve" plus a recap conclusion means rewrite. Name the concrete
-capability or measurement instead of an adjective, and end on the last concrete fact, not a
-summary. After editing for style, re-check every factual claim: tightening a sentence can
-flatten a hedge into an overclaim. A project with its own prose linter (e.g. a deck repo's)
-uses that instead.
+For prose a person reads (README, changelog, PR bodies, docs):
+
+- **Start from the reader's task.** Explain what the material helps them understand,
+  compare, decide, or do. Describe capabilities through their actions and benefits;
+  include technical detail when it helps them operate the system or assess evidence
+  and risk.
+- **Use plain, precise language.** Replace praise with a concrete capability or
+  evidence. Preserve domain terms when they make the meaning more precise.
+- **Give each layer a purpose.** Headings orient, summaries convey the key point,
+  and examples demonstrate it. Avoid repeating the same explanation across all three.
+  Use takeaways when they help the reader or are requested; keep them consistent
+  with the body and any starter instructions. Do not append a recap by habit.
+- **Fit the audience and genre.** Choose perspective and structure for the task,
+  preserving an established project voice. A personal article, PR, procedure,
+  fictional scene, and agent instruction have different purposes; one narrative
+  pattern or visual treatment does not govern them all.
+
+Judge AI tells **in clusters, not singly**. One em dash means nothing. Em dashes
+plus forced triples plus "robust", "seamless", "leverage", or "delve" plus an
+unnecessary recap means rewrite. After editing for style, re-check every factual
+claim: tightening a sentence can flatten a hedge into an overclaim. A project with
+its own prose linter (e.g. a deck repo's) uses that instead.
 
 ## Lifecycle and the dot-prefix rule
 
