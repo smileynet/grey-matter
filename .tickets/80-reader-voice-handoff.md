@@ -1,7 +1,7 @@
 ---
 id: "80"
 title: "Apply accepted reader-focused voice and in-dashboard handoff guidance"
-status: open
+status: done
 blocked_by: []
 validation_criteria:
   - "Shared prose and report guidance implement the four accepted review decisions without imposing article-specific defaults"
@@ -26,6 +26,15 @@ Do not impose the article's perspective, dark theme, italic summaries, embedded 
 
 ## Acceptance criteria
 
-- [ ] Shared prose and report guidance implement the four accepted review decisions without imposing article-specific defaults.
-- [ ] Repository, skill syntax, and changed-guidance review checks pass.
-- [ ] Deployment check and audit verify configured plugin and skill-root consumers use the updated guidance.
+- [x] Shared prose and report guidance implement the four accepted review decisions without imposing article-specific defaults.
+- [x] Repository, skill syntax, and changed-guidance review checks pass.
+- [x] Deployment check and audit verify configured plugin and skill-root consumers use the updated guidance.
+
+## Resolution (2026-10-25)
+
+Applied and pushed the accepted voice, report format, dashboard handoff, and in-dashboard prototype preview guidance. Deployed and verified local plugin consumers plus linked bare roots; reload plugins/start new sessions to consume refreshed instructions.
+
+### Verification
+1. ✓ Shared prose and report guidance implement the four accepted review decisions without imposing article-specific defaults — "Direct inspection and independent prose review confirmed the four accepted changes in doc-conventions, report-format, delivery-dashboard, and prototype UI; AGENTS pointer updated; source commit 1c6bf74."
+2. ✓ Repository, skill syntax, and changed-guidance review checks pass — "node scripts/check-repo.mjs passed all 13 invariants; node --test scripts/skill-syntax.test.mjs passed 10/10; git diff --check passed. Existing ticket07 warning and one Linux-only skip were read and retained."
+3. ✓ Deployment check and audit verify configured plugin and skill-root consumers use the updated guidance — "node scripts/deploy.mjs and corrective --link deployment succeeded. deploy check passed; strict audit passed with 18 plugins, 4 packs, zero findings/errors. All four Codex cache files match source; Antigravity changed content matches source/build; Claude reads source; Kiro/OpenCode source-linked skills resolve shared docs. Copy-mode gap captured as ticket81."
