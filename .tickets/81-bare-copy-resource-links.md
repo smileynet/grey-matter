@@ -1,7 +1,7 @@
 ---
 id: "81"
 title: "Preserve shared guidance links in bare copy-mode skill installs"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "An isolated copy-mode installation can open shared report-format and doc-conventions guidance from deployed skills"
@@ -33,5 +33,13 @@ This is a separate distribution fix; the accepted prose changes are already depl
 
 ## Acceptance criteria
 
-- [ ] An isolated copy-mode installation can open shared report-format and doc-conventions guidance from deployed skills.
-- [ ] Regression fixtures cover relative links without requiring the source checkout at runtime.
+- [x] An isolated copy-mode installation can open shared report-format and doc-conventions guidance from deployed skills.
+- [x] Regression fixtures cover relative links without requiring the source checkout at runtime.
+
+## Resolution (2026-10-25)
+
+Copied skill installs now include owned shared resources and relocated Markdown links without source-checkout runtime dependencies. Synced canonical deployer into tkt, redeployed both packs, and verified copy roots and native plugin refreshes.
+
+### Verification
+1. ✓ An isolated copy-mode installation can open shared report-format and doc-conventions guidance from deployed skills — "Isolated copy-mode fixtures delete the source pack and still read shared and transitive guidance; actual Kiro/OpenCode report-format and doc-conventions links resolve within copied installs. Portfolio redeployed both packs; strict audit passes with 18 plugins, 4 packs, zero findings/errors."
+2. ✓ Regression fixtures cover relative links without requiring the source checkout at runtime — "node --test scripts/deploy.test.mjs: 41 passed, including transitive links, missing resources, foreign ownership, source removal, peer directory and empty shared-directory regressions. node scripts/check-repo.mjs: all 13 invariants pass. tkt tooling: 37 passed; cargo deploy_skills: 6 passed."
