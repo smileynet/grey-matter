@@ -4,6 +4,9 @@ Read when changing skills, manifests, deployment or release guidance. Commands a
 
 ## Deployment and plugin updates
 
+Finish the final check run and read its passing summary before deploying. After
+a source fix, the replacement run must finish; an earlier pass covers earlier bytes.
+
 Skills deploy with `node scripts/deploy.mjs` (proposal 08). It reads the pack from
 `.claude-plugin/plugin.json` and has one harness table (which skill roots each harness reads,
 and how to tell whether its plugin is installed). From that table it picks roots so each

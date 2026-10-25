@@ -55,7 +55,10 @@ Physical layout:
   ticket 33.
 - Use `--status backlog` only for deliberately parked work.
 - grey-matter's `.tickets/config.toml` has push enabled, so `new`/`claim`/`close`
-  commit and push.
+  commit and push. Await each Git push or tkt mutation through its final result
+  before starting another write in this repository. After a push error, fetch
+  and compare `HEAD` with its upstream before retrying; a concurrent push may
+  already have published the commit.
 - **`tkt capabilities -o json` is partial** — it under-reports flags (e.g. `--tags`,
   `--vc`, and `edit --ac` vs `--vc`) and commands. Confirm any flag against
   `tkt <cmd> --help`, not the manifest alone; see `verify-tkt-usage`.
