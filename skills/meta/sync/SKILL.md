@@ -130,6 +130,16 @@ refresh. Preserve existing copies when a refresh fails.
    Crush reads **project** roots only, so for it note `node scripts/deploy.mjs --project`
    inside each project that wants it — sync doesn't chase project roots.
 
+   Then probe this machine's agent shell (report-only; it never writes without `--apply`):
+
+   ```bash
+   node scripts/probe-agent-shell.mjs
+   ```
+
+   Each `finding` line carries its fix; carry it into the delta as a follow-up. Run
+   `--apply` only when the user says so: `~/.claude/settings.json` is theirs. See
+   [harnesses](../../../docs/agents/harnesses.md) ("Bash tool shell").
+
 7. **Report the delta.** One compact summary, most-pressing-first:
 
    - **Commits pulled** (`git log --oneline <before>..HEAD`).
@@ -138,6 +148,7 @@ refresh. Preserve existing copies when a refresh fails.
    - **tkt**: version before → after, and any **drift** `verify-tkt-usage` found.
    - **Ticket health**: whether a rebase ran, and `tkt validate` status.
    - **Repo check**: green, or exactly what `check-repo.mjs` flagged.
+   - **Agent shell**: `ok`, `n/a`, or each `probe-agent-shell.mjs` finding with its fix.
    - **Follow-ups**: e.g. "run `reconcile-tickets`", "fix the drift in skill X", "`--project`
      install for Crush in repo Y".
 

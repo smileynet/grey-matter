@@ -19,6 +19,7 @@
 //  11. release draft/artifact/publisher safety -> release*.test.mjs (isolated repos and fake services)
 //  12. opt-in Git hooks            -> install-hooks.test.mjs (disposable repositories)
 //  13. repository artifact inspection -> repository-artifact-hygiene.test.mjs (read-only fixtures)
+//  14. agent shell probe          -> probe-agent-shell.test.mjs (fake settings and binaries)
 //
 // Design (AC-driven):
 //  - READ-ONLY on user state. The installer test uses throwaway temp roots (mkdtemp),
@@ -103,6 +104,7 @@ run("10. YAML syntax and core types", node, [join(SCRIPTS, "check-skill-syntax.m
 run("11. release draft, artifact and publisher safety", node, ["--test", join(SCRIPTS, "release-artifacts.test.mjs"), join(SCRIPTS, "release-version.test.mjs"), join(SCRIPTS, "release.test.mjs"), join(SCRIPTS, "release-product.test.mjs"), join(SCRIPTS, "release-native.test.mjs"), join(SCRIPTS, "release-entrypoints.test.mjs"), join(SCRIPTS, "release-verify.test.mjs"), join(SCRIPTS, "release-publish.test.mjs"), join(SCRIPTS, "release-registry.test.mjs"), join(SCRIPTS, "release-tkt-publication.test.mjs"), join(SCRIPTS, "release-cargo-credentials.test.mjs"), join(SCRIPTS, "release-cargo-upload.test.mjs"), join(SCRIPTS, "release-git.test.mjs"), join(SCRIPTS, "release-development.test.mjs"), join(SCRIPTS, "release-github.test.mjs"), join(SCRIPTS, "release-ci-artifacts.test.mjs"), join(SCRIPTS, "skill-syntax.test.mjs")]);
 run("12. Git and Claude plugin hooks", node, ["--test", join(SCRIPTS, "install-hooks.test.mjs"), join(SCRIPTS, "claude-hooks.test.mjs")]);
 run("13. repository artifact hygiene", node, ["--test", join(SCRIPTS, "repository-artifact-hygiene.test.mjs")]);
+run("14. agent shell probe", node, ["--test", join(SCRIPTS, "probe-agent-shell.test.mjs")]);
 
 // --- Summary ------------------------------------------------------------------
 console.log("\n==================== repo-check summary ====================");

@@ -70,6 +70,19 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **Test**: `claude -p "<prompt>" --allowedTools Read` (a plain `-p` works;
   `--plugin-dir` + piped stdin can hang, use a direct `-p` prompt).
 - Confirmed references/ load on demand; install is flat (bucket nesting is repo-only).
+- **Bash tool shell.** The Bash tool runs the login shell (zsh on macOS), not bash, with
+  the aliases, functions and options sourced from `~/.zshrc` applied to every command
+  ([tools reference](https://code.claude.com/docs/en/tools-reference)). The baseline on every
+  macOS/Linux machine is a bash ≥ 4 in `~/.claude/settings.json`:
+  `"env": { "CLAUDE_CODE_SHELL": "/opt/homebrew/bin/bash" }` (Intel Mac `/usr/local/bin/bash`,
+  Linux `/usr/bin/bash`). Never `/bin/bash` on macOS (3.2) or a versioned `Cellar/` path: an
+  invalid value falls back to auto-detection silently
+  ([env vars](https://code.claude.com/docs/en/env-vars)). Keep Homebrew bash marked
+  `brew tab --installed-on-request bash` so `brew autoremove` can't take it. After a restart,
+  `echo "$BASH_VERSION"` must be non-empty. `node scripts/probe-agent-shell.mjs` reports all of
+  this and `sync` runs it. In any shell, `grep`/`find` are Claude Code's embedded ugrep/bfs:
+  use `command grep`/`command find` for exact GNU/BSD behaviour.
+  Why: [proposal 11](proposals/11-agent-shell-baseline.md).
 - **`/review` is not grey-matter's review.** A skill named `code-review` replaces Claude's
   bundled `/code-review`, but the bundled alias `/review` still runs Claude's own reviewer
   (no two axes, no tickets). Invoke `/code-review`.
