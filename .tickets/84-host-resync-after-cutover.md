@@ -1,7 +1,7 @@
 ---
 id: "84"
 title: "Resync this host after the install-skills cutover: deploy.mjs redeploy, tkt skill pack, tkt 0.4.0"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "deploy.mjs audit shows no duplicate or root-escaping skills"
