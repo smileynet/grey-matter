@@ -65,13 +65,16 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   `Start-Process`; run it through a `Start-Job`/pwsh call.
 - **Invocation filter**: **honored, cleanly isolated**, a skill with
   `policy.allow_implicit_invocation: false` is absent from the model's catalog.
-- **Shell** (source-read on 0.147, not yet probed live): the account's login shell from the
-  passwd entry (`pw_shell`, not `$SHELL`), run as `zsh -lc`. With `features.shell_snapshot` on
-  (the default) it sources `~/.zshrc` and replays its functions, `setopt` options and aliases
-  ([startup](https://github.com/openai/codex/blob/main/codex-rs/shell-command/src/startup.rs),
-  [capture](https://github.com/openai/codex/blob/main/codex-rs/shell-command/src/shell_snapshot_capture.rs)),
-  so it hits the same zsh traps as Claude Code. There is no bash override (`zsh_path` only
-  serves the zsh-fork feature); options are in [proposal 11](proposals/11-agent-shell-baseline.md).
+- **Shell** (probed live 2026-10-26 in the Codex app; source read on 0.147): the account's
+  login shell from the passwd entry (`pw_shell`, not `$SHELL`), so zsh. The live probe hit all
+  three zsh rules (`echo ====` → `=== not found`, `set -- $p` → one argument, an unmatched glob →
+  `no matches found`). It did **not** pick up the user's `.zshrc` aliases or `noclobber`
+  (`ls`/`cat` were `/bin`, 2 aliases total), although the source's snapshot sources `~/.zshrc`
+  ([startup](https://github.com/openai/codex/blob/main/codex-rs/shell-command/src/startup.rs));
+  why is unexplained. `grep`/`find` are the system binaries (no shadowing). There is no bash
+  override: `zsh_path` only serves the zsh-fork feature, and `CODEX_SHELL` (set in the app's
+  command environment) isn't in the open-source code. Options are in
+  [proposal 11](proposals/11-agent-shell-baseline.md).
 
 ### Claude Code (ancillary)
 

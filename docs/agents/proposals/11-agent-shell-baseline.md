@@ -115,7 +115,7 @@ run: auto mode blocked launching agents with auto-approve flags. Per-harness not
 
 | Harness | How commands run | `.zshrc` aliases/options | zsh rules |
 |---|---|---|---|
-| Codex 0.147 | passwd login shell, `zsh -lc`; snapshot sources `~/.zshrc` | yes (reproduced: eza/bat, `noclobber` on) | yes |
+| Codex 0.147 | passwd login shell, `zsh -lc`; snapshot sources `~/.zshrc` | **live: no** (2 aliases, `/bin/ls`, `noclobber` off), though the simulated invocation had them | **live: yes** (`====`, word splitting, `NOMATCH`) |
 | OpenCode 1.18 | `$SHELL -c`, no rc beyond `~/.zshenv` | no (reproduced) | yes |
 | Kiro CLI 2.34 | predecessor Q CLI: `bash -c` / `$AMAZON_Q_CHAT_SHELL` | no (inferred) | no (inferred) |
 | Crush 0.98 | embedded `mvdan.cc/sh` interpreter | no | no |
@@ -123,8 +123,13 @@ run: auto mode blocked launching agents with auto-approve flags. Per-harness not
 
 ### Codex options (none verified live yet)
 
-Codex has no `CLAUDE_CODE_SHELL` equivalent: it reads the shell from the passwd entry and
-`zsh_path` only serves its zsh-fork feature. In order of preference:
+**Live probe, 2026-10-26 (Codex app):** zsh 5.9; `echo ====`, `set -- $p` and an unmatched glob
+all failed the zsh way; the user's aliases and `noclobber` were absent; the command environment
+carries `CODEX_CI`, `CODEX_THREAD_ID`, `CODEX_SHELL` and other `CODEX_*` names. So on this
+machine the problem is zsh's rules, not captured config. That makes option 1 below moot here and
+leaves option 3 as the only full fix. Codex has no `CLAUDE_CODE_SHELL` equivalent: it reads the
+shell from the passwd entry, `zsh_path` only serves its zsh-fork feature, and `CODEX_SHELL` isn't
+in the open-source code. In order of preference:
 
 1. **`[features] shell_snapshot = false`** in `~/.codex/config.toml`. Commands still run
    `zsh -lc`, which reads `.zshenv`, `.zprofile` and `.zlogin` but not `.zshrc`, so the aliases
