@@ -107,5 +107,43 @@ Claude-only, so it belongs in the Claude section of `harnesses.md`, not in the c
   holds a hand-written one-line grep/find note (written during this session). Change 1 makes
   that note redundant, so it can be deleted and `install-agents-md.mjs` run. The other foreign
   files may be the user's own, so they need a look before `--force`.
-- Codex and OpenCode run shell commands through their own mechanisms. Whether they capture zsh
-  config the same way is unverified; probe before extending the baseline to them.
+## Other harnesses (follow-up research, 2026-10-25)
+
+Read from source, and each tool's invocation was reproduced locally. Live agent probes were not
+run: auto mode blocked launching agents with auto-approve flags. Per-harness notes live in
+[harnesses](../harnesses.md).
+
+| Harness | How commands run | `.zshrc` aliases/options | zsh rules |
+|---|---|---|---|
+| Codex 0.147 | passwd login shell, `zsh -lc`; snapshot sources `~/.zshrc` | yes (reproduced: eza/bat, `noclobber` on) | yes |
+| OpenCode 1.18 | `$SHELL -c`, no rc beyond `~/.zshenv` | no (reproduced) | yes |
+| Kiro CLI 2.34 | predecessor Q CLI: `bash -c` / `$AMAZON_Q_CHAT_SHELL` | no (inferred) | no (inferred) |
+| Crush 0.98 | embedded `mvdan.cc/sh` interpreter | no | no |
+| agy 1.4.6 | closed source, unknown | unknown | unknown |
+
+### Codex options (none verified live yet)
+
+Codex has no `CLAUDE_CODE_SHELL` equivalent: it reads the shell from the passwd entry and
+`zsh_path` only serves its zsh-fork feature. In order of preference:
+
+1. **`[features] shell_snapshot = false`** in `~/.codex/config.toml`. Commands still run
+   `zsh -lc`, which reads `.zshenv`, `.zprofile` and `.zlogin` but not `.zshrc`, so the aliases
+   and `noclobber` go. zsh's own rules stay. Cost: the snapshot exists "to speed up repeated
+   commands", so repeated commands may slow down.
+2. **A `.zshrc` guard** on a variable Codex sets in its command environment (`CODEX_CI=1` and
+   `CODEX_THREAD_ID` are set by unified exec). This only works if one of them is set while the
+   snapshot itself is built, which is unverified.
+3. **`chsh -s /opt/homebrew/bin/bash`**. This fixes Codex fully but changes the login shell for
+   every terminal and tool, so it's a user decision, not a baseline.
+
+None of these goes into `probe-agent-shell.mjs` until one is verified live.
+
+### Live probe (paste into each harness)
+
+```text
+Run exactly this command once with your shell tool and reply with only its raw output:
+echo "zsh=${ZSH_VERSION:-none} bash=${BASH_VERSION:-none}"; type ls cat; set -o | grep noclobber; p="a b"; set -- $p; echo "args=$#"
+```
+
+A zsh version, an alias for `ls`/`cat`, `noclobber on`, or `args=1` means that harness is
+affected.

@@ -30,6 +30,11 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   subagents don't inherit the parent's: a missing entry stalls the worker on an approval prompt.
   On machines with AIM-managed agents the JSON is rewritten on load, so deploy configs by copy,
   never symlink. Verify a config with a live probe that should fail, not by reading the file.
+- **Shell** (unverified on 2.34, closed source): its open-source predecessor, Amazon Q CLI, runs
+  `bash -c` (or `$AMAZON_Q_CHAT_SHELL`), with no rc file loaded
+  ([source](https://github.com/aws/amazon-q-developer-cli/blob/main/crates/chat-cli/src/util/env_var.rs)),
+  so the zsh traps in [proposal 11](proposals/11-agent-shell-baseline.md) shouldn't apply. Confirm
+  with the live shell probe there before relying on it.
 
 ### codex (secondary)
 
@@ -60,6 +65,13 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   `Start-Process`; run it through a `Start-Job`/pwsh call.
 - **Invocation filter**: **honored, cleanly isolated**, a skill with
   `policy.allow_implicit_invocation: false` is absent from the model's catalog.
+- **Shell** (source-read on 0.147, not yet probed live): the account's login shell from the
+  passwd entry (`pw_shell`, not `$SHELL`), run as `zsh -lc`. With `features.shell_snapshot` on
+  (the default) it sources `~/.zshrc` and replays its functions, `setopt` options and aliases
+  ([startup](https://github.com/openai/codex/blob/main/codex-rs/shell-command/src/startup.rs),
+  [capture](https://github.com/openai/codex/blob/main/codex-rs/shell-command/src/shell_snapshot_capture.rs)),
+  so it hits the same zsh traps as Claude Code. There is no bash override (`zsh_path` only
+  serves the zsh-fork feature); options are in [proposal 11](proposals/11-agent-shell-baseline.md).
 
 ### Claude Code (ancillary)
 
@@ -132,6 +144,8 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   `/grey-matter:<skill>` expands the body. A loopback capture and removed-policy control
   verify this behavior; the published frontmatter reference still omits the field.
   See [policy evidence](research/plugin-invocation-policy.md).
+- **Shell**: unverified (closed source; nothing conclusive in the binary). Run the live shell
+  probe in [proposal 11](proposals/11-agent-shell-baseline.md) before assuming either way.
 
 ### Crush (ancillary, Charm)
 
@@ -140,6 +154,9 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **Project root**: `.agents/skills/` (confirmed live). **Install**: `--project`.
 - **Test**: `crush run --cwd <dir> --quiet "<prompt>"`. Gotcha: `--yolo` is rejected under
   `run` in the probed build; read-only prompts run without it.
+- **Shell**: an embedded POSIX/bash-style interpreter (`mvdan.cc/sh`,
+  [source](https://github.com/charmbracelet/crush/blob/main/internal/shell/run.go)), not the
+  login shell, and no rc files: the zsh traps don't apply.
 
 ### OpenCode (ancillary)
 
@@ -150,6 +167,10 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   project `.opencode/skills`, `.claude/skills`, `.agents/skills`. **Install**: `--project`,
   or `--root ~/.config/opencode/skills`.
 - **Test**: `opencode run "<prompt>"` from the project dir.
+- **Shell** (source-read, not yet probed live): `$SHELL -c` with no login or interactive flag
+  ([source](https://github.com/anomalyco/opencode/blob/dev/packages/core/src/shell/select.ts)),
+  so zsh reads only `~/.zshenv`: no `.zshrc` aliases or options, but zsh's `=word`, word-splitting
+  and `NOMATCH` rules still apply. The config `shell` key can point it at bash.
 
 ## Images
 
