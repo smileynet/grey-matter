@@ -3,7 +3,7 @@
 Sources read: `~/code/crew-research/atomics/skills/<name>/SKILL.md` + all `references/` (mise-helper refs only sized,
 not read in full: 8 files / 1,802 lines), `~/.kiro/steering/image-handling.md`, grey-matter `skills/meta/compass/SKILL.md`,
 grep across `skills/` for deploy/rollback/mise/MCP/image/vision. Local versions observed [L1]: kiro-cli 2.33.1,
-Claude Code 2.1.306 (ASBX), codex 0.163.0.
+Claude Code 2.1.306, codex 0.163.0.
 
 ## deployment-safety
 
@@ -16,7 +16,7 @@ Claude Code 2.1.306 (ASBX), codex 0.163.0.
 3. **Harness-native?** Partly. All three harnesses gate destructive commands via permission/approval modes, and the
    kiro system prompt in this very session mandates confirm-before-prod/destructive [L1: this session's system
    prompt]. Claude Code permission modes / plan mode: https://code.claude.com/docs/en/common-workflows [L4].
-   Amazon builders also get the `amazon-builder-production-safety` and `builder-security` steering [L1: injected rules].
+   Some machines also inject vendor production-safety and security steering [L1: injected rules].
 4. **Covered by grey-matter?** No deploy skill. `release` explicitly scopes out deployment; `sync` is about
    redeploying skills to harness roots, not production. Nothing needed.
 5. **Residual unique value:** Essentially none — no environment facts, no tool contracts. The only non-generic idea
@@ -47,7 +47,7 @@ Claude Code 2.1.306 (ASBX), codex 0.163.0.
 
 1. **What it does:** Keep the default agent's MCP surface small and push specialist servers into named agents;
    documents kiro-cli agent-config traps (zero-tools whitelist, opt-in `useLegacyMcpJson`), a positive/negative
-   sentinel probe pattern, and that AIM rewrites `.kiro/agents/*.json` so configs must be copy-deployed, not symlinked.
+   sentinel probe pattern, and that an agent-config manager may rewrite `.kiro/agents/*.json` so configs must be copy-deployed, not symlinked.
 2. **Model-obsolete?** The "too many tools degrades selection" premise is weakening — harnesses now defer tool
    schemas. The probe pattern ("verify with a live negative probe, not by reading config") is good discipline a
    strong model may skip.
@@ -58,12 +58,12 @@ Claude Code 2.1.306 (ASBX), codex 0.163.0.
 4. **Covered by grey-matter?** No. grey-matter has no agent-config / MCP skill.
 5. **Residual unique value:** kiro-cli-specific gotchas a model won't know: `tools` must include `@builtin` and every
    `@server` (including inherited) or zero tools load; inheritance requires `useLegacyMcpJson: true`; `allowedTools`
-   is trust-only and never inherits into subagents (approval stalls); AIM rewrites agent JSON on load (never
-   symlink). These are local/Amazon-machine facts, not methodology.
+   is trust-only and never inherits into subagents (approval stalls); an agent-config manager may rewrite agent JSON on load (never
+   symlink). These are local-machine facts, not methodology.
 6. **Verdict:** `FOLD` into grey-matter `docs/agents/harnesses.md` (kiro-cli section), as config gotchas:
    > kiro-cli agent configs: `tools` must list `@builtin` and every `@<server>` (inherited too) or nothing loads;
    > global mcp.json inheritance needs `useLegacyMcpJson: true`. `allowedTools` only auto-approves, and subagents
-   > don't inherit the parent's — missing entries stall on approval. On AIM machines agent JSON is rewritten on
+   > don't inherit the parent's — missing entries stall on approval. Where an agent-config manager runs, agent JSON is rewritten on
    > load: deploy by copy, never symlink. Verify with a live negative probe, not by reading the file.
    The partitioning strategy itself → DROP (tool search makes it mostly moot).
 7. **Confidence:** medium — tool-search deferral is documented for Claude Code and observed in kiro-cli; whether
@@ -127,6 +127,6 @@ Claude Code 2.1.306 (ASBX), codex 0.163.0.
 |-------|---------|-----------------|
 | deployment-safety | DROP | Generic SRE checklist; harness approval gates + org steering already cover the safety floor |
 | coding-plan-limits | PROJECT | Valuable vendor code tables, but only for repos dispatching to Kimi/Qwen/GLM — not a target harness |
-| mcp-partitioning | FOLD → `docs/agents/harnesses.md` | Tool search/deferral makes partitioning moot; keep kiro agent-config + AIM gotchas |
+| mcp-partitioning | FOLD → `docs/agents/harnesses.md` | Tool search/deferral makes partitioning moot; keep kiro agent-config + managed-config gotchas |
 | mise-helper | DROP | Mirror of public mise docs; the real mise gotchas live in environment-gotchas, not here |
 | image-handling | FOLD → `docs/agents/harnesses.md` | All 3 harnesses do images natively; keep compaction workaround + sizing; limits table is partly stale |

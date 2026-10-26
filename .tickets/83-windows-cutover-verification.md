@@ -30,8 +30,8 @@ Verification on 2026-10-26:
   passed all 19 tests.
 - Both `claude plugin validate .` and validation of the tkt checkout passed.
 - Native plugin inventories show grey-matter and tkt enabled in both clients.
-- The deployment audit found no duplicates and preserved the unrelated Kiro
-  `git-defender` skill.
+- The deployment audit found no duplicates and preserved an unrelated, externally managed Kiro
+  skill.
 - The full repository gate encountered Windows `EPERM` when creating a file
   symlink in `scripts/relocate-knowledge.test.mjs`, and temporary-directory
   cleanup failures in deployment fixtures.

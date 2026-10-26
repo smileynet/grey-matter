@@ -5,8 +5,8 @@ Sources: both handoff skills, read-handoff, orient, adopt-project + relocation s
 
 ## Facts that shape the design
 
-- The relocation script rewrites **tracked files only** (`git ls-files`). In game-state-manager,
-  roblox-dashboard, and multimodal-enablement, `.scratch/` is ignored, so their handoff is not
+- The relocation script rewrites **tracked files only** (`git ls-files`). In three of the
+  surveyed repos, `.scratch/` is ignored, so their handoff is not
   rewritten. bounty-board **tracks** `.scratch/HANDOFF.md` (`!.scratch/HANDOFF.md`), so writing
   one dirties the tree. It has to be committed before adoption, and the script will then rewrite
   it inside the adoption commit.

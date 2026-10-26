@@ -27,7 +27,7 @@ a tier-based prune. Write a script (`scripts/uninstall-crew-research.mjs`, or a 
 3. Removes only the 10 crew-owned steering files (see proposal 04) and the generated
    `~/.codex/AGENTS.md` (verify its auto-generated header first).
 4. Defaults to `--dry-run`, and diffs against the do-not-touch list: the 34 non-crew skills,
-   `archwright-conventions.md`, `amazon-builder/*`, and `references/environment-gotchas.md`.
+   `archwright-conventions.md`, the vendor steering subdir, and `references/environment-gotchas.md`.
 
 Context: [proposal 04 § What's deployed today](../docs/agents/proposals/04-crew-research-migration.md).
 
@@ -43,5 +43,5 @@ done: scripts/uninstall-crew-research.mjs + tests (check-repo invariant 7); run 
 
 ### Verification
 1. ✓ Removes only dirs listed in .crew-skills / .crew-skills-codex / .crew-skills-crush and only the crew-owned steering files — "Removes only dirs named in .crew-skills / .crew-skills-codex / .crew-skills-crush, plus the 8 remaining crew steering files and the crew-generated ~/.codex/AGENTS.md"
-2. ✓ Dry-run output proves the 34 non-crew skills and non-crew steering are untouched — "Real dry-run: 108 to remove; kept set = exactly the 34 non-crew kiro skills + amazon-builder/, archwright symlink, references/; fake-home tests prove symlinks, foreign files, grey-matter-owned dirs, and unsafe manifest entries are kept"
+2. ✓ Dry-run output proves the 34 non-crew skills and non-crew steering are untouched — "Real dry-run: 108 to remove; kept set = exactly the 34 non-crew kiro skills + the vendor steering subdir, archwright symlink, references/; fake-home tests prove symlinks, foreign files, grey-matter-owned dirs, and unsafe manifest entries are kept"
 3. ✓ Snapshot step precedes removal; restore documented — "Apply mode tars a snapshot before any removal; restore = tar -xzf <backup> -C ~ (printed)"

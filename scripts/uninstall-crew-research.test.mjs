@@ -17,7 +17,7 @@ function fakeHome() {
   const put = (p, body = "x\n") => { mkdirSync(dirname(join(h, p)), { recursive: true }); writeFileSync(join(h, p), body); };
   // crew-deployed skills (listed) and foreign skills (not listed)
   for (const s of ["handoff", "code-review", "recall"]) put(`.kiro/skills/${s}/SKILL.md`);
-  for (const s of ["archwright-survey", "brazil", "tkt"]) put(`.kiro/skills/${s}/SKILL.md`);
+  for (const s of ["archwright-survey", "build-tool", "tkt"]) put(`.kiro/skills/${s}/SKILL.md`);
   put(".kiro/.crew-skills", "handoff\ncode-review\nrecall\nnot-present\n../escape\n");
   put(".kiro/.crew-tier", "full\n");
   for (const s of ["handoff", "grill-with-docs"]) put(`.agents/skills/${s}/SKILL.md`);
@@ -27,7 +27,7 @@ function fakeHome() {
   // steering: crew files, a symlinked crew-named file, foreign subdirs and files
   put(".kiro/steering/verification-protocol.md");
   put(".kiro/steering/source-authority.md");
-  put(".kiro/steering/amazon-builder/amazon-builder-brazil.md");
+  put(".kiro/steering/vendor-steering/vendor-rule.md");
   put(".kiro/steering/references/environment-gotchas.md");
   put(".kiro/steering/my-own-rule.md");
   put("elsewhere/image-handling.md");
@@ -63,9 +63,9 @@ test("apply removes exactly the manifest-named and crew-owned items, and snapsho
       ".agents/skills/.crew-skills-codex", ".kiro/steering/verification-protocol.md",
       ".kiro/steering/source-authority.md", ".codex/AGENTS.md"]) assert.ok(!has(h, gone), gone);
     // the do-not-touch set
-    assert.deepEqual(readdirSync(join(h, ".kiro/skills")).sort(), ["archwright-survey", "brazil", "tkt"]);
+    assert.deepEqual(readdirSync(join(h, ".kiro/skills")).sort(), ["archwright-survey", "build-tool", "tkt"]);
     assert.deepEqual(readdirSync(join(h, ".agents/skills")), ["agy-own"]);
-    for (const kept of [".kiro/steering/amazon-builder/amazon-builder-brazil.md",
+    for (const kept of [".kiro/steering/vendor-steering/vendor-rule.md",
       ".kiro/steering/references/environment-gotchas.md", ".kiro/steering/my-own-rule.md",
       ".kiro/steering/image-handling.md", "elsewhere/image-handling.md", "escape"]) {
       if (kept !== "escape") assert.ok(has(h, kept), kept);

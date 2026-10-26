@@ -13,7 +13,7 @@
 //                           ~/.agents/skills/.crew-skills-codex|-crush (from ~/.agents/skills)
 //   - the manifests themselves and ~/.kiro/.crew-tier
 //   - top-level REGULAR files in ~/.kiro/steering whose name is in CREW_STEERING
-//     (symlinks, subdirs such as amazon-builder/ and references/, and any other file are kept)
+//     (symlinks, subdirs such as a vendor steering dir and references/, and any other file are kept)
 //   - ~/.codex/AGENTS.md, only if its header says crew-research generated it
 // It never removes a name that a grey-matter manifest owns, and never follows a symlink.
 //

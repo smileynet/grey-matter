@@ -28,7 +28,7 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **Agent-config gotchas** (`~/.kiro/agents/*.json`): `tools` must list `@builtin` and every
   `@<server>` the agent uses, or those tools never load. `allowedTools` only auto-approves, and
   subagents don't inherit the parent's: a missing entry stalls the worker on an approval prompt.
-  On machines with AIM-managed agents the JSON is rewritten on load, so deploy configs by copy,
+  On machines where an agent manager owns these configs, the JSON is rewritten on load, so deploy configs by copy,
   never symlink. Verify a config with a live probe that should fail, not by reading the file.
 - **Shell** (unverified on 2.34, closed source): its open-source predecessor, Amazon Q CLI, runs
   `bash -c` (or `$AMAZON_Q_CHAT_SHELL`), with no rc file loaded

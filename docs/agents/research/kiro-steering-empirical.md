@@ -4,7 +4,7 @@
 command run on this machine on the current date. Where a claim rests on another project's
 documentation it is labeled L4 and called out as such.
 
-Machine: `acp-client` (sandbox). kiro-cli **2.33.1**, `chat.agentEngine: v3`.
+Machine: a sandboxed host. kiro-cli **2.33.1**, `chat.agentEngine: v3`.
 
 ---
 
@@ -59,7 +59,7 @@ steering/context diagnostics are emitted. Exit code 0.
 ```json
 { "chat.agentEngine": "v3", "chat.defaultModel": "auto", "mcp.loadedBefore": true, ... }
 ```
-`~/.kiro/settings/amazon-internal.json`: `{"sandbox": true}`.
+A vendor settings file in `~/.kiro/settings/` sets `{"sandbox": true}`.
 
 ---
 
@@ -71,9 +71,9 @@ ai-generation-hygiene.md        context-budget-awareness.md   image-handling.md
 project-conventions.md          recall-check.md               recall-session-start.md
 research-dispatch-mandate.md    source-authority.md           subagent-reliability.md
 verification-protocol.md
-archwright-conventions.md -> /home/sabiggin/code/archwright/steering/archwright-conventions.md   (symlink)
-frontier-work.md         -> /local/home/sabiggin/code/tkt/steering/frontier-work.md              (symlink)
-amazon-builder/   (5 files: brazil, inclusivity-scanner, internal-systems, production-safety, security)
+archwright-conventions.md -> ~/code/archwright/steering/archwright-conventions.md   (symlink)
+frontier-work.md         -> ~/code/tkt/steering/frontier-work.md              (symlink)
+vendor-steering/  (5 externally managed vendor rule files)
 references/       (environment-gotchas.md — 57 KB)
 ```
 
@@ -93,7 +93,7 @@ inclusivity-scanner table ("inclusion list"), not a frontmatter directive:
 
 ```
 $ grep -rn "inclusion" ~/.kiro/steering/
-amazon-builder/amazon-builder-inclusivity-scanner.md:9:| whitelist | allowlist, approved list, inclusion list |
+vendor-steering/inclusive-language.md:9:| whitelist | allowlist, approved list, inclusion list |
 ```
 
 So: **bare markdown, no inclusion mode declared anywhere.**
@@ -105,21 +105,18 @@ So: **bare markdown, no inclusion mode declared anywhere.**
 The loader is the **agent config `resources` array**, found in `~/.kiro/agents/*.json`.
 There is no `~/.kiro/cli-agents/` dir and no `~/.aws/amazonq/` config on this host.
 
-Settings dir `~/.kiro/settings/` holds `cli.json`, `mcp.json`, `amazon-internal.json`,
+Settings dir `~/.kiro/settings/` holds `cli.json`, `mcp.json`, a vendor settings file,
 theme/feed/survey state — none of these reference steering or AGENTS.md. The wiring lives
 entirely in the agent JSONs:
 
 Agents that load steering + AGENTS.md (exact `resources` entries):
 
-- **`AmazonBuilderCoreAIAgents-amzn-builder.json`**:
-  `["file://README.md", "file://AGENTS.md", "file://.kiro/steering/**/*.md", <AIM context .md>, <AIM skill SKILL.md ...>]`
-- **`AtlasAICapabilities-atlas.json`**:
-  `["file://README.md", "file://AGENTS.md", "file://.kiro/steering/**/*.md", "file://...atlas-*.md"]`
-- **`kirocrew.json`** (the crew default) and every crew sub-agent
-  (`kirocrew-conductor`, `-research`, `-worker`, `-ledger-conductor`,
-  `-pipeline-conductor`, `-security-conductor`):
+- **Two externally managed agent configs**:
+  `["file://README.md", "file://AGENTS.md", "file://.kiro/steering/**/*.md", <managed context .md ...>]`
+- **The crew default agent** and every crew sub-agent (conductor, research,
+  worker, and the other conductors):
   `["file://.kiro/steering/**/*.md"]`
-- `kirocrew-lite`, `-heartbeat`, `-knowledge`, and the `sa-*` agents have
+- The lite, heartbeat and knowledge crew agents, and a few role agents, have
   `resources: None` — they load **no** steering at all.
 
 Key facts about the mechanism:
@@ -148,7 +145,7 @@ workspace-relative glob. (Observed: this session's injected rules are the global
   in full** — `verification-protocol`, `source-authority`, `subagent-reliability`,
   `research-dispatch-mandate`, `project-conventions`, `context-budget-awareness`,
   `image-handling`, `archwright-conventions`, `ai-generation-hygiene`, the recall pair,
-  the five `amazon-builder/*`, and the 57 KB `references/environment-gotchas.md`. All of
+  the five vendor steering files, and the 57 KB `references/environment-gotchas.md`. All of
   them, not a filtered subset — consistent with an unconditional `**/*.md` glob, not an
   `inclusion: fileMatch` filter.
 - The workspace **`AGENTS.md`** (grey-matter) and the tkt workspace-rule block were injected
@@ -166,7 +163,7 @@ workspace-relative glob. (Observed: this session's injected rules are the global
 Yes, and its documentation **confirms** the empirical finding above (this is L4 — another
 project's docs — but it corroborates the L1 observation):
 
-`/home/sabiggin/code/crew-research/.kiro/steering/user-setup-guide.md`:
+`~/code/crew-research/.kiro/steering/user-setup-guide.md`:
 - line 32: "`.kiro/steering/` — always-on rules (code hygiene, verification)"
 - line 48: "Files added directly to `~/.kiro/steering/` that aren't in the deployed tier get
   **PRUNED on the next deploy**. To add personal always-on steering that survives
@@ -189,7 +186,7 @@ That is exactly what the kiro-cli agent `resources` globs implement.
 
 ## Caveats on scope
 
-- Evidence is from one host (`acp-client`, sandbox) and the installed AIM + crew agent
+- Evidence is from one sandboxed host and the installed managed + crew agent
   configs. The loading *mechanism* (resources glob, no frontmatter gate) is stable across
   every agent JSON inspected; the specific *file set* is machine/deploy-specific.
 - I did not find kiro.dev documentation locally; the mechanism claims rest on the config

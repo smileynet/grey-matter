@@ -5,7 +5,7 @@ Checked against herdr 0.9.1 `--help` and `herdr --skill`, read-only, on 2026-10-
 ## 1. Detect
 
 ```bash
-R=/local/home/sabiggin/code/<repo>
+R=~/code/<repo>
 herdr pane list | jq -r --arg r "$R" '.result.panes[]
  | select([.cwd,.foreground_cwd][] // "" | .==$r or startswith($r+"/"))
  | [.pane_id,(.agent//"-"),.agent_status,.focused,.terminal_title_stripped]|@tsv' | sort -u
@@ -74,4 +74,4 @@ For codex, start the prompt with `$orient`: user-invoked skills aren't in its mo
   - Is `$orient` the right syntax in codex?
 - `orient` and `handoff` aren't installed until ticket 52. Before then, point the agent at `~/code/grey-matter/skills/meta/orient/SKILL.md`.
 - Human choices: `-a` (trust all tools)? May orient start work, or stop at its pick?
-- Working agents elsewhere (games-sa-buddy, sa-project-helper, 3d-pipeline, cloud-compute-optimization) keep stale context after cutover; retire them only via this protocol, one repo at a time.
+- Working agents elsewhere (four other repos) keep stale context after cutover; retire them only via this protocol, one repo at a time.

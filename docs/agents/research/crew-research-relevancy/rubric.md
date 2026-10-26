@@ -6,7 +6,7 @@ self-verification, flaky subagents, small contexts). grey-matter targets current
 Codex**. Default bias: **DROP**. A skill must earn its place.
 
 Source of each skill: `~/code/crew-research/atomics/skills/<name>/SKILL.md` (+ its `references/`).
-grey-matter skills to compare against: `/local/home/sabiggin/code/grey-matter/skills/*/*/SKILL.md`
+grey-matter skills to compare against: `~/code/grey-matter/skills/*/*/SKILL.md`
 (read `skills/meta/compass/SKILL.md` first for the map).
 
 For each skill, answer:

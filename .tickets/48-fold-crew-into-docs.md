@@ -18,7 +18,7 @@ Doc-level folds (exact text in [../docs/agents/research/crew-research-relevancy/
 
 - **`docs/agents/harnesses.md`:**
   - kiro agent-config gotchas: `@builtin` plus every `@server`; `allowedTools` doesn't inherit
-    into subagents; AIM rewrites agent JSON, so copy rather than symlink; verify with a live
+    into subagents; an agent-config manager may rewrite agent JSON, so copy rather than symlink; verify with a live
     negative probe.
   - Images: native in all three harnesses. After compaction, re-ask in a fresh headless run;
     resize to tier; label each image's role.
