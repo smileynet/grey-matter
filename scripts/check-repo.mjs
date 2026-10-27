@@ -105,6 +105,7 @@ run("11. release draft, artifact and publisher safety", node, ["--test", join(SC
 run("12. Git and Claude plugin hooks", node, ["--test", join(SCRIPTS, "install-hooks.test.mjs"), join(SCRIPTS, "claude-hooks.test.mjs")]);
 run("13. repository artifact hygiene", node, ["--test", join(SCRIPTS, "repository-artifact-hygiene.test.mjs")]);
 run("14. agent shell probe", node, ["--test", join(SCRIPTS, "probe-agent-shell.test.mjs")]);
+run("15. delivery-dashboard contract", node, ["--test", join(SCRIPTS, "delivery-dashboard.test.mjs")]);
 
 // --- Summary ------------------------------------------------------------------
 console.log("\n==================== repo-check summary ====================");
