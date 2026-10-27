@@ -1,6 +1,6 @@
 # Proposal 13: skills and critics that keep status dashboards honest
 
-**Status:** accepted 2026-10-27, except the model choice in "Critic model", which is proposed. **Scope:** `delivery-dashboard` (references and step 5),
+**Status:** accepted 2026-10-27, except the harness table in "Critic model", which waits for the spike in proposal 14. **Scope:** `delivery-dashboard` (references and step 5),
 `wrap-session`, `orient`, `adopt-project`, `conformance-audit`; two reviewer prompts drafted below.
 **Builds on:** [ADR 0004](../../adr/0004-delivery-dashboard-keeps-a-searchable-history.md), the
 [dashboard contract](../../../skills/productivity/delivery-dashboard/references/dashboard-contract.md)
@@ -167,7 +167,7 @@ sources are in [critic-model-selection-20261027](../research/critic-model-select
 1. **Pin a model explicitly on every spawn.** Never inherit from the parent. A parent on a faster
    model would otherwise review on that model: Claude Code, Codex and opencode all inherit by
    default.
-2. **Use the first available model in the harness's preference list** (table below).
+2. **Use the harness's ceiling model, or the strongest it offers** (table below).
 3. **Set the effort explicitly.** Opus 5.5 defaults to `medium`, so leaving it unset quietly
    weakens the review. Use `high` for both critics, and `xhigh` for the results critic on entries
    that make live claims or carry an ask, where a wrong verdict costs the most.
@@ -184,34 +184,39 @@ sources are in [critic-model-selection-20261027](../research/critic-model-select
    weaker model is not the cost lever. Skipping the results critic on pure decision and learning
    entries (above) is.
 
-### Preference lists and mechanics
+### Ceiling models and mechanics
 
-| Harness | Preference list | Pin with | Effort | Probe |
+Owner decision (2026-10-27): **Claude Opus 5.5 and GPT-6.1 Sol**, because both are available on
+subscription plans. Fable 5.1 and Astra are costlier or billed separately (Fable can use usage
+credits), so they are an opt-in escalation, not the default. "Best available" therefore means
+the ceiling below, or the strongest model the harness offers when the ceiling is missing. The
+spike in [proposal 14](./14-critic-model-spike.md) verifies each row on a real machine before this
+table goes into `harnesses.md`.
+
+| Harness | Ceiling | If the ceiling is unavailable | Pin with | Effort |
 | --- | --- | --- | --- | --- |
-| Claude Code | `fable` (`claude-fable-5-1`), then `opus` (`claude-opus-5-5`) | The `model` parameter of the spawn, or `model:` in a critic agent file. Not `best`, which subagents do not accept. | `effort:` or the per-spawn parameter | The model picker; Fable is selected explicitly and may bill usage credits or be unavailable |
-| Codex | `gpt-6-astra`, then `gpt-6.1-sol` | `model` and `model_reasoning_effort` in a `.codex/agents/*.toml` file, or `[agents] default_subagent_model` | `high`; `xhigh` or above where the model supports it | `/model` and the CLI's model list |
-| Kiro CLI | Strongest Claude model in Kiro's own list, in the Claude Code order | `model` in the agent file, using an ID from `kiro-cli chat --list-models` | Not documented; accept the default and record it | `--list-models`, because an unavailable pinned model fails the first prompt |
-| opencode | `anthropic/claude-fable-5-1` then `anthropic/claude-opus-5-5`, or `openai/gpt-6-astra` then `openai/gpt-6.1-sol`, whichever provider is configured | `model: provider/model-id` in the agent file | Not documented; accept the default and record it | `opencode models` |
+| Claude Code | `opus` (`claude-opus-5-5`) | Newest Opus the plan allows, recorded | The `model` parameter of the spawn, or `model:` in a critic agent file | `effort:` or the per-spawn parameter; Opus defaults to `medium`, so set `high` |
+| Codex | `gpt-6.1-sol` | Strongest model in the CLI's catalog, recorded | `model` and `model_reasoning_effort` in a `.codex/agents/*.toml` file, `-m` and `-c` on `codex exec`, or `[agents] default_subagent_model` | `high`; `xhigh` where supported |
+| Kiro CLI | Strongest Claude in `--list-models`, in the order Opus 5.5, Opus 5, Opus 4.x | Same | `--model` or `model` in the agent file, using an ID from `--list-models` | `--effort` |
+| opencode | `opencode/claude-opus-5-5` or `opencode/gpt-6.1-sol` (by configured provider) | Next in the provider's list | `-m provider/model` or `model:` in the agent file | `--variant` |
+
+On the machine used for this review, only Claude Code and opencode list the ceiling models. Kiro
+CLI 2.16.0 lists Claude Opus 4.5 as its strongest Claude, and Codex 0.147.0's catalog (fetched
+2026-10-21) lists `gpt-5.6-sol`, with no 6.1 model. Those harnesses would run critics below the
+ceiling today, which is why the rule requires recording what ran.
 
 ### Points for the owner to decide
 
-- **Opus 5.5 or Fable 5.1 on Claude.** The assumption was Opus 5.5. Anthropic's own pages place
-  Fable 5.1 above it for demanding reasoning and long-horizon agentic work, at 2.5 times the price
-  ($10 and $50 per million tokens against $4 and $20), slower, and billed to usage credits on some
-  plans; non-interactive runs bill it without a consent prompt. The rule as drafted prefers Fable
-  and falls back to Opus, which is what "best available" means in the vendor's terms. If you want
-  Opus 5.5 as the ceiling, change the first entry in the table; nothing else moves.
-- **Astra or Sol on OpenAI.** Astra is the flagship ("most capable"); Sol is "near-Astra" at a
-  fifth of the price. The draft prefers Astra with Sol as the fallback.
-- **Cross-family review.** Where both a Claude and a Codex harness are installed, the results
-  critic could run on the family the author did not use (for example `codex exec -m gpt-6-astra`
-  for a Claude-authored entry), as `dispatch-review` does for code. That costs a second harness
-  and a setup step; the default stays best model per harness, and cross-family becomes an option
-  the owner turns on.
-- **Where the files live.** Critic agent files in each harness's native format (Claude `.md`, Codex
-  `.toml`, Kiro `.json`, opencode `.md`) could be generated from one source and installed by the
-  deployer. Until then the skill instructs the author to pass the model and effort on the spawn,
-  which every harness above supports.
+- **Raising the ceiling.** If a project wants Fable 5.1 or Astra for high-stakes entries, the
+  ceiling is a per-project setting in `harnesses.md`, not a change to the critic prompts.
+- **Below-ceiling harnesses.** Whether a critic that can only run below the ceiling (Kiro on Opus
+  4.5 today) still produces a verdict, or defers to a harness that can. The draft: it runs and the
+  result is marked below-ceiling.
+- **Cross-family review.** Where a Claude and a Codex harness are both installed, the results critic
+  could run on the family the author did not use. Off by default.
+- **Where the files live.** Critic agent files in each harness's native format could be generated
+  from one source and installed by the deployer. Until then the skill instructs the author to pass
+  the model and effort on the spawn, which every harness above supports.
 
 ## Rollout
 

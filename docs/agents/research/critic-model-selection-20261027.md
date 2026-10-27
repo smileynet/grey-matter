@@ -50,3 +50,19 @@ without a consent prompt; it is unavailable under zero data retention. Source:
   documents effort for subagents. Defaults apply there.
 - The `Agent` tool in this session offers `sonnet`, `opus`, `haiku` and `fable` as model values, which
   agrees with the Claude Code page.
+
+## Owner decision and this machine's catalogs
+
+Decision (2026-10-27): critics use Claude Opus 5.5 and GPT-6.1 Sol, which are both available on
+subscription plans. Fable 5.1 and Astra stay opt-in.
+
+What each CLI on this machine (randomserver) offers, read-only:
+
+| Harness (version) | Source of the list | Ceiling model present? |
+| --- | --- | --- |
+| Claude Code 2.1.252 | The docs' alias `opus` (Opus 5.5 on the Anthropic API) | Expected, not yet exercised |
+| Codex 0.147.0 | `~/.codex/models_cache.json`, fetched 2026-10-21 for client 0.147.0: `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`; configured `model = "gpt-5.6-sol"` at `medium` | No `gpt-6.1-sol`. Codex's own docs say Terra needs 0.159.0 or later, so the CLI is likely too old or the catalog stale |
+| Kiro CLI 2.16.0 | `kiro-cli chat --list-models` | No. Strongest Claude is `claude-opus-4.5` |
+| opencode 1.18.21 | `opencode models` | Yes, under the `opencode/` provider: `opencode/claude-opus-5-5`, `opencode/gpt-6.1-sol` (also Fable 5.1 and Astra). Auth is configured for `opencode`, `openrouter` and others, not direct `anthropic` or `openai` providers |
+
+These are catalogs, not proof that a request succeeds. The spike checks that.
