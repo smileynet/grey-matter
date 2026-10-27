@@ -23,6 +23,10 @@ a quick skim, a markdown doc is the whole deliverable. (Hand-edited prose, conve
 ADRs, glossaries, and tkt tickets stay plain markdown regardless, this convention is about
 generated reports/dashboards, not the repo's working docs.)
 
+A status dashboard that is updated after each task follows the
+[delivery-dashboard](../../skills/productivity/delivery-dashboard/SKILL.md) contract: a shipped
+template, a short overview over a searchable history, and a checker.
+
 ## HTML rules
 
 - **Open the relevant view.** When the current environment supports it, open the

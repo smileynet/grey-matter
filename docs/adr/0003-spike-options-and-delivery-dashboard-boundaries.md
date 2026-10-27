@@ -1,6 +1,7 @@
 # 0003 — spike-options and delivery-dashboard: two composable skills, with bounded scope
 
-**Status:** accepted (2026-10-22)
+**Status:** accepted (2026-10-22). The dashboard's rolling-history clause is amended by
+[0004](./0004-delivery-dashboard-keeps-a-searchable-history.md).
 
 ## Context
 

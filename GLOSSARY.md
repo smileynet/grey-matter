@@ -195,10 +195,16 @@ The vocabulary for the completion-communication artifact
 text) — the dashboard is the living, relevant-now, visual surface.
 
 ### delivery dashboard
-A single evolving HTML view of delivered work in the **JTBD register**, distinct
-from an archival changelog or per-run report. The
+A single evolving HTML status page, updated after each task, in the **JTBD register**:
+an overview of what needs the owner and the latest five entries, over a searchable history
+of every entry. Distinct from an archival changelog or per-run report. The
 [delivery-dashboard skill](skills/productivity/delivery-dashboard/SKILL.md) owns its
-tabs, rolling history and update rules. Context: skills (productivity).
+views, entry fields and update rules. Context: skills (productivity).
+
+### ask
+An item in a dashboard entry that needs the owner's input: a question, a recommendation,
+the options and what it unblocks. Open asks collect in the page's "Needs you" panel.
+Context: skills (productivity).
 
 ### JTBD register
 The dashboard's writing perspective: the person's **job-to-be-done**, the delivered
