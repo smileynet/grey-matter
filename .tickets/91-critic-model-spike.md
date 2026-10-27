@@ -1,7 +1,7 @@
 ---
 id: "91"
 title: "Spike: verify critic model and effort pinning through each harness CLI"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -24,11 +24,11 @@ Decided: a harness below the ceiling still runs its critics on its best model, m
 
 ## Acceptance criteria
 
-- [ ] A results matrix covers all seven probes for the four harnesses, each cell with command, version, date and an evidence line.
-- [ ] One working spawn recipe per harness (model, effort, read-only, structured output) is recorded.
-- [ ] The harness table for `docs/agents/harnesses.md` is corrected from the results and committed.
-- [ ] `scripts/probe-critic-model.mjs` covers the passing probes read-only, and `sync` runs it.
-- [ ] Each failure has a follow-up ticket.
+- [x] A results matrix covers all seven probes for the four harnesses, each cell with command, version, date and an evidence line.
+- [x] One working spawn recipe per harness (model, effort, read-only, structured output) is recorded.
+- [x] The harness table for `docs/agents/harnesses.md` is corrected from the results and committed.
+- [x] `scripts/probe-critic-model.mjs` covers the passing probes read-only, and `sync` runs it.
+- [x] Each failure has a follow-up ticket.
 
 ## Progress (2026-10-27)
 
@@ -39,3 +39,11 @@ Code CLI (logged out on this host) and Codex (refresh token reused, token file u
 `codex login` here: P1 to P7 for those two, P5 for all, `probe-critic-model.mjs` and the corrected
 harness table. Findings already change proposal 13: the model of record comes from the harness,
 critics need a time limit, and a CLI flag outranks an agent file.
+
+## Resolution (2026-10-27)
+
+Spike run on randomserver; all four harnesses measured; probe script, harness table and sync step added; gaps filed as ticket 92.
+
+### Verification
+1. ✓ A results matrix covers all seven probes for Claude Code, Codex, Kiro CLI and opencode, with the command, version and evidence line for each cell — "docs/agents/research/critic-model-spike-20261027.md: matrix of seven probes across Claude Code (CLI and in-session), Codex 0.164.0, Kiro 2.16.0 and opencode 1.18.21, with command, version and evidence per cell"
+2. ✓ A working spawn recipe per harness and a corrected harness table are committed, and failures have follow-up tickets — "docs/agents/harnesses.md#critic-model holds the corrected table and recipes; scripts/probe-critic-model.mjs (check-repo invariant 16, run in sync) reported claude, codex and opencode at ceiling and Kiro unverified below ceiling; failures are ticket 92"
