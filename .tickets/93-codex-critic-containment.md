@@ -1,7 +1,7 @@
 ---
 id: "93"
 title: "Spike: contain Codex critics with an enforced boundary, not the prompt"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
