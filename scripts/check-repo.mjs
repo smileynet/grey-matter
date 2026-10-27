@@ -20,6 +20,8 @@
 //  12. opt-in Git hooks            -> install-hooks.test.mjs (disposable repositories)
 //  13. repository artifact inspection -> repository-artifact-hygiene.test.mjs (read-only fixtures)
 //  14. agent shell probe          -> probe-agent-shell.test.mjs (fake settings and binaries)
+//  15. delivery-dashboard contract -> delivery-dashboard.test.mjs (template, example and checker)
+//  16. critic model probe         -> probe-critic-model.test.mjs (fake harness binaries)
 //
 // Design (AC-driven):
 //  - READ-ONLY on user state. The installer test uses throwaway temp roots (mkdtemp),
@@ -106,6 +108,7 @@ run("12. Git and Claude plugin hooks", node, ["--test", join(SCRIPTS, "install-h
 run("13. repository artifact hygiene", node, ["--test", join(SCRIPTS, "repository-artifact-hygiene.test.mjs")]);
 run("14. agent shell probe", node, ["--test", join(SCRIPTS, "probe-agent-shell.test.mjs")]);
 run("15. delivery-dashboard contract", node, ["--test", join(SCRIPTS, "delivery-dashboard.test.mjs")]);
+run("16. critic model probe", node, ["--test", join(SCRIPTS, "probe-critic-model.test.mjs")]);
 
 // --- Summary ------------------------------------------------------------------
 console.log("\n==================== repo-check summary ====================");

@@ -140,6 +140,16 @@ refresh. Preserve existing copies when a refresh fails.
    `--apply` only when the user says so: `~/.claude/settings.json` is theirs. See
    [harnesses](../../../docs/agents/harnesses.md) ("Bash tool shell").
 
+   Then check that critic models can still be pinned and proven here (one tiny call per
+   harness; it reports, never changes anything):
+
+   ```bash
+   node scripts/probe-critic-model.mjs
+   ```
+
+   A `below-ceiling`, `unverified`, `not-authenticated` or `unavailable` line is a follow-up, not a
+   failure. See [harnesses](../../../docs/agents/harnesses.md) ("Critic model").
+
 7. **Report the delta.** One compact summary, most-pressing-first:
 
    - **Commits pulled** (`git log --oneline <before>..HEAD`).
@@ -149,6 +159,7 @@ refresh. Preserve existing copies when a refresh fails.
    - **Ticket health**: whether a rebase ran, and `tkt validate` status.
    - **Repo check**: green, or exactly what `check-repo.mjs` flagged.
    - **Agent shell**: `ok`, `n/a`, or each `probe-agent-shell.mjs` finding with its fix.
+   - **Critic models**: each harness's `probe-critic-model.mjs` line (model it ran on, ceiling, auth).
    - **Follow-ups**: e.g. "run `reconcile-tickets`", "fix the drift in skill X", "`--project`
      install for Crush in repo Y".
 

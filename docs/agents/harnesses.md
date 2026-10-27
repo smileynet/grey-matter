@@ -175,6 +175,47 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   so zsh reads only `~/.zshenv`: no `.zshrc` aliases or options, but zsh's `=word`, word-splitting
   and `NOMATCH` rules still apply. The config `shell` key can point it at bash.
 
+## Critic model
+
+Review critics (the dashboard copy and results critics, proposal 13) run on the best model a
+harness offers, with the model and effort pinned on the spawn. **Verified 2026-10-27** on
+randomserver by the spike in [critic-model-spike](./research/critic-model-spike-20261027.md);
+model facts are from [critic-model-selection](./research/critic-model-selection-20261027.md)
+(official vendor documentation). Recheck when a model ships, or run
+`node scripts/probe-critic-model.mjs` (`sync` does).
+
+| Harness | Ceiling | Pin with | Effort | Model of record | Needs |
+| --- | --- | --- | --- | --- | --- |
+| Claude Code | `opus` (Claude Opus 5.5) | Subagent: the `Agent` tool's `model` parameter. CLI: `--model opus` and `--agents` JSON with `model:` | `effort` parameter or `--effort high` (Opus defaults to `medium`) | In-session: the subagent transcript's `model` and `effort`. CLI: `modelUsage` in `--output-format json` | Logged in (`claude auth login`) |
+| Codex | `gpt-6.1-sol` | `-m gpt-6.1-sol -c model_reasoning_effort=high`, or a `~/.codex/agents/*.toml` file with `model` and `model_reasoning_effort` | `high` | The rollout's `turn_context` (`model`, `effort`); not written with `--ephemeral`. A spawned agent has its own rollout | CLI 0.159 or later for the 6.1 models (0.164 verified); logged in |
+| Kiro CLI | Strongest Claude in `--list-models` (Opus 4.5 on 2.16.0) | `--model <id>` on a top-level `kiro-cli chat --no-interactive` call. Subagents cannot take a model | `--effort high` | None. Record "requested, unverified" | Logged in |
+| opencode | `zai-coding-plan/glm-5.3` (owner's z.ai subscription) | `-m provider/model --variant high`, or `model:` in an agent file; a `-m` flag outranks the file | `--variant` | `opencode export <sessionID>`: `providerID`, `modelID`, `variant` per message; a subagent's model in the `task` tool metadata | A provider with a live key |
+
+Rules, with the evidence for each in the spike results:
+
+- **Pin on every spawn; never inherit.** An unpinned subagent ran on the parent's model in Claude
+  Code, Codex and opencode. In Codex, spawn with `fork_turns: "none"` so the critic does not also
+  inherit the parent's conversation.
+- **Record the model from the harness, never from the critic.** A Kiro run pinned to Haiku said it
+  was Sonnet. Every critic result carries `Reviewed on: <model> at <effort>` and `at ceiling`,
+  `below ceiling` or `unverified`; a harness below the ceiling still runs its critic.
+- **Overrides can defeat a pin.** `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` made a pinned Opus critic run
+  on Haiku in Claude Code 2.1.311. Without FORCE the pin won over `CLAUDE_CODE_SUBAGENT_MODEL`. In
+  Codex a pinned agent file beat `[agents] default_subagent_model`, which applied to an unpinned
+  agent. Read the record to see what ran.
+- **A missing model fails loudly everywhere tested.** Kiro lists the available models; Claude Code
+  and Codex name the model; opencode says only "Unexpected server error".
+- **Read-only.** Use the harness's own restriction (Claude Code `--tools Read,Grep,Glob`, an
+  opencode agent with write, edit and bash off and `permission.edit: deny`, Kiro `--trust-tools=fs_read`).
+  Codex `-s read-only` cannot run shell commands on randomserver (bubblewrap fails with
+  "RTM_NEWADDR: Operation not permitted"), so give a Codex critic its input in the prompt.
+- **Time-limit every critic call** with an outer `timeout`. A pinned opencode subagent told to reply
+  "OK" made 26 read-only calls and ran past 150 s.
+- **Ask for "no rows when there are no problems".** Kiro listed non-findings as rows; opencode and
+  Claude Code with `--json-schema`, and Codex with `--output-schema`, returned clean structure.
+- **Credentials.** A harness that is not logged in is `not-authenticated`, which is a different
+  result from a missing model. The probe reports them apart.
+
 ## Images
 
 All three primary harnesses read images natively: kiro-cli takes a path in the prompt (up to 10
