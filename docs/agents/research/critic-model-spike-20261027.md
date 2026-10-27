@@ -19,7 +19,7 @@ models there. Codex's catalog on 0.164.0 now lists `gpt-6.1-sol`; on 0.147.0 it 
 | P3 subagent pin | **Pass.** `--agents` pinned Opus ran under a Haiku parent (`modelUsage` lists both); unpinned used Haiku only | **Pass** (Sonnet 5.5 parent) | **Pass.** Agent file pinned `gpt-6.1-sol` ran under a `gpt-6-luna` parent; unpinned inherited `gpt-6-luna` at `low` | **Fail.** `subagent` runs `kiro_default`; no model choice | **Pass.** Pinned `glm-5.3` under a `glm-5.3-flash` parent; unpinned inherited flash |
 | P4 missing model | **Pass.** Exit 1, names the model | Not testable | **Pass.** Exit 1, `model_not_found`, names the model | **Pass.** Exit 1, lists the available models | **Pass, opaque.** Exit 1, "Unexpected server error" |
 | P5 overrides | **Finding.** `CLAUDE_CODE_SUBAGENT_MODEL=haiku` lost to a pinned agent; with `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` the pinned Opus critic ran on Haiku | n/a | **Pass.** A pinned agent file beat `[agents] default_subagent_model`; the default applied to an unpinned agent (`gpt-6.1-terra`) | n/a | **Finding.** A `-m` flag outranks the model in an agent file |
-| P6 read-only | **Pass.** `--tools Read,Grep,Glob` refused a write, no file | Not run | **Inconclusive.** Refused, but `-s read-only` cannot run any shell here (bubblewrap error), so a read-only critic cannot read files | **Pass.** Write refused (non-interactive), no file | **Pass.** Agent with write, edit, bash off refused, no file |
+| P6 read-only | **Pass.** `--tools Read,Grep,Glob` refused a write, no file | Not run | **Sandbox unusable here** (bubblewrap error), so the owner chose `--dangerously-bypass-approvals-and-sandbox`. With it the critic can read files, and read-only rests on the prompt: it refused to write when told it was a read-only reviewer and wrote the file when not told | **Pass.** Write refused (non-interactive), no file | **Pass.** Agent with write, edit, bash off refused, no file |
 | P7 output contract | **Pass.** `--json-schema` returned conforming structure with real findings | Not run | **Pass** with the entry in the prompt and `--output-schema`. With file access it failed honestly (sandbox), but returned verdict `REWRITE NEEDED` | **Partial.** Parsed, but listed non-findings as rows | **Pass** with a stricter prompt |
 
 ## What was found
@@ -42,12 +42,15 @@ models there. Codex's catalog on 0.164.0 now lists `gpt-6.1-sol`; on 0.147.0 it 
 6. **Kiro subagents cannot take a model.** Kiro critics run as top-level
    `kiro-cli chat --no-interactive --model <id>` calls. Its best Claude is `claude-opus-4.5`, so it
    runs below ceiling.
-7. **Codex's sandbox is unusable for file reads on this host.** `-s read-only` runs commands in
-   bubblewrap, which fails here ("loopback: Failed RTM_NEWADDR: Operation not permitted", the
-   unprivileged-namespace restriction). A critic that needs a file cannot read it, and the earlier
-   write refusal may have been this failure, not the policy. Give a Codex critic its input in the
-   prompt. A critic that cannot review should not return a rewrite verdict; this one did, with
-   `findings: []`.
+7. **Codex's sandbox is unusable on this host, so Codex critics run with
+   `--dangerously-bypass-approvals-and-sandbox` (the owner's decision).** `-s read-only` runs commands
+   in bubblewrap, which fails here ("loopback: Failed RTM_NEWADDR: Operation not permitted", the
+   unprivileged-namespace restriction). With the flag the critic read the file with `rg` and gave a
+   real review. The flag also removes enforcement: asked to create a file with no read-only
+   instruction it did; told it was a read-only reviewer it refused. A Codex critic is therefore
+   read-only only by its prompt, so run it from a clean tree and check `git status --porcelain`
+   afterwards. Earlier, without file access, the critic returned verdict `REWRITE NEEDED` with
+   `findings: []`; a critic that cannot review should not return a verdict.
 8. **Critics need a time limit.** A pinned opencode subagent told to reply "OK" made 26 read-only
    tool calls and ran past 150 s. Wrap every critic call in `timeout`.
 9. **Prompt wording decides output discipline.** Kiro, asked for findings, listed five non-findings

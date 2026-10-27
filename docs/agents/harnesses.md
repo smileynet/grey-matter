@@ -187,7 +187,7 @@ model facts are from [critic-model-selection](./research/critic-model-selection-
 | Harness | Ceiling | Pin with | Effort | Model of record | Needs |
 | --- | --- | --- | --- | --- | --- |
 | Claude Code | `opus` (Claude Opus 5.5) | Subagent: the `Agent` tool's `model` parameter. CLI: `--model opus` and `--agents` JSON with `model:` | `effort` parameter or `--effort high` (Opus defaults to `medium`) | In-session: the subagent transcript's `model` and `effort`. CLI: `modelUsage` in `--output-format json` | Logged in (`claude auth login`) |
-| Codex | `gpt-6.1-sol` | `-m gpt-6.1-sol -c model_reasoning_effort=high`, or a `~/.codex/agents/*.toml` file with `model` and `model_reasoning_effort` | `high` | The rollout's `turn_context` (`model`, `effort`); not written with `--ephemeral`. A spawned agent has its own rollout | CLI 0.159 or later for the 6.1 models (0.164 verified); logged in |
+| Codex | `gpt-6.1-sol` | `codex exec -m gpt-6.1-sol -c model_reasoning_effort=high --dangerously-bypass-approvals-and-sandbox` (owner's choice), or a `~/.codex/agents/*.toml` file with `model` and `model_reasoning_effort` | `high` | The rollout's `turn_context` (`model`, `effort`); not written with `--ephemeral`. A spawned agent has its own rollout | CLI 0.159 or later for the 6.1 models (0.164 verified); logged in |
 | Kiro CLI | Strongest Claude in `--list-models` (Opus 4.5 on 2.16.0) | `--model <id>` on a top-level `kiro-cli chat --no-interactive` call. Subagents cannot take a model | `--effort high` | None. Record "requested, unverified" | Logged in |
 | opencode | `zai-coding-plan/glm-5.3` (owner's z.ai subscription) | `-m provider/model --variant high`, or `model:` in an agent file; a `-m` flag outranks the file | `--variant` | `opencode export <sessionID>`: `providerID`, `modelID`, `variant` per message; a subagent's model in the `task` tool metadata | A provider with a live key |
 
@@ -207,8 +207,13 @@ Rules, with the evidence for each in the spike results:
   and Codex name the model; opencode says only "Unexpected server error".
 - **Read-only.** Use the harness's own restriction (Claude Code `--tools Read,Grep,Glob`, an
   opencode agent with write, edit and bash off and `permission.edit: deny`, Kiro `--trust-tools=fs_read`).
-  Codex `-s read-only` cannot run shell commands on randomserver (bubblewrap fails with
-  "RTM_NEWADDR: Operation not permitted"), so give a Codex critic its input in the prompt.
+  Codex's `-s read-only` cannot run shell commands on randomserver (bubblewrap fails with
+  "RTM_NEWADDR: Operation not permitted"), so the owner's rule is `--dangerously-bypass-approvals-and-sandbox`
+  for Codex critics. That removes every enforcement: on 2026-10-27 the same flag let Sol write a file
+  when asked and refuse when the prompt said "you must never create or modify files". So a Codex
+  critic's read-only guarantee is its prompt alone. Keep the read-only instruction first in the
+  prompt, give the input in the prompt where it fits, run from a clean tree, and check that
+  `git status --porcelain` is unchanged after the call; a changed tree fails the review.
 - **Time-limit every critic call** with an outer `timeout`. A pinned opencode subagent told to reply
   "OK" made 26 read-only calls and ran past 150 s.
 - **Ask for "no rows when there are no problems".** Kiro listed non-findings as rows; opencode and
