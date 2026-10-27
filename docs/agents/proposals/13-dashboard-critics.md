@@ -167,7 +167,8 @@ sources are in [critic-model-selection-20261027](../research/critic-model-select
 1. **Pin a model explicitly on every spawn.** Never inherit from the parent. A parent on a faster
    model would otherwise review on that model: Claude Code, Codex and opencode all inherit by
    default.
-2. **Use the harness's ceiling model, or the strongest it offers** (table below).
+2. **Use the harness's ceiling model, or the strongest it offers** (table below). A below-ceiling
+   run proceeds and is marked as such.
 3. **Set the effort explicitly.** Opus 5.5 defaults to `medium`, so leaving it unset quietly
    weakens the review. Use `high` for both critics, and `xhigh` for the results critic on entries
    that make live claims or carry an ask, where a wrong verdict costs the most.
@@ -209,9 +210,12 @@ ceiling today, which is why the rule requires recording what ran.
 
 - **Raising the ceiling.** If a project wants Fable 5.1 or Astra for high-stakes entries, the
   ceiling is a per-project setting in `harnesses.md`, not a change to the critic prompts.
-- **Below-ceiling harnesses.** Whether a critic that can only run below the ceiling (Kiro on Opus
-  4.5 today) still produces a verdict, or defers to a harness that can. The draft: it runs and the
-  result is marked below-ceiling.
+- **Below-ceiling harnesses (decided 2026-10-27).** A harness that cannot reach the ceiling runs
+  its critics on the best model it does offer, and the result is marked `below ceiling` next to
+  `Reviewed on:`. It does not defer to another harness and it does not skip the review. Today that
+  is Kiro CLI on Claude Opus 4.5 and Codex 0.147.0 on `gpt-5.6-sol`. The spike (proposal 14)
+  records the exact best-available model per harness; a harness with no verifiable model keeps
+  the `unverified` caveat instead.
 - **Cross-family review.** Where a Claude and a Codex harness are both installed, the results critic
   could run on the family the author did not use. Off by default.
 - **Where the files live.** Critic agent files in each harness's native format could be generated

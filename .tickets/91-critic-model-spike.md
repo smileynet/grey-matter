@@ -20,7 +20,7 @@ Code, Codex, Kiro CLI and opencode, using Claude Opus 5.5 and GPT-6.1 Sol as the
 Known starting facts on this machine: Codex 0.147.0's catalog lacks `gpt-6.1-sol`, Kiro CLI 2.16.0's
 strongest Claude is Opus 4.5, and opencode lists the ceiling models under its `opencode/` provider.
 Evidence stays in `.scratch/`; the committed result is a matrix under `docs/agents/research/`.
-Blocks the harness table in proposal 13 and ticket 90's dispatch wiring.
+Decided: a harness below the ceiling still runs its critics on its best model, marked below ceiling. Blocks the harness table in proposal 13 and ticket 90's dispatch wiring.
 
 ## Acceptance criteria
 
