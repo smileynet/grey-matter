@@ -20,8 +20,9 @@ seeded-defect fixtures that measure their catch rate against the
 [worked example](../skills/productivity/delivery-dashboard/assets/dashboard-example.html), then
 dispatch from `delivery-dashboard` step 5, `wrap-session` updating the dashboard and `orient`
 surfacing open asks, then a `conformance-audit` check. Promote the copy critic to a skill only when
-a second consumer needs it. Decide the open questions in the proposal (model family, manual path
-where subagents are missing, critic record on the page) before wiring the dispatch.
+a second consumer needs it. Decide the open questions in the proposal (manual path where subagents are missing, critic
+record on the page) and the owner's model choices (Fable or Opus on Claude, Astra or Sol on OpenAI,
+cross-family option) before wiring the dispatch. Evidence: [critic-model-selection](../docs/agents/research/critic-model-selection-20261027.md).
 
 ## Acceptance criteria
 
@@ -29,4 +30,5 @@ where subagents are missing, critic record on the page) before wiring the dispat
 - [ ] `delivery-dashboard` step 5 dispatches both critics read-only in a fresh context and loops until no actionable findings remain.
 - [ ] `wrap-session` updates a recorded dashboard and `orient` surfaces its open asks.
 - [ ] `conformance-audit` reports checker errors as safe-tier and critic findings as judgment-tier.
+- [ ] The critic model table is in `docs/agents/harnesses.md` with its verification date and official sources, and every critic result records the model and effort it ran on (after the owner decides the Claude and OpenAI preference lists in proposal 13).
 - [ ] `node scripts/check-repo.mjs` passes.

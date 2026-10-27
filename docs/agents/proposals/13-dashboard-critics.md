@@ -1,6 +1,6 @@
 # Proposal 13: skills and critics that keep status dashboards honest
 
-**Status:** proposed 2026-10-27. **Scope:** `delivery-dashboard` (references and step 5),
+**Status:** accepted 2026-10-27, except the model choice in "Critic model", which is proposed. **Scope:** `delivery-dashboard` (references and step 5),
 `wrap-session`, `orient`, `adopt-project`, `conformance-audit`; two reviewer prompts drafted below.
 **Builds on:** [ADR 0004](../../adr/0004-delivery-dashboard-keeps-a-searchable-history.md), the
 [dashboard contract](../../../skills/productivity/delivery-dashboard/references/dashboard-contract.md)
@@ -68,6 +68,8 @@ A critic that has never caught a seeded defect is a guess. Build fixtures before
   (ticket, diff range, test output path, capture paths); the project glossary; the previous
   dashboard version from git for comparison.
 - **Fresh context:** the critic has not seen the author's reasoning, only the packet.
+- **Model:** pinned explicitly to the best available model for the harness, with effort set, and
+  recorded in the output (see [Critic model](#critic-model)).
 - **Read-only:** the critic never edits the dashboard, tickets or code, and runs only read-only
   or already-approved commands.
 - **Output:** the findings format below, a verdict, and a coverage ledger saying what was reviewed
@@ -154,6 +156,63 @@ unreviewed entries or unexercised behaviour passed.
 > could not verify and why. State plainly that SUPPORTED means "no unsupported claims found among
 > those exercised".
 
+## Critic model
+
+Decision from the owner: critics always run on the best available model, and the guidance must work
+across tools. The official documentation, checked 2026-10-27, supports this rule; the evidence and
+sources are in [critic-model-selection-20261027](../research/critic-model-selection-20261027.md).
+
+### The rule
+
+1. **Pin a model explicitly on every spawn.** Never inherit from the parent. A parent on a faster
+   model would otherwise review on that model: Claude Code, Codex and opencode all inherit by
+   default.
+2. **Use the first available model in the harness's preference list** (table below).
+3. **Set the effort explicitly.** Opus 5.5 defaults to `medium`, so leaving it unset quietly
+   weakens the review. Use `high` for both critics, and `xhigh` for the results critic on entries
+   that make live claims or carry an ask, where a wrong verdict costs the most.
+4. **No silent downgrade.** Probe availability before spawning. If the first choice is unavailable,
+   use the next and say so. Every critic result states `Reviewed on: <model> at <effort>`, taken
+   from what actually ran, because an allowlist, an environment override or a gateway can change it
+   after the request. A model outside the list is run anyway and the result is marked "unlisted
+   model", so the owner can discount it.
+5. **One table, one date.** Model names live in one place, [harnesses](../harnesses.md), with the
+   date they were last verified and their official sources. Critic prompts and skills say "the
+   critic model in harnesses" and never hard-code a name. A guidance check (proposal 12) flags the
+   table when it is older than 90 days, and `sync` re-verifies it.
+6. **Scope, not strength, controls cost.** The packet is one entry plus its evidence pointers. A
+   weaker model is not the cost lever. Skipping the results critic on pure decision and learning
+   entries (above) is.
+
+### Preference lists and mechanics
+
+| Harness | Preference list | Pin with | Effort | Probe |
+| --- | --- | --- | --- | --- |
+| Claude Code | `fable` (`claude-fable-5-1`), then `opus` (`claude-opus-5-5`) | The `model` parameter of the spawn, or `model:` in a critic agent file. Not `best`, which subagents do not accept. | `effort:` or the per-spawn parameter | The model picker; Fable is selected explicitly and may bill usage credits or be unavailable |
+| Codex | `gpt-6-astra`, then `gpt-6.1-sol` | `model` and `model_reasoning_effort` in a `.codex/agents/*.toml` file, or `[agents] default_subagent_model` | `high`; `xhigh` or above where the model supports it | `/model` and the CLI's model list |
+| Kiro CLI | Strongest Claude model in Kiro's own list, in the Claude Code order | `model` in the agent file, using an ID from `kiro-cli chat --list-models` | Not documented; accept the default and record it | `--list-models`, because an unavailable pinned model fails the first prompt |
+| opencode | `anthropic/claude-fable-5-1` then `anthropic/claude-opus-5-5`, or `openai/gpt-6-astra` then `openai/gpt-6.1-sol`, whichever provider is configured | `model: provider/model-id` in the agent file | Not documented; accept the default and record it | `opencode models` |
+
+### Points for the owner to decide
+
+- **Opus 5.5 or Fable 5.1 on Claude.** The assumption was Opus 5.5. Anthropic's own pages place
+  Fable 5.1 above it for demanding reasoning and long-horizon agentic work, at 2.5 times the price
+  ($10 and $50 per million tokens against $4 and $20), slower, and billed to usage credits on some
+  plans; non-interactive runs bill it without a consent prompt. The rule as drafted prefers Fable
+  and falls back to Opus, which is what "best available" means in the vendor's terms. If you want
+  Opus 5.5 as the ceiling, change the first entry in the table; nothing else moves.
+- **Astra or Sol on OpenAI.** Astra is the flagship ("most capable"); Sol is "near-Astra" at a
+  fifth of the price. The draft prefers Astra with Sol as the fallback.
+- **Cross-family review.** Where both a Claude and a Codex harness are installed, the results
+  critic could run on the family the author did not use (for example `codex exec -m gpt-6-astra`
+  for a Claude-authored entry), as `dispatch-review` does for code. That costs a second harness
+  and a setup step; the default stays best model per harness, and cross-family becomes an option
+  the owner turns on.
+- **Where the files live.** Critic agent files in each harness's native format (Claude `.md`, Codex
+  `.toml`, Kiro `.json`, opencode `.md`) could be generated from one source and installed by the
+  deployer. Until then the skill instructs the author to pass the model and effort on the spawn,
+  which every harness above supports.
+
 ## Rollout
 
 One ticket each, in order; all behind the repo gate.
@@ -163,12 +222,13 @@ One ticket each, in order; all behind the repo gate.
 3. `delivery-dashboard` step 5 dispatches both; `wrap-session` and `orient` read the dashboard.
 4. `conformance-audit` runs the checker and reports copy and results issues by tier.
 5. Promote the copy critic to a skill when `changelog`, `pr` or `wrap-session` needs it.
+6. Add the model table to `harnesses.md` and the spawn rule (explicit model and effort, record what ran)
+   to the critic dispatch, before step 3 above wires it in.
 
 ## Open questions
 
-- Should the results critic be run on a different model family from the author, as `dispatch-review`
-  advises for code review? It costs more and may be worth it only for P1-prone entries (live claims
-  and asks).
+- Whether the results critic should prefer a different model family from the author's when a second
+  harness is installed (see "Critic model"). The default proposed there is best model per harness.
 - Where a harness has no subagents, the author reads the critic prompt in a fresh session. Is a
   documented manual path enough, or should the checker refuse a handback with no critic record?
 - Whether critic findings should be summarised on the dashboard itself ("reviewed by a second

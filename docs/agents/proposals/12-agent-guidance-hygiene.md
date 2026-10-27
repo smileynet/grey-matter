@@ -1,6 +1,6 @@
 # Proposal 12: managed guidance blocks and a stale/conflict check for agent instructions
 
-**Status:** proposed 2026-10-27. **Scope:** `scripts/install-agents-md.mjs`, a new read-only
+**Status:** accepted 2026-10-27. **Scope:** `scripts/install-agents-md.mjs`, a new read-only
 `scripts/check-guidance.mjs`, and the agent-guidance class of `conformance-audit`, `sync` and
 `adopt-project`.
 
