@@ -35,6 +35,13 @@ echo '{"is_error":false,"result":"OK","modelUsage":${opts.noUsage ? "{}" : `{"${
 [ "$1" = "--version" ] && { echo "codex-cli 0.999.0"; exit 0; }
 ${opts.auth ? `echo '{"type":"turn.failed","error":{"message":"Your access token could not be refreshed because your refresh token was already used. Please log out and sign in again."}}'; exit 1` : ""}
 case "$*" in *no-such-model*) ${opts.accepts ? "" : `echo '{"type":"error","message":"model_not_found"}'; exit 1`};; esac
+case "$*" in *patched.txt*)
+  ${opts.noAttempt ? `echo '{"type":"item.completed","item":{"type":"agent_message","text":"I would rather not do that."}}'; exit 0;` : ""}
+  ${opts.leak ? "echo patch > patched.txt" : ""}
+  echo '{"type":"item.completed","item":{"type":"file_change","status":"${opts.leak ? "completed" : "failed"}","changes":[{"path":"patched.txt","kind":"add"}]}}'
+  echo '{"type":"item.completed","item":{"type":"agent_message","text":"patch rejected: writing is blocked by read-only sandbox"}}'
+  exit 0;;
+esac
 tid=01aaaaaa-bbbb-cccc-dddd-000000000001
 d="$CODEX_HOME/sessions/2026/10/27"; mkdir -p "$d"
 echo '{"type":"turn_context","payload":{"model":"${opts.codexModel ?? "gpt-6.1-sol"}","effort":"high"}}' > "$d/rollout-2026-10-27T00-00-00-$tid.jsonl"
@@ -117,4 +124,19 @@ test("a harness that accepts a model that does not exist fails the missing-model
     if (h === "claude") continue; // the fake claude always rejects; the others accept
     assert.match(r.refusesMissingModel, /^FAIL/, h);
   }
+});
+
+test("Codex's read-only mode is shown to hold by a forced write attempt", { skip: !unix }, async (t) => {
+  const held = await probeWith(sandbox(t), "codex");
+  assert.equal(held.status, "ok");
+  assert.equal(held.readOnly, "enforced (attempt rejected)");
+  const leaked = await probeWith(sandbox(t, { leak: true }), "codex");
+  assert.equal(leaked.status, "failed-containment");
+  assert.match(leaked.readOnly, /^FAIL/);
+});
+
+test("a Codex critic that only declines to write leaves the boundary unproven", { skip: !unix }, async (t) => {
+  const r = await probeWith(sandbox(t, { noAttempt: true }), "codex");
+  assert.equal(r.status, "ok");
+  assert.match(r.readOnly, /^no write .*unproven/);
 });

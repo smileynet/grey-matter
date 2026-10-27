@@ -64,14 +64,14 @@ shows the model resisted a simple injection, not that a prompt is a boundary.
 6. **`-s workspace-write` also blocked a patch inside the workspace** here, so on this host any
    sandboxed mode is fail-closed for writes.
 
-## What this suggests (not yet decided)
+## Decision (owner, 2026-10-27)
 
-For a Codex critic whose input fits in the prompt: `codex exec -s read-only -m gpt-6.1-sol
+Default for a Codex critic whose input fits in the prompt: `codex exec -s read-only -m gpt-6.1-sol
 -c model_reasoning_effort=high --json --output-schema <file> --skip-git-repo-check "<packet and
 instructions>"`. It is enforced, needs no sudo and no container, and still works if the AppArmor
-restriction is fixed later. The bypass flag stays for a critic that must read files outside the
-prompt, with the guard prompt, the clean-tree check, and acceptance that only a prompt protects it.
-The owner's current rule is the bypass flag; this changes it, so it waits for a decision.
+restriction is fixed later. Otherwise (the critic must read files or use tools) the owner prefers
+no sandbox: `--dangerously-bypass-approvals-and-sandbox`, protected by the guard prompt, a clean
+tree and a `git status --porcelain` check, which is not enforcement.
 
 ## Not done
 

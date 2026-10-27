@@ -29,5 +29,5 @@ Run: T3, T4, T5 and an added `-s read-only` option; see
 [the results](../docs/agents/research/codex-containment-spike-20261027.md). Docker (T2) postponed and the
 AppArmor fix (T1) skipped by the owner. Finding: `-s read-only` is enforced here (patch rejected by
 policy, shell fails closed), the bypass flag gives no boundary, no flag removes the patch tool, and
-`--worktree` contains relative writes only. Recommendation pending the owner: use `-s read-only` for
-critics whose input is in the prompt. Remaining: T2, optionally T1, and the probe check.
+`--worktree` contains relative writes only. Decided by the owner: `-s read-only` with the input in the prompt
+is the Codex critic default; otherwise no sandbox. Remaining: T2, optionally T1, and the probe check.
