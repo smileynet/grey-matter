@@ -18,10 +18,10 @@ Run the spike in [proposal 15](../docs/agents/proposals/15-codex-critic-containm
 
 ## Acceptance criteria
 
-- [ ] A table covers the options against the six adversarial checks, each cell with evidence from the filesystem or process, not the critic's words.
-- [ ] Setup cost, reversibility, owner steps, per-call overhead and credential exposure are recorded per option.
-- [ ] A recommendation is chosen by the proposal's order, and the Codex row in `harnesses.md` and ticket 92's sandbox item are updated.
-- [ ] `scripts/probe-critic-model.mjs` checks the chosen boundary, and `sync` reports a regression.
+- [x] A table covers T3, T4, T5 and `-s read-only` against the adversarial checks (T1 skipped, T2 postponed by the owner), each cell with evidence from the filesystem or process, not the critic's words.
+- [x] Setup cost, reversibility, owner steps, per-call overhead and credential exposure are recorded per option.
+- [x] A recommendation is chosen by the proposal's order, and the Codex row in `harnesses.md` and ticket 92's sandbox item are updated.
+- [x] `scripts/probe-critic-model.mjs` checks the chosen boundary, and `sync` reports a regression.
 
 ## Progress (2026-10-27)
 
