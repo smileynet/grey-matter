@@ -1,6 +1,6 @@
 # Proposal 14: a spike to verify critic model selection through each harness's CLI
 
-**Status:** proposed 2026-10-27. **Scope:** a read-only probe, run once as a spike and then kept as
+**Status:** executed 2026-10-27; results in [critic-model-spike](../research/critic-model-spike-20261027.md). **Scope:** a read-only probe, run once as a spike and then kept as
 a check in `sync`. **Feeds:** the harness table in [proposal 13](./13-dashboard-critics.md#critic-model),
 whose ceiling models are Claude Opus 5.5 and GPT-6.1 Sol. Evidence base:
 [critic-model-selection](../research/critic-model-selection-20261027.md).

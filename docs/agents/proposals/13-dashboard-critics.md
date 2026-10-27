@@ -1,6 +1,6 @@
 # Proposal 13: skills and critics that keep status dashboards honest
 
-**Status:** accepted 2026-10-27, except the harness table in "Critic model", which waits for the spike in proposal 14. **Scope:** `delivery-dashboard` (references and step 5),
+**Status:** accepted 2026-10-27; the harness table in "Critic model" was verified by the spike in proposal 14. **Scope:** `delivery-dashboard` (references and step 5),
 `wrap-session`, `orient`, `adopt-project`, `conformance-audit`; two reviewer prompts drafted below.
 **Builds on:** [ADR 0004](../../adr/0004-delivery-dashboard-keeps-a-searchable-history.md), the
 [dashboard contract](../../../skills/productivity/delivery-dashboard/references/dashboard-contract.md)
@@ -201,10 +201,11 @@ table goes into `harnesses.md`.
 | Kiro CLI | Strongest Claude in `--list-models`, in the order Opus 5.5, Opus 5, Opus 4.x | Same | `--model` or `model` in the agent file, using an ID from `--list-models` | `--effort` |
 | opencode | `zai-coding-plan/glm-5.3` (owner's z.ai subscription; below the Opus 5.5 and Sol 6.1 target) | Next in the provider's list | `-m provider/model` or `model:` in the agent file; the flag outranks the file | `--variant` (recorded in `opencode export`) |
 
-On the machine used for this review, only Claude Code lists the ceiling models (opencode lists them under a provider whose key is expired; it runs on z.ai instead). Kiro
-CLI 2.16.0 lists Claude Opus 4.5 as its strongest Claude, and Codex 0.147.0's catalog (fetched
-2026-10-21) lists `gpt-5.6-sol`, with no 6.1 model. Those harnesses would run critics below the
-ceiling today, which is why the rule requires recording what ran.
+Spike results (2026-10-27, randomserver; [critic-model-spike](../research/critic-model-spike-20261027.md)):
+Claude Code (Opus 5.5), Codex 0.164.0 (`gpt-6.1-sol`) and opencode on z.ai (`glm-5.3`) pin and prove
+their model. Kiro CLI 2.16.0 runs below the ceiling on `claude-opus-4.5` and cannot prove it, because it
+keeps no model record and its subagents cannot take a model. The maintained table is in
+[harnesses](../harnesses.md#critic-model).
 
 ### Points for the owner to decide
 
@@ -213,9 +214,8 @@ ceiling today, which is why the rule requires recording what ran.
 - **Below-ceiling harnesses (decided 2026-10-27).** A harness that cannot reach the ceiling runs
   its critics on the best model it does offer, and the result is marked `below ceiling` next to
   `Reviewed on:`. It does not defer to another harness and it does not skip the review. Today that
-  is Kiro CLI on Claude Opus 4.5 and Codex 0.147.0 on `gpt-5.6-sol`. The spike (proposal 14)
-  records the exact best-available model per harness; a harness with no verifiable model keeps
-  the `unverified` caveat instead.
+  is Kiro CLI on Claude Opus 4.5. The spike (proposal 14) recorded the best-available model per
+  harness; a harness with no verifiable model keeps the `unverified` caveat.
 - **Cross-family review.** Where a Claude and a Codex harness are both installed, the results critic
   could run on the family the author did not use. Off by default.
 - **Where the files live.** Critic agent files in each harness's native format could be generated
