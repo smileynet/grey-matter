@@ -10,11 +10,13 @@ and where you need them. Write for that reader. The process behind the work stay
 way, under folds and links.
 
 1. **Find or create the dashboard.** Read the existing one and the work just finished. If none
-   exists, copy [the template](assets/dashboard-template.html) to one committed `docs/` path
-   (for example `docs/status.html`), set the project name in `gm-config`, delete the example
-   entries, and record the path on the originating ticket and in `AGENTS.md` so the next task
-   finds it. Edit only the two JSON blocks (`gm-config`, `gm-entries`); the renderer stays as
-   shipped so every project's dashboard behaves alike.
+   exists, copy the blank [template](assets/dashboard-template.html) to one committed `docs/`
+   path (for example `docs/status.html`), set the project name in `gm-config`, and record the
+   path on the originating ticket and in `AGENTS.md` so the next task finds it. Edit only the two
+   JSON blocks (`gm-config`, `gm-entries`); the renderer stays as shipped so every project's
+   dashboard behaves alike. For a first entry, read the finished
+   [worked example](assets/dashboard-example.html) and its
+   [walkthrough](references/worked-example.md) to see the voice and shapes expected.
 
 2. **Add one entry per task, newest first.** Lead with the outcome in the person's terms: what
    they can now do, see or decide, in plain words. Then, in this order of importance:

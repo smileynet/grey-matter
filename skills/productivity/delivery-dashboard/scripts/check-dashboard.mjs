@@ -24,6 +24,7 @@ const SAUSAGE = [
 
 export function check(path, { strict = false } = {}) {
   const errors = [], warnings = [];
+  let openAsks = 0, examples = 0, logic = null;
   const err = (m) => errors.push(m), warn = (m) => warnings.push(m);
   const html = readFileSync(path, "utf8");
   const base = dirname(resolve(path));
@@ -40,7 +41,6 @@ export function check(path, { strict = false } = {}) {
   if (cfg && cfg.recentCount !== undefined && !(Number.isInteger(cfg.recentCount) && cfg.recentCount >= 1 && cfg.recentCount <= 10)) err("recentCount must be an integer from 1 to 10");
 
   const ids = new Set();
-  let openAsks = 0, examples = 0;
   const hrefOk = (h, where) => {
     if (typeof h !== "string" || !h) return err(`${where}: empty link`);
     if (/^(javascript|data|vbscript):/i.test(h)) return err(`${where}: unsafe link scheme`);
@@ -110,7 +110,7 @@ export function check(path, { strict = false } = {}) {
 
   // The page's own selection logic: the overview shows the newest 5 and nothing is lost from history.
   const script = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).pop();
-  let logic = null;
+
   if (script) {
     const ctx = { window: {} };
     try {

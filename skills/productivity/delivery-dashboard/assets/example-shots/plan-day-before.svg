@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" role="img" aria-label="Your trip plan">
+<rect width="360" height="640" rx="28" fill="#0a1120"/>
+<rect x="12" y="12" width="336" height="616" rx="20" fill="#111b2f" stroke="#27395a"/>
+<text x="28" y="52" fill="#e8eef9" font-family="system-ui,sans-serif" font-size="18" font-weight="700">Your trip plan</text>
+<rect x="28" y="80" width="304" height="76" rx="12" fill="#162540" stroke="#27395a"/><text x="44" y="108" fill="#e8eef9" font-family="system-ui,sans-serif" font-size="15" font-weight="600">Day 1: Ridge loop</text><text x="44" y="130" fill="#a3b3cf" font-family="system-ui,sans-serif" font-size="13">8.2 km · about 3 hours</text><rect x="28" y="168" width="304" height="76" rx="12" fill="#162540" stroke="#27395a"/><text x="44" y="196" fill="#e8eef9" font-family="system-ui,sans-serif" font-size="15" font-weight="600">Day 2: Lake and back</text><text x="44" y="218" fill="#a3b3cf" font-family="system-ui,sans-serif" font-size="13">11.5 km · about 4.5 hours</text><rect x="28" y="256" width="304" height="76" rx="12" fill="#162540" stroke="#27395a"/><text x="44" y="284" fill="#e8eef9" font-family="system-ui,sans-serif" font-size="15" font-weight="600">Day 3: Summit</text><text x="44" y="306" fill="#a3b3cf" font-family="system-ui,sans-serif" font-size="13">6.0 km · about 3 hours</text>
+</svg>

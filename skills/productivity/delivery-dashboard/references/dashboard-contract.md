@@ -2,7 +2,8 @@
 
 What the status dashboard shows, how its data is shaped, and the rules the checker enforces.
 The page is [dashboard-template.html](../assets/dashboard-template.html): copy it, then edit only
-the two JSON blocks. Do not rewrite the renderer per project. A change the template needs goes
+the two JSON blocks. A finished example with commentary is in
+[worked-example.md](worked-example.md). Do not rewrite the renderer per project. A change the template needs goes
 back into the template, so every project's dashboard behaves alike.
 
 ## The reader and the job

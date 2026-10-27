@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Trailhead status (worked example)</title>
+<style>
+:root{color-scheme:dark;--bg:#0a1120;--panel:#111b2f;--panel2:#162540;--line:#27395a;--text:#e8eef9;--muted:#a3b3cf;--blue:#6aaeff;--blue2:#3b82e0;--cyan:#56d4f0;--ask:#ffc857;--bad:#ff8b8b;--ok:#7fe0b0;--r:14px}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:0 clamp(16px,4vw,40px) 64px}
+a{color:var(--blue)}a:hover{color:var(--cyan)}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+.wrap{max-width:980px;margin:0 auto}
+header{padding:28px 0 8px}
+.eyebrow{color:var(--muted);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+h1{margin:4px 0 4px;font-size:clamp(26px,4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.updated{color:var(--muted);font-size:14px;margin:0}
+[role=tablist]{display:flex;gap:6px;margin:22px 0 22px;border-bottom:1px solid var(--line)}
+[role=tab]{font:inherit;color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:10px 16px;min-height:44px;cursor:pointer}
+[role=tab][aria-selected=true]{color:var(--text);border-bottom-color:var(--blue)}
+h2{font-size:13px;margin:0 0 10px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;font-weight:600}
+section{margin:0 0 28px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card.latest{background:linear-gradient(180deg,var(--panel2),var(--panel))}
+.card h3{margin:6px 0 6px;font-size:clamp(21px,3vw,26px);line-height:1.25}
+.card p{margin:0 0 12px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:13px}
+.chip{display:inline-flex;gap:5px;align-items:center;border:1px solid var(--line);border-radius:99px;padding:1px 10px;font-size:12.5px;color:var(--text);background:#0e1830}
+.chip.shipped{border-color:#2f6f9b}.chip.progress{border-color:#3b5fb0}.chip.blocked{border-color:var(--bad);color:var(--bad)}.chip.decision,.chip.needs{border-color:var(--ask);color:var(--ask)}.chip.learning{border-color:#6a7fb0}
+.changes{margin:8px 0 12px;padding-left:20px}.changes li{margin:3px 0}
+.try{display:inline-block;margin:4px 0 12px;padding:10px 16px;min-height:44px;border-radius:10px;background:var(--blue2);color:#fff;text-decoration:none;font-weight:600}
+.try:hover{background:#2f6fc7;color:#fff}
+details{border-top:1px solid var(--line);padding:8px 0}
+details>summary{cursor:pointer;color:var(--muted);min-height:32px}
+details.row{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:0 14px;margin:0 0 8px}
+details.row>summary{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;padding:10px 0;color:var(--text);min-height:44px}
+details.row .when{color:var(--muted);font-size:13px;min-width:92px}
+details.row .ttl{flex:1 1 260px}
+details.row .body{padding:0 0 14px}
+.asks{display:grid;gap:12px}
+.ask{border:1px solid var(--ask);border-radius:var(--r);padding:16px;background:#1b1a14}
+.ask h3{margin:0 0 6px;font-size:18px}
+.ask .rec{color:var(--ask);font-weight:600}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
+.opts button,.tools button{font:inherit;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 14px;min-height:44px;cursor:pointer}
+.opts button:hover,.tools button:hover{border-color:var(--blue)}
+.reply{margin-top:8px;font-size:14px;color:var(--muted)}
+.reply input{width:100%;font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px}
+.none{color:var(--muted);border:1px dashed var(--line);border-radius:var(--r);padding:14px 18px}
+.visual{margin:12px 0}
+.visual img{max-width:100%;max-height:420px;width:auto;height:auto;margin:0 auto;border-radius:10px;border:1px solid var(--line);display:block}
+.visual figcaption{color:var(--muted);font-size:13px;margin-top:6px}
+.bar{height:14px;background:var(--bg);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue2),var(--cyan))}
+.pl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+.steps{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.steps li{flex:1 1 120px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#0e1830;font-size:14px}
+.steps li.done{border-color:#2f6f9b}.steps li.now{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan) inset}.steps li small{display:block;color:var(--muted)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.metrics div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#0e1830}
+.metrics b{display:block;font-size:24px;color:var(--cyan)}.metrics small{color:var(--muted)}
+.compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}.compare figcaption{text-align:center}
+.compare figure{margin:0}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px}
+.tools input[type=search]{flex:1 1 240px;font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px}
+.tools .on{border-color:var(--blue);background:#1b3256}
+.count{color:var(--muted);font-size:14px;margin:0 0 10px}
+.more{margin-top:10px}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:no-preference){.card,details.row{transition:border-color .15s}}
+@media (max-width:560px){.card{padding:16px}details.row .when{min-width:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">Status dashboard</div>
+  <h1 id="project">Project name</h1>
+  <p class="updated" id="updated"></p>
+  <div role="tablist" aria-label="Dashboard views">
+    <button role="tab" id="tab-overview" aria-controls="overview" aria-selected="true">Overview</button>
+    <button role="tab" id="tab-history" aria-controls="history" aria-selected="false" tabindex="-1">All entries <span id="history-count"></span></button>
+  </div>
+</header>
+
+<main id="overview" role="tabpanel" aria-labelledby="tab-overview">
+  <section aria-labelledby="needs-h"><h2 id="needs-h">Needs you</h2><div id="needs"></div></section>
+  <section aria-labelledby="latest-h"><h2 id="latest-h">Latest</h2><div id="latest"></div></section>
+  <section aria-labelledby="recent-h"><h2 id="recent-h">Earlier</h2><div id="recent"></div>
+    <p class="more"><a href="#history" id="all-link"></a></p></section>
+</main>
+
+<main id="history" role="tabpanel" aria-labelledby="tab-history" hidden>
+  <div class="tools">
+    <input type="search" id="q" placeholder="Search all entries" aria-label="Search all entries">
+    <button type="button" id="f-needs" aria-pressed="false">Needs you</button>
+    <button type="button" id="expand">Expand all</button>
+    <button type="button" id="collapse">Collapse all</button>
+  </div>
+  <div class="tools" id="kinds" aria-label="Filter by type"></div>
+  <div class="tools" id="streams" aria-label="Filter by area"></div>
+  <p class="count" id="count" aria-live="polite"></p>
+  <div id="list"></div>
+</main>
+</div>
+
+<script type="application/json" id="gm-config">
+{ "project": "Trailhead: weekend hike planner", "recentCount": 5 }
+</script>
+
+<!-- WORKED EXAMPLE for agents: a fictional project showing a well-formed dashboard. Copy dashboard-template.html, not this file.
+     Annotated walkthrough: references/worked-example.md -->
+<script type="application/json" id="gm-entries">
+[
+  {
+    "id": "2026-10-27-1",
+    "date": "2026-10-27",
+    "kind": "progress",
+    "fidelity": "mocked",
+    "title": "You can check the weather for each day of your trip",
+    "summary": "Each day on your plan now shows the high, low and chance of rain, with a gear tip when rain is likely. The numbers are sample data until a weather source is connected.",
+    "workstreams": [
+      "Plan a trip"
+    ],
+    "changes": [
+      "Each day shows high, low and rain chance",
+      "A gear tip appears when rain is likely"
+    ],
+    "visual": {
+      "type": "compare",
+      "before": {
+        "src": "example-shots/plan-day-before.svg",
+        "alt": "Trip plan with three days and distances only",
+        "label": "Before"
+      },
+      "after": {
+        "src": "example-shots/plan-day-after.svg",
+        "alt": "Trip plan with a forecast on each day and a rain warning on day 2",
+        "label": "After (sample data)"
+      }
+    },
+    "try": {
+      "label": "See the new plan screen",
+      "href": "example-shots/plan-day-after.svg"
+    },
+    "asks": [
+      {
+        "id": "weather-source",
+        "status": "open",
+        "question": "Which weather source should we connect first?",
+        "recommendation": "National forecast: free, updates daily",
+        "options": [
+          "National forecast: free, updates daily",
+          "Trail forecast: paid, updates hourly"
+        ],
+        "impact": "Decides the monthly cost and how fresh the forecast is on the trail."
+      }
+    ],
+    "links": [
+      {
+        "label": "Weather source comparison",
+        "href": "example-shots/plan-day-after.svg"
+      }
+    ],
+    "details": "Built on the existing plan screen. The forecast block takes any source that returns daily highs, lows and rain chance, so changing source later is a small change.\nChecked at phone and laptop widths. 14 of 14 checks pass; the sample forecast is generated, not fetched."
+  },
+  {
+    "id": "2026-10-26-1",
+    "date": "2026-10-26",
+    "kind": "shipped",
+    "fidelity": "live",
+    "title": "Your packing list remembers what you have ticked",
+    "summary": "Close the app halfway through packing and your ticks are still there when you come back, on the same phone.",
+    "workstreams": [
+      "Plan a trip"
+    ],
+    "changes": [
+      "Ticks are saved as soon as you make them"
+    ],
+    "visual": {
+      "type": "metrics",
+      "items": [
+        {
+          "label": "Ticks kept after closing the app",
+          "value": "100%"
+        },
+        {
+          "label": "Time to reopen the list",
+          "value": "0.3 s"
+        }
+      ]
+    },
+    "asks": [],
+    "details": "Saved on the device only; there is no account yet. Checked by ticking items, force-closing the app and reopening it five times."
+  },
+  {
+    "id": "2026-10-24-1",
+    "date": "2026-10-24",
+    "kind": "decision",
+    "workstreams": [
+      "Plan a trip"
+    ],
+    "title": "We chose to plan one trip at a time for now",
+    "summary": "Keeping a single trip simple gets you a usable plan sooner. Several trips and sharing come after.",
+    "visual": {
+      "type": "steps",
+      "items": [
+        {
+          "label": "One trip",
+          "state": "now"
+        },
+        {
+          "label": "Several trips",
+          "state": "next"
+        },
+        {
+          "label": "Share a trip",
+          "state": "next"
+        }
+      ]
+    },
+    "asks": [
+      {
+        "id": "one-or-many",
+        "status": "answered",
+        "question": "One trip or several at once?",
+        "answer": "One trip at a time"
+      }
+    ]
+  },
+  {
+    "id": "2026-10-22-1",
+    "date": "2026-10-22",
+    "kind": "blocked",
+    "workstreams": [
+      "On the trail"
+    ],
+    "title": "Offline maps are waiting on a choice of map source",
+    "summary": "The park service's maps need a licence we have not agreed to. Community maps work today but cover fewer trails.",
+    "asks": [
+      {
+        "id": "map-source",
+        "status": "open",
+        "question": "Which maps should work offline?",
+        "recommendation": "Community maps: free, fewer trails",
+        "options": [
+          "Community maps: free, fewer trails",
+          "Park service maps: more trails, needs a licence"
+        ],
+        "impact": "Unblocks offline use on the trail, the main reason to carry the app."
+      }
+    ],
+    "links": [
+      {
+        "label": "Licence terms summary",
+        "href": "example-shots/route-map.svg"
+      }
+    ],
+    "details": "The licence allows personal use but not redistribution of map tiles, so tiles could not be bundled in the app. Community maps cover 41 of the 58 trails on the shortlist."
+  },
+  {
+    "id": "2026-10-20-1",
+    "date": "2026-10-20",
+    "kind": "shipped",
+    "fidelity": "live",
+    "workstreams": [
+      "Plan a trip"
+    ],
+    "title": "You can add a stop to your route by tapping the map",
+    "summary": "Tap anywhere on the map and the route bends through that point. The distance updates as you go.",
+    "changes": [
+      "Tap to add a stop",
+      "Distance and time update immediately"
+    ],
+    "visual": {
+      "type": "image",
+      "src": "example-shots/route-map.svg",
+      "alt": "Route map with three stops and a distance of 8.2 kilometres",
+      "caption": "The running app after adding a viewpoint stop."
+    },
+    "try": {
+      "label": "Open the route screen",
+      "href": "example-shots/route-map.svg"
+    },
+    "asks": [],
+    "details": "Stops snap to the nearest trail within 30 metres so a slightly missed tap still works."
+  },
+  {
+    "id": "2026-10-17-1",
+    "date": "2026-10-17",
+    "kind": "learning",
+    "workstreams": [
+      "Plan a trip"
+    ],
+    "title": "Hikers plan around daylight, not distance",
+    "summary": "In five short trials, every hiker asked first how late they would finish. We will show finish time before kilometres.",
+    "asks": [],
+    "details": "Five people planned the same weekend. All five changed their start time after seeing a sunset marker, and none changed the route."
+  },
+  {
+    "id": "2026-10-14-1",
+    "date": "2026-10-14",
+    "kind": "progress",
+    "fidelity": "mocked",
+    "workstreams": [
+      "Plan a trip"
+    ],
+    "title": "You can sketch a route and see how far it is",
+    "summary": "Draw a line across a sample map to see its distance. Real trails and heights are not connected yet.",
+    "visual": {
+      "type": "progress",
+      "label": "Route tools working",
+      "done": 3,
+      "total": 5
+    },
+    "asks": [],
+    "details": "Working: draw, undo, distance. Still to build: snap to trails, height profile."
+  },
+  {
+    "id": "2026-10-10-1",
+    "date": "2026-10-10",
+    "kind": "progress",
+    "fidelity": "wireframe",
+    "workstreams": [
+      "Plan a trip"
+    ],
+    "title": "Here is how planning a trip will work",
+    "summary": "A sketch of the three steps: pick a trail, adjust the route, check the days. Nothing is built yet.",
+    "visual": {
+      "type": "steps",
+      "items": [
+        {
+          "label": "Pick a trail",
+          "state": "next"
+        },
+        {
+          "label": "Adjust the route",
+          "state": "next"
+        },
+        {
+          "label": "Check each day",
+          "state": "next"
+        }
+      ]
+    },
+    "asks": []
+  },
+  {
+    "id": "2026-10-06-1",
+    "date": "2026-10-06",
+    "kind": "decision",
+    "workstreams": [
+      "Plan a trip"
+    ],
+    "title": "We agreed what the first version must do",
+    "summary": "Plan a weekend hike on a phone: pick a trail, adjust the route, see each day. Everything else waits.",
+    "asks": [
+      {
+        "id": "scope",
+        "status": "answered",
+        "question": "Is a phone-only first version acceptable?",
+        "answer": "Yes, phone only"
+      }
+    ]
+  }
+]
+</script>
+
+<script>
+"use strict";
+(function () {
+  var KINDS = { shipped: "Shipped", progress: "In progress", decision: "Decision", blocked: "Blocked", learning: "Learned" };
+  var GLYPH = { shipped: "●", progress: "◐", decision: "◆", blocked: "▲", learning: "✦" };
+  var RUNG = { wireframe: "Wireframe: nothing built yet", mocked: "Mocked: sample data", live: "Live: real data" };
+
+  function sortEntries(list) {
+    return list.slice().sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
+  }
+  function splitRecent(list, n) {
+    var s = sortEntries(list);
+    return { latest: s[0] || null, recent: s.slice(1, n), rest: s.slice(n) };
+  }
+  function openAsks(list) {
+    var out = [];
+    sortEntries(list).forEach(function (e) {
+      (e.asks || []).forEach(function (a) { if (a.status === "open") out.push({ entry: e, ask: a }); });
+    });
+    return out;
+  }
+  function hasOpenAsk(e) { return (e.asks || []).some(function (a) { return a.status === "open"; }); }
+  function haystack(e) {
+    var parts = [e.title, e.summary, e.details, e.date, e.kind, (e.workstreams || []).join(" "), (e.changes || []).join(" ")];
+    (e.asks || []).forEach(function (a) { parts.push(a.question, a.answer, a.recommendation); });
+    return parts.filter(Boolean).join(" ").toLowerCase();
+  }
+  function matches(e, f) {
+    if (f.kind && e.kind !== f.kind) return false;
+    if (f.stream && (e.workstreams || []).indexOf(f.stream) < 0) return false;
+    if (f.needs && !hasOpenAsk(e)) return false;
+    var q = (f.q || "").trim().toLowerCase();
+    return !q || q.split(/\s+/).every(function (w) { return haystack(e).indexOf(w) >= 0; });
+  }
+  function safeHref(h) { return /^(https?:|#|[^:]*$)/i.test(h || "") ? h : "#"; }
+
+  var api = { sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref };
+  if (typeof window !== "undefined") window.GMDashboard = api;
+  if (typeof document === "undefined" || !document.getElementById("gm-entries")) return;
+
+  var cfg = JSON.parse(document.getElementById("gm-config").textContent);
+  var entries = JSON.parse(document.getElementById("gm-entries").textContent);
+  var RECENT = cfg.recentCount || 5;
+  var $ = function (id) { return document.getElementById(id); };
+
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === "text") n.textContent = attrs[k]; else if (k === "class") n.className = attrs[k]; else n.setAttribute(k, attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+    return n;
+  }
+  function chip(kind) { return el("span", { class: "chip " + kind, text: GLYPH[kind] + " " + KINDS[kind] }); }
+  function link(l) { var a = el("a", { href: safeHref(l.href), text: l.label }); if (/^https?:/i.test(l.href)) a.rel = "noopener"; return a; }
+
+  function visual(v) {
+    if (!v) return null;
+    var f = el("figure", { class: "visual" });
+    if (v.type === "image") {
+      f.appendChild(el("img", { src: safeHref(v.src), alt: v.alt || "", loading: "lazy" }));
+    } else if (v.type === "compare") {
+      var g = el("div", { class: "compare" });
+      [v.before, v.after].forEach(function (s) {
+        var c = el("figure"); c.appendChild(el("img", { src: safeHref(s.src), alt: s.alt || "", loading: "lazy" }));
+        c.appendChild(el("figcaption", { text: s.label })); g.appendChild(c);
+      });
+      f.appendChild(g);
+    } else if (v.type === "progress") {
+      var pct = v.total ? Math.round(100 * v.done / v.total) : 0;
+      f.appendChild(el("div", { class: "pl" }, [el("span", { text: v.label }), el("b", { text: v.done + " of " + v.total })]));
+      var bar = el("div", { class: "bar", role: "progressbar", "aria-valuemin": "0", "aria-valuemax": String(v.total), "aria-valuenow": String(v.done), "aria-label": v.label });
+      var fill = el("i"); fill.style.width = pct + "%"; bar.appendChild(fill); f.appendChild(bar);
+    } else if (v.type === "steps") {
+      var ol = el("ol", { class: "steps" });
+      v.items.forEach(function (s) {
+        ol.appendChild(el("li", { class: s.state }, [document.createTextNode(s.label), el("small", { text: { done: "Done", now: "Now", next: "Next" }[s.state] || "" })]));
+      });
+      f.appendChild(ol);
+    } else if (v.type === "metrics") {
+      var m = el("div", { class: "metrics" });
+      v.items.forEach(function (i) { m.appendChild(el("div", {}, [el("b", { text: i.value }), el("small", { text: i.label })])); });
+      f.appendChild(m);
+    }
+    if (v.caption) f.appendChild(el("figcaption", { text: v.caption }));
+    return f;
+  }
+
+  function body(e, full) {
+    var box = el("div", { class: "body" });
+    if (e.summary) box.appendChild(el("p", { text: e.summary }));
+    if (e.changes && e.changes.length) { var ul = el("ul", { class: "changes" }); e.changes.forEach(function (c) { ul.appendChild(el("li", { text: c })); }); box.appendChild(ul); }
+    var v = visual(e.visual); if (v) box.appendChild(v);
+    if (e.fidelity && e.fidelity !== "live") box.appendChild(el("p", { class: "meta", text: RUNG[e.fidelity] }));
+    if (e.try) { var t = link({ label: e.try.label, href: e.try.href }); t.className = "try"; box.appendChild(t); }
+    (e.asks || []).forEach(function (a) {
+      if (a.status === "answered") box.appendChild(el("p", { class: "meta", text: "You answered: " + a.question + " → " + a.answer }));
+      else if (!full) box.appendChild(el("p", { class: "meta", text: "Waiting on you: " + a.question }));
+    });
+    var more = (e.details || "") || (e.links && e.links.length);
+    if (more) {
+      var d = el("details", {}, [el("summary", { text: "Details and links" })]);
+      if (e.links) { var p = el("p"); e.links.forEach(function (l, i) { if (i) p.appendChild(document.createTextNode("  ·  ")); p.appendChild(link(l)); }); d.appendChild(p); }
+      (e.details || "").split("\n").filter(Boolean).forEach(function (t) { d.appendChild(el("p", { text: t })); });
+      box.appendChild(d);
+    }
+    return box;
+  }
+  function metaLine(e) {
+    return el("div", { class: "meta" }, [chip(e.kind), el("span", { text: e.date })].concat((e.workstreams || []).map(function (w) { return el("span", { text: "· " + w }); })));
+  }
+  function row(e, open) {
+    var s = el("summary", {}, [el("span", { class: "when", text: e.date }), el("span", { class: "ttl", text: e.title }), chip(e.kind)]);
+    if (hasOpenAsk(e)) s.appendChild(el("span", { class: "chip needs", text: "◆ Needs you" }));
+    var d = el("details", { class: "row", id: "e-" + e.id }, [s, body(e, false)]);
+    if (open) d.open = true;
+    return d;
+  }
+
+  function renderAsks() {
+    var box = $("needs"); box.textContent = "";
+    var asks = openAsks(entries);
+    if (!asks.length) { box.appendChild(el("div", { class: "none", text: "Nothing needs you right now." })); return; }
+    var wrap = el("div", { class: "asks" });
+    asks.forEach(function (x) {
+      var a = x.ask, c = el("div", { class: "ask" });
+      c.appendChild(el("h3", { text: a.question }));
+      if (a.recommendation) c.appendChild(el("p", { class: "rec", text: "Recommended: " + a.recommendation }));
+      if (a.impact) c.appendChild(el("p", { class: "meta", text: a.impact }));
+      var out = el("div", { class: "reply", hidden: "" });
+      var opts = el("div", { class: "opts" });
+      (a.options || []).forEach(function (o) {
+        var b = el("button", { type: "button", text: o });
+        b.addEventListener("click", function () {
+          var text = "Re \"" + a.question + "\": " + o;
+          out.hidden = false; out.textContent = "";
+          var inp = el("input", { type: "text", readonly: "", "aria-label": "Reply to paste into chat" }); inp.value = text;
+          out.appendChild(el("div", { text: "Paste this into chat:" })); out.appendChild(inp); inp.select();
+          if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { out.firstChild.textContent = "Copied. Paste this into chat:"; }, function () {});
+        });
+        opts.appendChild(b);
+      });
+      c.appendChild(opts); c.appendChild(out);
+      c.appendChild(el("p", { class: "meta", text: "From: " + x.entry.title }));
+      wrap.appendChild(c);
+    });
+    box.appendChild(wrap);
+  }
+
+  function renderOverview() {
+    var s = splitRecent(entries, RECENT);
+    renderAsks();
+    var L = $("latest"); L.textContent = "";
+    if (s.latest) {
+      var card = el("article", { class: "card latest" }, [metaLine(s.latest), el("h3", { text: s.latest.title }), body(s.latest, true)]);
+      L.appendChild(card);
+    } else L.appendChild(el("div", { class: "none", text: "No entries yet. Each finished task adds one." }));
+    var R = $("recent"); R.textContent = "";
+    s.recent.forEach(function (e) { R.appendChild(row(e, false)); });
+    $("recent-h").parentNode.hidden = !s.recent.length;
+    $("all-link").parentNode.hidden = !entries.length;
+    $("all-link").textContent = "See all " + entries.length + " entries" + (s.rest.length ? " (" + s.rest.length + " older)" : "") + " →";
+  }
+
+  var filter = { q: "", kind: "", stream: "", needs: false };
+  function renderChips(id, values, key, labels) {
+    var box = $(id); box.textContent = "";
+    values.forEach(function (v) {
+      var b = el("button", { type: "button", "aria-pressed": String(filter[key] === v), text: labels ? labels[v] : v });
+      if (filter[key] === v) b.className = "on";
+      b.addEventListener("click", function () { filter[key] = filter[key] === v ? "" : v; renderHistory(); });
+      box.appendChild(b);
+    });
+  }
+  function renderHistory() {
+    var kinds = Object.keys(KINDS).filter(function (k) { return entries.some(function (e) { return e.kind === k; }); });
+    var streams = []; entries.forEach(function (e) { (e.workstreams || []).forEach(function (w) { if (streams.indexOf(w) < 0) streams.push(w); }); });
+    renderChips("kinds", kinds, "kind", KINDS);
+    renderChips("streams", streams.length > 1 ? streams : [], "stream");
+    $("f-needs").className = filter.needs ? "on" : ""; $("f-needs").setAttribute("aria-pressed", String(filter.needs));
+    var list = sortEntries(entries).filter(function (e) { return matches(e, filter); });
+    var L = $("list"); L.textContent = "";
+    list.forEach(function (e) { L.appendChild(row(e, false)); });
+    $("count").textContent = list.length === entries.length ? entries.length + " entries" : list.length + " of " + entries.length + " entries";
+    if (!list.length) L.appendChild(el("div", { class: "none", text: "No entries match. Clear the search or a filter." }));
+  }
+
+  function show(tab, target) {
+    ["overview", "history"].forEach(function (t) {
+      $(t).hidden = t !== tab;
+      var b = $("tab-" + t); b.setAttribute("aria-selected", String(t === tab)); b.tabIndex = t === tab ? 0 : -1;
+    });
+    if (target) {
+      if (!$(target)) { filter = { q: "", kind: "", stream: "", needs: false }; $("q").value = ""; renderHistory(); }
+      var n = $(target); if (n) { if (n.tagName === "DETAILS") n.open = true; n.scrollIntoView(); }
+    }
+  }
+  function route() {
+    var h = decodeURIComponent(location.hash.slice(1));
+    if (h.indexOf("e-") === 0) { show("history", h); return; }
+    show(h === "history" ? "history" : "overview");
+  }
+
+  $("project").textContent = cfg.project || "Project status";
+  document.title = (cfg.project || "Project") + " status";
+  var s0 = splitRecent(entries, RECENT);
+  $("updated").textContent = s0.latest ? "Updated " + s0.latest.date + " after: " + s0.latest.title : "No entries yet";
+  $("history-count").textContent = "(" + entries.length + ")";
+  renderOverview(); renderHistory();
+
+  $("tab-overview").addEventListener("click", function () { location.hash = "overview"; });
+  $("tab-history").addEventListener("click", function () { location.hash = "history"; });
+  document.querySelector("[role=tablist]").addEventListener("keydown", function (ev) {
+    if (ev.key !== "ArrowRight" && ev.key !== "ArrowLeft") return;
+    location.hash = $("tab-history").getAttribute("aria-selected") === "true" ? "overview" : "history";
+    $(location.hash === "#history" ? "tab-history" : "tab-overview").focus();
+  });
+  $("q").addEventListener("input", function (ev) { filter.q = ev.target.value; renderHistory(); });
+  $("f-needs").addEventListener("click", function () { filter.needs = !filter.needs; renderHistory(); });
+  $("expand").addEventListener("click", function () { $("list").querySelectorAll("details.row").forEach(function (d) { d.open = true; }); });
+  $("collapse").addEventListener("click", function () { $("list").querySelectorAll("details.row").forEach(function (d) { d.open = false; }); });
+  window.addEventListener("hashchange", route);
+  route();
+})();
+</script>
+</body>
+</html>

@@ -50,7 +50,7 @@ details.row .body{padding:0 0 14px}
 .reply input{width:100%;font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px}
 .none{color:var(--muted);border:1px dashed var(--line);border-radius:var(--r);padding:14px 18px}
 .visual{margin:12px 0}
-.visual img{max-width:100%;border-radius:10px;border:1px solid var(--line);display:block}
+.visual img{max-width:100%;max-height:420px;width:auto;height:auto;margin:0 auto;border-radius:10px;border:1px solid var(--line);display:block}
 .visual figcaption{color:var(--muted);font-size:13px;margin-top:6px}
 .bar{height:14px;background:var(--bg);border:1px solid var(--line);border-radius:99px;overflow:hidden}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue2),var(--cyan))}
@@ -61,7 +61,7 @@ details.row .body{padding:0 0 14px}
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
 .metrics div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#0e1830}
 .metrics b{display:block;font-size:24px;color:var(--cyan)}.metrics small{color:var(--muted)}
-.compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}.compare figcaption{text-align:center}
 .compare figure{margin:0}
 .tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px}
 .tools input[type=search]{flex:1 1 240px;font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px}
@@ -110,43 +110,10 @@ details.row .body{padding:0 0 14px}
 { "project": "Project name", "recentCount": 5 }
 </script>
 
-<!-- Newest entry first. Edit only this block when updating (see references/dashboard-contract.md).
-     Entries marked "example": true are template samples; delete them on first use. -->
+<!-- Newest entry first. Add one entry per finished task; edit only this block and gm-config above.
+     Field rules and a worked example: references/dashboard-contract.md and assets/dashboard-example.html -->
 <script type="application/json" id="gm-entries">
-[
-  {
-    "id": "2026-10-27-3", "example": true, "date": "2026-10-27", "kind": "progress", "fidelity": "mocked",
-    "title": "You can browse topics by what you want to do",
-    "summary": "Topics are grouped by goal on the home screen. The groups use sample data until the real lessons are connected.",
-    "workstreams": ["Learning"],
-    "changes": ["Home screen groups topics by goal", "Each group shows how much you have finished"],
-    "visual": { "type": "progress", "label": "Goals with real content", "done": 3, "total": 7 },
-    "try": { "label": "Open the home screen", "href": "https://example.com/preview" },
-    "asks": [
-      { "id": "a1", "status": "open", "question": "Should finished topics stay on the home screen?",
-        "recommendation": "Move them to a Finished list", "impact": "Decides the layout of the next screen",
-        "options": ["Move them to a Finished list", "Keep them in place"] }
-    ],
-    "links": [{ "label": "Design notes", "href": "https://example.com/design-notes" }],
-    "details": "Built on the existing deck. Checked on a phone-sized window and a laptop window.\nTests pass; the sample data is generated, not real."
-  },
-  {
-    "id": "2026-10-26-2", "example": true, "date": "2026-10-26", "kind": "shipped", "fidelity": "live",
-    "title": "Your progress now survives closing the app",
-    "summary": "Reviews you finish are saved on this device and reappear when you come back.",
-    "workstreams": ["Learning"],
-    "changes": ["Progress is saved after every answer"],
-    "visual": { "type": "metrics", "items": [{ "label": "Answers saved", "value": "100%" }, { "label": "Load time", "value": "0.4s" }] },
-    "asks": [], "links": [], "details": "Stored locally in the browser; no account needed."
-  },
-  {
-    "id": "2026-10-25-1", "example": true, "date": "2026-10-25", "kind": "decision", "workstreams": ["Planning"],
-    "title": "We agreed to build the phone layout first",
-    "summary": "The laptop layout follows once the phone version feels right.",
-    "visual": { "type": "steps", "items": [{ "label": "Phone layout", "state": "now" }, { "label": "Laptop layout", "state": "next" }, { "label": "Offline", "state": "next" }] },
-    "asks": [{ "id": "a0", "status": "answered", "question": "Phone or laptop first?", "answer": "Phone first" }]
-  }
-]
+[]
 </script>
 
 <script>
@@ -305,10 +272,11 @@ details.row .body{padding:0 0 14px}
     if (s.latest) {
       var card = el("article", { class: "card latest" }, [metaLine(s.latest), el("h3", { text: s.latest.title }), body(s.latest, true)]);
       L.appendChild(card);
-    }
+    } else L.appendChild(el("div", { class: "none", text: "No entries yet. Each finished task adds one." }));
     var R = $("recent"); R.textContent = "";
     s.recent.forEach(function (e) { R.appendChild(row(e, false)); });
     $("recent-h").parentNode.hidden = !s.recent.length;
+    $("all-link").parentNode.hidden = !entries.length;
     $("all-link").textContent = "See all " + entries.length + " entries" + (s.rest.length ? " (" + s.rest.length + " older)" : "") + " →";
   }
 

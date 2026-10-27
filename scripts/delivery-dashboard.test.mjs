@@ -29,12 +29,36 @@ function dashboard(t, entries, edit = (h) => h) {
 }
 const run = (file, opts) => check(file, opts);
 
-test("the shipped template passes, and strict mode flags its example entries", (t) => {
+test("the blank template passes strict mode and shows empty states", () => {
   const f = join(SKILL, "assets/dashboard-template.html");
-  const r = run(f);
-  assert.equal(r.ok, true, r.errors.join("; "));
-  assert.match(r.warnings.join(), /template example/);
-  assert.equal(run(f, { strict: true }).ok, false);
+  const r = run(f, { strict: true });
+  assert.equal(r.ok, true, r.errors.concat(r.warnings).join("; "));
+  assert.equal(r.stats.entries, 0);
+  assert.match(TEMPLATE, /No entries yet/);
+});
+
+test("the worked example passes strict mode and demonstrates every feature", () => {
+  const f = join(SKILL, "assets/dashboard-example.html");
+  const html = readFileSync(f, "utf8");
+  const r = run(f, { strict: true });
+  assert.equal(r.ok, true, r.errors.concat(r.warnings).join("; "));
+  const entries = JSON.parse(html.match(ENTRIES)[2]);
+  assert.ok(entries.length >= 8, "enough entries that some roll into the history");
+  assert.ok(r.stats.logic.history > r.stats.logic.overview, "history holds more than the overview");
+  assert.ok(r.stats.openAsks >= 2, "open asks collect in Needs you");
+  assert.ok(entries.some((e) => (e.asks || []).some((a) => a.status === "answered")), "an answered ask is kept as record");
+  assert.deepEqual([...new Set(entries.flatMap((e) => (e.visual ? [e.visual.type] : [])))].sort(), ["compare", "image", "metrics", "progress", "steps"]);
+  assert.deepEqual([...new Set(entries.map((e) => e.kind))].sort(), ["blocked", "decision", "learning", "progress", "shipped"]);
+  assert.deepEqual([...new Set(entries.map((e) => e.fidelity).filter(Boolean))].sort(), ["live", "mocked", "wireframe"]);
+  assert.ok(!entries.some((e) => e.example), "the example is not flagged as template sample data");
+});
+
+test("the template and the example share the same renderer", () => {
+  const code = (h) => h.match(/<script>([\s\S]*?)<\/script>/g).pop();
+  const example = readFileSync(join(SKILL, "assets/dashboard-example.html"), "utf8");
+  assert.equal(code(example), code(TEMPLATE));
+  const style = (h) => h.match(/<style>([\s\S]*?)<\/style>/)[1];
+  assert.equal(style(example), style(TEMPLATE));
 });
 
 test("the overview keeps five entries and the history keeps all of them", (t) => {
@@ -115,4 +139,11 @@ test("the checker never modifies the dashboard", (t) => {
   const before = readFileSync(d.file, "utf8");
   run(d.file);
   assert.equal(readFileSync(d.file, "utf8"), before);
+});
+
+test("malformed data blocks produce errors, not a crash", (t) => {
+  const d = dashboard(t, [entry(1)], (h) => h.replace(/(id="gm-entries">)[\s\S]*?(<\/script>)/, '$1[{"id": "a", "title": "tab\there"}$2'));
+  const r = run(d.file);
+  assert.equal(r.ok, false);
+  assert.match(r.errors.join("\n"), /not valid JSON/);
 });

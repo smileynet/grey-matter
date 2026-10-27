@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" role="img" aria-label="Plan your route">
+<rect width="360" height="640" rx="28" fill="#0a1120"/>
+<rect x="12" y="12" width="336" height="616" rx="20" fill="#111b2f" stroke="#27395a"/>
+<text x="28" y="52" fill="#e8eef9" font-family="system-ui,sans-serif" font-size="18" font-weight="700">Plan your route</text>
+<rect x="28" y="72" width="304" height="360" rx="12" fill="#0e1830" stroke="#27395a"/>
+<path d="M50 390 C 100 300, 140 340, 180 250 S 270 200, 305 120" fill="none" stroke="#6aaeff" stroke-width="4" stroke-linecap="round"/>
+<circle cx="50" cy="390" r="9" fill="#56d4f0"/><circle cx="180" cy="250" r="9" fill="#56d4f0"/><circle cx="305" cy="120" r="9" fill="#56d4f0"/>
+<text x="62" y="396" fill="#e8eef9" font-family="system-ui,sans-serif" font-size="12">Start</text><text x="192" y="244" fill="#e8eef9" font-family="system-ui,sans-serif" font-size="12">Viewpoint</text><text x="250" y="110" fill="#e8eef9" font-family="system-ui,sans-serif" font-size="12">Summit</text>
+<rect x="28" y="448" width="304" height="64" rx="12" fill="#162540" stroke="#27395a"/><text x="44" y="476" fill="#e8eef9" font-family="system-ui,sans-serif" font-size="15" font-weight="600">Distance 8.2 km</text><text x="44" y="498" fill="#a3b3cf" font-family="system-ui,sans-serif" font-size="13">3 stops · tap the map to add another</text>
+</svg>
