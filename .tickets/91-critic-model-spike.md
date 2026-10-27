@@ -1,7 +1,7 @@
 ---
 id: "91"
 title: "Spike: verify critic model and effort pinning through each harness CLI"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
