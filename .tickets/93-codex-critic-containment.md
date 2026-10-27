@@ -14,8 +14,11 @@ tags: ["stream:tooling", "type:spike"]
 
 ## What to build
 
-TBD
+Run the spike in [proposal 15](../docs/agents/proposals/15-codex-critic-containment.md): test five containment options for Codex critics (restore the Codex sandbox with the AppArmor profile, a read-only Docker container, tool-surface removal, `--worktree`, and the prompt baseline) against six adversarial checks. T3 and T4 need no privilege and run first; T1 needs the owner to run one `sudo` step and is optional; T2 is the strongest option that needs no `sudo`, with credentials as its main risk. Evidence: [codex-cli-controls](../docs/agents/research/codex-cli-controls-20261027.md).
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [ ] A table covers the options against the six adversarial checks, each cell with evidence from the filesystem or process, not the critic's words.
+- [ ] Setup cost, reversibility, owner steps, per-call overhead and credential exposure are recorded per option.
+- [ ] A recommendation is chosen by the proposal's order, and the Codex row in `harnesses.md` and ticket 92's sandbox item are updated.
+- [ ] `scripts/probe-critic-model.mjs` checks the chosen boundary, and `sync` reports a regression.
