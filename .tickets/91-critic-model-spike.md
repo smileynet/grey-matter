@@ -29,3 +29,12 @@ Decided: a harness below the ceiling still runs its critics on its best model, m
 - [ ] The harness table for `docs/agents/harnesses.md` is corrected from the results and committed.
 - [ ] `scripts/probe-critic-model.mjs` covers the passing probes read-only, and `sync` runs it.
 - [ ] Each failure has a follow-up ticket.
+
+## Progress (2026-10-27)
+
+First pass done for Kiro CLI and Claude Code's in-session subagents; see
+[the results](../docs/agents/research/critic-model-spike-20261027.md). Blocked on expired credentials:
+Claude Code CLI (logged out), Codex (refresh token reused, needs login) and opencode (provider key
+expired). Remaining once the owner re-authenticates: P1 to P7 for those three, P5 for all, the
+`probe-critic-model.mjs` script and the corrected harness table. Kiro and Claude findings already
+change proposal 13: record the model from the harness, not the critic; Kiro critics run top-level.
