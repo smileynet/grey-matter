@@ -32,9 +32,10 @@ Decided: a harness below the ceiling still runs its critics on its best model, m
 
 ## Progress (2026-10-27)
 
-First pass done for Kiro CLI and Claude Code's in-session subagents; see
-[the results](../docs/agents/research/critic-model-spike-20261027.md). Blocked on expired credentials:
-Claude Code CLI (logged out), Codex (refresh token reused, needs login) and opencode (provider key
-expired). Remaining once the owner re-authenticates: P1 to P7 for those three, P5 for all, the
-`probe-critic-model.mjs` script and the corrected harness table. Kiro and Claude findings already
-change proposal 13: record the model from the harness, not the critic; Kiro critics run top-level.
+Measured: Kiro CLI, opencode (on the owner's z.ai subscription) and Claude Code's in-session
+subagents; see [the results](../docs/agents/research/critic-model-spike-20261027.md). Blocked: Claude
+Code CLI (logged out on this host) and Codex (refresh token reused, token file unchanged since
+2026-10-21); the owner's refresh did not reach this machine. Remaining after `claude auth login` and
+`codex login` here: P1 to P7 for those two, P5 for all, `probe-critic-model.mjs` and the corrected
+harness table. Findings already change proposal 13: the model of record comes from the harness,
+critics need a time limit, and a CLI flag outranks an agent file.

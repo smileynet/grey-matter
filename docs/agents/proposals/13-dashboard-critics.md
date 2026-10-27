@@ -199,9 +199,9 @@ table goes into `harnesses.md`.
 | Claude Code | `opus` (`claude-opus-5-5`) | Newest Opus the plan allows, recorded | The `model` parameter of the spawn, or `model:` in a critic agent file | `effort:` or the per-spawn parameter; Opus defaults to `medium`, so set `high` |
 | Codex | `gpt-6.1-sol` | Strongest model in the CLI's catalog, recorded | `model` and `model_reasoning_effort` in a `.codex/agents/*.toml` file, `-m` and `-c` on `codex exec`, or `[agents] default_subagent_model` | `high`; `xhigh` where supported |
 | Kiro CLI | Strongest Claude in `--list-models`, in the order Opus 5.5, Opus 5, Opus 4.x | Same | `--model` or `model` in the agent file, using an ID from `--list-models` | `--effort` |
-| opencode | `opencode/claude-opus-5-5` or `opencode/gpt-6.1-sol` (by configured provider) | Next in the provider's list | `-m provider/model` or `model:` in the agent file | `--variant` |
+| opencode | `zai-coding-plan/glm-5.3` (owner's z.ai subscription; below the Opus 5.5 and Sol 6.1 target) | Next in the provider's list | `-m provider/model` or `model:` in the agent file; the flag outranks the file | `--variant` (recorded in `opencode export`) |
 
-On the machine used for this review, only Claude Code and opencode list the ceiling models. Kiro
+On the machine used for this review, only Claude Code lists the ceiling models (opencode lists them under a provider whose key is expired; it runs on z.ai instead). Kiro
 CLI 2.16.0 lists Claude Opus 4.5 as its strongest Claude, and Codex 0.147.0's catalog (fetched
 2026-10-21) lists `gpt-5.6-sol`, with no 6.1 model. Those harnesses would run critics below the
 ceiling today, which is why the rule requires recording what ran.
