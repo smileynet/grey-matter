@@ -215,7 +215,11 @@ Rules, with the evidence for each in the spike results:
   prompt, give the input in the prompt where it fits, run from a clean tree, and check that
   `git status --porcelain` is unchanged after the call; a changed tree fails the review.
   Removing the shell tool (`--disable shell_tool --disable unified_exec`) stops reads but not writes:
-  the patch tool still created a file. Proposal 15 (ticket 93) tests an enforced boundary.
+  the patch tool still wrote files, including outside the repo. Under review (ticket 93, see
+  [codex-containment-spike](./research/codex-containment-spike-20261027.md)): `-s read-only` with
+  the input in the prompt was enforced on randomserver (an attempted patch was rejected by policy,
+  an attempted shell write failed), which the bypass flag is not. The owner's rule above stands until
+  decided.
 - **Time-limit every critic call** with an outer `timeout`. A pinned opencode subagent told to reply
   "OK" made 26 read-only calls and ran past 150 s.
 - **Ask for "no rows when there are no problems".** Kiro listed non-findings as rows; opencode and

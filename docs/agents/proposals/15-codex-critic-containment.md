@@ -1,6 +1,6 @@
 # Proposal 15: a test to contain Codex critics without trusting the prompt
 
-**Status:** proposed 2026-10-27. **Scope:** a short spike (ticket 93), then an update to
+**Status:** partly run 2026-10-27 (T3, T4, T5 and an added `-s read-only` option; T2 Docker postponed, T1 skipped); results in [codex-containment-spike](../research/codex-containment-spike-20261027.md). **Scope:** a short spike (ticket 93), then an update to
 [harnesses](../harnesses.md#critic-model) and `scripts/probe-critic-model.mjs`. **Evidence:**
 [codex-cli-controls](../research/codex-cli-controls-20261027.md) and the
 [critic model spike](../research/critic-model-spike-20261027.md).

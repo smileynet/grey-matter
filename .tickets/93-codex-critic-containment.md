@@ -22,3 +22,12 @@ Run the spike in [proposal 15](../docs/agents/proposals/15-codex-critic-containm
 - [ ] Setup cost, reversibility, owner steps, per-call overhead and credential exposure are recorded per option.
 - [ ] A recommendation is chosen by the proposal's order, and the Codex row in `harnesses.md` and ticket 92's sandbox item are updated.
 - [ ] `scripts/probe-critic-model.mjs` checks the chosen boundary, and `sync` reports a regression.
+
+## Progress (2026-10-27)
+
+Run: T3, T4, T5 and an added `-s read-only` option; see
+[the results](../docs/agents/research/codex-containment-spike-20261027.md). Docker (T2) postponed and the
+AppArmor fix (T1) skipped by the owner. Finding: `-s read-only` is enforced here (patch rejected by
+policy, shell fails closed), the bypass flag gives no boundary, no flag removes the patch tool, and
+`--worktree` contains relative writes only. Recommendation pending the owner: use `-s read-only` for
+critics whose input is in the prompt. Remaining: T2, optionally T1, and the probe check.
