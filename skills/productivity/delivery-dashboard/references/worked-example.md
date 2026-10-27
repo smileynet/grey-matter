@@ -21,7 +21,7 @@ shapes are the point.
 
 | Entry | Kind and fidelity | Why it is written this way |
 | --- | --- | --- |
-| Weather per day | progress, mocked | Headline says what the person can do. The visual answers "did it change?" with a `compare`. The honest limit (sample data) is in the summary and the rung label. The open ask carries the decision the next step needs. |
+| Weather per day | progress, mocked | Headline says what the person gets and carries the honest limit, because the headline is shown alone in the header, the ask card and the history row. The visual answers "did it change?" with a `compare`. The limit also appears in the summary and the rung label. The open ask carries the decision the next step needs. |
 | Packing list remembers ticks | shipped, live | A `metrics` visual gives two numbers that matter to the person. The method (closed the app five times) is in Details, not the headline. No asks, so none appear. |
 | One trip at a time | decision | A decision is an entry too. `steps` shows where we are. The ask is already `answered`, kept as the record. |
 | Offline maps waiting | blocked | Blocked work states the cause in plain words and asks for the one decision that unblocks it. Licence detail and the trail count sit in Details. |
@@ -37,11 +37,11 @@ The same events as an agent might first report them, and the version the dashboa
 
 | First draft (process voice) | Dashboard voice |
 | --- | --- |
-| "Closed ticket 41; refactored plan screen into WeatherRow component; 14 tests added" | "You can check the weather for each day of your trip" |
+| "Closed ticket 41; refactored plan screen into WeatherRow component; 14 tests added" | "Each day of your trip now shows a forecast (sample numbers for now)" |
 | "Implemented persistence layer using local storage with debounce" | "Your packing list remembers what you have ticked" |
 | "Blocked: tile licence incompatible with bundling; see docs/maps/licensing.md" | "Offline maps are waiting on a choice of map source", plus an ask with a recommendation |
 | "Decision recorded in ADR 0007" | "We chose to plan one trip at a time for now" |
-| "WIP: route tool 60% done" | "You can sketch a route and see how far it is", with a `progress` visual and a "Mocked" label |
+| "WIP: route tool 60% done" | "You can sketch a route on a sample map and see how far it is", with a `progress` visual and a "Mocked" label |
 
 Checks that fail a first draft: it names a ticket, a file, a component or a test count; it
 describes what the agent did instead of what the person can now do; it hides the decision the
