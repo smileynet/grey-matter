@@ -1,7 +1,7 @@
 ---
 id: "93"
 title: "Spike: contain Codex critics with an enforced boundary, not the prompt"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -31,3 +31,7 @@ AppArmor fix (T1) skipped by the owner. Finding: `-s read-only` is enforced here
 policy, shell fails closed), the bypass flag gives no boundary, no flag removes the patch tool, and
 `--worktree` contains relative writes only. Decided by the owner: `-s read-only` with the input in the prompt
 is the Codex critic default; otherwise no sandbox. Remaining: T2, optionally T1, and the probe check.
+
+## Resolution (2026-10-27)
+
+Ran T3, T4, T5 and -s read-only; owner decided: Codex critics default to -s read-only with the packet in the prompt, otherwise no sandbox. probe-critic-model.mjs checks the boundary with a forced write attempt (failed-containment on leak). T1 skipped and T2 postponed by the owner; T2 tracked separately.
