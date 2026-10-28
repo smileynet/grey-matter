@@ -32,6 +32,7 @@ sync by [`curate-docs`](../meta/curate-docs/SKILL.md).
 - [domain-modeling](./domain-modeling/SKILL.md): sharpen an app's domain language (DDD), the app regime.
 - [game-modeling](./game-modeling/SKILL.md): the game-native counterpart to domain-modeling.
 - [codebase-design](./codebase-design/SKILL.md): deep-module vocabulary, the service regime.
+- [data-modeling](./data-modeling/SKILL.md): data representations that make invalid states unrepresentable, plus a review lens for types and schemas.
 - [game-native-design](./game-native-design/SKILL.md): the game-native philosophy, the frame-loop regime.
 - [triage](./triage/SKILL.md): move external requests + tkt tickets through triage roles.
 - [retro](./retro/SKILL.md): improve the agent's environment after a session.

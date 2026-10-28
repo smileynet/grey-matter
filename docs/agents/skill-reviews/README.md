@@ -49,6 +49,7 @@ TBD so the index and its owning ticket agree.
 | handoff | productivity | user | adapt | [handoff.md](handoff.md) |
 | to-questionnaire | productivity | user | adapt | [to-questionnaire.md](to-questionnaire.md) |
 | codebase-design | engineering | model | adapt | [codebase-design.md](codebase-design.md) |
+| data-modeling | engineering | model | adapt (from crew-research) | [data-modeling.md](data-modeling.md) |
 | implement | engineering | user | adapt | [implement.md](implement.md) |
 | implement-spec | engineering | user | adapt | [implement-spec.md](implement-spec.md) |
 | grill-with-docs | engineering | user | adapt | [grill-with-docs.md](grill-with-docs.md) |

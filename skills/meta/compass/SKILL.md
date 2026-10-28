@@ -62,6 +62,7 @@ References that run *beneath* the other skills, each the single source of truth 
 
 - **domain-modeling** / **game-modeling**: sharpen the project's *domain* language (DDD-style for apps; the game-domain counterpart for game systems). The active discipline grill-with-docs drives to keep `GLOSSARY.md` clean.
 - **codebase-design**: the deep-module vocabulary (module, interface, depth, seam, adapter, leverage, locality) for a module's *shape*. **game-native-design**: the game-native philosophy (the loop, simulation state, determinism, feel) that keeps game code from feeling like a web app. tdd and improve-codebase-architecture speak both, routed by project type.
+- **data-modeling**: the *shape of data*, so invalid states can't be constructed (sum types, wrapper types, parse at the boundary, one fact in one place), and when to stop. codebase-design calls it when an interface carries data; code-review passes its review lens when a diff changes types or schemas.
 
 ## Phase boundaries
 

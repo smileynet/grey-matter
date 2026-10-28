@@ -7,6 +7,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 ## [Unreleased]
 
 ### Added
+- `data-modeling` helps design and review data so invalid states can't be represented, and says when a simpler type is the better choice. `codebase-design` calls it when an interface carries data, and `code-review` uses its review lens when a change touches types or schemas.
 - `repository-artifact-hygiene` separates source assets from generated evidence, measures staged Git artifacts read-only, and helps choose storage and recovery without automatic migration or deletion.
 - Codex marketplace packaging supplies namespaced skills, with local cache refresh through the same deployer used by the other harnesses.
 - `orient` and `wrap-session` connect session pickup and handoff to the current plan and tickets; `conformance-audit` checks adopted repositories against current guidance.

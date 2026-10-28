@@ -35,6 +35,8 @@ Search the repo for every file that documents how code should be written. When `
 
 On top of whatever the repo documents, the Standards axis carries a **smell baseline**. Pick the rubric by project type: an app/general codebase uses [references/rubric-app.md](references/rubric-app.md); a game (engine markers `project.godot`, `*.uproject`) uses [references/rubric-game.md](references/rubric-game.md). Load the one that fits and pass it to the Standards sub-agent in full. The baseline is the one load-bearing reference here: open the rubric file and read it. If it genuinely can't be reached, say so and run the Standards axis against the repo's documented standards alone (a thinner review, not a blocked one), rather than inventing a baseline from memory.
 
+When the diff adds or changes a type, enum or schema in app or service code, also pass the `data-modeling` skill's [review lens](../data-modeling/references/review-lens.md) and [language patterns](../data-modeling/references/patterns.md) to the Standards sub-agent in full.
+
 ### 4. Spawn both sub-agents in parallel
 
 Issue both sub-agent calls together, in the foreground, and aggregate the reports they return.

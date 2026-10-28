@@ -61,6 +61,8 @@ When designing an interface, ask:
 - Can I simplify the parameters?
 - Can I hide more complexity inside?
 
+When the interface carries data (a type, a set of states, a schema), call the Skill tool with `data-modeling` before settling it. The invariants a type enforces are part of the interface: a representation that admits invalid states pushes guards onto every caller, which is the opposite of depth.
+
 ## Principles
 
 - **Depth is a property of the interface, not the implementation.** A deep module can be internally composed of small, mockable, swappable parts; they just aren't part of the interface. A module can have **internal seams** (private to its implementation, used by its own tests) as well as the **external seam** at its interface.

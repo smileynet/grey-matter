@@ -104,7 +104,7 @@ guidance-sync/enforcement-hierarchy→retro, and verification-protocol/project-c
 | script-authoring | FOLD | windows gotchas doc: IFS empty-field collapse, uv shims under MSYS, `\r` strip, `as_posix()` |
 | diagrams | DROP | pr + report-format + HTML-REPORT already cover it, with grounding rules |
 | project-winddown | DROP | rare; retro/wrap-session/handoff cover the loop |
-| data-modeling | FOLD | code-review rubric-app: "Representable Invalid State" smell + exhaustiveness gotchas |
+| data-modeling | ADAPT (revised 2026-10-28) | own skill `data-modeling`, called by codebase-design; code-review passes its review lens. See [the review](../skill-reviews/data-modeling.md) |
 | adr-authoring | FOLD | domain-modeling § ADRs: one ADR per independently reversible decision |
 | git-protocol | DROP | kiro git_safety + grey-matter Working rhythm |
 | study-reference | FOLD | research: a `.references/` clone is the primary source; read it local-first and weight findings toward the non-obvious |
