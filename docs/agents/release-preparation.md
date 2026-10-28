@@ -1,8 +1,7 @@
 # Local draft preparation
 
-Ticket 67 implementation: local draft mechanics, not release readiness. The release
-contract still gates production use on complete preparation/native/platform checks.
-Preparation produces `mode: draft`, `publishable: false` and explicit
+Local draft mechanics, not release readiness: the release contract gates production
+use on complete preparation/native/platform checks. Preparation produces `mode: draft`, `publishable: false` and explicit
 pending product, native, scope and platform validation. Publication is not implemented
 here. Use explicitly approved candidate versions; draft success does not authorize publication.
 
@@ -122,7 +121,7 @@ verification does not change that state or its immutable artifacts.
 Successful product/native verification keeps `publishable: false` and explicit
 pending scope, compatibility, upgrades, platform approval, final audit and staging.
 It verifies the supplied commit and bundles, not completion of the entire release
-contract. Actual candidate evidence and remaining gates are still required by ticket 67.
+contract; the remaining gates are receipts written at staging.
 
 ## Product evidence for an exact commit
 
@@ -180,14 +179,10 @@ Failed rows retain their native output and stop further checks. Success remains
 `publishable: false` with product, scope, compatibility, upgrade and other-platform
 gates pending. This command does not refresh real user plugin installations.
 
-## Current coverage and remaining gates
+## Fixture coverage
 
 Isolated fixtures exercise dry-run byte preservation, skill/Cargo version surfaces,
 comment/lock/notes handling, eight interrupted phases, real CLI termination, app-managed
 worktrees, symlink/junction alias protection, paths with spaces, Git environment scoping,
-foreign edits and corrupted artifacts. These are macOS results until actual Windows/Linux
-runs exist. Product and native commands now exist. Fresh approved-candidate results, reviewed
-scope/compatibility and platform validation remain pending. Ticket 67 stays open;
-69–71 retain upgrade probes, final audit and staged release artifacts. Ticket 68's
-publication/recovery implementation and independent review are complete; their
-source evidence does not validate the final approved candidates.
+foreign edits and corrupted artifacts. Fixture evidence does not validate a candidate;
+each candidate needs its own product, native and staging evidence.

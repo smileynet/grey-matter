@@ -43,7 +43,7 @@ it is correct; it is the one deliberate deviation from the strict six-field allo
 call to a `disable-model-invocation: true` skill even from inside a skill the user
 started, and tells the agent not to replicate it by other means. So when an orchestrator
 (`wrap-session`, `release`, `sync`, `adopt-project`) says "call the Skill tool with `x`",
-`x` must be model-invoked; only the orchestrator itself stays user-invoked. Verified live
+`x` must be model-invoked; the orchestrator itself may be either. Verified live
 2026-10-22 (`wrap-session` -> `reconcile-tickets` was refused); enforced by Check 3 of
 `scripts/check-invocation-policy.mjs`.
 

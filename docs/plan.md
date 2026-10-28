@@ -37,6 +37,11 @@ source behavior or release-documentation changes require replacement artifacts a
 affected evidence. This live plan and ticket receipts record later progress; embedded
 plans in frozen bundles remain snapshots of their source revisions.
 
+On 2026-10-28 the user chose to prepare grey-matter 0.2.0 again from current main
+rather than publish `e071b7b`, which main had passed by 91 commits (it lacks
+`data-modeling`, `delivery-dashboard` and later work). The frozen candidate and review
+branch stay as the worked example; the new candidate needs its own evidence and staging.
+
 ## Parked work
 
 These are existing backlog items, not newly approved release scope. Audit 70 records

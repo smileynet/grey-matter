@@ -49,10 +49,9 @@ Real publication still requires separately authorized execution, correct remote
 binding, immutable-release policy and the assigned publisher. tkt's cargo-dist assets
 and crate recovery must be integrated before exposing its publication path.
 
-Current coverage uses committed synthetic receipts and disposable repositories.
-It proves identity/hash binding and refusal behavior, not final release readiness.
-Tickets 70 and 71 must supply real audit/staging receipts after the remaining gates
-pass. See the [release contract](release-contract.md) for the publication boundary.
+The reader's tests use committed synthetic receipts and disposable repositories.
+They prove identity/hash binding and refusal behavior, not release readiness; real
+receipts are written by hand at staging, after the gates they record pass. See the [release contract](release-contract.md) for the publication boundary.
 
 ## Reviewed tkt CI publisher binding
 

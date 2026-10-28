@@ -1,18 +1,15 @@
 # Coordinated release contract
 
-Effective for release-readiness work, ticket 66, 2026-10-23. This is the
-implementation contract for tickets 67–71. Current authorization ends with reviewed,
-staged candidates; publication capability is tested without publishing real releases.
+Adopted in ticket 66, 2026-10-23. Release status (what is prepared, staged or
+published) lives in [the plan](../plan.md) and the release carriers, not here.
 
-Preparation and product/native verification exist. The grey-matter
-[publication command](release-publication.md) binds reviewed staging evidence,
-atomic refs, immutable GitHub reconciliation and stable recovery; default planning
-is read-only. Development integration constructs and fully checks the merge before
-the three-ref transaction. Ticket 68 completed both publishers, prepared Cargo
-transport, recovery and independent integrated review. The
+Preparation, product/native verification, staging and publication tooling exist. The
+grey-matter [publication command](release-publication.md) binds reviewed staging
+evidence, atomic refs, immutable GitHub reconciliation and stable recovery; default
+planning is read-only. Development integration constructs and fully checks the merge
+before the three-ref transaction. The
 [recovery research](research/publisher-recovery-contract.md) records primary sources
-and tested boundaries. Final 67/69–71 candidate, install, audit and staging gates
-remain open. No real publication has run.
+and tested boundaries.
 
 ## Release identity and version authority
 
@@ -39,9 +36,9 @@ fixes bump patch, additions minor and breaks major. Behavior-changing instructio
 count as product changes even when no binary changes. The highest applicable bump
 wins; purely development-only edits may wait for the next product release.
 
-The user approved staged candidates grey-matter 0.2.0 and tkt 0.5.0 on 2026-10-23.
-Final included scope and candidate audits still require completion.
-No preparation or recovery command silently chooses or increments a version.
+The user approved grey-matter 0.2.0 and tkt 0.5.0 on 2026-10-23. An approved version
+stays approved until published; preparing it again from newer source is a new
+candidate under the same version. No preparation or recovery command silently chooses or increments a version.
 
 The [local draft mechanics](release-preparation.md) and [artifact layer](release-artifacts.md)
 exist alongside publication capability. Their source and fixture evidence does not
@@ -136,12 +133,13 @@ listing, install a plugin, or publish a crate automatically.
 Use the [source conformance report](research/plugin-conformance.md),
 [notice inventory](research/plugin-notice-inventory.md), grey-matter check-repo,
 tkt mise run check, version/packaging/recovery fixtures and native validators.
-Ticket 60 must supply real Windows evidence; unavailable platforms remain gaps.
-Ticket 69 tests install/upgrade and every supported harness, including project-only
-roots. Ticket 70 reconciles all findings and decides go/no-go for staging. Ticket 71
-updates README, changelog, install/migration guidance and release-note drafts, then
-repeats the audit on the final candidate. Its index records both SHAs, assets/hashes,
-compatibility, exclusions and exact later publish/resume commands.
+Each candidate needs native evidence from every supported platform; unavailable
+platforms remain recorded gaps. Install/upgrade tests cover every supported harness,
+including project-only roots. A final audit reconciles all findings and decides
+go/no-go for staging. Staging updates README, changelog, install/migration guidance
+and release-note drafts, then repeats the audit on the final candidate. Its index
+records both SHAs, assets/hashes, compatibility, exclusions and exact later
+publish/resume commands.
 
 Staged status proves reviewable release inputs. It is not permission to publish tags,
 crates, GitHub releases, stable branches or public-directory submissions.

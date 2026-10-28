@@ -16,7 +16,6 @@ strategy behind this bucket.
 - [curate-docs](./curate-docs/SKILL.md): promote mature notes into skills, move docs into a skill's `references/`, prune stale docs.
 - [cheat-sheet](./cheat-sheet/SKILL.md): list every skill by category with a one-line description (the quick reference card).
 - [orient](./orient/SKILL.md): session-start pickup, read the frontier + WIP + handoff and propose the next step and skill (pairs with reconcile-tickets).
-- [release](./release/SKILL.md): cut a tagged release (orchestrates changelog + readme + version + tag/publish).
 - [wrap-session](./wrap-session/SKILL.md): end-of-session closing bookend, runs reconcile-tickets then retro then lands the cheap mechanical findings (pairs with orient).
 - [sync](./sync/SKILL.md): pull current and re-synchronize the coupled pieces (deployed skills, tkt command surface, ticket IDs, repo invariants), then redeploy to the harnesses (the inbound twin of release; report-don't-gate).
 
@@ -28,5 +27,6 @@ strategy behind this bucket.
 - [repository-artifact-hygiene](./repository-artifact-hygiene/SKILL.md): classify source assets and generated evidence, measure staged artifacts read-only, and plan storage, retention and reproducible retrieval.
 - [changelog](./changelog/SKILL.md): maintain `CHANGELOG.md` with user-facing entries.
 - [readme](./readme/SKILL.md): keep `README.md` honest and current.
+- [release](./release/SKILL.md): prepare, verify and stage a versioned release (orchestrates changelog + readme + version); publish or resume only on the user's request.
 - [reconcile-tickets](./reconcile-tickets/SKILL.md): end-of-session ticket-board hygiene pass (wraps the `tkt-core` skill; pairs with retro).
 - [verify-tkt-usage](./verify-tkt-usage/SKILL.md): validate the skills' inlined tkt commands against the live `tkt capabilities` manifest.
