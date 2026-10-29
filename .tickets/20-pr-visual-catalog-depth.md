@@ -1,7 +1,7 @@
 ---
 id: "20"
 title: "Consider trimming pr's inline visual catalog to references/ (depth-bar nit)"
-status: backlog
+status: open
 blocked_by: []
 priority: low
 validation_criteria:

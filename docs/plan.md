@@ -94,7 +94,7 @@ their release dispositions; this table does not clear any blocker.
 | 16 | Test wizard end-to-end against known and unknown scenarios (post v0.1.0 deploy) | backlog |
 | 18 | Test an agent-focused routing skill (adapt the router or create a separate agent-router) | backlog |
 | 19 | Live-test teach against existing projects and related works | backlog |
-| 20 | Consider trimming pr's inline visual catalog to references/ (depth-bar nit) | backlog |
+| 20 | Consider trimming pr's inline visual catalog to references/ (depth-bar nit) | open |
 | 21 | Review the beta (in-progress) and frozen (misc) upstream skills for adaptation | backlog |
 | 23 | Spike: validate the release-process skills (changelog, readme, release) | backlog |
 | 24 | Wrap tkt-provided skills (not commands); record the wrap-skills-not-commands rule | backlog |
