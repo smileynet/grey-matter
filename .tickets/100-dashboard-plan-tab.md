@@ -1,7 +1,7 @@
 ---
 id: "100"
 title: "delivery-dashboard: an entry per closed ticket and a Plan tab of all tickets"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
