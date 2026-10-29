@@ -18,10 +18,11 @@ tags: ["type:research", "stream:guidance"]
 Intent: the owner asked (2026-10-29) to review
 `~/code/agent-harness-research/docs/agents/research/agent-workflow-guidance.md`
 (commit `649a44d`) for incorporation in the next release. The guide synthesizes bounded
-local studies into 12 recommendations plus a lean operating routine. Its own
-[audit](../../agent-harness-research/docs/agents/research/agent-workflow-guidance-audit.md)
-finds every recommendation supported; moderate ones are design judgment, not causal
-results. Its headline: keep the behavior-first, evidence-reading workflow and strengthen
+local studies into 12 recommendations plus a lean operating routine. Its own audit
+(`agent-workflow-guidance-audit.md` beside it) finds every recommendation supported;
+moderate ones are design judgment, not causal results. Both files are only on the
+research repo's local `main` (7 commits ahead of `origin` on 2026-10-29), so they are
+cited by path until that repo is pushed. Its headline: keep the behavior-first, evidence-reading workflow and strengthen
 failure boundaries before adding stages, agents or machinery.
 
 Take only what the evidence supports, at the confidence the guide states. Do not import
