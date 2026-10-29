@@ -1,7 +1,7 @@
 ---
 id: "97"
 title: "Clean up scratch and build artifacts at ticket close, with lifecycle scopes and bounded history"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "One skill owns the scratch retention rule; other skills point at it rather than restating it."
