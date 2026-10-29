@@ -66,8 +66,16 @@ Passing evidence for the current pair:
   Evidence archive `mac-evidence-20261029.zip`, sha256 `faa4e26d…85cc4021`.
 - tkt five-target build-only stage, Actions run 40822712451.
 
-Outstanding before staging: the tkt CLI-surface probe against the CI Linux binary, the
-final audit, and the six receipts per product plus the index on a `codex/stage-*` branch.
+- tkt CLI: the CI x86_64 Linux binary reports `tkt 0.5.0 (a827bb6)`; the CLI-surface
+  check (386 invocations, 42 files, 21 commands) and tag-context check pass.
+
+Staged 2026-10-29 for review: the [final audit](agents/research/final-release-audit-20261029.md)
+is go for staging. The carrier is on `codex/stage-grey-matter-020-tkt-050-20261029` at
+review commit `6b983fcda0e3326f96d32a656fa691cc188bacb3`, and its
+`docs/agents/releases/20261029/verify.mjs` passes at that commit (both products, no pending
+gates, tkt CI provenance re-read). tkt's publication plan passes read-only. Publication
+waits for an explicit request; recheck crates.io, artifact retention and the changelog
+merge first ([publication commands](https://github.com/smileynet/grey-matter/blob/codex/stage-grey-matter-020-tkt-050-20261029/docs/agents/releases/20261029/publication.md)).
 
 ## Parked work
 
