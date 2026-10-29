@@ -6,6 +6,8 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-29
+
 ### Added
 - `data-modeling` helps design and review data so invalid states can't be represented, and says when a simpler type is the better choice. `codebase-design` calls it when an interface carries data, and `code-review` uses its review lens when a change touches types or schemas.
 - `repository-artifact-hygiene` separates source assets from generated evidence, measures staged Git artifacts read-only, and helps choose storage and recovery without automatic migration or deletion.
