@@ -1,7 +1,7 @@
 ---
 id: "33"
 title: "tkt: allow checking ACs on a superseded/closed ticket (or validate --fix to repair unchecked-acs-on-done)"
-status: backlog
+status: done
 blocked_by: []
 priority: low
 validation_criteria:
@@ -44,3 +44,7 @@ permanent historical artifact for any such ticket.
 ## Acceptance criteria
 
 - [ ] A tkt-accepted path exists to resolve an unchecked-acs-on-done finding on a legitimately-superseded/closed ticket, without hand-editing the ticket file.
+
+## Resolution (2026-10-29)
+
+Migrated to tkt 182 (cancel or retire operation): the need is a tkt-accepted way to retire a superseded ticket without hand-editing it, which belongs to tkt, not grey-matter.

@@ -98,6 +98,6 @@ their release dispositions; this table does not clear any blocker.
 | 21 | Review the beta (in-progress) and frozen (misc) upstream skills for adaptation | backlog |
 | 23 | Spike: validate the release-process skills (changelog, readme, release) | backlog |
 | 24 | Wrap tkt-provided skills (not commands); record the wrap-skills-not-commands rule | backlog |
-| 33 | tkt: allow checking ACs on a superseded/closed ticket (or validate --fix to repair unchecked-acs-on-done) | backlog |
+| 33 | tkt: allow checking ACs on a superseded/closed ticket (or validate --fix to repair unchecked-acs-on-done) | ✅ done |
 | 43 | Revisit adopt-project glossary seeding: (b) stage-then-write vs (c) hybrid, from real-use findings | backlog |
 | 44 | orient could nudge if the pre-commit hook isn't installed (optional) | open |
