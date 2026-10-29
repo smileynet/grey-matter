@@ -316,6 +316,31 @@ test("default roots: each harness gets one copy; OpenCode is served by ~/.claude
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
+test("install removes dead links into this pack's checkout, in used and unused roots, and keeps every other link", () => {
+  const sb = homeSandbox({ harnesses: ["kiro", "codex", "claude"] });
+  try {
+    const repo = join(HERE, "..");
+    const link = (root, name, target) => { mkdirSync(join(sb.home, root), { recursive: true }); symlinkSync(target, join(sb.home, root, name)); return join(sb.home, root, name); };
+    const deadInUsed = link(".kiro/skills", "tkt", join(repo, "skills", "tkt-split-away"));
+    const deadInUnused = link(".agents/skills", "old-name", join(repo, "skills", "renamed-away"));
+    const foreignDead = link(".kiro/skills", "elsewhere", join(sb.home, "no-such-dir"));
+    const liveIntoPack = link(".kiro/skills", "compass-alias", join(repo, "skills", "meta", "compass"));
+
+    const dry = runWithEnv(["--no-agy", "--dry-run"], sb.env);
+    assert.equal(dry.status, 0, dry.stdout);
+    assert.match(dry.stdout, /dead link tkt/);
+    assert.ok(lstatSync(deadInUsed).isSymbolicLink(), "dry run removes nothing");
+
+    const r = runWithEnv(["--no-agy"], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.match(r.stdout, /remove  dead link tkt -> .*tkt-split-away/);
+    assert.match(r.stdout, /remove  dead link old-name -> .*renamed-away/);
+    for (const gone of [deadInUsed, deadInUnused]) assert.equal(lstatSync(gone, { throwIfNoEntry: false }), undefined, gone);
+    assert.ok(lstatSync(foreignDead).isSymbolicLink(), "a dead link outside the pack is not provably ours");
+    assert.ok(lstatSync(liveIntoPack).isSymbolicLink(), "a live link is not a leftover");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
 test("default roots: plugins count as the copy, and stale copies are taken back", () => {
   const sb = homeSandbox({ harnesses: ["kiro", "codex", "claude", "opencode"] });
   try {
