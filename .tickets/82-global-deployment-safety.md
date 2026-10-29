@@ -1,7 +1,7 @@
 ---
 id: "82"
 title: "Preserve foreign Antigravity plugins and honor CODEX_HOME for global rules"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Antigravity fallback preserves foreign same-named directories"
