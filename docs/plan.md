@@ -69,7 +69,7 @@ Passing evidence for the current pair:
 - tkt CLI: the CI x86_64 Linux binary reports `tkt 0.5.0 (a827bb6)`; the CLI-surface
   check (386 invocations, 42 files, 21 commands) and tag-context check pass.
 
-Staged 2026-10-29 for review: the [final audit](agents/research/final-release-audit-20261029.md)
+Staged 2026-10-29 for review: the [final audit](https://github.com/smileynet/grey-matter/blob/codex/stage-grey-matter-020-tkt-050-20261029/docs/agents/research/final-release-audit-20261029.md)
 is go for staging. The carrier is on `codex/stage-grey-matter-020-tkt-050-20261029` at
 review commit `6b983fcda0e3326f96d32a656fa691cc188bacb3`, and its
 `docs/agents/releases/20261029/verify.mjs` passes at that commit (both products, no pending
