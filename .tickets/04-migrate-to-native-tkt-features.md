@@ -1,7 +1,7 @@
 ---
 id: "04"
 title: "Migrate grey-matter conventions to native tkt features once 192-199 land"
-status: backlog
+status: open
 blocked_by: []
 priority: medium
 validation_criteria:

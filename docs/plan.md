@@ -84,7 +84,7 @@ their release dispositions; this table does not clear any blocker.
 
 | ID | Work | Status |
 | --- | --- | --- |
-| 04 | Migrate grey-matter conventions to native tkt features once 192-199 land | backlog |
+| 04 | Migrate grey-matter conventions to native tkt features once 192-199 land | open |
 | 06 | Model-eval harness: track how model changes affect skill handling and leverage | backlog |
 | 09 | Spike: shell-invoked fresh agent (kiro-cli/codex/claude) vs subagent for fresh-context tasks | backlog |
 | 10 | Make skills tkt-preferred but tracker-adaptable (GitHub Issues, others) by context | backlog |
