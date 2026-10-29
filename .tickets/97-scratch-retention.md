@@ -1,7 +1,7 @@
 ---
 id: "97"
 title: "Clean up scratch and build artifacts at ticket close, with lifecycle scopes and bounded history"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "One skill owns the scratch retention rule; other skills point at it rather than restating it."
@@ -84,3 +84,17 @@ behind the project's normal authorization; the rule tells agents what to propose
 
 Rule 3 now keeps failed attempts that recovery or release evidence still needs. Source:
 workflow-guidance recommendation 7, high confidence against overwriting records.
+
+## Resolution (2026-10-29)
+
+repository-artifact-hygiene now owns an 'At ticket close' rule: promote durable outputs into tracked files and cite those, keep an uncommitted item only with a lifecycle scope (tickets, release or shared, plus an end condition; shared items stay until their last ticket closes), keep a bounded history (latest three attempts plus failed or cited ones still needed), delete the rest, including build output and outside work folders. implement, implement-spec, wrap-session, curate-docs (orphans: ended scope or 14 days with no open ticket), init-project and AGENTS.md point at it. check-docs-consistency (group 3) rejects new .scratch citations in docs, skills and ticket Resolutions; 20 pre-existing citing files are grandfathered in scripts/scratch-citations-baseline.json, never rewritten. Landed in 20be9d9. Artifacts: deleted this ticket's scratch (old-checker copy, check logs); nothing promoted beyond the commit; kept ~/release-work/20261028 on randomserver, the Mac and SharkTank and the 10-24 candidate worktrees under scope 'release grey-matter 0.2.0 / tkt 0.5.0, until published', per this ticket's First use section.
+
+### Verification
+1. ✓ One skill owns the scratch retention rule; other skills point at it rather than restating it. — "Rule lives once in skills/meta/repository-artifact-hygiene/SKILL.md#at-ticket-close; the other six surfaces link to it"
+2. ✓ Closing a ticket names what happens to its scratch: promoted, deleted, or kept with a reason. — "Rule step: Resolution records what was promoted, deleted or kept with scope; implement and implement-spec close steps require it"
+3. ✓ Closure evidence cites tracked files; a .scratch path in a ticket or tracked doc is flagged by the owning check. — "node --test scripts/check-repo.test.mjs: 13 pass; the two seeded .scratch tests (doc citation, ticket Resolution citation) fail against the previous checker and pass now; placeholders and planning text are ignored"
+4. ✓ curate-docs treats scratch older than 14 days with no open ticket as orphaned and lists it for deletion. — "curate-docs Orphaned scratch: ended lifecycle scope or older than 14 days with no open ticket, listed for deletion after checking citations"
+5. ✓ The rule covers build artifacts and work folders (worktrees, build output, release and probe work directories, disposable homes) as well as .scratch. — "node scripts/check-repo.mjs: all 16 groups ok, 'All repository-consistency invariants pass'"
+6. ✓ Anything kept uncommitted past its ticket's close carries a lifecycle scope (ticket ids, a release, or shared) and an end condition; a shared item is kept until its last listed ticket closes. — "Rule covers .scratch, build output, worktrees, disposable homes and outside work folders"
+7. ✓ History is bounded: each artifact family keeps its latest attempts (default 3) plus any failed or cited attempt still needed; older ones are pruned at close. — "Keep requires a lifecycle scope and end condition; shared items stay until the last named ticket closes"
+8. ✓ node scripts/check-repo.mjs passes. — "Bounded history: latest three attempts plus failed or cited ones still needed; promote before pruning"
