@@ -100,4 +100,4 @@ their release dispositions; this table does not clear any blocker.
 | 24 | Wrap tkt-provided skills (not commands); record the wrap-skills-not-commands rule | backlog |
 | 33 | tkt: allow checking ACs on a superseded/closed ticket (or validate --fix to repair unchecked-acs-on-done) | backlog |
 | 43 | Revisit adopt-project glossary seeding: (b) stage-then-write vs (c) hybrid, from real-use findings | backlog |
-| 44 | orient could nudge if the pre-commit hook isn't installed (optional) | backlog |
+| 44 | orient could nudge if the pre-commit hook isn't installed (optional) | open |

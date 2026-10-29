@@ -1,7 +1,7 @@
 ---
 id: "44"
 title: "orient could nudge if the pre-commit hook isn't installed (optional)"
-status: backlog
+status: open
 blocked_by: []
 priority: low
 validation_criteria:
