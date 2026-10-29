@@ -10,10 +10,19 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 import { check } from "../skills/productivity/delivery-dashboard/scripts/check-dashboard.mjs";
+import { snapshot } from "../skills/productivity/delivery-dashboard/scripts/snapshot-tickets.mjs";
 
 const SKILL = resolve(dirname(fileURLToPath(import.meta.url)), "../skills/productivity/delivery-dashboard");
 const TEMPLATE = readFileSync(join(SKILL, "assets/dashboard-template.html"), "utf8");
 const ENTRIES = /(<script type="application\/json" id="gm-entries">)([\s\S]*?)(<\/script>)/;
+const TICKETS = /(<script type="application\/json" id="gm-tickets">)([\s\S]*?)(<\/script>)/;
+const withTickets = (snap) => (h) => h.replace(TICKETS, `$1${JSON.stringify(snap)}$3`);
+const api = () => {
+  const ctx = { window: {} };
+  vm.runInNewContext(TEMPLATE.match(/<script>([\s\S]*?)<\/script>/g).pop().replace(/<\/?script>/g, ""), ctx);
+  return ctx.window.GMDashboard;
+};
+const tk = (id, status, blocked_by = []) => ({ id, title: `Ticket ${id}`, status, blocked_by });
 
 function entry(n, extra = {}) {
   const day = String(n).padStart(2, "0");
@@ -51,6 +60,39 @@ test("the worked example passes strict mode and demonstrates every feature", () 
   assert.deepEqual([...new Set(entries.map((e) => e.kind))].sort(), ["blocked", "decision", "learning", "progress", "shipped"]);
   assert.deepEqual([...new Set(entries.map((e) => e.fidelity).filter(Boolean))].sort(), ["live", "mocked", "wireframe"]);
   assert.ok(!entries.some((e) => e.example), "the example is not flagged as template sample data");
+  const snap = JSON.parse(html.match(TICKETS)[2]);
+  assert.equal(r.stats.logic.plan, snap.tickets.length, "every ticket lands in one plan group");
+  assert.deepEqual([...new Set(snap.tickets.map((t) => t.status))].sort(), ["backlog", "done", "in_progress", "open"]);
+  assert.ok(entries.filter((e) => e.tickets).length >= 3 && entries.filter((e) => e.tickets).every((e) => e.visual), "ticket entries carry visuals");
+  assert.ok(api().planLanes(snap).length >= 3, "the plan shows work in at least three layers");
+});
+
+test("plan groups put open work first and layer it by unfinished blockers", () => {
+  const { planGroups, planLanes, ticketMatches } = api();
+  const snap = { frontier: ["4", "2"], tickets: [tk("1", "done"), tk("2", "open", ["1"]), tk("3", "open", ["2"]), tk("4", "open"), tk("5", "in_progress"), tk("6", "backlog"), tk("7", "open", ["6"]), tk("8", "open", ["99"])] };
+  const g = planGroups(snap), ids = (l) => Array.from(l, (t) => t.id);
+  assert.deepEqual(ids(g.ready), ["4", "2"], "ready follows the frontier order");
+  assert.deepEqual(ids(g.blocked), ["3", "7", "8"], "a missing blocker still blocks");
+  assert.deepEqual([ids(g.in_progress), ids(g.backlog), ids(g.done)], [["5"], ["6"], ["1"]]);
+  assert.deepEqual(Array.from(planLanes(snap), ids), [["5", "4", "2"], ["3", "7", "8"]]);
+  assert.deepEqual(snap.tickets.filter((t) => ticketMatches(t, { q: "ticket 4" }, {})).map((t) => t.id), ["4"]);
+});
+
+test("snapshot-tickets rewrites only the ticket block, escapes markup and refuses a scoped board", (t) => {
+  const { file } = dashboard(t, [entry(1)]);
+  const before = readFileSync(file, "utf8");
+  const replies = { query: [{ id: "1", title: "Fix </script> parsing", status: "open", blocked_by: [], agents: [] }], ready: [{ id: "1" }] };
+  const run = (cmd, args) => cmd === "tkt" ? replies[args[0]].map((x) => JSON.stringify(x)).join("\n") + "\n" : "";
+  assert.deepEqual(snapshot(file, { repo: dirname(file), run, now: new Date("2026-09-02T00:00:00Z") }), { tickets: 1, frontier: 1 });
+  const after = readFileSync(file, "utf8");
+  assert.equal(after.replace(TICKETS, ""), before.replace(TICKETS, ""));
+  assert.doesNotMatch(after.match(TICKETS)[2], /<\/script>/);
+  const snap = JSON.parse(after.match(TICKETS)[2]);
+  assert.deepEqual(snap.tickets, [{ id: "1", title: "Fix </script> parsing", status: "open", blocked_by: [] }]);
+  assert.equal(check(file).ok, true);
+  mkdirSync(join(dirname(file), ".tickets"));
+  writeFileSync(join(dirname(file), ".tickets/.context"), "backend\n");
+  assert.throws(() => snapshot(file, { repo: dirname(file), run }), /tag context "backend"/);
 });
 
 test("the template and the example share the same renderer", () => {
@@ -66,7 +108,7 @@ test("the overview keeps five entries and the history keeps all of them", (t) =>
   const { file } = dashboard(t, entries);
   const r = run(file);
   assert.equal(r.ok, true, r.errors.join("; "));
-  assert.deepEqual(r.stats.logic, { overview: 5, history: 12, total: 12 });
+  assert.deepEqual(r.stats.logic, { overview: 5, history: 12, total: 12, plan: 0 });
 });
 
 test("search and filters narrow entries; an open ask is findable", (t) => {
@@ -99,10 +141,14 @@ const BAD = {
   "an unsafe link": [[entry(1, { links: [{ label: "x", href: "javascript:alert(1)" }] })], /unsafe link/],
   "a bad kind": [[entry(1, { kind: "party" })], /kind must be/],
   "a bad date": [[entry(1, { date: "yesterday" })], /date must be/],
+  "a ticket entry without a visual": [[entry(1, { tickets: ["7"] })], /ticket entry needs a visual/],
+  "a ticket with an unknown status": [[entry(1)], /status must be one of/, { generated: null, frontier: [], tickets: [tk("1", "doing")] }],
+  "a frontier naming a closed ticket": [[entry(1)], /frontier lists 1/, { generated: null, frontier: ["1"], tickets: [tk("1", "done")] }],
+  "a ticket block missing its arrays": [[entry(1)], /needs generated/, { tickets: [] }],
 };
-for (const [name, [entries, pattern]] of Object.entries(BAD)) {
+for (const [name, [entries, pattern, snap]] of Object.entries(BAD)) {
   test(`rejects ${name}`, (t) => {
-    const r = run(dashboard(t, entries).file);
+    const r = run(dashboard(t, entries, snap ? withTickets(snap) : undefined).file);
     assert.equal(r.ok, false);
     assert.match(r.errors.join("\n"), pattern);
   });
@@ -132,6 +178,13 @@ test("warns when a headline carries process detail", (t) => {
   assert.match(r.warnings.join("\n"), /file path/);
   assert.match(r.warnings.join("\n"), /internal mechanics/);
   assert.equal(run(dashboard(t, [entry(1, { title: "Closed ticket 88" })]).file, { strict: true }).ok, false);
+});
+
+test("warns when the ticket snapshot predates the newest entry", (t) => {
+  const progress = { type: "progress", label: "Route", done: 1, total: 2 };
+  const r = run(dashboard(t, [entry(9, { tickets: ["1"], visual: progress })], withTickets({ generated: "2026-09-01T00:00:00Z", frontier: [], tickets: [tk("1", "done")] })).file);
+  assert.equal(r.ok, true, r.errors.join("; "));
+  assert.match(r.warnings.join("\n"), /predates the newest entry/);
 });
 
 test("the checker never modifies the dashboard", (t) => {

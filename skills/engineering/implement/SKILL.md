@@ -16,6 +16,5 @@ When the ticket's acceptance criteria are met, call the Skill tool with "code-re
 
 Commit to the current branch, then `tkt close` the ticket with its resolution and acceptance criteria checked. (Multi-ticket builds on an integration branch are `implement-spec`'s job, not this one.)
 
-If the delivery is worth surfacing visually, consider
-[delivery-dashboard](../../productivity/delivery-dashboard/SKILL.md) for the project's
-evolving view of what people can now do.
+If the project keeps a status dashboard, call the Skill tool with "delivery-dashboard" after
+closing the ticket: it adds the ticket's entry and refreshes the Plan tab.

@@ -38,6 +38,5 @@ Communicate between agents sparsely, via **context pointers** (spec-slug, ticket
 
 9. Clean up the implementer worktrees. Detect merged branches by content, not ancestry: a squash-merge looks unmerged by ancestry, so a naive "fully-merged only" sweep leaves worktrees (and their build artifacts) dangling.
 
-If the delivery is worth surfacing visually, consider
-[delivery-dashboard](../../productivity/delivery-dashboard/SKILL.md) for the project's
-evolving view of what people can now do.
+If the project keeps a status dashboard, call the Skill tool with "delivery-dashboard" after
+closing the tickets: one entry per ticket, then one Plan tab refresh.

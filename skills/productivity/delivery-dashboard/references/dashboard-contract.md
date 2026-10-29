@@ -2,7 +2,8 @@
 
 What the status dashboard shows, how its data is shaped, and the rules the checker enforces.
 The page is [dashboard-template.html](../assets/dashboard-template.html): copy it, then edit only
-the two JSON blocks. A finished example with commentary is in
+the `gm-config` and `gm-entries` JSON blocks; `scripts/snapshot-tickets.mjs` writes the third,
+`gm-tickets`. A finished example with commentary is in
 [worked-example.md](worked-example.md). Do not rewrite the renderer per project. A change the template needs goes
 back into the template, so every project's dashboard behaves alike.
 
@@ -14,6 +15,7 @@ order, in under a minute:
 1. **Do you need something from me?** The "Needs you" panel is first and always present.
 2. **What can I do or see now that I could not before?** The latest entry, in outcome terms.
 3. **What happened recently?** Four earlier entries as one-line rows.
+4. **What comes next?** The Plan tab: every ticket, open work first.
 
 Everything else (evidence, files, commits, test output, process) is reachable but folded away.
 
@@ -25,6 +27,7 @@ Everything else (evidence, files, commits, test output, process) is reachable bu
 | Latest | The newest entry in full: headline, summary, up to 3 changes, one visual, a try link. |
 | Earlier | The next four entries as collapsed rows (date, headline, type, "Needs you" marker). |
 | All entries tab | Every entry as a collapsed row, with search, type and area filters, "Needs you" filter, expand and collapse all, and a live count. |
+| Plan tab | Every ticket from the snapshot. Progress (done of total, a bar by state with a legend), "What comes next" (open and in-progress work in layers: a ticket sits one layer after its deepest unfinished blocker), then all tickets grouped Ready (frontier order), In progress, Blocked, Backlog and Done (collapsed), with search and state filters. A ticket row shows what it waits on, what it unblocks and the entries that delivered it. |
 
 The overview never grows past five entries (`recentCount`). Older entries are not deleted: they
 drop out of the overview and stay in the history tab, so the at-a-glance view stays short and the
@@ -32,7 +35,8 @@ record stays whole. The changelog still owns release-level, durable value langua
 
 ## Entry fields
 
-One entry per completed task worth surfacing, newest first in the `gm-entries` block.
+One entry per closed ticket, plus any other finished work worth surfacing, newest first in the
+`gm-entries` block.
 
 | Field | Required | Rule |
 | --- | --- | --- |
@@ -41,12 +45,21 @@ One entry per completed task worth surfacing, newest first in the `gm-entries` b
 | `title` | yes | An outcome headline, 90 characters at most: what the person can now do or decide. |
 | `summary` | yes | One or two sentences, 280 characters at most. |
 | `changes` | no | At most three short bullets of what changed in their experience. |
-| `visual` | no | One visual: `image`, `compare`, `progress`, `steps` or `metrics`. |
+| `visual` | with `tickets` | One visual: `image`, `compare`, `progress`, `steps` or `metrics`. Required on a ticket entry. |
 | `fidelity` | no | `wireframe`, `mocked` or `live`; shown for anything not live. |
 | `try` | no | One link or command to see or use the result. |
 | `asks` | no | Questions for the person; see below. |
 | `links`, `details` | no | Everything else, folded under "Details and links". |
 | `workstreams` | no | Short area names that become filters. Use two or more areas or none. |
+| `tickets` | no | Ids of the tickets the entry delivers, such as `["88"]`. Shown under Details and linked from the Plan tab, never in the headline. |
+
+## Ticket snapshot
+
+`gm-tickets` holds `{generated, frontier, tickets}`: the snapshot time, the ids `tkt ready`
+returns in order, and each ticket's `id`, `title`, `status`, `priority`, `blocked_by` and `tags`
+from `tkt query`. Regenerate it after every ticket change rather than editing it; the page stays
+offline, so it shows the board as of `generated`. A blocker missing from the snapshot counts as
+unfinished, so a broken edge never hides work.
 
 ## Asks
 
@@ -103,8 +116,10 @@ node <skill directory>/scripts/check-dashboard.mjs <dashboard.html> [--strict]
 ```
 
 Errors: invalid JSON or fields, duplicate ids, over-long headlines, missing alt text, open asks
-without a recommendation or options, relative links that do not resolve, remote resources, more
-than 50 KB of embedded media, a file over 400 KB, or broken overview and history selection.
-Warnings (failures under `--strict`): template examples left in, and ticket numbers, hashes, file
-paths or refactoring talk in headlines. Passing proves the contract, not the experience: open the
+without a recommendation or options, a ticket entry without a visual, a malformed ticket snapshot
+or a frontier naming a ticket that is not open, relative links that do not resolve, remote
+resources, more than 50 KB of embedded media, a file over 400 KB, or broken overview, history or
+plan selection. Warnings (failures under `--strict`): template examples left in; ticket numbers,
+hashes, file paths or refactoring talk in headlines; a snapshot older than the newest entry; and
+ticket ids or blockers missing from the snapshot. Passing proves the contract, not the experience: open the
 page, check each tab at phone and laptop width, and read it as the person would.

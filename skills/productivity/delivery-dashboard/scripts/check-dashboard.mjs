@@ -12,6 +12,8 @@ import vm from "node:vm";
 const KINDS = ["shipped", "progress", "decision", "blocked", "learning"];
 const RUNGS = ["wireframe", "mocked", "live"];
 const VISUALS = ["image", "compare", "progress", "steps", "metrics"];
+const STATUSES = ["backlog", "open", "in_progress", "done"];
+const PRIORITIES = ["urgent", "high", "medium", "low"];
 const LIMITS = { title: 90, summary: 280, changes: 3, change: 100, question: 140, option: 60 };
 const MAX_FILE = 400 * 1024;
 const MAX_DATA_URI = 50 * 1024;
@@ -24,19 +26,20 @@ const SAUSAGE = [
 
 export function check(path, { strict = false } = {}) {
   const errors = [], warnings = [];
-  let openAsks = 0, examples = 0, logic = null;
+  let openAsks = 0, examples = 0, tickets = 0, logic = null;
   const err = (m) => errors.push(m), warn = (m) => warnings.push(m);
   const html = readFileSync(path, "utf8");
   const base = dirname(resolve(path));
   if (Buffer.byteLength(html) > MAX_FILE) err(`file is ${Math.round(Buffer.byteLength(html) / 1024)} KB; keep the dashboard under ${MAX_FILE / 1024} KB and link media as separate files`);
 
-  const block = (id) => {
+  const block = (id, optional) => {
     const m = html.match(new RegExp(`<script type="application/json" id="${id}">([\\s\\S]*?)</script>`));
-    if (!m) { err(`missing <script type="application/json" id="${id}"> block`); return null; }
+    if (!m) { (optional ? warn : err)(`missing <script type="application/json" id="${id}"> block`); return null; }
     try { return JSON.parse(m[1]); } catch (e) { err(`${id} is not valid JSON: ${e.message}`); return null; }
   };
   const cfg = block("gm-config");
   const entries = block("gm-entries");
+  const snap = block("gm-tickets", true);
   if (!Array.isArray(entries)) { err("gm-entries must be a JSON array"); return finish(); }
   if (cfg && cfg.recentCount !== undefined && !(Number.isInteger(cfg.recentCount) && cfg.recentCount >= 1 && cfg.recentCount <= 10)) err("recentCount must be an integer from 1 to 10");
 
@@ -80,6 +83,10 @@ export function check(path, { strict = false } = {}) {
       if (v.type === "steps" && !(Array.isArray(v.items) && v.items.every((s) => s.label && ["done", "now", "next"].includes(s.state)))) err(`${at}: steps need label and state done|now|next`);
       if (v.type === "metrics" && !(Array.isArray(v.items) && v.items.every((m) => m.label && m.value !== undefined))) err(`${at}: metrics need label and value`);
     }
+    if (e.tickets !== undefined) {
+      if (!Array.isArray(e.tickets) || !e.tickets.length || !e.tickets.every((t) => typeof t === "string" && t)) err(`${at}: tickets must be a nonempty list of ticket ids`);
+      else if (!v) err(`${at}: a ticket entry needs a visual (a live capture, a labelled mock or wireframe, or steps showing plan movement)`);
+    }
     if (e.try) hrefOk(e.try.href, `${at} try link`);
     (e.links || []).forEach((l) => { if (!l.label) err(`${at}: link needs a label`); hrefOk(l.href, `${at} link`); });
     (e.asks || []).forEach((a) => {
@@ -95,6 +102,29 @@ export function check(path, { strict = false } = {}) {
       else err(`${at}: ask status must be open or answered`);
     });
   });
+
+  if (snap) {
+    const list = snap.tickets, tids = new Set();
+    if (!Array.isArray(list) || !Array.isArray(snap.frontier) || !(snap.generated === null || !Number.isNaN(Date.parse(snap.generated)))) err("gm-tickets needs generated (ISO time or null), frontier and tickets arrays; regenerate it with snapshot-tickets.mjs");
+    else {
+      tickets = list.length;
+      list.forEach((t, i) => {
+        const at = `ticket ${t && t.id ? t.id : "#" + i}`;
+        if (!t || typeof t.id !== "string" || !t.id) return err(`${at}: id required`);
+        if (tids.has(t.id)) err(`${at}: duplicate id`); tids.add(t.id);
+        if (typeof t.title !== "string" || !t.title) err(`${at}: title required`);
+        if (!STATUSES.includes(t.status)) err(`${at}: status must be one of ${STATUSES.join(", ")}`);
+        if (t.priority !== undefined && !PRIORITIES.includes(t.priority)) err(`${at}: priority must be one of ${PRIORITIES.join(", ")}`);
+        if (t.blocked_by !== undefined && !(Array.isArray(t.blocked_by) && t.blocked_by.every((b) => typeof b === "string"))) err(`${at}: blocked_by must be a list of ids`);
+      });
+      list.forEach((t) => (t && Array.isArray(t.blocked_by) ? t.blocked_by : []).forEach((b) => tids.has(b) || warn(`ticket ${t.id}: blocker ${b} is not in the snapshot`)));
+      snap.frontier.forEach((id) => { const t = list.find((x) => x && x.id === id); if (!t || t.status !== "open") err(`gm-tickets frontier lists ${id}, which is not an open ticket in the snapshot`); });
+      if (list.length) entries.forEach((e) => (Array.isArray(e && e.tickets) ? e.tickets : []).forEach((id) => tids.has(id) || warn(`entry ${e.id}: ticket ${id} is not in the snapshot`)));
+      const newest = entries.map((e) => e && e.date).filter(Boolean).sort().pop();
+      if (snap.generated && newest && String(snap.generated).slice(0, 10) < newest) warn(`ticket snapshot (${String(snap.generated).slice(0, 10)}) predates the newest entry (${newest}); rerun snapshot-tickets.mjs`);
+      if (entries.some((e) => e && e.tickets) && !list.length) warn("entries name tickets but the ticket snapshot is empty; run snapshot-tickets.mjs");
+    }
+  }
 
   if (examples) warn(`${examples} template example entr${examples === 1 ? "y" : "ies"} still present; delete them`);
   const sorted = entries.map((e) => e && e.date).filter(Boolean);
@@ -121,12 +151,17 @@ export function check(path, { strict = false } = {}) {
       const shown = (s.latest ? 1 : 0) + s.recent.length;
       logic = { overview: shown, history: shown + s.rest.length, total: entries.length };
       if (shown > n || logic.history !== entries.length) err(`selection logic broken: overview ${shown}, history ${logic.history}, total ${entries.length}`);
+      if (snap && Array.isArray(snap.tickets) && api.planGroups) {
+        const g = api.planGroups(snap), grouped = Object.values(g).reduce((s, x) => s + x.length, 0);
+        logic.plan = grouped;
+        if (grouped !== snap.tickets.length) err(`plan grouping broken: ${grouped} of ${snap.tickets.length} tickets shown`);
+      }
     } catch (e) { err(`page script failed to load: ${e.message}`); }
   } else err("page script missing");
 
   return finish();
   function finish() {
-    const stats = { entries: Array.isArray(entries) ? entries.length : 0, openAsks, bytes: Buffer.byteLength(html), logic };
+    const stats = { entries: Array.isArray(entries) ? entries.length : 0, tickets, openAsks, bytes: Buffer.byteLength(html), logic };
     const failed = errors.length > 0 || (strict && warnings.length > 0);
     return { ok: !failed, errors, warnings, stats };
   }

@@ -68,6 +68,16 @@ details.row .body{padding:0 0 14px}
 .tools .on{border-color:var(--blue);background:#1b3256}
 .count{color:var(--muted);font-size:14px;margin:0 0 10px}
 .more{margin-top:10px}
+.stack{display:flex;height:14px;border:1px solid var(--line);border-radius:99px;overflow:hidden;background:var(--bg)}
+.stack i{display:block;height:100%}.s-done{background:var(--blue2)}.s-in_progress{background:var(--cyan)}.s-ready{background:var(--ok)}.s-blocked{background:var(--bad)}.s-backlog{background:#3a4a6a}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted);margin:8px 0 0}
+.lanes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.lane{border:1px solid var(--line);border-radius:12px;padding:12px;background:#0e1830}
+.lane h3{margin:0 0 8px;font-size:14px;color:var(--muted);font-weight:600}
+.lane ol{margin:0;padding-left:20px;font-size:14px}.lane li{margin:4px 0}
+.tid{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.legend .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;font-weight:600}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:no-preference){.card,details.row{transition:border-color .15s}}
 @media (max-width:560px){.card{padding:16px}details.row .when{min-width:0}}
@@ -82,6 +92,7 @@ details.row .body{padding:0 0 14px}
   <div role="tablist" aria-label="Dashboard views">
     <button role="tab" id="tab-overview" aria-controls="overview" aria-selected="true">Overview</button>
     <button role="tab" id="tab-history" aria-controls="history" aria-selected="false" tabindex="-1">All entries <span id="history-count"></span></button>
+    <button role="tab" id="tab-plan" aria-controls="plan" aria-selected="false" tabindex="-1">Plan <span id="plan-count"></span></button>
   </div>
 </header>
 
@@ -104,16 +115,34 @@ details.row .body{padding:0 0 14px}
   <p class="count" id="count" aria-live="polite"></p>
   <div id="list"></div>
 </main>
+
+<main id="plan" role="tabpanel" aria-labelledby="tab-plan" hidden>
+  <section aria-labelledby="progress-h"><h2 id="progress-h">Progress</h2><div id="plan-progress"></div></section>
+  <section aria-labelledby="order-h"><h2 id="order-h">What comes next</h2><div id="plan-lanes"></div></section>
+  <section aria-labelledby="tickets-h"><h2 id="tickets-h">All tickets</h2>
+    <div class="tools">
+      <input type="search" id="tq" placeholder="Search tickets" aria-label="Search tickets">
+    </div>
+    <div class="tools" id="groups" aria-label="Filter by state"></div>
+    <p class="count" id="tcount" aria-live="polite"></p>
+    <div id="tickets"></div>
+  </section>
+</main>
 </div>
 
 <script type="application/json" id="gm-config">
 { "project": "Project name", "recentCount": 5 }
 </script>
 
-<!-- Newest entry first. Add one entry per finished task; edit only this block and gm-config above.
+<!-- Newest entry first. Add one entry per closed ticket or finished task; edit only this block and gm-config above.
      Field rules and a worked example: references/dashboard-contract.md and assets/dashboard-example.html -->
 <script type="application/json" id="gm-entries">
 []
+</script>
+
+<!-- Ticket snapshot for the Plan tab. Generated: run scripts/snapshot-tickets.mjs; do not edit by hand. -->
+<script type="application/json" id="gm-tickets">
+{ "generated": null, "frontier": [], "tickets": [] }
 </script>
 
 <script>
@@ -152,12 +181,59 @@ details.row .body{padding:0 0 14px}
   }
   function safeHref(h) { return /^(https?:|#|[^:]*$)/i.test(h || "") ? h : "#"; }
 
-  var api = { sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref };
+  var STATES = { ready: "Ready", in_progress: "In progress", blocked: "Blocked", backlog: "Backlog", done: "Done" };
+  var SGLYPH = { ready: "○", in_progress: "◐", blocked: "▲", backlog: "…", done: "●" };
+  var ORDER = ["ready", "in_progress", "blocked", "backlog", "done"];
+  function ticketIndex(snap) { var m = {}; (snap.tickets || []).forEach(function (t) { m[t.id] = t; }); return m; }
+  // A blocker missing from the snapshot counts as unfinished, so a broken edge never hides work.
+  function waitingOn(t, idx) { return (t.blocked_by || []).filter(function (b) { return !idx[b] || idx[b].status !== "done"; }); }
+  function ticketState(t, idx) { return t.status === "open" ? (waitingOn(t, idx).length ? "blocked" : "ready") : t.status; }
+  function byId(a, b) { return String(a.id).localeCompare(String(b.id), undefined, { numeric: true }); }
+  function planGroups(snap) {
+    var idx = ticketIndex(snap), g = {}, f = snap.frontier || [];
+    ORDER.forEach(function (k) { g[k] = []; });
+    (snap.tickets || []).forEach(function (t) { var s = ticketState(t, idx); if (g[s]) g[s].push(t); });
+    ORDER.forEach(function (k) { g[k].sort(byId); });
+    var rank = function (t) { var i = f.indexOf(t.id); return i < 0 ? f.length : i; };
+    g.ready.sort(function (a, b) { return rank(a) - rank(b) || byId(a, b); });
+    return g;
+  }
+  // Unfinished work in layers: a ticket sits one layer after its deepest unfinished blocker.
+  function planLanes(snap) {
+    var idx = ticketIndex(snap), memo = {}, g = planGroups(snap), order = g.in_progress.concat(g.ready, g.blocked, g.backlog);
+    function depth(id, seen) {
+      var t = idx[id];
+      if (!t) return 0;
+      if (t.status === "done") return -1;
+      if (memo[id] !== undefined) return memo[id];
+      if (seen[id]) return 0;
+      seen[id] = true;
+      var d = 0;
+      (t.blocked_by || []).forEach(function (b) { d = Math.max(d, depth(b, seen) + 1); });
+      delete seen[id];
+      return (memo[id] = d);
+    }
+    var lanes = [];
+    order.filter(function (t) { return t.status === "open" || t.status === "in_progress"; }).forEach(function (t) {
+      var d = depth(t.id, {}); (lanes[d] = lanes[d] || []).push(t);
+    });
+    return lanes.filter(Boolean);
+  }
+  function ticketMatches(t, f, idx) {
+    if (f.state && ticketState(t, idx) !== f.state) return false;
+    var q = (f.q || "").trim().toLowerCase(), hay = [t.id, t.title, t.status, t.priority, (t.tags || []).join(" ")].filter(Boolean).join(" ").toLowerCase();
+    return !q || q.split(/\s+/).every(function (w) { return hay.indexOf(w) >= 0; });
+  }
+
+  var api = { sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref, planGroups: planGroups, planLanes: planLanes, ticketMatches: ticketMatches };
   if (typeof window !== "undefined") window.GMDashboard = api;
   if (typeof document === "undefined" || !document.getElementById("gm-entries")) return;
 
   var cfg = JSON.parse(document.getElementById("gm-config").textContent);
   var entries = JSON.parse(document.getElementById("gm-entries").textContent);
+  var tblock = document.getElementById("gm-tickets");
+  var snap = tblock ? JSON.parse(tblock.textContent) : { tickets: [] };
+  var tidx = ticketIndex(snap);
   var RECENT = cfg.recentCount || 5;
   var $ = function (id) { return document.getElementById(id); };
 
@@ -215,14 +291,24 @@ details.row .body{padding:0 0 14px}
       if (a.status === "answered") box.appendChild(el("p", { class: "meta", text: "You answered: " + a.question + " → " + a.answer }));
       else if (!full) box.appendChild(el("p", { class: "meta", text: "Waiting on you: " + a.question }));
     });
-    var more = (e.details || "") || (e.links && e.links.length);
+    var more = (e.details || "") || (e.links && e.links.length) || (e.tickets && e.tickets.length);
     if (more) {
       var d = el("details", {}, [el("summary", { text: "Details and links" })]);
       if (e.links) { var p = el("p"); e.links.forEach(function (l, i) { if (i) p.appendChild(document.createTextNode("  ·  ")); p.appendChild(link(l)); }); d.appendChild(p); }
+      if (e.tickets && e.tickets.length) d.appendChild(ticketRefs("Tickets: ", e.tickets));
       (e.details || "").split("\n").filter(Boolean).forEach(function (t) { d.appendChild(el("p", { text: t })); });
       box.appendChild(d);
     }
     return box;
+  }
+  function ticketRefs(label, ids) {
+    var p = el("p", { class: "meta" }, [document.createTextNode(label)]);
+    ids.forEach(function (id, i) {
+      if (i) p.appendChild(document.createTextNode(", "));
+      var t = tidx[id];
+      p.appendChild(t ? el("a", { href: "#t-" + id, text: id + " " + t.title }) : el("span", { text: id }));
+    });
+    return p;
   }
   function metaLine(e) {
     return el("div", { class: "meta" }, [chip(e.kind), el("span", { text: e.date })].concat((e.workstreams || []).map(function (w) { return el("span", { text: "· " + w }); })));
@@ -303,20 +389,102 @@ details.row .body{padding:0 0 14px}
     if (!list.length) L.appendChild(el("div", { class: "none", text: "No entries match. Clear the search or a filter." }));
   }
 
+  function tlink(t) { return el("a", { href: "#t-" + t.id, text: t.id + " " + t.title }); }
+  function deliveredIn(id) { return sortEntries(entries).filter(function (e) { return (e.tickets || []).indexOf(id) >= 0; }); }
+  function renderPlanTop() {
+    var g = planGroups(snap), total = (snap.tickets || []).length, P = $("plan-progress"), Ln = $("plan-lanes");
+    P.textContent = ""; Ln.textContent = "";
+    if (!total) {
+      P.appendChild(el("div", { class: "none", text: "No ticket snapshot yet. Run the snapshot script to fill this tab." }));
+      $("order-h").parentNode.hidden = true; $("tickets-h").parentNode.hidden = true; return;
+    }
+    var words = ORDER.map(function (k) { return g[k].length + " " + STATES[k].toLowerCase(); }).join(", ");
+    P.appendChild(el("div", { class: "pl" }, [el("span", { text: snap.generated ? "Snapshot " + String(snap.generated).slice(0, 10) : "Snapshot" }), el("b", { text: g.done.length + " of " + total + " done" })]));
+    var bar = el("div", { class: "stack", role: "img", "aria-label": words });
+    var lg = el("div", { class: "legend" });
+    ["done", "in_progress", "ready", "blocked", "backlog"].forEach(function (k) {
+      if (!g[k].length) return;
+      var seg = el("i", { class: "s-" + k }); seg.style.width = (100 * g[k].length / total) + "%"; bar.appendChild(seg);
+      lg.appendChild(el("span", {}, [el("i", { class: "sw s-" + k, "aria-hidden": "true" }), document.createTextNode(SGLYPH[k] + " " + STATES[k] + " " + g[k].length)]));
+    });
+    P.appendChild(bar);
+    P.appendChild(lg);
+    var lanes = planLanes(snap);
+    $("order-h").parentNode.hidden = !lanes.length;
+    var wrap = el("div", { class: "lanes" });
+    lanes.forEach(function (lane, i) {
+      var ol = el("ol");
+      lane.forEach(function (t) {
+        var li = el("li", {}, [tlink(t)]);
+        if (t.status === "in_progress") li.appendChild(el("span", { class: "tid", text: " · in progress" }));
+        var w = waitingOn(t, tidx); if (w.length) li.appendChild(el("span", { class: "tid", text: " · after " + w.join(", ") }));
+        ol.appendChild(li);
+      });
+      wrap.appendChild(el("div", { class: "lane" }, [el("h3", { text: i === 0 ? "Now" : i === 1 ? "Next, once those finish" : "Then, step " + (i + 1) }), ol]));
+    });
+    Ln.appendChild(wrap);
+  }
+  function ticketRow(t) {
+    var st = ticketState(t, tidx);
+    var s = el("summary", {}, [el("span", { class: "when tid", text: t.id }), el("span", { class: "ttl", text: t.title }), el("span", { class: "chip" + (st === "blocked" ? " blocked" : ""), text: SGLYPH[st] + " " + STATES[st] })]);
+    if (t.priority) s.appendChild(el("span", { class: "tid", text: t.priority }));
+    var b = el("div", { class: "body" }), w = waitingOn(t, tidx);
+    var blocks = (snap.tickets || []).filter(function (o) { return (o.blocked_by || []).indexOf(t.id) >= 0; }).map(function (o) { return o.id; });
+    if (w.length) b.appendChild(ticketRefs("Waiting on: ", w));
+    if (blocks.length) b.appendChild(ticketRefs("Unblocks: ", blocks));
+    var got = deliveredIn(t.id);
+    if (got.length) {
+      var p = el("p", { class: "meta" }, [document.createTextNode("Delivered in: ")]);
+      got.forEach(function (e, i) { if (i) p.appendChild(document.createTextNode(", ")); p.appendChild(el("a", { href: "#e-" + e.id, text: e.title })); });
+      b.appendChild(p);
+    }
+    if (!b.childNodes.length) b.appendChild(el("p", { class: "meta", text: "No dependencies or delivery entries." }));
+    return el("details", { class: "row", id: "t-" + t.id }, [s, b]);
+  }
+  var tfilter = { q: "", state: "" };
+  function renderTickets() {
+    var g = planGroups(snap), total = (snap.tickets || []).length, box = $("groups");
+    box.textContent = "";
+    ORDER.forEach(function (k) {
+      if (!g[k].length) return;
+      var b = el("button", { type: "button", "aria-pressed": String(tfilter.state === k), text: STATES[k] + " " + g[k].length });
+      if (tfilter.state === k) b.className = "on";
+      b.addEventListener("click", function () { tfilter.state = tfilter.state === k ? "" : k; renderTickets(); });
+      box.appendChild(b);
+    });
+    var L = $("tickets"), shown = 0, narrowed = tfilter.q || tfilter.state;
+    L.textContent = "";
+    ORDER.forEach(function (k) {
+      var list = g[k].filter(function (t) { return ticketMatches(t, tfilter, tidx); });
+      if (!list.length) return;
+      shown += list.length;
+      var holder = L;
+      if (k === "done" && !narrowed) { holder = el("details", { class: "row", id: "done-group" }, [el("summary", { text: "Done (" + list.length + ")" })]); L.appendChild(holder); }
+      else L.appendChild(el("h3", { class: "group", text: STATES[k] }));
+      list.forEach(function (t) { holder.appendChild(ticketRow(t)); });
+    });
+    $("tcount").textContent = shown === total ? total + " tickets" : shown + " of " + total + " tickets";
+    if (!shown && total) L.appendChild(el("div", { class: "none", text: "No tickets match. Clear the search or the filter." }));
+  }
+
+  var TABS = ["overview", "history", "plan"];
   function show(tab, target) {
-    ["overview", "history"].forEach(function (t) {
+    TABS.forEach(function (t) {
       $(t).hidden = t !== tab;
       var b = $("tab-" + t); b.setAttribute("aria-selected", String(t === tab)); b.tabIndex = t === tab ? 0 : -1;
     });
     if (target) {
-      if (!$(target)) { filter = { q: "", kind: "", stream: "", needs: false }; $("q").value = ""; renderHistory(); }
-      var n = $(target); if (n) { if (n.tagName === "DETAILS") n.open = true; n.scrollIntoView(); }
+      if (target.indexOf("e-") === 0 && !$(target)) { filter = { q: "", kind: "", stream: "", needs: false }; $("q").value = ""; renderHistory(); }
+      if (target.indexOf("t-") === 0 && !$(target)) { tfilter = { q: "", state: "" }; $("tq").value = ""; renderTickets(); }
+      var n = $(target);
+      if (n) { if (n.parentNode.id === "done-group") n.parentNode.open = true; if (n.tagName === "DETAILS") n.open = true; n.scrollIntoView(); }
     }
   }
   function route() {
     var h = decodeURIComponent(location.hash.slice(1));
     if (h.indexOf("e-") === 0) { show("history", h); return; }
-    show(h === "history" ? "history" : "overview");
+    if (h.indexOf("t-") === 0) { show("plan", h); return; }
+    show(TABS.indexOf(h) >= 0 ? h : "overview");
   }
 
   $("project").textContent = cfg.project || "Project status";
@@ -324,15 +492,17 @@ details.row .body{padding:0 0 14px}
   var s0 = splitRecent(entries, RECENT);
   $("updated").textContent = s0.latest ? "Updated " + s0.latest.date + " after: " + s0.latest.title : "No entries yet";
   $("history-count").textContent = "(" + entries.length + ")";
-  renderOverview(); renderHistory();
+  $("plan-count").textContent = (snap.tickets || []).length ? "(" + snap.tickets.length + ")" : "";
+  renderOverview(); renderHistory(); renderPlanTop(); renderTickets();
 
-  $("tab-overview").addEventListener("click", function () { location.hash = "overview"; });
-  $("tab-history").addEventListener("click", function () { location.hash = "history"; });
+  TABS.forEach(function (t) { $("tab-" + t).addEventListener("click", function () { location.hash = t; }); });
   document.querySelector("[role=tablist]").addEventListener("keydown", function (ev) {
     if (ev.key !== "ArrowRight" && ev.key !== "ArrowLeft") return;
-    location.hash = $("tab-history").getAttribute("aria-selected") === "true" ? "overview" : "history";
-    $(location.hash === "#history" ? "tab-history" : "tab-overview").focus();
+    var cur = TABS.filter(function (t) { return $("tab-" + t).getAttribute("aria-selected") === "true"; })[0];
+    var next = TABS[(TABS.indexOf(cur) + (ev.key === "ArrowRight" ? 1 : TABS.length - 1)) % TABS.length];
+    location.hash = next; $("tab-" + next).focus();
   });
+  $("tq").addEventListener("input", function (ev) { tfilter.q = ev.target.value; renderTickets(); });
   $("q").addEventListener("input", function (ev) { filter.q = ev.target.value; renderHistory(); });
   $("f-needs").addEventListener("click", function () { filter.needs = !filter.needs; renderHistory(); });
   $("expand").addEventListener("click", function () { $("list").querySelectorAll("details.row").forEach(function (d) { d.open = true; }); });

@@ -16,7 +16,7 @@ sync by [`curate-docs`](../meta/curate-docs/SKILL.md).
 
 ## Model-invoked
 
-- [delivery-dashboard](./delivery-dashboard/SKILL.md): keep one dark status page current after each task: what needs your input, the latest outcome, five recent entries and a searchable history.
+- [delivery-dashboard](./delivery-dashboard/SKILL.md): keep one dark status page current after every closed ticket: what needs your input, the latest outcome, five recent entries, a searchable history and a Plan tab of every ticket.
 - [grilling](./grilling/SKILL.md): the interview primitive (rounds, frontier; facts are the agent's, decisions are yours).
 - [line-craft](./line-craft/SKILL.md): fiction prose and dialogue as acts and errands, checked against a self-testing shape catalog.
 - [writing-for-agents](./writing-for-agents/SKILL.md): the reference for writing documents agents consume.
