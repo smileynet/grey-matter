@@ -5,7 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { spawnSync, execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, readdirSync, lstatSync, readlinkSync, rmSync, symlinkSync, chmodSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, readdirSync, lstatSync, readlinkSync, realpathSync, rmSync, symlinkSync, chmodSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -131,7 +131,7 @@ test("NUL characters do not conceal embedded payload from an explicit policy", t
   const r = run(f, ["--policy", "policy.json"]); assert.equal(r.code, 1); assert.equal(r.data.metrics.embeddedCharacters, 4);
 });
 
-test("policy globs cover newline-containing Git paths", t => {
+test("policy globs cover newline-containing Git paths", { skip: process.platform === "win32" && "Git for Windows rejects newline paths" }, t => {
   const f = fixture(t); f.put("evidence\nreport.html", "payload"); f.g("add", "evidence\nreport.html");
   f.put("policy.json", JSON.stringify({ version: 1, rules: [{ id: "all", paths: ["**"], maxBlobBytes: 0 }] }));
   assert.equal(run(f, ["--policy", "policy.json"]).code, 1);
@@ -180,7 +180,7 @@ test("caller Git context cannot redirect the inspected repository or index", t =
   assert.equal(r.code, 0); assert.equal(r.data.scope.repository, realRoot(f.repo));
   assert.deepEqual(r.data.files.map(x => x.path), ["candidate.txt"]); assert.deepEqual(fingerprint(other.repo), before);
 });
-function realRoot(path) { return execFileSync("git", ["-C", path, "rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim(); }
+function realRoot(path) { return realpathSync(execFileSync("git", ["-C", path, "rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim()); }
 
 test("an arbitrary child directory cannot be mistaken for an independent repository", t => {
   const f = fixture(t); mkdirSync(join(f.repo, "child"));
