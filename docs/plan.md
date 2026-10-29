@@ -41,21 +41,28 @@ On 2026-10-28 the user chose to prepare grey-matter 0.2.0 again from current mai
 rather than publish `e071b7b`, which main had passed by 91 commits (it lacks
 `data-modeling`, `delivery-dashboard` and later work). The frozen candidate and review
 branch stay as the worked example; the new candidate needs its own evidence and staging.
-New candidate `1efb247d45a2a513dc4d13c66285b561a65b0a2f` (from main `4053f7c`, local
-branch `codex/release-grey-matter-0.2.0-4053f7c7`, output `~/release-work/20261028/` on
-randomserver) passes Linux product and native gates (agy via the pinned 1.4.6 wrapper).
-grey-matter's deploy engine had changed since tkt `2b6ff17` vendored it, so the
-portfolio probes refused that pair; the user approved preparing tkt 0.5.0 again, with
-all open tickets in both repos deferred. tkt candidate
+Current candidates: grey-matter `05792a71c7e936b3ed26a623933bbfa224d7b93c` (from main
+`a4db04a`, pushed branch `codex/release-grey-matter-0.2.0-a4db04a9`) and tkt
 `a827bb6f264ad2ef73157fd8c0a471cb78e634fe` (from tkt main `c4d2ad5`, pushed branch
-`codex/release-tkt-0.5.0-c4d2ad54`) passes Linux product and native gates and its
-five-target build-only stage (Actions run 40822712451). The six Linux harness probe
-groups pass on the new pair; the 10-24 Linux probes were retargeted to the new
-candidates and their expected catalog size raised from 51 to 53 (48 + 4 + 1 foreign).
-Outstanding before staging: the tkt CLI-surface probe against the CI Linux binary,
-Windows (SharkTank SSH host key changed; needs the user's check) and macOS native runs,
-the final audit, and the six receipts per product plus the index on a `codex/stage-*`
-branch.
+`codex/release-tkt-0.5.0-c4d2ad54`); work output is `~/release-work/20261028/` on
+randomserver. The first grey-matter re-candidate `1efb247` failed the Windows product
+gate on two artifact-hygiene tests (ticket 99, fixed in `a4db04a`) and is superseded.
+grey-matter's deploy engine had changed since tkt `2b6ff17` vendored it, so the user
+approved preparing tkt 0.5.0 again, with all open tickets in both repos deferred.
+
+Passing evidence for the current pair:
+- Linux (randomserver): product and native gates for both (agy via the pinned 1.4.6
+  wrapper); all six harness probe groups, with the 10-24 Linux probes retargeted and
+  their expected catalog size raised from 51 to 53 (48 + 4 + 1 foreign).
+- Windows (SharkTank, re-keyed 2026-10-29): product and native gates for both, and the
+  previous-release-to-Codex upgrade probe (53 skills, foreign preserved). The tkt clone
+  uses `core.autocrlf=false`, as on 10-24. Evidence archive
+  `windows-evidence-20261029.zip`, sha256 `4f135c6a…db9dbf`.
+- tkt five-target build-only stage, Actions run 40822712451.
+
+Outstanding before staging: the tkt CLI-surface probe against the CI Linux binary, a
+macOS native run, the final audit, and the six receipts per product plus the index on a
+`codex/stage-*` branch.
 
 ## Parked work
 
