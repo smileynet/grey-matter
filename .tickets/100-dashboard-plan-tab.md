@@ -1,7 +1,7 @@
 ---
 id: "100"
 title: "delivery-dashboard: an entry per closed ticket and a Plan tab of all tickets"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -38,9 +38,17 @@ alike; update the contract, SKILL.md and the worked example together.
 
 ## Acceptance criteria
 
-- [ ] Template has a Plan tab driven by `gm-tickets`, keyboard-accessible like the other tabs, with no remote resources
-- [ ] `scripts/snapshot-tickets.mjs` writes the block from tkt and leaves the rest of the file byte-identical
-- [ ] Checker enforces visuals on ticket entries, validates `gm-tickets`, warns on a stale snapshot; seeded cases go red
-- [ ] SKILL.md, the dashboard contract and the worked example describe and show the new behaviour
-- [ ] `implement` points to the dashboard update at ticket close
-- [ ] `node scripts/check-repo.mjs` passes
+- [x] Template has a Plan tab driven by `gm-tickets`, keyboard-accessible like the other tabs, with no remote resources
+- [x] `scripts/snapshot-tickets.mjs` writes the block from tkt and leaves the rest of the file byte-identical
+- [x] Checker enforces visuals on ticket entries, validates `gm-tickets`, warns on a stale snapshot; seeded cases go red
+- [x] SKILL.md, the dashboard contract and the worked example describe and show the new behaviour
+- [x] `implement` points to the dashboard update at ticket close
+- [x] `node scripts/check-repo.mjs` passes
+
+## Resolution (2026-10-29)
+
+Template gains a Plan tab rendered from a generated gm-tickets block (snapshot-tickets.mjs from tkt query/ready; refuses under a tag context; escapes markup). Ticket entries name their tickets and must carry a visual; the checker validates the snapshot and warns when stale. SKILL.md, contract, walkthrough, worked example, implement/implement-spec pointers, compass and README updated in 734c5ee. The proposed warning for closed tickets without an entry was dropped: tkt's JSON has no close dates to scope it.
+
+### Verification
+1. ✓ check-dashboard passes on the template and the worked example, and fails on seeded cases: a ticket entry with no visual, a malformed gm-tickets block, a stale snapshot — "node --test scripts/delivery-dashboard.test.mjs: 27 pass; the 7 new/changed tests fail against the previous checker (seeded: ticket entry without visual, unknown status, closed frontier ticket, malformed block, stale snapshot)"
+2. ✓ The worked example's Plan tab lists open tickets first, with done of total and a dependency view, readable at phone and laptop width — "Worked example: check-dashboard --strict ok, 13 tickets, plan 13/13 grouped, 3 lanes; headless Chrome at 1280 and 400 px reviewed; #t-03 deep link opens Plan, Done group and the row"
