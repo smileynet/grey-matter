@@ -1,7 +1,7 @@
 ---
 id: "101"
 title: "Review agent-harness-research workflow guidance for grey-matter 0.3"
-status: open
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -48,7 +48,16 @@ its experimental tools or metric thresholds; it says itself they are not justifi
 
 ## Acceptance criteria
 
-- [ ] Each recommendation and the lean routine has a recorded disposition and owner (table above, confirmed by the owner)
-- [ ] Accepted changes are filed as tickets or folded into existing ones, and recorded in the 0.3 scope (`docs/plan.md`; the tag vocabulary has no release axis, so no tag was added)
-- [ ] Ticket 90 / proposal 13 and ticket 97 are updated where this review conflicts with them
-- [ ] Rejected recommendations record why
+- [x] Each recommendation and the lean routine has a recorded disposition and owner (table above, confirmed by the owner)
+- [x] Accepted changes are filed as tickets or folded into existing ones, and recorded in the 0.3 scope (`docs/plan.md`; the tag vocabulary has no release axis, so no tag was added)
+- [x] Ticket 90 / proposal 13 and ticket 97 are updated where this review conflicts with them
+- [x] Rejected recommendations record why
+
+## Resolution (2026-10-29)
+
+Owner approved all proposals on 2026-10-29. Dispositions are in this ticket's table: 1 and 10 are no-ops; the rest are filed or folded in. New grey tickets 102-108 (review, outcome classes, stateful contracts, oracle qualification, release attempts, refactor benefit, writing-for-agents) and 109 (dashboard support for tkt's cancelled status). Folded into 90 (critics conditional, advance adoption criterion), 97 (keep failed attempts), 98 (context-bound reuse) and tkt 177 (evidence limits). Nothing rejected.
+
+### Verification
+1. ✓ Each of the guide's 12 recommendations and its lean routine has a recorded disposition (keep, change, no-op) naming the grey-matter skill, rule or ticket it affects — "Tickets 102-109 filed and scoped in 37a8726; 90, 97 and 98 updated in the same commit; tkt 177 in tkt 845faa8"
+2. ✓ Every accepted change is a filed ticket (or an existing ticket's updated scope) in the 0.3 scope; rejected ones say why — "docs/plan.md 'Next release scope' theme E lists 102-108 and tkt 177; check-repo passed before commit"
+3. ✓ Conflicts with open work are resolved in that work's ticket: 90 and proposal 13 (critic loop), 97 (scratch deletion) — "(no evidence)"
