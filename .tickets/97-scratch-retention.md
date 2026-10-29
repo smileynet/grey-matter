@@ -13,6 +13,7 @@ validation_criteria:
   - "History is bounded: each artifact family keeps its latest attempts (default 3) plus any failed or cited attempt still needed; older ones are pruned at close."
   - "node scripts/check-repo.mjs passes."
 tags: ["type:feature", "stream:tooling"]
+priority: high
 ---
 
 # Retire ticket scratch on close and keep closure evidence out of .scratch
