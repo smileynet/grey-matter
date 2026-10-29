@@ -1,7 +1,7 @@
 ---
 id: "85"
 title: "deploy.mjs leaves dead legacy symlinks when a pack drops a skill (tkt's 'tkt' after the tkt-core split)"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "A fixture with a dangling legacy link into the pack is detected and reported (or removed when provably the pack's own)"
