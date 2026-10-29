@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "kind": "release-gate",
+  "gate": "platform-approval",
+  "product": "tkt",
+  "version": "0.5.0",
+  "candidateSha": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe",
+  "status": "pass",
+  "blockers": [],
+  "summary": "Product, native and probe gates pass on macOS arm64, Linux x86_64 and Windows x64 without a coverage waiver.",
+  "evidence": [
+    "docs/agents/research/evidence/release-validation-20261029.json: Linux, Windows and macOS product, native and harness-probe results for the exact candidates, with per-platform raw archive hashes.",
+    "docs/agents/research/evidence/linux-evidence-20261029.zip, windows-evidence-20261029.zip, mac-evidence-20261029.zip: raw reports, logs and probe sources."
+  ],
+  "limits": "Staging readiness only. Catalog checks show skills load; they do not prove every model activation or authenticated interactive hooks. Network isolation was enforced on macOS only. No publication authorization.",
+  "publicationPerformed": false
+}

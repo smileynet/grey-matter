@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "kind": "release-gate",
+  "gate": "final-audit",
+  "product": "grey-matter",
+  "version": "0.2.0",
+  "candidateSha": "05792a71c7e936b3ed26a623933bbfa224d7b93c",
+  "status": "pass",
+  "blockers": [],
+  "summary": "The 2026-10-29 audit finds no unresolved release defect for the exact candidate; go for staging only.",
+  "evidence": [
+    "docs/agents/research/final-release-audit-20261029.md: candidate identities, findings and dispositions, deferred scope and the staging go decision."
+  ],
+  "limits": "Staging readiness only. Catalog checks show skills load; they do not prove every model activation or authenticated interactive hooks. Network isolation was enforced on macOS only. No publication authorization.",
+  "publicationPerformed": false
+}

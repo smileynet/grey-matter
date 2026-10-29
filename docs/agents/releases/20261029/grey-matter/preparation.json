@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "sourceSha": "a4db04a95ed4779849fd380613cd58564ee16daf",
+  "candidateSha": "05792a71c7e936b3ed26a623933bbfa224d7b93c",
+  "version": "0.2.0",
+  "date": "2026-10-29",
+  "branch": "codex/release-grey-matter-0.2.0-a4db04a9",
+  "fileHashes": {
+    ".claude-plugin/plugin.json": "c5376382dc6d672b251c9cbf32cb13cd0121cb5ecea3f0e5e531840087f7db9d",
+    ".codex-plugin/plugin.json": "5c71d3f5460eaf8d40365d3245350977f1457c8d4d8afd9066c82651cd2adb3e",
+    "CHANGELOG.md": "edddb871442bfd83fe4cce8d1bc6fdde0a5c8fcc214788452b31de673ca8ce5e"
+  },
+  "notesSha256": "f8aaa994e0fe0c8d49923153c7a1ec903d52b011a1bb4b17c651b8eca3013b6b"
+}

@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "mode": "product-evidence",
+  "publishable": false,
+  "candidateSha": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe",
+  "product": "tkt",
+  "version": "0.5.0",
+  "platform": {
+    "os": "linux",
+    "release": "7.0.0-34-generic",
+    "arch": "x64",
+    "node": "v22.23.4"
+  },
+  "commands": [
+    [
+      "mise",
+      "run",
+      "check"
+    ]
+  ],
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "check"
+      ],
+      "started": "2026-10-29T05:18:17.012Z",
+      "finished": "2026-10-29T05:19:06.556Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "log": "1-product.log",
+      "sha256": "db3b16dfaad005121b50fb0e1187745a33e36515050ce2bde2ba84acac03ad3f"
+    }
+  ],
+  "pending": [
+    "native",
+    "scope",
+    "compatibility",
+    "remaining-platforms"
+  ]
+}

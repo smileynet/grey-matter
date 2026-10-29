@@ -1,0 +1,14 @@
+{
+  "repository": "smileynet/tkt",
+  "repositoryId": 1316150092,
+  "workflowId": 330592177,
+  "runId": 40822712451,
+  "runAttempt": 1,
+  "artifactId": 12875427277,
+  "sealJobId": 123279717735,
+  "zipSize": 7838802,
+  "zipSha256": "01cf09f14221a6881ef125a2cb75e534079212705bb53d2725a8a9cdac13bc9e",
+  "sealSha256": "cbe2ad57fbcadaeff2d1804409c346c2391e605e84126763137a3ecfc9d16e33",
+  "candidateSha": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe",
+  "version": "0.5.0"
+}

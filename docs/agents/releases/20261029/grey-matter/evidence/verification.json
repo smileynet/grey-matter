@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "mode": "candidate-verification",
+  "publishable": false,
+  "candidateSha": "05792a71c7e936b3ed26a623933bbfa224d7b93c",
+  "product": "grey-matter",
+  "version": "0.2.0",
+  "metadataSha256": "f9c7a38a9c26856b89c1a70dc1ed5f50a8a0745b6c620d823018dce20b81c0d8",
+  "phases": {
+    "product": "pass",
+    "native": "pass"
+  },
+  "plan": {
+    "product": [
+      [
+        "/home/sam/.local/share/mise/installs/node/22.23.4/bin/node",
+        "scripts/check-repo.mjs",
+        "--require-tools"
+      ]
+    ],
+    "native": [
+      {
+        "host": "codex",
+        "asset": "grey-matter-0.2.0-codex.tar.gz",
+        "sha256": "c572795a255efd51f1add3efc220dac1b72bbc911d292665672ca36378d2f22c",
+        "binary": "codex"
+      },
+      {
+        "host": "claude",
+        "asset": "grey-matter-0.2.0-claude.tar.gz",
+        "sha256": "79ec922ebcf8fa2879554b76eb6c1d32caa76f253e7fb7490aca8ea0a7879fdf",
+        "binary": "claude"
+      },
+      {
+        "host": "agy",
+        "asset": "grey-matter-0.2.0-agy.tar.gz",
+        "sha256": "3eb739ea80b4781123b0b6cb2a779763077bfa73ae653cac7e3c3e30be933921",
+        "binary": "/home/sam/code/grey-matter/.scratch/linux-validation-20261024/tools/bin/agy"
+      }
+    ]
+  },
+  "pending": [
+    "scope",
+    "compatibility",
+    "upgrade",
+    "platform-approval",
+    "final-audit",
+    "staging"
+  ],
+  "started": "2026-10-29T05:48:39.602Z",
+  "productEvidence": {
+    "file": "product/product-evidence.json",
+    "sha256": "3afb5ab8512b7e0c7f98941b42bea5002cc7611e5b09a908a7a6a0ae88fca789",
+    "platform": {
+      "os": "linux",
+      "release": "7.0.0-34-generic",
+      "arch": "x64",
+      "node": "v22.23.4"
+    }
+  },
+  "nativeEvidence": {
+    "file": "native/native-evidence.json",
+    "sha256": "c71b21f5b993771339419ab3b0ec59ef74d676e85869ec6edb6301135ac7fa7a",
+    "platform": {
+      "os": "linux",
+      "release": "7.0.0-34-generic",
+      "arch": "x64"
+    },
+    "isolation": {
+      "homes": "disposable",
+      "credentials": "environment allowlist; no user configuration",
+      "network": "not-enforced"
+    }
+  },
+  "finished": "2026-10-29T05:51:21.426Z"
+}

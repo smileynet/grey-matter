@@ -1,0 +1,220 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "date": "2026-10-29",
+  "candidates": {
+    "grey-matter": "05792a71c7e936b3ed26a623933bbfa224d7b93c",
+    "tkt": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe"
+  },
+  "platforms": {
+    "linux": {
+      "host": "randomserver (x86_64)",
+      "gates": {
+        "grey-matter": {
+          "verification": "pass",
+          "native": "pass",
+          "nativeRows": [
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "candidateSha": "05792a71c7e936b3ed26a623933bbfa224d7b93c",
+          "platform": {
+            "os": "linux",
+            "release": "7.0.0-34-generic",
+            "arch": "x64"
+          },
+          "isolation": {
+            "homes": "disposable",
+            "credentials": "environment allowlist; no user configuration",
+            "network": "not-enforced"
+          }
+        },
+        "tkt": {
+          "verification": "pass",
+          "native": "pass",
+          "nativeRows": [
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "candidateSha": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe",
+          "platform": {
+            "os": "linux",
+            "release": "7.0.0-34-generic",
+            "arch": "x64"
+          },
+          "isolation": {
+            "homes": "disposable",
+            "credentials": "environment allowlist; no user configuration",
+            "network": "not-enforced"
+          }
+        }
+      },
+      "probes": {
+        "codex": "pass",
+        "claude": "pass",
+        "agy": "pass",
+        "kiro": "pass",
+        "bare": "pass",
+        "crush": "pass"
+      },
+      "archive": {
+        "file": "linux-evidence-20261029.zip",
+        "sha256": "76ffcef74061afcd2754d311183aa9a885ba867458b39efa096d2e844231aae0"
+      },
+      "limits": "Network isolation not enforced; disposable homes and environment allowlist. agy pinned 1.4.6 wrapper; Kiro 2.34.0 official build."
+    },
+    "windows": {
+      "host": "SharkTank (x64)",
+      "gates": {
+        "grey-matter": {
+          "verification": "pass",
+          "native": "pass",
+          "nativeRows": [
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "candidateSha": "05792a71c7e936b3ed26a623933bbfa224d7b93c",
+          "platform": {
+            "os": "win32",
+            "release": "10.0.26300",
+            "arch": "x64"
+          },
+          "isolation": {
+            "homes": "disposable",
+            "credentials": "environment allowlist; no user configuration",
+            "network": "not-enforced"
+          }
+        },
+        "tkt": {
+          "verification": "pass",
+          "native": "pass",
+          "nativeRows": [
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "candidateSha": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe",
+          "platform": {
+            "os": "win32",
+            "release": "10.0.26300",
+            "arch": "x64"
+          },
+          "isolation": {
+            "homes": "disposable",
+            "credentials": "environment allowlist; no user configuration",
+            "network": "not-enforced"
+          }
+        }
+      },
+      "codexPreviousReleaseUpgrade": {
+        "status": "pass",
+        "source": "codex-candidate-probe.json"
+      },
+      "archive": {
+        "file": "windows-evidence-20261029.zip",
+        "sha256": "4f135c6a85b6eadf859f20295374534c47ebdf91f2389293cb513040db6b9dbf"
+      },
+      "limits": "Network isolation not enforced. Clone uses core.autocrlf=false. Pinned codex-cli 0.147.0, Claude 2.1.310, agy 1.4.6."
+    },
+    "macos": {
+      "host": "SpaceJam (arm64, macOS 26.6.2)",
+      "gates": {
+        "grey-matter": {
+          "verification": "pass",
+          "native": "pass",
+          "nativeRows": [
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "candidateSha": "05792a71c7e936b3ed26a623933bbfa224d7b93c",
+          "platform": {
+            "os": "darwin",
+            "release": "25.6.0",
+            "arch": "arm64"
+          },
+          "isolation": {
+            "homes": "disposable",
+            "credentials": "environment allowlist; no user configuration",
+            "network": "loopback-only sandbox"
+          }
+        },
+        "tkt": {
+          "verification": "pass",
+          "native": "pass",
+          "nativeRows": [
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "candidateSha": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe",
+          "platform": {
+            "os": "darwin",
+            "release": "25.6.0",
+            "arch": "arm64"
+          },
+          "isolation": {
+            "homes": "disposable",
+            "credentials": "environment allowlist; no user configuration",
+            "network": "loopback-only sandbox"
+          }
+        }
+      },
+      "probes": {
+        "codex": "pass",
+        "claude": "pass",
+        "agy": "pass",
+        "kiro": "pass",
+        "bare": "pass",
+        "crush": "pass"
+      },
+      "archive": {
+        "file": "mac-evidence-20261029.zip",
+        "sha256": "faa4e26dc2de258e33d1f73891b8cf11594935ee87e252df9b23bf4385cc4021"
+      },
+      "limits": "Loopback-only sandbox-exec. Installed Kiro 2.35.1 refuses an unauthenticated ACP session; the kiro probe used the notarized official Kiro 2.34.0 build (kiro-pin.json in the archive)."
+    }
+  },
+  "tktCli": {
+    "binary": {
+      "version": "tkt 0.5.0 (a827bb6)",
+      "binarySource": "Provenance-verified CI x86_64 Linux release binary, run 40822712451 artifact 12875476574",
+      "artifactZipSha256": "9f67b1cbc7140623aa6cb7b2a029fabba77e4ff8d25761e98dfe8a46f0824826",
+      "archiveSha256": "7e93642c1a74880e9c2b6160acd7f13a9dd9dd08ce7967c0561e7396fe63a879",
+      "binarySha256": "b2d2cae1e9ca70ed35ba489e1f4c42e414c207790e8fdc841d0bc996e2f904ee",
+      "candidateSha": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe"
+    },
+    "surface": {
+      "status": "pass",
+      "version": "tkt 0.5.0 (a827bb6)",
+      "invocationHits": 386,
+      "files": 42,
+      "commands": 21,
+      "plannedExceptions": 2,
+      "failures": []
+    },
+    "context": {
+      "status": "pass",
+      "version": "tkt 0.5.0 (a827bb6)",
+      "scopedIds": [
+        "01",
+        "03"
+      ],
+      "restoredIds": [
+        "02",
+        "03"
+      ],
+      "untaggedIncluded": true,
+      "originalContextRestored": true
+    }
+  },
+  "ciStage": {
+    "file": "tkt-candidate-stage-a827bb6-20261029.json",
+    "sha256": "7e4b0dd7a2e2efe209e4300b2f7a2806a4b32e278dfd4a37c8e51cc5e6635833",
+    "runId": 40822712451
+  },
+  "publicationPerformed": false
+}

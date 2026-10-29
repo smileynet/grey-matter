@@ -1,0 +1,2735 @@
+
+=== 1. deployer: ownership, plugin guards, root selection ===
+TAP version 13
+# file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:407
+#     if (!exists(at)) throw new PackError(`package resource missing: ${rel}`);
+#                            ^
+# PackError: package resource missing: guide.md
+#     at include (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:407:28)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:419:63
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:396:23
+#     at String.replace (<anonymous>)
+#     at markdownResources (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:390:15)
+#     at include (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:419:5)
+#     at include (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:412:43)
+#     at agyResources (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:421:36)
+#     at agyDeploy (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:458:21)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:753:32
+# Node.js v22.23.4
+# install aborted, lint failed:
+#   - skills/demo-core/SKILL.md references skills outside the pack: wrap-session
+# node:internal/errors:983
+#   const err = new Error(message);
+#               ^
+# Error: Command failed: codex plugin add grey-matter@grey-matter --json
+#     at genericNodeError (node:internal/errors:983:15)
+#     at wrappedFn (node:internal/errors:537:14)
+#     at checkExecSyncError (node:child_process:916:11)
+#     at execFileSync (node:child_process:952:15)
+#     at refreshCodex (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:183:3)
+#     at doInstall (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:327:5)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:761:10
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+#   status: 1,
+#   signal: null,
+#   output: [ null, null, null ],
+#   pid: 3685253,
+#   stdout: null,
+#   stderr: null
+# }
+# Node.js v22.23.4
+# file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:181
+#     throw new Error(`${id} must use this checkout as its local marketplace before deploy: codex plugin marketplace add ${pack.dir}`);
+#           ^
+# Error: grey-matter@grey-matter must use this checkout as its local marketplace before deploy: codex plugin marketplace add /home/sam/release-work/20261028/prepare-2/worktree
+#     at refreshCodex (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:181:11)
+#     at doInstall (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:327:5)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:761:10
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+# Node.js v22.23.4
+# {"status":"fail","metrics":{"packs":2},"errors":["portfolio other: vendored deployer drift at /tmp/gm-home-brO5YO/other/deploy.mjs","cross-pack collision: orient (grey-matter, other)"]}
+# agy build aborted, lint failed:
+#   - required legal artifact missing, empty or outside pack: LICENSE
+# plugin-manifest check FAILED (2):
+#   - required legal artifact missing, empty or outside pack: LICENSE
+#   - claude plugin validate .claude-plugin/plugin.json failed:
+# /tmp/gm-home-BLTebL/bin/claude:12
+#   if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+#                                                ^
+# Error: unexpected Claude mutation
+#     at Object.<anonymous> (/tmp/gm-home-BLTebL/bin/claude:12:54)
+#     at Module._compile (node:internal/modules/cjs/loader:1781:14)
+#     at Object..js (node:internal/modules/cjs/loader:1913:10)
+#     at Module.load (node:internal/modules/cjs/loader:1505:32)
+#     at Function._load (node:internal/modules/cjs/loader:1309:12)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+#     at node:internal/main/run_main_module:36:49
+# Node.js v22.23.4
+# agy build aborted, lint failed:
+#   - required legal artifact missing, empty or outside pack: LICENSE
+# plugin-manifest check FAILED (2):
+#   - required legal artifact missing, empty or outside pack: LICENSE
+#   - claude plugin validate .claude-plugin/plugin.json failed:
+# /tmp/gm-home-BLTebL/bin/claude:12
+#   if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+#                                                ^
+# Error: unexpected Claude mutation
+#     at Object.<anonymous> (/tmp/gm-home-BLTebL/bin/claude:12:54)
+#     at Module._compile (node:internal/modules/cjs/loader:1781:14)
+#     at Object..js (node:internal/modules/cjs/loader:1913:10)
+#     at Module.load (node:internal/modules/cjs/loader:1505:32)
+#     at Function._load (node:internal/modules/cjs/loader:1309:12)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+#     at node:internal/main/run_main_module:36:49
+# Node.js v22.23.4
+# agy build aborted, lint failed:
+#   - required legal artifact missing, empty or outside pack: NOTICE
+# plugin-manifest check FAILED (2):
+#   - required legal artifact missing, empty or outside pack: NOTICE
+#   - claude plugin validate .claude-plugin/plugin.json failed:
+# /tmp/gm-home-BLTebL/bin/claude:12
+#   if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+#                                                ^
+# Error: unexpected Claude mutation
+#     at Object.<anonymous> (/tmp/gm-home-BLTebL/bin/claude:12:54)
+#     at Module._compile (node:internal/modules/cjs/loader:1781:14)
+#     at Object..js (node:internal/modules/cjs/loader:1913:10)
+#     at Module.load (node:internal/modules/cjs/loader:1505:32)
+#     at Function._load (node:internal/modules/cjs/loader:1309:12)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+#     at node:internal/main/run_main_module:36:49
+# Node.js v22.23.4
+# agy build aborted, lint failed:
+#   - required legal artifact missing, empty or outside pack: NOTICE
+# plugin-manifest check FAILED (2):
+#   - required legal artifact missing, empty or outside pack: NOTICE
+#   - claude plugin validate .claude-plugin/plugin.json failed:
+# /tmp/gm-home-BLTebL/bin/claude:12
+#   if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+#                                                ^
+# Error: unexpected Claude mutation
+#     at Object.<anonymous> (/tmp/gm-home-BLTebL/bin/claude:12:54)
+#     at Module._compile (node:internal/modules/cjs/loader:1781:14)
+#     at Object..js (node:internal/modules/cjs/loader:1913:10)
+#     at Module.load (node:internal/modules/cjs/loader:1505:32)
+#     at Function._load (node:internal/modules/cjs/loader:1309:12)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+#     at node:internal/main/run_main_module:36:49
+# Node.js v22.23.4
+# agy build aborted, lint failed:
+#   - required legal artifact missing, empty or outside pack: skills/example/LICENSE
+# plugin-manifest check FAILED (2):
+#   - required legal artifact missing, empty or outside pack: skills/example/LICENSE
+#   - claude plugin validate .claude-plugin/plugin.json failed:
+# /tmp/gm-home-BLTebL/bin/claude:12
+#   if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+#                                                ^
+# Error: unexpected Claude mutation
+#     at Object.<anonymous> (/tmp/gm-home-BLTebL/bin/claude:12:54)
+#     at Module._compile (node:internal/modules/cjs/loader:1781:14)
+#     at Object..js (node:internal/modules/cjs/loader:1913:10)
+#     at Module.load (node:internal/modules/cjs/loader:1505:32)
+#     at Function._load (node:internal/modules/cjs/loader:1309:12)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+#     at node:internal/main/run_main_module:36:49
+# Node.js v22.23.4
+# agy build aborted, lint failed:
+#   - required legal artifact missing, empty or outside pack: skills/example/LICENSE
+# plugin-manifest check FAILED (2):
+#   - required legal artifact missing, empty or outside pack: skills/example/LICENSE
+#   - claude plugin validate .claude-plugin/plugin.json failed:
+# /tmp/gm-home-BLTebL/bin/claude:12
+#   if (args.join(" ") !== "plugin list --json") throw Error("unexpected Claude mutation");
+#                                                ^
+# Error: unexpected Claude mutation
+#     at Object.<anonymous> (/tmp/gm-home-BLTebL/bin/claude:12:54)
+#     at Module._compile (node:internal/modules/cjs/loader:1781:14)
+#     at Object..js (node:internal/modules/cjs/loader:1913:10)
+#     at Module.load (node:internal/modules/cjs/loader:1505:32)
+#     at Function._load (node:internal/modules/cjs/loader:1309:12)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+#     at node:internal/main/run_main_module:36:49
+# Node.js v22.23.4
+# file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:142
+#   if (result.error || result.status !== 0) throw new PackError(`Claude installed inventory unavailable: ${result.error?.message ?? result.stderr}`);
+#                                                  ^
+# PackError: Claude installed inventory unavailable: 
+#     at claudeInventory (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:142:50)
+#     at verifyClaudeSource (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:151:16)
+#     at doInstall (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:326:5)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:761:10
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+# Node.js v22.23.4
+# file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:144
+#   if (!Array.isArray(rows) || rows.some((row) => typeof row?.id !== "string" || typeof row.enabled !== "boolean")) throw new PackError("invalid Claude installed inventory");
+#                                                                                                                          ^
+# PackError: invalid Claude installed inventory
+#     at claudeInventory (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:144:122)
+#     at verifyClaudeSource (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:151:16)
+#     at doInstall (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:326:5)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:761:10
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+# Node.js v22.23.4
+# file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:154
+#     throw new PackError(`${pack.name}: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace`);
+#           ^
+# PackError: grey-matter: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace
+#     at verifyClaudeSource (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:154:11)
+#     at doInstall (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:326:5)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:761:10
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+# Node.js v22.23.4
+# file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:154
+#     throw new PackError(`${pack.name}: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace`);
+#           ^
+# PackError: grey-matter: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace
+#     at verifyClaudeSource (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:154:11)
+#     at doInstall (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:326:5)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:761:10
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+# Node.js v22.23.4
+# file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:154
+#     throw new PackError(`${pack.name}: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace`);
+#           ^
+# PackError: grey-matter: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace
+#     at verifyClaudeSource (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:154:11)
+#     at doInstall (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:326:5)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:761:10
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+# Node.js v22.23.4
+# file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:154
+#     throw new PackError(`${pack.name}: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace`);
+#           ^
+# PackError: grey-matter: Claude must report this checkout/version through readFromFolder before deploy; update Claude and register this local marketplace
+#     at verifyClaudeSource (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:154:11)
+#     at doInstall (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:326:5)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:761:10
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+# Node.js v22.23.4
+# file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:407
+#     if (!exists(at)) throw new PackError(`package resource missing: ${rel}`);
+#                            ^
+# PackError: package resource missing: docs/details.md
+#     at include (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:407:28)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:419:63
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:396:23
+#     at String.replace (<anonymous>)
+#     at markdownResources (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:390:15)
+#     at include (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:419:5)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:419:63
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:396:23
+#     at String.replace (<anonymous>)
+#     at markdownResources (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:390:15)
+# Node.js v22.23.4
+# file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:270
+#   if (hasShared && exists(sharedRoot) && !ownsShared) throw new PackError(`refusing foreign resource directory: ${sharedRoot}`);
+#                                                             ^
+# PackError: refusing foreign resource directory: /tmp/gm-home-BUEDxM/installed/.resources-example
+#     at installRoot (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:270:61)
+#     at doInstall (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:335:19)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:761:10
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+# Node.js v22.23.4
+# file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:406
+#     if (rel === ".." || rel.startsWith(".." + sep)) throw new PackError(`package resource escapes pack: ${at}`);
+#                                                           ^
+# PackError: package resource escapes pack: /tmp/gm-home-KJdeE3/private.md
+#     at include (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:406:59)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:419:63
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:396:23
+#     at String.replace (<anonymous>)
+#     at markdownResources (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:390:15)
+#     at include (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:419:5)
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:419:63
+#     at file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:396:23
+#     at String.replace (<anonymous>)
+#     at markdownResources (file:///home/sam/release-work/20261028/prepare-2/worktree/scripts/deploy.mjs:390:15)
+# Node.js v22.23.4
+# Subtest: refused foreign destination is absent from the written manifest (AC1)
+ok 1 - refused foreign destination is absent from the written manifest (AC1)
+  ---
+  duration_ms: 1337.871205
+  type: 'test'
+  ...
+# Subtest: repeat install then uninstall leave a refused foreign dir byte-for-byte intact (AC2)
+ok 2 - repeat install then uninstall leave a refused foreign dir byte-for-byte intact (AC2)
+  ---
+  duration_ms: 2939.610421
+  type: 'test'
+  ...
+# Subtest: forced replacement is the only path that replaces a foreign dir (AC3)
+ok 3 - forced replacement is the only path that replaces a foreign dir (AC3)
+  ---
+  duration_ms: 2747.488101
+  type: 'test'
+  ...
+# Subtest: a clean install into an empty root owns what it installed and uninstall removes only those (AC4 happy path)
+ok 4 - a clean install into an empty root owns what it installed and uninstall removes only those (AC4 happy path)
+  ---
+  duration_ms: 1555.37732
+  type: 'test'
+  ...
+# Subtest: an unrelated foreign dir (no name collision) is never touched (AC2 corollary)
+ok 5 - an unrelated foreign dir (no name collision) is never touched (AC2 corollary)
+  ---
+  duration_ms: 1440.751763
+  type: 'test'
+  ...
+# Subtest: plugin installed: a .claude/skills root is skipped and nothing is copied
+ok 6 - plugin installed: a .claude/skills root is skipped and nothing is copied
+  ---
+  duration_ms: 74.055098
+  type: 'test'
+  ...
+# Subtest: plugin installed: earlier copies are removed, a foreign dir is left alone
+ok 7 - plugin installed: earlier copies are removed, a foreign dir is left alone
+  ---
+  duration_ms: 1578.001115
+  type: 'test'
+  ...
+# Subtest: plugin installed: a project .agents/skills root is skipped too
+ok 8 - plugin installed: a project .agents/skills root is skipped too
+  ---
+  duration_ms: 76.850568
+  type: 'test'
+  ...
+# Subtest: plugin installed: roots Claude doesn't read still install; --allow-dual overrides
+ok 9 - plugin installed: roots Claude doesn't read still install; --allow-dual overrides
+  ---
+  duration_ms: 2845.21146
+  type: 'test'
+  ...
+# Subtest: Codex plugin removes owned copies, preserves foreign skills, and honors disable/override
+ok 10 - Codex plugin removes owned copies, preserves foreign skills, and honors disable/override
+  ---
+  duration_ms: 5366.890923
+  type: 'test'
+  ...
+# Subtest: default roots: each harness gets one copy; OpenCode is served by ~/.claude/skills
+ok 11 - default roots: each harness gets one copy; OpenCode is served by ~/.claude/skills
+  ---
+  duration_ms: 4645.178011
+  type: 'test'
+  ...
+# Subtest: default roots: plugins count as the copy, and stale copies are taken back
+ok 12 - default roots: plugins count as the copy, and stale copies are taken back
+  ---
+  duration_ms: 8718.737384
+  type: 'test'
+  ...
+# Subtest: default roots: prefer the own root on an equal-cost shared-root choice
+ok 13 - default roots: prefer the own root on an equal-cost shared-root choice
+  ---
+  duration_ms: 1425.551612
+  type: 'test'
+  ...
+# Subtest: default roots: no known harness falls back to the shared ~/.agents/skills
+ok 14 - default roots: no known harness falls back to the shared ~/.agents/skills
+  ---
+  duration_ms: 1417.085884
+  type: 'test'
+  ...
+# Subtest: agy: with ~/.gemini present and no agy CLI, the plugin is packaged and copied
+ok 15 - agy: with ~/.gemini present and no agy CLI, the plugin is packaged and copied
+  ---
+  duration_ms: 1416.550028
+  type: 'test'
+  ...
+# Subtest: agy: missing resources fail before replacing the last package; repaired links build in isolation
+ok 16 - agy: missing resources fail before replacing the last package; repaired links build in isolation
+  ---
+  duration_ms: 144.55826
+  type: 'test'
+  ...
+# Subtest: audit: reports unowned dirs and a skill a harness sees twice
+ok 17 - audit: reports unowned dirs and a skill a harness sees twice
+  ---
+  duration_ms: 146.988275
+  type: 'test'
+  ...
+# Subtest: lint: metadata.deploy.forbidRefs blocks a skill naming one outside the pack
+ok 18 - lint: metadata.deploy.forbidRefs blocks a skill naming one outside the pack
+  ---
+  duration_ms: 57.440241
+  type: 'test'
+  ...
+# Subtest: default roots: separate a plugin root symlink and preserve both harnesses' foreign skills
+ok 19 - default roots: separate a plugin root symlink and preserve both harnesses' foreign skills
+  ---
+  duration_ms: 4347.7876
+  type: 'test'
+  ...
+# Subtest: Codex: default deploy refreshes the installed plugin once; dry-run and explicit roots do not
+ok 20 - Codex: default deploy refreshes the installed plugin once; dry-run and explicit roots do not
+  ---
+  duration_ms: 363.799092
+  type: 'test'
+  ...
+# Subtest: Codex: a failed refresh or different marketplace source preserves existing copies
+ok 21 - Codex: a failed refresh or different marketplace source preserves existing copies
+  ---
+  duration_ms: 2950.520577
+  type: 'test'
+  ...
+# Subtest: audit: includes Codex plugin coverage when reporting bare duplicates
+ok 22 - audit: includes Codex plugin coverage when reporting bare duplicates
+  ---
+  duration_ms: 3626.491891
+  type: 'test'
+  ...
+# Subtest: audit: enumerate multiple cached Codex plugins and detect actual source mismatches
+ok 23 - audit: enumerate multiple cached Codex plugins and detect actual source mismatches
+  ---
+  duration_ms: 292.463417
+  type: 'test'
+  ...
+# Subtest: portfolio: reject cross-pack name collisions and vendored drift before writing
+ok 24 - portfolio: reject cross-pack name collisions and vendored drift before writing
+  ---
+  duration_ms: 70.611053
+  type: 'test'
+  ...
+# Subtest: Codex: verified shared root supplies coverage without a redundant own copy
+ok 25 - Codex: verified shared root supplies coverage without a redundant own copy
+  ---
+  duration_ms: 3827.888407
+  type: 'test'
+  ...
+# Subtest: portfolio: deploy each registered active pack once without scanning other siblings
+ok 26 - portfolio: deploy each registered active pack once without scanning other siblings
+  ---
+  duration_ms: 7654.108663
+  type: 'test'
+  ...
+# Subtest: audit: retained legacy content stays unowned and changed bytes need review
+ok 27 - audit: retained legacy content stays unowned and changed bytes need review
+  ---
+  duration_ms: 133.247168
+  type: 'test'
+  ...
+# Subtest: legal artifacts: bundles and bare skills retain notices, and missing or empty requirements block replacement
+ok 28 - legal artifacts: bundles and bare skills retain notices, and missing or empty requirements block replacement
+  ---
+  duration_ms: 1237.641049
+  type: 'test'
+  ...
+# Subtest: Claude: default deploy verifies the active source once; dry-run and explicit roots do not
+ok 29 - Claude: default deploy verifies the active source once; dry-run and explicit roots do not
+  ---
+  duration_ms: 7001.687564
+  type: 'test'
+  ...
+# Subtest: Claude: foreign, stale-version, legacy and failed source observations preserve bare copies
+ok 30 - Claude: foreign, stale-version, legacy and failed source observations preserve bare copies
+  ---
+  duration_ms: 7080.879185
+  type: 'test'
+  ...
+# Subtest: Claude audit: active folder supersedes a stale cache; disabled plugins and failed reads stay explicit
+ok 31 - Claude audit: active folder supersedes a stale cache; disabled plugins and failed reads stay explicit
+  ---
+  duration_ms: 673.235761
+  type: 'test'
+  ...
+# Subtest: Claude portfolio: verify each local pack once without invoking update or install
+ok 32 - Claude portfolio: verify each local pack once without invoking update or install
+  ---
+  duration_ms: 170.503564
+  type: 'test'
+  ...
+# Subtest: bare copy: shared guidance remains readable after the source checkout is removed
+ok 33 - bare copy: shared guidance remains readable after the source checkout is removed
+  ---
+  duration_ms: 405.904384
+  type: 'test'
+  ...
+# Subtest: bare copy: a missing transitive resource preserves the previous install
+ok 34 - bare copy: a missing transitive resource preserves the previous install
+  ---
+  duration_ms: 184.09026
+  type: 'test'
+  ...
+# Subtest: bare copy: refresh prunes old resources and uninstall preserves foreign content
+ok 35 - bare copy: refresh prunes old resources and uninstall preserves foreign content
+  ---
+  duration_ms: 364.915916
+  type: 'test'
+  ...
+# Subtest: bare copy: audit detects a missing installed shared document
+ok 36 - bare copy: audit detects a missing installed shared document
+  ---
+  duration_ms: 204.429465
+  type: 'test'
+  ...
+# Subtest: bare copy: a foreign shared-resource directory is never overwritten or adopted
+ok 37 - bare copy: a foreign shared-resource directory is never overwritten or adopted
+  ---
+  duration_ms: 63.27198
+  type: 'test'
+  ...
+# Subtest: bare copy: switching from source links produces an independent installation
+ok 38 - bare copy: switching from source links produces an independent installation
+  ---
+  duration_ms: 220.301155
+  type: 'test'
+  ...
+# Subtest: bare copy: source resources cannot escape the pack before an upgrade
+ok 39 - bare copy: source resources cannot escape the pack before an upgrade
+  ---
+  duration_ms: 209.206966
+  type: 'test'
+  ...
+# Subtest: bare copy: directory links do not preempt peer installation
+ok 40 - bare copy: directory links do not preempt peer installation
+  ---
+  duration_ms: 170.111857
+  type: 'test'
+  ...
+# Subtest: bare copy: empty shared directories are owned without shared files
+ok 41 - bare copy: empty shared directories are owned without shared files
+  ---
+  duration_ms: 152.86975
+  type: 'test'
+  ...
+1..41
+# tests 41
+# suites 0
+# pass 41
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 79490.990459
+
+=== 2. invocation sidecars + README groups ===
+invocation-policy check OK: 48 skills, 19 user-invoked (frontmatter, sidecar policy, and README groupings all agree).
+
+=== 3. doc indexes + relative links ===
+docs-consistency check OK: 48 skills — each listed once in its bucket README and mentioned in compass; all real relative links in docs/ and skills/ resolve.
+
+=== 4. ticket health (tkt validate) ===
+{"status":"pass","findings":[{"file":"99-windows-artifact-hygiene-tests.md","rule":"stub-body","message":"body still has template placeholders (fill in before closing)","severity":"warning"}]}
+
+=== 5. knowledge relocation (adopt-project) ===
+TAP version 13
+# Subtest: dry-run changes nothing and reports the plan
+ok 1 - dry-run changes nothing and reports the plan
+  ---
+  duration_ms: 107.402992
+  type: 'test'
+  ...
+# Subtest: apply: moves files, re-relativizes links across a depth change and between moved files
+ok 2 - apply: moves files, re-relativizes links across a depth change and between moved files
+  ---
+  duration_ms: 136.555477
+  type: 'test'
+  ...
+# Subtest: apply: recorded evidence is moved but never rewritten
+ok 3 - apply: recorded evidence is moved but never rewritten
+  ---
+  duration_ms: 358.262375
+  type: 'test'
+  ...
+# Subtest: unmapped old-root mentions are reported as leftovers, not rewritten
+ok 4 - unmapped old-root mentions are reported as leftovers, not rewritten
+  ---
+  duration_ms: 41.743544
+  type: 'test'
+  ...
+# Subtest: refuses to move onto an existing destination
+ok 5 - refuses to move onto an existing destination
+  ---
+  duration_ms: 68.639637
+  type: 'test'
+  ...
+# Subtest: check-links skips code fences and inline code, and still FAILS on a real broken link
+ok 6 - check-links skips code fences and inline code, and still FAILS on a real broken link
+  ---
+  duration_ms: 107.943197
+  type: 'test'
+  ...
+# Subtest: --evidence-dir protects non-JSON records by path, and check-links --skip excludes a tree
+ok 7 - --evidence-dir protects non-JSON records by path, and check-links --skip excludes a tree
+  ---
+  duration_ms: 146.033283
+  type: 'test'
+  ...
+# Subtest: links inside fenced code and inline code are not rewritten
+ok 8 - links inside fenced code and inline code are not rewritten
+  ---
+  duration_ms: 196.5473
+  type: 'test'
+  ...
+# Subtest: the CLI runs when invoked through a symlinked path
+ok 9 - the CLI runs when invoked through a symlinked path
+  ---
+  duration_ms: 88.76413
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1388.529953
+
+=== 6. global AGENTS.md (budget + ownership) ===
+TAP version 13
+# Subtest: source global/AGENTS.md is within the always-on size budget
+ok 1 - source global/AGENTS.md is within the always-on size budget
+  ---
+  duration_ms: 2.066082
+  type: 'test'
+  ...
+# Subtest: install creates nested targets with the owner mark; reinstall is a no-op
+ok 2 - install creates nested targets with the owner mark; reinstall is a no-op
+  ---
+  duration_ms: 102.937495
+  type: 'test'
+  ...
+# Subtest: install refuses a foreign file without --force and leaves it untouched
+ok 3 - install refuses a foreign file without --force and leaves it untouched
+  ---
+  duration_ms: 115.516059
+  type: 'test'
+  ...
+# Subtest: dry-run writes nothing
+ok 4 - dry-run writes nothing
+  ---
+  duration_ms: 51.854653
+  type: 'test'
+  ...
+# Subtest: uninstall removes only owned files, never foreign ones
+ok 5 - uninstall removes only owned files, never foreign ones
+  ---
+  duration_ms: 158.661194
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 526.57816
+
+=== 7. crew-research uninstall scope ===
+TAP version 13
+# Subtest: dry-run removes nothing
+ok 1 - dry-run removes nothing
+  ---
+  duration_ms: 64.891152
+  type: 'test'
+  ...
+# Subtest: apply removes exactly the manifest-named and crew-owned items, and snapshots first
+ok 2 - apply removes exactly the manifest-named and crew-owned items, and snapshots first
+  ---
+  duration_ms: 71.596444
+  type: 'test'
+  ...
+# Subtest: a grey-matter-owned dir and a non-crew codex AGENTS.md are kept
+ok 3 - a grey-matter-owned dir and a non-crew codex AGENTS.md are kept
+  ---
+  duration_ms: 69.92057
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 302.146077
+
+=== 8. repo survey tiers (adopt-project portfolio) ===
+TAP version 13
+# Subtest: tiers repos by freshness, tree state, and agent layer
+ok 1 - tiers repos by freshness, tree state, and agent layer
+  ---
+  duration_ms: 973.425999
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1067.861256
+
+=== 9. Claude plugin manifest ===
+plugin-manifest check OK: grey-matter v0.2.0, 48 skills from 4 dirs.
+
+=== 10. YAML syntax and core types ===
+{
+  "status": "pass",
+  "metrics": {
+    "skills": 48,
+    "sidecars": 35
+  },
+  "errors": []
+}
+
+=== 11. release draft, artifact and publisher safety ===
+TAP version 13
+# Subtest: three bundles retain resources/notices/modes, exclude unrelated files, and verify after source removal
+ok 1 - three bundles retain resources/notices/modes, exclude unrelated files, and verify after source removal
+  ---
+  duration_ms: 538.921793
+  type: 'test'
+  ...
+# Subtest: unmatched example brackets: fenced, resource present
+ok 2 - unmatched example brackets: fenced, resource present
+  ---
+  duration_ms: 1143.005349
+  type: 'test'
+  ...
+# Subtest: unmatched example brackets: fenced, resource missing
+ok 3 - unmatched example brackets: fenced, resource missing
+  ---
+  duration_ms: 327.715662
+  type: 'test'
+  ...
+# Subtest: unmatched example brackets: inline, resource present
+ok 4 - unmatched example brackets: inline, resource present
+  ---
+  duration_ms: 485.507138
+  type: 'test'
+  ...
+# Subtest: unmatched example brackets: inline, resource missing
+ok 5 - unmatched example brackets: inline, resource missing
+  ---
+  duration_ms: 524.809208
+  type: 'test'
+  ...
+# Subtest: Claude-only hooks ship closed in Claude and are absent from other host bundles
+ok 6 - Claude-only hooks ship closed in Claude and are absent from other host bundles
+  ---
+  duration_ms: 514.707691
+  type: 'test'
+  ...
+# Subtest: build uses committed bytes and repeats without changing output or git state
+ok 7 - build uses committed bytes and repeats without changing output or git state
+  ---
+  duration_ms: 2801.010755
+  type: 'test'
+  ...
+# Subtest: rejects mismatched version before installing output
+ok 8 - rejects mismatched version before installing output
+  ---
+  duration_ms: 538.501901
+  type: 'test'
+  ...
+# Subtest: rejects missing resource before installing output
+ok 9 - rejects missing resource before installing output
+  ---
+  duration_ms: 296.059118
+  type: 'test'
+  ...
+# Subtest: rejects missing notice before installing output
+ok 10 - rejects missing notice before installing output
+  ---
+  duration_ms: 191.979814
+  type: 'test'
+  ...
+# Subtest: rejects malformed YAML before installing output
+ok 11 - rejects malformed YAML before installing output
+  ---
+  duration_ms: 622.981331
+  type: 'test'
+  ...
+# Subtest: rejects declared credential file before installing output
+ok 12 - rejects declared credential file before installing output
+  ---
+  duration_ms: 375.30896
+  type: 'test'
+  ...
+# Subtest: rejects private hook config missing from closure before installing output
+ok 13 - rejects private hook config missing from closure before installing output
+  ---
+  duration_ms: 403.048524
+  type: 'test'
+  ...
+# Subtest: rejects private file outside Claude subtree before installing output
+ok 14 - rejects private file outside Claude subtree before installing output
+  ---
+  duration_ms: 429.696056
+  type: 'test'
+  ...
+# Subtest: rejects private file in shared closure before installing output
+ok 15 - rejects private file in shared closure before installing output
+  ---
+  duration_ms: 154.775698
+  type: 'test'
+  ...
+# Subtest: changed committed source cannot replace an existing artifact identity
+ok 16 - changed committed source cannot replace an existing artifact identity
+  ---
+  duration_ms: 961.300335
+  type: 'test'
+  ...
+# Subtest: Cargo authority and lock: matching
+ok 17 - Cargo authority and lock: matching
+  ---
+  duration_ms: 426.945138
+  type: 'test'
+  ...
+# Subtest: Cargo authority and lock: wrong-authority
+ok 18 - Cargo authority and lock: wrong-authority
+  ---
+  duration_ms: 212.526906
+  type: 'test'
+  ...
+# Subtest: Cargo authority and lock: stale-lock
+ok 19 - Cargo authority and lock: stale-lock
+  ---
+  duration_ms: 431.973033
+  type: 'test'
+  ...
+# Subtest: committed symlinks are rejected before extraction or output writes
+ok 20 - committed symlinks are rejected before extraction or output writes
+  ---
+  duration_ms: 205.544502
+  type: 'test'
+  ...
+# Subtest: verify rejects corrupted asset
+ok 21 - verify rejects corrupted asset
+  ---
+  duration_ms: 292.158531
+  type: 'test'
+  ...
+# Subtest: verify rejects missing asset
+ok 22 - verify rejects missing asset
+  ---
+  duration_ms: 422.084126
+  type: 'test'
+  ...
+# Subtest: verify rejects unexpected output
+ok 23 - verify rejects unexpected output
+  ---
+  duration_ms: 639.18758
+  type: 'test'
+  ...
+# Subtest: verify rejects wrong index
+ok 24 - verify rejects wrong index
+  ---
+  duration_ms: 460.895868
+  type: 'test'
+  ...
+# Subtest: CLI validation failures use structured fail/exit 1
+ok 25 - CLI validation failures use structured fail/exit 1
+  ---
+  duration_ms: 210.893517
+  type: 'test'
+  ...
+# Subtest: verify rejects resealed archive with extra defect
+ok 26 - verify rejects resealed archive with extra defect
+  ---
+  duration_ms: 302.857699
+  type: 'test'
+  ...
+# Subtest: verify rejects resealed archive with missing defect
+ok 27 - verify rejects resealed archive with missing defect
+  ---
+  duration_ms: 434.53976
+  type: 'test'
+  ...
+# Subtest: verify rejects resealed archive with version defect
+ok 28 - verify rejects resealed archive with version defect
+  ---
+  duration_ms: 322.116442
+  type: 'test'
+  ...
+# Subtest: verify rejects resealed archive with dangling defect
+ok 29 - verify rejects resealed archive with dangling defect
+  ---
+  duration_ms: 411.964479
+  type: 'test'
+  ...
+# Subtest: verify rejects resealed archive with short-readme defect
+ok 30 - verify rejects resealed archive with short-readme defect
+  ---
+  duration_ms: 370.626674
+  type: 'test'
+  ...
+# Subtest: sealed runtime includes its dependency manifest and wrapper works in each host layout
+ok 31 - sealed runtime includes its dependency manifest and wrapper works in each host layout
+  ---
+  duration_ms: 604.300516
+  type: 'test'
+  ...
+# Subtest: publish credentials bind the exact seal and cannot be cached across operations
+ok 32 - publish credentials bind the exact seal and cannot be cached across operations
+  ---
+  duration_ms: 3.955253
+  type: 'test'
+  ...
+# Subtest: identity, registry, protocol and override mismatches are fatal without disclosing credentials
+ok 33 - identity, registry, protocol and override mismatches are fatal without disclosing credentials
+  ---
+  duration_ms: 0.833996
+  type: 'test'
+  ...
+# Subtest: invalid seal policies and missing credentials cannot authorize a request
+ok 34 - invalid seal policies and missing credentials cannot authorize a request
+  ---
+  duration_ms: 0.276206
+  type: 'test'
+  ...
+# Subtest: CLI answers Cargo's line protocol before stdin closes
+ok 35 - CLI answers Cargo's line protocol before stdin closes
+  ---
+  duration_ms: 68.677263
+  type: 'test'
+  ...
+# Subtest: CLI malformed JSON and policy failures return fatal protocol errors with no secret echo
+ok 36 - CLI malformed JSON and policy failures return fatal protocol errors with no secret echo
+  ---
+  duration_ms: 157.773699
+  type: 'test'
+  ...
+# Subtest: CLI refuses token flags and extra arguments
+ok 37 - CLI refuses token flags and extra arguments
+  ---
+  duration_ms: 42.469231
+  type: 'test'
+  ...
+# Subtest: snapshot preserves empty Git directories, directory modes and safe symlinks
+ok 38 - snapshot preserves empty Git directories, directory modes and safe symlinks
+  ---
+  duration_ms: 586.707085
+  type: 'test'
+  ...
+# Subtest: transport policy binds reviewed bytes and defaults to the sole crates.io registry
+ok 39 - transport policy binds reviewed bytes and defaults to the sole crates.io registry
+  ---
+  duration_ms: 1.289587
+  type: 'test'
+  ...
+# Subtest: token, config, dirty-source and invocation overrides cannot enter preparation
+ok 40 - token, config, dirty-source and invocation overrides cannot enter preparation
+  ---
+  duration_ms: 1.955335
+  type: 'test'
+  ...
+# Subtest: only the fixed localhost probe form is accepted as a registry override
+ok 41 - only the fixed localhost probe form is accepted as a registry override
+  ---
+  duration_ms: 0.779278
+  type: 'test'
+  ...
+# Subtest: manifest gate rejects external inputs while accepting tkt's registry-only dependency model
+ok 42 - manifest gate rejects external inputs while accepting tkt's registry-only dependency model
+  ---
+  duration_ms: 1.432201
+  type: 'test'
+  ...
+# Subtest: unsupported hosts refuse before reading credentials or starting a child
+ok 43 - unsupported hosts refuse before reading credentials or starting a child # SKIP
+  ---
+  duration_ms: 0.139447
+  type: 'test'
+  ...
+# Subtest: Linux entry rejects option injection before even reading the candidate
+ok 44 - Linux entry rejects option injection before even reading the candidate
+  ---
+  duration_ms: 0.88894
+  type: 'test'
+  ...
+# Subtest: reviewed CI ZIP verifies exact file bytes without extraction or rebuild
+ok 45 - reviewed CI ZIP verifies exact file bytes without extraction or rebuild
+  ---
+  duration_ms: 18.759517
+  type: 'test'
+  ...
+# Subtest: CI ZIP refuses unsafe paths, duplicate names, symlinks and size abuse
+ok 46 - CI ZIP refuses unsafe paths, duplicate names, symlinks and size abuse
+  ---
+  duration_ms: 10.792772
+  type: 'test'
+  ...
+# Subtest: CI ZIP refuses changed, extra or missing files and wrong execution records
+ok 47 - CI ZIP refuses changed, extra or missing files and wrong execution records
+  ---
+  duration_ms: 11.141656
+  type: 'test'
+  ...
+# Subtest: CI provenance binds latest successful attempt, upload ID/digest and repeated observations
+ok 48 - CI provenance binds latest successful attempt, upload ID/digest and repeated observations
+  ---
+  duration_ms: 5.026359
+  type: 'test'
+  ...
+# Subtest: CI provenance refuses uncertain metadata and logs before downloading bytes
+ok 49 - CI provenance refuses uncertain metadata and logs before downloading bytes
+  ---
+  duration_ms: 3.782207
+  type: 'test'
+  ...
+# Subtest: Actions adapter makes typed read-only requests and paginates exact collections
+ok 50 - Actions adapter makes typed read-only requests and paginates exact collections
+  ---
+  duration_ms: 1.96031
+  type: 'test'
+  ...
+# Subtest: Actions log and ZIP reads explicitly capture raw bytes without terminal filtering
+ok 51 - Actions log and ZIP reads explicitly capture raw bytes without terminal filtering
+  ---
+  duration_ms: 0.37269
+  type: 'test'
+  ...
+# Subtest: CI upload log IDs/digests require complete tokens and expiry must be a string
+ok 52 - CI upload log IDs/digests require complete tokens and expiry must be a string
+  ---
+  duration_ms: 1.909558
+  type: 'test'
+  ...
+# Subtest: development preparation: default creates no files, refs or remote changes
+ok 53 - development preparation: default creates no files, refs or remote changes
+  ---
+  duration_ms: 430.552042
+  type: 'test'
+  ...
+# Subtest: development preparation: fast-forward uses exact candidate and records a full gate
+ok 54 - development preparation: fast-forward uses exact candidate and records a full gate
+  ---
+  duration_ms: 1550.009532
+  type: 'test'
+  ...
+# Subtest: development preparation: disjoint merge preserves candidate and reuses the same merge on retry
+ok 55 - development preparation: disjoint merge preserves candidate and reuses the same merge on retry
+  ---
+  duration_ms: 2950.989942
+  type: 'test'
+  ...
+# Subtest: development preparation: changed remote main is integrated and checked again
+ok 56 - development preparation: changed remote main is integrated and checked again
+  ---
+  duration_ms: 3084.817612
+  type: 'test'
+  ...
+# Subtest: development preparation: merge conflicts leave all public refs unchanged
+ok 57 - development preparation: merge conflicts leave all public refs unchanged
+  ---
+  duration_ms: 1377.716163
+  type: 'test'
+  ...
+# Subtest: development preparation: failed gate never imports an unchecked merge
+ok 58 - development preparation: failed gate never imports an unchecked merge
+  ---
+  duration_ms: 1351.483727
+  type: 'test'
+  ...
+# Subtest: development preparation: foreign output and modified owned checkout are preserved
+ok 59 - development preparation: foreign output and modified owned checkout are preserved
+  ---
+  duration_ms: 1290.285785
+  type: 'test'
+  ...
+# Subtest: development preparation: already-contained candidate cannot hide a regressed version
+ok 60 - development preparation: already-contained candidate cannot hide a regressed version
+  ---
+  duration_ms: 699.257139
+  type: 'test'
+  ...
+# Subtest: development preparation: npm bootstrap ignores inherited user configuration
+ok 61 - development preparation: npm bootstrap ignores inherited user configuration
+  ---
+  duration_ms: 1192.56393
+  type: 'test'
+  ...
+# Subtest: development preparation: merged product checks receive no publisher credentials
+ok 62 - development preparation: merged product checks receive no publisher credentials
+  ---
+  duration_ms: 1044.7652
+  type: 'test'
+  ...
+# Subtest: development preparation: interruption before checkout reuses the recorded integration
+ok 63 - development preparation: interruption before checkout reuses the recorded integration
+  ---
+  duration_ms: 1686.46441
+  type: 'test'
+  ...
+# Subtest: development preparation: existing newer release tags block an older integration
+ok 64 - development preparation: existing newer release tags block an older integration
+  ---
+  duration_ms: 688.518016
+  type: 'test'
+  ...
+# Subtest: development preparation: candidate-local output and aliases cannot receive integration files
+ok 65 - development preparation: candidate-local output and aliases cannot receive integration files
+  ---
+  duration_ms: 216.834372
+  type: 'test'
+  ...
+# Subtest: development preparation: ambient Git configuration cannot redirect the checkout
+ok 66 - development preparation: ambient Git configuration cannot redirect the checkout
+  ---
+  duration_ms: 1007.194271
+  type: 'test'
+  ...
+# Subtest: wrapper finds shared tools and preserves arguments from skills/meta/release/references/release.sh
+ok 67 - wrapper finds shared tools and preserves arguments from skills/meta/release/references/release.sh
+  ---
+  duration_ms: 216.909628
+  type: 'test'
+  ...
+# Subtest: wrapper finds shared tools and preserves arguments from skills/release/references/release.sh
+ok 68 - wrapper finds shared tools and preserves arguments from skills/release/references/release.sh
+  ---
+  duration_ms: 221.29331
+  type: 'test'
+  ...
+# Subtest: wrapper finds shared tools and preserves arguments from tools/release.sh
+ok 69 - wrapper finds shared tools and preserves arguments from tools/release.sh
+  ---
+  duration_ms: 207.615151
+  type: 'test'
+  ...
+# Subtest: legacy version and publishing modes stop before any release operation
+ok 70 - legacy version and publishing modes stop before any release operation
+  ---
+  duration_ms: 14.728567
+  type: 'test'
+  ...
+# Subtest: vendor default is read-only; explicit sync/check replay the same reviewed inventory
+ok 71 - vendor default is read-only; explicit sync/check replay the same reviewed inventory
+  ---
+  duration_ms: 821.945568
+  type: 'test'
+  ...
+# Subtest: foreign or locally modified vendor files are preserved, with no partial sync
+ok 72 - foreign or locally modified vendor files are preserved, with no partial sync
+  ---
+  duration_ms: 70.249235
+  type: 'test'
+  ...
+# Subtest: foreign ownership and mismatched maintainer dependencies block sync
+ok 73 - foreign ownership and mismatched maintainer dependencies block sync
+  ---
+  duration_ms: 39.986005
+  type: 'test'
+  ...
+# Subtest: runtime manifest contains every shared release module and dependency lock
+ok 74 - runtime manifest contains every shared release module and dependency lock
+  ---
+  duration_ms: 0.542462
+  type: 'test'
+  ...
+# Subtest: candidate refs: dry-run leaves remote refs untouched
+ok 75 - candidate refs: dry-run leaves remote refs untouched
+  ---
+  duration_ms: 386.281666
+  type: 'test'
+  ...
+# Subtest: candidate refs: exact annotated objects and no implicit tags
+ok 76 - candidate refs: exact annotated objects and no implicit tags
+  ---
+  duration_ms: 210.529383
+  type: 'test'
+  ...
+# Subtest: candidate refs: unsupported atomic server changes no refs
+ok 77 - candidate refs: unsupported atomic server changes no refs
+  ---
+  duration_ms: 730.832759
+  type: 'test'
+  ...
+# Subtest: candidate refs: foreign tag, stable, lightweight tags and multiple destinations refuse
+ok 78 - candidate refs: foreign tag, stable, lightweight tags and multiple destinations refuse
+  ---
+  duration_ms: 390.117076
+  type: 'test'
+  ...
+# Subtest: candidate refs: divergent branch cannot create the release tag
+ok 79 - candidate refs: divergent branch cannot create the release tag
+  ---
+  duration_ms: 319.154276
+  type: 'test'
+  ...
+# Subtest: candidate refs: mirror configuration cannot widen or delete refs
+ok 80 - candidate refs: mirror configuration cannot widen or delete refs
+  ---
+  duration_ms: 343.91102
+  type: 'test'
+  ...
+# Subtest: candidate refs: an annotated tag with another embedded name is refused
+ok 81 - candidate refs: an annotated tag with another embedded name is refused
+  ---
+  duration_ms: 337.758596
+  type: 'test'
+  ...
+# Subtest: candidate refs: a receive-time competing branch update rejects the whole candidate
+ok 82 - candidate refs: a receive-time competing branch update rejects the whole candidate
+  ---
+  duration_ms: 542.832422
+  type: 'test'
+  ...
+# Subtest: candidate refs: a race on an already-matching branch stops after tag-only success
+ok 83 - candidate refs: a race on an already-matching branch stops after tag-only success
+  ---
+  duration_ms: 500.154152
+  type: 'test'
+  ...
+# Subtest: stable: dry-run, initial creation and replay require immutable published bytes
+ok 84 - stable: dry-run, initial creation and replay require immutable published bytes
+  ---
+  duration_ms: 1181.639921
+  type: 'test'
+  ...
+# Subtest: stable: unpublished, mutable and incomplete releases cannot change refs
+ok 85 - stable: unpublished, mutable and incomplete releases cannot change refs
+  ---
+  duration_ms: 1372.357151
+  type: 'test'
+  ...
+# Subtest: stable: fast-forward succeeds and divergence preserves the channel
+ok 86 - stable: fast-forward succeeds and divergence preserves the channel
+  ---
+  duration_ms: 625.642531
+  type: 'test'
+  ...
+# Subtest: stable: a rejected promotion resumes without repeating publication
+ok 87 - stable: a rejected promotion resumes without repeating publication
+  ---
+  duration_ms: 316.646496
+  type: 'test'
+  ...
+# Subtest: stable: a changed release ID fails post-promotion verification without rollback
+ok 88 - stable: a changed release ID fails post-promotion verification without rollback
+  ---
+  duration_ms: 225.492029
+  type: 'test'
+  ...
+# Subtest: remote binding: HTTPS and Git SSH resolve to the reviewed GitHub repository
+ok 89 - remote binding: HTTPS and Git SSH resolve to the reviewed GitHub repository
+  ---
+  duration_ms: 312.185976
+  type: 'test'
+  ...
+# Subtest: remote binding: mismatches, credentials, lookalike hosts and local transports refuse
+ok 90 - remote binding: mismatches, credentials, lookalike hosts and local transports refuse
+  ---
+  duration_ms: 521.001567
+  type: 'test'
+  ...
+# Subtest: remote binding checks push URL overrides and pushInsteadOf, without making a network call
+ok 91 - remote binding checks push URL overrides and pushInsteadOf, without making a network call
+  ---
+  duration_ms: 217.85363
+  type: 'test'
+  ...
+# Subtest: candidate refs: verified development merge joins the same atomic transaction
+ok 92 - candidate refs: verified development merge joins the same atomic transaction
+  ---
+  duration_ms: 877.880651
+  type: 'test'
+  ...
+# Subtest: candidate refs: unsupported three-ref atomic push leaves development and release refs intact
+ok 93 - candidate refs: unsupported three-ref atomic push leaves development and release refs intact
+  ---
+  duration_ms: 549.681006
+  type: 'test'
+  ...
+# Subtest: candidate refs: development integration cannot omit the candidate or replace advanced main
+ok 94 - candidate refs: development integration cannot omit the candidate or replace advanced main
+  ---
+  duration_ms: 536.488982
+  type: 'test'
+  ...
+# Subtest: GitHub adapter authenticates draft discovery and flattens every page
+ok 95 - GitHub adapter authenticates draft discovery and flattens every page
+  ---
+  duration_ms: 4.634699
+  type: 'test'
+  ...
+# Subtest: GitHub adapter errors never become absent releases or disabled settings
+ok 96 - GitHub adapter errors never become absent releases or disabled settings
+  ---
+  duration_ms: 1.077434
+  type: 'test'
+  ...
+# Subtest: GitHub adapter validates annotated tag name, type and peeled commit
+ok 97 - GitHub adapter validates annotated tag name, type and peeled commit
+  ---
+  duration_ms: 1.138953
+  type: 'test'
+  ...
+# Subtest: GitHub writes require opt-in and use verified tags, exact bytes and typed JSON
+ok 98 - GitHub writes require opt-in and use verified tags, exact bytes and typed JSON
+  ---
+  duration_ms: 0.731415
+  type: 'test'
+  ...
+# Subtest: exact-name gate rejects missing, extra and duplicated skills despite equal totals
+ok 99 - exact-name gate rejects missing, extra and duplicated skills despite equal totals
+  ---
+  duration_ms: 2.841159
+  type: 'test'
+  ...
+# Subtest: native Claude gate rejects missing-control
+ok 100 - native Claude gate rejects missing-control
+  ---
+  duration_ms: 0.578352
+  type: 'test'
+  ...
+# Subtest: native Claude gate rejects readme-control
+ok 101 - native Claude gate rejects readme-control
+  ---
+  duration_ms: 0.219753
+  type: 'test'
+  ...
+# Subtest: native Claude gate rejects missing-run
+ok 102 - native Claude gate rejects missing-run
+  ---
+  duration_ms: 0.204799
+  type: 'test'
+  ...
+# Subtest: native Claude gate rejects exit
+ok 103 - native Claude gate rejects exit
+  ---
+  duration_ms: 0.329188
+  type: 'test'
+  ...
+# Subtest: native Claude gate rejects success
+ok 104 - native Claude gate rejects success
+  ---
+  duration_ms: 0.290712
+  type: 'test'
+  ...
+# Subtest: native Claude gate rejects blocker
+ok 105 - native Claude gate rejects blocker
+  ---
+  duration_ms: 0.236883
+  type: 'test'
+  ...
+# Subtest: native Claude gate rejects incomplete
+ok 106 - native Claude gate rejects incomplete
+  ---
+  duration_ms: 0.20251
+  type: 'test'
+  ...
+# Subtest: native Claude gate rejects failure
+ok 107 - native Claude gate rejects failure
+  ---
+  duration_ms: 0.497027
+  type: 'test'
+  ...
+# Subtest: native environment excludes inherited credentials, Git context and user config
+ok 108 - native environment excludes inherited credentials, Git context and user config
+  ---
+  duration_ms: 0.987514
+  type: 'test'
+  ...
+# Subtest: dry-run validates bundles without executing binaries, output or identity changes
+ok 109 - dry-run validates bundles without executing binaries, output or identity changes
+  ---
+  duration_ms: 482.687389
+  type: 'test'
+  ...
+# Subtest: corrupt sealed asset fails before any native process or output
+ok 110 - corrupt sealed asset fails before any native process or output
+  ---
+  duration_ms: 808.69215
+  type: 'test'
+  ...
+# Subtest: missing native binary preserves failed evidence and never claims verification
+ok 111 - missing native binary preserves failed evidence and never claims verification
+  ---
+  duration_ms: 413.867534
+  type: 'test'
+  ...
+# Subtest: foreign output is preserved and never mistaken for previous success
+ok 112 - foreign output is preserved and never mistaken for previous success
+  ---
+  duration_ms: 356.990154
+  type: 'test'
+  ...
+# Subtest: output aliases cannot write inside sealed artifacts
+ok 113 - output aliases cannot write inside sealed artifacts
+  ---
+  duration_ms: 387.285281
+  type: 'test'
+  ...
+# Subtest: product dry-run creates no output and requires strict tooling
+ok 114 - product dry-run creates no output and requires strict tooling
+  ---
+  duration_ms: 234.530395
+  type: 'test'
+  ...
+# Subtest: passed product evidence records exact commit, command, log and pending gates
+ok 115 - passed product evidence records exact commit, command, log and pending gates
+  ---
+  duration_ms: 169.218339
+  type: 'test'
+  ...
+# Subtest: a failed product command is retained as failure, never verified
+ok 116 - a failed product command is retained as failure, never verified
+  ---
+  duration_ms: 184.316587
+  type: 'test'
+  ...
+# Subtest: product checks cannot inherit publishing credentials
+ok 117 - product checks cannot inherit publishing credentials
+  ---
+  duration_ms: 227.495797
+  type: 'test'
+  ...
+# Subtest: successful exit cannot hide candidate changes
+ok 118 - successful exit cannot hide candidate changes
+  ---
+  duration_ms: 576.641045
+  type: 'test'
+  ...
+# Subtest: dirty and moved candidates fail before creating evidence
+ok 119 - dirty and moved candidates fail before creating evidence
+  ---
+  duration_ms: 253.104627
+  type: 'test'
+  ...
+# Subtest: foreign evidence and candidate-local output are refused without overwrite
+ok 120 - foreign evidence and candidate-local output are refused without overwrite
+  ---
+  duration_ms: 80.1021
+  type: 'test'
+  ...
+# Subtest: symlink or junction output aliases cannot bypass candidate boundary
+ok 121 - symlink or junction output aliases cannot bypass candidate boundary
+  ---
+  duration_ms: 276.196452
+  type: 'test'
+  ...
+# Subtest: tkt selects its Cargo authority and full mise gate
+ok 122 - tkt selects its Cargo authority and full mise gate
+  ---
+  duration_ms: 128.869146
+  type: 'test'
+  ...
+# Subtest: aggregate strict mode fails instead of skipping missing tkt
+ok 123 - aggregate strict mode fails instead of skipping missing tkt
+  ---
+  duration_ms: 1640.923705
+  type: 'test'
+  ...
+# Subtest: dry-run discovers the draft but creates, uploads and publishes nothing
+ok 124 - dry-run discovers the draft but creates, uploads and publishes nothing
+  ---
+  duration_ms: 4.962629
+  type: 'test'
+  ...
+# Subtest: truthy configuration strings cannot turn inspection into publication
+ok 125 - truthy configuration strings cannot turn inspection into publication
+  ---
+  duration_ms: 1.65956
+  type: 'test'
+  ...
+# Subtest: one publisher stages missing bytes, publishes once and resumes without writes
+ok 126 - one publisher stages missing bytes, publishes once and resumes without writes
+  ---
+  duration_ms: 3.273027
+  type: 'test'
+  ...
+# Subtest: local tkt publisher and unresolved candidate gates fail before API access
+ok 127 - local tkt publisher and unresolved candidate gates fail before API access
+  ---
+  duration_ms: 1.624358
+  type: 'test'
+  ...
+# Subtest: matching partial drafts upload only missing assets
+ok 128 - matching partial drafts upload only missing assets
+  ---
+  duration_ms: 1.119384
+  type: 'test'
+  ...
+# Subtest: assets completed by the assigned publisher between inspections are not uploaded again
+ok 129 - assets completed by the assigned publisher between inspections are not uploaded again
+  ---
+  duration_ms: 0.758894
+  type: 'test'
+  ...
+# Subtest: remote tag, duplicate drafts, notes, titles and foreign assets fail closed
+ok 130 - remote tag, duplicate drafts, notes, titles and foreign assets fail closed
+  ---
+  duration_ms: 2.839882
+  type: 'test'
+  ...
+# Subtest: incomplete, duplicate, changed or digest-less assets are never clobbered
+ok 131 - incomplete, duplicate, changed or digest-less assets are never clobbered
+  ---
+  duration_ms: 1.959631
+  type: 'test'
+  ...
+# Subtest: observed success after createDraft timeout is resumed without repeating it
+ok 132 - observed success after createDraft timeout is resumed without repeating it
+  ---
+  duration_ms: 1.188567
+  type: 'test'
+  ...
+# Subtest: observed success after upload timeout is resumed without repeating it
+ok 133 - observed success after upload timeout is resumed without repeating it
+  ---
+  duration_ms: 1.084245
+  type: 'test'
+  ...
+# Subtest: observed success after publish timeout is resumed without repeating it
+ok 134 - observed success after publish timeout is resumed without repeating it
+  ---
+  duration_ms: 0.775249
+  type: 'test'
+  ...
+# Subtest: a failed upload retains a resumable draft; retry never repeats completed uploads
+ok 135 - a failed upload retains a resumable draft; retry never repeats completed uploads
+  ---
+  duration_ms: 1.216836
+  type: 'test'
+  ...
+# Subtest: immutable settings and published state are independently checked
+ok 136 - immutable settings and published state are independently checked
+  ---
+  duration_ms: 0.611133
+  type: 'test'
+  ...
+# Subtest: tag movement or release replacement during upload blocks publication
+ok 137 - tag movement or release replacement during upload blocks publication
+  ---
+  duration_ms: 1.37038
+  type: 'test'
+  ...
+# Subtest: bad local bytes or duplicate asset names fail before API access
+ok 138 - bad local bytes or duplicate asset names fail before API access
+  ---
+  duration_ms: 0.708388
+  type: 'test'
+  ...
+# Subtest: persisted release IDs cannot silently disappear or resolve to replacements
+ok 139 - persisted release IDs cannot silently disappear or resolve to replacements
+  ---
+  duration_ms: 0.668729
+  type: 'test'
+  ...
+# Subtest: successful API responses without observed progress stop instead of looping
+ok 140 - successful API responses without observed progress stop instead of looping
+  ---
+  duration_ms: 1.544475
+  type: 'test'
+  ...
+# Subtest: a draft cannot claim immutable published state
+ok 141 - a draft cannot claim immutable published state
+  ---
+  duration_ms: 0.374113
+  type: 'test'
+  ...
+# Subtest: sealed annotated tag object is checked even when its peeled commit still matches
+ok 142 - sealed annotated tag object is checked even when its peeled commit still matches
+  ---
+  duration_ms: 0.378483
+  type: 'test'
+  ...
+# Subtest: draft-only staging uploads complete bytes without undrafting and replays unchanged
+ok 143 - draft-only staging uploads complete bytes without undrafting and replays unchanged
+  ---
+  duration_ms: 1.34414
+  type: 'test'
+  ...
+# Subtest: draft-only staging refuses non-boolean flags and changed final asset inventory
+ok 144 - draft-only staging refuses non-boolean flags and changed final asset inventory
+  ---
+  duration_ms: 1.333895
+  type: 'test'
+  ...
+# Subtest: sparse registry: exact versions, explicit missing version and uncached read-only request
+ok 145 - sparse registry: exact versions, explicit missing version and uncached read-only request
+  ---
+  duration_ms: 2.418304
+  type: 'test'
+  ...
+# Subtest: sparse registry: failures and malformed, duplicate or colliding versions never become absence
+ok 146 - sparse registry: failures and malformed, duplicate or colliding versions never become absence
+  ---
+  duration_ms: 1.865925
+  type: 'test'
+  ...
+# Subtest: registry reconciliation: planning never publishes and completed publication replays without writes
+ok 147 - registry reconciliation: planning never publishes and completed publication replays without writes
+  ---
+  duration_ms: 2.298212
+  type: 'test'
+  ...
+# Subtest: registry reconciliation: timeout after upload is observed without publishing twice
+ok 148 - registry reconciliation: timeout after upload is observed without publishing twice
+  ---
+  duration_ms: 0.396278
+  type: 'test'
+  ...
+# Subtest: registry reconciliation: unknown attempts require an explicit retry and keep the same bytes
+ok 149 - registry reconciliation: unknown attempts require an explicit retry and keep the same bytes
+  ---
+  duration_ms: 1.221244
+  type: 'test'
+  ...
+# Subtest: registry reconciliation: wrong bytes, changed checksums and yanked versions refuse publication
+ok 150 - registry reconciliation: wrong bytes, changed checksums and yanked versions refuse publication
+  ---
+  duration_ms: 0.722546
+  type: 'test'
+  ...
+# Subtest: registry intent bytes are deterministic and bind only the sealed product identity
+ok 151 - registry intent bytes are deterministic and bind only the sealed product identity
+  ---
+  duration_ms: 6.984923
+  type: 'test'
+  ...
+# Subtest: tkt publication plans all channels without preparation or mutations
+ok 152 - tkt publication plans all channels without preparation or mutations
+  ---
+  duration_ms: 3.963432
+  type: 'test'
+  ...
+# Subtest: initial publication stages ordinary bytes, intent, Cargo, GitHub and stable in order
+ok 153 - initial publication stages ordinary bytes, intent, Cargo, GitHub and stable in order
+  ---
+  duration_ms: 8.220981
+  type: 'test'
+  ...
+# Subtest: partial ordinary draft resumes without replacing assets or creating a second release
+ok 154 - partial ordinary draft resumes without replacing assets or creating a second release
+  ---
+  duration_ms: 4.651369
+  type: 'test'
+  ...
+# Subtest: preexisting registry intent requires explicit retry while the index remains missing
+ok 155 - preexisting registry intent requires explicit retry while the index remains missing
+  ---
+  duration_ms: 3.482736
+  type: 'test'
+  ...
+# Subtest: lost receipt upload response consumes initial permission even when readback matches
+ok 156 - lost receipt upload response consumes initial permission even when readback matches
+  ---
+  duration_ms: 3.19689
+  type: 'test'
+  ...
+# Subtest: unconfirmed receipt creation response or changed receipt ID cannot authorize Cargo
+ok 157 - unconfirmed receipt creation response or changed receipt ID cannot authorize Cargo
+  ---
+  duration_ms: 6.184359
+  type: 'test'
+  ...
+# Subtest: another publisher's new receipt is never mistaken for initial attempt ownership
+ok 158 - another publisher's new receipt is never mistaken for initial attempt ownership
+  ---
+  duration_ms: 1.574563
+  type: 'test'
+  ...
+# Subtest: Cargo response loss after registry commit is reconciled without a duplicate upload
+ok 159 - Cargo response loss after registry commit is reconciled without a duplicate upload
+  ---
+  duration_ms: 5.360737
+  type: 'test'
+  ...
+# Subtest: unobserved Cargo attempt leaves a draft and receipt; later matching index resumes
+ok 160 - unobserved Cargo attempt leaves a draft and receipt; later matching index resumes
+  ---
+  duration_ms: 5.624884
+  type: 'test'
+  ...
+# Subtest: transport and immutable-policy failures occur before any publication writes
+ok 161 - transport and immutable-policy failures occur before any publication writes
+  ---
+  duration_ms: 2.533701
+  type: 'test'
+  ...
+# Subtest: GitHub response loss and failed stable promotion resume without repeating Cargo
+ok 162 - GitHub response loss and failed stable promotion resume without repeating Cargo
+  ---
+  duration_ms: 3.897173
+  type: 'test'
+  ...
+# Subtest: wrong crate, yanked versions and invalid reviewed gates never reach preparation
+ok 163 - wrong crate, yanked versions and invalid reviewed gates never reach preparation
+  ---
+  duration_ms: 0.924133
+  type: 'test'
+  ...
+# Subtest: post-stable observation must still confirm both published channels
+ok 164 - post-stable observation must still confirm both published channels
+  ---
+  duration_ms: 1.950012
+  type: 'test'
+  ...
+# Subtest: different product, version or commit cannot share verification evidence
+ok 165 - different product, version or commit cannot share verification evidence
+  ---
+  duration_ms: 2.413418
+  type: 'test'
+  ...
+# Subtest: default and explicit CLI dry-run preserve repository, artifacts and output bytes
+ok 166 - default and explicit CLI dry-run preserve repository, artifacts and output bytes
+  ---
+  duration_ms: 721.289564
+  type: 'test'
+  ...
+# Subtest: new checkout commit cannot reuse the old sealed bundle identity
+ok 167 - new checkout commit cannot reuse the old sealed bundle identity
+  ---
+  duration_ms: 868.727127
+  type: 'test'
+  ...
+# Subtest: failed product gate records failure and never launches native validation
+ok 168 - failed product gate records failure and never launches native validation
+  ---
+  duration_ms: 554.315688
+  type: 'test'
+  ...
+# Subtest: failed native gate preserves product proof and blocks verified status
+ok 169 - failed native gate preserves product proof and blocks verified status
+  ---
+  duration_ms: 521.635124
+  type: 'test'
+  ...
+# Subtest: changed artifacts during the product gate cannot acquire native or overall success
+ok 170 - changed artifacts during the product gate cannot acquire native or overall success
+  ---
+  duration_ms: 789.084082
+  type: 'test'
+  ...
+# Subtest: foreign output and checkout/artifact aliases are refused without overwrite
+ok 171 - foreign output and checkout/artifact aliases are refused without overwrite
+  ---
+  duration_ms: 1414.551949
+  type: 'test'
+  ...
+# Subtest: interrupted orchestration records unfinished gates and refuses stale output reuse
+ok 172 - interrupted orchestration records unfinished gates and refuses stale output reuse
+  ---
+  duration_ms: 865.785932
+  type: 'test'
+  ...
+# Subtest: conflicting execution modes are rejected before state changes
+ok 173 - conflicting execution modes are rejected before state changes
+  ---
+  duration_ms: 1051.551307
+  type: 'test'
+  ...
+# Subtest: bound evidence checks index, child reports and logs without granting publication
+ok 174 - bound evidence checks index, child reports and logs without granting publication
+  ---
+  duration_ms: 486.864988
+  type: 'test'
+  ...
+# Subtest: bound evidence refuses changed index, cleared gates and cross-identity reports
+ok 175 - bound evidence refuses changed index, cleared gates and cross-identity reports
+  ---
+  duration_ms: 501.965222
+  type: 'test'
+  ...
+# Subtest: bound evidence refuses incomplete native rows and failed product commands
+ok 176 - bound evidence refuses incomplete native rows and failed product commands
+  ---
+  duration_ms: 644.108
+  type: 'test'
+  ...
+# Subtest: bound evidence rejects report path traversal and symlinked product logs
+ok 177 - bound evidence rejects report path traversal and symlinked product logs
+  ---
+  duration_ms: 724.35983
+  type: 'test'
+  ...
+# Subtest: staging reader binds a committed index, six receipts, notes and complete assets
+ok 178 - staging reader binds a committed index, six receipts, notes and complete assets
+  ---
+  duration_ms: 561.732938
+  type: 'test'
+  ...
+# Subtest: staging reader rejects blocked, mismatched or missing gate receipts
+ok 179 - staging reader rejects blocked, mismatched or missing gate receipts
+  ---
+  duration_ms: 948.933704
+  type: 'test'
+  ...
+# Subtest: staging reader refuses changed artifacts and unpinned review identities
+ok 180 - staging reader refuses changed artifacts and unpinned review identities
+  ---
+  duration_ms: 837.059391
+  type: 'test'
+  ...
+# Subtest: staging reader ignores local Git replacements of the pinned review commit
+ok 181 - staging reader ignores local Git replacements of the pinned review commit
+  ---
+  duration_ms: 423.603935
+  type: 'test'
+  ...
+# Subtest: staging reader requires receipt digests and rejects committed symlink blobs
+ok 182 - staging reader requires receipt digests and rejects committed symlink blobs
+  ---
+  duration_ms: 878.684129
+  type: 'test'
+  ...
+# Subtest: publication command: default planning leaves files, refs and fake APIs unchanged
+ok 183 - publication command: default planning leaves files, refs and fake APIs unchanged
+  ---
+  duration_ms: 752.365245
+  type: 'test'
+  ...
+# Subtest: publication command: interruption persists the release ID and resumes without another release
+ok 184 - publication command: interruption persists the release ID and resumes without another release
+  ---
+  duration_ms: 1777.210474
+  type: 'test'
+  ...
+# Subtest: publication command: immutable publication resumes stable despite later development conflicts
+ok 185 - publication command: immutable publication resumes stable despite later development conflicts
+  ---
+  duration_ms: 1749.243027
+  type: 'test'
+  ...
+# Subtest: publication command: failure JSON retains identity and last observed channels
+ok 186 - publication command: failure JSON retains identity and last observed channels
+  ---
+  duration_ms: 1312.640435
+  type: 'test'
+  ...
+# Subtest: publication command: changed remote or foreign recovery state blocks all writes
+ok 187 - publication command: changed remote or foreign recovery state blocks all writes
+  ---
+  duration_ms: 912.569899
+  type: 'test'
+  ...
+# Subtest: publication command: disabled immutability or an existing lock permits no remote writes
+ok 188 - publication command: disabled immutability or an existing lock permits no remote writes
+  ---
+  duration_ms: 979.35895
+  type: 'test'
+  ...
+# Subtest: publication command: a replacement release cannot inherit interrupted state
+ok 189 - publication command: a replacement release cannot inherit interrupted state
+  ---
+  duration_ms: 2802.300392
+  type: 'test'
+  ...
+# Subtest: publication CLI: parsed default mode plans from a foreign cwd without writes
+ok 190 - publication CLI: parsed default mode plans from a foreign cwd without writes
+  ---
+  duration_ms: 1004.545581
+  type: 'test'
+  ...
+# Subtest: publication command: local tkt publication refuses before repository or API access
+ok 191 - publication command: local tkt publication refuses before repository or API access
+  ---
+  duration_ms: 0.660914
+  type: 'test'
+  ...
+# Subtest: publication command: development must pass before release refs or GitHub writes
+ok 192 - publication command: development must pass before release refs or GitHub writes
+  ---
+  duration_ms: 3753.491321
+  type: 'test'
+  ...
+# Subtest: tkt staging joins pinned plugin and CI bytes, retaining the original stage record
+ok 193 - tkt staging joins pinned plugin and CI bytes, retaining the original stage record
+  ---
+  duration_ms: 2063.760341
+  type: 'test'
+  ...
+# Subtest: tkt CI entry: dry-run validates reviewed build bytes without credentials or ref changes
+ok 194 - tkt CI entry: dry-run validates reviewed build bytes without credentials or ref changes
+  ---
+  duration_ms: 581.403181
+  type: 'test'
+  ...
+# Subtest: tkt CI entry: reviewed tag, build bytes, intent and delayed transport are connected
+ok 195 - tkt CI entry: reviewed tag, build bytes, intent and delayed transport are connected
+  ---
+  duration_ms: 1741.458494
+  type: 'test'
+  ...
+# Subtest: tkt CI entry: foreign/stale dispatches and disabled immutability never reach ref writes
+ok 196 - tkt CI entry: foreign/stale dispatches and disabled immutability never reach ref writes
+  ---
+  duration_ms: 1880.664607
+  type: 'test'
+  ...
+# Subtest: tkt CI entry: altered reviewed tag is refused
+ok 197 - tkt CI entry: altered reviewed tag is refused
+  ---
+  duration_ms: 1502.78128
+  type: 'test'
+  ...
+# Subtest: tkt CI entry: failed candidate push cannot create drafts or prepare credentials
+ok 198 - tkt CI entry: failed candidate push cannot create drafts or prepare credentials
+  ---
+  duration_ms: 2307.684745
+  type: 'test'
+  ...
+# Subtest: tkt CI entry: failed stable resumes observed registry without preparing another upload
+ok 199 - tkt CI entry: failed stable resumes observed registry without preparing another upload
+  ---
+  duration_ms: 1233.174725
+  type: 'test'
+  ...
+# Subtest: tkt CI entry: published candidate resumes stable without development or candidate ref writes
+ok 200 - tkt CI entry: published candidate resumes stable without development or candidate ref writes
+  ---
+  duration_ms: 921.608223
+  type: 'test'
+  ...
+# Subtest: tkt CI entry: stable recovery refuses a missing registry observation before development
+ok 201 - tkt CI entry: stable recovery refuses a missing registry observation before development
+  ---
+  duration_ms: 1609.025466
+  type: 'test'
+  ...
+# Subtest: tkt CI entry: failure JSON retains published channels and uncertain stable
+ok 202 - tkt CI entry: failure JSON retains published channels and uncertain stable
+  ---
+  duration_ms: 1000.752451
+  type: 'test'
+  ...
+# Subtest: publication command: stable recovery rechecks complete remote assets
+ok 203 - publication command: stable recovery rechecks complete remote assets
+  ---
+  duration_ms: 3476.198366
+  type: 'test'
+  ...
+# Subtest: tkt CI entry: missing publication binding fails closed
+ok 204 - tkt CI entry: missing publication binding fails closed
+  ---
+  duration_ms: 604.980606
+  type: 'test'
+  ...
+# Subtest: tkt CI entry: dispatch identity is rechecked after development work
+ok 205 - tkt CI entry: dispatch identity is rechecked after development work
+  ---
+  duration_ms: 880.607095
+  type: 'test'
+  ...
+# Subtest: last Unreleased section omits version footer links and hidden comments from notes
+ok 206 - last Unreleased section omits version footer links and hidden comments from notes
+  ---
+  duration_ms: 3.531082
+  type: 'test'
+  ...
+# Subtest: empty visible notes rejected: ""
+ok 207 - empty visible notes rejected: ""
+  ---
+  duration_ms: 0.82613
+  type: 'test'
+  ...
+# Subtest: empty visible notes rejected: "\#\#\# Added\\n"
+ok 208 - empty visible notes rejected: "\#\#\# Added\\n"
+  ---
+  duration_ms: 1.346556
+  type: 'test'
+  ...
+# Subtest: empty visible notes rejected: "<!-- editorial only -->\\n"
+ok 209 - empty visible notes rejected: "<!-- editorial only -->\\n"
+  ---
+  duration_ms: 0.385665
+  type: 'test'
+  ...
+# Subtest: empty visible notes rejected: "[Unreleased]: https://example.invalid\\n"
+ok 210 - empty visible notes rejected: "[Unreleased]: https://example.invalid\\n"
+  ---
+  duration_ms: 0.262594
+  type: 'test'
+  ...
+# Subtest: invalid date 2026-02-30 rejected
+ok 211 - invalid date 2026-02-30 rejected
+  ---
+  duration_ms: 0.28123
+  type: 'test'
+  ...
+# Subtest: invalid date 2026-99-10 rejected
+ok 212 - invalid date 2026-99-10 rejected
+  ---
+  duration_ms: 0.294183
+  type: 'test'
+  ...
+# Subtest: invalid date today rejected
+ok 213 - invalid date today rejected
+  ---
+  duration_ms: 0.177518
+  type: 'test'
+  ...
+# Subtest: invalid date 2026-1-1 rejected
+ok 214 - invalid date 2026-1-1 rejected
+  ---
+  duration_ms: 0.506904
+  type: 'test'
+  ...
+# Subtest: duplicate Unreleased and existing candidate heading rejected
+ok 215 - duplicate Unreleased and existing candidate heading rejected
+  ---
+  duration_ms: 0.81851
+  type: 'test'
+  ...
+# Subtest: product names must be strings and catalogs cannot duplicate the version authority
+ok 216 - product names must be strings and catalogs cannot duplicate the version authority
+  ---
+  duration_ms: 0.421892
+  type: 'test'
+  ...
+# Subtest: malformed TOML and duplicate root lock entries fail version inspection
+ok 217 - malformed TOML and duplicate root lock entries fail version inspection
+  ---
+  duration_ms: 2.400679
+  type: 'test'
+  ...
+# Subtest: default and explicit CLI dry-run leave source, Git bytes, remote and harness home unchanged
+ok 218 - default and explicit CLI dry-run leave source, Git bytes, remote and harness home unchanged
+  ---
+  duration_ms: 552.671701
+  type: 'test'
+  ...
+# Subtest: draft skill preparation updates all surfaces once and replays the same identity
+ok 219 - draft skill preparation updates all surfaces once and replays the same identity
+  ---
+  duration_ms: 1590.610238
+  type: 'test'
+  ...
+# Subtest: draft Cargo preparation updates all surfaces once and replays the same identity
+ok 220 - draft Cargo preparation updates all surfaces once and replays the same identity
+  ---
+  duration_ms: 1556.21323
+  type: 'test'
+  ...
+# Subtest: resume after interrupted worktree reuses one version and one commit
+ok 221 - resume after interrupted worktree reuses one version and one commit
+  ---
+  duration_ms: 3130.981797
+  type: 'test'
+  ...
+# Subtest: resume after interrupted file-intent reuses one version and one commit
+ok 222 - resume after interrupted file-intent reuses one version and one commit
+  ---
+  duration_ms: 1395.866029
+  type: 'test'
+  ...
+# Subtest: resume after interrupted file-written reuses one version and one commit
+ok 223 - resume after interrupted file-written reuses one version and one commit
+  ---
+  duration_ms: 1369.9777
+  type: 'test'
+  ...
+# Subtest: resume after interrupted file-promoted reuses one version and one commit
+ok 224 - resume after interrupted file-promoted reuses one version and one commit
+  ---
+  duration_ms: 1027.208053
+  type: 'test'
+  ...
+# Subtest: resume after interrupted file reuses one version and one commit
+ok 225 - resume after interrupted file reuses one version and one commit
+  ---
+  duration_ms: 1117.004137
+  type: 'test'
+  ...
+# Subtest: resume after interrupted versioned reuses one version and one commit
+ok 226 - resume after interrupted versioned reuses one version and one commit
+  ---
+  duration_ms: 1136.455666
+  type: 'test'
+  ...
+# Subtest: resume after interrupted committed reuses one version and one commit
+ok 227 - resume after interrupted committed reuses one version and one commit
+  ---
+  duration_ms: 871.756726
+  type: 'test'
+  ...
+# Subtest: resume after interrupted draft reuses one version and one commit
+ok 228 - resume after interrupted draft reuses one version and one commit
+  ---
+  duration_ms: 1116.474609
+  type: 'test'
+  ...
+# Subtest: a terminated CLI process resumes from its owned worktree without a second commit
+ok 229 - a terminated CLI process resumes from its owned worktree without a second commit
+  ---
+  duration_ms: 815.648314
+  type: 'test'
+  ...
+# Subtest: existing branch app-managed worktree preserves its source checkout
+ok 230 - existing branch app-managed worktree preserves its source checkout
+  ---
+  duration_ms: 484.321017
+  type: 'test'
+  ...
+# Subtest: existing detached app-managed worktree preserves its source checkout
+ok 231 - existing detached app-managed worktree preserves its source checkout
+  ---
+  duration_ms: 545.336548
+  type: 'test'
+  ...
+# Subtest: foreign output and unrelated candidate changes are preserved and refused
+ok 232 - foreign output and unrelated candidate changes are preserved and refused
+  ---
+  duration_ms: 732.174447
+  type: 'test'
+  ...
+# Subtest: resume rejects different version/date/notes and a moved candidate history
+ok 233 - resume rejects different version/date/notes and a moved candidate history
+  ---
+  duration_ms: 648.03728
+  type: 'test'
+  ...
+# Subtest: invalid or non-increasing version 0.1.0 creates no output
+ok 234 - invalid or non-increasing version 0.1.0 creates no output
+  ---
+  duration_ms: 187.207502
+  type: 'test'
+  ...
+# Subtest: invalid or non-increasing version 0.0.9 creates no output
+ok 235 - invalid or non-increasing version 0.0.9 creates no output
+  ---
+  duration_ms: 105.857398
+  type: 'test'
+  ...
+# Subtest: invalid or non-increasing version 00.2.0 creates no output
+ok 236 - invalid or non-increasing version 00.2.0 creates no output
+  ---
+  duration_ms: 152.388904
+  type: 'test'
+  ...
+# Subtest: invalid or non-increasing version 1.0 creates no output
+ok 237 - invalid or non-increasing version 1.0 creates no output
+  ---
+  duration_ms: 138.176954
+  type: 'test'
+  ...
+# Subtest: invalid or non-increasing version 0.2.0-rc.1 creates no output
+ok 238 - invalid or non-increasing version 0.2.0-rc.1 creates no output
+  ---
+  duration_ms: 115.466955
+  type: 'test'
+  ...
+# Subtest: newer local release tag and dirty source block preparation
+ok 239 - newer local release tag and dirty source block preparation
+  ---
+  duration_ms: 158.743985
+  type: 'test'
+  ...
+# Subtest: ambient Git index cannot redirect preparation into user state
+ok 240 - ambient Git index cannot redirect preparation into user state
+  ---
+  duration_ms: 479.147208
+  type: 'test'
+  ...
+# Subtest: freshly fetched upstream advancement blocks draft creation even without branch tracking
+ok 241 - freshly fetched upstream advancement blocks draft creation even without branch tracking
+  ---
+  duration_ms: 477.64833
+  type: 'test'
+  ...
+# Subtest: corrupted draft assets stop resume without moving the candidate or replacing bytes
+ok 242 - corrupted draft assets stop resume without moving the candidate or replacing bytes
+  ---
+  duration_ms: 1067.514936
+  type: 'test'
+  ...
+# Subtest: source checkout and a symlink/junction alias cannot be used as the candidate
+ok 243 - source checkout and a symlink/junction alias cannot be used as the candidate
+  ---
+  duration_ms: 244.786855
+  type: 'test'
+  ...
+# Subtest: owned partial staging files recover while similarly named user files remain untouched
+ok 244 - owned partial staging files recover while similarly named user files remain untouched
+  ---
+  duration_ms: 1290.171147
+  type: 'test'
+  ...
+# Subtest: core, host extension and sidecar policy parse together
+ok 245 - core, host extension and sidecar policy parse together
+  ---
+  duration_ms: 20.54914
+  type: 'test'
+  ...
+# Subtest: reject malformed YAML missed by native validator
+ok 246 - reject malformed YAML missed by native validator
+  ---
+  duration_ms: 3.534877
+  type: 'test'
+  ...
+# Subtest: reject duplicate key
+ok 247 - reject duplicate key
+  ---
+  duration_ms: 1.851587
+  type: 'test'
+  ...
+# Subtest: reject description array
+ok 248 - reject description array
+  ---
+  duration_ms: 1.791541
+  type: 'test'
+  ...
+# Subtest: reject unquoted description colon
+ok 249 - reject unquoted description colon
+  ---
+  duration_ms: 1.647726
+  type: 'test'
+  ...
+# Subtest: reject metadata shape
+ok 250 - reject metadata shape
+  ---
+  duration_ms: 1.730099
+  type: 'test'
+  ...
+# Subtest: reject quoted policy boolean
+ok 251 - reject quoted policy boolean
+  ---
+  duration_ms: 2.358185
+  type: 'test'
+  ...
+# Subtest: reject malformed sidecar
+ok 252 - reject malformed sidecar
+  ---
+  duration_ms: 2.653435
+  type: 'test'
+  ...
+# Subtest: reject non-mapping frontmatter
+ok 253 - reject non-mapping frontmatter
+  ---
+  duration_ms: 1.995909
+  type: 'test'
+  ...
+# Subtest: library imports from Node stdin do not resolve the dash marker as a file
+ok 254 - library imports from Node stdin do not resolve the dash marker as a file
+  ---
+  duration_ms: 123.960459
+  type: 'test'
+  ...
+1..254
+# tests 254
+# suites 0
+# pass 253
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 47898.746153
+
+=== 12. Git and Claude plugin hooks ===
+TAP version 13
+# Subtest: push gate runs the project checker with project cwd for Bash and PowerShell
+ok 1 - push gate runs the project checker with project cwd for Bash and PowerShell
+  ---
+  duration_ms: 186.9251
+  type: 'test'
+  ...
+# Subtest: checker failure is blocking exit 2 with named diagnostics
+ok 2 - checker failure is blocking exit 2 with named diagnostics
+  ---
+  duration_ms: 93.543293
+  type: 'test'
+  ...
+# Subtest: unrelated commands, tools and repositories are no-ops
+ok 3 - unrelated commands, tools and repositories are no-ops
+  ---
+  duration_ms: 274.780685
+  type: 'test'
+  ...
+# Subtest: checker crash and malformed hook input block without stdout
+ok 4 - checker crash and malformed hook input block without stdout
+  ---
+  duration_ms: 133.443279
+  type: 'test'
+  ...
+# Subtest: pre-push installer is opt-in, idempotent and refuses foreign hooks
+ok 5 - pre-push installer is opt-in, idempotent and refuses foreign hooks
+  ---
+  duration_ms: 426.663524
+  type: 'test'
+  ...
+# Subtest: installer respects custom hooksPath and preserves tracked hook source
+ok 6 - installer respects custom hooksPath and preserves tracked hook source
+  ---
+  duration_ms: 315.57671
+  type: 'test'
+  ...
+# Subtest: pre-commit remains the default
+ok 7 - pre-commit remains the default
+  ---
+  duration_ms: 204.569288
+  type: 'test'
+  ...
+# Subtest: installer resolves the effective hooks directory from a linked worktree
+ok 8 - installer resolves the effective hooks directory from a linked worktree
+  ---
+  duration_ms: 250.741605
+  type: 'test'
+  ...
+# Subtest: installed pre-push permits green push and blocks a real YAML invariant failure
+ok 9 - installed pre-push permits green push and blocks a real YAML invariant failure
+  ---
+  duration_ms: 927.138962
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2229.051373
+
+=== 13. repository artifact hygiene ===
+TAP version 13
+# Subtest: staged inspection reads the index and leaves ignored data and all repository bytes unchanged
+ok 1 - staged inspection reads the index and leaves ignored data and all repository bytes unchanged
+  ---
+  duration_ms: 197.776278
+  type: 'test'
+  ...
+# Subtest: committed tree inspection ignores dirty files and freezes the requested tree
+ok 2 - committed tree inspection ignores dirty files and freezes the requested tree
+  ---
+  duration_ms: 578.438354
+  type: 'test'
+  ...
+# Subtest: small source art remains a review decision with no mandatory LFS recommendation
+ok 3 - small source art remains a review decision with no mandatory LFS recommendation
+  ---
+  duration_ms: 205.640967
+  type: 'test'
+  ...
+# Subtest: large embedded evidence is measured as characters and warns without banning portable HTML
+ok 4 - large embedded evidence is measured as characters and warns without banning portable HTML
+  ---
+  duration_ms: 611.173876
+  type: 'test'
+  ...
+# Subtest: diffable JSON stays ordinary content and a warning size is an explicit caller choice
+ok 5 - diffable JSON stays ordinary content and a warning size is an explicit caller choice
+  ---
+  duration_ms: 280.491674
+  type: 'test'
+  ...
+# Subtest: LFS lengths are declared payload, deduplicated by payload hash, not physical or remote availability
+ok 6 - LFS lengths are declared payload, deduplicated by payload hash, not physical or remote availability
+  ---
+  duration_ms: 160.30129
+  type: 'test'
+  ...
+# Subtest: malformed LFS input returns an inspection error rather than a plausible storage total
+ok 7 - malformed LFS input returns an inspection error rather than a plausible storage total
+  ---
+  duration_ms: 153.620876
+  type: 'test'
+  ...
+# Subtest: inconsistent LFS declarations cannot undercount a deduplicated payload
+ok 8 - inconsistent LFS declarations cannot undercount a deduplicated payload
+  ---
+  duration_ms: 840.299105
+  type: 'test'
+  ...
+# Subtest: explicit project limits fail while an exact reasoned exception preserves an intentional deliverable
+ok 9 - explicit project limits fail while an exact reasoned exception preserves an intentional deliverable
+  ---
+  duration_ms: 463.712238
+  type: 'test'
+  ...
+# Subtest: a required manifest must be in the inspected Git state, not merely an untracked file
+ok 10 - a required manifest must be in the inspected Git state, not merely an untracked file
+  ---
+  duration_ms: 382.481681
+  type: 'test'
+  ...
+# Subtest: removing a manifest checks unchanged artifacts that depend on it
+ok 11 - removing a manifest checks unchanged artifacts that depend on it
+  ---
+  duration_ms: 530.944005
+  type: 'test'
+  ...
+# Subtest: NUL characters do not conceal embedded payload from an explicit policy
+ok 12 - NUL characters do not conceal embedded payload from an explicit policy
+  ---
+  duration_ms: 245.470993
+  type: 'test'
+  ...
+# Subtest: policy globs cover newline-containing Git paths
+ok 13 - policy globs cover newline-containing Git paths
+  ---
+  duration_ms: 201.863138
+  type: 'test'
+  ...
+# Subtest: malformed policy cannot silently disable a misspelled intended gate
+ok 14 - malformed policy cannot silently disable a misspelled intended gate
+  ---
+  duration_ms: 178.35087
+  type: 'test'
+  ...
+# Subtest: broad or unexplained policy exceptions are rejected
+ok 15 - broad or unexplained policy exceptions are rejected
+  ---
+  duration_ms: 164.862879
+  type: 'test'
+  ...
+# Subtest: content bounds disclose skipped bodies and fail a policy that cannot be verified
+ok 16 - content bounds disclose skipped bodies and fail a policy that cannot be verified
+  ---
+  duration_ms: 263.295602
+  type: 'test'
+  ...
+# Subtest: history is explicit and bounded, and its bytes do not replace the current-tree metric
+ok 17 - history is explicit and bounded, and its bytes do not replace the current-tree metric
+  ---
+  duration_ms: 516.940577
+  type: 'test'
+  ...
+# Subtest: a missing local object is surfaced without fetching a promisor remote
+ok 18 - a missing local object is surfaced without fetching a promisor remote
+  ---
+  duration_ms: 467.763834
+  type: 'test'
+  ...
+# Subtest: caller Git context cannot redirect the inspected repository or index
+ok 19 - caller Git context cannot redirect the inspected repository or index
+  ---
+  duration_ms: 360.62438
+  type: 'test'
+  ...
+# Subtest: an arbitrary child directory cannot be mistaken for an independent repository
+ok 20 - an arbitrary child directory cannot be mistaken for an independent repository
+  ---
+  duration_ms: 768.254495
+  type: 'test'
+  ...
+# Subtest: symlinks are inspected as Git blobs without following an ignored target
+ok 21 - symlinks are inspected as Git blobs without following an ignored target
+  ---
+  duration_ms: 714.457614
+  type: 'test'
+  ...
+# Subtest: Git subprocesses receive lazy-fetch/optional-lock protection and only read commands
+ok 22 - Git subprocesses receive lazy-fetch/optional-lock protection and only read commands
+  ---
+  duration_ms: 579.40083
+  type: 'test'
+  ...
+# Subtest: invalid CLI input returns structured errors
+ok 23 - invalid CLI input returns structured errors
+  ---
+  duration_ms: 127.112136
+  type: 'test'
+  ...
+1..23
+# tests 23
+# suites 0
+# pass 23
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9136.165431
+
+=== 14. agent shell probe ===
+TAP version 13
+# Subtest: unset key is a finding that names the recommended bash
+ok 1 - unset key is a finding that names the recommended bash
+  ---
+  duration_ms: 57.266763
+  type: 'test'
+  ...
+# Subtest: --apply adds the key, keeps other keys, and then reports ok
+ok 2 - --apply adds the key, keeps other keys, and then reports ok
+  ---
+  duration_ms: 79.903738
+  type: 'test'
+  ...
+# Subtest: without --apply the settings file is never written
+ok 3 - without --apply the settings file is never written
+  ---
+  duration_ms: 56.107804
+  type: 'test'
+  ...
+# Subtest: a configured modern bash is ok
+ok 4 - a configured modern bash is ok
+  ---
+  duration_ms: 64.060048
+  type: 'test'
+  ...
+# Subtest: bash 3, a non-bash, a missing path and a Cellar path are each findings
+ok 5 - bash 3, a non-bash, a missing path and a Cellar path are each findings
+  ---
+  duration_ms: 366.256186
+  type: 'test'
+  ...
+# Subtest: invalid JSON is reported and left untouched, even with --apply
+ok 6 - invalid JSON is reported and left untouched, even with --apply
+  ---
+  duration_ms: 57.830821
+  type: 'test'
+  ...
+# Subtest: darwin: Homebrew bash installed only as a dependency is a finding
+ok 7 - darwin: Homebrew bash installed only as a dependency is a finding
+  ---
+  duration_ms: 108.716165
+  type: 'test'
+  ...
+# Subtest: platforms without a bash baseline are not applicable
+ok 8 - platforms without a bash baseline are not applicable
+  ---
+  duration_ms: 49.811912
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 962.347127
+
+=== 15. delivery-dashboard contract ===
+TAP version 13
+# Subtest: the blank template passes strict mode and shows empty states
+ok 1 - the blank template passes strict mode and shows empty states
+  ---
+  duration_ms: 4.812297
+  type: 'test'
+  ...
+# Subtest: the worked example passes strict mode and demonstrates every feature
+ok 2 - the worked example passes strict mode and demonstrates every feature
+  ---
+  duration_ms: 6.080349
+  type: 'test'
+  ...
+# Subtest: the template and the example share the same renderer
+ok 3 - the template and the example share the same renderer
+  ---
+  duration_ms: 0.769704
+  type: 'test'
+  ...
+# Subtest: the overview keeps five entries and the history keeps all of them
+ok 4 - the overview keeps five entries and the history keeps all of them
+  ---
+  duration_ms: 3.660307
+  type: 'test'
+  ...
+# Subtest: search and filters narrow entries; an open ask is findable
+ok 5 - search and filters narrow entries; an open ask is findable
+  ---
+  duration_ms: 1.852005
+  type: 'test'
+  ...
+# Subtest: rejects duplicate ids
+ok 6 - rejects duplicate ids
+  ---
+  duration_ms: 2.008995
+  type: 'test'
+  ...
+# Subtest: rejects a long headline
+ok 7 - rejects a long headline
+  ---
+  duration_ms: 3.259133
+  type: 'test'
+  ...
+# Subtest: rejects too many changes
+ok 8 - rejects too many changes
+  ---
+  duration_ms: 2.04948
+  type: 'test'
+  ...
+# Subtest: rejects an image without alt text
+ok 9 - rejects an image without alt text
+  ---
+  duration_ms: 2.161428
+  type: 'test'
+  ...
+# Subtest: rejects a missing local image
+ok 10 - rejects a missing local image
+  ---
+  duration_ms: 1.967655
+  type: 'test'
+  ...
+# Subtest: rejects an open ask without a recommendation
+ok 11 - rejects an open ask without a recommendation
+  ---
+  duration_ms: 1.835741
+  type: 'test'
+  ...
+# Subtest: rejects a recommendation outside the options
+ok 12 - rejects a recommendation outside the options
+  ---
+  duration_ms: 1.9075
+  type: 'test'
+  ...
+# Subtest: rejects an unsafe link
+ok 13 - rejects an unsafe link
+  ---
+  duration_ms: 2.047794
+  type: 'test'
+  ...
+# Subtest: rejects a bad kind
+ok 14 - rejects a bad kind
+  ---
+  duration_ms: 1.844149
+  type: 'test'
+  ...
+# Subtest: rejects a bad date
+ok 15 - rejects a bad date
+  ---
+  duration_ms: 1.645835
+  type: 'test'
+  ...
+# Subtest: rejects remote scripts, remote images and embedded media bloat
+ok 16 - rejects remote scripts, remote images and embedded media bloat
+  ---
+  duration_ms: 6.351288
+  type: 'test'
+  ...
+# Subtest: accepts a relative image that exists and resolves it from the dashboard's folder
+ok 17 - accepts a relative image that exists and resolves it from the dashboard's folder
+  ---
+  duration_ms: 1.875051
+  type: 'test'
+  ...
+# Subtest: warns when a headline carries process detail
+ok 18 - warns when a headline carries process detail
+  ---
+  duration_ms: 3.260345
+  type: 'test'
+  ...
+# Subtest: the checker never modifies the dashboard
+ok 19 - the checker never modifies the dashboard
+  ---
+  duration_ms: 1.93172
+  type: 'test'
+  ...
+# Subtest: malformed data blocks produce errors, not a crash
+ok 20 - malformed data blocks produce errors, not a crash
+  ---
+  duration_ms: 0.968741
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 159.792882
+
+=== 16. critic model probe ===
+TAP version 13
+# Subtest: each harness records the model it ran on, from its own record
+ok 1 - each harness records the model it ran on, from its own record
+  ---
+  duration_ms: 33.799062
+  type: 'test'
+  ...
+# Subtest: Kiro has no model record: unverified, and reported below ceiling when Opus 5.5 is missing
+ok 2 - Kiro has no model record: unverified, and reported below ceiling when Opus 5.5 is missing
+  ---
+  duration_ms: 17.994188
+  type: 'test'
+  ...
+# Subtest: a model below the ceiling is reported, not hidden
+ok 3 - a model below the ceiling is reported, not hidden
+  ---
+  duration_ms: 24.785051
+  type: 'test'
+  ...
+# Subtest: expired credentials are reported as not-authenticated, not as a missing model
+ok 4 - expired credentials are reported as not-authenticated, not as a missing model
+  ---
+  duration_ms: 11.75242
+  type: 'test'
+  ...
+# Subtest: a harness that is not installed is unavailable
+ok 5 - a harness that is not installed is unavailable
+  ---
+  duration_ms: 2.909405
+  type: 'test'
+  ...
+# Subtest: a result with no usable record is unverified, never ok
+ok 6 - a result with no usable record is unverified, never ok
+  ---
+  duration_ms: 6.905489
+  type: 'test'
+  ...
+# Subtest: a harness that accepts a model that does not exist fails the missing-model check
+ok 7 - a harness that accepts a model that does not exist fails the missing-model check
+  ---
+  duration_ms: 173.692315
+  type: 'test'
+  ...
+# Subtest: Codex's read-only mode is shown to hold by a forced write attempt
+ok 8 - Codex's read-only mode is shown to hold by a forced write attempt
+  ---
+  duration_ms: 30.746897
+  type: 'test'
+  ...
+# Subtest: a Codex critic that only declines to write leaves the boundary unproven
+ok 9 - a Codex critic that only declines to write leaves the boundary unproven
+  ---
+  duration_ms: 14.495866
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 418.373577
+
+==================== repo-check summary ====================
+  [ok  ] 1. deployer: ownership, plugin guards, root selection
+  [ok  ] 2. invocation sidecars + README groups
+  [ok  ] 3. doc indexes + relative links
+  [ok  ] 4. ticket health (tkt validate)
+  [ok  ] 5. knowledge relocation (adopt-project)
+  [ok  ] 6. global AGENTS.md (budget + ownership)
+  [ok  ] 7. crew-research uninstall scope
+  [ok  ] 8. repo survey tiers (adopt-project portfolio)
+  [ok  ] 9. Claude plugin manifest
+  [ok  ] 10. YAML syntax and core types
+  [ok  ] 11. release draft, artifact and publisher safety
+  [ok  ] 12. Git and Claude plugin hooks
+  [ok  ] 13. repository artifact hygiene
+  [ok  ] 14. agent shell probe
+  [ok  ] 15. delivery-dashboard contract
+  [ok  ] 16. critic model probe
+============================================================
+
+All repository-consistency invariants pass.

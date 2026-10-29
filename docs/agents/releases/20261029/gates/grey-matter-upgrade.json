@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "kind": "release-gate",
+  "gate": "upgrade",
+  "product": "grey-matter",
+  "version": "0.2.0",
+  "candidateSha": "05792a71c7e936b3ed26a623933bbfa224d7b93c",
+  "status": "pass",
+  "blockers": [],
+  "summary": "Previous-release installations upgrade to the candidate without duplicate skills or loss of foreign content on Linux, Windows (Codex) and macOS.",
+  "evidence": [
+    "docs/agents/research/evidence/release-validation-20261029.json: Linux, Windows and macOS product, native and harness-probe results for the exact candidates, with per-platform raw archive hashes.",
+    "docs/agents/research/evidence/windows-evidence-20261029.zip: codex-candidate-probe.json, 53 skills, foreign preserved, repeated catalog identical."
+  ],
+  "limits": "Staging readiness only. Catalog checks show skills load; they do not prove every model activation or authenticated interactive hooks. Network isolation was enforced on macOS only. No publication authorization.",
+  "publicationPerformed": false
+}

@@ -1,0 +1,108 @@
+{
+  "schema": 1,
+  "kind": "release-staging",
+  "status": "staged",
+  "entries": [
+    {
+      "product": "grey-matter",
+      "version": "0.2.0",
+      "candidateSha": "05792a71c7e936b3ed26a623933bbfa224d7b93c",
+      "sourceSha": "a4db04a95ed4779849fd380613cd58564ee16daf",
+      "repository": "smileynet/grey-matter",
+      "metadataSha256": "f9c7a38a9c26856b89c1a70dc1ed5f50a8a0745b6c620d823018dce20b81c0d8",
+      "verificationSha256": "d02428a96aa5053dcf7cf14b747c8cb76b68e4d34eb8a17ebae10cdf3b62b3c9",
+      "notes": {
+        "file": "docs/agents/releases/20261029/grey-matter/release-notes.md",
+        "sha256": "f8aaa994e0fe0c8d49923153c7a1ec903d52b011a1bb4b17c651b8eca3013b6b"
+      },
+      "gates": {
+        "scope": {
+          "file": "docs/agents/releases/20261029/gates/grey-matter-scope.json",
+          "sha256": "a5eacc06690ff2007ee4d8481d9e09e7dfa0a653293a9f6920d4d79afc8891dd"
+        },
+        "compatibility": {
+          "file": "docs/agents/releases/20261029/gates/grey-matter-compatibility.json",
+          "sha256": "090f69ffeb7ef6d0787513568a483f181de752a12f55c97bca733dbd3917de19"
+        },
+        "upgrade": {
+          "file": "docs/agents/releases/20261029/gates/grey-matter-upgrade.json",
+          "sha256": "50e491a969850911449a09d048493bffe2babbaa4ff7a0845b3f69c90dbbab1c"
+        },
+        "platform-approval": {
+          "file": "docs/agents/releases/20261029/gates/grey-matter-platform-approval.json",
+          "sha256": "c14d82f0e17eac81f234fcdaf6c606a5386e253f1147fdda2194bf90ce6de225"
+        },
+        "final-audit": {
+          "file": "docs/agents/releases/20261029/gates/grey-matter-final-audit.json",
+          "sha256": "a8f968b270e0097cad988569f7500bb4be2747c61ca27ca13e31835649500847"
+        },
+        "staging": {
+          "file": "docs/agents/releases/20261029/gates/grey-matter-staging.json",
+          "sha256": "43b16b03ab4f8f63f32cde6b973e0f1b5486e9999c2a365d4c9576a4853d18f1"
+        }
+      },
+      "tagRecord": {
+        "file": "docs/agents/releases/20261029/grey-matter/annotated-tag.txt",
+        "sha256": "a95a583bead3e34408d35d120058220472ac600419b1221494c91ab364d3b2ac",
+        "objectSha": "fa9fb95a024499629914427124a5f831d4127891"
+      }
+    },
+    {
+      "product": "tkt",
+      "version": "0.5.0",
+      "candidateSha": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe",
+      "sourceSha": "c4d2ad5469f19a0be5e4ff91566f7163b6a87b43",
+      "repository": "smileynet/tkt",
+      "metadataSha256": "2e018327ee3671f9101043dcfbfe6770711520bb6a2a2bb11a7fea0c14613c82",
+      "verificationSha256": "7259c1df24635b9e7f8bc5f2006b7d7282caa7b82ceb046c7b148fcc3d36bdf2",
+      "notes": {
+        "file": "docs/agents/releases/20261029/tkt/release-notes.md",
+        "sha256": "5b1f462dfef626569f9683d9c0bf1e8f3a1620cfdfe3560aa7f8bd1241cc3375"
+      },
+      "gates": {
+        "scope": {
+          "file": "docs/agents/releases/20261029/gates/tkt-scope.json",
+          "sha256": "69044c9552726346576ff7ead3961f43297c92ceb91fa6f7a913f154e66d3fe2"
+        },
+        "compatibility": {
+          "file": "docs/agents/releases/20261029/gates/tkt-compatibility.json",
+          "sha256": "291e4890fb8cbd90fd88c9e8413606733d3f8704a17cef22b038d07ba6818e70"
+        },
+        "upgrade": {
+          "file": "docs/agents/releases/20261029/gates/tkt-upgrade.json",
+          "sha256": "27f362c43752bfc1cb158de8ff492da78b99d265c36ed01205ffeb81461533af"
+        },
+        "platform-approval": {
+          "file": "docs/agents/releases/20261029/gates/tkt-platform-approval.json",
+          "sha256": "65c247546b1fca2ef497cd9d590671d2da8ee8a5ff26538467ab5e126ca03720"
+        },
+        "final-audit": {
+          "file": "docs/agents/releases/20261029/gates/tkt-final-audit.json",
+          "sha256": "821a0121c50376304bb1dedc430d039b721230010a98524e52463ac1d14d2c27"
+        },
+        "staging": {
+          "file": "docs/agents/releases/20261029/gates/tkt-staging.json",
+          "sha256": "e6f627e2a57b445e2f8a58d3fda0a4fea2c81c8b6565ef65333e15b7c0025fe1"
+        }
+      },
+      "tagRecord": {
+        "file": "docs/agents/releases/20261029/tkt/annotated-tag.txt",
+        "sha256": "a61c1b28fc3b7cafb548c93032753d1fcd0767c0cd16a7144b41f8231cbea18f",
+        "objectSha": "bee42829e53dba5e42ebdfb9774ee057efa6b04a"
+      },
+      "ci": {
+        "file": "docs/agents/releases/20261029/tkt/ci-identity.json",
+        "sha256": "715473af79c7f4288886110edabc3bb4841bdacdfe2b44eca0e2a08d009d8458"
+      },
+      "publication": {
+        "workflowSha": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe",
+        "workflowId": 394865280,
+        "branch": "refs/heads/codex/release-tkt-0.5.0-c4d2ad54",
+        "tag": {
+          "file": "docs/agents/releases/20261029/tkt/annotated-tag.txt",
+          "objectSha": "bee42829e53dba5e42ebdfb9774ee057efa6b04a"
+        }
+      }
+    }
+  ]
+}

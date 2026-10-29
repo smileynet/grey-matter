@@ -1,0 +1,460 @@
+[check] $ node --test tools/release-tools.test.mjs tools/release-ci.test.mjs &&…
+✔ real dist generation is deterministic and retains only read-only manual staging jobs (1186.521557ms)
+✔ CI seal binds complete built files to candidate and run without rebuilding (130.606763ms)
+✔ CI seal refuses missing/foreign/empty files, wrong crate commit and plan target omission (405.720837ms)
+✔ CI seal validates sidecar checksum syntax and exact bytes before output (75.859943ms)
+✔ Windows dist bootstrap retains the native PowerShell execution shell (12.833201ms)
+✔ CI intermediate uploads and downloads are isolated by run attempt (9.506496ms)
+✔ CI candidate identity refuses source edits even when HEAD and versions still match (61.554878ms)
+✔ SessionStart gathers frontier and WIP from the launch project before emitting context (129.749329ms)
+✔ missing project tickets or tkt produces no context (157.248517ms)
+✔ failed second query never leaks partial frontier context (113.613295ms)
+✔ native executable fixture preserves the first tkt argument (34.44021ms)
+✔ legacy migration previews all three links without changing them (4.131626ms)
+✔ legacy migration removes only matching links and can run twice (2.63395ms)
+✔ legacy migration preserves foreign directories and refuses a partial cleanup (2.327322ms)
+✔ legacy migration preserves links to another source (2.232214ms)
+✔ legacy migration recognizes a dangling link from the explicitly supplied source (2.457202ms)
+✔ legacy migration resolves a relative link without following the target (2.051343ms)
+✔ legacy migration refuses roots redirected outside the selected home (2.243368ms)
+✔ publisher CLI rejects overrides and defers reading its credential (2.520537ms)
+✔ publisher workflow is manual, serialized, defaults to planning and isolates credentials (24.470863ms)
+✔ publisher and nonpublishing product probe share the complete toolchain (16.144682ms)
+✔ local dispatch defaults to a read-only plan (1.465692ms)
+✔ dispatch saves intent before POST and replay observes without sending another request (40.067044ms)
+✔ lost dispatch response is correlated without redispatching (17.176458ms)
+✔ unknown response with no visible run remains uncertain, then observes the same request (11.263018ms)
+✔ changed review, foreign run and failed run cannot report successful publication (12.84296ms)
+✔ dispatch API uses typed POST bodies and paginated GETs only (0.838858ms)
+✔ moved candidate branch refuses dispatch before recording an attempt (1.183273ms)
+✔ vendored release files match their reviewed ownership inventory (2.970571ms)
+✔ standalone publication core refuses a competing local tkt publisher (1.318227ms)
+✔ standalone Cargo credential provider refuses changed seals and never caches read credentials (0.870303ms)
+✔ standalone prepared Cargo policy accepts this manifest and rejects token overrides (3.775866ms)
+✔ release entry points contain no legacy publisher or implicit bump path (5.573494ms)
+✔ Node dependencies are pinned maintainer prerequisites, outside Rust dependencies (0.714161ms)
+✔ standalone Node, bash and mise preparation inspect without output or version changes (713.51329ms)
+✔ Cargo package excludes tracked scratch while retaining source and license (120.307936ms)
+✔ built identity belongs to packaged source or its own checkout across rebuilds (9739.645184ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11381.229057
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling unicode-ident v1.0.24
+   Compiling zmij v1.0.23
+   Compiling libc v0.2.189
+   Compiling serde_json v1.0.151
+    Checking memchr v2.8.3
+    Checking utf8parse v0.2.2
+    Checking anstyle-query v1.1.5
+   Compiling itoa v1.0.18
+    Checking anstyle v1.0.14
+    Checking is_terminal_polyfill v1.70.2
+    Checking colorchoice v1.0.5
+   Compiling anyhow v1.0.104
+   Compiling thiserror v2.0.19
+   Compiling heck v0.5.0
+    Checking strsim v0.11.1
+    Checking clap_lex v1.1.0
+   Compiling rustix v1.1.4
+   Compiling getrandom v0.4.3
+    Checking regex-syntax v0.8.11
+    Checking option-ext v0.2.0
+    Checking cfg-if v1.0.4
+    Checking bitflags v2.13.1
+    Checking linux-raw-sys v0.12.1
+    Checking once_cell v1.21.4
+    Checking fastrand v2.5.0
+    Checking anstyle-parse v1.0.0
+    Checking anstream v1.0.0
+    Checking clap_builder v4.6.2
+    Checking aho-corasick v1.1.4
+   Compiling syn v3.0.3
+    Checking dirs-sys v0.4.1
+    Checking dirs v5.0.1
+    Checking regex-automata v0.4.16
+    Checking tempfile v3.27.0
+    Checking regex v1.13.1
+   Compiling tkt v0.5.0 (/home/sam/release-work/20261028/tkt-prepare/worktree)
+   Compiling thiserror-impl v2.0.19
+   Compiling clap_derive v4.6.4
+    Checking clap v4.6.4
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 14.01s
+   Compiling memchr v2.8.3
+   Compiling utf8parse v0.2.2
+   Compiling anstyle v1.0.14
+   Compiling anstyle-query v1.1.5
+   Compiling colorchoice v1.0.5
+   Compiling itoa v1.0.18
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling regex-syntax v0.8.11
+   Compiling strsim v0.11.1
+   Compiling clap_lex v1.1.0
+   Compiling option-ext v0.2.0
+   Compiling cfg-if v1.0.4
+   Compiling bitflags v2.13.1
+   Compiling linux-raw-sys v0.12.1
+   Compiling fastrand v2.5.0
+   Compiling once_cell v1.21.4
+   Compiling libc v0.2.189
+   Compiling zmij v1.0.23
+   Compiling serde_core v1.0.229
+   Compiling anyhow v1.0.104
+   Compiling thiserror v2.0.19
+   Compiling anstyle-parse v1.0.0
+   Compiling anstream v1.0.0
+   Compiling clap_builder v4.6.2
+   Compiling rustix v1.1.4
+   Compiling aho-corasick v1.1.4
+   Compiling dirs-sys v0.4.1
+   Compiling getrandom v0.4.3
+   Compiling dirs v5.0.1
+   Compiling regex-automata v0.4.16
+   Compiling tempfile v3.27.0
+   Compiling clap v4.6.4
+   Compiling serde_json v1.0.151
+   Compiling tkt v0.5.0 (/home/sam/release-work/20261028/tkt-prepare/worktree)
+   Compiling regex v1.13.1
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 16.24s
+     Running unittests src/main.rs (target/debug/deps/tkt-6cfe09970df9c7d9)
+
+running 193 tests
+test commands::audit::tests::baseline_empty_is_none ... ok
+test commands::audit::tests::baseline_numeric_parses ... ok
+test commands::audit::tests::baseline_malformed_errors ... ok
+test commands::close::tests::duplicate_named_index_is_rejected ... ok
+test commands::close::tests::exact_fill_succeeds ... ok
+test commands::close::tests::more_evidence_than_criteria_overflows ... ok
+test commands::close::tests::named_index_targets_specific_slot ... ok
+test commands::close::tests::named_index_zero_is_rejected ... ok
+test commands::close::tests::named_out_of_range_is_gate_failed ... ok
+test commands::close::tests::partial_evidence_preserves_missing_slots_for_severity_gate ... ok
+test commands::close::tests::partial_named_evidence_preserves_missing_slots_for_severity_gate ... ok
+test commands::close::tests::positional_and_named_interleave ... ok
+test commands::close::tests::positional_fills_in_order ... ok
+test commands::close::tests::positional_then_named_collision_is_duplicate ... ok
+test audit::tests::cutoff_exempts_below_tbd_resolution ... ok
+test audit::tests::cutoff_exempts_below_missing_resolution ... ok
+test audit::tests::cutoff_none_disables_exemption ... ok
+test audit::tests::resolution_quality_missing_section ... ok
+test audit::tests::ac_completeness_no_ac_section_ok ... ok
+test audit::tests::resolution_quality_good ... ok
+test audit::tests::resolution_quality_empty ... ok
+test audit::tests::frontier_health_medium_priority_ok ... ok
+test audit::tests::cutoff_does_not_affect_low_evidence_closure ... ok
+test audit::tests::frontier_health_high_priority_flagged ... ok
+test audit::tests::cutoff_post_cutoff_still_fires ... ok
+test audit::tests::frontier_health_blocked_high_not_flagged ... ok
+test audit::tests::resolution_quality_tbd ... ok
+test audit::tests::resolution_quality_skips_non_done ... ok
+test audit::tests::cutoff_does_not_exempt_at_or_above ... ok
+test audit::tests::stale_wip_no_timestamp_ok ... ok
+test audit::tests::stale_wip_detected ... ok
+test audit::tests::stale_wip_recent_ok ... ok
+test commands::validate::tests::no_regression_on_clean_fix ... ok
+test audit::tests::stale_wip_skips_non_wip ... ok
+test commands::validate::tests::no_regression_when_findings_only_reduced ... ok
+test commands::validate::tests::regression_detected_when_new_finding_appears ... ok
+test audit::tests::cutoff_does_not_affect_ac_completeness ... ok
+test audit::tests::ac_completeness_all_unchecked ... ok
+test audit::tests::ac_completeness_partially_checked_ok ... ok
+test config::tests::test_default_for_known_keys ... ok
+test config::tests::test_read_config_file_missing_returns_none ... ok
+test commands::validate::tests::identity_is_file_plus_rule_not_message ... ok
+test config::tests::test_audit_resolution_baseline_id_default_empty ... ok
+test config::tests::test_audit_resolution_baseline_id_parsed ... ok
+test context::tests::matches_combined ... ok
+test context::tests::matches_exclude ... ok
+test context::tests::matches_empty_context ... ok
+test config::tests::test_project_config_defaults ... ok
+test context::tests::matches_include ... ok
+test config::tests::test_read_config_file_parses_values ... ok
+test context::tests::parse_context_bare_words ... ok
+test context::tests::clear_removes_file ... ok
+test config::tests::test_project_config_parses_sections ... ok
+test context::tests::parse_context_basic ... ok
+test config::tests::test_write_sectioned_config ... ok
+test context::tests::parse_context_empty ... ok
+test config::tests::test_write_then_read_roundtrip ... ok
+test config::tests::test_user_config_cascades_to_project ... ok
+test context::tests::save_and_load ... ok
+test core::ticket::tests::ac_stats_counts_uppercase_x_as_checked ... ok
+test core::ticket::tests::ac_stats_without_mutation ... ok
+test core::ticket::tests::append_resolution_basic ... ok
+test core::ticket::tests::append_resolution_idempotent ... ok
+test commands::lint::tests::normalize_bare_scalar_preserves_deps ... ok
+test core::ticket::tests::append_resolution_with_spike ... ok
+test commands::lint::tests::normalize_value_passes_through_multiline ... ok
+test commands::lint::tests::normalize_blocked_by_slug_strip ... ok
+test commands::lint::tests::normalize_empty_array ... ok
+test core::ticket::tests::check_acs_all ... ok
+test commands::lint::tests::normalize_single_bare_scalar ... ok
+test commands::lint::tests::normalize_inline_array_drops_trailing_comma_empty ... ok
+test core::ticket::tests::check_acs_indices ... ok
+test core::ticket::tests::env_enum_parse ... ok
+test commands::lint::tests::normalize_unquoted_inline_array ... ok
+test commands::lint::tests::normalize_inline_array_preserved ... ok
+test core::ticket::agent_eligibility_tests::agent_eligibility_matcher_is_exhaustive ... ok
+test core::ticket::tests::check_acs_no_section ... ok
+test core::ticket::tests::invalid_env_rejected_at_parse ... ok
+test core::ticket::tests::invalid_status_rejected_at_parse ... ok
+test core::ticket::tests::new_ticket_text_escapes_title ... ok
+test core::ticket::tests::json_escape_handles_special_chars ... ok
+test core::ticket::tests::parse_blocked_by_bare_scalar ... ok
+test core::ticket::tests::parse_blocked_by_block_style ... ok
+test core::ticket::tests::parse_blocked_by_single_bare ... ok
+test core::ticket::tests::parent_round_trip_preserves_value_and_raw_content ... ok
+test core::ticket::tests::parse_double_quoted_scalars_decode_escapes ... ok
+test core::ticket::tests::parse_basic_ticket ... ok
+test core::ticket::tests::parse_indented_comments_inside_block_style_dependencies ... ok
+test core::ticket::agent_eligibility_tests::agent_eligibility_boundary_and_roundtrip ... ok
+test core::ticket::tests::parse_parent_decodes_yaml_scalar ... ok
+test core::ticket::tests::frontier_excludes_backlog ... ok
+test core::ticket::tests::frontier_filters_correctly ... ok
+test core::ticket::tests::parse_rejects_mixed_legacy_env_and_requires ... ok
+test core::ticket::tests::parse_rejects_duplicate_frontmatter_keys_with_line_context ... ok
+test core::ticket::tests::parse_single_item_block_style_blocked_by ... ok
+test core::ticket::tests::parse_still_bails_on_garbage_line ... ok
+test core::ticket::tests::parse_serialize_roundtrip_preserves_indented_comment_without_corrupting_value ... ok
+test core::ticket::tests::parse_still_bails_on_missing_closing_fence ... ok
+test core::ticket::tests::parse_still_bails_on_missing_opening_fence ... ok
+test core::ticket::tests::parse_tolerates_comment_lines ... ok
+test core::ticket::tests::parse_tolerates_space_before_colon ... ok
+test core::ticket::tests::parse_tolerates_utf8_bom ... ok
+test core::ticket::tests::parse_unquoted_scalars_preserve_backslashes ... ok
+test core::ticket::tests::parse_validation_criteria_empty_when_absent ... ok
+test core::ticket::tests::parse_ticket_with_deps ... ok
+test core::ticket::tests::parse_validation_criteria_inline_array ... ok
+test core::ticket::tests::parse_validation_criteria_multiline ... ok
+test core::ticket::tests::parse_without_parent_remains_parentless ... ok
+test core::ticket::tests::remove_parent_is_noop_when_absent ... ok
+test core::ticket::tests::remove_parent_preserves_other_content ... ok
+test core::ticket::tests::resolve_empty_is_noop ... ok
+test core::ticket::tests::resolve_noop_on_canonical ... ok
+test core::ticket::tests::resolve_strips_numeric_prefixed_slug ... ok
+test core::ticket::tests::set_blocked_by_empty ... ok
+test core::ticket::tests::set_blocked_by_escapes_values ... ok
+test core::ticket::tests::set_blocked_by_multiple ... ok
+test core::ticket::tests::set_env_none_removes_field ... ok
+test core::ticket::tests::set_env_some ... ok
+test core::ticket::tests::set_parent_appends_when_absent ... ok
+test commands::lint::tests::normalize_blocked_by_leaves_dangling ... ok
+test core::ticket::tests::resolve_idempotent ... ok
+test commands::lint::tests::normalize_blocked_by_padding ... ok
+test core::ticket::tests::resolve_pads_underpadded_numeric ... ok
+test core::ticket::tests::set_parent_replaces_in_place_and_preserves_other_content ... ok
+test core::ticket::tests::resolve_slug_collision_is_ambiguous_noop ... ok
+test core::ticket::tests::resolve_leaves_dangling_untouched ... ok
+test core::ticket::tests::set_priority_some ... ok
+test core::ticket::tests::resolve_width_three_corpus ... ok
+test core::ticket::tests::set_priority_none_removes_field ... ok
+test core::ticket::tests::set_status_preserves_other_fields ... ok
+test core::ticket::tests::status_enum_parse ... ok
+test core::ticket::tests::yaml_escape_handles_special_chars ... ok
+test core::ticket::tests::set_validation_criteria_roundtrip ... ok
+test core::ticket::tests::frontier_sorts_by_priority_buckets ... ok
+test core::validate::tests::duplicate_slugs ... ok
+test core::ticket::tests::set_status_typed ... ok
+test core::ticket::tests::surgical_edit_preserves_unknown_fields ... ok
+test core::validate::tests::free_text_rejects_newlines ... ok
+test core::validate::tests::free_text_rejects_too_long ... ok
+test core::validate::tests::free_text_valid ... ok
+test core::validate::tests::id_validation ... ok
+test core::validate::tests::self_dep_detection ... ok
+test core::validate::tests::slug_rejects_invalid_chars ... ok
+test core::validate::tests::slug_rejects_reserved_names ... ok
+test core::validate::tests::slug_rejects_too_long ... ok
+test core::validate::tests::slug_valid ... ok
+test findings::tests::bad_status_detected ... ok
+test findings::tests::cycles_detected_self ... ok
+test findings::tests::dangling_dep_detected ... ok
+test findings::tests::cycles_detected_two_node ... ok
+test findings::tests::stub_body_flags_open_template ... ok
+test findings::tests::stub_body_ignores_done_tickets ... ok
+test findings::tests::stub_body_ignores_filled_open ... ok
+test findings::tests::no_cycle_in_linear_chain ... ok
+test findings::tests::stub_body_ignores_ticket_that_quotes_the_sentinel ... ok
+test migrate::tests::parse_tk_file_basic ... ok
+test migrate::tests::parse_tk_file_no_deps ... ok
+test migrate::tests::parse_tk_file_no_frontmatter ... ok
+test migrate::tests::detect_tkt_format ... ok
+test migrate::tests::detect_tk_format ... ok
+test migrate::tests::plan_tk_basic ... ok
+test migrate::tests::apply_creates_correct_files ... ok
+test renumber::tests::single_produces_entry ... ok
+test telemetry::tests::consent_default_disabled ... ok
+test renumber::tests::single_validates_old_id_exists ... ok
+test renumber::tests::single_validates_new_id_free ... ok
+test telemetry::tests::extract_session_id_from_jsonl ... ok
+test telemetry::tests::event_serialization ... ok
+test telemetry::tests::event_serialization_with_error ... ok
+test telemetry::tests::is_rotated_file_detection ... ok
+test telemetry::tests::iso_timestamp_format ... ok
+test renumber::tests::materialize_refuses_block_style_citation_without_writing ... ok
+test telemetry::tests::project_slug_from_path ... ok
+test telemetry::tests::sanitize_slug_handles_special_chars ... ok
+test telemetry::tests::session_id_format ... ok
+test renumber::tests::materialize_refuses_body_citation_and_malformed_corpus_without_writing ... ok
+test telemetry::tests::enforce_max_files_cleans_excess ... ok
+test update_check::tests::version_comparison ... ok
+test telemetry::tests::prune_oldest_sessions_removes_whole_sessions ... ok
+test telemetry::tests::rotate_file_shifts_files ... ok
+test telemetry::tests::rotate_file_respects_max_files ... ok
+test renumber::tests::for_collisions_same_files_no_collision ... ok
+test renumber::tests::for_collisions_detects_id_clash ... ok
+test renumber::tests::for_collisions_no_collisions ... ok
+test renumber::tests::for_collisions_preserves_id_width ... ok
+test renumber::tests::for_collisions_multiple_clashes ... ok
+test telemetry::tests::session_id_unique ... ok
+test core::tests::atomic_write_replaces_existing_file_without_leftover_temp ... ok
+test renumber::tests::apply_uses_only_preflighted_writes ... ok
+test telemetry::tests::consent_file_parsing ... ok
+test core::tests::rename_replaces_an_existing_file ... ok
+test renumber::tests::apply_renumber_multiple_entries ... ok
+test renumber::tests::apply_renumber_renames_and_rewrites ... ok
+
+test result: ok. 193 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/agent_eligibility.rs (target/debug/deps/agent_eligibility-ad87f1e3c1d62450)
+
+running 4 tests
+test agent_eligibility_identity_boundary_and_init_guidance ... ok
+test agent_eligibility_frontier_composes_and_query_stays_scoped ... ok
+test agent_eligibility_claim_reasons_and_force ... ok
+test agent_eligibility_creation_edit_and_discovery ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+
+     Running tests/deploy_skills.rs (target/debug/deps/deploy_skills-57158c77bec0c8ea)
+
+running 6 tests
+test plugin_installed_skips_claude_root ... ok
+test plugin_installed_skips_project_agents_root ... ok
+test another_plugin_does_not_trigger_the_guard ... ok
+test plugin_installed_removes_earlier_copies_but_not_foreign_dirs ... ok
+test other_roots_install_and_allow_dual_overrides ... ok
+test codex_plugin_removes_owned_copies_and_preserves_foreign_skills ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.75s
+
+     Running tests/integration.rs (target/debug/deps/integration-3253f9da15b5c830)
+
+running 99 tests
+test test_doctor_and_validate_agree_on_clean_corpus ... ok
+test test_doctor_names_unparseable_ticket ... ok
+test test_doctor_and_validate_agree_on_strict_result ... ok
+test test_broken_file_still_skipped_with_warning ... ok
+test test_ascii_mode_produces_ascii_symbols ... ok
+test test_claim_rejects_non_open ... ok
+test test_close_rejects_already_done ... ok
+test test_exit_code_2_on_crash ... ok
+test test_color_always_produces_ansi ... ok
+test test_debug_mode_json_format ... ok
+test test_batch_nudge_optout ... ok
+test test_audit_reports_quality_issues ... ok
+test test_blocked_shows_blockers ... ok
+test test_global_dry_run_init_does_not_create_files ... ok
+test test_batch_nudge_json ... ok
+test test_batch_nudge_trigger ... ok
+test test_close_gates_batched ... ok
+test test_close_evidence_error_singular_form ... ok
+test test_close_gate_hint_populated ... ok
+test test_init_creates_tickets_dir_and_config ... ok
+test test_close_write_failure_surfaces_os_error ... ok
+test test_close_partial_evidence_kind_is_gate_failed ... ok
+test test_init_idempotent ... ok
+test test_debug_mode_emits_to_stderr ... ok
+test test_init_write_creates_agents_md_with_markers ... ok
+test test_error_output_includes_program_name ... ok
+test test_close_ac_flag_bypasses_all_unchecked_error ... ok
+test test_argument_boundary_safety ... ok
+test test_close_allows_partially_checked_acs ... ok
+test test_close_evidence_text_mode_strict_gate_writes_done ... ok
+test test_close_errors_on_all_unchecked_acs ... ok
+test test_close_resolution_flag_works ... ok
+test test_close_shows_unblocked_tickets ... ok
+test test_migrate_preview_is_no_write_and_apply_requires_confirm ... ok
+test test_exit_code_1_on_domain_error ... ok
+test test_hand_edits_do_not_eject_tickets ... ok
+test test_evidence_duplicate_named_index_rejected ... ok
+test test_fix_regression_gate_aborts_on_new_finding ... ok
+test test_json_error_envelope_is_last_stderr_line ... ok
+test test_fix_normalizes_blocked_by_padding_and_slug ... ok
+test test_no_color_produces_no_ansi ... ok
+test test_edit_changes_field ... ok
+test test_no_remote_works_locally ... ok
+test test_global_dry_run_prevents_lint_context_config_and_renumber_writes ... ok
+test test_push_failure_no_rebase_on_unreachable ... ok
+test test_config_set_get_list ... ok
+test test_new_creates_and_pushes ... ok
+test test_evidence_gate_blocks_when_configured ... ok
+test test_config_unset_reverts_to_default ... ok
+test test_evidence_named_mapping ... ok
+test test_config_debug_enables_debug_output ... ok
+test test_plan_missing_rows_fix ... ok
+test test_project_config_unknown_key_warns ... ok
+test test_config_env_overrides_config_file ... ok
+test test_project_config_show_dumps_settings ... ok
+test test_competing_allocation_no_collision ... ok
+test test_query_preserves_hand_edited_plain_scalar_backslashes ... ok
+test test_query_status_filter ... ok
+test test_query_outputs_json_lines ... ok
+test test_new_quiet_outputs_bare_id ... ok
+test test_ready_uses_one_capability_model_for_env_and_requires ... ok
+test test_race_detection_uses_tracking_ref_for_master_and_non_origin_remote ... ok
+test test_renumber_refuses_malformed_ticket_before_writing ... ok
+test test_ready_excludes_blocked ... ok
+test test_ready_hierarchy_format ... ok
+test test_push_failure_after_commit_preserves_local_state ... ok
+test test_ready_shows_frontier ... ok
+test test_project_config_require_resolution_blocks_bare_close ... ok
+test test_lifecycle_new_claim_close ... ok
+test test_race_detection_falls_back_to_remote_head_without_tracking ... ok
+test test_project_config_push_disabled_skips_push ... ok
+test test_renumber_refuses_one_item_block_style_citation_before_writing ... ok
+test test_sync_plan_advisory_default ... ok
+test test_sync_plan_check_gate ... ok
+test test_sync_plan_detects_drift ... ok
+test test_sync_plan_fix_dryrun ... ok
+test test_sync_plan_fix_corrects_status ... ok
+test test_sync_plan_orphan_row_errors ... ok
+test test_uppercase_checkbox_not_flagged_as_all_unchecked_on_done ... ok
+test test_telemetry_enable_disable_cycle ... ok
+test test_plan_dirty_rejected_and_absent_unchanged ... ok
+test test_validate_detects_self_cycle ... ok
+test test_validate_detects_two_node_cycle ... ok
+test test_validate_finds_issues ... ok
+test test_uppercase_checkbox_counts_as_checked_at_close ... ok
+test test_validate_fix_advises_on_hand_flipped_done ... ok
+test test_validate_fix_quotes_ids_and_removes_invalid_env ... ok
+test test_validate_passes_clean_corpus ... ok
+test test_validate_flags_hand_flipped_done ... ok
+test test_remote_without_upstream_and_detached_head_fail_before_mutation ... ok
+test test_validate_stub_body_advisory ... ok
+test test_validate_no_false_stub ... ok
+test test_validate_stub_body_strict ... ok
+test test_validate_no_false_positive_on_acyclic ... ok
+test test_rebase_resolves_id_collision ... ok
+test test_stale_claim_fails_cleanly ... ok
+test test_plan_status_mutations ... ok
+test test_validation_criteria_and_evidence_flow ... ok
+test test_partial_evidence_respects_warn_true_and_false_and_criteria_less_warns ... ok
+
+test result: ok. 99 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.31s
+
+     Running tests/plugin_manifests.rs (target/debug/deps/plugin_manifests-de464d89b0ede089)
+
+running 3 tests
+test agy_plugin_version_matches_crate ... ok
+test claude_plugin_version_matches_crate ... ok
+test codex_plugin_version_matches_crate ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

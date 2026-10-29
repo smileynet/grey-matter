@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "kind": "release-gate",
+  "gate": "compatibility",
+  "product": "tkt",
+  "version": "0.5.0",
+  "candidateSha": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe",
+  "status": "pass",
+  "blockers": [],
+  "summary": "Fresh sealed archives load in Codex, Claude and Antigravity on Linux, Windows and macOS, and in Kiro, OpenCode and Crush bare roots on Linux and macOS, at the measured client versions.",
+  "evidence": [
+    "docs/agents/research/evidence/release-validation-20261029.json: Linux, Windows and macOS product, native and harness-probe results for the exact candidates, with per-platform raw archive hashes.",
+    "docs/agents/research/final-release-audit-20261029.md: candidate identities, findings and dispositions, deferred scope and the staging go decision.",
+    "docs/agents/research/evidence/tkt-candidate-stage-a827bb6-20261029.json: readCiStage provenance of run 40822712451; 16 sealed assets including the crate.",
+    "CI x86_64 Linux binary reports tkt 0.5.0 (a827bb6); CLI-surface check passes 386 invocations in 42 files across 21 commands (tktCli in docs/agents/research/evidence/release-validation-20261029.json)."
+  ],
+  "limits": "Staging readiness only. Catalog checks show skills load; they do not prove every model activation or authenticated interactive hooks. Network isolation was enforced on macOS only. No publication authorization.",
+  "publicationPerformed": false
+}

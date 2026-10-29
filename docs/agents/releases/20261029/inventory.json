@@ -1,0 +1,244 @@
+{
+  "schema": 1,
+  "status": "staged",
+  "files": [
+    {
+      "file": "docs/agents/releases/20261029/README.md",
+      "size": 3006,
+      "sha256": "3242de85eba0ea17ff3de422fbf5c987882b059a89d90086cbe21bc36e3cecc9"
+    },
+    {
+      "file": "docs/agents/releases/20261029/assembly-recipe.py",
+      "size": 7122,
+      "sha256": "0d81ab2e3ddbb64e8ce1561c2cfeacae7911b605abe926e0d8805cc71a228e03"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/grey-matter-compatibility.json",
+      "size": 1056,
+      "sha256": "090f69ffeb7ef6d0787513568a483f181de752a12f55c97bca733dbd3917de19"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/grey-matter-final-audit.json",
+      "size": 769,
+      "sha256": "a8f968b270e0097cad988569f7500bb4be2747c61ca27ca13e31835649500847"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/grey-matter-platform-approval.json",
+      "size": 991,
+      "sha256": "c14d82f0e17eac81f234fcdaf6c606a5386e253f1147fdda2194bf90ce6de225"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/grey-matter-scope.json",
+      "size": 960,
+      "sha256": "a5eacc06690ff2007ee4d8481d9e09e7dfa0a653293a9f6920d4d79afc8891dd"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/grey-matter-staging.json",
+      "size": 1063,
+      "sha256": "43b16b03ab4f8f63f32cde6b973e0f1b5486e9999c2a365d4c9576a4853d18f1"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/grey-matter-upgrade.json",
+      "size": 1010,
+      "sha256": "50e491a969850911449a09d048493bffe2babbaa4ff7a0845b3f69c90dbbab1c"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/tkt-compatibility.json",
+      "size": 1416,
+      "sha256": "291e4890fb8cbd90fd88c9e8413606733d3f8704a17cef22b038d07ba6818e70"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/tkt-final-audit.json",
+      "size": 761,
+      "sha256": "821a0121c50376304bb1dedc430d039b721230010a98524e52463ac1d14d2c27"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/tkt-platform-approval.json",
+      "size": 983,
+      "sha256": "65c247546b1fca2ef497cd9d590671d2da8ee8a5ff26538467ab5e126ca03720"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/tkt-scope.json",
+      "size": 952,
+      "sha256": "69044c9552726346576ff7ead3961f43297c92ceb91fa6f7a913f154e66d3fe2"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/tkt-staging.json",
+      "size": 1055,
+      "sha256": "e6f627e2a57b445e2f8a58d3fda0a4fea2c81c8b6565ef65333e15b7c0025fe1"
+    },
+    {
+      "file": "docs/agents/releases/20261029/gates/tkt-upgrade.json",
+      "size": 1002,
+      "sha256": "27f362c43752bfc1cb158de8ff492da78b99d265c36ed01205ffeb81461533af"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/CHANGELOG.snapshot.txt",
+      "size": 7059,
+      "sha256": "edddb871442bfd83fe4cce8d1bc6fdde0a5c8fcc214788452b31de673ca8ce5e"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/README.snapshot.txt",
+      "size": 5558,
+      "sha256": "0d09de715a80e0c64303b3607575981e5eb31672abbb0307ac66fd295614f0fb"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/annotated-tag.txt",
+      "size": 157,
+      "sha256": "a95a583bead3e34408d35d120058220472ac600419b1221494c91ab364d3b2ac"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/artifacts/SHA256SUMS",
+      "size": 378,
+      "sha256": "9c74c7426528ffc002933dc55aef5fbe26b5d62c49ed903bf62436586d485e85"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/artifacts/grey-matter-0.2.0-agy.tar.gz",
+      "size": 2271860,
+      "sha256": "3eb739ea80b4781123b0b6cb2a779763077bfa73ae653cac7e3c3e30be933921"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/artifacts/grey-matter-0.2.0-claude.tar.gz",
+      "size": 2272347,
+      "sha256": "79ec922ebcf8fa2879554b76eb6c1d32caa76f253e7fb7490aca8ea0a7879fdf"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/artifacts/grey-matter-0.2.0-codex.tar.gz",
+      "size": 2271696,
+      "sha256": "c572795a255efd51f1add3efc220dac1b72bbc911d292665672ca36378d2f22c"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/artifacts/release-metadata.json",
+      "size": 199591,
+      "sha256": "f9c7a38a9c26856b89c1a70dc1ed5f50a8a0745b6c620d823018dce20b81c0d8"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/evidence/native/native-evidence.json",
+      "size": 119000,
+      "sha256": "c71b21f5b993771339419ab3b0ec59ef74d676e85869ec6edb6301135ac7fa7a"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/evidence/product/1-product.log",
+      "size": 102476,
+      "sha256": "a09d77a07d8525bf17d2da27ed26884c0a2d3f54d095fe9836a706eea3641442"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/evidence/product/product-evidence.json",
+      "size": 1025,
+      "sha256": "3afb5ab8512b7e0c7f98941b42bea5002cc7611e5b09a908a7a6a0ae88fca789"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/evidence/verification.json",
+      "size": 2156,
+      "sha256": "d02428a96aa5053dcf7cf14b747c8cb76b68e4d34eb8a17ebae10cdf3b62b3c9"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/preparation.json",
+      "size": 639,
+      "sha256": "55b71130a8262d13ccce5195bbbfbe926073ddaefc87e4cbfe23cee62e840cd5"
+    },
+    {
+      "file": "docs/agents/releases/20261029/grey-matter/release-notes.md",
+      "size": 5965,
+      "sha256": "f8aaa994e0fe0c8d49923153c7a1ec903d52b011a1bb4b17c651b8eca3013b6b"
+    },
+    {
+      "file": "docs/agents/releases/20261029/index.json",
+      "size": 4843,
+      "sha256": "7cc4100e33c0756b26d11232a86b612f91282d0fbe672b8fd632eddea6fb2ef0"
+    },
+    {
+      "file": "docs/agents/releases/20261029/installation.md",
+      "size": 3377,
+      "sha256": "d8339919bb628e93ce8ab2c6808f4e9a020dd020a5308c5a41a298d08000a693"
+    },
+    {
+      "file": "docs/agents/releases/20261029/publication.md",
+      "size": 3499,
+      "sha256": "450f54c320c2336fdf9e9adfa7f55d909ec044545c852e21ebc009c10f59432a"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/CHANGELOG.snapshot.txt",
+      "size": 12403,
+      "sha256": "53eac7a736b9a6bef69431997bb641dd89fa45b390a4509b0c46782fc46333c4"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/README.snapshot.txt",
+      "size": 13369,
+      "sha256": "96ae23f8bd603b79f2fc0c4a47e22fd5a3ecd1d8cf69d8626f268e56965e5482"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/annotated-tag.txt",
+      "size": 149,
+      "sha256": "a61c1b28fc3b7cafb548c93032753d1fcd0767c0cd16a7144b41f8231cbea18f"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/artifacts/SHA256SUMS",
+      "size": 354,
+      "sha256": "1c618568434baec1aac751459788f428817a44715219c2347979b6bd49a41fc7"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/artifacts/release-metadata.json",
+      "size": 23608,
+      "sha256": "2e018327ee3671f9101043dcfbfe6770711520bb6a2a2bb11a7fea0c14613c82"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/artifacts/tkt-0.5.0-agy.tar.gz",
+      "size": 91932,
+      "sha256": "e1a3399f2494c0bfe7f92c38a49c36231e8befaa89b333c61860696fce5b722c"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/artifacts/tkt-0.5.0-claude.tar.gz",
+      "size": 93368,
+      "sha256": "7a37c301d9e2cbff4fdb0da0e6bf0920beedd6fe0d280bd244931f71c0e4cf0a"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/artifacts/tkt-0.5.0-codex.tar.gz",
+      "size": 92566,
+      "sha256": "c9744e2dc222027574f0aea17b4173939fe9456662b35c2b2992de0482022c62"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/ci-identity.json",
+      "size": 467,
+      "sha256": "715473af79c7f4288886110edabc3bb4841bdacdfe2b44eca0e2a08d009d8458"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/evidence/native/native-evidence.json",
+      "size": 38288,
+      "sha256": "14a6adc8bf0339667803ac6e545c0d4fa40af137745d795862fd82ffc192abf0"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/evidence/product/1-product.log",
+      "size": 24988,
+      "sha256": "db3b16dfaad005121b50fb0e1187745a33e36515050ce2bde2ba84acac03ad3f"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/evidence/product/product-evidence.json",
+      "size": 851,
+      "sha256": "458062e0f64090e5cfc5b0f006ff5dd83a9e71e0902d99d7e5f72524ebf95a6a"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/evidence/verification.json",
+      "size": 2041,
+      "sha256": "7259c1df24635b9e7f8bc5f2006b7d7282caa7b82ceb046c7b148fcc3d36bdf2"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/preparation.json",
+      "size": 890,
+      "sha256": "3d7218fcacf24743de2cde967a1d9755afe8b931b668f0b82b2233e0c8925d1e"
+    },
+    {
+      "file": "docs/agents/releases/20261029/tkt/release-notes.md",
+      "size": 2296,
+      "sha256": "5b1f462dfef626569f9683d9c0bf1e8f3a1620cfdfe3560aa7f8bd1241cc3375"
+    },
+    {
+      "file": "docs/agents/releases/20261029/verify.mjs",
+      "size": 2198,
+      "sha256": "af60671708332619d831ba75739a40e1d8a733db9c5b026366b4bd99395dede8"
+    }
+  ],
+  "publicationPerformed": false,
+  "ciAssets": "16 dist/crate files plus tkt-stage.json remain in the provenance-verified Actions ZIP of run 40822712451; CI identity is committed here. Plugin release has five assets per product; tkt joined release has 22 assets.",
+  "reproduction": "Check out the pinned review commit to recover these exact regular blobs. Preparation source, version, date and planned version-file hashes are preserved per product; do not rebuild CI assets."
+}

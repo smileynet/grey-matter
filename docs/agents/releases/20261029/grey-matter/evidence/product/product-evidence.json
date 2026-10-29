@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "mode": "product-evidence",
+  "publishable": false,
+  "candidateSha": "05792a71c7e936b3ed26a623933bbfa224d7b93c",
+  "product": "grey-matter",
+  "version": "0.2.0",
+  "platform": {
+    "os": "linux",
+    "release": "7.0.0-34-generic",
+    "arch": "x64",
+    "node": "v22.23.4"
+  },
+  "commands": [
+    [
+      "/home/sam/.local/share/mise/installs/node/22.23.4/bin/node",
+      "scripts/check-repo.mjs",
+      "--require-tools"
+    ]
+  ],
+  "checks": [
+    {
+      "command": [
+        "/home/sam/.local/share/mise/installs/node/22.23.4/bin/node",
+        "scripts/check-repo.mjs",
+        "--require-tools"
+      ],
+      "started": "2026-10-29T05:48:39.702Z",
+      "finished": "2026-10-29T05:51:06.020Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "log": "1-product.log",
+      "sha256": "a09d77a07d8525bf17d2da27ed26884c0a2d3f54d095fe9836a706eea3641442"
+    }
+  ],
+  "pending": [
+    "native",
+    "scope",
+    "compatibility",
+    "remaining-platforms"
+  ]
+}

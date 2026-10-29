@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "mode": "candidate-verification",
+  "publishable": false,
+  "candidateSha": "a827bb6f264ad2ef73157fd8c0a471cb78e634fe",
+  "product": "tkt",
+  "version": "0.5.0",
+  "metadataSha256": "2e018327ee3671f9101043dcfbfe6770711520bb6a2a2bb11a7fea0c14613c82",
+  "phases": {
+    "product": "pass",
+    "native": "pass"
+  },
+  "plan": {
+    "product": [
+      [
+        "mise",
+        "run",
+        "check"
+      ]
+    ],
+    "native": [
+      {
+        "host": "codex",
+        "asset": "tkt-0.5.0-codex.tar.gz",
+        "sha256": "c9744e2dc222027574f0aea17b4173939fe9456662b35c2b2992de0482022c62",
+        "binary": "codex"
+      },
+      {
+        "host": "claude",
+        "asset": "tkt-0.5.0-claude.tar.gz",
+        "sha256": "7a37c301d9e2cbff4fdb0da0e6bf0920beedd6fe0d280bd244931f71c0e4cf0a",
+        "binary": "claude"
+      },
+      {
+        "host": "agy",
+        "asset": "tkt-0.5.0-agy.tar.gz",
+        "sha256": "e1a3399f2494c0bfe7f92c38a49c36231e8befaa89b333c61860696fce5b722c",
+        "binary": "/home/sam/code/grey-matter/.scratch/linux-validation-20261024/tools/bin/agy"
+      }
+    ]
+  },
+  "pending": [
+    "scope",
+    "compatibility",
+    "upgrade",
+    "platform-approval",
+    "final-audit",
+    "staging"
+  ],
+  "started": "2026-10-29T05:18:16.935Z",
+  "productEvidence": {
+    "file": "product/product-evidence.json",
+    "sha256": "458062e0f64090e5cfc5b0f006ff5dd83a9e71e0902d99d7e5f72524ebf95a6a",
+    "platform": {
+      "os": "linux",
+      "release": "7.0.0-34-generic",
+      "arch": "x64",
+      "node": "v22.23.4"
+    }
+  },
+  "nativeEvidence": {
+    "file": "native/native-evidence.json",
+    "sha256": "14a6adc8bf0339667803ac6e545c0d4fa40af137745d795862fd82ffc192abf0",
+    "platform": {
+      "os": "linux",
+      "release": "7.0.0-34-generic",
+      "arch": "x64"
+    },
+    "isolation": {
+      "homes": "disposable",
+      "credentials": "environment allowlist; no user configuration",
+      "network": "not-enforced"
+    }
+  },
+  "finished": "2026-10-29T05:19:16.367Z"
+}
