@@ -6,7 +6,7 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -64,5 +64,16 @@ test("uninstall removes only owned files, never foreign ones", () => {
     assert.ok(!existsSync(mine));
     assert.equal(readFileSync(theirs, "utf8"), "foreign\n");
     assert.match(run("list", "--target", theirs).stdout, /foreign/);
+  });
+});
+
+test("the default codex target follows CODEX_HOME", () => {
+  withDir((d) => {
+    const home = join(d, "home"), codexHome = join(d, "custom-codex");
+    mkdirSync(home); mkdirSync(codexHome);
+    const r = spawnSync(process.execPath, [SCRIPT], { encoding: "utf8", env: { ...process.env, HOME: home, USERPROFILE: home, CODEX_HOME: codexHome } });
+    assert.equal(r.status, 0, r.stdout + r.stderr);
+    assert.ok(readFileSync(join(codexHome, "AGENTS.md"), "utf8").startsWith(OWNER_MARK));
+    assert.equal(existsSync(join(home, ".codex", "AGENTS.md")), false);
   });
 });

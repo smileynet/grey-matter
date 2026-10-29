@@ -8,7 +8,7 @@
 //
 // Targets (default: each one whose harness dir exists on this machine):
 //   kiro-cli    ~/.kiro/steering/AGENTS.md   (Kiro loads AGENTS.md there, always-on)
-//   codex       ~/.codex/AGENTS.md
+//   codex       $CODEX_HOME/AGENTS.md (default ~/.codex/AGENTS.md)
 //   claude      ~/.claude/CLAUDE.md
 //   opencode    ~/.config/opencode/AGENTS.md
 // --target replaces the whole set (used by tests; never touches real files then).
@@ -29,9 +29,11 @@ export const BUDGET_BYTES = 3072;
 export const OWNER_MARK = "<!-- installed by grey-matter (global/AGENTS.md): edit the source, then reinstall -->";
 
 const H = homedir();
+// Same resolution as deploy.mjs, so global rules land beside the skills Codex loads.
+const CODEX = process.env.CODEX_HOME || join(H, ".codex");
 const KNOWN = [
   { harness: "kiro-cli", dir: join(H, ".kiro"), file: join(H, ".kiro", "steering", "AGENTS.md") },
-  { harness: "codex", dir: join(H, ".codex"), file: join(H, ".codex", "AGENTS.md") },
+  { harness: "codex", dir: CODEX, file: join(CODEX, "AGENTS.md") },
   { harness: "claude", dir: join(H, ".claude"), file: join(H, ".claude", "CLAUDE.md") },
   { harness: "opencode", dir: join(H, ".config", "opencode"), file: join(H, ".config", "opencode", "AGENTS.md") },
 ];

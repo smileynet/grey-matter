@@ -37,6 +37,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 - `adopt-project` treats skills a repo ships to its users as product: it audits them but no longer restructures them. `conformance-audit` reports grey-matter's own layout rules as not applicable on such repos.
 
 ### Fixed
+- Without the `agy` CLI, `node scripts/deploy.mjs` no longer replaces an Antigravity plugin folder it didn't install: a same-named folder or link is refused (`--force` overrides), and its own copy is marked so later runs can update it. A copy left by an earlier run has no mark yet, so update it once with `--force`. Global rules from `scripts/install-agents-md.mjs` now go to `$CODEX_HOME/AGENTS.md` when `CODEX_HOME` is set, beside the skills Codex loads.
 - Local Claude plugin audits use the active checkout rather than stale cache folders. Failed or foreign source checks preserve existing skill copies during deployment.
 - Plugin bundles retain referenced scripts/resources and required license notices when extracted away from the source checkout.
 

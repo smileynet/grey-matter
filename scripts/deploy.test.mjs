@@ -15,7 +15,7 @@ import { test, before, after, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import {
   mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, symlinkSync,
-  readdirSync, chmodSync, cpSync,
+  readdirSync, chmodSync, cpSync, lstatSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, delimiter } from "node:path";
@@ -371,6 +371,56 @@ test("agy: with ~/.gemini present and no agy CLI, the plugin is packaged and cop
     }
     assert.match(readFileSync(join(wrap, "SKILL.md"), "utf8"), /\]\(\.\.\/\.\.\/docs\/agents\/doc-conventions\.md\)/);
     assert.ok(existsSync(join(dest, "docs", "agents", "report-format.md")), "transitive documentation link is included");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("agy: without the CLI, a foreign same-named plugin directory or link is refused and kept", () => {
+  const sb = homeSandbox({ harnesses: ["kiro"] });
+  try {
+    const plugins = join(sb.home, ".gemini", "config", "plugins");
+    const dest = join(plugins, "grey-matter");
+    mkdirSync(dest, { recursive: true });
+    writeFileSync(join(dest, "plugin.json"), '{"name":"grey-matter","note":"someone else\'s"}\n');
+    let r = runWithEnv(["agy", "install", "--out", join(sb.home, "agy-out")], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.match(r.stdout, /refused .*grey-matter.*--force/);
+    assert.equal(readFileSync(join(dest, "plugin.json"), "utf8"), '{"name":"grey-matter","note":"someone else\'s"}\n');
+    assert.equal(existsSync(join(dest, "skills")), false);
+
+    rmSync(dest, { recursive: true });
+    const elsewhere = join(sb.home, "linked-plugin");
+    mkdirSync(elsewhere);
+    writeFileSync(join(elsewhere, "keep.txt"), "keep\n");
+    symlinkSync(elsewhere, dest);
+    r = runWithEnv(["agy", "install", "--out", join(sb.home, "agy-out")], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.match(r.stdout, /refused .*grey-matter.*--force/);
+    assert.ok(lstatSync(dest).isSymbolicLink(), "the link is kept");
+    assert.equal(readFileSync(join(elsewhere, "keep.txt"), "utf8"), "keep\n");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("agy: without the CLI, the deployer replaces only its own earlier copy, or anything with --force", () => {
+  const sb = homeSandbox({ harnesses: ["kiro"] });
+  try {
+    const dest = join(sb.home, ".gemini", "config", "plugins", "grey-matter");
+    mkdirSync(dirname(dest), { recursive: true });
+    const out = join(sb.home, "agy-out");
+    assert.equal(runWithEnv(["agy", "install", "--out", out], sb.env).status, 0);
+    writeFileSync(join(dest, "stale.txt"), "from an older deploy\n");
+    const again = runWithEnv(["agy", "install", "--out", out], sb.env);
+    assert.equal(again.status, 0, again.stdout);
+    assert.doesNotMatch(again.stdout, /refused/);
+    assert.equal(existsSync(join(dest, "stale.txt")), false, "its own copy is replaced whole");
+    assert.ok(existsSync(join(dest, "skills", "orient", "SKILL.md")));
+
+    rmSync(dest, { recursive: true });
+    mkdirSync(dest);
+    writeFileSync(join(dest, "foreign.txt"), "x\n");
+    const forced = runWithEnv(["agy", "install", "--out", out, "--force"], sb.env);
+    assert.equal(forced.status, 0, forced.stdout);
+    assert.equal(existsSync(join(dest, "foreign.txt")), false);
+    assert.ok(existsSync(join(dest, "plugin.json")));
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
