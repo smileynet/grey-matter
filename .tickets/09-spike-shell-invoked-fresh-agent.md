@@ -43,3 +43,21 @@ harness).
 
 - [ ] A written finding on when to use a shell-invoked harness CLI (kiro-cli/codex/claude -p) for a fresh-context read vs a subagent, with tradeoffs (isolation, cost, portability, output capture)
 - [ ] Decision reflected where fresh-context reads are specified (retro step 2, and any similar), or explicitly deferred
+
+## Re-triage (2026-10-29)
+
+Most of this is now answered by the critic work, so the remaining job is to write it
+down, not to spike it:
+
+- [proposal 13](../docs/agents/proposals/13-dashboard-critics.md) runs each critic in a
+  fresh context, "a subagent where the harness has them".
+- [proposal 14](../docs/agents/proposals/14-critic-model-spike.md) (P3) and
+  [harnesses.md](../docs/agents/harnesses.md) record when a subagent is not enough: Kiro
+  subagents cannot take a model, and a spawn without an explicit model inherits the
+  parent's. There the critic runs as a top-level CLI call instead.
+- `harnesses.md` already has the non-interactive invocation for each CLI
+  (`claude -p`, `codex exec`, `kiro-cli chat --no-interactive`, `opencode`).
+
+Next step: state the rule (subagent by default; a separate CLI session when the harness
+cannot pin the subagent's model or a different harness must do the read) in
+`harnesses.md`, point `retro` step 2 at it, and close.

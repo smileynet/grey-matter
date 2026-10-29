@@ -69,3 +69,14 @@ real release.
 - [ ] release run end-to-end live in a throwaway repo with real git+gh (changelog promoted, `[Unreleased]` emptied, annotated tag, notes match; dirty-tree safe)
 - [ ] release composition verified: invokes changelog + readme via the Skill tool in kiro-cli and codex
 - [ ] Dogfooding noted: cutting v0.2.0 via the release skill counts as spikes 1+3
+
+## Re-triage (2026-10-29)
+
+Partly dogfooded. The `release` skill drove grey-matter 0.2.0 and tkt 0.5.0 through
+prepare, verify and stage on 2026-10-28/29 (review commit `6b983fc`, audit
+[2026-10-29](../docs/agents/research/final-release-audit-20261029.md)). Its changelog
+output went into the release notes but was not scored against a gold changelog, and
+publication has not happened.
+
+Activate when the staged pair is published: score the 0.2.0 notes against a hand-written
+gold list (spike 1), record the publish run as spike 3, then run spikes 2 and 4.
