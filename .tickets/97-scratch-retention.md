@@ -48,6 +48,9 @@ When closing a ticket, clean up its scratch and build artifacts:
 - **Keep a reasonably sized history**: the latest few attempts of each kind, plus any
   failed or cited attempt still needed, rather than everything or nothing.
 
+tkt states the same rule in its own close workflow (tkt ticket 229), since tkt ships
+standalone.
+
 Keep the mechanism light (workflow-guidance recommendation 7: improve existing files
 before adding machinery). Scope can be carried by the name (`t97-…`, `release-0.3-…`,
 `shared-<slug>-…`) plus a one-line note for anything kept past a close, in the place

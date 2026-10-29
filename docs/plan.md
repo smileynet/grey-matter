@@ -88,7 +88,7 @@ first, and only on the owner's word. Ticket ids are per repo.
 | --- | --- | --- |
 | A. Native epics, owners and labels | 04 | 193–200 |
 | B. Agents can trust what tkt reports | 98 | 138, 127, 143, 144, 151, 153, 176, 177 |
-| C. Safe setup and ticket lifecycle | 82, 85, 88, 97 | 190, 163, 164, 165, 145, 202, 66, 159, 227 (cancelled status, ADR 0004) |
+| C. Safe setup and ticket lifecycle | 82, 85, 88, 97 (artifact cleanup at close) | 190, 163, 164, 165, 145, 202, 66, 159, 227 (cancelled status, ADR 0004), 229 (cleanup in tkt-work) |
 | D. A dashboard that checks itself | 90, 92, 109 (already on main: 100) | |
 | E. Workflow guidance (ticket 101) | 102, 103, 104, 105, 106, 107, 108 | 177 (evidence limits) |
 | Small fixes | 20, 44 | |
