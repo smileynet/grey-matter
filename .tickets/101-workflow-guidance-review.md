@@ -49,6 +49,6 @@ its experimental tools or metric thresholds; it says itself they are not justifi
 ## Acceptance criteria
 
 - [ ] Each recommendation and the lean routine has a recorded disposition and owner (table above, confirmed by the owner)
-- [ ] Accepted changes are filed as tickets or folded into existing ones, tagged for 0.3
+- [ ] Accepted changes are filed as tickets or folded into existing ones, and recorded in the 0.3 scope (`docs/plan.md`; the tag vocabulary has no release axis, so no tag was added)
 - [ ] Ticket 90 / proposal 13 and ticket 97 are updated where this review conflicts with them
 - [ ] Rejected recommendations record why
