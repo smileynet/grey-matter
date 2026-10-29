@@ -116,7 +116,7 @@ for (const root of ["docs", "skills"]) {
   const rp = join(REPO, root);
   if (isDir(rp)) walkMd(rp, mdFiles);
 }
-for (const top of ["README.md", "AGENTS.md", "GLOSSARY.md", "CHANGELOG.md", "CLAUDE.md"]) {
+for (const top of ["README.md", "AGENTS.md", "GLOSSARY.md", "CHANGELOG.md", ".claude/CLAUDE.md"]) {
   const p = join(REPO, top);
   if (isFile(p)) mdFiles.push(p);
 }

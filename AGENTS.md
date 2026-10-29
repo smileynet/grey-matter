@@ -3,7 +3,7 @@
 A customized, adapted set of agent skills derived from `mattpocock/skills`,
 reshaped for this workflow and for game-centric (not just web-app) development.
 
-This is the primary agent-instructions file. `CLAUDE.md` just points here, so every
+This is the primary agent-instructions file. `.claude/CLAUDE.md` just points here, so every
 harness reads one source.
 
 ## Vocabulary and conventions (read these first)

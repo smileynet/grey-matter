@@ -14,8 +14,15 @@ harness on this machine sees each skill exactly once, counting an installed plug
 It copies there, takes back copies it left elsewhere, and packages the Antigravity (`agy`)
 plugin when `~/.gemini` exists. It is manifest-tracked and idempotent, refuses foreign dirs,
 and takes `--dry-run`/`list`/`uninstall`/`--root`/`--project`. It also has `check` (the
-manifests match disk and tags) and `audit` (unowned dirs, and skills a harness sees twice).
-`install-skills.mjs` and `build-agy-plugin.mjs` forward to it. tkt vendors the same
+manifests match disk and tags; native manifest/content warnings fail via `--strict`) and `audit` (unowned dirs, and skills a harness sees twice).
+`install-skills.mjs` and `build-agy-plugin.mjs` forward to it.
+Use `node scripts/deploy.mjs check --profile directory` to also reject native catalog
+blockers and warnings, including a missing icon. The profile applies to the plugin,
+while its marketplace still receives strict manifest validation. When Claude is absent,
+native checks are skipped with a message. Run `check` before installing; install itself
+checks skill lint and ownership, without running native validation.
+Project guidance belongs in `.claude/CLAUDE.md` (importing `../AGENTS.md`); a root
+`CLAUDE.md` produces a strict plugin-content warning. tkt vendors the same
 file at `tools/deploy.mjs` (ticket 64), so **change the harness table here, never in a copy**. The earlier
 design is in
 [`docs/agents/proposals/03-distribution-packaging.md`](./proposals/03-distribution-packaging.md);
