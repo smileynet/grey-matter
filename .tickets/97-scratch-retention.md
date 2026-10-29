@@ -23,7 +23,9 @@ telling agents when to remove it. Add a retention rule to the existing owners:
 1. Name scratch for its ticket (`ticketNNN-…` or `tNN-…`).
 2. On ticket close, promote what is worth keeping into tracked docs or evidence,
    then delete the ticket's scratch. Record the outcome in the Resolution.
-3. When a numbered rerun (`-v5`, `-v6`) passes, delete the earlier versions.
+3. When a numbered rerun (`-v5`, `-v6`) passes, promote the evidence that matters first,
+   then delete the earlier versions. Keep any failed attempt a recovery or a release record
+   still needs (ticket 106).
 4. Scratch that other tools depend on (for example files hard-linked into a
    simulator) is marked and excluded from sweeps.
 5. `curate-docs` lists scratch older than 14 days with no open ticket as orphaned.
@@ -41,3 +43,8 @@ Likely owners: `skills/meta/curate-docs`, `skills/meta/init-project` (the Scratc
 note), the tkt close flow (`tkt-work` / `reconcile-tickets`), and
 `repository-artifact-hygiene` for where promoted evidence goes. Deletion stays
 behind the project's normal authorization; the rule tells agents what to propose.
+
+## Scope change (2026-10-29, tickets 101 and 106)
+
+Rule 3 now keeps failed attempts that recovery or release evidence still needs. Source:
+workflow-guidance recommendation 7, high confidence against overwriting records.

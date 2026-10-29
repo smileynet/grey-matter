@@ -27,8 +27,19 @@ cross-family option) before wiring the dispatch. Evidence: [critic-model-selecti
 ## Acceptance criteria
 
 - [ ] Both critics catch at least 8 of 10 seeded defects and return CLEAN on the worked example, with the catch rate recorded here.
-- [ ] `delivery-dashboard` step 5 dispatches both critics read-only in a fresh context and loops until no actionable findings remain.
+- [ ] Before wiring, the adoption criterion is set in advance: the critics are adopted into `delivery-dashboard` step 6 (Check, open and hand back) only if their seeded-defect catch beats the author's own checklist pass on the same seeds; the comparison is recorded here.
+- [ ] If adopted, step 6 runs the critics read-only in a fresh context when an entry claims shipped or live work or the owner asks, not on every entry by default; a critic that can't read its input returns UNABLE TO REVIEW (ticket 92 item 3).
 - [ ] `wrap-session` updates a recorded dashboard and `orient` surfaces its open asks.
 - [ ] `conformance-audit` reports checker errors as safe-tier and critic findings as judgment-tier.
 - [ ] The critic model table is in `docs/agents/harnesses.md` with its verification date and official sources, and every critic result records the model and effort it ran on (after the owner decides the Claude and OpenAI preference lists in proposal 13).
 - [ ] `node scripts/check-repo.mjs` passes.
+
+## Scope change (2026-10-29, ticket 101)
+
+The workflow-guidance review (recommendations 6 and 9) found that extra reviewers and QA
+added no distinct faults in several small screens, while qualified checks did catch real
+gaps. So the critics must earn their place: they are qualified first (positive control on
+the worked example, negative controls from seeded defects, unable-to-review kept apart from
+CLEAN) and adopted only against an advance criterion. The "loop until no findings on every
+entry" default is replaced by conditional dispatch. Step numbers follow the skill after
+ticket 100 (check is now step 6).

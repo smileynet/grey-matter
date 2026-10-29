@@ -33,3 +33,12 @@ CLI's release tag or say the CLI must be upgraded. Document the choice in sync.
 
 - [ ] A fixture where pack skills use a flag the installed CLI lacks is reported before deploy
 - [ ] sync documents whether to pin the tkt pack to the installed CLI's tag or upgrade the CLI
+- [ ] `verify-tkt-usage` records the CLI identity it checked (version and build hash) and reruns when that identity, the pack commit or the command changes; a stored result is reused only when all of them match
+
+## Scope change (2026-10-29, ticket 101)
+
+Workflow-guidance recommendation 5 (high confidence against unbound reuse): a stored
+verification result is only valid for the commit, command, working directory, environment
+and executable it ran against. Today `verify-tkt-usage` reruns only when the tkt version
+changes, which is how this ticket's drift went unnoticed. Pairs with tkt ticket 153
+(stale-binary guard).

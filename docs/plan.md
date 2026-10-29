@@ -77,6 +77,26 @@ gates, tkt CI provenance re-read). tkt's publication plan passes read-only. Publ
 waits for an explicit request; recheck crates.io, artifact retention and the changelog
 merge first ([publication commands](https://github.com/smileynet/grey-matter/blob/codex/stage-grey-matter-020-tkt-050-20261029/docs/agents/releases/20261029/publication.md)).
 
+## Next release scope: grey-matter 0.3.0 and tkt 0.6.0
+
+Approved 2026-10-29 from the
+[scope review](https://claude.ai/artifact/NbGTVyVy3Qgsw5YpXJqXE5) and the workflow-guidance
+review (ticket 101). The versions are proposed; the staged 0.2.0 / 0.5.0 pair publishes
+first, and only on the owner's word. Ticket ids are per repo.
+
+| Theme | grey-matter tickets | tkt tickets |
+| --- | --- | --- |
+| A. Native epics, owners and labels | 04 | 193–200 |
+| B. Agents can trust what tkt reports | 98 | 138, 127, 143, 144, 151, 153, 176, 177 |
+| C. Safe setup and ticket lifecycle | 82, 85, 88, 97 | 190, 163, 164, 165, 145, 202, 66, 159, 227 (cancelled status, ADR 0004) |
+| D. A dashboard that checks itself | 90, 92, 109 (already on main: 100) | |
+| E. Workflow guidance (ticket 101) | 102, 103, 104, 105, 106, 107, 108 | 177 (evidence limits) |
+| Small fixes | 20, 44 | |
+
+Already on main for these versions: grey `bca9a2a` and `734c5ee`, tkt `752b14c` and
+`dd559e5`. Land tkt 138 before theme A's fields so they declare themselves in the
+manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 227.
+
 ## Parked work
 
 These are existing backlog items, not newly approved release scope. Audit 70 records
