@@ -58,11 +58,16 @@ Passing evidence for the current pair:
   previous-release-to-Codex upgrade probe (53 skills, foreign preserved). The tkt clone
   uses `core.autocrlf=false`, as on 10-24. Evidence archive
   `windows-evidence-20261029.zip`, sha256 `4f135c6a…db9dbf`.
+- macOS (SpaceJam, arm64, macOS 26.6.2, 2026-10-29): product gates (all 16 grey-matter
+  groups) and native gates for both under the loopback-only sandbox; all six harness
+  probe groups, using the Mac's 10-24 probes with the same retargeting. Installed Kiro
+  2.35.1 refuses an unauthenticated session, so the kiro probe ran the notarized
+  official Kiro 2.34.0 build that matches the Linux pin (recorded in `kiro-pin.json`).
+  Evidence archive `mac-evidence-20261029.zip`, sha256 `faa4e26d…85cc4021`.
 - tkt five-target build-only stage, Actions run 40822712451.
 
-Outstanding before staging: the tkt CLI-surface probe against the CI Linux binary, a
-macOS native run, the final audit, and the six receipts per product plus the index on a
-`codex/stage-*` branch.
+Outstanding before staging: the tkt CLI-surface probe against the CI Linux binary, the
+final audit, and the six receipts per product plus the index on a `codex/stage-*` branch.
 
 ## Parked work
 
