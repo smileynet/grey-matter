@@ -14,7 +14,7 @@ Typecheck and run the relevant test file after each slice; run the full test sui
 
 When the ticket's acceptance criteria are met, call the Skill tool with "code-review" to review the work. Code-review files its findings as tickets. Fix only the findings that block *this* ticket's acceptance criteria before committing; the rest stay as follow-up tickets, don't balloon this ticket into fixing everything review surfaces.
 
-Commit to the current branch, then `tkt close` the ticket with its resolution and acceptance criteria checked. (Multi-ticket builds on an integration branch are `implement-spec`'s job, not this one.)
+Commit to the current branch. Before `tkt close`, promote, keep or delete the ticket's scratch and build artifacts per [repository-artifact-hygiene](../../meta/repository-artifact-hygiene/SKILL.md#at-ticket-close), and say which in the resolution. Then `tkt close` the ticket with its resolution and acceptance criteria checked. (Multi-ticket builds on an integration branch are `implement-spec`'s job, not this one.)
 
 If the project keeps a status dashboard, call the Skill tool with "delivery-dashboard" after
 closing the ticket: it adds the ticket's entry and refreshes the Plan tab.

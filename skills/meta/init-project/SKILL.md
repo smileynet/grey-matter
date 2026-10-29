@@ -55,7 +55,9 @@ Each of these is created only if absent; if it already exists, leave it and move
 Create `.scratch/` as the project-local home for non-committed working files (handoffs,
 agent notes, throwaway output) and gitignore it. Add a short `## Scratch` note to
 `AGENTS.md` stating the rule (if not already present): nothing in `.scratch/` is durable;
-anything worth keeping goes in committed `docs/` or a ticket.
+anything worth keeping goes in committed `docs/` or a ticket, and at ticket close scratch
+and build artifacts are promoted, kept with a lifecycle scope, or deleted (the
+`repository-artifact-hygiene` skill's "At ticket close" rule).
 
 Create `.references/` as the place to clone prior-art and reference material. Gitignore
 its *contents* but commit a `.references/README.md` (`.references/*` then

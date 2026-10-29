@@ -24,7 +24,7 @@ strategy behind this bucket.
 - [compass](./compass/SKILL.md): the router/index over the whole set, for a human choosing a tool or an agent unsure which to reach for.
 - [init-project](./init-project/SKILL.md): the precondition, configure a repo's tkt tracker, triage tags, and doc layout for the other skills.
 - [conformance-audit](./conformance-audit/SKILL.md): audit a repo's skills/scripts/agent-guidance/docs against current grey-matter standards and apply the mechanically-safe fixes (gated).
-- [repository-artifact-hygiene](./repository-artifact-hygiene/SKILL.md): classify source assets and generated evidence, measure staged artifacts read-only, and plan storage, retention and reproducible retrieval.
+- [repository-artifact-hygiene](./repository-artifact-hygiene/SKILL.md): classify source assets and generated evidence, measure staged artifacts read-only, plan storage, retention and reproducible retrieval, and promote, keep or delete a ticket's scratch and build artifacts at close.
 - [changelog](./changelog/SKILL.md): maintain `CHANGELOG.md` with user-facing entries.
 - [readme](./readme/SKILL.md): keep `README.md` honest and current.
 - [release](./release/SKILL.md): prepare, verify and stage a versioned release (orchestrates changelog + readme + version); publish or resume only on the user's request.

@@ -1,0 +1,22 @@
+{
+  ".tickets/14-spike-harness-behavior-proofs.md": 1,
+  "docs/agents/proposals/04-crew-research-migration.md": 1,
+  "docs/agents/proposals/06-live-repo-migration-process.md": 3,
+  "docs/agents/proposals/14-critic-model-spike.md": 1,
+  "docs/agents/research/agy-plugin-conformance.md": 7,
+  "docs/agents/research/cargo-publish-source-contract-audit.md": 2,
+  "docs/agents/research/cargo-publish-source-contract.md": 1,
+  "docs/agents/research/claude-current-validation.md": 1,
+  "docs/agents/research/codex-containment-spike-20261027.md": 1,
+  "docs/agents/research/critic-model-spike-20261027.md": 1,
+  "docs/agents/research/final-plugin-agy-20261024.md": 3,
+  "docs/agents/research/final-plugin-claude-20261024.md": 1,
+  "docs/agents/research/final-plugin-codex-20261024.md": 2,
+  "docs/agents/research/final-release-audit-20261024.md": 2,
+  "docs/agents/research/harness-behavior-probes.md": 1,
+  "docs/agents/research/humanlayer-notices.md": 1,
+  "docs/agents/research/migration-process/a-herdr-protocol.md": 2,
+  "docs/agents/research/migration-process/b-sequencing-safety.md": 1,
+  "docs/agents/research/migration-process/c-handoff-orient.md": 9,
+  "docs/agents/research/registry-recovery.md": 1
+}

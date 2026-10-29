@@ -1,6 +1,6 @@
 ---
 name: repository-artifact-hygiene
-description: "Classify repository artifacts and choose storage, retention and reproducible retrieval. Use when adding source art, generated evidence, screenshots, embedded HTML, datasets or reference bundles; reviewing repository growth; or choosing ordinary Git versus LFS. Trigger: artifact hygiene, generated evidence, source assets, repository storage, LFS, report growth."
+description: "Classify repository artifacts and choose storage, retention and reproducible retrieval. Use when adding source art, generated evidence, screenshots, embedded HTML, datasets or reference bundles; reviewing repository growth; choosing ordinary Git versus LFS; or closing a ticket, to promote, keep or delete its scratch and build artifacts. Trigger: artifact hygiene, generated evidence, source assets, repository storage, LFS, report growth, scratch cleanup."
 ---
 
 # Repository Artifact Hygiene
@@ -67,6 +67,30 @@ read-only; use the user's existing authorization for subsequent changes.
 Finish when every scoped candidate has a role or explicit uncertainty, retained
 recovery inputs and a justified recommendation, with coverage and checks stated.
 
+## At ticket close
+
+Every uncommitted artifact a ticket made gets one of three outcomes before `tkt close`:
+`.scratch` files, build output, worktrees, disposable homes, and work folders outside
+the repo (`~/release-work/…`, a remote host's checkout).
+
+- **Promote** what must outlive the ticket into tracked docs or evidence, and cite the
+  tracked copy. A `.scratch` path in a Resolution or tracked doc dangles once the
+  scratch goes; the docs check fails on new ones.
+- **Keep** an item only while something still needs it, and give it a lifecycle scope:
+  the ticket(s), release or shared purpose it serves, and the condition that ends it.
+  Put the scope in the name (`t97-…`, `release-0.3-…`, `shared-<slug>-…`) and, for
+  anything kept past this close, one line in the Resolution. A shared item stays until
+  the last ticket it names closes.
+- **Delete** everything else.
+
+Keep a bounded history: the latest three attempts of each kind, plus any failed or cited
+attempt that recovery or a release record still needs. Promote before pruning.
+
+Record the outcome in the Resolution: what was promoted where, what was deleted, and
+what was kept, with its scope. Deleting files outside the repo or on another host uses
+the same authorization as any other deletion there. Items marked as relied on by another
+tool (for example files hard-linked into a simulator) are kept until that tool is done.
+
 ## Policy and ownership
 
 The inspector warns by default. `--warn-bytes N` adds a review signal, not a gate.
@@ -77,7 +101,8 @@ It does not decide purpose or install a gate. See
 
 [Report format](../../../docs/agents/report-format.md) owns offline presentation;
 [doc conventions](../../../docs/agents/doc-conventions.md) owns placement;
-[curate-docs](../curate-docs/SKILL.md) owns promotion/pruning. Use the project's
+[curate-docs](../curate-docs/SKILL.md) owns the periodic promotion/pruning sweep;
+this skill owns the close-time rule above. Use the project's
 Git workflow for commits and hooks. Do not copy their policies here.
 
 Does NOT cover GitHub account administration, general Git governance, release

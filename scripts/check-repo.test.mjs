@@ -92,6 +92,40 @@ test("link check FAILS on a broken relative link", () => {
     });
 });
 
+// (invariant: closure evidence cites tracked files, not .scratch — ticket 97)
+test("scratch check FAILS on a new .scratch citation in a doc", () => {
+  const doc = join(REPO, "docs", "agents", "tkt-conventions.md");
+  withSeededFile(doc,
+    (t) => t + "\n\nSeeded: see `.scratch/t97-run/result.json`.\n",
+    () => {
+      const r = runCheck("check-docs-consistency.mjs");
+      assert.equal(r.status, 1, "expected nonzero on a new .scratch citation");
+      assert.match(r.out, /tkt-conventions\.md: cites \.scratch \(\.scratch\/t97-run\/result\.json\)/);
+    });
+});
+
+test("scratch check FAILS on a .scratch citation in a ticket's Resolution", () => {
+  const ticket = join(REPO, ".tickets", "100-dashboard-plan-tab.md");
+  withSeededFile(ticket,
+    (t) => t + "\nEvidence log: `.scratch/t100-shots/plan.png`\n",
+    () => {
+      const r = runCheck("check-docs-consistency.mjs");
+      assert.equal(r.status, 1, "expected nonzero on a .scratch citation in closure evidence");
+      assert.match(r.out, /100-dashboard-plan-tab\.md: cites \.scratch/);
+    });
+});
+
+test("scratch check ignores placeholders and a ticket's planning text", () => {
+  const doc = join(REPO, "docs", "agents", "tkt-conventions.md");
+  const ticket = join(REPO, ".tickets", "102-risk-scaled-review.md");
+  withSeededFile(doc, (t) => t + "\n\nName scratch `.scratch/ticketNNN-notes/` or `.scratch/<slug>/`.\n", () => {
+    withSeededFile(ticket, (t) => t.replace("## Acceptance criteria", "Clean up `.scratch/t102-draft/` at close.\n\n## Acceptance criteria"), () => {
+      const r = runCheck("check-docs-consistency.mjs");
+      assert.equal(r.status, 0, r.out);
+    });
+  });
+});
+
 // (invariant: deployer ownership safety — proven by the dedicated isolated suite)
 test("installer ownership regression suite passes (isolated temp roots)", () => {
   const r = spawnSync(node, ["--test", join(SCRIPTS, "deploy.test.mjs")],

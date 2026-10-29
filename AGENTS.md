@@ -42,7 +42,9 @@ handoff documents, agent notes, throwaway output. One consistent location per pr
 so a fresh agent knows where to look.
 
 Nothing in `.scratch/` is durable or shared; anything worth keeping is promoted to committed `docs/agents/` reference or a tkt ticket
-(see `docs/agents/doc-conventions.md`).
+(see `docs/agents/doc-conventions.md`). At ticket close, scratch and build artifacts are promoted,
+kept with a lifecycle scope, or deleted: see
+[repository-artifact-hygiene](skills/meta/repository-artifact-hygiene/SKILL.md#at-ticket-close).
 
 ## References
 

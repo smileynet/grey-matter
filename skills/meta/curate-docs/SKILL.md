@@ -33,7 +33,7 @@ Flag for removal, and these are the usual causes:
 - **Superseded**: a shipped skill or a newer doc now covers it; the old note is a stale duplicate.
 - **Overtaken by a decision**: an ADR or a ruling settled the question the note was exploring; keep the decision, drop the exploration.
 - **A deferral masquerading as a note**: "revisit later" with no durable content, this is a tkt ticket (`--status backlog`), not a doc.
-- **Orphaned scratch**: `.scratch/` material whose task is long done and that was never promoted; it was always disposable.
+- **Orphaned scratch**: `.scratch/` material, build output or outside work folders whose lifecycle scope has ended, or that is older than 14 days with no open ticket naming it; it was always disposable. List it for deletion after checking nothing cites it (the [close rule](../repository-artifact-hygiene/SKILL.md#at-ticket-close) owns what to promote first).
 
 ## Process
 

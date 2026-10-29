@@ -91,7 +91,9 @@ skill/doc, a moved pointer) passes the consistency invariants and link checks, a
 `tkt validate` is clean. Then **confirm the working tree is clean** (`git status --porcelain`):
 a non-empty tree at wrap time means finished work is stranded unpushed — commit and push it
 (or say why it's deliberately left), because the "commit + push after every task" rhythm means
-the next session should find nothing dangling. Then report three things: the **board** delta
+the next session should find nothing dangling. Likewise list uncommitted artifacts this
+session left (scratch, build output, outside work folders) whose lifecycle scope has ended, and
+apply the [close rule](../repository-artifact-hygiene/SKILL.md#at-ticket-close) to them. Then report three things: the **board** delta
 (tickets created / updated, what the frontier now surfaces), the **environment** changes
 **landed** this session (including any rehydration-index fix), and what was **deferred** to a
 ticket and why.

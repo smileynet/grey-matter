@@ -13,7 +13,8 @@ help you *build software* (engineering), *think and communicate* (productivity),
 Current members of `skills/meta/`:
 
 - **repository-artifact-hygiene**: read-only artifact classification and storage,
-  retention and retrieval planning. Callable during work or for a requested audit;
+  retention and retrieval planning, and the close-time rule for a ticket's scratch and
+  build artifacts. Callable during work, at ticket close or for a requested audit;
   report format, placement, Git operations and account administration stay separate.
 
 - **init-project**: the precondition, sets up a repo's tkt tracker, triage tags, and doc

@@ -7,8 +7,10 @@
 //      (The maintenance-skills "set-equality lint".)
 //   2. LINKS: every real relative markdown link in the committed docs/skills tree
 //      resolves to a file that exists (catches the ../GLOSSARY.md-class bug, ticket 30).
+//   3. SCRATCH: no new .scratch/ citation in docs, skills or a ticket's Resolution
+//      (ticket 97); existing ones are listed in scripts/scratch-citations-baseline.json.
 //
-// Read-only: it opens files and checks the filesystem; it mutates nothing.
+// Read-only unless --write-scratch-baseline is passed, which rewrites the baseline.
 // Exit 0 = consistent, 1 = at least one problem (details on stderr).
 // Run:  node scripts/check-docs-consistency.mjs
 //
@@ -20,7 +22,7 @@
 //  - A bucket README's intro sentence may mention compass/curate-docs navigationally;
 //    the set-equality check only counts links under the "## ...invoked" tier sections.
 
-import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { join, dirname, resolve, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -143,6 +145,43 @@ for (const file of mdFiles) {
 }
 
 // =============================================================================
+// Check 3 — closure evidence and docs cite tracked files, not .scratch (ticket 97)
+// =============================================================================
+// .scratch is deleted at ticket close, so a citation into it dangles. Docs count every
+// citation; a ticket counts only its Resolution (closure evidence), not planning text that
+// names what to clean up. Citations that predate the rule are recorded in the baseline,
+// never rewritten; only new ones fail. Placeholders (`ticketNNN-…`, `<name>`) are examples.
+const BASELINE = join(REPO, "scripts", "scratch-citations-baseline.json");
+const SCRATCH_RE = /\.scratch\/[A-Za-z0-9_][^\s`'")\]]*/g;
+const isPlaceholder = (p) => /[<>{}*…]|NNN/.test(p);
+function scratchCitations(file) {
+  let text = readFileSync(file, "utf8");
+  if (relative(REPO, file).startsWith(".tickets")) {
+    const at = text.search(/^## Resolution/m);
+    text = at < 0 ? "" : text.slice(at);
+  }
+  return [...text.matchAll(SCRATCH_RE)].map((m) => m[0]).filter((p) => !isPlaceholder(p));
+}
+const ticketDir = join(REPO, ".tickets");
+const citing = mdFiles.concat(isDir(ticketDir) ? readdirSync(ticketDir).filter((f) => f.endsWith(".md")).map((f) => join(ticketDir, f)) : []);
+const counts = {};
+for (const file of citing) {
+  const n = scratchCitations(file).length;
+  if (n) counts[relative(REPO, file).split("\\").join("/")] = n;
+}
+if (process.argv.includes("--write-scratch-baseline")) {
+  writeFileSync(BASELINE, JSON.stringify(counts, Object.keys(counts).sort(), 2) + "\n");
+  console.log(`wrote ${relative(REPO, BASELINE)} (${Object.keys(counts).length} files)`);
+}
+const baseline = existsSync(BASELINE) ? JSON.parse(readFileSync(BASELINE, "utf8")) : {};
+for (const [file, n] of Object.entries(counts)) {
+  if (n > (baseline[file] ?? 0)) {
+    const example = scratchCitations(join(REPO, file)).at(-1);
+    problems.push(`${file}: cites .scratch (${example}); promote it into a tracked file and cite that`);
+  }
+}
+
+// =============================================================================
 if (problems.length) {
   console.error(`docs-consistency check FAILED (${problems.length} problem(s)):`);
   for (const p of problems) console.error("  - " + p);
@@ -150,5 +189,6 @@ if (problems.length) {
 }
 console.log(
   `docs-consistency check OK: ${skills.length} skills — each listed once in its bucket ` +
-  `README and mentioned in compass; all real relative links in docs/ and skills/ resolve.`,
+  `README and mentioned in compass; all real relative links in docs/ and skills/ resolve; ` +
+  `no new .scratch citations.`,
 );

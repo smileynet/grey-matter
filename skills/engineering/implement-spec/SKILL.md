@@ -34,7 +34,7 @@ Communicate between agents sparsely, via **context pointers** (spec-slug, ticket
 
 7. Once all tickets are implemented, call the Skill tool with `code-review` on the integration branch. Code-review files its findings as tickets; fix the ones that block the spec now, in a single implementer subagent, and leave the rest as follow-up tickets.
 
-8. **Verify before closing.** For each ticket, confirm its acceptance criteria actually pass on the integration branch, don't trust an implementer's self-report. Then `tkt close` each with its resolution and ACs checked. (If this repo treats PRs as a request surface, which is off by default, mark the draft PR ready instead; see the issue-tracker doc.) Report the integration branch.
+8. **Verify before closing.** For each ticket, confirm its acceptance criteria actually pass on the integration branch, don't trust an implementer's self-report. Before closing, promote, keep or delete each ticket's scratch and build artifacts per [repository-artifact-hygiene](../../meta/repository-artifact-hygiene/SKILL.md#at-ticket-close). Then `tkt close` each with its resolution and ACs checked. (If this repo treats PRs as a request surface, which is off by default, mark the draft PR ready instead; see the issue-tracker doc.) Report the integration branch.
 
 9. Clean up the implementer worktrees. Detect merged branches by content, not ancestry: a squash-merge looks unmerged by ancestry, so a naive "fully-merged only" sweep leaves worktrees (and their build artifacts) dangling.
 

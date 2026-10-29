@@ -7,6 +7,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 ## [Unreleased]
 
 ### Added
+- Closing a ticket now cleans up after it: `repository-artifact-hygiene` says what to promote into tracked files, what to keep (only with a stated lifecycle and a bounded history of attempts) and what to delete, including build output and work folders outside the repo. `implement`, `implement-spec`, `wrap-session` and `curate-docs` follow it, and the docs check rejects new citations of `.scratch` files.
 - `delivery-dashboard` adds an entry after every closed ticket, showing the feature with a screenshot, mock or wireframe, and a Plan tab listing every ticket, open work first, with progress and what comes next. A snapshot script fills the tab from tkt, and the checker requires a visual on each ticket entry.
 - `data-modeling` helps design and review data so invalid states can't be represented, and says when a simpler type is the better choice. `codebase-design` calls it when an interface carries data, and `code-review` uses its review lens when a change touches types or schemas.
 - `repository-artifact-hygiene` separates source assets from generated evidence, measures staged Git artifacts read-only, and helps choose storage and recovery without automatic migration or deletion.
