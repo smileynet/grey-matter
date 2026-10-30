@@ -1,7 +1,7 @@
 ---
 id: "103"
 title: "Standing rules name outcome classes and report what remains unknown"
-status: open
+status: done
 blocked_by: []
 priority: high
 tags: ["kind:enhancement"]
@@ -24,6 +24,10 @@ it under budget and redeploy it once.
 
 ## Acceptance criteria
 
-- [ ] The global standing rule names the outcome classes and asks for unknowns
-- [ ] The reporting guidance covers "not demonstrated here" and counting distinct faults
-- [ ] check-repo group 6 (global AGENTS.md budget) passes and the installed copies are refreshed
+- [x] The global standing rule names the outcome classes and asks for unknowns
+- [x] The reporting guidance covers "not demonstrated here" and counting distinct faults
+- [x] check-repo group 6 (global AGENTS.md budget) passes and the installed copies are refreshed
+
+## Resolution (2026-10-30)
+
+Done in 85ad76a. global/AGENTS.md 'Done means evidenced' now names the outcome classes (pass, assertion failure, skip, infrastructure error, timeout, survivor), says exit 0 is not a pass, and asks what remains unknown (1325 B of 3072). docs/agents/doc-conventions.md Human-facing writing adds 'Report evidence by outcome class': missing command as infrastructure error, unmeasured gain as 'not demonstrated here', distinct faults counted apart from assertions and repeats. Installed to all four harness files. No artifacts kept.
