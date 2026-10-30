@@ -45,6 +45,12 @@ For prose a person reads (README, changelog, PR bodies, docs):
   preserving an established project voice. A personal article, PR, procedure,
   fictional scene, and agent instruction have different purposes; one narrative
   pattern or visual treatment does not govern them all.
+- **Report evidence by outcome class.** Name what each check actually returned (pass,
+  assertion failure, skip, infrastructure error, timeout, survivor) rather than "green";
+  a missing command counted as a kill is an infrastructure error. State what remains
+  unknown. A gain nobody measured is "not demonstrated here", not a benefit. Count
+  distinct faults separately from failing assertions and repeats of one fault: ten
+  red tests from one bug are one fault.
 
 Judge AI tells **in clusters, not singly**. One em dash means nothing. Em dashes
 plus forced triples plus "robust", "seamless", "leverage", or "delve" plus an
