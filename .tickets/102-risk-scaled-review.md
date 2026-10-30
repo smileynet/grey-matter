@@ -1,7 +1,7 @@
 ---
 id: "102"
 title: "implement and implement-spec scale review to risk, with acceptance derived from the contract"
-status: open
+status: done
 blocked_by: []
 priority: high
 tags: ["kind:enhancement"]
@@ -31,7 +31,11 @@ and blast radius".
 
 ## Acceptance criteria
 
-- [ ] `implement` and `implement-spec` state when the full review runs and when a spec check is enough, with the consequential cases listed
-- [ ] The start step names the observable outcome and the unresolved assumption
-- [ ] Review expectations come from the ticket or spec; the skill says so
-- [ ] `node scripts/check-repo.mjs` passes
+- [x] `implement` and `implement-spec` state when the full review runs and when a spec check is enough, with the consequential cases listed
+- [x] The start step names the observable outcome and the unresolved assumption
+- [x] Review expectations come from the ticket or spec; the skill says so
+- [x] `node scripts/check-repo.mjs` passes
+
+## Resolution (2026-10-30)
+
+Done in af94bfc. implement gains a Review depth section: code-review for consequential changes (stateful behavior, public interface, release or deploy tooling, security, hard to reverse; unsure counts as consequential), a spec check listing each criterion met/unmet/untested otherwise. Its start step names the observable outcome and main unresolved assumption and checks the assumption first. implement-spec's implementers do the same and its review step follows implement's Review depth by the riskiest ticket. Both write expectations from the ticket or spec before reading the diff. compass and CHANGELOG updated. No scratch artifacts kept; gate log deleted.
