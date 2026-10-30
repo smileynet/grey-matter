@@ -26,7 +26,7 @@ The route most work travels. You have an idea and want it built. The tracker thr
      - **implement-spec** for the whole spec in one run. It reads the tickets as a **task graph**, runs implementer subagents across the ready **frontier** in parallel, and lands everything on one **integration branch**. Reach for it when you'd rather orchestrate the build than drive each ticket yourself.
    - **No** -> **implement** right here, in the same context window.
 
-   Either way, the code gets built by driving **tdd** (one red-green slice at a time) and closes out with **code-review**, a two-axis review (Standards + Spec) of the diff that **files its findings as tkt tickets**. Reach for **tdd** on its own to build a concrete behaviour test-first without a full spec, and **code-review** on its own to review a branch or PR against a fixed point.
+   Either way, the code gets built by driving **tdd** (one red-green slice at a time) and closes out with a review scaled to risk: **code-review**, a two-axis review (Standards + Spec) that **files its findings as tkt tickets**, for a consequential change, and a spec check against the ticket for a small, reversible one. Reach for **tdd** on its own to build a concrete behaviour test-first without a full spec, and **code-review** on its own to review a branch or PR against a fixed point.
 
    When the work goes up as a pull request, **pr** shapes the body: the smallest visual that shows the change, before/after evidence, and a one-way or two-way door call. It's model-invoked, so the agent reaches for it whenever it writes a PR.
 

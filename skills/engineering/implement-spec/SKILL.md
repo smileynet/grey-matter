@@ -23,6 +23,7 @@ Communicate between agents sparsely, via **context pointers** (spec-slug, ticket
 4. For each ready ticket, run an **implementer subagent** in its own worktree on its own branch. Each one:
    - confirms its worktree is based on the **integration branch** tip before starting, and resets onto it if not;
    - `tkt claim`s its ticket;
+   - states the ticket's observable outcome and main unresolved assumption, and checks the assumption first;
    - calls the Skill tool with `tdd` to build it;
    - merges the integration branch tip into its own branch before reporting done.
 
@@ -32,7 +33,7 @@ Communicate between agents sparsely, via **context pointers** (spec-slug, ticket
 
 6. Recompute the frontier (`tkt ready`); fan out implementers for the newly-unblocked tickets (or take the next one, sequentially).
 
-7. Once all tickets are implemented, call the Skill tool with `code-review` on the integration branch. Code-review files its findings as tickets; fix the ones that block the spec now, in a single implementer subagent, and leave the rest as follow-up tickets.
+7. Once all tickets are implemented, review the integration branch at the depth its riskiest ticket calls for, per implement's [review depth](../implement/SKILL.md#review-depth): `code-review` for a consequential change, otherwise a spec check of each ticket. Expectations come from the spec and tickets, written before reading the diff. Code-review files its findings as tickets; fix the ones that block the spec now, in a single implementer subagent, and leave the rest as follow-up tickets.
 
 8. **Verify before closing.** For each ticket, confirm its acceptance criteria actually pass on the integration branch, don't trust an implementer's self-report. Before closing, promote, keep or delete each ticket's scratch and build artifacts per [repository-artifact-hygiene](../../meta/repository-artifact-hygiene/SKILL.md#at-ticket-close). Then `tkt close` each with its resolution and ACs checked. (If this repo treats PRs as a request surface, which is off by default, mark the draft PR ready instead; see the issue-tracker doc.) Report the integration branch.
 
