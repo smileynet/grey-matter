@@ -1,6 +1,15 @@
 # Proposal 12: managed guidance blocks and a stale/conflict check for agent instructions
 
-**Status:** accepted 2026-10-27. **Scope:** `scripts/install-agents-md.mjs`, a new read-only
+**Status:** accepted 2026-10-27; implemented 2026-10-29 (ticket 88), with three choices made
+during the build:
+
+- Rule ids live in `global/conflict-pairs.json`, not in `global/AGENTS.md`, so the always-on file
+  pays nothing for them; an override marker names a pair id.
+- The Kiro steering target uses a block like the others: one primitive, and a block alone in a
+  file behaves like whole-file ownership.
+- Commands resolve on the host running the check, and the output says so.
+
+**Scope:** `scripts/install-agents-md.mjs`, a new read-only
 `scripts/check-guidance.mjs`, and the agent-guidance class of `conformance-audit`, `sync` and
 `adopt-project`.
 

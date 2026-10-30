@@ -150,6 +150,16 @@ refresh. Preserve existing copies when a refresh fails.
    A `below-ceiling`, `unverified`, `not-authenticated` or `unavailable` line is a follow-up, not a
    failure. See [harnesses](../../../docs/agents/harnesses.md) ("Critic model").
 
+   Then refresh the standing rules and check this machine's guidance for rot (read-only):
+
+   ```bash
+   node scripts/install-agents-md.mjs
+   node scripts/check-guidance.mjs
+   ```
+
+   A refused target (a hand-edited block or a generated file) and each guidance finding are
+   follow-ups for the user; don't `--force` without them.
+
 7. **Report the delta.** One compact summary, most-pressing-first:
 
    - **Commits pulled** (`git log --oneline <before>..HEAD`).
@@ -160,6 +170,7 @@ refresh. Preserve existing copies when a refresh fails.
    - **Repo check**: green, or exactly what `check-repo.mjs` flagged.
    - **Agent shell**: `ok`, `n/a`, or each `probe-agent-shell.mjs` finding with its fix.
    - **Critic models**: each harness's `probe-critic-model.mjs` line (model it ran on, ceiling, auth).
+   - **Guidance**: standing-rules install result, and each `check-guidance.mjs` finding.
    - **Follow-ups**: e.g. "run `reconcile-tickets`", "fix the drift in skill X", "`--project`
      install for Crush in repo Y".
 

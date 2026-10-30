@@ -70,7 +70,10 @@ is a current rehydration index rather than replacing it.
 ### 4. Track what the installed skills need
 
 Each skill that carries a convention gets its config set up and a pointer from
-`AGENTS.md`. Set up only what is installed:
+`AGENTS.md`. With a grey-matter checkout at hand, keep those pointer lines in one managed block,
+so later runs update them without touching the repo's own text: write them to a file in
+`.scratch/`, then `node scripts/install-agents-md.mjs --name pointer --source <that file> --target AGENTS.md`.
+Set up only what is installed:
 
 - **tkt** (ticket tracker): run `tkt init` if `.tickets/` is absent; it writes the
   tracking block into `AGENTS.md`. Point at `docs/agents/tkt-conventions.md` for the tag

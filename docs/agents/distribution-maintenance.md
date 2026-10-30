@@ -27,7 +27,7 @@ file at `tools/deploy.mjs` (ticket 64), so **change the harness table here, neve
 design is in
 [`docs/agents/proposals/03-distribution-packaging.md`](./proposals/03-distribution-packaging.md);
 the user-level standing rules (`global/AGENTS.md`, no steering) install with
-`node scripts/install-agents-md.mjs` (owner-marked, never clobbers a foreign file);
+`node scripts/install-agents-md.mjs` (a managed block; text outside it is never touched);
 per-harness deploy + test instructions are in
 [`docs/agents/harnesses.md`](./harnesses.md). Claude Code installs grey-matter as a
 plugin from this repo's own marketplace (`.claude-plugin/`). It depends on `tkt@tkt`, from
@@ -132,7 +132,8 @@ root selection (`scripts/deploy.test.mjs`), YAML syntax/core field types
 (`scripts/check-invocation-policy.mjs`), doc indexes + relative links
 (`scripts/check-docs-consistency.mjs`), ticket health (`tkt validate`), adopt-project's
 knowledge-relocation fixtures (`scripts/relocate-knowledge.test.mjs`), the global AGENTS.md
-size budget + ownership (`scripts/install-agents-md.test.mjs`), the crew-research uninstall scope
+size budget + managed blocks (`scripts/install-agents-md.test.mjs`) and the guidance check's
+fixtures (`scripts/check-guidance.test.mjs`), the crew-research uninstall scope
 (`scripts/uninstall-crew-research.test.mjs`), the repo-survey tiers (`scripts/survey-repos.test.mjs`), and the
 Claude plugin manifest (`scripts/check-plugin-manifest.mjs`: every skill bucket listed, version not
 behind the latest tag, marketplace entry present). It is

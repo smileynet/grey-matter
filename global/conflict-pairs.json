@@ -1,0 +1,11 @@
+{
+  "note": "Known opposed phrasings for check-guidance.mjs. A line matching one side in a global instructions file and the other side in a repo file is reported for judgment. A repo marks an intentional override with <!-- overrides: <id> --> on the line above. This is a lookup of known pairs, not a reading of meaning.",
+  "pairs": [
+    { "id": "done-evidenced", "a": "done means evidenced|cite the command and result", "b": "skip (the )?(tests|build|lint)|without running (the )?(tests|build|lint)|no need to (run|verify)" },
+    { "id": "minimal-code", "a": "minimal code", "b": "log (on )?(every )?(entry|exit)|wrap every call in try" },
+    { "id": "observed-beats-documented", "a": "observed beats documented", "b": "trust the docs over|the spec is always right" },
+    { "id": "commit-confirm", "a": "confirm before commit|ask before commit", "b": "commit without asking|commit automatically" },
+    { "id": "push-after-commit", "a": "push after every commit", "b": "(never|don't|do not) push" },
+    { "id": "tk-tracker", "a": "(?<!never |don't |do not )use `tk`", "b": "(never|don't|do not) use `tk`" }
+  ]
+}

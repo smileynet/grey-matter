@@ -34,7 +34,8 @@ node scripts/deploy.mjs audit        # unowned dirs, skills a harness sees twice
 
 User-level standing rules live in one short file, `global/AGENTS.md`, installed into each
 harness's global instructions file with `node scripts/install-agents-md.mjs` (`--dry-run`,
-`list`, `uninstall`; never overwrites a file it didn't install). See
+`list`, `uninstall`). It owns only a marked block, so your own rules can share the file;
+`node scripts/check-guidance.mjs` reports guidance that names dead paths, commands or skills. See
 [`docs/agents/harnesses.md`](./docs/agents/harnesses.md).
 
 Wrappers `scripts/install-skills.sh` and `scripts/install-skills.ps1` call the same

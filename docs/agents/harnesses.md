@@ -252,8 +252,14 @@ harness's global instructions file:
 | OpenCode | `~/.config/opencode/AGENTS.md` | OpenCode rules docs |
 | agy, Crush | not installed | no verified user-level rules path yet; project AGENTS.md still applies |
 
-An installed file starts with an owner marker. The installer refuses to overwrite a file
-without it (`--force` overrides), and `uninstall` removes only marked files. Evidence for the
+The installer owns only a marked block (`<!-- grey-matter:begin global rev=… -->` to
+`<!-- grey-matter:end global -->`), so the user's own rules can share the file. It appends the
+block to a file without one, replaces only the block on update, and `uninstall` removes only the
+block (and the file, if nothing else is left). It refuses a block edited by hand and a file
+another tool generates; `--force` overrides either. A whole file installed by an older version
+migrates to a block. `node scripts/check-guidance.mjs` reads these files, Kiro steering and a
+repo's `AGENTS.md`/`CLAUDE.md` for dead paths, commands, skills and steering links, generated
+files, oversize files and lines repeated across layers. Evidence for the
 no-steering decision: [kiro-steering-empirical](./research/kiro-steering-empirical.md),
 [steering-vs-agents-md-portability](./research/steering-vs-agents-md-portability.md).
 

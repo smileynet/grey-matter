@@ -118,7 +118,9 @@ developing this repo, or also consumers of what it ships (shipped artifacts usua
 root `AGENTS.md` with them). Then cut it to its job: standing rules, non-derivable gotchas, and
 navigation pointers. Delete what the environment already answers (task lists, skill lists, `--help`)
 and what has a canonical home elsewhere. **Lossless rule:** before deleting a line, confirm its
-canonical home holds it; if none does, keep it or move it there. Show the before/after size at the gate.
+canonical home holds it; if none does, keep it or move it there. Show the before/after size at the gate,
+and run `node scripts/check-guidance.mjs --repo <target> --no-global` from a grey-matter checkout before
+and after: dead paths, commands and skills it reports are reshape input, and the after run should drop them.
 
 ### 4. Seed & triage the board
 

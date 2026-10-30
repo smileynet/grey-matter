@@ -11,7 +11,9 @@
 //   3. doc indexes + links         -> scripts/check-docs-consistency.mjs
 //   4. ticket health               -> tkt validate   (skipped w/ warning if tkt absent)
 //   5. knowledge relocation        -> scripts/relocate-knowledge.test.mjs (node:test, temp git repos)
-//   6. global AGENTS.md            -> scripts/install-agents-md.test.mjs (size budget + ownership)
+//   6. agent guidance              -> scripts/install-agents-md.test.mjs (budget + managed blocks) and
+//                                     check-guidance.test.mjs (fixtures; check-guidance.mjs itself
+//                                     reads this host's files, so `sync` runs it, not this check)
 //   7. crew-research uninstall     -> scripts/uninstall-crew-research.test.mjs (fake home only)
 //   8. repo survey (portfolio)     -> scripts/survey-repos.test.mjs (temp git repos)
 //   9. Claude plugin manifest      -> scripts/check-plugin-manifest.mjs (buckets, version, marketplace)
@@ -98,7 +100,7 @@ run("3. doc indexes + relative links", node, [join(SCRIPTS, "check-docs-consiste
 // build; only structural errors — cycles, dangling deps — exit nonzero).
 run("4. ticket health (tkt validate)", "tkt", ["validate"], { optional: true });
 run("5. knowledge relocation (adopt-project)", node, ["--test", join(SCRIPTS, "relocate-knowledge.test.mjs")]);
-run("6. global AGENTS.md (budget + ownership)", node, ["--test", join(SCRIPTS, "install-agents-md.test.mjs")]);
+run("6. agent guidance (managed blocks + guidance check)", node, ["--test", join(SCRIPTS, "install-agents-md.test.mjs"), join(SCRIPTS, "check-guidance.test.mjs")]);
 run("7. crew-research uninstall scope", node, ["--test", join(SCRIPTS, "uninstall-crew-research.test.mjs")]);
 run("8. repo survey tiers (adopt-project portfolio)", node, ["--test", join(SCRIPTS, "survey-repos.test.mjs")]);
 run("9. Claude plugin manifest", node, [join(SCRIPTS, "check-plugin-manifest.mjs")]);

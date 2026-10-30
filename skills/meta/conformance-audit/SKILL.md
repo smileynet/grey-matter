@@ -66,7 +66,9 @@ When unsure which tier, it is needs-judgment. The safe tier is for the genuinely
 1. **Skills** — `SKILL.md` frontmatter, invocation policy and its sidecar, bucket/index placement.
 2. **Tool scripts** — wired into a consistency check, or dead/orphaned?
 3. **Agent guidance** — `AGENTS.md` / `CLAUDE.md` / steering: pointer-style not reference-bloated, no
-   no-ops, no duplication of a skill's job.
+   no-ops, no duplication of a skill's job, and everything it names still resolves. From a
+   grey-matter checkout, `node scripts/check-guidance.mjs --repo <target> --no-global` reads the
+   target without writing: its errors join the safe tier, its judgment findings the needs-judgment tier.
 4. **Docs & organization** — `README.md` currency, `docs/` layout, relative links, stale or duplicate
    docs.
 
