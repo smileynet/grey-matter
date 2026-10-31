@@ -30,12 +30,12 @@ The harness facts that grey-matter already holds live in [`../harnesses.md`](../
 | | kiro-cli (native) | Kiro Crew | Claude Code | Codex | agy |
 |---|---|---|---|---|---|
 | **Dispatch** | `subagent` tool; `/spawn`; or a separate `kiro-cli chat --no-interactive --agent X --model M` | `work_dispatch` (or `session_create`, then bind, then `session_send`); `spawn_run` for side tasks only | Agent tool; `claude --bg`; agent teams (experimental); desktop `start_session` | `spawn_agent`; `codex exec -C`; `codex cloud exec` (experimental) | `invoke_subagent`; `define_subagent` |
-| **Isolation** | Manual `git worktree` (no flag in 2.34, V) | Manual; the worker contract carries a `worktree_pattern` | `isolation: worktree`, `claude -w` | Worktrees managed by the app; manual in the CLI | Workspace `branch` (a worktree) |
+| **Isolation** | Manual `git worktree` (no flag in 2.34, V) | Manual; the worker contract carries a `worktree_pattern` | `isolation: worktree`, `claude -w` | Worktrees managed by the app; `codex exec --worktree` (detached HEAD, V); or manual | Workspace `branch` (a worktree) |
 | **Messaging** | Result only | Ledger `work_report` and `decision`; `session_send` | `SendMessage` to a sub-agent, teammate or session | `send_input` (v1), `send_message` (v2) | `send_message`; agents can read each other's transcripts |
 | **Ask the parent** | None documented | `work_report status=question` | Message the lead; the user is reached through the main UI | Final message (I) | "has a question" picker (interactive only) |
 | **Approvals** | The child's own config. V3: the stricter of parent and child wins. Headless runs fail fast | Autopilot is inherited; headless calls are otherwise denied | Prompts bubble to the main session; the parent's mode overrides the child's | The child inherits the parent's sandbox and approvals; headless runs fail | Inherited; prompts bubble up |
 | **Wait** | Blocks until all children finish | `monitor_start(watch="work-ledger")` | Background completion notice; `notify_when_idle` | `wait_agent(timeout_ms)` | Completion message |
-| **Limits** | None documented (an older page said 4; stale) | Sized from host memory; 3 h and 1000 tool calls per sub-agent | 20 concurrent, depth 3 | 6 threads, depth 1 (source defaults) | Depth 10 |
+| **Limits** | None documented (an older page said 4; stale) | Sized from host memory; 3 h and 1000 tool calls per sub-agent | 20 concurrent, depth 3 | Source defaults say 6 threads, depth 1; 0.166 accepted 8 and depth 2 (V) | Depth 10 |
 | **Model per child** | V2: per-stage `model`; V3: the agent file's `model`; or top-level `--model` | `session_create.model` | Yes | Yes | `flash`, `pro` or `inherit` |
 | **Native review** | Graph review loops | `accept_eval.py` | `/code-review`, `/security-review`, `TaskCompleted` hook | `codex review --base`, `/review` | Auto-mode command reviewer |
 
@@ -93,8 +93,9 @@ Sources: code.claude.com/docs/en/sub-agents, /worktrees, /agent-teams, /commands
   - v2 renames some of these and adds `list_agents` (D: `codex-rs/core/src/tools/handlers/multi_agents_spec.rs`).
 - **Custom agents.** TOML files in `~/.codex/agents/` or `.codex/agents/`. The built-in agents are `default`, `worker` and `explorer`.
 - **Limits** (D: `codex-rs/core/src/config/mod.rs`): `agents.max_concurrent_threads_per_session` defaults to 6, and `agents.max_depth` defaults to 1.
-- **Approvals.** Children inherit the parent turn's sandbox and approval settings, and an agent file cannot override them. Headless runs fail the action and report it. `codex exec` needs the bypass flag or it hangs (`harnesses.md`).
-- **Worktrees.** The desktop app manages worktrees (detached HEAD, `codex/` branches, Hand off, 15 kept by default). In the CLI, use `git worktree` plus `-C`.
+- **Approvals.** Children inherit the parent turn's sandbox and approval settings, and an agent file cannot override them. Headless runs fail the action and report it. `harnesses.md` says `codex exec` needs the bypass flag or it hangs; in 0.166 it defaulted to approval `never` and did not hang, and `--approve-for-me` let children commit without the bypass flag (V, spike).
+- **Worktrees.** The desktop app manages worktrees (detached HEAD, `codex/` branches, Hand off, 15 kept by default). In the CLI, `codex exec --worktree` makes a detached-HEAD worktree under `<drive>:/.codex/worktrees/<id>/<repo>` (V), or use `git worktree` plus `-C`.
+- **0.166 tool surface** (V: [spike results](#spike-results-codex-2026-10-31)): `spawn_agent` (`task_name`, `message`, `fork_turns` all|none, `model`, `reasoning_effort`), `wait_agent` (`timeout_ms`, default 30 s, max 1 h), `send_message`, `followup_task`, `interrupt_agent`, `list_agents`. There is no close tool.
 - **Review.** `codex review --base <b>` / `--uncommitted` / `--commit <sha>`, and `codex exec review` (V, `--help`).
 - **Native terms:** subagent, agent thread, `spawn_agent`, `wait_agent`, custom agent, worktree, Hand off.
 
@@ -174,6 +175,38 @@ Every claim is **V** unless marked. Credits were not reported in the stream, so 
 
 **Fallbacks for the reference:** P4 → status line in the summary result, and accept a lone SHA only after `git cat-file -e`; P6 abort → validate stage models before dispatch, or one process per worker; P10 PR → untested; P13 → rely on deny rules for destructive commands, not the brief.
 
+## Spike results: Codex (2026-10-31)
+
+Ticket 127. codex-cli 0.166.0 on Windows 11, headless `codex exec --json` from inside the trunk fixture. Orchestrator `gpt-6.1-sol` (low effort), workers `gpt-6-luna`. Every claim is **V** unless marked. The loop run used about 1.48 M input tokens (1.40 M cached) and 10 k output tokens.
+
+**Install bug found first:** the bun shim `~/.bun/bin/codex.exe` looks for `codex-code-mode-host.exe` beside itself, where it is missing, so every shell call failed (`Code Mode is unavailable … host executable was not found`). The vendored binary in `@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/` has the host beside it, and all runs below used it.
+
+| # | Probe | Result | Evidence |
+|---|---|---|---|
+| P1 | Dispatch | **Pass.** `spawn_agent` with `fork_turns: "none"` started three workers in one turn; they ran concurrently and reported in completion order. | Loop run spawns `/root/t1`, `/root/t2`, `/root/t5`. |
+| P2 | Isolation | **Manual, or `--worktree` for a top-level run.** `spawn_agent` has no cwd or worktree field, so the orchestrator made `git worktree add … -b tkt/<id>-<slug>` worktrees and named them in each brief. `codex exec --worktree` gave a detached-HEAD worktree at `D:/.codex/worktrees/d186/<repo>`, cut from the current `HEAD`. | Loop run; `--worktree` probe. |
+| P3 | Approvals | **The sandbox, not a prompt, is the gate.** `codex exec` defaults to approval `never`. Under `-s workspace-write` children wrote files (cwd and `%TEMP%`, which the policy also makes writable) but **`.git` is read-only**: `git add` failed on `.git/index.lock`, and `--add-dir <repo>/.git` did not change that. **`--approve-for-me`** (approval `on-request`, routed to a `codex-auto-review` model) let a child's `git commit` through without the bypass flag; the child's turn context recorded `workspace-write` plus `on-request`, inherited from the parent. The sandbox runs as another account: `~/.config/git/ignore` was unreadable and `mise` shims were absent, so `tkt` and `npm test` failed until the orchestrator called `tkt.exe` and `node.exe` directly. | Write probes; child rollout `turn_context`; loop run. |
+| P4 | Status line | **Pass, with a false-DONE risk.** Workers ended with a bare `DONE <sha>`. But the `--worktree` worker's commit failed and it still ended `DONE 9d77280…`, the pre-existing `HEAD`. Accept only a SHA that `git log main..<sha>` shows as new. | Loop run; `--worktree` probe. |
+| P5 | Question round-trip | **Pass, same agent.** The T2 worker ended `QUESTION What is the project glossary term for a returning user?`; `followup_task` to `/root/t2` with the answer resumed it in place, and it finished `DONE 136732b…`. No re-dispatch needed. | Loop run. |
+| P6 | Await | **Pass.** `wait_agent(timeout_ms)` returns on the next mailbox update, not on a sleep; the orchestrator called it three times and acted on each finisher. | Loop run (`collab_tool_call` `wait` ×3). |
+| P7 | Read-only reviewer | **Pass with `codex review --base main`.** On a branch that changed `add` to subtract, it reported `[P1] Preserve addition behavior in add` and left the tree clean. It cannot take the ticket text: `--base` and a custom prompt are mutually exclusive, so ticket-specific expectations need a `-s read-only` spawned reviewer instead. | Review probe. |
+| P8 | Model per child | **Pass.** The child's rollout `turn_context` records `model: gpt-6-luna` while the parent ran `gpt-6.1-sol`. | `~/.codex/sessions/…/rollout-*.jsonl`. |
+| P9 | Cap | **No cap at 8; depth is at least 2.** Eight `spawn_agent` calls all returned a task name and all finished. A child spawned its own child (`/root/d1/d2`), against the documented depth default of 1. | Cap probe. |
+| P10 | Landing (trunk) | **Pass.** T1, T2, T5 in flight, then T3 and T4. Each `tkt/` branch was diffed, merged `--no-ff`, tested green (2, 3, then 4/4), closed, and given its own dashboard commit. Claims first failed inside the sandbox after tkt had already written `in_progress`; the orchestrator escalated and committed the claim changes. | Loop run; independent `git log --graph`, `tkt query` (1-4 done, 5 in_progress), `npm test` 4/4. |
+| P10 | Landing (PR) | **Not run.** Needs a throwaway GitHub repo, which needs the user's go-ahead. | |
+| P11 | Chat visual | **Pass in the CLI.** The final message had an ASCII sketch per ticket; the four dashboard entries passed `check()`. The Codex app was not checked. | Loop final message; `check()`. |
+| P12 | Cleanup | **Pass.** Merged worktrees and branches were removed and pruned; T5's was kept and reported. A `--worktree` run leaves its worktree behind. | Final `git worktree list`. |
+| P13 | Escalation | **Pass.** The T5 worker ended `BLOCKED needs-human: deleting the tracked README.md is explicitly prohibited by the work instructions` without trying the deletion. | Loop run. |
+
+**Harness-specific answers:**
+
+- **`spawn_agent` vs. one `codex exec -C <worktree>` per worker.** `spawn_agent` is the better default: concurrent, model per child, event-driven `wait_agent`, and `followup_task` keeps a questioning worker alive. A top-level `codex exec` per worker gives process isolation and `--worktree`, but each is a separate approval context and its result comes back only as its last message (`-o`).
+- **Children writing their worktree without the bypass flag.** `--approve-for-me` is the setting. `workspace-write` alone cannot commit, because `.git` stays read-only.
+- **`wait_agent`.** Default 30 s, min 10 s, max 1 h; use the max and loop while agents are live.
+- **`codex review --base`.** Good as a generic consequential-change reviewer; not a spec reviewer.
+
+**Fallbacks for the reference:** P3 → `--approve-for-me`, and call tools by absolute path when the sandbox account lacks the user's PATH; P4 → verify the SHA is new; P7 spec check → a spawned read-only reviewer with the ticket; P10 PR → untested.
+
 ## Portable abstractions
 
 These are the verbs the skill body can use, each mapped to a native mechanism in the per-harness references:
@@ -193,6 +226,7 @@ These are the verbs the skill body can use, each mapped to a native mechanism in
 
 - Claude Code spike (2026-10-31), not run: P7 with a `bypassPermissions` parent (refused by the sandbox classifier); `claude --bg` workers (the fixture folder is untrusted, and accepting trust is the user's call); real concurrency limits beyond 22 short agents; interactive (non-headless) approval bubbling.
 - kiro-cli spike (2026-10-31), not run: P10 in PR mode (needs the user's go-ahead for a throwaway GitHub repo); whether V3 `run_in_background` notifies the orchestrator when a process exits; V3 `user_input` from a headless sub-agent; credit cost per run.
+- Codex spike (2026-10-31), not run: P10 in PR mode; rendering in the Codex app; whether 8 spawns ran concurrently or queued behind a cap of 6.
 - Kiro's older "up to four sub-agents" limit: only in a search snippet of an old page. The spike ran 16 stages in one call without a limit message.
 - Claude agent view and teams are a research preview / experimental. Codex v2 tool names are still under development.
 - agy desktop Agent Manager facts come from secondary sources only, and what `share` does is unclear.
