@@ -110,3 +110,38 @@ documents object lengths, batch metadata and missing-object responses. Read
 injection, optional locks, lazy fetching, fsmonitor and external diff/textconv;
 it runs only Git metadata/blob reads. History enumeration has command output/time
 limits as well as the declared commit/object bounds; exceeding them is an error.
+
+## Footprint inspector
+
+`scripts/inspect-footprint.mjs` measures what sits on disk uncommitted, for the
+"While you work" and "At ticket close" rules. It reads files, Git metadata and the
+open-file table; it never deletes, stages or fetches.
+
+```text
+node <skill-dir>/scripts/inspect-footprint.mjs --repo PATH [--path DIR]... [--ticket N]
+  [--quiet 15m | --agent-state] [--floor 20GiB] [--cap 5GiB] [--dedupe]
+  [--recheck PRIOR.json] [--summary [--top-under 40GiB]]
+```
+
+| Flag | Effect |
+|---|---|
+| `--path DIR` | add a family outside the repo (a release work folder, an agent state store) |
+| `--ticket N` | only families whose name carries ticket N (`t110-…`, `ticket-110`, `110-…`) |
+| `--quiet 15m` | skip a family written within this window; `--agent-state` sets 24h for session stores |
+| `--floor` / `--cap` | free-space floor (default 20GiB) and optional per-ticket total; breaking one exits 1 |
+| `--dedupe` | sha256 files whose size matches a tracked file, plus the LFS store; reports identical bytes. Opt-in: it reads every candidate file |
+| `--recheck PRIOR.json` | compare keep lists with a saved run; a changed one on a delete/slim family becomes "keep list changed" and exits 1 |
+| `--summary` | one line: free space, and the three largest families when free space is under `--top-under` (40GiB) |
+
+Output is JSON: `status` (`pass`, `review` when candidates exist, `fail` when a limit
+breaks), `freeSpace` (under WSL, the lower of the distro and `/mnt/c`), `coverage`,
+`findings`, `families` sorted by size, and `conformance` (pytest retention, tracked
+`.scratch` citations). Sizes are allocated bytes, an upper bound on copy-on-write
+filesystems; a hard-linked file counts once. Files dated before 2000 are counted but
+ignored for the newest write. A citation counts only by exact sub-path; a bare mention
+of the folder is a `lead`, which makes the outcome `ask`, never `delete`. Exit 0 reports,
+1 means a limit broke or a keep list changed, 2 means input or inspection failed.
+
+Coverage is partial, and says so, where a probe is missing: open files come from
+`/proc` on Linux (other users' processes only as root), `lsof` elsewhere, and are
+unavailable on Windows without Sysinternals `handle.exe`.

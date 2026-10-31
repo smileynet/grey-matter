@@ -29,7 +29,7 @@ event-drive the rest.
 | Determinism | `FRandomStream` seeded RNG; authoritative-server replication (Chaos physics is not bit-deterministic) |
 | Frame budget | UObject **GC** pressure; avoid per-frame `SpawnActor`; object pooling *(idiom)*; C++ over Blueprint in hot paths; `stat unit`/Unreal Insights |
 | Feel | Timelines / `UCurveFloat`, Niagara, `UCameraShakeBase`, hit-stop via `SetGlobalTimeDilation` |
-| Testing | Automation (low-level, no world) / Functional (needs a PIE level) / Gauntlet (session) |
+| Testing | Automation (low-level, no world; tier 1-2 with NullRHI) / Functional (needs a PIE level; tier 3) / Gauntlet (packaged build on a target platform; tier 5). Tiers: [ladder](../../../../docs/agents/test-environment-ladder.md) |
 
 ## Notes
 

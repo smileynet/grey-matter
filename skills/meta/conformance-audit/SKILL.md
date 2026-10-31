@@ -69,6 +69,9 @@ When unsure which tier, it is needs-judgment. The safe tier is for the genuinely
    no-ops, no duplication of a skill's job, and everything it names still resolves. From a
    grey-matter checkout, `node scripts/check-guidance.mjs --repo <target> --no-global` reads the
    target without writing: its errors join the safe tier, its judgment findings the needs-judgment tier.
+   A repo `AGENTS.md` with no test commands by tier (the
+   [test-environment ladder](../../../docs/agents/test-environment-ladder.md)) is needs-judgment:
+   naming the commands takes the project's intent.
 4. **Docs & organization** — `README.md` currency, `docs/` layout, relative links, stale or duplicate
    docs.
 
@@ -102,6 +105,14 @@ For stored media or generated-evidence growth, consume
 [repository-artifact-hygiene](../repository-artifact-hygiene/SKILL.md) observations.
 Storage/retention choices remain needs-judgment. A warning or binary extension is
 not nonconformance; only an explicit project policy defines a mechanical violation.
+
+Footprint conformance comes from that skill's footprint inspector, whose `conformance` block reads
+the target without writing (`node <skill-dir>/scripts/inspect-footprint.mjs --repo <target> --floor 0B`):
+
+- `pytestRetention.finding`: a pytest project with no `tmp_path_retention_policy` keeps every run.
+  Safe tier: add the one line it prints as `fix`.
+- `scratchCitations`: tracked JSON or Markdown citing `.scratch` paths, which dangle once scratch
+  goes. Needs-judgment: promote each cited file, using the family's `keep` list as the migration aid.
 
 ## Incumbent repos (polarity)
 

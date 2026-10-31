@@ -1,6 +1,6 @@
 ---
 name: repository-artifact-hygiene
-description: "Classify repository artifacts and choose storage, retention and reproducible retrieval. Use when adding source art, generated evidence, screenshots, embedded HTML, datasets or reference bundles; reviewing repository growth; choosing ordinary Git versus LFS; or closing a ticket, to promote, keep or delete its scratch and build artifacts. Trigger: artifact hygiene, generated evidence, source assets, repository storage, LFS, report growth, scratch cleanup."
+description: "Classify repository artifacts and choose storage, retention and reproducible retrieval. Use when adding source art, generated evidence, screenshots, embedded HTML, datasets or reference bundles; reviewing repository growth; choosing ordinary Git versus LFS; before a build, test run, simulator, download, clone or copy of tracked files grows the disk; or closing a ticket, to promote, keep or delete its scratch and build artifacts. Trigger: artifact hygiene, generated evidence, source assets, repository storage, LFS, report growth, disk footprint, free space, scratch cleanup."
 ---
 
 # Repository Artifact Hygiene
@@ -67,6 +67,44 @@ read-only; use the user's existing authorization for subsequent changes.
 Finish when every scoped candidate has a role or explicit uncertainty, retained
 recovery inputs and a justified recommendation, with coverage and checks stated.
 
+## While you work
+
+Check before you create and prune as you go; the close-out is the second chance.
+
+1. **Measure.** Before a build, test run, simulator, download, clone or copy of tracked
+   files, check free space. Under 20 GiB, stop adding data and tell the user; under WSL,
+   use the lower of the distro and its Windows drive. Measure the first attempt: the rules
+   below apply past 500 MiB. Commands per OS: [footprint by OS](references/footprint-by-os.md).
+2. **Reference large tracked files** by path, hard link, `git worktree` or shared clone.
+   Create test clones and worktrees with `GIT_LFS_SKIP_SMUDGE=1`: worktrees share the LFS
+   store, but each checks out its own copy. One copy of the same bytes per ticket.
+3. **Bound history as it grows.** Name attempts `t<ticket>-<kind>-<n>`. When attempt N+1
+   lands, delete attempts older than the latest three that are neither failed nor cited.
+4. **Let tools clean up.** Set test-runner retention so a passing run leaves nothing
+   (pytest: `tmp_path_retention_policy = "failed"`), and prune caches with the tool's own
+   command before deleting by hand.
+5. **Test in the cheapest tier** that answers the question, per the
+   [test-environment ladder](../../../docs/agents/test-environment-ladder.md). Keep one booted
+   simulator or emulator across a ticket's slices and shut it down at close.
+6. **Own what you made.** Delete your own attempts without asking, to the OS trash. For
+   anything older or made by someone else, run the inspector, list the result with sizes and
+   wait for authorization. On Windows, list files larger than the Recycle Bin's cap instead
+   of deleting them: the bin deletes those permanently.
+7. **Cite small.** Cite a tracked copy. When a `.scratch` path must be cited, cite one small
+   file (a `report.json`) so close can keep it and drop the rest.
+
+```text
+node <skill-dir>/scripts/inspect-footprint.mjs --repo <repository-root> [--ticket N] [--path DIR] [--cap 5GiB]
+```
+
+The inspector reads and never writes. For each family (`.scratch/*`, ignored build output,
+linked worktrees, `--path` folders) it reports size, owning ticket and status, tracked files
+citing it by exact sub-path with the resulting keep list, hard links, open files, and an
+outcome: delete, slim (keep the keep list), keep, ask, prune, or skip (written within the
+quiet floor, holding open files, or an active worktree). Rerun with `--recheck <saved.json>`
+right before removing anything from a list; "keep list changed" means stop and re-list.
+Flags and exit codes: [footprint inspector](references/inspection.md#footprint-inspector).
+
 ## At ticket close
 
 Every uncommitted artifact a ticket made gets one of three outcomes before `tkt close`:
@@ -102,7 +140,7 @@ It does not decide purpose or install a gate. See
 [Report format](../../../docs/agents/report-format.md) owns offline presentation;
 [doc conventions](../../../docs/agents/doc-conventions.md) owns placement;
 [curate-docs](../curate-docs/SKILL.md) owns the periodic promotion/pruning sweep;
-this skill owns the close-time rule above. Use the project's
+this skill owns the while-you-work and close-time rules above. Use the project's
 Git workflow for commits and hooks. Do not copy their policies here.
 
 Does NOT cover GitHub account administration, general Git governance, release

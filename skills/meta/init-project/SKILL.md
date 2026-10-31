@@ -84,6 +84,10 @@ Set up only what is installed:
   source once they exist.
 - **game projects**: point `AGENTS.md` at `game-native-design` and `game-modeling` as
   the defaults, and record the engine.
+- **test commands by tier**: list the project's single-test command, commit gate, and slow
+  tier with the environment it needs, per the
+  [test-environment ladder](../../../docs/agents/test-environment-ladder.md). Ask the user
+  for any you cannot find in the build files.
 - Any other installed skill with a project convention: add its config and a one-line
   `AGENTS.md` pointer. Keep `AGENTS.md` to pointers plus the few always-on rules; detail
   lives in the pointed-at docs.

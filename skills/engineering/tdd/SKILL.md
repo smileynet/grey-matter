@@ -75,6 +75,9 @@ a session to run.
 - **Red before green.** Write the failing test first, then only enough code to pass it.
   Don't anticipate future tests or add speculative features.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
+- **Leftmost tier.** Run the loop at the cheapest tier that observes the seam, in seconds;
+  climb only for what that tier cannot see. Tiers: the
+  [test-environment ladder](../../../docs/agents/test-environment-ladder.md).
 - **Refactoring is not part of this loop.** Making it work and making it clean are
   separate stages here: the red → green loop makes it work, and `code-review` surfaces
   cleanup as tickets to fix. Keeping cleanup out of the loop is why the tests above must

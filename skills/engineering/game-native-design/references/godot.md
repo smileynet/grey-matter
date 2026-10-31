@@ -29,7 +29,7 @@ native: nodes that don't simulate simply don't process.
 | Determinism | fixed `_physics_process` + per-system seeded `RandomNumberGenerator` |
 | Frame budget | ref-counting (no tracing GC) but node churn costs; object pooling *(idiom)*; static-typed GDScript; escalate to C#/GDExtension |
 | Feel | `create_tween()` easing, `AnimationPlayer`, `GPUParticles2D/3D`, camera `offset` shake *(idiom)*, hit-stop via `Engine.time_scale` *(idiom)* |
-| Testing | GUT / GdUnit4; pure logic + `Resource` + seeded sim test off-tree; nodes/physics need a running scene (GdUnit4 Scene Runner) |
+| Testing | GUT / GdUnit4; pure logic + `Resource` + seeded sim test off-tree (tier 1); `--headless` runs scripts and nodes without rendering (tier 2); input and nodes/physics with a display need a running scene, GdUnit4 Scene Runner (tier 3); feel and frame pacing on target hardware (tier 5). Tiers: [ladder](../../../../docs/agents/test-environment-ladder.md) |
 
 ## Notes
 
