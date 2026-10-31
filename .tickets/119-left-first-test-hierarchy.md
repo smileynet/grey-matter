@@ -8,6 +8,7 @@ validation_criteria:
   - "Worked scenarios distinguish change, merge, release, and physical-pilot gates with evidence reuse limits"
   - "Applicable guidance fixtures and node scripts/check-repo.mjs pass"
 tags: ["stream:tooling", "kind:enhancement"]
+priority: low
 ---
 
 # Choose the cheapest faithful test environment with explicit lifecycle gates
