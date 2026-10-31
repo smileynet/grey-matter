@@ -36,7 +36,7 @@ The harness facts that grey-matter already holds live in [`../harnesses.md`](../
 | **Approvals** | The child's own config. V3: the stricter of parent and child wins. Headless runs fail fast | Autopilot is inherited; headless calls are otherwise denied | Prompts bubble to the main session; the parent's mode overrides the child's | The child inherits the parent's sandbox and approvals; headless runs fail | Inherited; prompts bubble up |
 | **Wait** | Blocks until all children finish | `monitor_start(watch="work-ledger")` | Background completion notice; `notify_when_idle` | `wait_agent(timeout_ms)` | Completion message |
 | **Limits** | None documented (an older page said 4; stale) | Sized from host memory; 3 h and 1000 tool calls per sub-agent | 20 concurrent, depth 3 | 6 threads, depth 1 (source defaults) | Depth 10 |
-| **Model per child** | No; use top-level `--model` | `session_create.model` | Yes | Yes | `flash`, `pro` or `inherit` |
+| **Model per child** | V2: per-stage `model`; V3: the agent file's `model`; or top-level `--model` | `session_create.model` | Yes | Yes | `flash`, `pro` or `inherit` |
 | **Native review** | Graph review loops | `accept_eval.py` | `/code-review`, `/security-review`, `TaskCompleted` hook | `codex review --base`, `/review` | Auto-mode command reviewer |
 
 ## Per-harness notes
@@ -52,7 +52,7 @@ The harness facts that grey-matter already holds live in [`../harnesses.md`](../
   - Sub-agents don't inherit the parent's `allowedTools` (already in `harnesses.md`).
   - A non-interactive sub-agent cannot prompt, so it fails fast.
 - **Worktrees.** None in 2.34 (V). Create one with `git worktree add`, then start the worker inside it.
-- **Model per worker.** A model can't be pinned per sub-agent. Run a top-level `kiro-cli chat --no-interactive --agent <a> --model <m>` per worker instead (V, `--help`).
+- **Model per worker.** The V2 `subagent` tool takes a `model` per stage, and it is honoured: an unknown model fails that stage (V: [spike results](#spike-results-kiro-cli-2026-10-31)). The V3 per-agent tools take only `prompt`, so the model comes from the agent file. A top-level `kiro-cli chat --no-interactive --agent <a> --model <m>` per worker also works (V).
 
 ### Kiro Crew
 
@@ -140,6 +140,40 @@ Ticket 125. Claude Code 2.1.316 on Windows 11, headless `claude -p --output-form
 
 **Found in passing:** `check-dashboard.mjs` exits 0 without checking anything when run as a CLI on Windows. Its entry-point guard compares `resolve(argv[1])` with `new URL(import.meta.url).pathname`, which is `/D:/…` on Windows, so the guard never matches. The exported `check()` works.
 
+## Spike results: kiro-cli (2026-10-31)
+
+Ticket 126. kiro-cli 2.34.0 on Windows 11, headless `kiro-cli chat --no-interactive --trust-workspace --output-format stream-json` from inside the trunk fixture. The default engine is V2; V3 was probed with `--v3`. Three workspace agents in the fixture's `.kiro/agents/` carried the permissions:
+- `spike-orchestrator`: Sonnet 4.6; `read`, `glob`, `grep` and `subagent` trusted; shell limited by `allowedCommands` to `git .*`, `npm test`, `tkt .*` and `gh pr .*`; writes limited to `docs/**`.
+- `spike-worker`: Haiku 4.5; shell limited to named git commands and `npm test`; writes limited to the fixture and its worktree folder.
+- `spike-reviewer`: `read`, `glob` and `grep` only.
+
+Every claim is **V** unless marked. Credits were not reported in the stream, so cost is unmeasured.
+
+| # | Probe | Result | Evidence |
+|---|---|---|---|
+| P1 | Dispatch | **Pass, two ways.** (a) The V2 `subagent` tool takes `task`, `mode` (only `"blocking"`) and `stages[]` (`name`, `role` = an agent name, `prompt_template`, optional `model`, `depends_on`, `loop_to`). Stages without `depends_on` run concurrently: two workers' tool calls interleaved. (b) Two top-level `kiro-cli chat --no-interactive --agent spike-worker` processes overlapped (started 1 s apart, ended at 12 s and 17 s). V3 replaces the stage tool with one tool per agent, `subagent_<name>(prompt, explanation)`; three calls in one turn ran together. | Write probe; top-level probe; V3 probe. |
+| P2 | Isolation | **Manual, and it works.** No native worktree. The orchestrator ran `git worktree add <fixture>-wt/t<id> -b tkt/<id>-<slug>` and told each worker its path; workers passed `working_dir` to shell and used absolute paths, and commits landed on `tkt/NN-slug`. Workers share the parent's process and cwd, so isolation rests on the brief, not the harness. | Loop run: `git log --graph` shows `tkt/` branches merged. |
+| P3 | Approvals | **Fails fast without rules; works with agent-file rules.** With only `subagent` trusted, every child `write` and `shell` call was denied at once (`tool permission approval is not supported in non-interactive mode`), even `git log`, and both workers reported BLOCKED. With `allowedCommands` and `allowedPaths` in the worker's agent file, V2 children ran. **V3 checks parent and child and the stricter wins:** with the orchestrator allowing writes only under `docs/**` and the worker allowing the whole fixture, the child's `docs/probe-in.txt` was written and its root `probe-out.txt` was denied. V3 also refused a PowerShell here-string it could not parse (`Kiro could not parse this shell command`). The orchestrator had both `subagent` in `allowedTools` and V2 `toolsSettings.subagent.trustedAgents`, so the effect of `trustedAgents` alone was not isolated. | Write probes V2 untrusted, V2 scoped, V3 scoped. |
+| P4 | Status line | **Pass, with a channel rule.** The parent receives the worker's `summary` tool result (`taskResult`), not its final text. One worker's `DONE w2` was in its text but missing from `taskResult`; in the loop two workers gave a SHA without the `DONE` form and the orchestrator accepted the SHA. The brief must say the summary's result ends with the status line. | Write probe; loop batch 2. |
+| P5 | Question round-trip | **Pass by re-dispatch.** The T2 worker ended `QUESTION What term from the project glossary…`; the orchestrator answered `greetReturningUser` and dispatched a new stage into the same worktree (manual worktrees survive), which ended `DONE aa6ade9…`. There is no resume of a finished sub-agent. V3 sub-agents list a `user_input` tool; headless it cannot be answered (not probed). | Loop run. |
+| P6 | Await | **Pass (blocking).** The V2 `subagent` call blocks until every stage ends, so no polling appears, but the batch waits for its slowest stage. **One stage's fatal error aborts the batch:** an unknown model in one stage stopped its two siblings (`stage failed due to upstream error`). Top-level processes: the V2 shell tool has no background option, so an orchestrator waits on one foreground worker at a time; the V3 `execute_pwsh` tool has `run_in_background` and a 30-minute maximum `timeout` (completion notices not probed). | Model probe; shell-schema probes. |
+| P7 | Read-only reviewer | **Pass in V2 and V3.** `spike-reviewer` reported only `glob`, `grep`, `read` and `summary` (V2) or read and search tools (V3), and no file was written. | Reviewer probes. |
+| P8 | Model per child | **Pass.** A stage's `model` reaches the API: `no-such-model-xyz` failed with `The model 'no-such-model-xyz' is not available`, and a `qwen3-coder-next` stage answered. A top-level worker's saved session records `model_id: qwen3-coder-next`. Sub-agent sessions record `model_info: null`, so the stage model is shown only by the error. | Model probes; `~/.kiro/sessions/cli/<id>.json`. |
+| P9 | Cap | **No cap hit at 16.** One call with 16 stages returned 16 outputs, no limit message. | Cap probe. |
+| P10 | Landing (trunk) | **Pass.** Two batches: T1, T2 and T5, then T3 and T4 after T1 merged. The orchestrator diffed each `tkt/` branch against `main`, merged `--no-ff`, ran `npm test` green after each (2, 3, 3, 4 tests), closed with `tkt close`. It wrote one dashboard commit per batch rather than per ticket. | Loop run; independent `git log --graph`, `tkt query` (1-4 done, 5 in_progress), `npm test` 4/4. |
+| P10 | Landing (PR) | **Not run.** Needs a throwaway GitHub repo, which needs the user's go-ahead. | |
+| P11 | Chat visual | **Pass, terminal only.** The final message carried an ASCII input → output sketch per ticket. The four dashboard entries used `visual.type: "steps"` and passed `check()` (no errors). | Loop final message; `check-dashboard.mjs` `check()`. |
+| P12 | Cleanup | **Pass.** The orchestrator removed the four merged worktrees and branches and pruned; the blocked T5 worktree was left and reported. Manual worktrees are never removed automatically. | Final `git worktree list`. |
+| P13 | Escalation | **Pass, but the permission layer did the work.** The T5 worker tried `Remove-Item`, `del` and `git rm README.md`, all denied, then ended `BLOCKED needs-human`. The brief's "do not delete" was ignored by Haiku; only the shell rules kept the file. `README.md` still exists. | Loop run denials. |
+
+**Harness-specific answers:**
+
+- **`subagent` vs. top-level processes.** Use the `subagent` tool for a batch that shares a deadline: it is concurrent, model-per-stage, and blocks without polling. Its costs: one bad stage cancels the batch, the parent waits for the slowest stage, and results arrive only through `summary`. Use one top-level `kiro-cli chat --no-interactive` process per worker when workers must finish independently. The orchestrator can then wait on a foreground process (V2) or start background processes (V3 `run_in_background`); notification on exit was not observed.
+- **V3 approvals.** Stricter-of-both is confirmed. Every path or command a worker needs must also be allowed for the orchestrator agent.
+- **Shell.** V2 runs "the detected shell" (PowerShell or cmd.exe); V3 runs `pwsh.exe`. Workers wrote PowerShell (`Remove-Item`, here-strings), so rules must match the shell actually used.
+
+**Fallbacks for the reference:** P4 → status line in the summary result, and accept a lone SHA only after `git cat-file -e`; P6 abort → validate stage models before dispatch, or one process per worker; P10 PR → untested; P13 → rely on deny rules for destructive commands, not the brief.
+
 ## Portable abstractions
 
 These are the verbs the skill body can use, each mapped to a native mechanism in the per-harness references:
@@ -158,7 +192,8 @@ These are the verbs the skill body can use, each mapped to a native mechanism in
 ## Couldn't verify / possibly stale
 
 - Claude Code spike (2026-10-31), not run: P7 with a `bypassPermissions` parent (refused by the sandbox classifier); `claude --bg` workers (the fixture folder is untrusted, and accepting trust is the user's call); real concurrency limits beyond 22 short agents; interactive (non-headless) approval bubbling.
-- Kiro's older "up to four sub-agents" limit: only in a search snippet of an old page.
+- kiro-cli spike (2026-10-31), not run: P10 in PR mode (needs the user's go-ahead for a throwaway GitHub repo); whether V3 `run_in_background` notifies the orchestrator when a process exits; V3 `user_input` from a headless sub-agent; credit cost per run.
+- Kiro's older "up to four sub-agents" limit: only in a search snippet of an old page. The spike ran 16 stages in one call without a limit message.
 - Claude agent view and teams are a research preview / experimental. Codex v2 tool names are still under development.
 - agy desktop Agent Manager facts come from secondary sources only, and what `share` does is unclear.
 - Cursor facts come from search snippets only.
