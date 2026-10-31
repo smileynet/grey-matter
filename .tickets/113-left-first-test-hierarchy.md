@@ -87,3 +87,7 @@ hold for host sudo. Do not upgrade those limits into completed evidence.
 - [ ] Worked scenarios route byte/time/auth cases left, process/DAV/rollback cases to integration, controls to native UI and installed-update retention to a physical pilot.
 - [ ] Scenario review catches a JavaScript stand-in for a native parser and a simulator-only claim of phone retention.
 - [ ] Existing related tickets are cross-referenced without duplicating their ownership; applicable fixtures and `node scripts/check-repo.mjs` pass.
+
+## October 31 follow-up
+
+The source deployment HOLD described above is historical to its pinned evidence; the host installation and bounded worker-manager deployment subsequently completed. Physical pilot and broader cleanup claims remain separate gates. #114 owns fail-stop orchestration; #115 owns positive-byte preservation interpretation. Retain already-added authorization lifetime, interrupted-retry and exact container-ID regressions when extending adapters; no duplicate policy document or native matrix is needed.

@@ -87,3 +87,7 @@ retrievable under the artifact-hygiene guidance.
 - [ ] Offline, keyboard and phone/laptop checks show readable diagrams and usable ticket details; the relevant same dashboard view is opened/refreshed for the user.
 - [ ] Reachability guidance distinguishes local-file, LAN and public scope and preserves private content boundaries.
 - [ ] Applicable dashboard tests and `node scripts/check-repo.mjs` pass.
+
+## October 31 follow-up: bounded inspection
+
+An unrestricted search of the embedded source dashboard produced roughly3.94 million output tokens. Prefer the existing consistency check and metadata-only ticket/queue queries; avoid printing image payloads or full minified lines. The source project now supplies `--summary` and `--ticket ID`, explicitly separate from HTML freshness checks. Extend the existing snapshot/query seam if reusable support is needed; do not copy its large HTML payload. Verify metadata inspection is read-only and excludes bodies/media. #116 owns current-readiness derivation.
