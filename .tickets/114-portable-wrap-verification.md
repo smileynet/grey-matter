@@ -8,6 +8,7 @@ validation_criteria:
   - "Guidance has one maintained owner with scoped implementation and evidence limits"
   - "Applicable fixtures and repository consistency gate pass"
 tags: ["stream:tooling"]
+priority: medium
 ---
 
 # Discover project verification gates and stop dependent mutations on failure
