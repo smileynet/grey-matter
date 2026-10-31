@@ -43,3 +43,7 @@ the worked example, negative controls from seeded defects, unable-to-review kept
 CLEAN) and adopted only against an advance criterion. The "loop until no findings on every
 entry" default is replaced by conditional dispatch. Step numbers follow the skill after
 ticket 100 (check is now step 6).
+
+## Learning Library evidence follow-up (31 October 2026)
+
+User-approved retrospective recommendation from Learning Library ticket 13: qualify dashboard results against artifact-bound receipts. Examples must distinguish actual preview screenshots, human direct-file functionality reports, blocked browser checks and unvalidated learning. Before planned browser QA, identify permitted protocols and telemetry. Extend existing critic fixtures with these cases rather than creating a parallel dashboard reviewer. Shared UI guidance is tracked in ticket 112.
