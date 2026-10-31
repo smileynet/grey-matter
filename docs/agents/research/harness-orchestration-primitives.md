@@ -207,6 +207,24 @@ Ticket 127. codex-cli 0.166.0 on Windows 11, headless `codex exec --json` from i
 
 **Fallbacks for the reference:** P3 → `--approve-for-me`, and call tools by absolute path when the sandbox account lacks the user's PATH; P4 → verify the SHA is new; P7 spec check → a spawned read-only reviewer with the ticket; P10 PR → untested.
 
+## Spike results: agy (2026-10-31, partial)
+
+Ticket 129. agy 1.4.12 on Windows 11, headless `agy -p --output-format stream-json` from inside the trunk fixture; orchestrator `gemini-4-argon-low`, workers `Model: "flash"`. **The full loop was not run:** headless workers could not run any shell command without a rule that allows every command (below), which waits on the user's go-ahead. Every claim is **V** unless marked.
+
+| # | Probe | Result | Evidence |
+|---|---|---|---|
+| P1 | Dispatch | **Pass.** `define_subagent` (`Name`, `Description`, `SystemPrompt`, `EnableWriteTools`, `EnableSubagentTools`, `EnableMCPTools`) then `invoke_subagent` (`TypeName`, `Role`, `Prompt`, `Model` inherit/flash_lite/flash/pro, `Workspace` inherit/branch/share) started three sub-agents in one turn. They run in the background and message the parent on completion. | Write probes. |
+| P2 | Isolation | **Pass, native.** `Workspace: "branch"` made a git worktree of the fixture at `~/.gemini/antigravity-cli/worktrees/<parent conversation>/subagent-<Role>-<type>-<hash>` on a branch of the same name, cut from `HEAD`. The worktrees outlived the `-p` run and had to be removed by hand. | `git worktree list` after each probe. |
+| P3 | Approvals | **Fails closed headless; the only working rule allows everything.** The default mode is `request-review`. A worker's `git rev-parse` was refused (`permission check failed for unsandboxed … user denied permission`) and the worker was then **cancelled** ("explicitly canceled by the user") instead of reporting BLOCKED. `--sandbox` did not change that. `--mode auto` is refused on Windows ("not available for this account"; the changelog says Auto mode is Linux and macOS only). Session rules via `--settings '{"permissions":{"allow":[…]}}'`: `command(git *)`, `command(git)`, `command(git:*)` and an exact `command(git rev-parse --show-toplevel)` all left the parent's command denied; only `command(*)` let it run. | Write probes; settings probes. |
+| P4 | Status line | **Not reached.** Workers were cancelled before they could report. | |
+| P5 | Question round-trip | **Not run.** The changelog says headless `-p` skips sub-agent questions (I). | |
+| P6 | Await | **Unreliable headless.** In three runs the parent waited for completion messages; in one, `-p` emitted its result after the parent's first turn ("Waiting for its completion message.", `num_turns: 1`) and exited while the worker was still running. | `one-allow` probe. |
+| P7 | Read-only reviewer | **Pass.** A sub-agent defined with `EnableWriteTools: false` had no `write_file`, `edit_file` or `run_command`; it reported `send_message`, `view_file`, `read_url_content`, `search_web`, `schedule`, `generate_image` and `manage_task`. The Auto-mode command reviewer could not be compared: Auto mode is unavailable on Windows. | Write probes. |
+| P8 | Model per child | **Requested, not proven.** `invoke_subagent` accepted `Model: "flash"`; the child's model was not checked in its transcript. | |
+| P9-P13 | Cap, landing, visual, cleanup, escalation | **Not run** (blocked on P3). | |
+
+**Fallbacks for the reference:** P3 → on Windows, either `command(*)` / `--dangerously-skip-permissions` in a disposable checkout only, or run agy interactively so approvals reach the user; P6 → do not rely on headless `-p` to wait for sub-agents.
+
 ## Portable abstractions
 
 These are the verbs the skill body can use, each mapped to a native mechanism in the per-harness references:
@@ -227,6 +245,7 @@ These are the verbs the skill body can use, each mapped to a native mechanism in
 - Claude Code spike (2026-10-31), not run: P7 with a `bypassPermissions` parent (refused by the sandbox classifier); `claude --bg` workers (the fixture folder is untrusted, and accepting trust is the user's call); real concurrency limits beyond 22 short agents; interactive (non-headless) approval bubbling.
 - kiro-cli spike (2026-10-31), not run: P10 in PR mode (needs the user's go-ahead for a throwaway GitHub repo); whether V3 `run_in_background` notifies the orchestrator when a process exits; V3 `user_input` from a headless sub-agent; credit cost per run.
 - Codex spike (2026-10-31), not run: P10 in PR mode; rendering in the Codex app; whether 8 spawns ran concurrently or queued behind a cap of 6.
+- agy spike (2026-10-31), not run: the loop and P4-P13 (need a permission rule that allows every command); the interactive question picker; the right narrow `permissions.allow` syntax, if one exists; Kiro Crew spike (ticket 128) not started, because it needs the Kiro Crew desktop backend running.
 - Kiro's older "up to four sub-agents" limit: only in a search snippet of an old page. The spike ran 16 stages in one call without a limit message.
 - Claude agent view and teams are a research preview / experimental. Codex v2 tool names are still under development.
 - agy desktop Agent Manager facts come from secondary sources only, and what `share` does is unclear.
