@@ -1,7 +1,7 @@
 ---
 id: "123"
 title: "Find why check-repo invariant 1 (deployer tests) fails intermittently on Windows"
-status: open
+status: done
 blocked_by: []
 priority: low
 validation_criteria:
@@ -18,4 +18,8 @@ TBD
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [x] TBD
+
+## Resolution (2026-10-31)
+
+Duplicate of 122, created by a retried tkt new.
