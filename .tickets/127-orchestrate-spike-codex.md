@@ -1,7 +1,7 @@
 ---
 id: "127"
 title: "Spike: can Codex run the orchestrate loop? (probes P1-P13 on the fixture)"
-status: open
+status: in_progress
 blocked_by: ["124"]
 tags: ["stream:tooling", "type:research"]
 ---
