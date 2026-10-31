@@ -23,7 +23,7 @@ Extend existing delivery-dashboard/reconcile guidance with a scoped current-read
 
 Generate current summaries from that record and preserve dated historical evidence. Detect mismatches structurally; do not scan for words such as pending or rewrite historical reports as current. Respect the project's explicit execution policy while dependencies remain structural truth; a raw `tkt ready` listing is not authority to override an adopted queue. Keep real dependencies separate from preferred execution order.
 
-Coordinate with #112 for dashboard order and #106 for verification attempts; the Philippines Trip #79 owns its concrete readiness schema. This ticket supplies an adoptable contract and worked example, not a second registry in every adopter. Read `skills/productivity/delivery-dashboard`, `skills/meta/reconcile-tickets` and their references before selecting the smallest shared owner.
+Coordinate with #118 for dashboard order and #106 for verification attempts; the Philippines Trip #79 owns its concrete readiness schema. This ticket supplies an adoptable contract and worked example, not a second registry in every adopter. Read `skills/productivity/delivery-dashboard`, `skills/meta/reconcile-tickets` and their references before selecting the smallest shared owner.
 
 ## Acceptance criteria
 

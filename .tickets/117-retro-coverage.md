@@ -21,7 +21,7 @@ Sam requested this shared follow-up after a fresh-context retrospective selectiv
 
 Update `skills/engineering/retro/SKILL.md` or its existing report reference to state the inspected corpus, sampling/extraction limits, trace/file references and unverified areas. Bounded reads are desirable, but a truncated tool result requires a focused reread or an explicit remaining gap. Never infer completeness from a nonempty subagent report.
 
-Separate observed defect, corrected verification gap, already-landed regression and remaining recommendation. Distinguish source inspection from freshly executed checks. Route remaining work to existing owners instead of duplicating tickets or adding a broad AGENTS rule. Use one compact coverage statement rather than a mandatory new report format. #113 owns evidence execution/reuse semantics; #112 owns bounded dashboard inspection guidance.
+Separate observed defect, corrected verification gap, already-landed regression and remaining recommendation. Distinguish source inspection from freshly executed checks. Route remaining work to existing owners instead of duplicating tickets or adding a broad AGENTS rule. Use one compact coverage statement rather than a mandatory new report format. #119 owns evidence execution/reuse semantics; #118 owns bounded dashboard inspection guidance.
 
 Do not require replaying the entire trace or redispatching facts already in context. The actual audit's coverage limit is historical fact, not a blanket defect in the final deployment proof.
 

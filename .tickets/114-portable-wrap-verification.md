@@ -23,7 +23,7 @@ Update `skills/meta/wrap-session/SKILL.md` and the owning implementation/verific
 
 Make verification-dependent commit/deploy/publish stages fail closed on nonzero exit, timeout, missing executable or incomplete result. Read the completed result before scheduling a dependent mutation; unrelated read-only investigation may continue. Use an existing runner where available; choose any new reusable enforcement seam deliberately rather than building a universal deployment framework. Bash flags alone do not guard asynchronous tool orchestration. Document the caller's exit-code/structured-result contract rather than prescribing Bash semantics for Python/Node tools.
 
-Inspect current `sync`, hook and verification guidance for overlap and contradictions. The local script-authoring skill is outside this pack; preserve one owner for reusable guidance instead of making that personal skill a dependency. Related tickets 98/106/113 own evidence identity and test cadence. Source project #88 owns its actual change-scoped runner.
+Inspect current `sync`, hook and verification guidance for overlap and contradictions. The local script-authoring skill is outside this pack; preserve one owner for reusable guidance instead of making that personal skill a dependency. Related tickets 98/106/119 own evidence identity and test cadence. Source project #88 owns its actual change-scoped runner.
 
 ## Acceptance criteria
 
