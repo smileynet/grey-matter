@@ -4,6 +4,7 @@ title: "Build the orchestrate skill (proposal 17): conductor over the ticket fro
 status: open
 blocked_by: []
 tags: ["stream:tooling", "type:enhancement"]
+priority: medium
 ---
 
 # Build the orchestrate skill (proposal 17): conductor over the ticket frontier with reviewer gate and per-harness references
