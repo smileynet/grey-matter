@@ -8,6 +8,7 @@ validation_criteria:
   - "Seeded serial-WIP, owner, ordering, snapshot, and visual-evidence failures are rejected"
   - "Phone/laptop and offline dashboard checks plus node scripts/check-repo.mjs pass"
 tags: ["stream:tooling", "kind:enhancement"]
+priority: low
 ---
 
 # Show a complete visual execution queue with one active ticket in serial mode
