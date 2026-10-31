@@ -1,7 +1,7 @@
 ---
 id: "110"
 title: "Keep agent footprint bounded while work runs, not only at ticket close"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
