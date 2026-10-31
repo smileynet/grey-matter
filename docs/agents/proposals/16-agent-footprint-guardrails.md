@@ -30,7 +30,7 @@ Extending the owner keeps ticket 97's decision (one skill owns the rule, the oth
 
 ## Evidence, 2026-10-23 to 2026-10-30, one Mac
 
-The system-health disk-review session reported the measurements below from disposable local reports. Those reports are not retained here, so these historical measurements are reported context rather than independently reproducible evidence; implementation acceptance requires the tracked fixtures below.
+The system-health disk-review session reported the measurements below from disposable local reports: the recent-files report and removal final list, both dated 2026-10-30. They are untracked in system-health and not preserved in this checkout, so these historical measurements are reported context rather than independently reproducible evidence; implementation acceptance requires the tracked fixtures below.
 
 - 166.1 GiB of new files in 7 days; 69.0 GiB of it in code folders.
 - Free space fell from 20 GiB to 6.6 GiB, and on Oct 30 at 06:45 to 0.18 GiB, while agent sessions kept writing. It recovered only because the Trash was emptied. About 55 GiB was moved to the Trash in the last two rounds (28.7 GiB, then 26.2 GiB).
@@ -99,7 +99,7 @@ For each uncommitted family (`.scratch/*`, build output, worktrees, outside work
 
 Exit 0 reports; 1 means a stated limit is exceeded (a ticket over its cap, free space under the floor); 2 means inspection failed. Partial coverage is reported, never presented as complete. A companion `--slim` execution mode is not proposed: removal stays with the user's authorization and `trash`.
 
-**Prototype context:** system-health used disposable Python/macOS scripts for keep-list and recheck logic, reporting 30 real items without a wrong removal. Those scripts are not a durable implementation dependency. Implement the contract above with tracked fixtures; Linux needs its own `lsof`/`du` verification.
+**Prototype context:** system-health used disposable Python/macOS scripts for keep-list and recheck logic, reporting 30 real items without a wrong removal. The `removal-final` script and session scratchpad scripts `code_candidates.py` and `do_ready.py` are untracked there and not preserved here; they are not a durable implementation dependency. Implement the contract above with tracked fixtures; Linux needs its own `lsof`/`du` verification.
 
 ### P4. Conformance checks for adopted repos (`conformance-audit`)
 

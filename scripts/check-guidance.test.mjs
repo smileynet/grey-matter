@@ -102,7 +102,7 @@ test("a file referenced by guidance and changed after the guidance's last commit
     git(["commit", "-qam", "two"], "2026-02-01T00:00:00Z");
     const r = spawnSync(process.execPath, [SCRIPT, "--repo", f.repo, "--json", "--no-global"], { encoding: "utf8", env: { ...f.env, PATH: process.env.PATH } });
     const found = parse(r);
-    assert.ok(has(found, "judgment", "re-read", /AGENTS\.md:1 .*scripts\/run\.sh/), JSON.stringify(found));
+    assert.ok(has(found, "judgment", "re-read", /AGENTS\.md:1 .*scripts[\\/]run\.sh/), JSON.stringify(found));
   });
 });
 

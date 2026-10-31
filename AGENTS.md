@@ -56,7 +56,7 @@ Re-clone its listed references on a fresh checkout; add each new reference with 
 with Pocock's for this workflow.
 
 Other skill sets we study (notably **crew-research**, at
-`~/code/crew-research/atomics/`) are **prior art we draw insight from, never an authoritative
+`../crew-research/atomics/`) are **prior art we draw insight from, never an authoritative
 source.**
 
 Cite them as "X does this (prior art); grey-matter chose Y" — consulted and weighed,

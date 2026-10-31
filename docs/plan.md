@@ -97,6 +97,40 @@ Already on main for these versions: grey `bca9a2a` and `734c5ee`, tkt `752b14c` 
 `dd559e5`. Land tkt 138 before theme A's fields so they declare themselves in the
 manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 227.
 
+## Open work order (reconciled 2026-10-31)
+
+Order follows the rubric: finish the in-flight threads, earlier ids first, real blockers
+override position, priority breaks ties only. Waves run top to bottom; rows within a wave
+are in the order to take them. Release themes above still say what ships in 0.3.0.
+
+| ID | Work | Status |
+| --- | --- | --- |
+| 120 | Wave 1, tooling reliability: sync resolves vendored-tool drift and a diverged tkt checkout | open |
+| 98 | Wave 1: sync can deploy tkt skills ahead of the installed CLI (shares sync with 120) | open |
+| 121 | Wave 1: critic probe launches Codex on Windows and says when the CLI is too old | open |
+| 122 | Wave 1: find why check-repo invariant 1 fails intermittently | open |
+| 104 | Wave 2, workflow guidance (theme E): acceptance for stateful changes names ownership and terminal behavior | open |
+| 105 | Wave 2: check generated tests against the contract and prove the assertion ran | open |
+| 106 | Wave 2: release verify keeps numbered attempts | open |
+| 107 | Wave 2: improve-codebase-architecture names the next real change a seam simplifies | open |
+| 108 | Wave 2: writing-for-agents ties pruning to observed navigation failures | open |
+| 92 | Wave 3, dashboard checks itself (theme D): fix the gaps the critic model spike found | open |
+| 90 | Wave 3: build the dashboard copy and results critics (after 92) | open |
+| 109 | Wave 3: delivery-dashboard understands tkt's cancelled status (ships with tkt 227) | open |
+| 116 | Wave 4, evidence cluster: derive current delivery summaries from scoped evidence records | open |
+| 115 | Wave 4: require positive scoped evidence for preservation claims | open |
+| 117 | Wave 4: declare retrospective coverage and distinguish repairs from remaining work | open |
+| 112 | Wave 4: plan UI checks against available capabilities and preserve evidence boundaries | open |
+| 113 | Wave 4: verify portable bundle hashes across fresh copies and Git checkouts | open |
+| 114 | Wave 4: discover project verification gates and stop dependent mutations on failure | open |
+| 118 | Wave 4: show a complete visual execution queue with one active ticket in serial mode | open |
+| 119 | Wave 4: choose the cheapest faithful test environment with explicit lifecycle gates | open |
+| 111 | Wave 5, owner input first: build the orchestrate skill (proposal 17; three open questions) | open |
+| 95 | Wave 5: Kiro Crew chat_tag and session_ledger steps (after 111's placement decision) | open |
+| 87 | Owner decision: setup-repo links shadow handoff and grill-me in Kiro | open |
+| 89 | Owner approval per repo: adopt the dashboard template in three other repos | open |
+| 94 | Low: Kiro hook runs check-repo before an agent push | open |
+
 ## Parked work
 
 These are existing backlog items, not newly approved release scope. Audit 70 records
@@ -121,3 +155,5 @@ their release dispositions; this table does not clear any blocker.
 | 33 | tkt: allow checking ACs on a superseded/closed ticket (or validate --fix to repair unchecked-acs-on-done) | ✅ done |
 | 43 | Revisit adopt-project glossary seeding: (b) stage-then-write vs (c) hybrid, from real-use findings | backlog |
 | 44 | orient could nudge if the pre-commit hook isn't installed (optional) | open |
+| 96 | Docker containment option for Codex critics (only if critics must read files) | backlog |
+| 110 | Keep agent footprint bounded while work runs, not only at ticket close (proposal 16) | backlog |

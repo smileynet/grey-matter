@@ -23,7 +23,7 @@ Gaps from the [critic model spike](../docs/agents/research/critic-model-spike-20
 6. **opencode ceiling**: its `opencode` provider key is expired; critics use the owner's z.ai plan. Refresh the key or confirm z.ai stays the choice.
 7. **Context isolation**: Kiro loads global steering into a fresh session; confirm whether a Kiro critic should run with `--agent` set to a bare agent.
 8. **Claude accepts a nonexistent model** (sync probe 2026-10-28, macOS host, claude 2.1.310): `probe-critic-model.mjs` reports `missing-model: FAIL`, the harness accepted a model name that does not exist instead of erroring. A requested pin therefore proves nothing on its own; the same fix as gap 4 (check the recorded model against the pin) covers it.
-9. **Codex ceiling unreachable on this host** (same probe, codex 0.164.0): the configured provider endpoint returns 404 "model does not exist" for `gpt-6.1-sol`, so Codex critics cannot run at the ceiling here. Point Codex at a provider that serves the ceiling model, or record the host as below ceiling.
+9. **Codex ceiling unreachable on this host** (same probe, codex 0.164.0): the configured provider endpoint returns 404 "model does not exist" for `gpt-6.1-sol`, so Codex critics cannot run at the ceiling here. Point Codex at a provider that serves the ceiling model, or record the host as below ceiling. **Resolved on the Windows host 2026-10-31:** Codex 0.139.0 was below the 0.159 minimum; after upgrading to 0.166.0 the probe ran on `gpt-6.1-sol` at ceiling. Other hosts still need the check. The probe's Windows launch and old-CLI reporting are ticket 121.
 
 ## Acceptance criteria
 
