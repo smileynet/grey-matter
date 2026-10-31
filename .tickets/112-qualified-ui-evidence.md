@@ -7,6 +7,7 @@ validation_criteria:
   - "Conditional UI verification guidance distinguishes protocol capability, artifact checks, human reports and learner outcomes"
   - "Guidance fixtures and node scripts/check-repo.mjs pass"
 tags: ["stream:tooling"]
+priority: medium
 ---
 
 # Plan UI checks against available capabilities and preserve evidence boundaries
