@@ -7,6 +7,7 @@ validation_criteria:
   - "A fixture where pack skills use a flag the installed CLI lacks is reported before deploy"
   - "sync documents whether to pin the tkt pack to the installed CLI's tag or upgrade the CLI"
 tags: ["stream:tooling", "type:enhancement"]
+priority: medium
 ---
 
 # sync can deploy tkt skills from a dev checkout that are ahead of the installed tkt release CLI
@@ -22,6 +23,8 @@ tags: ["stream:tooling", "type:enhancement"]
 - `verify-tkt-usage` only runs when the tkt version changes, so a pack refresh against an
   unchanged CLI is never checked. Sync was held manually: grey-matter deployed, tkt pack
   left at the copies that match 0.4.0.
+
+Seen again 2026-10-31 (Windows host): the installed CLI reports tkt 0.4.0 (92d4833) and warns `unknown config key "audit.resolution_baseline_id"` for the tkt checkout's `.tickets/config.toml`, so the checkout is also ahead of the CLI in config keys. The same pre-deploy check should surface it.
 
 ## What to build
 
