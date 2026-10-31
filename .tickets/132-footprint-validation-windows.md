@@ -44,3 +44,11 @@ Fix wrong rows and inspector bugs in place; file anything larger as its own tick
 - [ ] The inspector's fixture test runs and reports open files as unchecked, or the failure is fixed or filed.
 - [ ] Inspector free space matches `Get-Volume`; OneDrive placeholders are handled or filed.
 - [ ] Commands and output are recorded; `node scripts/check-repo.mjs` passes on Windows.
+
+## Observed failure (2026-10-31, from the ticket 125 session)
+
+`node --test scripts/inspect-footprint.test.mjs` on Windows 11 Pro 10.0.26300, Node from this checkout, fails 3 of 7 on a clean detached worktree of `HEAD` (so it is not caused by uncommitted work), which makes `check-repo` invariant 13 red:
+
+- `not ok 1 - seeded families get the right facts and outcomes, and the run goes red`: expected `'skip'`, actual `'keep'`
+- `not ok 4 - the free-space floor and the summary line`: `1 !== 2`
+- `not ok 5 - goes green once the seeded problems are cleaned up`: expected `0`, actual `1`
