@@ -172,14 +172,14 @@ These are capability probes, one per harness, to run **before** the skill is wri
 
 ### Shared fixture (spike 0)
 
-A disposable sandbox repo, made by a script and kept outside grey-matter. It has `tkt init`, a `npm test` suite of a few seconds, a dashboard copied from the `delivery-dashboard` template, and five tickets:
+A disposable sandbox repo, made by [`scripts/spike-orchestrate-fixture.mjs`](../../../scripts/spike-orchestrate-fixture.mjs) and kept outside grey-matter (run it with no arguments for usage; `clean` removes it). Each ticket names the files it may touch on a `Touches:` line, which is what admission reads for overlap. It has `tkt init`, a `npm test` suite of a few seconds, a dashboard copied from the `delivery-dashboard` template, and five tickets:
 
 | Ticket | Shape | Expected handling |
 |---|---|---|
-| T1 | Add `a.js`, with a test | Admitted |
-| T2 | Add `b.js`, with a test. One requirement is deliberately ambiguous (a name to take "from the glossary", and no glossary exists) | Admitted; the worker sends `QUESTION` and the orchestrator answers it |
-| T3 | Edit `a.js` | Held: overlaps T1 |
-| T4 | Blocked by T1 | Admitted only after T1 lands |
+| T1 | Add `multiply` to the seeded `src/a.js`, with a test | Admitted |
+| T2 | Add `src/b.js`, with a test. One requirement is deliberately ambiguous (a name to take "from the glossary", and no glossary exists) | Admitted; the worker sends `QUESTION` and the orchestrator answers it |
+| T3 | Rename `add` to `sum` in `src/a.js` | Held: overlaps T1 |
+| T4 | Add `src/c.js` using `multiply`; blocked by T1 | Admitted only after T1 lands |
 | T5 | Delete `README.md` | Admitted; the worker's deletion triggers an escalation |
 
 It runs in two variants: trunk mode with no remote, and branch/PR mode with a throwaway private GitHub repo. The user approves creating that repo first.
