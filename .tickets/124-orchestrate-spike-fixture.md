@@ -1,7 +1,7 @@
 ---
 id: "124"
 title: "Spike 0: disposable orchestration fixture repo (five shaped tickets, trunk and PR variants)"
-status: open
+status: in_progress
 blocked_by: []
 tags: ["stream:tooling", "type:research"]
 ---
