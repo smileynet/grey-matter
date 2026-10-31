@@ -43,6 +43,25 @@ export function check(path, { strict = false } = {}) {
   if (!Array.isArray(entries)) { err("gm-entries must be a JSON array"); return finish(); }
   if (cfg && cfg.recentCount !== undefined && !(Number.isInteger(cfg.recentCount) && cfg.recentCount >= 1 && cfg.recentCount <= 10)) err("recentCount must be an integer from 1 to 10");
 
+  if (cfg && cfg.ticketFlow !== undefined && cfg.ticketFlow !== false) {
+    const flow = cfg.ticketFlow;
+    if (!flow || typeof flow !== "object" || Array.isArray(flow)) err("ticketFlow must be false or a configuration object");
+    else {
+      if (flow.enabled !== undefined && typeof flow.enabled !== "boolean") err("ticketFlow.enabled must be boolean");
+      const scopes = flow.scopes === undefined ? [] : flow.scopes;
+      if (!Array.isArray(scopes)) err("ticketFlow.scopes must be a list");
+      else {
+        const scopeIds = new Set(["all"]);
+        scopes.forEach((scope) => {
+          if (!scope || typeof scope.id !== "string" || !scope.id || scopeIds.has(scope.id)) err("ticketFlow scopes need unique ids other than all");
+          else scopeIds.add(scope.id);
+          if (!scope || typeof scope.label !== "string" || !scope.label || !Array.isArray(scope.tags) || !scope.tags.length || !scope.tags.every((tag) => typeof tag === "string" && tag)) err("ticketFlow scopes need a label and nonempty tags list");
+        });
+        if (flow.defaultScope !== undefined && !scopeIds.has(flow.defaultScope)) err("ticketFlow.defaultScope must name all or a configured scope");
+      }
+    }
+  }
+
   const ids = new Set();
   const hrefOk = (h, where) => {
     if (typeof h !== "string" || !h) return err(`${where}: empty link`);
@@ -115,6 +134,7 @@ export function check(path, { strict = false } = {}) {
         if (typeof t.title !== "string" || !t.title) err(`${at}: title required`);
         if (!STATUSES.includes(t.status)) err(`${at}: status must be one of ${STATUSES.join(", ")}`);
         if (t.priority !== undefined && !PRIORITIES.includes(t.priority)) err(`${at}: priority must be one of ${PRIORITIES.join(", ")}`);
+        if (t.tags !== undefined && !(Array.isArray(t.tags) && t.tags.every((tag) => typeof tag === "string"))) err(`${at}: tags must be a list of strings`);
         if (t.blocked_by !== undefined && !(Array.isArray(t.blocked_by) && t.blocked_by.every((b) => typeof b === "string"))) err(`${at}: blocked_by must be a list of ids`);
       });
       list.forEach((t) => (t && Array.isArray(t.blocked_by) ? t.blocked_by : []).forEach((b) => tids.has(b) || warn(`ticket ${t.id}: blocker ${b} is not in the snapshot`)));
@@ -155,6 +175,12 @@ export function check(path, { strict = false } = {}) {
         const g = api.planGroups(snap), grouped = Object.values(g).reduce((s, x) => s + x.length, 0);
         logic.plan = grouped;
         if (grouped !== snap.tickets.length) err(`plan grouping broken: ${grouped} of ${snap.tickets.length} tickets shown`);
+        if (api.ticketFlow && cfg && cfg.ticketFlow !== false && !(cfg.ticketFlow && cfg.ticketFlow.enabled === false)) {
+          const flow = api.ticketFlow(snap);
+          const remaining = snap.tickets.filter((ticket) => ticket.status !== "done");
+          if (flow.visible.length !== remaining.length || remaining.some((ticket) => !flow.visible.some((visible) => visible.id === ticket.id))) err("default ticket flow hides remaining work");
+          if (Object.values(flow.counts).reduce((total, count) => total + count, 0) !== flow.visible.length) err("ticket flow status counts omit visible work");
+        }
       }
     } catch (e) { err(`page script failed to load: ${e.message}`); }
   } else err("page script missing");

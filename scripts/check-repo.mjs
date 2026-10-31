@@ -111,6 +111,8 @@ run("12. Git and Claude plugin hooks", node, ["--test", join(SCRIPTS, "install-h
 run("13. repository artifact hygiene", node, ["--test", join(SCRIPTS, "repository-artifact-hygiene.test.mjs"), join(SCRIPTS, "inspect-footprint.test.mjs")]);
 run("14. agent shell probe", node, ["--test", join(SCRIPTS, "probe-agent-shell.test.mjs")]);
 run("15. delivery-dashboard contract", node, ["--test", join(SCRIPTS, "delivery-dashboard.test.mjs")]);
+run("15b. final-source review receipt", node, ["--test", join(SCRIPTS, "review-receipt.test.mjs")]);
+if (process.env.DASHBOARD_BROWSER_TESTS === "1") run("15c. delivery-dashboard browser behavior", node, ["--test", join(SCRIPTS, "delivery-dashboard-browser.test.mjs")]);
 run("16. critic model probe", node, ["--test", join(SCRIPTS, "probe-critic-model.test.mjs")]);
 run("17. orchestrate spike fixture", node, ["--test", join(SCRIPTS, "spike-orchestrate-fixture.test.mjs")]);
 

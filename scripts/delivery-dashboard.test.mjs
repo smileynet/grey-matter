@@ -9,6 +9,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
+import { execFileSync } from "node:child_process";
 import { check } from "../skills/productivity/delivery-dashboard/scripts/check-dashboard.mjs";
 import { snapshot } from "../skills/productivity/delivery-dashboard/scripts/snapshot-tickets.mjs";
 
@@ -199,4 +200,58 @@ test("malformed data blocks produce errors, not a crash", (t) => {
   const r = run(d.file);
   assert.equal(r.ok, false);
   assert.match(r.errors.join("\n"), /not valid JSON/);
+});
+
+
+test("remaining flow includes deferred work, complete counts and every visible edge", () => {
+  const snap = { tickets: [tk("base", "done"), tk("one", "open", ["base"]), tk("two", "in_progress", ["one"]), tk("three", "open", ["two"]), tk("later", "backlog"), tk("other", "open")] };
+  const flow = api().ticketFlow(snap), plain = (value) => JSON.parse(JSON.stringify(value));
+  assert.deepEqual(plain(flow.visible.map((ticket) => ticket.id)), ["one", "two", "three", "later", "other"]);
+  assert.deepEqual(plain(flow.edges.map((edge) => edge.from + ">" + edge.to)), ["one>two", "two>three"]);
+  assert.deepEqual(plain(flow.counts), { ready: 2, in_progress: 1, blocked: 1, backlog: 1, done: 0 });
+  assert.deepEqual(plain(flow.relations("two")), { before: ["one", "base"], after: ["three"], waiting: ["one"] });
+  const completed = api().ticketFlow(snap, { completed: true });
+  assert.ok(completed.edges.some((edge) => edge.from === "base" && edge.satisfied));
+});
+
+test("a completed configured stream falls back without hiding work elsewhere", () => {
+  const snap = { tickets: [{ ...tk("past", "done"), tags: ["archive"] }, { ...tk("next", "open"), tags: ["build"] }, tk("later", "backlog")] };
+  const scopes = [{ id: "archive", label: "Archive", tags: ["archive"] }];
+  const flow = api().ticketFlow(snap, { scopes, scope: "archive" });
+  assert.equal(flow.scope, "all"); assert.equal(flow.fallback, true);
+  assert.deepEqual(Array.from(flow.visible, (ticket) => ticket.id), ["next", "later"]);
+  const context = api().ticketFlow(snap, { scopes, scope: "archive", completed: true });
+  assert.deepEqual(Array.from(context.visible, (ticket) => ticket.id), ["past"]); assert.equal(context.elsewhere, 2);
+});
+
+test("flow keeps a missing prerequisite visible as waiting and rejects cycles", () => {
+  const flow = api().ticketFlow({ tickets: [tk("visible", "open", ["missing"])] });
+  assert.equal(flow.counts.blocked, 1); assert.deepEqual(Array.from(flow.relations("visible").waiting), ["missing"]);
+  assert.throws(() => api().ticketFlow({ tickets: [tk("a", "open", ["b"]), tk("b", "done", ["a"])] }), /cycle/);
+});
+
+function flowDashboard(t, entries, edit = (html) => html) {
+  const parent = resolve(SKILL, "../../..", ".scratch/t50-fixtures"); mkdirSync(parent, { recursive: true });
+  const dir = mkdtempSync(join(parent, "fixture-")); t.after(() => execFileSync("gio", ["trash", "--", dir]));
+  const file = join(dir, "status.html"); writeFileSync(file, edit(TEMPLATE.replace(ENTRIES, `$1${JSON.stringify(entries)}$3`)));
+  return { dir, file };
+}
+
+test("checker rejects malformed flow configuration and malformed tags", (t) => {
+  for (const config of [{ scopes: [{ id: "all", label: "Duplicate", tags: ["x"] }] }, { scopes: [{ id: "build", label: "Build", tags: [] }] }, { defaultScope: "missing" }]) {
+    const d = flowDashboard(t, [], (html) => html.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/, "$1" + JSON.stringify({ project: "Fixture", ticketFlow: config }) + "$2"));
+    assert.equal(check(d.file).ok, false);
+  }
+  const d = flowDashboard(t, [], withTickets({ generated: null, frontier: [], tickets: [{ ...tk("bad", "open"), tags: "build" }] }));
+  assert.match(check(d.file).errors.join(";"), /tags must be/);
+});
+
+
+test("snapshot retains real ticket tags when the CLI omits them", (t) => {
+  const d = flowDashboard(t, []); mkdirSync(join(d.dir, ".tickets"));
+  writeFileSync(join(d.dir, ".tickets/one-a.md"), '---\nid: "one"\ntags: ["build", "review"]\n---\n');
+  writeFileSync(join(d.dir, ".tickets/two-b.md"), '---\nid: "two"\ntags:\n  - "design"\n  - later\n---\n');
+  const run = (cmd, args) => args[0] === "query" ? [tk("one", "open"), tk("two", "backlog")].map((ticket) => JSON.stringify(ticket)).join("\n") : JSON.stringify({ id: "one" });
+  snapshot(d.file, { repo: d.dir, run }); const snap = JSON.parse(readFileSync(d.file, "utf8").match(TICKETS)[2]);
+  assert.deepEqual(snap.tickets.map((ticket) => ticket.tags), [["build", "review"], ["design", "later"]]);
 });

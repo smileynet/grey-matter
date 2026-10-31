@@ -27,7 +27,7 @@ Everything else (evidence, files, commits, test output, process) is reachable bu
 | Latest | The newest entry in full: headline, summary, up to 3 changes, one visual, a try link. |
 | Earlier | The next four entries as collapsed rows (date, headline, type, "Needs you" marker). |
 | All entries tab | Every entry as a collapsed row, with search, type and area filters, "Needs you" filter, expand and collapse all, and a live count. |
-| Plan tab | Every ticket from the snapshot. Progress (done of total, a bar by state with a legend), "What comes next" (open and in-progress work in layers: a ticket sits one layer after its deepest unfinished blocker), then all tickets grouped Ready (frontier order), In progress, Blocked, Backlog and Done (collapsed), with search and state filters. A ticket row shows what it waits on, what it unblocks and the entries that delivered it. |
+| Plan tab | The optional remaining-ticket flow comes first, followed by every ticket from the snapshot. Progress (done of total, a bar by state with a legend), "What comes next" (open and in-progress work in layers: a ticket sits one layer after its deepest unfinished blocker), then all tickets grouped Ready (frontier order), In progress, Blocked, Backlog and Done (collapsed), with search and state filters. A ticket row shows what it waits on, what it unblocks and the entries that delivered it. |
 
 The overview never grows past five entries (`recentCount`). Older entries are not deleted: they
 drop out of the overview and stay in the history tab, so the at-a-glance view stays short and the
@@ -55,9 +55,48 @@ One entry per closed ticket, plus any other finished work worth surfacing, newes
 
 ## Ticket snapshot
 
+## Remaining ticket flow
+
+The shared template keeps an offline, interactive dependency flow in the Plan tab. By default it
+shows every non-done ticket, including backlog, and every edge between those visible tickets.
+Counts account for prerequisite eligibility, active work, waiting work, deferred work and completed
+context separately. "Prerequisites met" describes the graph, not game/device access or participant
+availability; keep those project facts outside the shared renderer.
+
+`gm-config.ticketFlow` may be `false` to omit the flow, or an object:
+
+```json
+{
+  "enabled": true,
+  "defaultScope": "all",
+  "scopes": [
+    {"id": "build", "label": "Build work", "tags": ["build", "verification"]}
+  ]
+}
+```
+
+`all` is reserved for all remaining work. Scope tags match any listed tag. Scope ids are unique;
+labels and tag lists are nonempty. A configured stream with no visible remaining work falls back
+to all remaining work with a notice. A narrowed view always reports unfinished tickets outside it,
+so completed context cannot silently imply the project is finished. Deferred work is included
+initially and has its own toggle; completed context is opt-in. The complete searchable ticket list
+remains below regardless of graph scope or whether the flow is enabled.
+
+Selecting a ticket highlights its transitive prerequisites and dependents, lists unfinished and
+completed prerequisites (including missing snapshot references), and links to its ticket row.
+The readable prerequisite list and glyph/text states supplement arrows and colour. The diagram
+scrolls internally on small screens; the document must not overflow. Inspect a whole chain at
+laptop/phone widths; DOM membership alone does not prove that its path is understandable.
+
+When changing this renderer, run both the ordinary contract fixtures and the explicit local browser
+gate: `DASHBOARD_BROWSER_TESTS=1 node scripts/check-repo.mjs`, with local `PLAYWRIGHT_MODULE` and
+`CHROME_BIN` set when not using the Node installation's Playwright and system Chromium. Browser
+tools are test prerequisites, not dashboard runtime resources; no CDN or network fallback is used.
+
 `gm-tickets` holds `{generated, frontier, tickets}`: the snapshot time, the ids `tkt ready`
 returns in order, and each ticket's `id`, `title`, `status`, `priority`, `blocked_by` and `tags`
-from `tkt query`. Regenerate it after every ticket change rather than editing it; the page stays
+from `tkt query`. Current tkt versions omit tags in query output; the snapshot helper fills missing
+tags from the same ticket files' inline/block tag lists without changing CLI-provided tags. Regenerate it after every ticket change rather than editing it; the page stays
 offline, so it shows the board as of `generated`. A blocker missing from the snapshot counts as
 unfinished, so a broken edge never hides work.
 

@@ -81,6 +81,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:no-preference){.card,details.row{transition:border-color .15s}}
 @media (max-width:560px){.card{padding:16px}details.row .when{min-width:0}}
+#ticket-flow{margin-top:0}.flow-options>summary,.flow-readable>summary{cursor:pointer;min-height:44px;padding:8px 0}.flow-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:8px 0}.flow-controls label{display:flex;align-items:center;gap:8px;min-height:44px;max-width:100%;min-width:0}.flow-controls select{font:inherit;padding:10px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;min-width:0;max-width:100%}.flow-counts,.flow-notice{font-size:14px;color:var(--muted)}.flow-notice{border-left:3px solid var(--blue);padding:10px}.flow-scroll{max-height:820px;overflow:auto;border:1px solid var(--line);padding:16px;margin:16px 0}.flow-canvas{position:relative;width:max-content;min-width:100%;padding:12px 24px}.flow-layers{display:flex;flex-direction:column;gap:42px;position:relative;z-index:1}.flow-layer{display:grid;grid-template-columns:repeat(3,240px);gap:16px}.flow-layer h3{grid-column:1/-1;font-size:14px;margin:0;color:var(--muted)}.flow-node{font:14px/1.45 system-ui;text-align:left;white-space:normal;overflow-wrap:anywhere;background:var(--panel);color:var(--text);border:2px solid var(--line);border-radius:8px;padding:12px;min-height:110px;cursor:pointer}.flow-node strong,.flow-node span,.flow-node small{display:block}.flow-node span,.flow-node small{margin-top:7px}.flow-node small{color:var(--muted);font-size:12px}.flow-node[data-state=ready]{border-color:var(--ok)}.flow-node[data-state=in_progress]{border-color:var(--cyan)}.flow-node[data-state=backlog]{border-style:dashed}.flow-node[data-state=blocked]{border-color:var(--bad)}.flow-node[data-related=unrelated]{opacity:.55}.flow-node[data-related=before],.flow-node[data-related=after]{border-color:var(--blue)}.flow-node[aria-pressed=true]{outline:3px solid var(--ask);outline-offset:3px}.flow-links{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:visible}.flow-links path{fill:none;stroke:var(--muted);stroke-width:2}.flow-links .flow-arrow{fill:var(--muted);stroke:none}.flow-links path[data-satisfied=true]{stroke-dasharray:5 5}.flow-links path[data-related=true]{stroke:var(--blue);stroke-width:3}.flow-detail{border-left:3px solid var(--blue);padding:12px 16px;background:var(--panel);margin:16px 0}.flow-detail h3{margin:0 0 8px}.flow-detail p{margin:8px 0}.flow-readable li{margin:8px 0}@media(max-width:560px){.flow-scroll{max-height:620px;padding:10px}.flow-canvas{padding:10px 16px}}
 </style>
 </head>
 <body>
@@ -117,6 +118,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 </main>
 
 <main id="plan" role="tabpanel" aria-labelledby="tab-plan" hidden>
+  <section id="ticket-flow" aria-labelledby="flow-h"><h2 id="flow-h">Remaining ticket flow</h2><div id="flow-content"></div></section>
   <section aria-labelledby="progress-h"><h2 id="progress-h">Progress</h2><div id="plan-progress"></div></section>
   <section aria-labelledby="order-h"><h2 id="order-h">What comes next</h2><div id="plan-lanes"></div></section>
   <section aria-labelledby="tickets-h"><h2 id="tickets-h">All tickets</h2>
@@ -184,7 +186,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   var STATES = { ready: "Ready", in_progress: "In progress", blocked: "Blocked", backlog: "Backlog", done: "Done" };
   var SGLYPH = { ready: "○", in_progress: "◐", blocked: "▲", backlog: "…", done: "●" };
   var ORDER = ["ready", "in_progress", "blocked", "backlog", "done"];
-  function ticketIndex(snap) { var m = {}; (snap.tickets || []).forEach(function (t) { m[t.id] = t; }); return m; }
+  function ticketIndex(snap) { var m = Object.create(null); (snap.tickets || []).forEach(function (t) { m[t.id] = t; }); return m; }
   // A blocker missing from the snapshot counts as unfinished, so a broken edge never hides work.
   function waitingOn(t, idx) { return (t.blocked_by || []).filter(function (b) { return !idx[b] || idx[b].status !== "done"; }); }
   function ticketState(t, idx) { return t.status === "open" ? (waitingOn(t, idx).length ? "blocked" : "ready") : t.status; }
@@ -219,13 +221,52 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     });
     return lanes.filter(Boolean);
   }
+  function ticketFlow(snap, options) {
+    options = options || {};
+    var idx = ticketIndex(snap), all = snap.tickets || [], scopes = options.scopes || [], scope = options.scope || "all";
+    var selected = scopes.filter(function (s) { return s.id === scope; })[0], fallback = scope !== "all" && !selected;
+    if (fallback) scope = "all";
+    function matching(t) { return scope === "all" || selected.tags.some(function (tag) { return (t.tags || []).indexOf(tag) >= 0; }); }
+    function included(t) { return (options.completed || t.status !== "done") && (options.deferred !== false || t.status !== "backlog"); }
+    var visible = all.filter(function (t) { return matching(t) && included(t); });
+    if (scope !== "all" && !visible.length && all.some(function (t) { return t.status !== "done" && included(t); })) {
+      scope = "all"; fallback = true; visible = all.filter(included);
+    }
+    var ids = Object.create(null), memo = Object.create(null), visiting = Object.create(null), checked = Object.create(null);
+    visible.forEach(function (t) { ids[t.id] = true; });
+    function inspect(id) {
+      if (visiting[id]) throw new Error("Ticket dependency cycle at " + id);
+      if (checked[id] || !idx[id]) return;
+      visiting[id] = true; (idx[id].blocked_by || []).forEach(inspect); delete visiting[id]; checked[id] = true;
+    }
+    all.forEach(function (t) { inspect(t.id); });
+    function depth(id) {
+      if (memo[id] !== undefined) return memo[id];
+      var d = 0; (idx[id].blocked_by || []).filter(function (id) { return ids[id]; }).forEach(function (id) { d = Math.max(d, depth(id) + 1); });
+      return (memo[id] = d);
+    }
+    var layers = [], counts = { ready: 0, in_progress: 0, blocked: 0, backlog: 0, done: 0 };
+    visible.forEach(function (t) { var d = depth(t.id); (layers[d] = layers[d] || []).push(t); counts[ticketState(t, idx)]++; });
+    layers.forEach(function (layer) { layer.sort(byId); });
+    var edges = [];
+    visible.forEach(function (t) { (t.blocked_by || []).forEach(function (id) { if (ids[id]) edges.push({ from: id, to: t.id, satisfied: idx[id].status === "done" }); }); });
+    function relations(id) {
+      var before = [], after = [];
+      function upstream(id) { if (!idx[id]) return; (idx[id].blocked_by || []).forEach(function (p) { if (before.indexOf(p) < 0) { before.push(p); upstream(p); } }); }
+      function downstream(id) { all.forEach(function (t) { if ((t.blocked_by || []).indexOf(id) >= 0 && after.indexOf(t.id) < 0) { after.push(t.id); downstream(t.id); } }); }
+      upstream(id); downstream(id);
+      return { before: before, after: after, waiting: waitingOn(idx[id], idx) };
+    }
+    return { index: idx, visible: visible, layers: layers, edges: edges, counts: counts, scope: scope, fallback: fallback, elsewhere: all.filter(function (t) { return t.status !== "done" && !ids[t.id]; }).length, relations: relations };
+  }
+
   function ticketMatches(t, f, idx) {
     if (f.state && ticketState(t, idx) !== f.state) return false;
     var q = (f.q || "").trim().toLowerCase(), hay = [t.id, t.title, t.status, t.priority, (t.tags || []).join(" ")].filter(Boolean).join(" ").toLowerCase();
     return !q || q.split(/\s+/).every(function (w) { return hay.indexOf(w) >= 0; });
   }
 
-  var api = { sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref, planGroups: planGroups, planLanes: planLanes, ticketMatches: ticketMatches };
+  var api = { sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref, planGroups: planGroups, planLanes: planLanes, ticketMatches: ticketMatches, ticketFlow: ticketFlow };
   if (typeof window !== "undefined") window.GMDashboard = api;
   if (typeof document === "undefined" || !document.getElementById("gm-entries")) return;
 
@@ -410,7 +451,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     P.appendChild(bar);
     P.appendChild(lg);
     var lanes = planLanes(snap);
-    $("order-h").parentNode.hidden = !lanes.length;
+    $("order-h").parentNode.hidden = !lanes.length || (cfg.ticketFlow !== false && !(cfg.ticketFlow && cfg.ticketFlow.enabled === false));
     var wrap = el("div", { class: "lanes" });
     lanes.forEach(function (lane, i) {
       var ol = el("ol");
@@ -424,6 +465,80 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     });
     Ln.appendChild(wrap);
   }
+  function renderFlow() {
+    var section = $("ticket-flow"); if (!section) return;
+    var settings = cfg.ticketFlow || {};
+    section.hidden = cfg.ticketFlow === false || settings.enabled === false;
+    if (section.hidden) return;
+    var root = $("flow-content"), controls = el("details", { class: "flow-options" }, [el("summary", { text: "Filter ticket flow" })]);
+    root.textContent = "";
+    var form = el("div", { class: "flow-controls" }), scope = el("select", { id: "flow-scope", "aria-label": "Ticket flow work stream" });
+    scope.appendChild(el("option", { value: "all", text: "All remaining work" }));
+    (settings.scopes || []).forEach(function (s) { scope.appendChild(el("option", { value: s.id, text: s.label })); });
+    scope.value = settings.defaultScope || "all";
+    form.appendChild(el("label", { text: "Work stream " }, [scope]));
+    var completed = el("input", { type: "checkbox", id: "flow-completed" }), deferred = el("input", { type: "checkbox", id: "flow-deferred" }); deferred.checked = true;
+    form.appendChild(el("label", {}, [completed, document.createTextNode("Include completed context")]));
+    form.appendChild(el("label", {}, [deferred, document.createTextNode("Include deferred work")]));
+    controls.appendChild(form); root.appendChild(controls);
+    root.appendChild(el("p", { class: "meta", text: "Arrows connect prerequisites to dependent work. Prerequisites met describes ticket dependencies, not device, access or participant readiness." }));
+    var notice = el("p", { class: "flow-notice", role: "status" }), summary = el("p", { class: "flow-counts" }), scroll = el("div", { class: "flow-scroll", tabindex: "0", role: "region", "aria-label": "Ticket dependency flow; scroll to follow branches" });
+    var canvas = el("div", { class: "flow-canvas" }), layers = el("div", { class: "flow-layers" }), svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "flow-links"); svg.setAttribute("aria-hidden", "true");
+    canvas.appendChild(svg); canvas.appendChild(layers); scroll.appendChild(canvas);
+    var detail = el("div", { class: "flow-detail", "aria-live": "polite" }), readable = el("details", { class: "flow-readable" }, [el("summary", { text: "Read the visible prerequisite list" })]), list = el("ul"); readable.appendChild(list);
+    root.appendChild(notice); root.appendChild(summary); root.appendChild(scroll); root.appendChild(detail); root.appendChild(readable);
+    var model, selected = null, buttons = Object.create(null), words = { ready: "Prerequisites met", in_progress: "In progress", blocked: "Waiting", backlog: "Deferred", done: "Done" };
+    function choose(id) {
+      selected = id; var t = model.index[id], r = model.relations(id), deps = t.blocked_by || [];
+      detail.textContent = ""; detail.appendChild(el("h3", { text: id + " · " + t.title }));
+      detail.appendChild(el("p", { text: "Prerequisites: " + (deps.map(function (id) { return id + " (" + (model.index[id] ? model.index[id].status : "missing from snapshot") + ")"; }).join(", ") || "none") }));
+      detail.appendChild(el("p", { text: "Still waiting on: " + (r.waiting.join(", ") || "none") }));
+      detail.appendChild(el("p", { text: "Downstream work: " + (r.after.join(", ") || "none") }));
+      detail.appendChild(el("p", { text: "No dependency path to: " + (model.visible.filter(function (t) { return t.id !== id && r.before.indexOf(t.id) < 0 && r.after.indexOf(t.id) < 0; }).map(function (t) { return t.id; }).join(", ") || "none in this view") + ". Shared files and external access can still constrain parallel work." }));
+      detail.appendChild(el("a", { href: "#t-" + id, text: "Open ticket details" }));
+      Object.keys(buttons).forEach(function (key) { var b = buttons[key]; b.setAttribute("aria-pressed", String(key === id)); b.dataset.related = key === id ? "selected" : r.before.indexOf(key) >= 0 ? "before" : r.after.indexOf(key) >= 0 ? "after" : "unrelated"; });
+      draw();
+    }
+    function draw() {
+      svg.textContent = ""; var box = canvas.getBoundingClientRect(); if (!box.width || !box.height) return;
+      svg.setAttribute("width", String(canvas.scrollWidth)); svg.setAttribute("height", String(canvas.scrollHeight));
+      var defs = document.createElementNS(svg.namespaceURI, "defs"), marker = document.createElementNS(svg.namespaceURI, "marker"), arrow = document.createElementNS(svg.namespaceURI, "path");
+      marker.id = "gm-flow-arrow"; marker.setAttribute("viewBox", "0 0 10 10"); marker.setAttribute("refX", "10"); marker.setAttribute("refY", "5"); marker.setAttribute("markerWidth", "7"); marker.setAttribute("markerHeight", "7"); marker.setAttribute("orient", "auto"); arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 z"); arrow.setAttribute("class", "flow-arrow"); marker.appendChild(arrow); defs.appendChild(marker); svg.appendChild(defs);
+      var related = selected ? model.relations(selected) : null;
+      model.edges.forEach(function (edge, edgeIndex) {
+        var a = buttons[edge.from].getBoundingClientRect(), b = buttons[edge.to].getBoundingClientRect(), x1 = a.left + a.width / 2 - box.left, y1 = a.bottom - box.top, x2 = b.left + b.width / 2 - box.left, y2 = b.top - box.top, path = document.createElementNS(svg.namespaceURI, "path");
+        var lane = 6 + (edgeIndex % 3) * 5;
+        path.setAttribute("d", "M" + x1 + "," + y1 + " L" + x1 + "," + (y1 + 8) + " L" + lane + "," + (y1 + 8) + " L" + lane + "," + (y2 - 8) + " L" + x2 + "," + (y2 - 8) + " L" + x2 + "," + y2); path.setAttribute("marker-end", "url(#gm-flow-arrow)"); path.dataset.from = edge.from; path.dataset.to = edge.to; path.dataset.satisfied = String(edge.satisfied); path.dataset.related = String(Boolean(related && ((related.before.indexOf(edge.from) >= 0 && (related.before.indexOf(edge.to) >= 0 || edge.to === selected)) || ((edge.from === selected || related.after.indexOf(edge.from) >= 0) && related.after.indexOf(edge.to) >= 0)))); svg.appendChild(path);
+      });
+    }
+    function render() {
+      try { model = ticketFlow(snap, { scope: scope.value, scopes: settings.scopes, completed: completed.checked, deferred: deferred.checked }); }
+      catch (error) { root.textContent = "Ticket flow unavailable: " + error.message + ". The full ticket list remains below."; return; }
+      scope.value = model.scope;
+      notice.textContent = model.fallback ? "That stream has no visible remaining work; showing all remaining work." : model.elsewhere ? model.elsewhere + " unfinished tickets are outside this view. Choose All remaining work to see them." : "";
+      notice.hidden = !notice.textContent;
+      summary.textContent = ORDER.map(function (state) { return model.counts[state] + " " + words[state].toLowerCase(); }).join(" · ") + " · " + model.visible.length + " shown. Select a ticket to inspect its dependency path.";
+      layers.textContent = ""; list.textContent = ""; buttons = Object.create(null);
+      model.layers.forEach(function (items, depth) {
+        var layer = el("div", { class: "flow-layer" }, [el("h3", { text: depth ? "Dependency depth " + depth : "No visible ticket prerequisites" })]);
+        items.forEach(function (t) {
+          var state = ticketState(t, model.index), button = el("button", { type: "button", class: "flow-node", "aria-pressed": "false" }, [el("strong", { text: t.id + " · " + t.title }), el("span", { text: SGLYPH[state] + " " + words[state] })]); button.dataset.ticket = t.id; button.dataset.state = state;
+          var deps = t.blocked_by || [], done = deps.filter(function (id) { return model.index[id] && model.index[id].status === "done"; }), waiting = waitingOn(t, model.index);
+          if (waiting.length) button.appendChild(el("small", { text: "Needs: " + waiting.join(", ") }));
+          if (done.length) button.appendChild(el("small", { text: "Completed: " + done.join(", ") }));
+          if (!deps.length) button.appendChild(el("small", { text: "No ticket prerequisites" }));
+          button.addEventListener("click", function () { choose(t.id); }); buttons[t.id] = button; layer.appendChild(button);
+          list.appendChild(el("li", { text: t.id + " · " + t.title + " — " + (deps.length ? "prerequisites " + deps.join(", ") : "no prerequisites") + " · " + words[state] }));
+        }); layers.appendChild(layer);
+      });
+      if (selected && buttons[selected]) choose(selected); else { selected = null; detail.textContent = "Select a ticket above. Its prerequisites and downstream work will be highlighted."; }
+      if (!model.visible.length) layers.appendChild(el("p", { class: "none", text: "No tickets in this view." }));
+      requestAnimationFrame(draw);
+    }
+    [scope, completed, deferred].forEach(function (control) { control.addEventListener("change", render); });
+    new ResizeObserver(draw).observe(canvas); render();
+  }
+
   function ticketRow(t) {
     var st = ticketState(t, tidx);
     var s = el("summary", {}, [el("span", { class: "when tid", text: t.id }), el("span", { class: "ttl", text: t.title }), el("span", { class: "chip" + (st === "blocked" ? " blocked" : ""), text: SGLYPH[st] + " " + STATES[st] })]);
@@ -493,7 +608,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   $("updated").textContent = s0.latest ? "Updated " + s0.latest.date + " after: " + s0.latest.title : "No entries yet";
   $("history-count").textContent = "(" + entries.length + ")";
   $("plan-count").textContent = (snap.tickets || []).length ? "(" + snap.tickets.length + ")" : "";
-  renderOverview(); renderHistory(); renderPlanTop(); renderTickets();
+  renderOverview(); renderHistory(); renderFlow(); renderPlanTop(); renderTickets();
 
   TABS.forEach(function (t) { $("tab-" + t).addEventListener("click", function () { location.hash = t; }); });
   document.querySelector("[role=tablist]").addEventListener("keydown", function (ev) {

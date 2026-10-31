@@ -47,17 +47,24 @@ stays out of the way, under folds and links.
 4. **Refresh the Plan tab.** Run `node <this skill's directory>/scripts/snapshot-tickets.mjs
    <file>`. It rewrites only `gm-tickets` from the tkt board, so the Plan tab lists every ticket,
    open work first, with progress and what comes next. It refuses while a tkt tag context is set,
-   because a scoped snapshot would hide tickets.
+   because a scoped snapshot would hide tickets. The shipped flow starts with all remaining work,
+   including deferred tickets; tag-based work-stream views and completed context are optional.
+   Configure them through `gm-config.ticketFlow` per the [flow contract](references/dashboard-contract.md#remaining-ticket-flow).
+   Set `ticketFlow: false` when a graph does not help the owner's task; keep every ticket in the list.
 
 5. **Let the page roll.** The overview shows the newest entry in full and the next four as
    collapsed rows; the "All entries" tab keeps every entry as a collapsed row with search and
    filters. Do not delete or merge old entries to shorten the page. The template does the rolling;
    the changelog still owns release-level history.
 
-6. **Check, open and hand back.** Run
+6. **Check, open and hand back.** Before closing UI work, inspect the actual laptop/phone
+   rendering and bind required critic acceptance to its source and captures. When recording that
+   acceptance, use [review receipts](references/review-receipt.md); a rendering-input change requires
+   affected checks, new captures and renewed acceptance. Closure-only metadata may change only
+   through the receipt's explicit projections. Run
    `node <this skill's directory>/scripts/check-dashboard.mjs <file>` and fix
    every error; clear warnings that are real. Then open all three tabs at phone and laptop width and
-   read the page as the owner would. Read [report-format.md](../../../docs/agents/report-format.md)
+   read the page as the owner would. Follow one dependency chain, compare visible nodes/edges and status counts with the board, and check that selected streams do not hide remaining work elsewhere. Read [report-format.md](../../../docs/agents/report-format.md)
    for the HTML rules, and use
    [repository-artifact-hygiene](../../meta/repository-artifact-hygiene/SKILL.md) before adding
    media. Open the page using
