@@ -10,6 +10,7 @@
 //                              [--base REF] [--include ID]... [--manifest PATH]
 //   --stdin   read Git pre-push lines (<local ref> <local sha> <remote ref> <remote sha>).
 //   --base    pre-merge range start; default: merge-base of HEAD with origin/main.
+//   pre-release runs every check in every stage, whatever changed.
 //   SKIP=id,id  skip named checks; they are reported, never silent.
 // Checks run in a detached worktree of the commit being judged (each pushed tip, else HEAD), so
 // uncommitted files, including another session's in a shared checkout, never pass or block them.
@@ -157,8 +158,9 @@ if (opts.stage !== "pre-release") {
   else if (paths.some((p) => fullTriggers.includes(p))) { source = "a full trigger changed: every check in the stage"; paths = null; }
   else source = `${paths.length} changed path(s)`;
 }
-const inStage = checks.filter((c) => c.stage === opts.stage);
-const selected = checks.filter((c) => opts.include.includes(c.id) || (c.stage === opts.stage &&
+// A release judges the whole product, so pre-release takes every stage's checks.
+const inStage = checks.filter((c) => opts.stage === "pre-release" || c.stage === opts.stage);
+const selected = checks.filter((c) => opts.include.includes(c.id) || (inStage.includes(c) &&
   (paths === null || c.always || paths.some((p) => matches(p, c.scope)))));
 const skip = new Set((process.env.SKIP ?? "").split(",").map((s) => s.trim()).filter(Boolean));
 

@@ -1,17 +1,15 @@
 #!/usr/bin/env node
-// check-repo.test.mjs — fixture tests proving each consistency check FAILS on a seeded
+// static-checks.test.mjs — fixture tests proving each static check FAILS on a seeded
 // mismatch, and the repaired repo PASSES (ticket 31, AC2 + AC3).
 //
-// For the three file-based checks (invocation, index, link) we seed a defect in-place,
-// run the specific check, assert it exits nonzero, then restore the file — with a guard
-// that ALWAYS restores even if an assertion throws. The installer-ownership and
-// ticket-validation invariants are proven in their own isolated harnesses
-// (deploy.test.mjs; the tkt immutability findings in ticket 29/33), and are
-// re-asserted here at the command level.
+// Each test seeds a defect into a tracked file in place, runs the specific check, asserts it
+// exits nonzero, then restores the file, even if an assertion throws. Seeding edits the
+// checkout, so run it through `gate.mjs pre-merge`, which runs it in a worktree snapshot; run
+// directly only in a checkout no other session is using.
 //
 // Nothing here mutates a user skill root or needs harness auth.
 //
-// Run:  node --test scripts/check-repo.test.mjs
+// Run:  node scripts/gate.mjs pre-merge --include static-check-fixtures
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -124,15 +122,6 @@ test("scratch check ignores placeholders and a ticket's planning text", () => {
       assert.equal(r.status, 0, r.out);
     });
   });
-});
-
-// (invariant: deployer ownership safety — proven by the dedicated isolated suite)
-test("installer ownership regression suite passes (isolated temp roots)", () => {
-  const r = spawnSync(node, ["--test", join(SCRIPTS, "deploy.test.mjs")],
-    { cwd: REPO, encoding: "utf8" });
-  assert.equal(r.status, 0, (r.stdout || "") + (r.stderr || ""));
-  // And it is the suite that proves the FAILING seeded case (refused foreign dir): its
-  // AC1/AC2 tests assert the pre-fix behavior would lose data; they pass only post-fix.
 });
 
 // (invariant: invocation sidecar one-sided mismatch — the exact ticket-27 gap)

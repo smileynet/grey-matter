@@ -29,7 +29,7 @@ async function fixture(fn, check = 'console.log("fixture gate passed");', produc
     put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(manifest)); put(join(repo, ".codex-plugin/plugin.json"), JSON.stringify({name: product, version: "0.1.0", skills: "./skills/"}));
     put(join(repo, ".claude-plugin/marketplace.json"), JSON.stringify({name: product, plugins: [{name: product, source: "./"}]}));
     put(join(repo, "skills/example/SKILL.md"), "---\nname: example\ndescription: Candidate fixture\n---\nFixture.\n"); put(join(repo, "LICENSE"), "Fixture notice\n");
-    cpSync(join(scripts, "deploy.mjs"), join(repo, "scripts/deploy.mjs")); put(join(repo, "scripts/check-repo.mjs"), check);
+    cpSync(join(scripts, "deploy.mjs"), join(repo, "scripts/deploy.mjs")); put(join(repo, "scripts/gate.mjs"), check);
     const commit = () => { git("add", "."); git("-c", `core.hooksPath=${join(temp, "no hooks")}`, "commit", "-m", "Fixture"); return git("rev-parse", "HEAD"); };
     const sha = commit(); buildArtifacts({ repo, ref: sha, out: artifacts });
     await fn({ temp, repo, artifacts, out, sha, git, commit, run: (extra = {}) => verifyCandidate({ repo, sha, artifacts, out, ...extra }) });

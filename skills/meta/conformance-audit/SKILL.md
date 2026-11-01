@@ -7,7 +7,7 @@ description: "Audit a repo's skills, tool scripts, agent guidance, and docs agai
 
 Measure a repo's agent/repo-health artifacts against grey-matter's **current** standards, then
 apply the fixes that are mechanically unambiguous — leaving the judgment calls for a human. It is
-the `check-repo.mjs` + `curate-docs` instinct pointed at *a* repo (often a foreign one): "does this
+the `gate.mjs` + `curate-docs` instinct pointed at *a* repo (often a foreign one): "does this
 repo still follow current conventions, and where it trivially doesn't, fix it."
 
 Two ways in: **standalone**, to re-conform a repo as grey-matter's guidance drifts (invocation
@@ -51,7 +51,7 @@ does fixing it require interpreting intent?**
 
 - **safe-auto-fix** — a deterministic rule says exactly what right looks like. A missing or malformed
   SKILL.md frontmatter field; a user-invoked skill missing its `agents/openai.yaml` sidecar; a skill
-  absent from its bucket `README.md` or from `compass`; a tool script not wired into `check-repo.mjs`;
+  absent from its bucket `README.md` or from `compass`; a check or test script that no `gates.json` check runs;
   a broken relative link; a doc misfiled against the `docs/agents` / dot-prefix rule. These are what
   the existing checks already define as right-or-wrong — the fix is the form the rule specifies.
 - **needs-judgment** — fixing it means interpreting intent. Reshaping a bloated `AGENTS.md` into

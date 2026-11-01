@@ -131,7 +131,7 @@ Inspect the product gate without writing or running it:
 node scripts/release-product.mjs --repo /path/to/candidate --sha FULL_COMMIT_SHA --out /path/to/new-evidence
 ```
 
-Add `--execute` to run grey-matter's `check-repo.mjs --require-tools` or tkt's
+Add `--execute` to run grey-matter's `gate.mjs pre-release` or tkt's
 `mise run check` in a clean checkout at that exact SHA. Install the candidate's
 maintainer dependencies first; this command does not install or publish anything.
 Evidence needs a new directory outside the checkout. Logs, hashes, exit/signal,

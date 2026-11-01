@@ -46,7 +46,7 @@ for the cases where a shell command is genuinely the right tool (git, Node, tkt,
   `powershell.exe -NoProfile -Command`, and pipe through `tr -d '\r'`.
 - **PowerShell output carries `\r`.** Strip it before comparing strings.
 - **Compare Python paths to git output with `Path.as_posix()`**: git always prints `/`.
-- **A pipe hides a gating command's failure.** `node scripts/check-repo.mjs | tail -11 && git push`
+- **A pipe hides a gating command's failure.** `node scripts/gate.mjs pre-merge | tail -11 && git push`
   tests `tail`'s exit code, so a red check still pushes (it did, 2026-10-22). Run the gate bare
   under `set -e`, or redirect it to a file and grep the file after the exit code is known.
 - **Edit code and data with Edit/Write, or a script file.** Backslashes, regexes, and template

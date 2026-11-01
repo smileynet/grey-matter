@@ -53,5 +53,5 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Install pinned tkt check dependency
         run: cargo install --git https://github.com/smileynet/tkt --rev 64c651cda08556f1fd6b2a5ed29a4a7b3d72c7f9 --locked
-      - name: Complete repository gate
-        run: node scripts/check-repo.mjs --require-tools
+      - name: Pre-release gate
+        run: node scripts/gate.mjs pre-release

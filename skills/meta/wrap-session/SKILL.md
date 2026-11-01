@@ -54,8 +54,8 @@ land-now finding, pick the form by what the finding is:
 
 - **A deterministic check** (a mistake a linter/test/filesystem check would have caught) →
   write or extend the check so it goes **red** on the seeded mistake and green once clean.
-  A new repo-consistency check is a `scripts/check-*.mjs` — the aggregator's orphan guard
-  requires it be wired into `scripts/check-repo.mjs`, so wire it. Prove it red-then-green on
+  A new repo-consistency check is a `scripts/check-*.mjs` — the `gates-coverage` check
+  requires a `scripts/gates.json` entry that runs it, so add one. Prove it red-then-green on
   a seeded case before moving on.
 - **A recurring agent trap or procedure** → create or update a **project-level skill** or an
   `AGENTS.md`-pointed `docs/agents/` note. Choose which by the **promotion test** in
@@ -87,7 +87,7 @@ move on; this is a quick currency check, not a rewrite.
 
 ### 5. Verify and report
 
-Run `node scripts/check-repo.mjs --static` so anything landed in step 3 (a new check, a new
+Run `node scripts/gate.mjs pre-merge` so anything landed in step 3 (a new check, a new
 skill/doc, a moved pointer) passes the consistency invariants and link checks, and confirm
 `tkt validate` is clean. Then **confirm the working tree is clean** (`git status --porcelain`):
 a non-empty tree at wrap time means finished work is stranded unpushed — commit and push it
@@ -114,7 +114,7 @@ ticket and why.
 - Every recurring **mechanical** mistake from the session either has a guardrail/check/note
   **in the repo now** or a ticket saying why it was deferred — none silently lost.
 - A newly created check is proven red-then-green; a new skill/doc is reachable by a pointer
-  and passes `check-repo.mjs`.
+  and passes `gate.mjs pre-merge`.
 - The committed `.references/README.md` indexes exactly the references on disk, each with a
   working clone command — a fresh checkout could rehydrate from it.
 - The working tree is clean at wrap — no finished-but-unpushed work stranded for the next session.

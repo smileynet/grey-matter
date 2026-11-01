@@ -10,7 +10,7 @@
 // --candidates A,B (preferred bash paths) exist for the tests.
 // Exit: 0 = ok or not applicable; 1 = a finding (each printed with its fix); 2 = usage error.
 //
-// Not a check-*.mjs: it inspects the machine, not the repository, so check-repo runs only its
+// Not a check-*.mjs: it inspects the machine, not the repository, so the gates run only its
 // tests (fake settings files and fake binaries; no real user file is read or written).
 
 import { accessSync, constants, existsSync, readFileSync, writeFileSync, realpathSync } from "node:fs";

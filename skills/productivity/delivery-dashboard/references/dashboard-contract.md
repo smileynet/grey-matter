@@ -89,7 +89,7 @@ scrolls internally on small screens; the document must not overflow. Inspect a w
 laptop/phone widths; DOM membership alone does not prove that its path is understandable.
 
 When changing this renderer, run both the ordinary contract fixtures and the explicit local browser
-gate: `DASHBOARD_BROWSER_TESTS=1 node scripts/check-repo.mjs`, with local `PLAYWRIGHT_MODULE` and
+gate: `node --test scripts/delivery-dashboard-browser.test.mjs`, with local `PLAYWRIGHT_MODULE` and
 `CHROME_BIN` set when not using the Node installation's Playwright and system Chromium. Browser
 tools are test prerequisites, not dashboard runtime resources; no CDN or network fallback is used.
 

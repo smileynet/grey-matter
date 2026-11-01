@@ -19,8 +19,8 @@ The four couplings it keeps aligned:
    rename a flag or drop a subcommand and break a skill mid-task.
 3. **Local tickets ↔ upstream tickets.** A pull can collide ticket IDs; `tkt rebase`
    resolves them (upstream wins).
-4. **Repo invariants.** `check-repo.mjs` must stay green (indexes, links, invocation
-   sidecars, installer safety).
+4. **Repo invariants.** `gate.mjs pre-merge` must stay green (indexes, links, invocation
+   sidecars, ticket graph).
 
 Read the [release contract](../../../docs/agents/release-contract.md) when choosing
 development, stable or pinned sources. Sync refreshes the configured source; it
@@ -95,7 +95,7 @@ refresh. Preserve existing copies when a refresh fails.
    invocation-policy, doc-consistency, and `tkt validate`):
 
    ```bash
-   node scripts/check-repo.mjs
+   node scripts/gate.mjs pre-merge
    ```
 
    If it's red, **report the failure** and still proceed to deploy (the installer is safe
@@ -167,7 +167,7 @@ refresh. Preserve existing copies when a refresh fails.
      which plugin caches were refreshed.
    - **tkt**: version before → after, and any **drift** `verify-tkt-usage` found.
    - **Ticket health**: whether a rebase ran, and `tkt validate` status.
-   - **Repo check**: green, or exactly what `check-repo.mjs` flagged.
+   - **Repo check**: green, or exactly what `gate.mjs pre-merge` flagged.
    - **Agent shell**: `ok`, `n/a`, or each `probe-agent-shell.mjs` finding with its fix.
    - **Critic models**: each harness's `probe-critic-model.mjs` line (model it ran on, ceiling, auth).
    - **Guidance**: standing-rules install result, and each `check-guidance.mjs` finding.

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// check-plugin-manifest.mjs — check-repo invariant 9: the plugin manifests stay true to
+// check-plugin-manifest.mjs — the plugin-manifest pre-push check: the plugin manifests stay true to
 // disk, to each other, and to the latest release tag (tickets 22, 64). The checks live in
 // `deploy.mjs check` so every pack that vendors the deployer gets them; this runs it here.
 //

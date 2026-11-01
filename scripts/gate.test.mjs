@@ -134,6 +134,12 @@ test("pre-merge diffs against --base, and --include runs a check from another st
   assert.ok(ran(r.out, "a") && ran(r.out, "late"), r.out);
 }));
 
+test("pre-release runs every check in every stage, whatever changed", () => fixture([check("push", ["a/"]), check("merge", ["b/"], pass, { stage: "pre-merge" }), check("release", ["c/"], pass, { stage: "pre-release" })], ({ run }) => {
+  const r = run(["pre-release"]);
+  assert.equal(r.status, 0, r.out);
+  assert.ok(["push", "merge", "release"].every((id) => ran(r.out, id)), r.out);
+}));
+
 test("a malformed manifest or an unknown argument exits 2", () => fixture([{ id: "a", stage: "pre-push", run: ["node"], timeout_s: 1, scope: ["a/"] }], ({ run }) => {
   assert.equal(run(["pre-push"]).status, 2, "a check without catches is rejected");
   assert.equal(run(["pre-flight"]).status, 2);

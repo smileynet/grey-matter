@@ -18,7 +18,7 @@ function fixture(t) {
   writeFileSync(join(repo, "package.json"), '{"name":"fixture","version":"0.0.0","private":true}');
   writeFileSync(join(repo, "package-lock.json"), '{"name":"fixture","version":"0.0.0","lockfileVersion":3,"packages":{"":{"name":"fixture","version":"0.0.0"}}}');
   writeFileSync(join(repo, ".gitignore"), "node_modules/\n");
-  writeFileSync(join(repo, "scripts/check-repo.mjs"), 'console.log("full integration gate ran");\n');
+  writeFileSync(join(repo, "scripts/gate.mjs"), 'console.log("full integration gate ran");\n');
   setVersion("0.1.0"); const base = commit("Base"); git(repo, ["push", "origin", "main"]);
   git(repo, ["checkout", "-b", "candidate"]); setVersion("0.2.0"); const candidateSha = commit("Candidate");
   const options = { repo, remote: "origin", candidateSha, product: "grey-matter", version: "0.2.0", out };
@@ -62,7 +62,7 @@ test("development preparation: merge conflicts leave all public refs unchanged",
   assert.equal(git(f.repo, ["ls-remote", "origin"]), before); assert.equal(git(f.repo, ["status", "--porcelain"]), "");
 });
 test("development preparation: failed gate never imports an unchecked merge", (t) => {
-  const f = fixture(t); git(f.repo, ["checkout", "main"]); writeFileSync(join(f.repo, "scripts/check-repo.mjs"), "process.exit(1);\n"); f.commit("Fail gate"); git(f.repo, ["push", "origin", "main"]); git(f.repo, ["checkout", "candidate"]);
+  const f = fixture(t); git(f.repo, ["checkout", "main"]); writeFileSync(join(f.repo, "scripts/gate.mjs"), "process.exit(1);\n"); f.commit("Fail gate"); git(f.repo, ["push", "origin", "main"]); git(f.repo, ["checkout", "candidate"]);
   assert.throws(() => f.run({ execute: true }), /product gate failed/);
   const state = JSON.parse(readFileSync(join(f.out, "development.json")));
   assert.throws(() => git(f.repo, ["cat-file", "-t", state.developmentSha]), /failed/);
@@ -89,7 +89,7 @@ test("development preparation: npm bootstrap ignores inherited user configuratio
 
 test("development preparation: merged product checks receive no publisher credentials", (t) => {
   const f = fixture(t), key = "RELEASE_CARGO_TOKEN", previous = process.env[key];
-  writeFileSync(join(f.repo, "scripts/check-repo.mjs"), 'if (process.env.RELEASE_CARGO_TOKEN) process.exit(9); console.log("credential-free gate");\n');
+  writeFileSync(join(f.repo, "scripts/gate.mjs"), 'if (process.env.RELEASE_CARGO_TOKEN) process.exit(9); console.log("credential-free gate");\n');
   const candidateSha = f.commit("Check credential isolation");
   process.env[key] = "dummy-publication-credential";
   try {

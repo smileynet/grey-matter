@@ -95,8 +95,8 @@ primary-source deep-dive capture (ticket 12). File a maintenance skill under
   them honest. The mechanical backstop is a **set-equality lint**: every skill folder
   appears in `compass` and in its bucket README exactly once, and every skill named there
   resolves to a real folder. This is now built: `scripts/check-docs-consistency.mjs` (run
-  standalone, or via the umbrella `scripts/check-repo.mjs` with the installer, invocation,
-  and ticket checks). See `AGENTS.md` ("Consistency checks"). The Claude plugin manifest
+  standalone, or as the `doc-links` check that `scripts/gate.mjs` runs with the invocation,
+  manifest and ticket checks). See `AGENTS.md` ("Verification phase"). The Claude plugin manifest
   lists bucket dirs, not skills, so a new skill needs no manifest edit; a new *bucket* does,
   and `scripts/check-plugin-manifest.mjs` fails until it is listed.
 - **Wrap tool-owned skills; inline tool commands.** This repo depends on the `tkt` tool

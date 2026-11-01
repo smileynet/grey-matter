@@ -131,7 +131,7 @@ listing, install a plugin, or publish a crate automatically.
 ## Verification and staging boundary
 
 Use the [source conformance report](research/plugin-conformance.md),
-[notice inventory](research/plugin-notice-inventory.md), grey-matter check-repo,
+[notice inventory](research/plugin-notice-inventory.md), grey-matter `gate.mjs pre-release`,
 tkt mise run check, version/packaging/recovery fixtures and native validators.
 Each candidate needs native evidence from every supported platform; unavailable
 platforms remain recorded gaps. Install/upgrade tests cover every supported harness,

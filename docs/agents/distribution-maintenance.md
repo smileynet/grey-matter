@@ -66,7 +66,7 @@ When a change touches skills, the plugin manifests, or tkt's plugin:
 
 - **New or changed skill:** no manifest edit. `plugin.json` lists bucket dirs, so the skill is
   picked up as is. **New bucket:** add `./skills/<bucket>` to `.claude-plugin/plugin.json`;
-  `scripts/check-plugin-manifest.mjs` (check-repo invariant 9) fails until you do.
+  `scripts/check-plugin-manifest.mjs` (the `plugin-manifest` pre-push check) fails until you do.
 - **Existing cached installs need a release version bump.** `claude plugin update`
   can report "already at the latest version" while `main` has changed. New installs
   can receive the current source ref, so a push to `main` can reach new users before
@@ -91,7 +91,7 @@ When a change touches skills, the plugin manifests, or tkt's plugin:
   never touched. `--allow-dual` overrides; don't use it in a normal deploy. A new harness, or a
   root a harness turns out to read, goes in that table, not in a new guard
   (`scripts/deploy.test.mjs` covers it).
-- **Check before committing:** `node scripts/check-repo.mjs` runs `claude plugin validate`
+- **Check before pushing:** the `plugin-manifest` check (`node scripts/gate.mjs pre-push`) runs `claude plugin validate`
   when `claude` is on PATH. To see what loads, run
   `claude --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`, which lists the
   skills without a model call.
@@ -116,15 +116,15 @@ Read [draft preparation](release-preparation.md) for modes, prerequisites and ow
 
 Maintainer setup requires Node 22+ and the pinned parser/archive dependencies. Run `npm ci --ignore-scripts` once after cloning or lockfile changes. Plugin consumers and the standalone deploy engine do not need npm dependencies.
 
-One command verifies the mechanical distribution invariants:
+`scripts/gates.json` declares every check and its stage; `node scripts/gate.mjs <stage>` runs them:
 
 ```
-node scripts/check-repo.mjs
+node scripts/gate.mjs pre-merge     # the changed areas' checks, before a ticket's code is pushed
+node scripts/gate.mjs pre-release   # every check in every stage; the release product gate runs it
 ```
 
-That is the full set (`--full`, the default): the release workflow's product gate runs it, and
-you can run it on request. `--static` and `--push` run the static checks only; they are the
-commit and push gates. No test group gates a push. The summary prints each group's time. See [local gates](local-gates.md).
+The `gates-coverage` check fails when a `scripts/check-*.mjs` or `scripts/*.test.mjs` is run by no
+check and not listed under `not_gated` with a reason. The output prints each check's time and outcome.
 
 It aggregates (each also runnable on its own): the deployer's ownership, plugin guards and
 root selection (`scripts/deploy.test.mjs`), YAML syntax/core field types
@@ -146,15 +146,14 @@ The artifact-hygiene invariant runs
 repositories. Its distributed inspector lives with
 [repository-artifact-hygiene](../../skills/meta/repository-artifact-hygiene/SKILL.md);
 the fixtures need Git but no provider login, network or LFS payload download.
-Fixtures proving each invariant fails when seeded live in `scripts/check-repo.test.mjs`
-(`node --test`).
+Fixtures proving each static check fails when seeded live in `scripts/static-checks.test.mjs`; they
+edit tracked files, so run them through `gate.mjs`, which uses a worktree snapshot.
 
 `scripts/gates.json` declares the staged checks and `node scripts/gate.mjs <stage>` runs them
 ([proposal 18](proposals/18-three-stage-verification.md)). The pre-push stage runs from the tracked
 `.githooks/pre-push` once a clone opts in with `git config core.hooksPath .githooks`; nothing
 installs it. `gate.mjs` owns each check's timeout and kills the process tree, so a check that
-hangs, or blocks in `spawnSync`, ends as `timeout`, never as a pass. `check-repo.mjs` runs the
-remaining suites on demand until step 3 moves them under `gate.mjs pre-release`.
+hangs, or blocks in `spawnSync`, ends as `timeout`, never as a pass.
 
 
 Release bundle construction and verification are documented in

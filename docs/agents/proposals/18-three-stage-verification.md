@@ -218,6 +218,12 @@ the vendored `gate.mjs` version line with the reference and offer the update. tk
    `gate.mjs pre-merge` before pushing a ticket's code and cite it at close.
 3. **Pre-release**: move the slow groups and platform workflow under `gate.mjs pre-release`;
    `release-product.mjs` calls it; slim deployer and release tests (137); retire `check-repo.mjs`.
+   Done 2026-11-01: `pre-release` runs every check in every stage; `deployer` and
+   `release-integration` are pre-release checks; the eight fast release test files became the
+   scoped pre-merge `release-units` check; `check-repo.mjs` is gone. Its orphan guard is now the
+   `gates-coverage` pre-push check, which found `deploy-validation.test.mjs` and
+   `check-repo.test.mjs` (now `static-checks.test.mjs`) had never run in any gate. Slimming the
+   slow fixtures stays on 137.
 4. **Guidance**: rewrite `local-gates.md` around project phase and the three stages; `init-project`
    scaffolds the `check` command and the `Verification phase: speed` line; once the owner declares
    stability, `init-project` or `adopt-project` vendors `gate.mjs` and `.githooks/pre-push`, writes
