@@ -17,9 +17,9 @@ tags: ["stream:tooling"]
 
 Field report from the consumer repo `philippines-trip`, 2026-11-01, where the Claude
 plugin pre-push hook (`.claude-plugin/hooks/pre-push.mjs`, ticket 63) blocked or
-misfired repeatedly in one session. Companion to 137 (scope commit gates to vital,
+misfired repeatedly in one session. Companion to 152 (scope commit gates to vital,
 changed parts and bound verification scratch); this ticket covers the hook itself and
-its contract, 137 covers what a consumer gate runs and the scratch it leaves.
+its contract, 152 covers what a consumer gate runs and the scratch it leaves.
 
 ## Observed problems
 
