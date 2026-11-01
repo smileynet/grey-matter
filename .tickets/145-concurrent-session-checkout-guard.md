@@ -12,10 +12,12 @@ tags: ["stream:tooling"]
 
 # Detect another live session in the same checkout and suggest a worktree
 
-## What to build
+## Origin
 
-TBD
+Field report from philippines-trip, 2026-11-01. Two or three sessions (Claude, Codex) worked in the same checkout and branch at once: they regenerated the same dashboard, edited the same tickets and committed between each other's commits. The push gate was blocked three times by another session's uncommitted edits, and generated files had to be regenerated rather than merged.
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [ ] orient (and handoff) detect another live session or recent foreign commits in the same checkout and say so.
+- [ ] Guidance recommends a per-session worktree for concurrent work and names how generated files (dashboards) are reconciled: regenerate, never hand-merge.
+- [ ] The detection is a cheap check, not a lock.
