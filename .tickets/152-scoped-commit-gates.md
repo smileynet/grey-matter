@@ -9,6 +9,7 @@ validation_criteria:
   - "The guidance states the defaults: gate files run the gate's own tests, dependency pins run everything, docs/tickets/art run nothing, and the full gate runs before a release or device build."
   - "conformance-audit flags a pre-commit hook that runs the full suite unconditionally, and a scratch directory with unbounded run history."
   - "Critic and reconcile guidance says an owner's explicit decision ends a deliberation chain; heavy evidence belongs to data and acceptance risk, not tooling ergonomics."
+  - "Guidance tells agents that a hook failing on a check unrelated to the change is a gate-scope bug: propose moving the check to a later stage instead of debugging or time-boxing it in the hook."
   - "node scripts/gate.mjs pre-merge passes."
 ---
 
@@ -28,6 +29,10 @@ Owner request on 2026-10-31 from a tagalog-helper session: "fix the precommit ga
   - Result: docs commits take 0.3s, the gate's own change took 43s, and full stays available via `scripts/check.sh`.
 - Cleanup: tagalog-helper `.scratch` reached 32 GB. Every gate run directory (35 kept) and every prepared Simulator run (about 57 MB of app each, plus derived data) was kept forever. #97 defined a retention rule, but nothing in an adopted repo enforces it.
 
+### Addendum (2026-11-01, philippines-trip retro)
+
+grey-matter's own pre-push hook blocked ticket-only commits on a footprint test (#151). Sam: "it's a matter of not gating things that aren't critical", not time limits. A hook that fails on a check unrelated to the change is a gate-scope bug.
+
 ## What to build
 
 - **init-project and adopt-project:** a reference pattern for change-scoped commit gates. It covers:
@@ -44,6 +49,7 @@ Owner request on 2026-10-31 from a tagalog-helper session: "fix the precommit ga
 - [ ] The scaffolded pattern and its defaults are documented with a worked example (tagalog-helper's scope file can seed it).
 - [ ] conformance-audit reports unconditional full hooks and unbounded scratch, with the measured size.
 - [ ] The proportionality rule is in the owning skill and referenced, not restated, by the others.
+- [ ] `docs/agents/local-gates.md` (or the owning skill) tells agents: when a hook fails on a check unrelated to the change, propose moving that check to a later stage; do not debug or time-box it in the hook.
 - [ ] `node scripts/gate.mjs pre-merge` passes.
 
 ## Out of scope
