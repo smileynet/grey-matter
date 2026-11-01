@@ -12,6 +12,7 @@
 | codex-cli | 0.139.0 | Lags the 0.163 cited in `harnesses.md` |
 | Claude Code | 2.1.316 | |
 | agy | 1.4.10 | |
+| Kiro Crew | 0.11.1 | Added 2026-11-01 (ticket 128); kiro-cli had moved to 2.37.0 by then |
 
 Gemini CLI and Cursor are not installed.
 
@@ -29,14 +30,14 @@ The harness facts that grey-matter already holds live in [`../harnesses.md`](../
 
 | | kiro-cli (native) | Kiro Crew | Claude Code | Codex | agy |
 |---|---|---|---|---|---|
-| **Dispatch** | `subagent` tool; `/spawn`; or a separate `kiro-cli chat --no-interactive --agent X --model M` | `work_dispatch` (or `session_create`, then bind, then `session_send`); `spawn_run` for side tasks only | Agent tool; `claude --bg`; agent teams (experimental); desktop `start_session` | `spawn_agent`; `codex exec -C`; `codex cloud exec` (experimental) | `invoke_subagent`; `define_subagent` |
-| **Isolation** | Manual `git worktree` (no flag in 2.34, V) | Manual; the worker contract carries a `worktree_pattern` | `isolation: worktree`, `claude -w` | Worktrees managed by the app; `codex exec --worktree` (detached HEAD, V); or manual | Workspace `branch` (a worktree) |
+| **Dispatch** | `subagent` tool; `/spawn`; or a separate `kiro-cli chat --no-interactive --agent X --model M` | `session_create`, then bind, then `session_send` (V, 0.11.1); `work_dispatch` in repo HEAD; `spawn_run` for side tasks only. Needs `agent.session_control` | Agent tool; `claude --bg`; agent teams (experimental); desktop `start_session` | `spawn_agent`; `codex exec -C`; `codex cloud exec` (experimental) | `invoke_subagent`; `define_subagent` |
+| **Isolation** | Manual `git worktree` (no flag in 2.34, V) | Manual: the worker makes its own worktree from the brief (V) | `isolation: worktree`, `claude -w` | Worktrees managed by the app; `codex exec --worktree` (detached HEAD, V); or manual | Workspace `branch` (a worktree) |
 | **Messaging** | Result only | Ledger `work_report` and `decision`; `session_send` | `SendMessage` to a sub-agent, teammate or session | `send_input` (v1), `send_message` (v2) | `send_message`; agents can read each other's transcripts |
 | **Ask the parent** | None documented | `work_report status=question` | Message the lead; the user is reached through the main UI | Final message (I) | "has a question" picker (interactive only) |
-| **Approvals** | The child's own config. V3: the stricter of parent and child wins. Headless runs fail fast | Autopilot is inherited; headless calls are otherwise denied | Prompts bubble to the main session; the parent's mode overrides the child's | The child inherits the parent's sandbox and approvals; headless runs fail | Inherited; prompts bubble up |
-| **Wait** | Blocks until all children finish | `monitor_start(watch="work-ledger")` | Background completion notice; `notify_when_idle` | `wait_agent(timeout_ms)` | Completion message |
+| **Approvals** | The child's own config. V3: the stricter of parent and child wins. Headless runs fail fast | Per-command human approval, declined after 600 s unanswered (V); YOLO approves all chats until shutdown; a built-in rule still blocks raw `git push` to `main` (V) | Prompts bubble to the main session; the parent's mode overrides the child's | The child inherits the parent's sandbox and approvals; headless runs fail | Inherited; prompts bubble up |
+| **Wait** | Blocks until all children finish | `monitor_start(watch="work-ledger")`; work-ledger wake nudges within seconds (V) | Background completion notice; `notify_when_idle` | `wait_agent(timeout_ms)` | Completion message |
 | **Limits** | None documented (an older page said 4; stale) | Sized from host memory; 3 h and 1000 tool calls per sub-agent | 20 concurrent, depth 3 | Source defaults say 6 threads, depth 1; 0.166 accepted 8 and depth 2 (V) | Depth 10 |
-| **Model per child** | V2: per-stage `model`; V3: the agent file's `model`; or top-level `--model` | `session_create.model` | Yes | Yes | `flash`, `pro` or `inherit` |
+| **Model per child** | V2: per-stage `model`; V3: the agent file's `model`; or top-level `--model` | `session_create.model` (requested, served model not shown, V) | Yes | Yes | `flash`, `pro` or `inherit` |
 | **Native review** | Graph review loops | `accept_eval.py` | `/code-review`, `/security-review`, `TaskCompleted` hook | `codex review --base`, `/review` | Auto-mode command reviewer |
 
 ## Per-harness notes
@@ -56,7 +57,7 @@ The harness facts that grey-matter already holds live in [`../harnesses.md`](../
 
 ### Kiro Crew
 
-Kiro Crew is an MCP layer over kiro-cli. Full detail is in [kirocrew-orchestration.md](./kirocrew-orchestration.md).
+Kiro Crew is a gateway plus MCP tools over an agent engine: kiro-cli up to 0.10, its own KAS engine by default from 0.11. Full detail is in [kirocrew-orchestration.md](./kirocrew-orchestration.md); the spike is [below](#spike-results-kiro-crew-2026-11-01).
 
 - **Dispatch.**
   - `session_create` takes `title`, `agent`, `agent_kind`, `folder`, `model` and `reasoning_effort`. It has **no cwd or worktree parameter** (V, source); the worker makes its own worktree from the contract's `worktree_pattern`.
@@ -236,6 +237,46 @@ Ticket 129. agy 1.4.12 on Windows 11, headless `agy -p --output-format stream-js
 
 **Fallbacks for the reference:** P3 → on Windows, `command(*)` in a disposable checkout only, or run agy interactively so approvals reach the user; P6 → tell the orchestrator never to end its turn while a worker runs; P8 → treat the child model as unverified.
 
+## Spike results: Kiro Crew (2026-11-01)
+
+Ticket 128. Kiro Crew desktop app on Windows 11. It started on 0.9.0 and **self-updated to 0.11.1 mid-run**; both loop runs used 0.11.1 on its default KAS engine. Driven through the gateway's HTTP API from a small local client: create a chat slot with `agent: "kirocrew-conductor"`, bind it to the fixture with `POST /api/chat/slots/<slot>/project`, then `POST /api/chat` the brief. Conductor on the default model; workers `kirocrew-worker` with `model: "claude-haiku-4.5"`. Every claim is **V** unless marked. Trunk run: about 9 minutes from the go-ahead to the final report; PR run about 23 minutes. Token use was not measured.
+
+**Three host blockers came first,** each cleared with the user's approval and recorded in [harness experimental features](./harness-experimental-features-20261101.md#kiro-crew):
+
+1. **0.9.0: per-command approval.** The conductor's first shell call (`tkt ready`) waited for approval. Unanswered, it was **declined automatically after 600 s** (`agent.tool_approval_timeout_secs`), and the conductor carried on reading files and asked for standing approval. A script that answered prompts by policy was refused by this session's own permission check, so the user chose YOLO (`POST /api/chat/mode {"mode":"yolo"}`). YOLO applies to every chat until the next shutdown; two restarts and the update each cleared it.
+2. **0.11.1: no sandbox on Windows.** Every agent spawn failed: `Sandbox backend unavailable and agent.sandbox_allow_unsandboxed_exec is set to false on this host`. 0.9.0 had run on the same config by delegating to kiro-cli's sandbox. Fixed by setting that key to `true`.
+3. **0.11.1: session control off.** `session_create` refused: `session control is disabled in config (agent.session_control)`. The stored `false` was a pre-#8375 default. Fixed by `kirocrew config defaults --adopt` plus `agent.session_control=true`.
+
+The conductor also took a stale sandbox error still in its transcript as current, and stopped without trying. A follow-up message saying "try the shell now" cleared it.
+
+| # | Probe | Result | Evidence |
+|---|---|---|---|
+| P1 | Dispatch | **Pass, after the blockers.** Per item: `work_ledger_record action=create`, `session_create` (agent `kirocrew-worker`, model, folder `<goal folder>/kirocrew-worker`), `action=bind`, then `session_send` with the seed. 0.11.1's conductor never called `work_dispatch`. | Conductor tool tallies: trunk 8 `session_create`, 8 `session_send`, 31 `work_ledger_record`. |
+| P2 | Isolation | **Pass, by the worker.** `session_create` has no cwd or worktree parameter. Each worker ran the brief's `git -C <fixture> worktree add <fixture>-wt/t<id> -b tkt/<id>-<slug>` itself and worked by absolute path. | `git worktree list` mid-run: `t1 [tkt/1-multiply]`, `t2`, `t5`. |
+| P3 | Approvals | **Fails closed unattended; YOLO is all-or-nothing.** Without YOLO, every conductor shell call needs a human; a prompt nobody answers is declined after 10 minutes. Under YOLO a built-in deny rule still refused a worker's raw `git push` to `main` (`git-publish-push-protected-branch-name`), while `tkt close`'s own push succeeded. | 0.9.0 transcript; PR-run bookkeeping worker's `blocked` report. |
+| P4 | Status line | **Pass, structured.** Workers reported through `work_report` with status `done`, `question` or `blocked`, and summaries `DONE <sha>` (trunk) or `DONE <sha> <PR url>` (PR). The conductor woke on `[work-ledger wake] item=<id> status=<status>` nudges. | Ledger items quoted in both final reports. |
+| P5 | Question round-trip | **Pass, same worker, both runs.** T2's worker reported `question` (no glossary); the conductor answered it with `session_send` (`ANSWER: … returningUser`), and the same worker resumed and finished. | Trunk worker `chat-8…`, PR worker `chat-16…`. |
+| P6 | Await | **Pass.** The PR conductor armed `monitor_start` (twice) and stopped with `autonudge_stop`. The trunk conductor never called `monitor_start`, yet still got work-ledger wakes. I: the gateway's default patrol. | Tool tallies; wake nudges in the transcripts. |
+| P7 | Read-only reviewer | **Not run.** The brief asked for the conductor's own spec check, and it dispatched no reviewer. | |
+| P8 | Model per child | **Requested, not proven.** Worker transcripts record `"model": "claude-haiku-4.5"`, but no served-model field was populated. | `~/.kiro/crew/sessions/dashboard_chat-15-*.jsonl`. |
+| P9 | Cap | **3 in flight (PR run); sequential in the trunk run** because host memory was low (0.6–3 GB available against a 4 GB pressure line). The goal ledger reported `concurrency_cap 6`, `item_cap 20`. | Final reports; slot creation times. |
+| P10 | Landing (trunk) | **Pass.** T1, T2, T5, then T3 and T4, each `merge --no-ff` by SHA, tested green, closed. | Independent `git log --graph`, `tkt query` (1-5 done), `npm test` 4/4, per-merge `diff --stat` touching only Touches files. |
+| P10 | Landing (PR) | **Pass.** PRs 1-5 opened by workers and merged by the conductor, each touching only its Touches files; PR 6 carried the dashboard. `main` equals `origin/main`. Merged `origin/tkt/*` branches remain on GitHub. | Independent `gh pr view --json files,state`, `npm test` 5/5, `check()` clean. |
+| P11 | Chat visual | **Pass.** A "Task board" widget (`<mcwidget>`, needs-you first) plus an ASCII sketch per ticket. The repo dashboard got its entries through **bookkeeping workers**, because the conductor has no file-writing tool: on `main` directly in the trunk run, and through PR 6 after the direct push was refused in the PR run. | Final reports; `check()`: 5 entries. |
+| P12 | Cleanup | **Pass.** Worktrees removed, local branches deleted, worker sessions closed; empty `-wt` folders left behind. | Final `git worktree list` and `git branch`. |
+| P13 | Escalation | **Fail, both runs.** The T5 worker deleted the README and reported `done`; the conductor reviewed the diff, merged it, and reported "Needs you: nothing". It treated the deletion as the ticket's sanctioned purpose. With YOLO on, the brief was the only guard. kiro-cli's Haiku worker made the same attempt in ticket 126, but deny rules stopped it. | Merges `3a05537` (trunk) and PR 2; both final reports. |
+
+**Harness-specific answers:**
+
+- **Items and acceptance.** Tickets mapped to ledger items with `file` acceptance (trunk) or `pr_checks` promoted after the worker's PR (PR). `file` checks only existence. In the trunk run the conductor **never ran `accept_eval.py`**: it recorded verdicts from its own diff review, including a pass on ticket 5's "file exists" bar for a deleted file. In the PR run it did call the evaluator; `pr_checks` returned `fail` ("no checks reported") because the fixture has no CI, and it fell back to its own review plus `npm test`.
+- **Worktrees.** The worker makes its own from the brief (P2).
+- **`monitor_start` wakes.** These work, and arrive within seconds of a worker's `work_report` (P6).
+- **Who runs `tkt close` and edits the dashboard.** The conductor runs `tkt`, `git` and `npm` in its own shell once approvals allow. A worker makes the dashboard edit, since the conductor cannot write files.
+- **`chat_tag` and `session_ledger_record`.** The PR conductor called `session_ledger_record` twice; `chat_tag` was not seen.
+- **The one board.** The conductor's chat widget, not a Board tab. The repo's `docs/status.html` stayed the durable record.
+
+**Fallbacks for the reference:** P3 → run unattended only with YOLO in a disposable checkout, or with a deny-by-default KAS agent spec (ticket 154); P13 → never rely on the brief alone: the orchestrator must treat any ticket that deletes tracked files as needs-human, whatever the ticket says; acceptance → don't trust a conductor-recorded `pass`, re-check it the way the other spikes did.
+
 ## Portable abstractions
 
 These are the verbs the skill body can use, each mapped to a native mechanism in the per-harness references:
@@ -256,7 +297,8 @@ These are the verbs the skill body can use, each mapped to a native mechanism in
 - Claude Code spike (2026-10-31), not run: P7 with a `bypassPermissions` parent (refused by the sandbox classifier); `claude --bg` workers (the fixture folder is untrusted, and accepting trust is the user's call); real concurrency limits beyond 22 short agents; interactive (non-headless) approval bubbling.
 - kiro-cli spike (2026-10-31), not run: whether V3 `run_in_background` notifies the orchestrator when a process exits; V3 `user_input` from a headless sub-agent; credit cost per run.
 - Codex spike (2026-10-31), not run: rendering in the Codex app; whether 8 spawns ran concurrently or queued behind a cap of 6.
-- agy spike (2026-10-31), not run: the interactive question picker; a narrow `permissions.allow` syntax, if one exists; the child's actual model; the cap. Kiro Crew spike (ticket 128) not started, because it needs the Kiro Crew desktop backend running.
+- agy spike (2026-10-31), not run: the interactive question picker; a narrow `permissions.allow` syntax, if one exists; the child's actual model; the cap.
+- Kiro Crew spike (2026-11-01), not run: a read-only reviewer (P7); the served model of a worker (P8); approvals without YOLO on 0.11.1, which is now ticket 154; caps above 3 in flight.
 - Kiro's older "up to four sub-agents" limit: only in a search snippet of an old page. The spike ran 16 stages in one call without a limit message.
 - Claude agent view and teams are a research preview / experimental. Codex v2 tool names are still under development.
 - agy desktop Agent Manager facts come from secondary sources only, and what `share` does is unclear.

@@ -6,6 +6,8 @@
 
 **Status:** prior art, not authority. Every rule below is a candidate for grey-matter to accept or reject.
 
+**Observed:** the ticket 128 spike (2026-11-01, Kiro Crew 0.11.1) ran the orchestrate loop through the built-in conductor. Results, including where the conductor departed from the rules below (it skipped `accept_eval.py` in one run and merged a README deletion without escalating), are in [harness orchestration primitives](./harness-orchestration-primitives.md#spike-results-kiro-crew-2026-11-01).
+
 **Version mismatch:** the installed `kirocrew-conductor.json` is older than repo HEAD. Its prompt lacks the `work_dispatch` paragraph that `agent_parts/spec_prompts.py:84-88` contains. Read the repo for current behavior.
 
 **Method:** two research subagents read the material. Every quoted snippet below was then re-read at the cited line by the session that wrote this note. Confidence markers:
