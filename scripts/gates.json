@@ -1,0 +1,50 @@
+{
+  "full_triggers": ["package.json", "package-lock.json", "scripts/gates.json", "scripts/gate.mjs", ".githooks/pre-push"],
+  "checks": [
+    {
+      "id": "plugin-manifest",
+      "stage": "pre-push",
+      "catches": "a plugin manifest that no longer matches disk, its sibling or the release tag, so consumer installs fail",
+      "scope": [".claude-plugin/", ".codex-plugin/", ".agents/", ".kiro/", "skill-packs.json", "skills/", "scripts/deploy.mjs", "scripts/check-plugin-manifest.mjs"],
+      "run": ["node", "scripts/check-plugin-manifest.mjs"],
+      "timeout_s": 10,
+      "measured": { "s": 1.4, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "skill-syntax",
+      "stage": "pre-push",
+      "catches": "malformed SKILL.md YAML or wrong core types, which harnesses reject on load",
+      "scope": ["skills/", "scripts/check-skill-syntax.mjs"],
+      "run": ["node", "scripts/check-skill-syntax.mjs"],
+      "timeout_s": 10,
+      "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "invocation-policy",
+      "stage": "pre-push",
+      "catches": "a user-invoked skill without its invocation sidecar, or a skill missing from its bucket README",
+      "scope": ["skills/", "scripts/check-invocation-policy.mjs"],
+      "run": ["node", "scripts/check-invocation-policy.mjs"],
+      "timeout_s": 10,
+      "measured": { "s": 0.2, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "doc-links",
+      "stage": "pre-push",
+      "catches": "a broken relative link or index entry that a skill or global rule points at",
+      "scope": ["skills/", "global/", "docs/agents/", "scripts/check-docs-consistency.mjs"],
+      "run": ["node", "scripts/check-docs-consistency.mjs"],
+      "timeout_s": 10,
+      "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "gate-runner",
+      "stage": "pre-merge",
+      "catches": "a gate.mjs change that mis-selects checks, lets a hung check pass, or leaks its process tree",
+      "scope": ["scripts/gate", ".githooks/"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/gate.test.mjs"],
+      "timeout_s": 120,
+      "measured": { "s": 16.7, "date": "2026-11-01", "host": "win" }
+    }
+  ]
+}

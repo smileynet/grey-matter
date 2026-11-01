@@ -70,13 +70,20 @@ skills, manifests, deployment or release guidance. It covers plugin updates, own
 shared release-tool synchronization, per-host validation and the consistency checks.
 
 - Setup: Node 22+, then `npm ci --ignore-scripts` after clone or lockfile changes.
-- Checks: no hook gates commits or pushes; the old gate was removed while [proposal 18](./docs/agents/proposals/18-three-stage-verification.md) rebuilds pre-push, pre-merge and pre-release stages. Until then, `node scripts/check-repo.mjs --static` (seconds) before pushing skill or manifest changes; `--full` before a release.
+- Verification phase: stability ([proposal 18](./docs/agents/proposals/18-three-stage-verification.md)). `scripts/gates.json` declares the checks; `node scripts/gate.mjs <stage>` runs them.
+  - Pre-push: opt in per clone with `git config core.hooksPath .githooks`; the Git hook runs `gate.mjs pre-push` on the commits being pushed. Without it, run `node scripts/gate.mjs pre-push` before pushing (it checks the commits not yet on `origin/main`).
+  - Pre-merge: before the push that carries a ticket's code, run `node scripts/gate.mjs pre-merge` and cite its output at `tkt close`.
+  - Pre-release: `node scripts/check-repo.mjs --full` until proposal 18 step 3 moves it under `gate.mjs pre-release`.
 - Syntax fixtures: `node --test scripts/skill-syntax.test.mjs` must pass; native validation alone misses malformed YAML.
 
 ## When blocked
 
 Record unavailable gates and exact failures in the owning ticket; continue independent
 work. Release staging waits for required evidence or an explicit supported-scope decision.
+
+Usage limit reached: stop and report the limit and reset; never move work to another
+provider unless the project's `AGENTS.md` opts in ([provider switching](docs/agents/provider-switching.md)).
+This repo does not opt in.
 
 Release preparation/publication: read [the release contract](docs/agents/release-contract.md)
 for version authorities, mode boundaries, publishers and remaining gates.

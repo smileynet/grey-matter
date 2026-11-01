@@ -21,3 +21,11 @@ Field report from philippines-trip, 2026-11-01. `tkt new`, `tkt claim`, `tkt edi
 - [ ] Reproduce with an unrelated staged file and record the result.
 - [ ] Either tkt commits only the ticket path (e.g. `git commit -- <ticket>`; raise upstream in tkt) or every skill that runs tkt commands (code-review, reconcile-tickets, tkt-core/work, triage) warns to commit or unstage first.
 - [ ] File the tkt-side issues (staged sweep, tags missing from query JSON, comma splitting in --vc, slow publish) upstream and link them here.
+
+## Reproduced in grey-matter (2026-11-01)
+
+Two sessions shared this checkout. One staged `scripts/gate.mjs` and `.githooks/pre-push` (ticket
+165); the other ran `tkt new 166`, whose commit `66141a8` ("chore(tickets): new 166
+refresh-harnesses-md-versions") contains both files and was pushed. Nothing was lost, but the
+runner landed under an unrelated ticket's message. Workaround until fixed: commit with explicit
+paths (`git commit -- <paths>`) and keep the index empty while another session may run tkt.

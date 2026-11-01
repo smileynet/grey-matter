@@ -82,7 +82,7 @@ standard.
 | **Range** | the commits being pushed: every stdin line of the Git pre-push hook | merge-base with `origin/main` to `HEAD`; never the working tree | all |
 | **Budget** | 30 s total, 10 s per check; 0 s when no scoped path changed | 5 min total, 2 min per check | none; once per release |
 | **Enforced by** | an opt-in Git pre-push hook per clone | the agent, before the push that lands a ticket's code, citing the output at `tkt close`; optionally a project `Stop` agent hook | the `release` skill, as receipts |
-| **Excludes** | test suites, temp repos, network, harness or tool spawns, anything that can prompt | full suite by default | silent skips: a check not run is "not run", never a pass |
+| **Excludes** | test suites, temp repos, network, anything that can prompt; an offline tool such as `claude plugin validate` is allowed when measured and bounded | full suite by default | silent skips: a check not run is "not run", never a pass |
 
 **Pre-merge on trunk.** With no pull requests, the push that lands work *is* the merge;
 trunkbaseddevelopment.com: "Locally, before the commit/push is the gate" (staged §3). Closing a
@@ -117,7 +117,7 @@ A check enters a stage only with all of:
 1. **Catches** one named failure, observed, and often enough to earn its time. A check with no
    catch over three releases moves one stage later (Chromium drops configs that "only fail once
    every couple of weeks").
-2. **Scope**: repo-relative POSIX path prefixes or globs, no regex. Out of scope, it does not run.
+2. **Scope**: repo-relative POSIX path prefixes (`skills/` a folder, `scripts/deploy` a file stem); no globs or regex until a project needs them. Out of scope, it does not run.
 3. **Measured** time on this host with date, inside the stage budget. Over budget moves it later;
    budgets are never raised.
 4. **Bounded by the runner**: a per-check timeout the runner enforces by killing the process tree

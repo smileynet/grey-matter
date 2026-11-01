@@ -149,8 +149,12 @@ the fixtures need Git but no provider login, network or LFS payload download.
 Fixtures proving each invariant fails when seeded live in `scripts/check-repo.test.mjs`
 (`node --test`).
 
-No hook runs these checks; see [proposal 18](proposals/18-three-stage-verification.md) for the
-pre-push, pre-merge and pre-release stages that replace the removed hooks.
+`scripts/gates.json` declares the staged checks and `node scripts/gate.mjs <stage>` runs them
+([proposal 18](proposals/18-three-stage-verification.md)). The pre-push stage runs from the tracked
+`.githooks/pre-push` once a clone opts in with `git config core.hooksPath .githooks`; nothing
+installs it. `gate.mjs` owns each check's timeout and kills the process tree, so a check that
+hangs, or blocks in `spawnSync`, ends as `timeout`, never as a pass. `check-repo.mjs` runs the
+remaining suites on demand until step 3 moves them under `gate.mjs pre-release`.
 
 
 Release bundle construction and verification are documented in
