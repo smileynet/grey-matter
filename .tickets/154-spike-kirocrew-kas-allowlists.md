@@ -10,8 +10,14 @@ tags: ["stream:tooling", "type:research"]
 
 ## What to build
 
-TBD
+Rerun probes P3 (approvals) and P13 (escalation) on Kiro Crew 0.11.1 with workers whose agent spec allows only `git`, `npm` and `tkt` inside the fixture and denies file deletion, with YOLO off. In ticket 128, YOLO let the ticket 5 worker delete the README and the conductor merged it.
+
+**Question:** Does a deny-by-default KAS spec stop the README deletion, and does the worker then report `blocked needs-human`?
+
+Source: [harness experimental features](../docs/agents/research/harness-experimental-features-20261101.md#proposed-spikes) (2026-11-01). Run on the spike-0 fixture (`scripts/spike-orchestrate-fixture.mjs`, ticket 124) in a throwaway checkout; any GitHub repo only with the user's go-ahead.
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
+- [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
+- [ ] Sandbox folders removed after the run; settings changed for the spike restored or recorded.

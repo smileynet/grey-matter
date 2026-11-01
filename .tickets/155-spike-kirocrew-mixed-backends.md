@@ -10,8 +10,14 @@ tags: ["stream:tooling", "type:research"]
 
 ## What to build
 
-TBD
+Set Kiro Crew's worker backend (`agent.acp_backend` or `agent.member_acp_backend`) to `claude` or `codex`, both labelled experimental, and run the trunk loop with the built-in conductor on KAS.
+
+**Question:** Do `work_report`, the work-ledger wake and the conductor's acceptance still work when workers run on another harness?
+
+Source: [harness experimental features](../docs/agents/research/harness-experimental-features-20261101.md#proposed-spikes) (2026-11-01). Run on the spike-0 fixture (`scripts/spike-orchestrate-fixture.mjs`, ticket 124) in a throwaway checkout; any GitHub repo only with the user's go-ahead.
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
+- [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
+- [ ] Sandbox folders removed after the run; settings changed for the spike restored or recorded.
