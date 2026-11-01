@@ -1,6 +1,6 @@
 ---
 id: "164"
-title: "grey-matter-upgrade skill: bring a project up to a new grey-matter release's standards"
+title: "Upgrade path: bring a project up to a new grey-matter release's standards (conformance-audit mode recommended)"
 status: open
 blocked_by: []
 tags: ["stream:tooling"]
@@ -37,7 +37,24 @@ conformed to, reading the changelog entries between that and the current version
 per-release migration steps (for example, remove the old Git pre-commit hook, add the phase line,
 re-vendor `gate.mjs`).
 
-## What to build (if a skill)
+## Recommended direction (2026-11-01, owner asked to weigh merge vs. separate)
+
+Extend `conformance-audit` with a release-aware upgrade mode rather than adding a skill:
+
+- Upgrading is conformance with a starting version. The audit already has the audit, approval gate,
+  safe-tier fix, judgement report and one-commit landing an upgrade needs; a second skill would copy
+  them.
+- One source of "current standard". Two skills defining it drift (the audit's own rule-sources
+  section warns against "a fourth copy").
+- What is new is input: the recorded conformed version, per-release migration notes naming
+  retired patterns (the old Git pre-commit hook, the old `check-repo.mjs` contract), and vendored
+  `gate.mjs` drift. These become rule sources for the audit.
+- No new skill means no bucket README, `compass` or roster churn; the audit's description gains an
+  "after a grey-matter upgrade" trigger.
+- Split only if upgrading had to change how grey-matter is installed in the project, which is
+  `sync` and `deploy`'s job.
+
+## What to build
 
 - Record the conformed grey-matter version in the project (for example a line in `AGENTS.md`).
 - Per release, a migration note in grey-matter (agent-facing, beside `CHANGELOG.md` or in
@@ -48,7 +65,7 @@ re-vendor `gate.mjs`).
 
 ## Acceptance criteria
 
-- [ ] The overlap decision (new skill vs. `conformance-audit` mode) is recorded with reasons.
+- [ ] The overlap decision is confirmed by the owner (recommended: a `conformance-audit` upgrade mode) and recorded with reasons.
 - [ ] A project adopted before proposal 18 can be brought to the post-18 shape by running it, shown on one real consumer repo (philippines-trip or tagalog-helper), with the diff as evidence.
 - [ ] Running it twice in a row makes no further change.
 - [ ] Mechanical steps apply only behind the approval gate; judgement calls are reported.
