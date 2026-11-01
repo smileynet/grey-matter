@@ -1,7 +1,7 @@
 ---
 id: "163"
 title: "Skill: harness-changelog, review new harness versions against a hashed baseline"
-status: in_progress
+status: done
 blocked_by: []
 tags: ["stream:tooling"]
 ---
@@ -22,7 +22,11 @@ Open design questions: one manifest or per-file stamps only; whether to hash per
 
 ## Acceptance criteria
 
-- [ ] SKILL.md under `skills/meta/harness-changelog/` follows [skill frontmatter](../docs/agents/skill-frontmatter.md) and passes `node --test scripts/skill-syntax.test.mjs`.
-- [ ] The detect script reports no change on an unchanged machine, and names the harness and the changed subcommand after a version change (test with a fixture of two help outputs).
-- [ ] One real review run recorded against the current baseline, with the proposals it produced.
-- [ ] `node scripts/check-repo.mjs --affected` exits 0.
+- [x] SKILL.md under `skills/meta/harness-changelog/` follows [skill frontmatter](../docs/agents/skill-frontmatter.md) and passes `node --test scripts/skill-syntax.test.mjs`.
+- [x] The detect script reports no change on an unchanged machine, and names the harness and the changed subcommand after a version change (test with a fixture of two help outputs).
+- [x] One real review run recorded against the current baseline, with the proposals it produced.
+- [x] `node scripts/check-repo.mjs --affected` exits 0.
+
+## Resolution (2026-11-01)
+
+done: harness-changelog skill (meta) with scripts/harness-versions.mjs, baseline docs/agents/harness-surfaces/versions.json (11 surfaces incl. Claude and Codex desktop via Get-AppxPackage, Kiro IDE and Antigravity IDE via product files), tests as check-repo group 18, first review recorded and ticket 166 filed for the harnesses.md refresh.
