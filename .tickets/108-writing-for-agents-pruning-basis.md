@@ -25,3 +25,7 @@ reviews the wording before it lands, because this is a core reference.
 - [ ] The sprawl passage ties restructuring to an observed failure, not an assumed gain
 - [ ] Owner approved the wording
 - [ ] `node scripts/check-repo.mjs` passes
+
+## Field report — 2026-11-01
+
+Specs and tickets should put the current state first. philippines-trip specs stacked dated "supersedes" paragraphs at the top (one had four layers), so agents had to read the whole history to find the current rule. Proposed rule: a short current-state section first, superseded notes in a dated history section at the end.

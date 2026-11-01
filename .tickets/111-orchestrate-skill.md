@@ -32,3 +32,14 @@ Write each harness reference from its spike (124-129).
 - [ ] Ticket 95's placement decision recorded as "harness reference", citing proposal 17.
 - [ ] Harness references are written from spikes 125-129; any probe that failed names the fallback the loop uses there.
 - [ ] A live dry run on the spike fixture in Claude Code and kiro-cli shows: claim before dispatch, one worktree each, a spec check (or a reviewer verdict for consequential changes) before close, one dashboard entry plus a chat update with a visual per close, the landing mode chosen per project, the T2 QUESTION answered without escalation, and only T5 escalated.
+
+## Field report — 2026-11-01
+
+Lessons for orchestrate from planning parallel work in philippines-trip:
+
+- Define worker streams by the files they own (content, screens, accounts) and name the shared files that force ordering (one large Android activity file, a shared home screen).
+- The schema owner is the only stream that changes generated content or its format; other streams consume new fields.
+- Critic: a fresh agent with the ticket, the diff and the project's critic rubric; two failed rounds, then escalate to the owner.
+- One device (simulator) handed to one worker at a time, with the device ID and owner recorded.
+- Merge in feature order even when workers finish out of order; rebase open branches after a schema change merges.
+- Before merging, look upstream: other sessions may be committing to the same branch.
