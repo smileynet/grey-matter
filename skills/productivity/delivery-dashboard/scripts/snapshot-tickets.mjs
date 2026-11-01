@@ -6,6 +6,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const BLOCK = /(<script type="application\/json" id="gm-tickets">)[\s\S]*?(<\/script>)/;
 const FIELDS = ["id", "title", "status", "priority", "blocked_by", "tags"];
@@ -45,7 +46,8 @@ export function snapshot(file, { repo, run = execFileSync, now = new Date() } = 
   return { tickets: tickets.length, frontier: frontier.length };
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname)) {
+// fileURLToPath, not URL.pathname: on Windows the pathname is /D:/..., so the CLI never ran.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   const file = args.find((a, i) => !a.startsWith("--") && args[i - 1] !== "--repo");
   const repoAt = args.indexOf("--repo");

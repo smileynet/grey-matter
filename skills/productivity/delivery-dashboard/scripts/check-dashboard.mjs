@@ -7,6 +7,7 @@
 // is no substitute for opening the page. Trusted repository HTML only (not a sandbox).
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
 const KINDS = ["shipped", "progress", "decision", "blocked", "learning"];
@@ -193,7 +194,8 @@ export function check(path, { strict = false } = {}) {
   }
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname)) {
+// fileURLToPath, not URL.pathname: on Windows the pathname is /D:/..., so the CLI never ran.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   const file = args.find((a) => !a.startsWith("--"));
   if (!file || !existsSync(file)) { console.error("usage: check-dashboard.mjs <dashboard.html> [--strict]"); process.exit(2); }

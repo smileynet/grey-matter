@@ -9,6 +9,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
+import { spawnSync } from "node:child_process";
 import { check } from "../skills/productivity/delivery-dashboard/scripts/check-dashboard.mjs";
 import { snapshot } from "../skills/productivity/delivery-dashboard/scripts/snapshot-tickets.mjs";
 
@@ -253,4 +254,17 @@ test("snapshot retains real ticket tags when the CLI omits them", (t) => {
   const run = (cmd, args) => args[0] === "query" ? [tk("one", "open"), tk("two", "backlog")].map((ticket) => JSON.stringify(ticket)).join("\n") : JSON.stringify({ id: "one" });
   snapshot(d.file, { repo: d.dir, run }); const snap = JSON.parse(readFileSync(d.file, "utf8").match(TICKETS)[2]);
   assert.deepEqual(snap.tickets.map((ticket) => ticket.tags), [["build", "review"], ["design", "later"]]);
+});
+
+// Ticket 134: on Windows the CLI entry guards compared against URL.pathname (/D:/...), never
+// matched, and exited 0 with no output, so the skill's own check step passed every dashboard.
+test("checker and snapshot CLIs run as commands", (t) => {
+  const scripts = join(SKILL, "scripts");
+  const d = flowDashboard(t, [], withTickets({ generated: null, frontier: [], tickets: [{ ...tk("bad", "open"), tags: "build" }] }));
+  const checked = spawnSync(process.execPath, [join(scripts, "check-dashboard.mjs"), d.file], { cwd: tmpdir(), encoding: "utf8" });
+  assert.equal(checked.status, 1, checked.stdout + checked.stderr);
+  assert.match(checked.stdout, /tags must be/);
+  const usage = spawnSync(process.execPath, [join(scripts, "snapshot-tickets.mjs")], { cwd: tmpdir(), encoding: "utf8" });
+  assert.equal(usage.status, 2, usage.stdout + usage.stderr);
+  assert.match(usage.stderr, /usage: snapshot-tickets/);
 });
