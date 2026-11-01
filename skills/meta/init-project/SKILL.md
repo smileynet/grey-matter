@@ -87,7 +87,8 @@ Set up only what is installed:
 - **test commands by tier**: list the project's single-test command, commit gate, and slow
   tier with the environment it needs, per the
   [test-environment ladder](../../../docs/agents/test-environment-ladder.md). Ask the user
-  for any you cannot find in the build files.
+  for any you cannot find in the build files. Add hooks only per
+  [local gates](../../../docs/agents/local-gates.md), each with its scope and measured time.
 - Any other installed skill with a project convention: add its config and a one-line
   `AGENTS.md` pointer. Keep `AGENTS.md` to pointers plus the few always-on rules; detail
   lives in the pointed-at docs.

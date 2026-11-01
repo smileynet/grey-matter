@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtempSync,mkdirSync,writeFileSync,readFileSync,existsSync,symlinkSync,renameSync} from 'node:fs';
+import {mkdtempSync,mkdirSync,writeFileSync,readFileSync,existsSync,symlinkSync,renameSync,rmSync} from 'node:fs';
 import {tmpdir,homedir} from 'node:os';
 import {join} from 'node:path';
 import {execFileSync,spawnSync} from 'node:child_process';
@@ -36,13 +36,6 @@ test('escaping paths and source/parent symlinks are rejected',()=>{const f=fixtu
 test('receipt cannot include itself or silently overwrite an existing acceptance',()=>{const f=fixture();assert.throws(()=>f.create('ui/receipt.json'),/outside the declared source/);assert.equal(existsSync(join(f.root,'ui/receipt.json')),false);const record=f.create();f.accept(record);assert.throws(()=>f.create(),/already exists/);});
 test('read-only CLI check from unrelated cwd preserves source and record bytes',()=>{const f=fixture(),record=f.create();f.accept(record);const before=readFileSync(join(f.root,'receipt.json'));const command=['check',f.root,'manifest.json','receipt.json'];const output=execFileSync(process.execPath,[helper,...command],{cwd:tmpdir(),encoding:'utf8'});assert.equal(JSON.parse(output).id,record.id);assert.deepEqual(readFileSync(join(f.root,'receipt.json')),before);change(f.root,'ui/app.css',text=>text+'div{color:black}');const failed=spawnSync(process.execPath,[helper,...command],{cwd:tmpdir(),encoding:'utf8'});assert.equal(failed.status,1);assert.match(failed.stderr,/source or captures changed/);});
 
-// These owned fixtures are small enough for recoverable OS disposal.
-test.after(()=>{
- let command,args;
- if(process.platform==='win32'){
-  command='powershell.exe';args=['-NoProfile','-Command',"Add-Type -AssemblyName Microsoft.VisualBasic; $items = $env:T47_TRASH_PATHS | ConvertFrom-Json; foreach ($item in $items) { [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteDirectory($item, 'AllDialogs', 'SendToRecycleBin') }"];
- }else if(process.platform==='darwin'){command='/usr/bin/trash';args=attempts;}
- else{command='gio';args=['trash','--',...attempts];}
- const result=spawnSync(command,args,{encoding:'utf8',timeout:10000,env:{...process.env,T47_TRASH_PATHS:JSON.stringify(attempts)}});
- if(result.error||result.status!==0)throw Error('Fixture OS-trash cleanup unavailable; retained '+attempts.join(', ')+': '+(result.error?.message??result.stderr));
-});
+// The test made these mkdtemp fixtures and nothing else lives in them, so remove them
+// outright. An OS-trash route showed a modal dialog on Windows and hung the gate.
+test.after(()=>{for(const root of attempts)rmSync(root,{recursive:true,force:true});});

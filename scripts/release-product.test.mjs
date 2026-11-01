@@ -71,7 +71,7 @@ test("aggregate strict mode fails instead of skipping missing tkt", () => {
   const dir = mkdtempSync(join(tmpdir(), "strict product "));
   try {
     const source = readFileSync(join(scripts, "check-repo.mjs"), "utf8"); put(join(dir, "check-repo.mjs"), source);
-    for (const match of source.matchAll(/join\(SCRIPTS, "([^"/]+\.mjs)"\)/g)) put(join(dir, match[1]), "// isolated stub: command dispatch fixture\n");
+    for (const match of source.matchAll(/"([^"/]+\.mjs)"/g)) if (match[1] !== "check-repo.mjs") put(join(dir, match[1]), "// isolated stub: command dispatch fixture\n");
     const run = (args) => spawnSync(process.execPath, [join(dir, "check-repo.mjs"), ...args], { encoding: "utf8", env: { ...process.env, PATH: dir } });
     const normal = run([]); assert.equal(normal.status, 0, normal.stderr); assert.match(normal.stdout, /skipped: tkt not found/);
     const strict = run(["--require-tools"]); assert.equal(strict.status, 1, strict.stdout); assert.match(strict.stderr, /FAILED: tkt not found/);

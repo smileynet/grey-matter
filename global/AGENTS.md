@@ -8,4 +8,5 @@
 - Footprint: before a build, test run, simulator, download, clone or copy of tracked files, check free space and reference large files instead of copying them. Measure the first attempt; past 500 MiB, follow repository-artifact-hygiene ("While you work").
 - Before you finish, promote, keep or delete what you made, as in repository-artifact-hygiene ("At ticket close"). Delete to the OS trash, and list what you did not make, with its size, instead of deleting it.
 - Free space under 20 GiB (under WSL, the lower of the distro and its Windows drive): stop adding data and tell the user.
+- Git hooks are rare and budgeted: add one only for a key area's observed, mechanical failure, scoped to its paths, measured within pre-commit 10 s or pre-push 2 min in total. Run agent reviews, full suites and builds on demand before merge; hosted CI is manual dispatch only.
 - Repos with `.memory/` predate grey-matter: read `.memory/CONTEXT.md` as the glossary and `.memory/adr/` as the decision records until `adopt-project` migrates them.
