@@ -82,11 +82,20 @@ Record unavailable gates and exact failures in the owning ticket; continue indep
 work. Release staging waits for required evidence or an explicit supported-scope decision.
 
 Usage limit reached: stop and report the limit and reset; never move work to another
-provider unless the project's `AGENTS.md` opts in ([provider switching](docs/agents/provider-switching.md)).
-This repo does not opt in.
+provider unless the Provider fallback section below opts in ([provider switching](docs/agents/provider-switching.md)).
 
 Release preparation/publication: read [the release contract](docs/agents/release-contract.md)
 for version authorities, mode boundaries, publishers and remaining gates.
+
+## Provider fallback
+
+Off. Validate after any edit: `node scripts/check-provider-fallback.mjs AGENTS.md`.
+
+- **Allowed:** no
+- **Providers, in order:** none
+- **Task classes:** none
+- **Not for:** none
+- **Announce:** yes
 
 ## Working rhythm
 

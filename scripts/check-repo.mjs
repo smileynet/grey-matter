@@ -25,6 +25,7 @@
 //  16. critic model probe         -> probe-critic-model.test.mjs (fake harness binaries)
 //  17. orchestrate spike fixture  -> spike-orchestrate-fixture.test.mjs (temp sandboxes; skips without tkt)
 //  18. harness version detector   -> harness-versions.test.mjs (fake harness binaries)
+//  19. provider fallback validator -> check-provider-fallback.test.mjs (fixture sections + this AGENTS.md)
 //
 // Design (AC-driven):
 //  - READ-ONLY on user state. The installer test uses throwaway temp roots (mkdtemp),
@@ -117,6 +118,7 @@ const STATIC = [
   ["4. ticket health (tkt validate)", "tkt", ["validate"], { optional: true }],
   ["9. Claude plugin manifest", node, [join(SCRIPTS, "check-plugin-manifest.mjs")]],
   ["10. YAML syntax and core types", node, [join(SCRIPTS, "check-skill-syntax.mjs")]],
+  ["10b. provider fallback section", node, [join(SCRIPTS, "check-provider-fallback.mjs"), join(ROOT, "AGENTS.md")]],
 ];
 const TESTS = [
   ["1. deployer: ownership, plugin guards, root selection", test("deploy.test.mjs")],
@@ -132,6 +134,7 @@ const TESTS = [
   ["16. critic model probe", test("probe-critic-model.test.mjs")],
   ["17. orchestrate spike fixture", test("spike-orchestrate-fixture.test.mjs")],
   ["18. harness version detector", test("harness-versions.test.mjs")],
+  ["19. provider fallback validator", test("check-provider-fallback.test.mjs")],
 ];
 const selected = mode === "full" ? TESTS : [];
 console.log(`check-repo mode: ${mode}; ${selected.length} of ${TESTS.length} test groups selected`);

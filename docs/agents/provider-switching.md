@@ -19,11 +19,27 @@
 
 ## Per-project opt-in
 
-A project allows moving work by adding this section to its `AGENTS.md`. Every field is required, so the permission is explicit:
+### Scaffold: start from the off state
+
+Add this to the project's `AGENTS.md` exactly as shown, even when the project doesn't opt in. The explicit off state makes the decision visible. It also means turning it on later is an edit to known fields, not a new section written from memory:
 
 ```markdown
 ## Provider fallback
 
+Off. Validate after any edit: `node scripts/check-provider-fallback.mjs AGENTS.md`.
+
+- **Allowed:** no
+- **Providers, in order:** none
+- **Task classes:** none
+- **Not for:** none
+- **Announce:** yes
+```
+
+### Turning it on
+
+Change only the field values:
+
+```markdown
 - **Allowed:** yes
 - **Providers, in order:** anthropic, openai
 - **Task classes:** implementation, review, research
@@ -31,13 +47,28 @@ A project allows moving work by adding this section to its `AGENTS.md`. Every fi
 - **Announce:** yes
 ```
 
-- **Allowed** must be `yes`; anything else means the default rule.
-- **Providers, in order** lists the only providers work may move to, in preference order.
-- **Task classes** names the kinds of work that may move. Work outside them stays put.
-- **Not for** lists work that never moves, whatever else the section says.
-- **Announce: yes** means the agent says before moving: which task, from which provider to which, and why. `no` is allowed but not recommended.
+| Field | Values | Meaning |
+|---|---|---|
+| **Allowed** | `yes` or `no` | `no` keeps the default rule. |
+| **Providers, in order** | `none`, or a comma list from `anthropic`, `openai`, `amazon`, `google` | The only providers work may move to, in preference order. Must be `none` when Allowed is `no`, and non-empty when it is `yes`. |
+| **Task classes** | `none`, or a comma list from `orchestration`, `implementation`, `review`, `research`, `docs`, `triage` | The kinds of work that may move. Work outside them stays put. The same rules as providers. |
+| **Not for** | `none`, or a free comma list | Work that never moves, whatever else the section says. |
+| **Announce** | `yes` or `no` | `yes`: say before moving which task, from which provider to which, and why. `no` is allowed but not recommended. |
 
-A missing section, a malformed one, or one the agent can't parse means **no opt-in**.
+### Validate, don't infer
+
+Run the validator after every edit. An agent applying the policy runs it too, instead of reading the section by eye:
+
+```bash
+node scripts/check-provider-fallback.mjs AGENTS.md          # one-line policy, exit 0 valid / 1 invalid
+node scripts/check-provider-fallback.mjs AGENTS.md --json   # {present, errors, policy} for a skill to read
+```
+
+- An absent section is valid and means no opt-in.
+- A present section with any error (a missing, unknown or duplicated field; a value outside the lists; `yes` with no providers; `no` with providers still listed; two sections) exits 1. It is treated as **no opt-in** until fixed.
+- This repo's own section is checked by `node --test scripts/check-provider-fallback.test.mjs`.
+
+The script lives in grey-matter's `scripts/`. Until the orchestrate skill (ticket 111) ships it with the skill, a project outside this repo runs it by path from a grey-matter checkout.
 
 ## Who applies it
 

@@ -89,6 +89,10 @@ Set up only what is installed:
   [test-environment ladder](../../../docs/agents/test-environment-ladder.md). Ask the user
   for any you cannot find in the build files. Add hooks only per
   [local gates](../../../docs/agents/local-gates.md), each with its scope and measured time.
+- **provider fallback**: add the `## Provider fallback` section in its off state, exactly as
+  scaffolded in [provider switching](../../../docs/agents/provider-switching.md#scaffold-start-from-the-off-state),
+  then validate it with `node scripts/check-provider-fallback.mjs AGENTS.md` from a grey-matter checkout.
+  Turn it on only when the user says which providers and task classes may take moved work.
 - Any other installed skill with a project convention: add its config and a one-line
   `AGENTS.md` pointer. Keep `AGENTS.md` to pointers plus the few always-on rules; detail
   lives in the pointed-at docs.

@@ -38,6 +38,15 @@
       "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
     },
     {
+      "id": "provider-fallback",
+      "stage": "pre-push",
+      "catches": "a malformed Provider fallback section in AGENTS.md, which agents must treat as no opt-in",
+      "scope": ["AGENTS.md", "scripts/check-provider-fallback.mjs"],
+      "run": ["node", "scripts/check-provider-fallback.mjs", "AGENTS.md"],
+      "timeout_s": 10,
+      "measured": { "s": 0.2, "date": "2026-11-01", "host": "win" }
+    },
+    {
       "id": "gate-runner",
       "stage": "pre-merge",
       "catches": "a gate.mjs change that mis-selects checks, lets a hung check pass, or leaks its process tree",
