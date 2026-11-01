@@ -69,3 +69,14 @@ its contract, 152 covers what a consumer gate runs and the scratch it leaves.
       contract names which environment variables a checker can rely on; `.githooks/pre-push`
       sets the same variables and forwards Git's stdin refs.
 - [ ] philippines-trip's push gate still passes after the change.
+
+## Update 2026-11-01 (proposal 18)
+
+- Items 1 to 6: the plugin agent hook was removed in 545a80f; the plugin ships no agent hook, so
+  command matching, wrong-repository and environment problems no longer arise from grey-matter.
+  Consumers vendor `gate.mjs` and their own Git pre-push hook (proposal 18 decision 6).
+- Item 6 (gates judge what is published): `gate.mjs` runs checks in a worktree snapshot of the
+  pushed commit (2c9d7e7), so other sessions' uncommitted files neither block nor pass a push.
+- Item 7 (slow `tkt new` publish): the cause was the Git pre-push hook running the full suite,
+  which hung in the footprint test (151). The pre-push stage now runs only static checks: about
+  2.5 s when they apply, 0 s for ticket-only pushes, which is what `tkt` publishes.
