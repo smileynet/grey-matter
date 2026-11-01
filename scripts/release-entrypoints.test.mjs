@@ -2,27 +2,35 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { releaseFiles, syncReleaseTools } from "./sync-release-tools.mjs";
 const scripts = dirname(fileURLToPath(import.meta.url)), repo = dirname(scripts), wrapper = join(repo, "skills/meta/release/references/release.sh");
 const put = (file, text) => { mkdirSync(dirname(file), { recursive: true }); writeFileSync(file, text); };
-for (const path of ["skills/meta/release/references/release.sh", "skills/release/references/release.sh", "tools/release.sh"]) test(`wrapper finds shared tools and preserves arguments from ${path}`, () => {
+// On Windows, PATH's bash can be WSL's, which cannot open Windows paths; use the one Git ships.
+function posixBash() {
+  if (process.platform !== "win32") return "bash";
+  const exec = spawnSync("git", ["--exec-path"], { encoding: "utf8" }).stdout?.trim();
+  const bash = exec && resolve(exec, "../../../bin/bash.exe");
+  return bash && existsSync(bash) ? bash : null;
+}
+const bash = posixBash(), noBash = bash ? false : "Git for Windows' bash.exe not found";
+for (const path of ["skills/meta/release/references/release.sh", "skills/release/references/release.sh", "tools/release.sh"]) test(`wrapper finds shared tools and preserves arguments from ${path}`, { skip: noBash }, () => {
   const temp = mkdtempSync(join(tmpdir(), "release wrapper "));
   try {
     const entry = join(temp, path), dir = path === "tools/release.sh" ? "tools" : "scripts";
     mkdirSync(dirname(entry), { recursive: true }); cpSync(wrapper, entry);
     for (const name of ["release.mjs", "release-product.mjs", "release-native.mjs", "release-verify.mjs"]) put(join(temp, dir, name), 'console.log(JSON.stringify(process.argv.slice(2)));');
     for (const [mode, prefix] of [["prepare", ["prepare"]], ["verify", []], ["verify-product", []], ["verify-native", []]]) {
-      const result = spawnSync("bash", [entry, mode, "--out", "path with spaces", "--execute"], { cwd: tmpdir(), encoding: "utf8" });
+      const result = spawnSync(bash, [entry, mode, "--out", "path with spaces", "--execute"], { cwd: tmpdir(), encoding: "utf8" });
       assert.equal(result.status, 0, result.stderr); assert.deepEqual(JSON.parse(result.stdout), [...prefix, "--out", "path with spaces", "--execute"]);
     }
   } finally { rmSync(temp, { recursive: true, force: true }); }
 });
-test("legacy version and publishing modes stop before any release operation", () => {
+test("legacy version and publishing modes stop before any release operation", { skip: noBash }, () => {
   for (const args of [[], ["0.2.0"], ["patch", "--execute"], ["publish"], ["resume"]]) {
-    const result = spawnSync("bash", [wrapper, ...args], { encoding: "utf8" }); assert.equal(result.status, 2, result.stderr); assert.match(result.stderr, /legacy publication is disabled/);
+    const result = spawnSync(bash, [wrapper, ...args], { encoding: "utf8" }); assert.equal(result.status, 2, result.stderr); assert.match(result.stderr, /legacy publication is disabled/);
   }
 });
 function vendorFixture(fn) {
