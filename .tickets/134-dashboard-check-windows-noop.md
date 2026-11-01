@@ -1,7 +1,7 @@
 ---
 id: "134"
 title: "check-dashboard.mjs CLI is a silent no-op on Windows (entry-point guard never matches)"
-status: open
+status: in_progress
 blocked_by: []
 tags: ["stream:tooling"]
 ---
