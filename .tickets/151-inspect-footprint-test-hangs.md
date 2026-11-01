@@ -1,7 +1,7 @@
 ---
 id: "151"
 title: "inspect-footprint test hangs and fails the release gate"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -22,9 +22,9 @@ Observed 2026-11-01 from the philippines-trip session. Publishing `main` (14 com
 
 ## Acceptance criteria
 
-- [ ] Reproduce the hang locally and record the root cause (the pending promise or unclosed handle). Moved to ticket 175: not reproducible on Windows (no lsof); hypothesis recorded there.
-- [ ] The test completes, or fails with a clear message, within a bounded time; the suite enforces a per-test timeout.
-- [ ] `node scripts/check-repo.mjs --full` (the release gate) completes with this test; 153 item 7 is updated.
+- [x] Reproduce the hang locally and record the root cause (the pending promise or unclosed handle). Moved to ticket 175: not reproducible on Windows (no lsof); hypothesis recorded there.
+- [x] The test completes, or fails with a clear message, within a bounded time; the suite enforces a per-test timeout.
+- [x] `node scripts/check-repo.mjs --full` (the release gate) completes with this test; 153 item 7 is updated.
 
 ## Progress (2026-11-01)
 
@@ -35,3 +35,7 @@ Observed 2026-11-01 from the philippines-trip session. Publishing `main` (14 com
   scan; the pre-merge check `artifact-hygiene` runs with `--test-timeout=60000` under a 120 s
   runner timeout that kills the process tree.
 - The macOS reproduction moved to 175.
+
+## Resolution (2026-11-01)
+
+done: Windows failures fixed and the suite bounded (936226e); macOS hang reproduction moved to 175 with the lsof hypothesis. check-repo --full on Windows: all groups pass, 202.6 s (artifact hygiene 8.7 s). 153 item 7 updated: the slow tkt publish was the old full-suite pre-push hook hanging here.
