@@ -32,3 +32,15 @@ declares `Verification phase: stability`.
 ## Resolution (2026-11-01)
 
 done: gate.mjs runner (runner-owned timeouts, process-tree kill, worktree snapshot of the judged commit, SKIP, --include), gates.json with four pre-push checks and the runner's own pre-merge tests, opt-in .githooks/pre-push; commits 66141a8 (swept, ticket 140), 204465e, 2c9d7e7
+
+## Evidence (2026-11-01)
+
+- `node --test scripts/gate.test.mjs`: 12/12 pass (17.9 s). Mutation checks: disabling the
+  deletion skip, the process-tree kill (grandchild under `cmd /c`) or the worktree snapshot each
+  makes its test fail.
+- Real `git push` through `.githooks/pre-push` (this clone set `core.hooksPath .githooks`): 4 of 4
+  checks in about 2.5 s. It blocked on a real broken link on `main` (AGENTS.md links an
+  uncommitted `docs/agents/provider-switching.md` from another session), then
+  `SKIP=doc-links git push` landed `1f3a453..2c9d7e7` with the skip reported.
+- A Node intermediate on Windows takes its own children down when killed, so the tree-kill test
+  uses a shell intermediate; without that, the mutation went undetected.
