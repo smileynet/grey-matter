@@ -12,6 +12,8 @@ tags: ["stream:tooling", "type:research"]
 
 With a headless orchestrator running the trunk loop, watch and steer it from each GUI: Claude desktop agent view, the Codex app thread list, Kiro IDE Agent Focus, the Antigravity Agent Manager and Kiro Crew's session grid ([by surface](../docs/agents/research/harness-experimental-features-20261101.md#by-surface-tui-and-gui)).
 
+Prior art to borrow techniques from (not authority): [eval prior art](../docs/agents/research/eval-prior-art-20261101.md#techniques-by-spike).
+
 **Question:** What does each GUI show of worker state, pending approvals and usage, and can a person answer a worker's question or approval from it?
 
 ## Acceptance criteria

@@ -10,7 +10,7 @@ Harnesses update themselves silently. Kiro Crew moved 0.9.0 to 0.11.1 in the mid
 ## The baseline
 
 - **Manifest:** [`docs/agents/harness-surfaces/versions.json`](../../../docs/agents/harness-surfaces/versions.json). Per harness and surface, it records:
-  - how to read the version: `bin` candidates, optional `args` and `versionArgs`, or a `versionFile` for GUI apps with no CLI;
+  - how to read the version: `bin` candidates, optional `args` and `versionArgs`, or typed per-OS `versionSources` for GUI apps with no CLI;
   - which help outputs to hash (`help`, one argument list per subcommand);
   - where the changelog lives (`changelog`);
   - which reference file describes it (`reference`);
@@ -66,7 +66,7 @@ Harnesses update themselves silently. Kiro Crew moved 0.9.0 to 0.11.1 in the mid
 
 Add an entry to the manifest:
 - **CLI:** `bin` candidates, `help` keys for the subcommands an agent uses, `changelog` and `reference`.
-- **GUI:** `versionFile` (`path` + `field`), or a `bin` + `versionArgs` that prints the version, such as `Get-AppxPackage` for an MSIX app.
+- **GUI:** `versionSources`, an ordered list of typed, per-OS sources (`file-version`, `asar`, `appx`, `json-file`, `plist`, `command`). See [version sources](./references/version-sources.md), which records the verified source for each app and why winget isn't one.
 
 Run `--update --only <id>`, and add a reference file following the [README template](../../../docs/agents/harness-surfaces/README.md#file-template).
 

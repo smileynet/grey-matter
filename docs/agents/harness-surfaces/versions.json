@@ -53,20 +53,27 @@
       "changelog": [
         "https://code.claude.com/docs/en/desktop"
       ],
-      "bin": [
-        "powershell.exe"
-      ],
-      "versionArgs": [
-        "-NoProfile",
-        "-Command",
-        "(Get-AppxPackage -Name Claude).Version"
-      ],
-      "help": [],
       "recorded": {
-        "version": "4.4212.0.0",
+        "version": "4.4212.0",
         "date": "2026-11-01",
         "hashes": {}
-      }
+      },
+      "versionSources": [
+        {
+          "os": [
+            "win32"
+          ],
+          "source": "appx",
+          "name": "Claude"
+        },
+        {
+          "os": [
+            "darwin"
+          ],
+          "source": "plist",
+          "path": "/Applications/Claude.app/Contents/Info.plist"
+        }
+      ]
     },
     {
       "id": "codex",
@@ -135,20 +142,27 @@
       "changelog": [
         "https://learn.chatgpt.com/docs/changelog"
       ],
-      "bin": [
-        "powershell.exe"
-      ],
-      "versionArgs": [
-        "-NoProfile",
-        "-Command",
-        "(Get-AppxPackage -Name OpenAI.Codex).Version"
-      ],
-      "help": [],
       "recorded": {
-        "version": "26.1027.3384.0",
+        "version": "26.1027.3384",
         "date": "2026-11-01",
         "hashes": {}
-      }
+      },
+      "versionSources": [
+        {
+          "os": [
+            "win32"
+          ],
+          "source": "appx",
+          "name": "OpenAI.Codex"
+        },
+        {
+          "os": [
+            "darwin"
+          ],
+          "source": "plist",
+          "path": "/Applications/Codex.app/Contents/Info.plist"
+        }
+      ]
     },
     {
       "id": "kiro-cli",
@@ -206,15 +220,28 @@
       "changelog": [
         "https://kiro.dev/changelog/"
       ],
-      "versionFile": {
-        "path": "%LOCALAPPDATA%/Programs/Kiro/resources/app/package.json",
-        "field": "version"
-      },
       "recorded": {
         "version": "1.3.11",
         "date": "2026-11-01",
         "hashes": {}
-      }
+      },
+      "versionSources": [
+        {
+          "source": "json-file",
+          "os": [
+            "win32"
+          ],
+          "path": "%LOCALAPPDATA%/Programs/Kiro/resources/app/product.json",
+          "field": "version"
+        },
+        {
+          "os": [
+            "darwin"
+          ],
+          "source": "plist",
+          "path": "/Applications/Kiro.app/Contents/Info.plist"
+        }
+      ]
     },
     {
       "id": "agy",
@@ -268,12 +295,54 @@
       "changelog": [
         "https://antigravity.google/docs/changelog"
       ],
-      "versionFile": {
-        "path": "%LOCALAPPDATA%/Programs/Antigravity IDE/resources/app/product.json",
-        "field": "ideVersion"
-      },
       "recorded": {
         "version": "2.5.5",
+        "date": "2026-11-01",
+        "hashes": {}
+      },
+      "versionSources": [
+        {
+          "source": "json-file",
+          "os": [
+            "win32"
+          ],
+          "path": "%LOCALAPPDATA%/Programs/Antigravity IDE/resources/app/product.json",
+          "field": "ideVersion"
+        }
+      ]
+    },
+    {
+      "id": "antigravity-app",
+      "surface": "GUI",
+      "reference": "antigravity.md",
+      "changelog": [
+        "https://antigravity.google/docs/changelog"
+      ],
+      "versionSources": [
+        {
+          "os": [
+            "win32"
+          ],
+          "source": "file-version",
+          "path": "%LOCALAPPDATA%/Programs/Antigravity/Antigravity.exe"
+        },
+        {
+          "os": [
+            "win32"
+          ],
+          "source": "asar",
+          "path": "%LOCALAPPDATA%/Programs/Antigravity/resources/app.asar"
+        },
+        {
+          "os": [
+            "darwin"
+          ],
+          "source": "plist",
+          "path": "/Applications/Antigravity.app/Contents/Info.plist"
+        }
+      ],
+      "recorded": {
+        "version": "2.28.2",
         "date": "2026-11-01",
         "hashes": {}
       }
@@ -325,6 +394,42 @@
           "gateway --help": "b9550e091078",
           "spawn --help": "de3983e6a5f8"
         }
+      }
+    },
+    {
+      "id": "kiro-crew-desktop",
+      "surface": "GUI",
+      "reference": "kiro-crew.md",
+      "changelog": [
+        "%LOCALAPPDATA%/Programs/KiroCrew/resources/backend-dist/kirocrew-backend/Lib/site-packages/kiro_crew/CHANGELOG.md"
+      ],
+      "versionSources": [
+        {
+          "os": [
+            "win32"
+          ],
+          "source": "file-version",
+          "path": "%LOCALAPPDATA%/Programs/KiroCrew/KiroCrew.exe"
+        },
+        {
+          "os": [
+            "win32"
+          ],
+          "source": "asar",
+          "path": "%LOCALAPPDATA%/Programs/KiroCrew/resources/app.asar"
+        },
+        {
+          "os": [
+            "darwin"
+          ],
+          "source": "plist",
+          "path": "/Applications/KiroCrew.app/Contents/Info.plist"
+        }
+      ],
+      "recorded": {
+        "version": "0.11.1",
+        "date": "2026-11-01",
+        "hashes": {}
       }
     },
     {

@@ -12,6 +12,8 @@ tags: ["stream:tooling", "type:research"]
 
 Run fast tiers on read-only research and exploration: find every caller of a function, summarize a module, answer a question from cited docs. Compare against the default on the same questions. Compare tiers within each provider using [models and usage](../docs/agents/harness-surfaces/models-and-usage.md#which-model-for-what), with one cheap or fast tier against the default per provider that is available: Anthropic, OpenAI, Kiro, Google. Use fixed task fixtures so runs are comparable. Record pass rate, defects found or missed, wall time, and usage spent from the provider's usage check. Never move work between providers to finish a run ([provider switching](../docs/agents/provider-switching.md)).
 
+Prior art to borrow techniques from (not authority): [eval prior art](../docs/agents/research/eval-prior-art-20261101.md#techniques-by-spike).
+
 **Question:** Are fast tiers accurate enough for exploration fan-out, judged by recall against a known answer key and citation accuracy?
 
 ## Acceptance criteria

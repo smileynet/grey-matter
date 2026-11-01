@@ -10,7 +10,28 @@ import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { compare, expand, helpHash, main, normalize } from "../skills/meta/harness-changelog/scripts/harness-versions.mjs";
+import { compare, expand, helpHash, main, normalize, normalizeVersion, probe, readAsarJson } from "../skills/meta/harness-changelog/scripts/harness-versions.mjs";
+
+// A minimal app.asar: pickle size, header pickle, JSON header, then file data.
+function writeAsar(path, files) {
+  let offset = 0;
+  const data = [], entries = {};
+  for (const [name, text] of Object.entries(files)) {
+    const b = Buffer.from(text);
+    entries[name] = { size: b.length, offset: String(offset) };
+    data.push(b);
+    offset += b.length;
+  }
+  const json = Buffer.from(JSON.stringify({ files: entries }));
+  const padded = Buffer.alloc(Math.ceil(json.length / 4) * 4);
+  json.copy(padded);
+  const head = Buffer.alloc(16);
+  head.writeUInt32LE(4, 0);
+  head.writeUInt32LE(padded.length + 8, 4);
+  head.writeUInt32LE(padded.length + 4, 8);
+  head.writeUInt32LE(json.length, 12);
+  writeFileSync(path, Buffer.concat([head, padded, ...data]));
+}
 
 const FAKE = `
 const out = JSON.parse(require("fs").readFileSync(process.env.FAKE_OUT, "utf8"));
@@ -109,4 +130,41 @@ test("compare treats a removed help key as a change", () => {
   const r = compare({ version: "1", hashes: { a: "1", b: "2" } }, { version: "1", hashes: { a: "1" } });
   assert.equal(r.status, "moved");
   assert.deepEqual(r.changedHelp, ["b"]);
+});
+
+test("readAsarJson reads package.json out of an asar without extracting it", (t) => {
+  const dir = mkdtempSync(join(tmpdir(), "gm-asar-"));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const asar = join(dir, "app.asar");
+  writeAsar(asar, { "main.js": "console.log(1)\n", "package.json": JSON.stringify({ name: "app", version: "2.28.2" }) });
+  assert.equal(readAsarJson(asar).version, "2.28.2");
+  assert.equal(probe({ id: "a", versionSources: [{ source: "asar", path: asar }] }).version, "2.28.2");
+});
+
+test("version sources fall through in order and skip other OSes", (t) => {
+  const dir = mkdtempSync(join(tmpdir(), "gm-src-"));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const json = join(dir, "product.json");
+  writeFileSync(json, JSON.stringify({ version: "1.107.0", ideVersion: "2.5.5" }));
+  const entry = { id: "ide", versionSources: [
+    { os: ["darwin"], source: "plist", path: "/nope/Info.plist" },
+    { source: "json-file", path: join(dir, "missing.json") },
+    { source: "json-file", path: json, field: "ideVersion" },
+  ] };
+  const r = probe(entry, { platform: "win32" });
+  assert.equal(r.version, "2.5.5");
+  assert.equal(r.source, "json-file");
+  assert.match(probe({ id: "x", versionSources: [{ source: "json-file", path: join(dir, "missing.json") }] }).missing, /missing/);
+  assert.equal(probe({ id: "m", os: ["darwin"], versionSources: [] }, { platform: "win32" }).skipped, "not for win32");
+});
+
+test("a command source and four-part Windows versions are normalized", () => {
+  assert.equal(normalizeVersion("2.28.2.0"), "2.28.2");
+  assert.equal(normalizeVersion("26.1027.3384.1"), "26.1027.3384.1");
+  const r = probe({ id: "c", versionSources: [{ source: "command", argv: [process.execPath, "-e", "console.log('tool 4.4212.0.0')"] }] });
+  assert.equal(r.version, "4.4212.0");
+});
+
+test("a skipped entry does not count as a change", () => {
+  assert.equal(compare({ version: "1", hashes: {} }, { skipped: "not for linux" }).status, "skipped");
 });

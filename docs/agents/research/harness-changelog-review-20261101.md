@@ -23,7 +23,7 @@ node skills/meta/harness-changelog/scripts/harness-versions.mjs            # sec
 | crush | CLI | 0.93.1 | "not installed" (user-level rules table) | n/a |
 | opencode | CLI | 1.18.21 | probed 1.18.21 | none |
 
-The Antigravity 2.0 app (2.28.2) and the Kiro Crew desktop app are not in the manifest: their versions live inside `app.asar`, with no readable file or command. Kiro Crew's CLI version tracks the desktop app.
+Added later the same day: the Antigravity 2.0 app (2.28.2) and the Kiro Crew desktop app (0.11.1), read from their exe version resources with `app.asar` as the cross-check. winget is not a source: it reported Kiro Crew 0.9.0 ([version sources](../../../skills/meta/harness-changelog/references/version-sources.md)).
 
 ## Changes and proposals
 

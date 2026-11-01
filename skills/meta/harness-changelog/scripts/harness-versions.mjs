@@ -46,19 +46,80 @@ function resolveBinary(candidates, env) {
   return null;
 }
 
-function readVersionFile({ path, field }, env) {
-  const file = expand(path, env);
-  if (!existsSync(file)) return { error: `missing ${file}` };
-  const value = field.split(".").reduce((o, k) => o?.[k], JSON.parse(readFileSync(file, "utf8")));
-  return typeof value === "string" ? { version: value } : { error: `no ${field} in ${file}` };
+const pick = (obj, field) => field.split(".").reduce((o, k) => o?.[k], obj);
+
+// Electron's app.asar: UInt32LE at 4 = header pickle size, at 12 = header JSON length, JSON
+// from 16; file data starts at 8 + the pickle size. Reading package.json this way needs no
+// extraction, which is how GUI apps with no CLI expose their version.
+export function readAsarJson(file, inner = "package.json") {
+  const buf = readFileSync(file);
+  const headerJson = JSON.parse(buf.subarray(16, 16 + buf.readUInt32LE(12)).toString("utf8"));
+  const node = inner.split("/").reduce((n, part) => n?.files?.[part], headerJson);
+  if (!node || node.offset === undefined) throw new Error(`${inner} not in ${file}`);
+  const start = 8 + buf.readUInt32LE(4) + Number(node.offset);
+  return JSON.parse(buf.subarray(start, start + node.size).toString("utf8"));
+}
+
+const PS = ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command"];
+const psQuote = (s) => `'${s.replace(/'/g, "''")}'`;
+
+// Typed, offline version sources, tried in order; the first that yields a version wins.
+// winget is deliberately absent: it reported Kiro Crew 0.9.0 while 0.11.1 was installed.
+function readSource(src, env) {
+  const file = src.path && expand(src.path, env);
+  if (file && !existsSync(file)) return { error: `missing ${file}` };
+  switch (src.source) {
+    case "json-file": {
+      const v = pick(JSON.parse(readFileSync(file, "utf8")), src.field ?? "version");
+      return typeof v === "string" ? { version: v } : { error: `no ${src.field} in ${file}` };
+    }
+    case "asar": {
+      const v = pick(readAsarJson(file, src.inner), src.field ?? "version");
+      return typeof v === "string" ? { version: v } : { error: `no ${src.field ?? "version"} in ${file}` };
+    }
+    case "file-version":
+      return fromCommand([...PS, `(Get-Item -LiteralPath ${psQuote(file)}).VersionInfo.${src.field ?? "FileVersion"}`], env);
+    case "appx":
+      return fromCommand([...PS, `(Get-AppxPackage -Name ${psQuote(src.name)}).Version`], env);
+    case "plist":
+      return fromCommand(["/usr/libexec/PlistBuddy", "-c", `Print :${src.key ?? "CFBundleShortVersionString"}`, file], env);
+    case "command":
+      return fromCommand(src.argv.map((a) => expand(a, env)), env);
+    default:
+      return { error: `unknown version source ${src.source}` };
+  }
+}
+
+function fromCommand([argv0, ...args], env) {
+  const r = runCapture(argv0, args, env);
+  if (r.error) return { error: r.error };
+  if (r.status !== 0) return { error: `exit ${r.status}` };
+  const version = firstVersion(r.text);
+  return version ? { version } : { error: `no version in ${JSON.stringify(r.text.slice(0, 60))}` };
 }
 
 const firstVersion = (text) => text.match(/\d+\.\d+(?:\.\d+)*(?:[-+][\w.]+)?/)?.[0] ?? null;
 
-export function probe(entry, { env = process.env, home = homedir() } = {}) {
-  if (entry.versionFile) {
-    const v = readVersionFile(entry.versionFile, env);
-    return v.error ? { missing: v.error } : { version: v.version, hashes: {} };
+// Windows version resources pad to four parts (2.28.2.0); drop one trailing .0 so they match
+// the version the app reports elsewhere.
+export const normalizeVersion = (v) => (/^\d+\.\d+\.\d+\.0$/.test(v) ? v.slice(0, -2) : v);
+
+const appliesHere = (os, platform) => !os || os.includes(platform);
+
+export function probe(entry, { env = process.env, home = homedir(), platform = process.platform } = {}) {
+  if (!appliesHere(entry.os, platform)) return { skipped: `not for ${platform}` };
+  if (entry.versionSources) {
+    const errors = [];
+    for (const src of entry.versionSources.filter((s) => appliesHere(s.os, platform))) {
+      try {
+        const v = readSource(src, env);
+        if (v.version) return { version: normalizeVersion(v.version), hashes: {}, source: src.source };
+        errors.push(`${src.source}: ${v.error}`);
+      } catch (e) {
+        errors.push(`${src.source}: ${e.message}`);
+      }
+    }
+    return { missing: errors.join("; ") || `no version source for ${platform}` };
   }
   const bin = resolveBinary(entry.bin, env);
   if (!bin) return { missing: `none of ${entry.bin.join(", ")} found` };
@@ -80,8 +141,9 @@ export function probe(entry, { env = process.env, home = homedir() } = {}) {
   return { version, hashes, ...(errors.length && { error: errors.join("; ") }) };
 }
 
-// status: unchanged | moved | new | missing | error
+// status: unchanged | moved | new | missing | skipped | error
 export function compare(recorded, current) {
+  if (current.skipped) return { status: "skipped", detail: current.skipped };
   if (current.missing) return { status: "missing", detail: current.missing };
   if (current.error && !Object.keys(current.hashes ?? {}).length) return { status: "error", detail: current.error };
   if (!recorded) return { status: "new", version: current.version, ...(current.error && { warning: current.error }) };
@@ -105,7 +167,7 @@ function parseArgs(argv) {
   return opts;
 }
 
-export function main(argv = process.argv.slice(2), { env = process.env, home = homedir(), today = new Date().toISOString().slice(0, 10), log = console.log } = {}) {
+export function main(argv = process.argv.slice(2), { env = process.env, home = homedir(), platform = process.platform, today = new Date().toISOString().slice(0, 10), log = console.log } = {}) {
   let opts, manifest;
   try {
     opts = parseArgs(argv);
@@ -118,7 +180,7 @@ export function main(argv = process.argv.slice(2), { env = process.env, home = h
   const results = [];
   for (const entry of manifest.harnesses) {
     if (opts.only && !opts.only.has(entry.id)) continue;
-    const current = probe(entry, { env, home });
+    const current = probe(entry, { env, home, platform });
     const result = { id: entry.id, surface: entry.surface, ...compare(entry.recorded, current) };
     results.push(result);
     if (opts.update && ["moved", "new"].includes(result.status)) {
@@ -133,7 +195,7 @@ export function main(argv = process.argv.slice(2), { env = process.env, home = h
     log(`${r.status.padEnd(9)} ${r.id} (${r.surface}) ${what}${r.warning ? ` [warning: ${r.warning}]` : ""}`);
   }
   if (results.some((r) => r.status === "error")) return 2;
-  return results.some((r) => r.status !== "unchanged") ? 1 : 0;
+  return results.some((r) => !["unchanged", "skipped"].includes(r.status)) ? 1 : 0;
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) process.exitCode = main();

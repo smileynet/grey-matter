@@ -40,3 +40,18 @@ Pinned reference point when last used: commit `cbf3ecce` (2026-10-31).
 Clone it under `.references/<name>`, then add a section here: what it is, why it's a
 reference for this project, and the exact clone command. Keep clones shallow and
 throwaway; nothing here is a dependency, only material agents read.
+
+### Evaluation prior art (model and harness comparison)
+
+Shallow clones read for the model-tier, effort, fast-mode and harness spikes (tickets 154-162, 167-173). What each teaches is in [eval prior art](../docs/agents/research/eval-prior-art-20261101.md). Prior art, not authority. Pinned commits are from 2026-11-01. Together they take about 165 MB, most of it harbor.
+
+```
+git clone --depth 1 https://github.com/harbor-framework/harbor.git .references/harbor                    # ac533ec, Apache-2.0, 144 MB; adapters in src/harbor/agents/installed/
+git clone --depth 1 https://github.com/harbor-framework/harbor-cookbook.git .references/harbor-cookbook  # 2700bb2, Apache-2.0; task recipes
+git clone --depth 1 https://github.com/meridianlabs-ai/inspect_swe.git .references/inspect_swe            # 7804cf7, MIT; harness CLIs as Inspect agents
+git clone --depth 1 https://github.com/review-bench/ReviewBench.git .references/reviewbench              # 228f2a8, MIT; golden findings + judge
+git clone --depth 1 https://github.com/SWE-agent/mini-swe-agent.git .references/mini-swe-agent           # 04d809c, MIT; bash-only control agent
+git clone --depth 1 https://github.com/Dubibubii/tokenmeter.git .references/tokenmeter                   # a9531c0, MIT; cost from session logs
+git clone --depth 1 --filter=blob:none --sparse https://github.com/Aider-AI/aider.git .references/aider  # 5dc9490, Apache-2.0
+git -C .references/aider sparse-checkout set benchmark
+```
