@@ -4,12 +4,21 @@ import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, re
 import { createHash } from "node:crypto";
 import { execFileSync, spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as tar from "tar";
 import { buildArtifacts, verifyArtifacts, extractArtifact } from "./release-artifacts.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
+
+// On Windows, PATH can resolve bash to the WSL launcher in System32, which cannot read native paths
+// or run this node (ticket 135). Use Git for Windows' own bash, or null when it is absent.
+function posixBash() {
+  if (process.platform !== "win32") return "bash";
+  const exec = spawnSync("git", ["--exec-path"], { encoding: "utf8" }).stdout?.trim();
+  const bash = exec && resolve(exec, "../../../bin/bash.exe");
+  return bash && existsSync(bash) ? bash : null;
+}
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const git = (repo, ...args) => execFileSync("git", ["-C", repo, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
 const put = (path, text) => { mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, text); };
@@ -189,7 +198,9 @@ for (const change of ["extra", "missing", "version", "dangling", "short-readme"]
   assert.throws(() => verifyArtifacts(out), /unexpected archive entry|missing expected|wrong agy bundle|package resource missing|incomplete agy plugin README/);
 }));
 
-test("sealed runtime includes its dependency manifest and wrapper works in each host layout", () => fixture(({ repo, dir, build, commit }) => {
+test("sealed runtime includes its dependency manifest and wrapper works in each host layout", (t) => fixture(({ repo, dir, build, commit }) => {
+  const bash = posixBash();
+  if (!bash) return t.skip("no Git for Windows bash next to git; the wrapper needs a POSIX bash that reads Windows paths");
   const file = join(repo, ".claude-plugin/plugin.json"), manifest = JSON.parse(readFileSync(file));
   manifest.metadata.deploy.runtimeFiles.push("scripts/release.mjs", "package.json", "package-lock.json"); put(file, JSON.stringify(manifest));
   put(join(repo, "scripts/release.mjs"), 'console.log(JSON.stringify(process.argv.slice(2)));');
@@ -200,7 +211,7 @@ test("sealed runtime includes its dependency manifest and wrapper works in each 
     const extracted = join(dir, asset.host); extractArtifact(join(dir, "out", asset.name), extracted, asset.files);
     assert.ok(asset.files["package.json"]); assert.ok(asset.files["package-lock.json"]);
     assert.match(readFileSync(join(extracted, "README.md"), "utf8"), /npm ci --ignore-scripts/);
-    const result = spawnSync("bash", [join(extracted, "skills/example/references/release.sh"), "prepare", "--out", "path with spaces"], { encoding: "utf8" });
+    const result = spawnSync(bash, [join(extracted, "skills/example/references/release.sh"), "prepare", "--out", "path with spaces"], { encoding: "utf8" });
     assert.equal(result.status, 0, result.stderr); assert.deepEqual(JSON.parse(result.stdout), ["prepare", "--out", "path with spaces"]);
   }
 }));
