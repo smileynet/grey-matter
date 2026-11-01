@@ -91,7 +91,7 @@ Description addition (one trigger per branch): "Use when a task will create buil
 node <skill-dir>/scripts/inspect-footprint.mjs --repo <root> [--ticket N] [--since <time>] [--dedupe]
 ```
 
-For each uncommitted family (`.scratch/*`, build output, worktrees, outside work folders named in a ticket) it reports:
+For each uncommitted family (`.scratch/*`, build output, worktrees, outside work folders named in a ticket, agent home folders such as `~/.codex` and `~/.kiro`, and the test runner's temp root such as `$TMPDIR/pytest-of-$USER`) it reports:
 
 - allocated size and newest write (epoch-dated files ignored);
 - owning ticket from the name, and that ticket's status from `tkt query`;
@@ -252,3 +252,23 @@ Checked against primary sources where reachable; blog and package-doc items are 
 3. P2 adds a seventh rule: prefer the tool's own prune command to hand deletion for caches (`uv cache prune`, `go clean -cache`, `cargo clean` for a workspace that does not share its target directory, `xcrun simctl delete unavailable`). The per-OS reference marks each as observed or docs-only.
 4. Decision 6 recommendation: pytest only.
 5. No hook-based or daemon approach found in prior art that beats rule-at-creation plus inspector; "Not proposed" stands.
+
+## Addendum 2026-10-31: whole-drive deep dive
+
+Source: full Data-volume inventory (gdu 5.38.0, 3.79M files, 60 unreadable paths, 2.1 GiB of Data in-use unexplained) and the cleanup rounds of 2026-10-31.
+
+Evidence added:
+
+- Free space fell from 28.8 GiB to 10.3 GiB in about 7 hours of agent work. A daily check cannot catch that; a rate check every 2 hours can.
+- `$TMPDIR/pytest-of-$USER` held 11.2 GiB across six runs in 6 hours. Each run copies a 1.2 GiB tracked archive into its checkout while the git objects are hard links, so a moved run frees only its unshared half.
+- `~/.codex/lfs-proof-161` was recreated at 3.8 GiB right after 3.6 GiB of it was removed. The folder lives outside any repo, so a repo-scoped inspector and close rule miss it. Cleanup without a rule at creation does not hold.
+- 517 deleted-but-open regular files (1.4 GiB, mostly Codex temp files) sat in `$TMPDIR` until the process exits; removal cannot reclaim them.
+- Disk that agents leave behind is a minority of the drive (about 70 of 418 GiB allocated); the rest is apps, simulators, caches and toolchains, which are owner decisions and stay out of the agent rules.
+
+Changes to the parts above:
+
+1. **P3** covers agent home folders and the runner temp root (edit above). Output flags a family that regrew after an earlier cleanup.
+2. **P2 rule 2** names the case: a test that checks out the repo must not copy a tracked LFS archive; reference it by hard link or `GIT_LFS_SKIP_SMUDGE=1`.
+3. **P5** (`orient`) prints the free-space rate as well as the level when a history file exists; the owner of that history is the host's disk watch, not the skill.
+4. **Host watch** (outside grey-matter, in the operator's scheduler): run every 2 hours instead of daily, alert on a rate over 2 GiB per hour or a 5 GiB drop, count deleted-but-open files, and flag agent families that grew over 3 GiB. The first version of this runs on one Mac; the proposal records it as the reference behavior for ticket 110's inspector.
+5. **Decision 6 evidence:** still pytest only; both growth sources found are pytest and Codex scratch.
