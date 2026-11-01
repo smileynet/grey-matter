@@ -234,7 +234,9 @@ function outcome(f) {
 
 export function inspect(opts, now = Date.now()) {
   const repo = realpathSync(opts.repo), coverage = { complete: true, sizes: "allocated bytes; upper bound on copy-on-write filesystems" };
-  const tracked = trackedText(repo), status = tickets(repo), open = openPaths(coverage), trees = worktrees(repo);
+  // opts.open supplies the open-file set; the fixture tests pass one so each call skips a machine-wide lsof.
+  if (opts.open) coverage.openFiles = "supplied";
+  const tracked = trackedText(repo), status = tickets(repo), open = opts.open ?? openPaths(coverage), trees = worktrees(repo);
   const roots = [];
   const scratch = join(repo, ".scratch");
   if (existsSync(scratch)) for (const name of readdirSync(scratch)) roots.push({ abs: join(scratch, name), kind: "scratch" });

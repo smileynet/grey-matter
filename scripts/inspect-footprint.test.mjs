@@ -6,9 +6,11 @@ import { spawn, spawnSync } from "node:child_process";
 import { linkSync, mkdirSync, mkdtempSync, readFileSync, rmSync, utimesSync, writeFileSync, appendFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { conformance, inspect, options, summary } from "../skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs";
 
-const SCRIPT = new URL("../skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs", import.meta.url).pathname;
+// fileURLToPath, not URL.pathname: on Windows the pathname is /D:/..., which node cannot load.
+const SCRIPT = fileURLToPath(new URL("../skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs", import.meta.url));
 const git = (cwd, ...args) => {
   const r = spawnSync("git", ["-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false", ...args], { cwd });
   assert.equal(r.status, 0, r.stderr.toString());
@@ -18,8 +20,12 @@ const put = (path, body) => { mkdirSync(join(path, ".."), { recursive: true }); 
 const family = (r, path) => r.families.find((f) => f.path === path);
 const MiB = Buffer.alloc(1024 ** 2, 1);
 
+const made = [];
+test.after(() => { for (const dir of made) rmSync(dir, { recursive: true, force: true }); });
+
 function fixture() {
   const base = mkdtempSync(join(tmpdir(), "footprint-")), repo = join(base, "repo");
+  made.push(base);
   mkdirSync(repo);
   git(repo, "init", "-q", "-b", "main");
   put(join(repo, ".gitignore"), ".scratch/\nbuild/\n");
@@ -52,13 +58,14 @@ async function holdOpen(path) {
   return child;
 }
 
-const base = { paths: [], quietMinutes: 0, floor: 0, topUnder: 0 };
+// An empty open-file set: only the open-file test pays for a machine-wide scan.
+const base = { paths: [], quietMinutes: 0, floor: 0, topUnder: 0, open: new Set() };
 
-test("seeded families get the right facts and outcomes, and the run goes red", async () => {
+test("seeded families get the right facts and outcomes, and the run goes red", async (t) => {
   const { repo } = fixture();
   const holder = await holdOpen(join(repo, ".scratch/t171-open/held.txt"));
   try {
-    const r = inspect({ ...base, repo, cap: 1024 ** 2 });
+    const r = inspect({ ...base, open: undefined, repo, cap: 1024 ** 2 });
     assert.equal(family(r, ".scratch/t170-run-1").outcome, "delete");
     assert.equal(family(r, ".scratch/t170-run-1").epochDatedFiles, 1);
     const cited = family(r, ".scratch/t170-cited");
@@ -70,8 +77,15 @@ test("seeded families get the right facts and outcomes, and the run goes red", a
     assert.equal(family(r, ".scratch/notes").outcome, "ask");
     assert.equal(family(r, "build").kind, "ignored");
     const open = family(r, ".scratch/t171-open");
-    assert.equal(open.outcome, "skip");
-    assert.deepEqual(open.openFiles, [".scratch/t171-open/held.txt"]);
+    if (r.coverage.openFiles === "unavailable") {
+      // Windows has neither lsof nor /proc: the inspector must say its coverage is incomplete.
+      t.diagnostic("open-file detection unavailable on this host; asserted incomplete coverage instead");
+      assert.equal(r.coverage.complete, false);
+      assert.notEqual(open.outcome, "delete");
+    } else {
+      assert.equal(open.outcome, "skip");
+      assert.deepEqual(open.openFiles, [".scratch/t171-open/held.txt"]);
+    }
     const active = r.families.find((f) => f.path.endsWith("wt-active"));
     assert.equal(active.outcome, "skip");
     assert.match(active.activeReasons.join(), /active worktree .* on feature/);
@@ -123,8 +137,8 @@ test("goes green once the seeded problems are cleaned up", () => {
   assert.equal(family(r, ".scratch/t170-cited").outcome, "keep");
   assert.deepEqual(r.findings, []);
   assert.equal(r.status, "pass", JSON.stringify(r.families.map((f) => [f.path, f.outcome])));
-  assert.equal(spawnSync(process.execPath, [SCRIPT, "--repo", repo, "--floor", "0B", "--quiet", "0m"]).status, 0);
-  rmSync(dir, { recursive: true, force: true });
+  const cli = spawnSync(process.execPath, [SCRIPT, "--repo", repo, "--floor", "0B", "--quiet", "0m"], { encoding: "utf8" });
+  assert.equal(cli.status, 0, cli.stdout + cli.stderr);
 });
 
 test("--dedupe counts bytes identical to tracked files", () => {
