@@ -1,7 +1,7 @@
 ---
 id: "138"
 title: "inspect-footprint tests 1, 4, 5 fail on Windows (invariant 13 red before ticket-gates change)"
-status: open
+status: done
 blocked_by: []
 tags: ["stream:tooling"]
 ---
@@ -26,5 +26,9 @@ quiet-floor or mtime handling differs on Windows; unverified.
 
 ## Acceptance criteria
 
-- [ ] `node --test scripts/inspect-footprint.test.mjs` passes on Windows, or each Windows-only difference is skipped with a stated reason.
-- [ ] `node scripts/check-repo.mjs` invariant 13 is green on Windows.
+- [x] `node --test scripts/inspect-footprint.test.mjs` passes on Windows, or each Windows-only difference is skipped with a stated reason.
+- [x] `node scripts/check-repo.mjs` invariant 13 is green on Windows.
+
+## Resolution (2026-11-01)
+
+done under 151 (commit 936226e): inspect-footprint.test.mjs 7/7 on Windows three runs in a row (about 3.5 s); invariant 13's two files 27 pass, 0 fail, 3 platform skips with stated reasons.
