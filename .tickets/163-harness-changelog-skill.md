@@ -1,7 +1,7 @@
 ---
 id: "163"
 title: "Skill: harness-changelog, review new harness versions against a hashed baseline"
-status: open
+status: in_progress
 blocked_by: []
 tags: ["stream:tooling"]
 ---
