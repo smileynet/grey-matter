@@ -24,6 +24,7 @@
 //  15. delivery-dashboard contract -> delivery-dashboard.test.mjs (template, example and checker)
 //  16. critic model probe         -> probe-critic-model.test.mjs (fake harness binaries)
 //  17. orchestrate spike fixture  -> spike-orchestrate-fixture.test.mjs (temp sandboxes; skips without tkt)
+//  18. harness version detector   -> harness-versions.test.mjs (fake harness binaries)
 //
 // Design (AC-driven):
 //  - READ-ONLY on user state. The installer test uses throwaway temp roots (mkdtemp),
@@ -130,6 +131,7 @@ const TESTS = [
   ["15b. final-source review receipt", test("review-receipt.test.mjs")],
   ["16. critic model probe", test("probe-critic-model.test.mjs")],
   ["17. orchestrate spike fixture", test("spike-orchestrate-fixture.test.mjs")],
+  ["18. harness version detector", test("harness-versions.test.mjs")],
 ];
 const selected = mode === "full" ? TESTS : [];
 console.log(`check-repo mode: ${mode}; ${selected.length} of ${TESTS.length} test groups selected`);

@@ -30,3 +30,4 @@ strategy behind this bucket.
 - [release](./release/SKILL.md): prepare, verify and stage a versioned release (orchestrates changelog + readme + version); publish or resume only on the user's request.
 - [reconcile-tickets](./reconcile-tickets/SKILL.md): end-of-session ticket-board hygiene pass (wraps the `tkt-core` skill; pairs with retro).
 - [verify-tkt-usage](./verify-tkt-usage/SKILL.md): validate the skills' inlined tkt commands against the live `tkt capabilities` manifest.
+- [harness-changelog](./harness-changelog/SKILL.md): detect harness upgrades against a hashed baseline, read what changed, and propose what this repo should adapt.

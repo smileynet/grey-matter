@@ -61,6 +61,10 @@ Current members of `skills/meta/`:
   plan-less), it absorbs the handoff read-side (there is no `read-handoff`), and it defers
   routing to `compass` and the ordering rubric to `reconcile-tickets` rather than
   restating either. The session-start twin of `compass`.
+- **harness-changelog**: detect harness upgrades (CLI and desktop app versions plus hashed
+  `--help` output, baseline in `docs/agents/harness-surfaces/versions.json`), read the
+  changelog between versions, and propose edits to the harness references and skills.
+  The harness-side twin of `verify-tkt-usage`.
 - **verify-tkt-usage**: validate the tkt **commands** the skills inline against the live
   `tkt capabilities` manifest, catching drift after a tkt upgrade. (Inlined commands are
   allowed, see the wrap-skills-not-commands rule below; this keeps them honest.)

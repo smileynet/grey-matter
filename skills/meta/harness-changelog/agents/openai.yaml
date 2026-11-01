@@ -1,0 +1,3 @@
+interface:
+  display_name: "Harness Changelog"
+  short_description: "Detect harness upgrades against a hashed baseline and review what to adapt"

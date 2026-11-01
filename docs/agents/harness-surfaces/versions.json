@@ -1,0 +1,394 @@
+{
+  "about": "Harness version baseline for the harness-changelog skill. Each entry says how to read a harness's version and which help outputs to hash; `recorded` is the last reviewed state. Refresh with: node skills/meta/harness-changelog/scripts/harness-versions.mjs --update (only after the review). Help-hash recipe: docs/agents/harness-surfaces/README.md#version-stamp.",
+  "schema": 1,
+  "harnesses": [
+    {
+      "id": "claude-code",
+      "surface": "CLI",
+      "reference": "claude-code.md",
+      "changelog": [
+        "https://code.claude.com/docs/en/changelog"
+      ],
+      "bin": [
+        "%USERPROFILE%/.local/bin/claude.exe",
+        "claude"
+      ],
+      "help": [
+        [
+          "--help"
+        ],
+        [
+          "mcp",
+          "--help"
+        ],
+        [
+          "agents",
+          "--help"
+        ],
+        [
+          "plugin",
+          "--help"
+        ],
+        [
+          "auto-mode",
+          "--help"
+        ]
+      ],
+      "recorded": {
+        "version": "2.1.316",
+        "date": "2026-11-01",
+        "hashes": {
+          "--help": "5ca3a9dac202",
+          "mcp --help": "7119050de798",
+          "agents --help": "4895bfe1bf28",
+          "plugin --help": "afc319633b0e",
+          "auto-mode --help": "e0547c016060"
+        }
+      }
+    },
+    {
+      "id": "claude-desktop",
+      "surface": "GUI",
+      "reference": "claude-code.md",
+      "changelog": [
+        "https://code.claude.com/docs/en/desktop"
+      ],
+      "bin": [
+        "powershell.exe"
+      ],
+      "versionArgs": [
+        "-NoProfile",
+        "-Command",
+        "(Get-AppxPackage -Name Claude).Version"
+      ],
+      "help": [],
+      "recorded": {
+        "version": "4.4212.0.0",
+        "date": "2026-11-01",
+        "hashes": {}
+      }
+    },
+    {
+      "id": "codex",
+      "surface": "CLI",
+      "reference": "codex.md",
+      "changelog": [
+        "https://github.com/openai/codex/releases",
+        "https://learn.chatgpt.com/docs/changelog"
+      ],
+      "bin": [
+        "%USERPROFILE%/.bun/install/global/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe",
+        "codex"
+      ],
+      "help": [
+        [
+          "--help"
+        ],
+        [
+          "exec",
+          "--help"
+        ],
+        [
+          "review",
+          "--help"
+        ],
+        [
+          "mcp",
+          "--help"
+        ],
+        [
+          "cloud",
+          "--help"
+        ],
+        [
+          "agents",
+          "--help"
+        ],
+        [
+          "queue",
+          "--help"
+        ],
+        [
+          "features",
+          "--help"
+        ]
+      ],
+      "recorded": {
+        "version": "0.166.0",
+        "date": "2026-11-01",
+        "hashes": {
+          "--help": "c45272069305",
+          "exec --help": "df0d864ca207",
+          "review --help": "cea76537e3c6",
+          "mcp --help": "9e7d1a796b48",
+          "cloud --help": "56877a6b0c1e",
+          "agents --help": "60d8ea3174fc",
+          "queue --help": "6eba21840efd",
+          "features --help": "dbbe49450f95"
+        }
+      }
+    },
+    {
+      "id": "codex-desktop",
+      "surface": "GUI",
+      "reference": "codex.md",
+      "changelog": [
+        "https://learn.chatgpt.com/docs/changelog"
+      ],
+      "bin": [
+        "powershell.exe"
+      ],
+      "versionArgs": [
+        "-NoProfile",
+        "-Command",
+        "(Get-AppxPackage -Name OpenAI.Codex).Version"
+      ],
+      "help": [],
+      "recorded": {
+        "version": "26.1027.3384.0",
+        "date": "2026-11-01",
+        "hashes": {}
+      }
+    },
+    {
+      "id": "kiro-cli",
+      "surface": "CLI",
+      "reference": "kiro.md",
+      "changelog": [
+        "https://kiro.dev/changelog/"
+      ],
+      "bin": [
+        "%LOCALAPPDATA%/Kiro-Cli/kiro-cli.exe",
+        "kiro-cli"
+      ],
+      "help": [
+        [
+          "--help"
+        ],
+        [
+          "chat",
+          "--help"
+        ],
+        [
+          "acp",
+          "--help"
+        ],
+        [
+          "serve",
+          "--help"
+        ],
+        [
+          "settings",
+          "--help"
+        ],
+        [
+          "agent",
+          "--help"
+        ]
+      ],
+      "recorded": {
+        "version": "2.37.0",
+        "date": "2026-11-01",
+        "hashes": {
+          "--help": "039718fcd2b1",
+          "chat --help": "8288aa0b649b",
+          "acp --help": "b1c25994dfac",
+          "serve --help": "a200fe6008a3",
+          "settings --help": "fcb0bc9178e9",
+          "agent --help": "8d44a934188e"
+        }
+      }
+    },
+    {
+      "id": "kiro-ide",
+      "surface": "GUI",
+      "reference": "kiro.md",
+      "changelog": [
+        "https://kiro.dev/changelog/"
+      ],
+      "versionFile": {
+        "path": "%LOCALAPPDATA%/Programs/Kiro/resources/app/package.json",
+        "field": "version"
+      },
+      "recorded": {
+        "version": "1.3.11",
+        "date": "2026-11-01",
+        "hashes": {}
+      }
+    },
+    {
+      "id": "agy",
+      "surface": "CLI",
+      "reference": "antigravity.md",
+      "changelog": [
+        "agy changelog",
+        "https://antigravity.google/docs/changelog"
+      ],
+      "bin": [
+        "%LOCALAPPDATA%/agy/bin/agy.exe",
+        "agy"
+      ],
+      "help": [
+        [
+          "--help"
+        ],
+        [
+          "mcp",
+          "--help"
+        ],
+        [
+          "plugin",
+          "--help"
+        ],
+        [
+          "remote-control",
+          "--help"
+        ],
+        [
+          "agentapi",
+          "--help"
+        ]
+      ],
+      "recorded": {
+        "version": "1.4.12",
+        "date": "2026-11-01",
+        "hashes": {
+          "--help": "8db8bb69e55f",
+          "mcp --help": "673b231375e1",
+          "plugin --help": "6cc51dc26bdb",
+          "remote-control --help": "8758c1ed23fa",
+          "agentapi --help": "77a08412f01e"
+        }
+      }
+    },
+    {
+      "id": "antigravity-ide",
+      "surface": "GUI",
+      "reference": "antigravity.md",
+      "changelog": [
+        "https://antigravity.google/docs/changelog"
+      ],
+      "versionFile": {
+        "path": "%LOCALAPPDATA%/Programs/Antigravity IDE/resources/app/product.json",
+        "field": "ideVersion"
+      },
+      "recorded": {
+        "version": "2.5.5",
+        "date": "2026-11-01",
+        "hashes": {}
+      }
+    },
+    {
+      "id": "kiro-crew",
+      "surface": "CLI",
+      "reference": "kiro-crew.md",
+      "changelog": [
+        "%LOCALAPPDATA%/Programs/KiroCrew/resources/backend-dist/kirocrew-backend/Lib/site-packages/kiro_crew/CHANGELOG.md"
+      ],
+      "bin": [
+        "%LOCALAPPDATA%/Programs/KiroCrew/resources/backend-dist/kirocrew-backend/python.exe"
+      ],
+      "args": [
+        "-s",
+        "-P",
+        "-m",
+        "kiro_crew"
+      ],
+      "help": [
+        [
+          "--help"
+        ],
+        [
+          "chat",
+          "--help"
+        ],
+        [
+          "config",
+          "--help"
+        ],
+        [
+          "gateway",
+          "--help"
+        ],
+        [
+          "spawn",
+          "--help"
+        ]
+      ],
+      "recorded": {
+        "version": "0.11.1",
+        "date": "2026-11-01",
+        "hashes": {
+          "--help": "ce059c4a1173",
+          "chat --help": "dbe92af42a98",
+          "config --help": "c153c13f238b",
+          "gateway --help": "b9550e091078",
+          "spawn --help": "de3983e6a5f8"
+        }
+      }
+    },
+    {
+      "id": "crush",
+      "surface": "CLI",
+      "reference": "crush-opencode.md",
+      "changelog": [
+        "https://github.com/charmbracelet/crush/releases"
+      ],
+      "bin": [
+        "%LOCALAPPDATA%/Microsoft/WinGet/Links/crush.exe",
+        "crush"
+      ],
+      "help": [
+        [
+          "--help"
+        ],
+        [
+          "run",
+          "--help"
+        ]
+      ],
+      "recorded": {
+        "version": "0.93.1",
+        "date": "2026-11-01",
+        "hashes": {
+          "--help": "facd1f30ee6c",
+          "run --help": "4400adf3cef2"
+        }
+      }
+    },
+    {
+      "id": "opencode",
+      "surface": "CLI",
+      "reference": "crush-opencode.md",
+      "changelog": [
+        "https://github.com/anomalyco/opencode/releases"
+      ],
+      "bin": [
+        "%LOCALAPPDATA%/Microsoft/WinGet/Links/opencode.exe",
+        "opencode"
+      ],
+      "help": [
+        [
+          "--help"
+        ],
+        [
+          "run",
+          "--help"
+        ],
+        [
+          "serve",
+          "--help"
+        ]
+      ],
+      "recorded": {
+        "version": "1.18.21",
+        "date": "2026-11-01",
+        "hashes": {
+          "--help": "b594ad32674b",
+          "run --help": "d62299ebc267",
+          "serve --help": "6855794f108c"
+        }
+      }
+    }
+  ]
+}
