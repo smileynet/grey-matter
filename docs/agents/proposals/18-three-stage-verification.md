@@ -83,6 +83,15 @@ ticket auto-pushes after the code is already on `main`, so pre-merge runs **befo
 carries a ticket's code**, not at close. Pushes of tickets and docs match no pre-merge scope and
 run nothing. Worktree branches run it before merging (`implement-spec`).
 
+**Pre-commit is not a stage.** The trunk-based source says "Locally, before the commit/push is the
+gate": the gate guards integration, and on trunk a commit integrates only when pushed. A commit is
+a local, rewritable save point; every failure a pre-commit check could stop (a secret, a large
+file, a broken manifest) is still stoppable at pre-push, which judges the commits actually leaving.
+A Git pre-commit hook fires on every `tkt new`, `claim` and `close` and every agent commit (152's
+6 to 8 minute case), and it judges the staged index, which can hold another session's work (153
+item 6). A project may keep a Git pre-commit hook only as formatter-style tooling: it fixes staged
+files in about a second, never blocks, and sits outside `gates.json`, the stages and their budgets.
+
 **Pre-push reads Git's refs exactly.** The Git pre-push hook gets one stdin line per pushed ref.
 Skip deletions (all-zeroes local object); for a new ref (all-zeroes remote object) use
 `git rev-list <local> --not --remotes=<remote>`; union paths across all lines. pre-commit only
