@@ -1,7 +1,7 @@
 ---
 id: "128"
 title: "Spike: can Kiro Crew run the orchestrate loop? (probes P1-P13 on the fixture)"
-status: open
+status: done
 blocked_by: ["124"]
 tags: ["stream:tooling", "type:research"]
 ---
@@ -23,3 +23,7 @@ The results become this harness's reference file in the skill. Workers use the c
 - [x] The harness-specific questions in proposal 17 are answered, or each is listed under "couldn't verify" with what was tried.
 - [x] Sandbox repos removed after the run (the GitHub repo only with the user's go-ahead).
 - [ ] `node scripts/check-repo.mjs` passes.
+
+## Resolution (2026-11-01)
+
+done: Kiro Crew spike recorded (trunk + PR) in harness-orchestration-primitives.md 'Spike results: Kiro Crew (2026-11-01)'. Kiro Crew self-updated 0.9.0 -> 0.11.1 mid-run; three blockers cleared with the user's approval (per-command approval -> YOLO; agent.sandbox_allow_unsandboxed_exec=true, since 0.11.1 has no Windows sandbox; agent.session_control=true plus config defaults --adopt). Both loops landed T1-T5, checked independently (trunk: git log --graph, tkt query 1-5 done, npm test 4/4; PR: 6 PRs MERGED each touching only Touches files, npm test 5/5, check() clean). P13 FAILED in both modes: the T5 worker deleted the README and the conductor merged it. Trunk conductor skipped accept_eval.py; same-worker question resume worked. Fixtures, the private repo smileynet/gm-orchestrate-fixture-pr-kirocrew and YOLO were removed or turned off afterwards. check-repo --static: only red is links to the harness-surfaces files still being written (uncommitted).
