@@ -1,7 +1,7 @@
 ---
 id: "134"
 title: "check-dashboard.mjs CLI is a silent no-op on Windows (entry-point guard never matches)"
-status: in_progress
+status: done
 blocked_by: []
 tags: ["stream:tooling"]
 ---
@@ -16,7 +16,11 @@ Compare with `fileURLToPath(import.meta.url)`, and cover the CLI path in `script
 
 ## Acceptance criteria
 
-- [ ] `node check-dashboard.mjs <bad dashboard>` prints the JSON and exits 1 on Windows.
-- [ ] A test runs the checker as a CLI (spawned) on a failing fixture and asserts exit 1.
-- [ ] Any other script with the same entry-point guard is fixed or listed.
-- [ ] `node scripts/check-repo.mjs` passes.
+- [x] `node check-dashboard.mjs <bad dashboard>` prints the JSON and exits 1 on Windows.
+- [x] A test runs the checker as a CLI (spawned) on a failing fixture and asserts exit 1.
+- [x] Any other script with the same entry-point guard is fixed or listed.
+- [x] `node scripts/check-repo.mjs` passes.
+
+## Resolution (2026-11-01)
+
+done: both CLI entry guards use fileURLToPath (commit da661b1); delivery-dashboard.test.mjs 33/33, new spawned-CLI test fails without the fix; the only other URL.pathname use (inspect-footprint.test.mjs) is handled under 151
