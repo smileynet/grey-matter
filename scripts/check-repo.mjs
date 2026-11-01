@@ -35,12 +35,15 @@
 //  - Each sub-check is independently runnable; this is the aggregator.
 //
 // Modes (docs/agents/local-gates.md):
-//   --static    the static checks (2, 3, 4, 9, 10): the pre-commit gate.
-//   --affected  static checks plus the test groups whose scope changed since upstream:
-//               the pre-push gate.
-//   --full      every group (the default): before a release, or on request.
+//   --static    the static checks (2, 3, 4, 9, 10): the pre-commit and pre-push gate. They
+//               read files only, take seconds and guard what a consumer installs.
+//   --push      the pre-push gate; the same as --static. --affected and
+//               CHECK_REPO_MODE=affected are accepted names for it (the Claude push hook
+//               sets that variable for every project's checker).
+//   --full      every group (the default): the release workflow's product gate
+//               (release-product.mjs runs it), or on request. Test groups never gate a push.
 //
-// Run:  node scripts/check-repo.mjs [--static | --affected | --full] [--require-tools]
+// Run:  node scripts/check-repo.mjs [--static | --push | --full] [--require-tools]
 // Exit: 0 = all pass; 1 = at least one invariant failed.
 
 import { spawnSync } from "node:child_process";
@@ -53,15 +56,17 @@ const ROOT = join(SCRIPTS, "..");
 const SELF = "check-repo.mjs";
 const results = [];
 const args = process.argv.slice(2);
-const MODES = ["--static", "--affected", "--full"];
+const MODES = ["--static", "--push", "--affected", "--full"];
 if (args.some((arg) => arg !== "--require-tools" && !MODES.includes(arg)) || args.filter((arg) => MODES.includes(arg)).length > 1) {
-  console.error("usage: node scripts/check-repo.mjs [--static | --affected | --full] [--require-tools]");
+  console.error("usage: node scripts/check-repo.mjs [--static | --push | --full] [--require-tools]");
   process.exit(2);
 }
 const requireTools = args.includes("--require-tools");
-// CHECK_REPO_MODE lets the Claude push hook ask for --affected without passing a flag a
+// CHECK_REPO_MODE lets the Claude push hook ask for the push gate without passing a flag a
 // foreign project's checker would reject.
-let mode = args.find((arg) => MODES.includes(arg))?.slice(2) ?? (process.env.CHECK_REPO_MODE === "affected" ? "affected" : "full");
+const PUSH = ["push", "affected"];
+let mode = args.find((arg) => MODES.includes(arg))?.slice(2) ?? (PUSH.includes(process.env.CHECK_REPO_MODE) ? "push" : "full");
+if (PUSH.includes(mode)) mode = "static";
 
 // Orphan guard (ticket 34 nice-to-have): every sibling `check-*.mjs` sub-check (excluding
 // this aggregator and any `*.test.mjs`) must be named in this file's run list, so a future
@@ -109,9 +114,9 @@ const node = process.execPath;
 
 const test = (...files) => ["--test", ...files.map((f) => join(SCRIPTS, f))];
 
-// Static checks only read files and run in every mode (the pre-commit gate). A test group
-// runs in --affected when a changed path starts with one of its scope prefixes; a change to
-// something every group depends on forces the full set.
+// Static checks only read files and run in every mode (the commit and push gates). Test
+// groups run only in --full, before a release: a slow or flaky fixture must not block
+// publishing tickets or docs.
 const STATIC = [
   ["2. invocation sidecars + README groups", node, [join(SCRIPTS, "check-invocation-policy.mjs")]],
   ["3. doc indexes + relative links", node, [join(SCRIPTS, "check-docs-consistency.mjs")]],
@@ -121,56 +126,22 @@ const STATIC = [
   ["9. Claude plugin manifest", node, [join(SCRIPTS, "check-plugin-manifest.mjs")]],
   ["10. YAML syntax and core types", node, [join(SCRIPTS, "check-skill-syntax.mjs")]],
 ];
-const PLUGIN = [".claude-plugin/", ".codex-plugin/", ".agents/", ".kiro/", "skill-packs.json"];
 const TESTS = [
-  ["1. deployer: ownership, plugin guards, root selection", test("deploy.test.mjs"),
-    ["scripts/deploy", "scripts/install-skills", ...PLUGIN]],
-  ["5. knowledge relocation (adopt-project)", test("relocate-knowledge.test.mjs"),
-    ["scripts/relocate-knowledge", "skills/meta/adopt-project/scripts/relocate-knowledge"]],
-  ["6. agent guidance (managed blocks + guidance check)", test("install-agents-md.test.mjs", "check-guidance.test.mjs"),
-    ["scripts/install-agents-md", "scripts/check-guidance", "global/"]],
-  ["7. crew-research uninstall scope", test("uninstall-crew-research.test.mjs"), ["scripts/uninstall-crew-research"]],
-  ["8. repo survey tiers (adopt-project portfolio)", test("survey-repos.test.mjs"),
-    ["scripts/survey-repos", "skills/meta/adopt-project/scripts/survey-repos"]],
-  ["11. release draft, artifact and publisher safety", test("release-artifacts.test.mjs", "release-version.test.mjs", "release.test.mjs", "release-product.test.mjs", "release-native.test.mjs", "release-entrypoints.test.mjs", "release-verify.test.mjs", "release-publish.test.mjs", "release-registry.test.mjs", "release-tkt-publication.test.mjs", "release-cargo-credentials.test.mjs", "release-cargo-upload.test.mjs", "release-git.test.mjs", "release-development.test.mjs", "release-github.test.mjs", "release-ci-artifacts.test.mjs", "skill-syntax.test.mjs"),
-    ["scripts/release", "scripts/sync-release-tools", "scripts/skill-syntax", "scripts/check-skill-syntax", ...PLUGIN]],
-  ["12. Git and Claude plugin hooks", test("install-hooks.test.mjs", "claude-hooks.test.mjs"),
-    ["scripts/install-hooks", "scripts/claude-hooks", "scripts/hooks/", ".githooks/", ".claude-plugin/hooks/", ".claude-plugin/claude-hooks.json"]],
-  ["13. repository artifact hygiene", test("repository-artifact-hygiene.test.mjs", "inspect-footprint.test.mjs"),
-    ["scripts/repository-artifact-hygiene", "scripts/inspect-footprint", "scripts/scratch-citations-baseline.json", "skills/meta/repository-artifact-hygiene/scripts/"]],
-  ["14. agent shell probe", test("probe-agent-shell.test.mjs"), ["scripts/probe-agent-shell"]],
-  ["15. delivery-dashboard contract", test("delivery-dashboard.test.mjs"),
-    ["scripts/delivery-dashboard", "skills/productivity/delivery-dashboard/"]],
-  ["15b. final-source review receipt", test("review-receipt.test.mjs"),
-    ["scripts/review-receipt", "skills/productivity/delivery-dashboard/scripts/review-receipt"]],
-  ["16. critic model probe", test("probe-critic-model.test.mjs"), ["scripts/probe-critic-model"]],
-  ["17. orchestrate spike fixture", test("spike-orchestrate-fixture.test.mjs"), ["scripts/spike-orchestrate-fixture"]],
+  ["1. deployer: ownership, plugin guards, root selection", test("deploy.test.mjs")],
+  ["5. knowledge relocation (adopt-project)", test("relocate-knowledge.test.mjs")],
+  ["6. agent guidance (managed blocks + guidance check)", test("install-agents-md.test.mjs", "check-guidance.test.mjs")],
+  ["7. crew-research uninstall scope", test("uninstall-crew-research.test.mjs")],
+  ["8. repo survey tiers (adopt-project portfolio)", test("survey-repos.test.mjs")],
+  ["11. release draft, artifact and publisher safety", test("release-artifacts.test.mjs", "release-version.test.mjs", "release.test.mjs", "release-product.test.mjs", "release-native.test.mjs", "release-entrypoints.test.mjs", "release-verify.test.mjs", "release-publish.test.mjs", "release-registry.test.mjs", "release-tkt-publication.test.mjs", "release-cargo-credentials.test.mjs", "release-cargo-upload.test.mjs", "release-git.test.mjs", "release-development.test.mjs", "release-github.test.mjs", "release-ci-artifacts.test.mjs", "skill-syntax.test.mjs")],
+  ["12. Git and Claude plugin hooks", test("install-hooks.test.mjs", "claude-hooks.test.mjs")],
+  ["13. repository artifact hygiene", test("repository-artifact-hygiene.test.mjs", "inspect-footprint.test.mjs")],
+  ["14. agent shell probe", test("probe-agent-shell.test.mjs")],
+  ["15. delivery-dashboard contract", test("delivery-dashboard.test.mjs")],
+  ["15b. final-source review receipt", test("review-receipt.test.mjs")],
+  ["16. critic model probe", test("probe-critic-model.test.mjs")],
+  ["17. orchestrate spike fixture", test("spike-orchestrate-fixture.test.mjs")],
 ];
-const FULL_TRIGGERS = ["package.json", "package-lock.json", "scripts/check-repo.mjs"];
-
-function git(...gitArgs) {
-  const r = spawnSync("git", gitArgs, { cwd: ROOT, encoding: "utf8" });
-  return r.status === 0 ? r.stdout.split("\n").filter(Boolean) : null;
-}
-
-// Paths changed since the upstream branch, committed or not; null when unknown.
-function changedPaths() {
-  const base = git("merge-base", "HEAD", "@{upstream}") ?? git("merge-base", "HEAD", "origin/main");
-  if (!base) return null;
-  const parts = [git("diff", "--name-only", base[0], "HEAD"), git("diff", "--name-only", "HEAD"), git("ls-files", "--others", "--exclude-standard")];
-  return parts.includes(null) ? null : [...new Set(parts.flat())];
-}
-
-let selected = mode === "static" ? [] : TESTS;
-if (mode === "affected") {
-  const changed = changedPaths();
-  if (!changed || changed.some((p) => FULL_TRIGGERS.includes(p))) {
-    console.log(changed ? "affected: a shared dependency changed; running every group" : "affected: no upstream to diff against; running every group");
-    mode = "full";
-  } else {
-    selected = TESTS.filter(([, , scope]) => changed.some((p) => scope.some((prefix) => p.startsWith(prefix))));
-  }
-}
+const selected = mode === "full" ? TESTS : [];
 console.log(`check-repo mode: ${mode}; ${selected.length} of ${TESTS.length} test groups selected`);
 
 for (const [label, cmd, cmdArgs, opts] of STATIC) run(label, cmd, cmdArgs, opts);

@@ -11,4 +11,5 @@ if ! command -v node >/dev/null 2>&1; then
   echo "pre-push: node is required; push blocked." >&2
   exit 1
 fi
-exec node scripts/check-repo.mjs --affected
+# Gates only the static invariants (seconds); test groups run in the release workflow.
+exec node scripts/check-repo.mjs --push

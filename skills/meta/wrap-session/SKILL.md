@@ -87,7 +87,7 @@ move on; this is a quick currency check, not a rewrite.
 
 ### 5. Verify and report
 
-Run `node scripts/check-repo.mjs --affected` so anything landed in step 3 (a new check, a new
+Run `node scripts/check-repo.mjs --push` so anything landed in step 3 (a new check, a new
 skill/doc, a moved pointer) passes the consistency invariants and link checks, and confirm
 `tkt validate` is clean. Then **confirm the working tree is clean** (`git status --porcelain`):
 a non-empty tree at wrap time means finished work is stranded unpushed — commit and push it

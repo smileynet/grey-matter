@@ -92,4 +92,4 @@ mkdirSync(dirname(target), { recursive: true });
 writeFileSync(target, source, { mode: 0o755 });
 chmodSync(target, 0o755);
 console.log(`Installed grey-matter ${HOOK} hook -> ${target}`);
-console.log(`It runs \`node scripts/check-repo.mjs ${HOOK === "pre-push" ? "--affected` before each push" : "--static` before each commit"} and blocks on failure.`);
+console.log(`It runs \`node scripts/check-repo.mjs ${HOOK === "pre-push" ? "--push` (static checks) before each push" : "--static` before each commit"} and blocks on failure.`);

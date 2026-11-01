@@ -10,10 +10,13 @@ Add a gate sparingly, for a key area, with a focused scope and a measured budget
 | Stage | Runs | Budget (all gates together, warm cache) |
 |---|---|---|
 | pre-commit | tier 0 on staged files: format, lint, parse, a focused invariant | 10 s |
-| pre-push | tier 0 and the affected tier 1 tests for the changed area | 2 min |
+| pre-push | tier 0 critical invariants only: the checks that stop a broken install or manifest from publishing | 30 s |
+| release workflow | the full test suite, before the release is staged | none; it runs once per release |
 | on demand, before merge | full tier 0 to 2 suite, tier 3 critical flows, agent review (`code-review`, critics) | none; the agent runs and reports it |
 | hosted CI (GitHub Actions) | manual dispatch only, for evidence no local host gives (another OS, a clean machine) | none |
 
+Test suites run in the release workflow, not at push: a slow or flaky fixture must never block
+publishing tickets, docs or fixes. Hosted CI does not run them either.
 Agent and LLM reviews take minutes and vary run to run, so they run on demand before merge,
 never in a hook. Builds, full suites, rendered, simulator and device tiers also stay out of hooks.
 
@@ -41,7 +44,7 @@ Record these in a header comment in the hook and in the `AGENTS.md` test command
 
 ## Over budget
 
-Narrow it first (staged or changed files, affected tests only), then move it one stage later
-(pre-commit, pre-push, on demand before merge, release), else remove it. Re-time the hook
-whenever a gate is added, and whenever a commit or push feels slow. A gate over budget, without a
+Move it one stage later (pre-commit, pre-push, release), else remove it. A test is not
+critical enough for a hook unless its failure would publish something broken to consumers.
+Re-time the hook whenever a gate is added, and whenever a commit or push feels slow. A gate over budget, without a
 scope, or guarding a failure no longer seen is a finding for `retro` and `conformance-audit`.
