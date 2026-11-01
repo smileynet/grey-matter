@@ -27,3 +27,5 @@ The results become this harness's reference file in the skill. Workers use the c
 ## Resolution (2026-11-01)
 
 done: kiro-cli spike recorded (trunk + PR); check-repo still red on 13 and 15, tracked by 132 and 136
+
+Evidence: the "Spike results: kiro-cli (2026-10-31)" section of `docs/agents/research/harness-orchestration-primitives.md` (commits 3514ea4, 9b835b7). Trunk and PR loops both landed T1-T4 and escalated T5; checked independently with `gh pr list --state all` (4 MERGED), `tkt query`, `npm test` 4/4 and `check()`. Local sandboxes removed; `smileynet/gm-orchestrate-fixture-pr-kiro` is left for the user to delete (the gh token lacks `delete_repo`).
