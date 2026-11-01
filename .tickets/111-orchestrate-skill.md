@@ -43,3 +43,9 @@ Lessons for orchestrate from planning parallel work in philippines-trip:
 - One device (simulator) handed to one worker at a time, with the device ID and owner recorded.
 - Merge in feature order even when workers finish out of order; rebase open branches after a schema change merges.
 - Before merging, look upstream: other sessions may be committing to the same branch.
+
+## Inputs added 2026-11-01
+
+- [Provider switching](../docs/agents/provider-switching.md): read the project's `## Provider fallback` section at orient. Without an opt-in, never move work to another provider when a limit runs out.
+- [Models and usage](../docs/agents/harness-surfaces/models-and-usage.md): pick worker and reviewer tiers by task class, and check usage headroom before a fan-out.
+- [Harness surfaces](../docs/agents/harness-surfaces/README.md): the headless flags per harness. GUIs are the watch layer (ticket 173).

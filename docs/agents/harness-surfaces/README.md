@@ -11,6 +11,10 @@ One file per harness. Each one separates what the harness can do in each **surfa
 | Kiro Crew | [kiro-crew.md](./kiro-crew.md) | `kirocrew` CLI, gateway HTTP API, desktop app and web dashboard |
 | Crush and OpenCode | [crush-opencode.md](./crush-opencode.md) | CLI and TUI |
 
+Across harnesses:
+- [models-and-usage.md](./models-and-usage.md): where to check each provider's current models, which tier and effort level to use for which task, and how to read 5-hour, weekly or monthly usage on every surface.
+- [versions.json](./versions.json): the baseline the [harness-changelog](../../../skills/meta/harness-changelog/SKILL.md) skill diffs against.
+
 ## Grammar
 
 ### Terms

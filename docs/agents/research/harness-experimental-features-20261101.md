@@ -91,6 +91,89 @@ Not confirmed: a `max_depth` config key, or why `multi_agent_v2` is "stable" but
 | PreInvocation hooks with `terminationBehavior` | `~/.gemini/config/hooks.json` | New in 1.4.11 (D) | Medium. A policy gate before each worker turn. |
 | `artifactReviewPolicy` | `/config` (currently `asks-for-review`) | Opt-in (L) | Medium. Headless top-level runs can stall on artifact review (I). |
 
+## By surface: TUI and GUI
+
+The tables above came mostly from CLI help and settings listings, so they lean toward the terminal. This section places each feature on the surface that has it, from a second research pass (2026-11-01) that also read the desktop apps' bundles and the IDE extensions. ✓ present, ✗ absent, ~ partial, ? unverified. The flags behind each one are in [harness surfaces](../harness-surfaces/README.md).
+
+### Claude Code
+
+| Feature | TUI | GUI | Headless | Status |
+|---|---|---|---|---|
+| Agent view | ✓ | ? | `claude agents --json` | Research preview (D) |
+| Agent teams | ✓ | ✗ | ✓ | Experimental, env var (D) |
+| Fast mode | `/fast` | VS Code "Toggle fast mode"; desktop ? | `--settings '{"fastMode":true}'` | Available on Opus 5.5; bills usage credits (D) |
+| Ultracode | `/effort ultracode` | VS Code switch under Effort | `--effort ultracode` | Needs workflows and `xhigh` (D) |
+| Computer use | macOS only | **Desktop app** (Windows and macOS), Settings > Enable computer use | ? | Research preview, paid plans (D) |
+| Dispatch from the phone | ✗ | **Desktop app only** | ✗ | Paid plans (D) |
+| Browser pane, pane pop-out, scheduled tasks, SSH/WSL sessions | ✗ | **Desktop app only** | ✗ | GA (D) |
+| Agent map (`/tasks` tree), Focus view, per-change Accept/Reject | ✗ | **VS Code only** | ✗ | GA (D) |
+| JetBrains IDE diffs and diagnostics | via `/ide` | JetBrains plugin | ✗ | Plugin beta, 0.1.14-beta installed (L) |
+| Channels | ✓ | ✗ | ✗ | Research preview (D) |
+
+**Only one surface has it:**
+- **Desktop:** Dispatch, the browser and simulator panes, computer use on Windows.
+- **VS Code:** the agent map and Focus view.
+- **CLI:** `--print`, the Agent SDK, agent teams.
+
+### Codex
+
+| Feature | TUI | GUI | Headless (`exec`) | Status |
+|---|---|---|---|---|
+| Experimental menu | `/experimental` | App: Settings > General > Experimental features (Beta), restart to apply (L) | `--enable <flag>` | Beta |
+| `prevent_idle_sleep`, `network_proxy`, `login_shell_package_path` | ✓ | ✓ through the app's list (I) | `--enable` | Experimental, off (L) |
+| Plan-limit history | `/analytics` with `analytics_plan_history` | App's own limit-history preview (L) | ✗ | Experimental (L) |
+| Desktop app beta features | ✗ | **App only**: `settings.general.desktopAppBeta` (L) | ✗ | Beta |
+| Ultra effort (sub-agent fan-out) | `/model` > More reasoning | App: "Ultra in model picker slider" (D) | `-c model_reasoning_effort=ultra` (I) | Opt-in |
+| Fast and Ultrafast tiers | `/fast` | App speed cycles Standard, Fast, Ultrafast (Ultrafast on Pro) (L) | `-c service_tier=priority` (I) | Stable |
+| Computer use, in-app browser, voice, dictation, local automations | ✗ (`/pets` only) | **App only** (L) | ✗ | Stable |
+| `multi_agent_v2`, `agent_message_board`, `wake_on_agent_messages` | flag | ? | `--enable` | Stable-off or under development (L) |
+
+The IDE extension isn't installed here, and its docs label nothing experimental.
+
+### Kiro (kiro-cli, Kiro IDE, Kiro Crew)
+
+| Feature | TUI | Headless | Kiro IDE | Kiro Crew GUI | Status |
+|---|---|---|---|---|---|
+| `/experiment` toggles (Knowledge, Tangent, TodoList, Thinking, Checkpoint, Context indicator, Delegate) | ✓ | through `kiro-cli settings` | ✗ | ✗ | Experimental (D) |
+| Agent Focus mode: parallel sessions, Autopilot or Supervised, cloud sessions, Spec / Plan / Bug Fix / Quick Spec workflows | ~ (`--sessions`) | ✗ | **IDE only** | ✗ | Experimental (D) |
+| Agent modes: Concise, Default, Spec, Quick Spec, Bug Fix, Autonomous | ✗ | ✗ | **IDE only**; Autonomous is experiment-gated | ✗ | L (bundle) |
+| Specs, hooks UI, steering create and refine | ~ `/spec`, `/hooks` | ~ | ✓ | ✗ | GA |
+| IDE workflows | ✗ | ✗ | `kiroAgent.workflows.enabled` | ✗ | Opt-in, off (L) |
+| IDE experiments registry (Workspace Manager, Live Steering, Message Queuing, Sandbox Mode, Verify First, Memory Manager, Remote Sessions, Session Recap, …) | ✗ | ✗ | **IDE only**, "Open Experiments"; tagged insider or dev, so a stable build likely shows none (I) | ✗ | L (bundle) |
+| Feature Previews: Mates, Crew Members, Dynamic Dashboard, Decisions, Chat on a crew, engine switch | ✗ | ✗ | ✗ | **Kiro Crew only**: Settings > Developer > Feature Previews | Preview (L) |
+| Session grid, dynamic dashboard cards, topic tags, link previews | ✗ | ✗ | ✗ | **Kiro Crew only** (config keys) | Off by default (L) |
+| Code-to-Spec, infra-safety monitor | ✓ | ✓ | insider experiments | ✗ | Opt-in (L) |
+| Experimental-preview models (deepseek-3.2, minimax-m2.1, qwen3-coder-next) | ✓ | ✓ | ? | ✓ | Preview (L) |
+
+### Antigravity
+
+| Feature | agy TUI | agy headless | App | IDE | Status |
+|---|---|---|---|---|---|
+| Auto mode | Shift+Tab | ✗ (falls back to default) | "Auto (Preview)" | ? | Preview; not for business accounts (D) |
+| `/teamwork` (agent teams), `/boost` | ✓ | ? | ✓ | ? | Paid plans (D) |
+| `/generative_ui` | ✗ | ✗ | **App only** | ✗ | D |
+| Browser subagent `/browser` | ✓ | ? | ✓ | ✓ Open Browser | D, L |
+| Built-in browser, PDF viewer, integrated terminal, VCS review panel, Automations | ✗ | ✗ | **App only** | ? | D |
+| Artifacts review | `Ctrl+R`, `/artifact` | proceeds automatically | Side pane with comments | Visual diff overlays | `artifactReviewPolicy` |
+| Agent Manager (multi-agent sidebar) | ✗ | ✗ | ✓ in effect | ? | I (third-party reviews only) |
+| Tab, Supercomplete, Inline Command, code lenses | ✗ | ✗ | ✗ | **IDE only** | L |
+| `[Beta] Start Demo Mode` | ✗ | ✗ | ✗ | **IDE only** | L |
+| `/diff`, settings.json, headless runs | **CLI only** | ✓ | ✗ | ✗ | D |
+| Regex permission rules | ✓ | ✓ | ? | ? | Opt-in (L: changelog) |
+
+### What the GUI split changes for orchestration
+
+- **Several orchestration-relevant features exist only in a GUI:**
+  - the Kiro IDE's Agent Focus (parallel sessions with Autopilot);
+  - Kiro Crew's Mates and Feature Previews;
+  - Antigravity's Agent Manager;
+  - Codex's and Claude's desktop computer use;
+  - Claude's Dispatch.
+
+  A headless orchestrator can't drive these. They are for a person watching or steering.
+- **Headless-only features are the dispatch layer:** `claude -p`, `codex exec`, `kiro-cli --no-interactive`, `agy -p`, Kiro Crew's HTTP API. The orchestrate skill (ticket 111) should be written against these and should treat the GUI as an observation surface.
+- **Usage views differ per surface.** See [models and usage](../harness-surfaces/models-and-usage.md#usage): several GUIs show the 5-hour and weekly limits that the matching headless surface doesn't expose.
+
 ## Proposed spikes
 
 Ordered by expected value to the orchestrate skill (ticket 111).
@@ -105,11 +188,13 @@ Ordered by expected value to the orchestrate skill (ticket 111).
 8. **kiro-cli V3 workflows.** Can a recipe express claim → worker in a worktree → independent reviewer loop → land, natively?
 9. **Cross-harness headless drivers.** Compare `codex queue`/`exec --json`, `kiro-cli chat --output-format stream-json`/`serve`, agy paired stream-json and Claude Code stream forwarding as surfaces one outside orchestrator could drive.
 
-Each is a candidate ticket; none is filed yet.
+10. **GUI orchestration surfaces as the watch layer** (ticket 173): with a headless orchestrator running, can a person follow and steer it from each GUI? The candidates are Claude desktop agent view, the Codex app thread list, Kiro IDE Agent Focus, the Antigravity Agent Manager and Kiro Crew's session grid. What does each show of worker state, approvals and usage?
+
+Spikes 1-9 are tickets 154-162. Model-tier and effort spikes are tickets 167-172.
 
 ## Proposed QoL switches for the user
 
-None is applied; each is the user's call.
+Applied on 2026-11-01 at the user's request, except `prevent_idle_sleep`. That flag holds a wake lock only while a Codex turn runs, and the user keeps it for servers. GUI-side options, not applied: the Codex app's Experimental features (Beta) list, the Codex status-line items `five-hour-limit` and `weekly-limit`, and Kiro Crew's Feature Previews.
 
 - **Claude Code:** `CLAUDE_CODE_RETRY_WATCHDOG=1`, so long unattended runs survive usage limits. `defaultToAgentsView` opens the agent dashboard on a plain `claude`. `preferredNotifChannel` picks where needs-input and finished notices go.
 - **Codex:** `prevent_idle_sleep`, so long turns don't die when the laptop sleeps. Set `[agents] default_subagent_model` and `default_subagent_reasoning_effort` once, for cheaper workers.

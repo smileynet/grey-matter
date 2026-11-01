@@ -10,8 +10,12 @@ tags: ["stream:tooling", "type:research"]
 
 ## What to build
 
-TBD
+Run the orchestrate loop's workers with Claude Code fast mode (`/fast`, `fastMode`) on and off. Compare tiers within each provider using [models and usage](../docs/agents/harness-surfaces/models-and-usage.md#which-model-for-what), with one cheap or fast tier against the default per provider that is available: Anthropic, OpenAI, Kiro, Google. Use fixed task fixtures so runs are comparable. Record pass rate, defects found or missed, wall time, and usage spent from the provider's usage check. Never move work between providers to finish a run ([provider switching](../docs/agents/provider-switching.md)).
+
+**Question:** How much faster is it, does quality change, and how many usage credits does it spend? Fast mode bills credits, not plan limits.
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [ ] A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note.
+- [ ] A recommendation for this task class: the cheapest tier that met the bar, or "keep the default", folded into the Which model for what table in models-and-usage.md.
+- [ ] Settings changed for the spike restored or recorded; sandbox folders removed.
