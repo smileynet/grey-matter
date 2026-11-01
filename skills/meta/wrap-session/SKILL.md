@@ -16,7 +16,8 @@ session** instead of leaving every improvement as a ticket for later.
   make).
 - Then the new beat: for each accepted **mechanical** finding that's cheap and unambiguous,
   **build it now** — write the check, the guardrail, or the project-level skill/note — and
-  verify it. Everything else stays a ticket (reconcile already captured it).
+  verify it. A new check runs on demand; it joins a hook only when it passes
+  [local gates](../../../docs/agents/local-gates.md). Everything else stays a ticket (reconcile already captured it).
 
 Composes the two existing skills; it does not re-spell them. Both remain invokable alone.
 This is the session-end twin of `orient` (the start bookend); `handoff` writes the pickup
@@ -86,7 +87,7 @@ move on; this is a quick currency check, not a rewrite.
 
 ### 5. Verify and report
 
-Run `node scripts/check-repo.mjs` so anything landed in step 3 (a new check, a new
+Run `node scripts/check-repo.mjs --affected` so anything landed in step 3 (a new check, a new
 skill/doc, a moved pointer) passes the consistency invariants and link checks, and confirm
 `tkt validate` is clean. Then **confirm the working tree is clean** (`git status --porcelain`):
 a non-empty tree at wrap time means finished work is stranded unpushed — commit and push it

@@ -34,7 +34,13 @@
 //    Nothing here logs into Claude/Codex/Kiro or hits a network.
 //  - Each sub-check is independently runnable; this is the aggregator.
 //
-// Run:  node scripts/check-repo.mjs [--require-tools]
+// Modes (docs/agents/local-gates.md):
+//   --static    the static checks (2, 3, 4, 9, 10): the pre-commit gate.
+//   --affected  static checks plus the test groups whose scope changed since upstream:
+//               the pre-push gate.
+//   --full      every group (the default): before a release, or on request.
+//
+// Run:  node scripts/check-repo.mjs [--static | --affected | --full] [--require-tools]
 // Exit: 0 = all pass; 1 = at least one invariant failed.
 
 import { spawnSync } from "node:child_process";
@@ -43,14 +49,19 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const SCRIPTS = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(SCRIPTS, "..");
 const SELF = "check-repo.mjs";
 const results = [];
 const args = process.argv.slice(2);
-if (args.some((arg) => arg !== "--require-tools")) {
-  console.error("usage: node scripts/check-repo.mjs [--require-tools]");
+const MODES = ["--static", "--affected", "--full"];
+if (args.some((arg) => arg !== "--require-tools" && !MODES.includes(arg)) || args.filter((arg) => MODES.includes(arg)).length > 1) {
+  console.error("usage: node scripts/check-repo.mjs [--static | --affected | --full] [--require-tools]");
   process.exit(2);
 }
 const requireTools = args.includes("--require-tools");
+// CHECK_REPO_MODE lets the Claude push hook ask for --affected without passing a flag a
+// foreign project's checker would reject.
+let mode = args.find((arg) => MODES.includes(arg))?.slice(2) ?? (process.env.CHECK_REPO_MODE === "affected" ? "affected" : "full");
 
 // Orphan guard (ticket 34 nice-to-have): every sibling `check-*.mjs` sub-check (excluding
 // this aggregator and any `*.test.mjs`) must be named in this file's run list, so a future
@@ -73,57 +84,108 @@ const requireTools = args.includes("--require-tools");
 
 function run(label, cmd, args, { optional = false } = {}) {
   process.stdout.write(`\n=== ${label} ===\n`);
-  const r = spawnSync(cmd, args, { stdio: "inherit", cwd: join(SCRIPTS, "..") });
+  const started = Date.now();
+  const r = spawnSync(cmd, args, { stdio: "inherit", cwd: ROOT });
+  const seconds = (Date.now() - started) / 1000;
   if (r.error) {
     if (r.error.code === "ENOENT") {
       if (optional && !requireTools) {
         console.log(`(skipped: ${cmd} not found — ${label} not checked)`);
-        results.push({ label, status: "skip" });
+        results.push({ label, status: "skip", seconds });
         return;
       }
       console.error(`FAILED: ${cmd} not found`);
-      results.push({ label, status: "fail" });
+      results.push({ label, status: "fail", seconds });
       return;
     }
     console.error(`FAILED: ${r.error.message}`);
-    results.push({ label, status: "fail" });
+    results.push({ label, status: "fail", seconds });
     return;
   }
-  results.push({ label, status: r.status === 0 ? "pass" : "fail" });
+  results.push({ label, status: r.status === 0 ? "pass" : "fail", seconds });
 }
 
 const node = process.execPath;
 
-run("1. deployer: ownership, plugin guards, root selection", node, ["--test", join(SCRIPTS, "deploy.test.mjs")]);
-run("2. invocation sidecars + README groups", node, [join(SCRIPTS, "check-invocation-policy.mjs")]);
-run("3. doc indexes + relative links", node, [join(SCRIPTS, "check-docs-consistency.mjs")]);
-// tkt validate: normal severity (a warning like unchecked-acs-on-done does not fail the
-// build; only structural errors — cycles, dangling deps — exit nonzero).
-run("4. ticket health (tkt validate)", "tkt", ["validate"], { optional: true });
-run("5. knowledge relocation (adopt-project)", node, ["--test", join(SCRIPTS, "relocate-knowledge.test.mjs")]);
-run("6. agent guidance (managed blocks + guidance check)", node, ["--test", join(SCRIPTS, "install-agents-md.test.mjs"), join(SCRIPTS, "check-guidance.test.mjs")]);
-run("7. crew-research uninstall scope", node, ["--test", join(SCRIPTS, "uninstall-crew-research.test.mjs")]);
-run("8. repo survey tiers (adopt-project portfolio)", node, ["--test", join(SCRIPTS, "survey-repos.test.mjs")]);
-run("9. Claude plugin manifest", node, [join(SCRIPTS, "check-plugin-manifest.mjs")]);
-run("10. YAML syntax and core types", node, [join(SCRIPTS, "check-skill-syntax.mjs")]);
-run("11. release draft, artifact and publisher safety", node, ["--test", join(SCRIPTS, "release-artifacts.test.mjs"), join(SCRIPTS, "release-version.test.mjs"), join(SCRIPTS, "release.test.mjs"), join(SCRIPTS, "release-product.test.mjs"), join(SCRIPTS, "release-native.test.mjs"), join(SCRIPTS, "release-entrypoints.test.mjs"), join(SCRIPTS, "release-verify.test.mjs"), join(SCRIPTS, "release-publish.test.mjs"), join(SCRIPTS, "release-registry.test.mjs"), join(SCRIPTS, "release-tkt-publication.test.mjs"), join(SCRIPTS, "release-cargo-credentials.test.mjs"), join(SCRIPTS, "release-cargo-upload.test.mjs"), join(SCRIPTS, "release-git.test.mjs"), join(SCRIPTS, "release-development.test.mjs"), join(SCRIPTS, "release-github.test.mjs"), join(SCRIPTS, "release-ci-artifacts.test.mjs"), join(SCRIPTS, "skill-syntax.test.mjs")]);
-run("12. Git and Claude plugin hooks", node, ["--test", join(SCRIPTS, "install-hooks.test.mjs"), join(SCRIPTS, "claude-hooks.test.mjs")]);
-run("13. repository artifact hygiene", node, ["--test", join(SCRIPTS, "repository-artifact-hygiene.test.mjs"), join(SCRIPTS, "inspect-footprint.test.mjs")]);
-run("14. agent shell probe", node, ["--test", join(SCRIPTS, "probe-agent-shell.test.mjs")]);
-run("15. delivery-dashboard contract", node, ["--test", join(SCRIPTS, "delivery-dashboard.test.mjs")]);
-run("15b. final-source review receipt", node, ["--test", join(SCRIPTS, "review-receipt.test.mjs")]);
-if (process.env.DASHBOARD_BROWSER_TESTS === "1") run("15c. delivery-dashboard browser behavior", node, ["--test", join(SCRIPTS, "delivery-dashboard-browser.test.mjs")]);
-run("16. critic model probe", node, ["--test", join(SCRIPTS, "probe-critic-model.test.mjs")]);
-run("17. orchestrate spike fixture", node, ["--test", join(SCRIPTS, "spike-orchestrate-fixture.test.mjs")]);
+const test = (...files) => ["--test", ...files.map((f) => join(SCRIPTS, f))];
+
+// Static checks only read files and run in every mode (the pre-commit gate). A test group
+// runs in --affected when a changed path starts with one of its scope prefixes; a change to
+// something every group depends on forces the full set.
+const STATIC = [
+  ["2. invocation sidecars + README groups", node, [join(SCRIPTS, "check-invocation-policy.mjs")]],
+  ["3. doc indexes + relative links", node, [join(SCRIPTS, "check-docs-consistency.mjs")]],
+  // tkt validate: normal severity (a warning like unchecked-acs-on-done does not fail the
+  // build; only structural errors — cycles, dangling deps — exit nonzero).
+  ["4. ticket health (tkt validate)", "tkt", ["validate"], { optional: true }],
+  ["9. Claude plugin manifest", node, [join(SCRIPTS, "check-plugin-manifest.mjs")]],
+  ["10. YAML syntax and core types", node, [join(SCRIPTS, "check-skill-syntax.mjs")]],
+];
+const PLUGIN = [".claude-plugin/", ".codex-plugin/", ".agents/", ".kiro/", "skill-packs.json"];
+const TESTS = [
+  ["1. deployer: ownership, plugin guards, root selection", test("deploy.test.mjs"),
+    ["scripts/deploy", "scripts/install-skills", ...PLUGIN]],
+  ["5. knowledge relocation (adopt-project)", test("relocate-knowledge.test.mjs"),
+    ["scripts/relocate-knowledge", "skills/meta/adopt-project/scripts/relocate-knowledge"]],
+  ["6. agent guidance (managed blocks + guidance check)", test("install-agents-md.test.mjs", "check-guidance.test.mjs"),
+    ["scripts/install-agents-md", "scripts/check-guidance", "global/"]],
+  ["7. crew-research uninstall scope", test("uninstall-crew-research.test.mjs"), ["scripts/uninstall-crew-research"]],
+  ["8. repo survey tiers (adopt-project portfolio)", test("survey-repos.test.mjs"),
+    ["scripts/survey-repos", "skills/meta/adopt-project/scripts/survey-repos"]],
+  ["11. release draft, artifact and publisher safety", test("release-artifacts.test.mjs", "release-version.test.mjs", "release.test.mjs", "release-product.test.mjs", "release-native.test.mjs", "release-entrypoints.test.mjs", "release-verify.test.mjs", "release-publish.test.mjs", "release-registry.test.mjs", "release-tkt-publication.test.mjs", "release-cargo-credentials.test.mjs", "release-cargo-upload.test.mjs", "release-git.test.mjs", "release-development.test.mjs", "release-github.test.mjs", "release-ci-artifacts.test.mjs", "skill-syntax.test.mjs"),
+    ["scripts/release", "scripts/sync-release-tools", "scripts/skill-syntax", "scripts/check-skill-syntax", ...PLUGIN]],
+  ["12. Git and Claude plugin hooks", test("install-hooks.test.mjs", "claude-hooks.test.mjs"),
+    ["scripts/install-hooks", "scripts/claude-hooks", "scripts/hooks/", ".githooks/", ".claude-plugin/hooks/", ".claude-plugin/claude-hooks.json"]],
+  ["13. repository artifact hygiene", test("repository-artifact-hygiene.test.mjs", "inspect-footprint.test.mjs"),
+    ["scripts/repository-artifact-hygiene", "scripts/inspect-footprint", "scripts/scratch-citations-baseline.json", "skills/meta/repository-artifact-hygiene/scripts/"]],
+  ["14. agent shell probe", test("probe-agent-shell.test.mjs"), ["scripts/probe-agent-shell"]],
+  ["15. delivery-dashboard contract", test("delivery-dashboard.test.mjs"),
+    ["scripts/delivery-dashboard", "skills/productivity/delivery-dashboard/"]],
+  ["15b. final-source review receipt", test("review-receipt.test.mjs"),
+    ["scripts/review-receipt", "skills/productivity/delivery-dashboard/scripts/review-receipt"]],
+  ["16. critic model probe", test("probe-critic-model.test.mjs"), ["scripts/probe-critic-model"]],
+  ["17. orchestrate spike fixture", test("spike-orchestrate-fixture.test.mjs"), ["scripts/spike-orchestrate-fixture"]],
+];
+const FULL_TRIGGERS = ["package.json", "package-lock.json", "scripts/check-repo.mjs"];
+
+function git(...gitArgs) {
+  const r = spawnSync("git", gitArgs, { cwd: ROOT, encoding: "utf8" });
+  return r.status === 0 ? r.stdout.split("\n").filter(Boolean) : null;
+}
+
+// Paths changed since the upstream branch, committed or not; null when unknown.
+function changedPaths() {
+  const base = git("merge-base", "HEAD", "@{upstream}") ?? git("merge-base", "HEAD", "origin/main");
+  if (!base) return null;
+  const parts = [git("diff", "--name-only", base[0], "HEAD"), git("diff", "--name-only", "HEAD"), git("ls-files", "--others", "--exclude-standard")];
+  return parts.includes(null) ? null : [...new Set(parts.flat())];
+}
+
+let selected = mode === "static" ? [] : TESTS;
+if (mode === "affected") {
+  const changed = changedPaths();
+  if (!changed || changed.some((p) => FULL_TRIGGERS.includes(p))) {
+    console.log(changed ? "affected: a shared dependency changed; running every group" : "affected: no upstream to diff against; running every group");
+    mode = "full";
+  } else {
+    selected = TESTS.filter(([, , scope]) => changed.some((p) => scope.some((prefix) => p.startsWith(prefix))));
+  }
+}
+console.log(`check-repo mode: ${mode}; ${selected.length} of ${TESTS.length} test groups selected`);
+
+for (const [label, cmd, cmdArgs, opts] of STATIC) run(label, cmd, cmdArgs, opts);
+for (const [label, cmdArgs] of selected) run(label, node, cmdArgs);
+if (mode === "full" && process.env.DASHBOARD_BROWSER_TESTS === "1") run("15c. delivery-dashboard browser behavior", node, test("delivery-dashboard-browser.test.mjs"));
 
 // --- Summary ------------------------------------------------------------------
 console.log("\n==================== repo-check summary ====================");
 let failed = 0;
 for (const r of results) {
   const mark = r.status === "pass" ? "ok  " : r.status === "skip" ? "skip" : "FAIL";
-  console.log(`  [${mark}] ${r.label}`);
+  console.log(`  [${mark}] ${r.seconds.toFixed(1).padStart(6)}s  ${r.label}`);
   if (r.status === "fail") failed++;
 }
+console.log(`  total ${results.reduce((sum, r) => sum + r.seconds, 0).toFixed(1)}s (${mode})`);
 console.log("============================================================");
 
 if (failed) {

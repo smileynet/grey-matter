@@ -51,3 +51,18 @@ test("checker crash and malformed hook input block without stdout", () => fixtur
     assert.ok(result.stderr.trim());
   }
 }));
+
+test("checker runs in affected mode", () => fixture(({ project, checker, run }) => {
+  checker("import {writeFileSync} from 'node:fs'; writeFileSync('mode', process.env.CHECK_REPO_MODE ?? '');\n");
+  assert.equal(run("git push").status, 0);
+  assert.equal(readFileSync(join(project, "mode"), "utf8"), "affected");
+}));
+
+test("an installed Git pre-push hook owns the gate", () => fixture(({ project, checker, run }) => {
+  assert.equal(spawnSync("git", ["init", "-q"], { cwd: project }).status, 0);
+  checker("throw new Error('must not run');\n");
+  const hook = spawnSync("git", ["rev-parse", "--git-path", "hooks/pre-push"], { cwd: project, encoding: "utf8" }).stdout.trim();
+  writeFileSync(join(project, hook), "#!/bin/sh\n");
+  const result = run("git push");
+  assert.equal(result.status, 0, result.stderr);
+}));

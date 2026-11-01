@@ -55,6 +55,9 @@ anti-pattern Android names: run a device smoke before release, not only overnigh
 | Before merge | the full tier 0 to 2 suite; tier 3 critical flows; a tier 4 smoke when platform code changed |
 | Before release | the tier 4 matrix and tier 5 checks the ticket or release names |
 
+This is what the agent runs. A Git hook enforces only a small, budgeted subset; see
+[local gates](local-gates.md).
+
 ## Projects declare their commands
 
 The ladder runs only if a project names its commands. A project's `AGENTS.md` lists them by tier:

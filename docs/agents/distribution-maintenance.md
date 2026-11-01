@@ -62,7 +62,8 @@ Claude-only hooks use `.claude-plugin/claude-hooks.json`; keep their files in
 Codex explicitly selects no hooks. Release packaging includes the private files only
 in the Claude archive and removes the Claude hook declaration from the Codex archive.
 The push gate checks the launch project's `scripts/check-repo.mjs` for recognizable
-`git push` commands in Bash or PowerShell. Keep the Git pre-push gate for aliases,
+`git push` commands in Bash or PowerShell, with `CHECK_REPO_MODE=affected`. It defers to an
+installed Git pre-push hook, so a push runs the checker once. Keep the Git pre-push gate for aliases,
 wrappers and commands that redirect to another repository. These hooks target Claude
 2.1.310+ and Node 22+. See [the hook contract](research/claude-plugin-hooks.md).
 
@@ -126,6 +127,10 @@ One command verifies the mechanical distribution invariants:
 node scripts/check-repo.mjs
 ```
 
+That is the full set (`--full`, the default), for releases and on request. `--affected` runs the
+static checks plus the test groups whose scope changed since upstream; `--static` runs the static
+checks only. The summary prints each group's time. See [local gates](local-gates.md).
+
 It aggregates (each also runnable on its own): the deployer's ownership, plugin guards and
 root selection (`scripts/deploy.test.mjs`), YAML syntax/core field types
 (`scripts/check-skill-syntax.mjs`, seeded fixtures in `scripts/skill-syntax.test.mjs`), invocation sidecars + README tiers
@@ -150,14 +155,14 @@ Fixtures proving each invariant fails when seeded live in `scripts/check-repo.te
 (`node --test`).
 
 An **opt-in pre-commit hook** can run this automatically: `node scripts/install-hooks.mjs`
-installs a `pre-commit` hook that runs `check-repo.mjs` and blocks the commit on failure;
+installs a `pre-commit` hook that runs `check-repo.mjs --static` and blocks the commit on failure;
 `list` / `uninstall` manage it, and it refuses to clobber a foreign hook. It is not forced
 on clone — install it if you want the local gate. (Normal gates remain local; the manually dispatched platform job below supplies
 Windows/Linux evidence.)
 
 For a push gate, run `node scripts/install-hooks.mjs --hook pre-push`. This installs
 the committed `.githooks/pre-push` in Git's effective hook directory. It runs
-`node scripts/check-repo.mjs`, blocks on failure or missing Node, and clears Git's repository
+`node scripts/check-repo.mjs --affected`, blocks on failure or missing Node, and clears Git's repository
 context before checks create temporary repositories. Manage it with `list --hook pre-push`
 or `uninstall --hook pre-push`. The installer respects `core.hooksPath`, preserves
 foreign hooks, and refuses to delete its tracked source when `.githooks` is configured

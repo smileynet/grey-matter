@@ -9,7 +9,6 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
-import { execFileSync } from "node:child_process";
 import { check } from "../skills/productivity/delivery-dashboard/scripts/check-dashboard.mjs";
 import { snapshot } from "../skills/productivity/delivery-dashboard/scripts/snapshot-tickets.mjs";
 
@@ -232,7 +231,7 @@ test("flow keeps a missing prerequisite visible as waiting and rejects cycles", 
 
 function flowDashboard(t, entries, edit = (html) => html) {
   const parent = resolve(SKILL, "../../..", ".scratch/t50-fixtures"); mkdirSync(parent, { recursive: true });
-  const dir = mkdtempSync(join(parent, "fixture-")); t.after(() => execFileSync("gio", ["trash", "--", dir]));
+  const dir = mkdtempSync(join(parent, "fixture-")); t.after(() => rmSync(dir, { recursive: true, force: true }));
   const file = join(dir, "status.html"); writeFileSync(file, edit(TEMPLATE.replace(ENTRIES, `$1${JSON.stringify(entries)}$3`)));
   return { dir, file };
 }
