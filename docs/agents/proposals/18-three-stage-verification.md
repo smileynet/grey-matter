@@ -104,6 +104,13 @@ Skip deletions (all-zeroes local object); for a new ref (all-zeroes remote objec
 `git rev-list <local> --not --remotes=<remote>`; union paths across all lines. pre-commit only
 reads the first line and lefthook hangs without `use_stdin: true` (prior art to avoid; staged §2).
 
+**Checks judge the committed tree.** Selection uses the pushed or branch range, and the checks run
+in a detached worktree of the commit being judged (each pushed tip, else `HEAD`), with the
+checkout's `node_modules` linked in. Uncommitted files, including another session's in a shared
+checkout, can then neither block nor pass a push (153 item 6). Found in step 1: the working-tree
+run failed a push on another session's untracked doc, and the snapshot run then caught a real
+broken link committed to `main`. Cost: about 2.4 s for this repo's whole pre-push stage.
+
 **Pre-release on devices.** Seed game and mobile receipts from platform checklists: Apple 2.1
 on-device testing with the backend on; Play internal track and pre-launch report; Steam Deck
 criteria (input, glyphs, text entry, 30 fps at 800p); Xbox XR-001's fresh-profile and offline

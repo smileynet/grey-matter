@@ -138,3 +138,17 @@ test("a malformed manifest or an unknown argument exits 2", () => fixture([{ id:
   assert.equal(run(["pre-push"]).status, 2, "a check without catches is rejected");
   assert.equal(run(["pre-flight"]).status, 2);
 }));
+
+test("checks judge the committed tree, never uncommitted edits, and keep node_modules", () => fixture([check("tree", ["a/"], "process.exit(require('fs').readFileSync('a/x', 'utf8').includes('dirty') ? 1 : 0)")], ({ git, commit, run, push, base }) => {
+  const head = commit("a/x", "clean\n");
+  writeFileSync(join(git("rev-parse", "--show-toplevel"), "a/x"), "dirty\n");
+  mkdirSync(join(git("rev-parse", "--show-toplevel"), "node_modules/dep"), { recursive: true });
+  writeFileSync(join(git("rev-parse", "--show-toplevel"), "node_modules/dep/index.js"), "");
+  const r = run(["pre-push", "--stdin", "--remote", "origin"], { input: push(head, base) });
+  assert.equal(r.status, 0, r.out);
+  assert.ok(existsSync(join(git("rev-parse", "--show-toplevel"), "node_modules/dep/index.js")), "removing the snapshot reached through the node_modules link");
+  assert.equal(git("worktree", "list").split("\n").length, 1, "the snapshot worktree was left behind");
+  writeFileSync(join(git("rev-parse", "--show-toplevel"), "a/x"), "clean\n");
+  const dirty = commit("a/x", "dirty\n");
+  assert.equal(run(["pre-push", "--stdin", "--remote", "origin"], { input: push(dirty, head) }).status, 1, "a committed defect still fails");
+}));
