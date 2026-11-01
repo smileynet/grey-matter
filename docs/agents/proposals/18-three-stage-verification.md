@@ -1,120 +1,203 @@
-# Proposal 18: three-stage verification, rebuilt from zero
+# Proposal 18: three-stage verification, local first, rebuilt from zero
 
-**Status:** proposed 2026-11-01. Step 0 (remove the old gate) is done in the same change.
-**Supersedes:** the hook layout in [local gates](../local-gates.md) and the `check-repo.mjs` modes.
-**Absorbs:** tickets 137, 138, 151, 152, 153 (see [Ticket disposition](#ticket-disposition)).
+**Status:** proposed 2026-11-01; revised the same day from three research notes. Step 0 (remove the
+old gate) is done (commit 545a80f).
+**Supersedes:** the layout in [local gates](../local-gates.md) and the `check-repo.mjs` modes.
+**Absorbs:** tickets 137, 138, 151, 152, 153 ([disposition](#ticket-disposition)).
+**Terms:** **Git hook**, **agent hook**, **test lifecycle hook** and **stage** as ruled in the
+[glossary](../../../GLOSSARY.md#verification-terms). Bare "hook" is not used.
+**Research:** [staged verification](../research/staged-verification-prior-art-20261101.md),
+[local-first verification](../research/local-first-verification-20261101.md),
+[check selection and agent enforcement](../research/check-selection-and-agent-enforcement-20261101.md);
+earlier: [test tiers and cadence](../research/test-tiers-and-cadence-20261031.md),
+[agent test tiering](../research/agent-test-tiering-prior-art-20261031.md),
+[test-environment ladder](../test-environment-ladder.md).
 
 ## Why start over
 
-The old gate grew by accretion: one aggregator (`check-repo.mjs`) behind a pre-commit hook, a Git
-pre-push hook and a Claude plugin PreToolUse hook. Observed costs:
+The old gate grew by accretion: one aggregator (`check-repo.mjs`) behind a Git pre-commit hook, a
+Git pre-push hook and a Claude Code `PreToolUse` agent hook shipped in the plugin. Observed:
 
 - 15m12s for one full run here, a modal Recycle Bin dialog that hung it, and 3 red groups on
-  Windows (2026-11-01). A push could run it three times.
-- The Claude plugin hook shipped to **every** project that installs grey-matter. It fired on
-  `git stash push` and on ticket titles containing "git push", checked the wrong repository
-  for `git -C`, and called consumer checkers with an argument contract they did not share (153).
-- Consumers copied the shape: tagalog-helper ran a 6 to 8 minute gate on every commit,
-  docs-only commits included (152); philippines-trip's push hung 524 s in our footprint test (151).
+  Windows (2026-11-01). One push could run it three times.
+- The plugin agent hook fired in **every** project with grey-matter enabled, matched `git stash
+  push` and ticket titles, and checked the wrong repository for `git -C` (153). Claude's own docs
+  call the `if` command filter "best-effort" and say to use permissions, not an agent hook, for a
+  hard rule (check-selection §4).
+- Consumers copied the shape: a 6 to 8 minute Git pre-commit hook on every commit (152); a push
+  hung 524 s in our footprint test (151).
+- A per-test timeout did not bound it: `node:test` reports a 500 ms-timeout test that blocks 3 s in
+  `spawnSync` as **ok** (reproduced here, 3074 ms). Only a runner that owns the timeout and kills
+  the process tree bounds a check.
 
-Trimming did not fix the shape, so step 0 removes every enforcement point and the rebuild
-admits checks one at a time.
+## Principles
 
-## The three stages
+1. **Local first.** Every stage runs on the owner's machine through one project command. Hosted CI
+   runs only when the user explicitly asks, or for a need no local machine meets: an OS the owner
+   has no machine for, a clean-machine check before release, contributors outside the trusted
+   circle, or signed provenance (SLSA Build L2). Prefer manual dispatch. Rails 8.1 ships local CI
+   (`bin/ci`) as the default for small-to-mid apps; DHH scopes it away from Shopify-size codebases
+   (prior art). Do not use act or Earthly as a stand-in: act is Linux-container-only and
+   incomplete, Earthly is unmaintained (local-first §2).
+2. **Small until released.** Test what is cheap to break and costly to miss; grow when the project
+   ships. No primary source states "keep tests small until a release"; this is grey-matter's rule,
+   built on Beck ("test as little as possible to reach a given level of confidence") and
+   Dodds ("not too many, mostly integration"). Fowler disagrees for non-trivial code; we resolve it
+   by testing what survives exploration, not what is explored (local-first §3).
+3. **The stage is when; the enforcer is separate.** A Git hook, an agent hook, the agent's own
+   discipline or a release receipt can enforce a stage. The check list and runner are the same.
+4. **Bounded or out.** A check that can hang, prompt or flake does not run in any stage until fixed.
 
-| | Pre-push | Pre-merge | Pre-release |
+## Project phase: before and after the first release
+
+A project is **released** once something outside the repo depends on a version of it: a store
+build, a tag others install, a plugin installed from `main`. grey-matter is released (consumers
+install from `main`); most consumer projects are not yet.
+
+| | Before the first release | After releases exist |
+|---|---|---|
+| Entry point | one `check` command (npm script, `just`, `mise`, `make`, `bin/ci`) | the same command, now with `--stage` |
+| Contents | tier 0 (format, lint, typecheck, data-file parse); unit tests only where the author or agent has actually been wrong or the logic is tangled; one headless smoke that boots the app or steps the game loop | adds: a regression test for every shipped bug fix at the lowest tier that reproduces it (Google's Beyoncé Rule); migration tests over previous save versions; the pre-release stage |
+| Always, from day one | a round-trip test for anything persisted: save files, schemas, wire formats | same |
+| Not yet | prototype code (promote to tested code when it survives), coverage targets, a device matrix, any Git hook or agent hook, hosted CI | hosted CI still only by explicit request or the four needs above |
+| Budget | `check` under 60 s warm | pre-push 30 s, pre-merge 5 min, pre-release unbounded |
+| Stages in use | pre-merge only: the agent runs `check` before pushing finished work | all three |
+
+The 60 s figure is grey-matter's, from the ladder's "about a minute" inner loop, not an external
+standard.
+
+## The three stages (released projects)
+
+| | Pre-push (most critical) | Pre-merge (important) | Pre-release (end to end) |
 |---|---|---|---|
-| **Question** | Would this push break someone who pulls or installs right now? | Does this change work and fit, before it joins the trunk? | Does the product work end to end, where users run it? |
-| **Priority** | most critical | important | complete |
-| **Runs** | tier 0 static invariants on consumer-facing files | tiers 0 to 2 for the changed areas, plus agent review when risk warrants | everything: full suite, every OS, real harness installs, simulators and live devices |
-| **Selected by** | the paths in the commits being pushed (Git's stdin refs), never the working tree | the paths changed on the branch or ticket | nothing; all of it |
-| **Budget** | 30 s total; 0 s when no scoped path changed | 5 min per run, no single check over 2 min | none; once per release |
-| **Enforced by** | one Git pre-push hook per clone, opt-in | the agent, as `tkt close` evidence or before a branch merge | the `release` skill, as gate receipts |
-| **Never** | tests, temp repos, network, harness or tool spawns, anything that can prompt | hooks; full suite by default | skipped silently: a check not run is recorded "not run" |
+| **Question** | Would this push break someone who pulls or installs right now? | Does this change work before it joins the trunk? | Does the release artifact work where users run it? |
+| **Runs** | tier 0 static invariants on consumer-facing files | tiers 0 to 2 for changed areas; tier 3 critical flows and a tier 4 simulator smoke **only when** their scope changed; agent review when risk warrants | everything, on the **release artifact** (signed APK/AAB, archived IPA, packaged game build), every OS, real harness installs, simulator matrix, live devices, platform checklists |
+| **Range** | the commits being pushed: every stdin line of the Git pre-push hook | merge-base with `origin/main` to `HEAD`; never the working tree | all |
+| **Budget** | 30 s total, 10 s per check; 0 s when no scoped path changed | 5 min total, 2 min per check | none; once per release |
+| **Enforced by** | an opt-in Git pre-push hook per clone | the agent, before the push that lands a ticket's code, citing the output at `tkt close`; optionally a project `Stop` agent hook | the `release` skill, as receipts |
+| **Excludes** | test suites, temp repos, network, harness or tool spawns, anything that can prompt | full suite by default | silent skips: a check not run is "not run", never a pass |
 
-**Pre-merge on trunk.** grey-matter and most consumers commit straight to `main`, so "merge" has
-no event. Pre-merge then runs **before closing the ticket** whose change it is, and before merging
-a worktree branch (`implement-spec`). That keeps it out of the push path and ties it to a unit of
-work.
+**Pre-merge on trunk.** With no pull requests, the push that lands work *is* the merge;
+trunkbaseddevelopment.com: "Locally, before the commit/push is the gate" (staged §3). Closing a
+ticket auto-pushes after the code is already on `main`, so pre-merge runs **before the push that
+carries a ticket's code**, not at close. Pushes of tickets and docs match no pre-merge scope and
+run nothing. Worktree branches run it before merging (`implement-spec`).
 
-**Pre-release includes devices.** A game or mobile consumer's pre-release names its simulator matrix
-and its tier 5 device checks (input feel, frame pacing, memory, install) from the
-[test-environment ladder](../test-environment-ladder.md). The release does not stage until each is
-a receipt or an explicit "not run" accepted by the owner.
+**Pre-push reads Git's refs exactly.** The Git pre-push hook gets one stdin line per pushed ref.
+Skip deletions (all-zeroes local object); for a new ref (all-zeroes remote object) use
+`git rev-list <local> --not --remotes=<remote>`; union paths across all lines. pre-commit only
+reads the first line and lefthook hangs without `use_stdin: true` (prior art to avoid; staged §2).
 
-## Admission rules (every stage)
+**Pre-release on devices.** Seed game and mobile receipts from platform checklists: Apple 2.1
+on-device testing with the backend on; Play internal track and pre-launch report; Steam Deck
+criteria (input, glyphs, text entry, 30 fps at 800p); Xbox XR-001's fresh-profile and offline
+passes. A store report that does not arrive (Play's is "subject to capacity") is "not run", never a
+pass and never a blocker by itself (staged §4).
+
+## Admission and demotion
 
 A check enters a stage only with all of:
 
-1. **Catches**: one named failure, observed (an incident, a ticket or a field report).
-2. **Scope**: the paths it guards. Pre-push and pre-merge skip it when none changed.
-3. **Measured time** on this host, with date, inside the stage budget.
-4. **A per-check timeout** (pre-push 10 s, pre-merge 2 min, pre-release set per check). A timeout
-   is an `infrastructure error` outcome, never a hang.
-5. **Green on every supported host**, or skipped there with a stated reason. Flaky checks stay out
-   until fixed.
-
-Prefer the earliest stage that can observe the failure; a check that misses the budget moves
-**later**, never gets the budget raised.
+1. **Catches** one named failure, observed, and often enough to earn its time. A check with no
+   catch over three releases moves one stage later (Chromium drops configs that "only fail once
+   every couple of weeks").
+2. **Scope**: repo-relative POSIX path prefixes or globs, no regex. Out of scope, it does not run.
+3. **Measured** time on this host with date, inside the stage budget. Over budget moves it later;
+   budgets are never raised.
+4. **Bounded by the runner**: a per-check timeout the runner enforces by killing the process tree
+   (`taskkill /T /F` on Windows, process group on POSIX), stdin closed, `CI=true`,
+   `GIT_TERMINAL_PROMPT=0`, a fresh temp dir. Killed is `timeout`; spawn failure or a missing tool
+   is `infrastructure error`; neither is ever `pass` (Bazel). `node --test` also gets
+   `--test-timeout` as a second line, not the bound.
+5. **Cannot prompt**: no stdin reads, no OS trash or shell file APIs; test-made temp dirs go with
+   `rmSync(..., { recursive: true, force: true })`.
+6. **Green on every supported host**, or skipped there with a stated reason. A flaky check is
+   quarantined with a ticket naming the stage it returns to; never retry-to-green.
 
 ## One manifest, one runner
 
-Replace the hard-coded groups in `check-repo.mjs` with a declared list, `scripts/gates.json`:
+`scripts/gates.json` declares checks; `node scripts/gate.mjs <pre-push|pre-merge|pre-release>`
+runs them.
 
 ```json
-{ "checks": [
+{ "full_triggers": ["package.json", "package-lock.json", "scripts/gates.json", "scripts/gate.mjs"],
+  "checks": [
   { "id": "plugin-manifest", "stage": "pre-push", "catches": "plugin install fails for consumers",
     "scope": [".claude-plugin/", ".codex-plugin/", "skill-packs.json"],
-    "run": ["node", "scripts/check-plugin-manifest.mjs"], "timeout_s": 10, "measured": "1.6 s, 2026-11-01" }
+    "run": ["node", "scripts/check-plugin-manifest.mjs"], "timeout_s": 10,
+    "measured": { "s": 1.6, "date": "2026-11-01", "host": "win" } }
 ] }
 ```
 
-`node scripts/gate.mjs <pre-push|pre-merge|pre-release> [--base REF]` reads it, selects by stage and
-changed paths, enforces timeouts and prints each check's time and outcome class. The same shape is
-the consumer pattern (152): a project authors its own `gates.json`; grey-matter ships the runner
-pattern and guidance, **never a hook**.
+- `always: true` runs a check whatever changed; a `full_triggers` path selects every check in the
+  stage. Unknown history selects more, never less.
+- `SKIP=<id,...>` skips named checks and prints them as `skipped (SKIP)`; `git push --no-verify`
+  stays the whole-Git-hook escape hatch (pre-commit prior art).
+- `--include <id>` or `--stage pre-release` runs a later stage's checks early for a risky change
+  (Chromium's opt-in CQ prior art).
+- Output: each check's time and outcome class, and a warning when time exceeds `measured`.
 
-## Initial admission (from the 2026-11-01 timings)
+`catches` and `measured` have no precedent in the manifests read (pre-commit, lefthook,
+`config/ci.rb`, Nx, Turbo, Bazel); they carry the admission evidence.
+
+## What grey-matter ships to consumers
+
+Guidance, the `gates.json` schema and a reference `gate.mjs`. **No agent hook in the plugin**, and
+no `PreToolUse` command matching for gating anywhere. A consumer that wants enforcement adds its
+own, calling its own `gate.mjs`: a Git pre-push hook via `core.hooksPath`, and optionally a project
+`Stop` agent hook in `.claude/settings.json` or `.codex/hooks.json` for pre-merge. Claude's
+components page recommends plugin agent hooks for rules that must always hold; that fits rules the
+plugin owns, not each project's checks (check-selection §6).
+
+## Initial admission for grey-matter (from the 2026-11-01 timings)
 
 | Check | Stage | Measured |
 |---|---|---|
-| plugin manifest (`check-plugin-manifest.mjs`) | pre-push | 1.6 to 2.4 s |
-| YAML syntax and core types (`check-skill-syntax.mjs`) | pre-push | 0.2 to 1.0 s |
+| plugin manifest (`check-plugin-manifest.mjs`) | pre-push | 1.5 to 2.4 s |
+| YAML syntax and core types (`check-skill-syntax.mjs`) | pre-push | 0.1 to 1.0 s |
 | invocation sidecars and skill indexes (`check-invocation-policy.mjs`) | pre-push | 0.1 s |
-| skill and doc links (`check-docs-consistency.mjs`) | pre-push, scoped to `skills/`, `global/` | 0.2 s |
-| ticket graph (`tkt validate`) | pre-merge | 0.1 s |
-| relocate, guidance, uninstall, survey, shell probe, dashboard, review receipt, critic probe, spike fixture tests | pre-merge, each scoped to its own sources | 0.1 to 3.9 s each |
-| footprint tests | pre-merge after 138/151 are fixed | red on Windows today |
+| skill and doc links (`check-docs-consistency.mjs`), scoped to `skills/`, `global/` | pre-push | 0.1 to 0.2 s |
+| ticket graph (`tkt validate`) | pre-merge | 0.1 to 0.5 s |
+| relocate, guidance, uninstall, survey, shell probe, dashboard, review receipt, critic probe, spike fixture tests | pre-merge, each scoped to its sources | 0.1 to 3.9 s each |
+| footprint tests | pre-merge after 151 is fixed | red or hung on Windows today |
 | deployer tests | pre-release until 137 slims them | 90.8 s |
 | release tests | pre-release | 116.2 s; test 31 flaky on Windows (135) |
 | platform workflow (Windows, Linux), real Claude/Codex/agy installs | pre-release | manual dispatch |
 
 ## Rebuild sequence
 
-0. **Remove** (done): the Claude plugin push hook, the Git pre-push and pre-commit hooks, their
-   installer and tests. `check-repo.mjs` stays as an on-demand command so `release-product.mjs`
-   keeps working until step 3.
-1. **Pre-push**: `gates.json`, `gate.mjs`, the four pre-push checks, and one Git pre-push hook that
-   passes Git's pushed refs to `gate.mjs`. Tests: a docs-only push runs zero checks; a seeded broken
-   manifest blocks; a hung check times out.
-2. **Pre-merge**: fix 138/151, 135 and 134, then admit the pre-merge tests one at a time. `tkt-work`
-   and `implement` cite `gate.mjs pre-merge` output as close evidence.
-3. **Pre-release**: move the remaining groups and the platform workflow under `gate.mjs pre-release`;
-   `release-product.mjs` calls it; slim deployer and release tests (137). Retire `check-repo.mjs`.
-4. **Guidance**: rewrite `local-gates.md` as the three-stage reference; `init-project`,
-   `conformance-audit` and `retro` point at it; ship the consumer `gates.json` pattern (152).
+0. **Remove** (done): the plugin agent hook, the Git pre-push and pre-commit hooks, the installer
+   and their tests. `check-repo.mjs` stays on demand so `release-product.mjs` works until step 3.
+1. **Runner and pre-push**: `gates.json`, `gate.mjs` (timeouts, process-tree kill, outcome
+   classes, SKIP, stdin refs), the four pre-push checks, an opt-in Git pre-push hook. Tests: a
+   docs-only push runs nothing; a two-ref and a new-branch push select correctly; a seeded broken
+   manifest blocks; a hung and a `spawnSync`-blocked check both end as `timeout`.
+2. **Pre-merge**: fix 151, 135 and 134; admit tests one at a time. `tkt-work` and `implement` run
+   `gate.mjs pre-merge` before pushing a ticket's code and cite it at close.
+3. **Pre-release**: move the slow groups and platform workflow under `gate.mjs pre-release`;
+   `release-product.mjs` calls it; slim deployer and release tests (137); retire `check-repo.mjs`.
+4. **Guidance**: rewrite `local-gates.md` around project phase and the three stages; `init-project`
+   scaffolds the `check` command and, for released projects, `gates.json`; `conformance-audit`
+   flags unbounded Git hooks, plugin agent hooks used as gates, hosted CI on every push, and
+   unbounded scratch; `retro` points at it; lefthook consumers get the `use_stdin` note (152).
 
 ## Ticket disposition
 
-- **153** (plugin push hook): items 1 to 6 are moot once no hook ships; item 7 is 151. Keep only
-  "the Git pre-push hook judges the pushed refs" as part of step 1, then close.
-- **152** (consumer commit gates): becomes step 4.
-- **138 and 151** (footprint test fails or hangs): one root cause area; merge into 151, prerequisite of step 2.
-- **137** (slow deployer and release tests): pre-release slimming, step 3.
+- **153** (plugin agent hook): items 1 to 6 are moot with no agent hook shipped; item 7 is 151.
+  Keep "the Git pre-push hook judges the pushed refs" in step 1, then close.
+- **152** (consumer gates): step 4.
+- **151** (footprint test hang) absorbs **138** (same file, Windows failures): prerequisite of step 2.
+- **137** (slow deployer and release tests): step 3.
 - **134, 135**: pre-merge admission blockers, step 2.
 
 ## Open decisions
 
-1. Pre-merge trigger on trunk: before `tkt close` (proposed), or before every push of a finished ticket?
-2. Pre-push hook: opt-in per clone (proposed), or installed by `deploy.mjs` for maintainers?
-3. Consumers: guidance and runner pattern only, no shipped hook (proposed)?
+1. **Pre-merge timing on trunk**: before the push that carries a ticket's code (recommended, per
+   trunkbaseddevelopment.com), or at `tkt close` (later than the code reaching `main`)?
+2. **Git pre-push hook**: opt-in per clone (recommended), or installed by `deploy.mjs` for
+   maintainers?
+3. **Consumers**: guidance plus runner pattern, no shipped agent hook (recommended)?
+4. **Released threshold**: is "something outside the repo depends on a version of it" the right
+   trigger for the expanded guidance, or should the owner declare it in `AGENTS.md`?
+5. **Scaling**: if several agents push to `main` at once, a serialization point (commit queue)
+   rather than a heavier pre-push (Google, TBD prior art). Not needed now.

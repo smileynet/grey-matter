@@ -18,7 +18,7 @@ Add a gate sparingly, for a key area, with a focused scope and a measured budget
 Test suites run in the release workflow, not at push: a slow or flaky fixture must never block
 publishing tickets, docs or fixes. Hosted CI does not run them either.
 Agent and LLM reviews take minutes and vary run to run, so they run on demand before merge,
-never in a hook. Builds, full suites, rendered, simulator and device tiers also stay out of hooks.
+never in a Git hook or agent hook. Builds, full suites, rendered, simulator and device tiers also stay out of both.
 
 ## When a gate earns its place
 
@@ -40,11 +40,11 @@ project's `AGENTS.md` test commands.
 - **Catches**: the one failure it exists for.
 - **Command** and **measured time**, with the date measured.
 
-Record these in a header comment in the hook and in the `AGENTS.md` test commands.
+Record these in a header comment in the Git hook and in the `AGENTS.md` test commands.
 
 ## Over budget
 
 Move it one stage later (pre-commit, pre-push, release), else remove it. A test is not
-critical enough for a hook unless its failure would publish something broken to consumers.
-Re-time the hook whenever a gate is added, and whenever a commit or push feels slow. A gate over budget, without a
+critical enough for a Git hook unless its failure would publish something broken to consumers.
+Re-time the Git hook whenever a gate is added, and whenever a commit or push feels slow. A gate over budget, without a
 scope, or guarding a failure no longer seen is a finding for `retro` and `conformance-audit`.

@@ -216,6 +216,30 @@ built, representative data) or **live** (shipped, actual data). Labeling and evi
 rules belong to [delivery-dashboard](skills/productivity/delivery-dashboard/SKILL.md).
 Context: skills.
 
+## Verification terms
+
+### Git hook  (homonym - see ruling)
+A script Git runs at a Git event (`pre-commit`, `pre-push`), from the clone's hook directory
+(`core.hooksPath`). It fires for every Git client, human or agent, in that one clone, and only
+when installed there. Source of truth: [githooks](https://git-scm.com/docs/githooks).
+
+### agent hook  (homonym - see ruling)
+A callback an agent harness runs on its own events (Claude Code `PreToolUse`, `Stop`,
+`SessionStart`; Kiro and Codex hooks). It fires only inside that harness, sees tool calls rather
+than Git events, and a plugin's agent hooks fire in every project where the plugin is enabled.
+Source of truth: each harness's own hook docs. Avoid: "plugin hook" or "Claude hook" as a stand-in
+for the kind; name the harness when it matters.
+
+**Ruling:** never write bare "hook". A source's "hook" is translated to one of the two before it is
+cited, and a finding about one kind is never applied to the other. A test framework's `before`,
+`after` and `beforeEach` callbacks are a third thing: write **test lifecycle hook**.
+
+### stage
+One of the three verification points of
+[proposal 18](./docs/agents/proposals/18-three-stage-verification.md): **pre-push**, **pre-merge**,
+**pre-release**. A stage says *when* a check runs; a Git hook or agent hook is only one way to
+enforce it.
+
 ## Cross-context mapping
 
 Match strength is honest (exact / close / broad / narrow); a blank counterpart is
@@ -244,6 +268,8 @@ a real gap, not forced equivalence.
 - **"issue" vs "ticket"**: collapsed to **ticket**; "issue" is a skills alias only.
 - **"vertical slice"**: a false friend. Web = thin path through all layers; game = a
   polished representative chunk. Qualify it when both domains are in play.
+- **"hook"**: split into **Git hook** and **agent hook** (see Verification terms). Bare
+  "hook" is retired; name the kind every time.
 - **"spike"**: scoped to a throwaway build answering a deciding question for one option in
   a multi-option **spike run** (`spike-options`). A one-off throwaway with no comparison is
   a `prototype`, not a spike; the agile "any timeboxed investigation" sense is not used.
