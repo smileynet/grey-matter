@@ -30,3 +30,7 @@ Pass bash a path it can read (forward slashes or `cygpath`), or skip the wrapper
 
 - [ ] Test 31 passes on Windows, or is skipped there with a stated reason.
 - [ ] `node scripts/check-repo.mjs` invariant 11 is green on Windows.
+
+## Flaky, not constant (2026-10-31, later)
+
+A later `node scripts/check-repo.mjs` run on the same machine passed invariant 11, so test 31's failure depends on the environment it runs in (likely which `bash` resolves first), not on the code alone.

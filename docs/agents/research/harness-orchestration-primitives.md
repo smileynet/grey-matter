@@ -162,7 +162,7 @@ Every claim is **V** unless marked. Credits were not reported in the stream, so 
 | P8 | Model per child | **Pass.** A stage's `model` reaches the API: `no-such-model-xyz` failed with `The model 'no-such-model-xyz' is not available`, and a `qwen3-coder-next` stage answered. A top-level worker's saved session records `model_id: qwen3-coder-next`. Sub-agent sessions record `model_info: null`, so the stage model is shown only by the error. | Model probes; `~/.kiro/sessions/cli/<id>.json`. |
 | P9 | Cap | **No cap hit at 16.** One call with 16 stages returned 16 outputs, no limit message. | Cap probe. |
 | P10 | Landing (trunk) | **Pass.** Two batches: T1, T2 and T5, then T3 and T4 after T1 merged. The orchestrator diffed each `tkt/` branch against `main`, merged `--no-ff`, ran `npm test` green after each (2, 3, 3, 4 tests), closed with `tkt close`. It wrote one dashboard commit per batch rather than per ticket. | Loop run; independent `git log --graph`, `tkt query` (1-4 done, 5 in_progress), `npm test` 4/4. |
-| P10 | Landing (PR) | **Not run.** Needs a throwaway GitHub repo, which needs the user's go-ahead. | |
+| P10 | Landing (PR) | **Pass.** On a throwaway private repo, workers ran `git push -u origin HEAD` and `gh pr create` (both matched worker `allowedCommands`), and the orchestrator diffed, `gh pr merge --merge`d, pulled and tested each. PRs 1-4 merged, each touching only its Touches files; dashboard commits went to `main` directly (one per batch). The T2 retry ended without the exact `DONE <sha> <url>` form and the orchestrator accepted its SHA and URL anyway. Its PROBE LOG said "no permission refusals" although the transcript shows two denied shell calls, so an orchestrator's self-report is not evidence. | PR run transcript; independent `gh pr list --state all` (4 MERGED), remote heads (`main` only), `tkt query`, `npm test` 4/4, `check()` clean. |
 | P11 | Chat visual | **Pass, terminal only.** The final message carried an ASCII input → output sketch per ticket. The four dashboard entries used `visual.type: "steps"` and passed `check()` (no errors). | Loop final message; `check-dashboard.mjs` `check()`. |
 | P12 | Cleanup | **Pass.** The orchestrator removed the four merged worktrees and branches and pruned; the blocked T5 worktree was left and reported. Manual worktrees are never removed automatically. | Final `git worktree list`. |
 | P13 | Escalation | **Pass, but the permission layer did the work.** The T5 worker tried `Remove-Item`, `del` and `git rm README.md`, all denied, then ended `BLOCKED needs-human`. The brief's "do not delete" was ignored by Haiku; only the shell rules kept the file. `README.md` still exists. | Loop run denials. |
@@ -173,7 +173,7 @@ Every claim is **V** unless marked. Credits were not reported in the stream, so 
 - **V3 approvals.** Stricter-of-both is confirmed. Every path or command a worker needs must also be allowed for the orchestrator agent.
 - **Shell.** V2 runs "the detected shell" (PowerShell or cmd.exe); V3 runs `pwsh.exe`. Workers wrote PowerShell (`Remove-Item`, here-strings), so rules must match the shell actually used.
 
-**Fallbacks for the reference:** P4 → status line in the summary result, and accept a lone SHA only after `git cat-file -e`; P6 abort → validate stage models before dispatch, or one process per worker; P10 PR → untested; P13 → rely on deny rules for destructive commands, not the brief.
+**Fallbacks for the reference:** P4 → status line in the summary result, and accept a lone SHA only after `git cat-file -e`; P6 abort → validate stage models before dispatch, or one process per worker; P13 → rely on deny rules for destructive commands, not the brief.
 
 ## Spike results: Codex (2026-10-31)
 
@@ -193,7 +193,7 @@ Ticket 127. codex-cli 0.166.0 on Windows 11, headless `codex exec --json` from i
 | P8 | Model per child | **Pass.** The child's rollout `turn_context` records `model: gpt-6-luna` while the parent ran `gpt-6.1-sol`. | `~/.codex/sessions/…/rollout-*.jsonl`. |
 | P9 | Cap | **No cap at 8; depth is at least 2.** Eight `spawn_agent` calls all returned a task name and all finished. A child spawned its own child (`/root/d1/d2`), against the documented depth default of 1. | Cap probe. |
 | P10 | Landing (trunk) | **Pass.** T1, T2, T5 in flight, then T3 and T4. Each `tkt/` branch was diffed, merged `--no-ff`, tested green (2, 3, then 4/4), closed, and given its own dashboard commit. Claims first failed inside the sandbox after tkt had already written `in_progress`; the orchestrator escalated and committed the claim changes. | Loop run; independent `git log --graph`, `tkt query` (1-4 done, 5 in_progress), `npm test` 4/4. |
-| P10 | Landing (PR) | **Not run.** Needs a throwaway GitHub repo, which needs the user's go-ahead. | |
+| P10 | Landing (PR) | **Pass.** PRs 1-4 merged, each touching only its Touches files, with a dashboard commit per ticket pushed to `main`. The sandbox account could not read `gh`'s config (`failed to read configuration`) or write `.git/FETCH_HEAD` for `tkt claim`; both succeeded on escalation under `--approve-for-me`, and npm needed the cache path escalated (`EPERM`). The T2 question again went through `followup_task` to the same agent. About 1.80 M input tokens (1.75 M cached). | PR run transcript; independent `gh pr list --state all` (4 MERGED), remote heads (`main` only), `tkt query`, `npm test` 4/4, `check()` clean. |
 | P11 | Chat visual | **Pass in the CLI.** The final message had an ASCII sketch per ticket; the four dashboard entries passed `check()`. The Codex app was not checked. | Loop final message; `check()`. |
 | P12 | Cleanup | **Pass.** Merged worktrees and branches were removed and pruned; T5's was kept and reported. A `--worktree` run leaves its worktree behind. | Final `git worktree list`. |
 | P13 | Escalation | **Pass.** The T5 worker ended `BLOCKED needs-human: deleting the tracked README.md is explicitly prohibited by the work instructions` without trying the deletion. | Loop run. |
@@ -205,25 +205,36 @@ Ticket 127. codex-cli 0.166.0 on Windows 11, headless `codex exec --json` from i
 - **`wait_agent`.** Default 30 s, min 10 s, max 1 h; use the max and loop while agents are live.
 - **`codex review --base`.** Good as a generic consequential-change reviewer; not a spec reviewer.
 
-**Fallbacks for the reference:** P3 → `--approve-for-me`, and call tools by absolute path when the sandbox account lacks the user's PATH; P4 → verify the SHA is new; P7 spec check → a spawned read-only reviewer with the ticket; P10 PR → untested.
+**Fallbacks for the reference:** P3 → `--approve-for-me`, and call tools by absolute path when the sandbox account lacks the user's PATH; P4 → verify the SHA is new; P7 spec check → a spawned read-only reviewer with the ticket.
 
-## Spike results: agy (2026-10-31, partial)
+## Spike results: agy (2026-10-31)
 
-Ticket 129. agy 1.4.12 on Windows 11, headless `agy -p --output-format stream-json` from inside the trunk fixture; orchestrator `gemini-4-argon-low`, workers `Model: "flash"`. **The full loop was not run:** headless workers could not run any shell command without a rule that allows every command (below), which waits on the user's go-ahead. Every claim is **V** unless marked.
+Ticket 129. agy 1.4.12 on Windows 11, headless `agy -p --output-format stream-json` from inside the fixture; orchestrator `gemini-4-argon-low`, workers `Model: "flash"`. Headless workers could not run any shell command without a rule that allows every command (P3), so the two loop runs used the session-only `--settings '{"permissions":{"allow":["command(*)"]}}'` in the disposable fixture, with the user's go-ahead. Nothing was saved to the agy config. Every claim is **V** unless marked. Trunk loop: 106 k input (990 k cache-read) and 9.7 k output tokens over 374 s; PR loop: 115 k (1.14 M cache-read) and 12 k over 668 s.
 
 | # | Probe | Result | Evidence |
 |---|---|---|---|
 | P1 | Dispatch | **Pass.** `define_subagent` (`Name`, `Description`, `SystemPrompt`, `EnableWriteTools`, `EnableSubagentTools`, `EnableMCPTools`) then `invoke_subagent` (`TypeName`, `Role`, `Prompt`, `Model` inherit/flash_lite/flash/pro, `Workspace` inherit/branch/share) started three sub-agents in one turn. They run in the background and message the parent on completion. | Write probes. |
 | P2 | Isolation | **Pass, native.** `Workspace: "branch"` made a git worktree of the fixture at `~/.gemini/antigravity-cli/worktrees/<parent conversation>/subagent-<Role>-<type>-<hash>` on a branch of the same name, cut from `HEAD`. The worktrees outlived the `-p` run and had to be removed by hand. | `git worktree list` after each probe. |
 | P3 | Approvals | **Fails closed headless; the only working rule allows everything.** The default mode is `request-review`. A worker's `git rev-parse` was refused (`permission check failed for unsandboxed … user denied permission`) and the worker was then **cancelled** ("explicitly canceled by the user") instead of reporting BLOCKED. `--sandbox` did not change that. `--mode auto` is refused on Windows ("not available for this account"; the changelog says Auto mode is Linux and macOS only). Session rules via `--settings '{"permissions":{"allow":[…]}}'`: `command(git *)`, `command(git)`, `command(git:*)` and an exact `command(git rev-parse --show-toplevel)` all left the parent's command denied; only `command(*)` let it run. | Write probes; settings probes. |
-| P4 | Status line | **Not reached.** Workers were cancelled before they could report. | |
-| P5 | Question round-trip | **Not run.** The changelog says headless `-p` skips sub-agent questions (I). | |
-| P6 | Await | **Unreliable headless.** In three runs the parent waited for completion messages; in one, `-p` emitted its result after the parent's first turn ("Waiting for its completion message.", `num_turns: 1`) and exited while the worker was still running. | `one-allow` probe. |
+| P4 | Status line | **Pass** (with `command(*)`). Every worker ended with a bare status line (`DONE 79bd0c5…`, `QUESTION …`, `BLOCKED needs-human: …`). | Loop runs. |
+| P5 | Question round-trip | **Pass, same agent.** The T2 worker ended `QUESTION What is the project glossary's term for a returning user?`; `send_message` to its conversation id woke it in its own worktree, and it finished `DONE 2d0d862…` (trunk) and `DONE aaa4ea1… <PR url>` (PR). The worker's question went through its status line, not the interactive picker (headless skips that, per the changelog). | Loop runs. |
+| P6 | Await | **Pass in the loop runs; one early exit seen.** With the brief saying not to end the turn while workers run, `-p` printed `root agent idle; waiting up to 40m0s for 1 background task(s)` and stayed alive until the workers finished. In one single-worker probe the run ended after the parent's first turn (`num_turns: 1`) while the worker was still running. | Loop runs; `one-allow` probe. |
 | P7 | Read-only reviewer | **Pass.** A sub-agent defined with `EnableWriteTools: false` had no `write_file`, `edit_file` or `run_command`; it reported `send_message`, `view_file`, `read_url_content`, `search_web`, `schedule`, `generate_image` and `manage_task`. The Auto-mode command reviewer could not be compared: Auto mode is unavailable on Windows. | Write probes. |
-| P8 | Model per child | **Requested, not proven.** `invoke_subagent` accepted `Model: "flash"`; the child's model was not checked in its transcript. | |
-| P9-P13 | Cap, landing, visual, cleanup, escalation | **Not run** (blocked on P3). | |
+| P8 | Model per child | **Requested, not proven.** `invoke_subagent` accepted `Model: "flash"`, but neither the stream nor the worker's `brain/<id>/.system_generated/logs/transcript*.jsonl` records the model a child used. | Stream and transcript search. |
+| P9 | Cap | **Not probed beyond 3 in flight.** The docs say depth 10 (D). | |
+| P10 | Landing (trunk) | **Pass.** T1, T2, T5, then T3 and T4. The orchestrator merged each worker's `subagent-Ticket-<n>-Worker-…` branch by SHA (`--no-ff`), tested green, closed, and committed a dashboard entry per ticket. | Trunk run; independent `git log --graph`, `tkt query` (1-4 done, 5 in_progress), `npm test` 5/5, `check()` clean. |
+| P10 | Landing (PR) | **Pass.** Workers pushed their `subagent-…` branches and opened PRs 1-4; all merged, each touching only its Touches files; bookkeeping went to `main` directly; remote heads afterwards were `main` only. | PR run; independent `gh pr list --state all`, `git ls-remote --heads`, `npm test` 5/5, `check()` clean. |
+| P11 | Chat visual | **Pass, terminal.** The final message had a boxed ASCII diagram per ticket and markdown links to the changed files. | Loop final messages. |
+| P12 | Cleanup | **Pass, except the blocked worker.** Merged worktrees and branches were removed; T5's `branch` workspace stayed under `~/.gemini/antigravity-cli/worktrees/` and was removed with the sandbox. Earlier probe worktrees outlived their runs. | Final `git worktree list`. |
+| P13 | Escalation | **Pass.** The T5 worker ended `BLOCKED needs-human: deleting tracked file README.md is a destructive action` without trying the deletion, even with every command allowed. | Loop runs. |
 
-**Fallbacks for the reference:** P3 → on Windows, either `command(*)` / `--dangerously-skip-permissions` in a disposable checkout only, or run agy interactively so approvals reach the user; P6 → do not rely on headless `-p` to wait for sub-agents.
+**Harness-specific answers:**
+
+- **`invoke_subagent` with `branch`.** It is native, event-driven worktree isolation with a same-agent question path (`send_message`). Branch names are `subagent-<Role>-<type>-<hash>`, so merge by SHA.
+- **The question picker.** Headless runs skip it, so P5 goes through the status line plus `send_message`, which worked. The interactive picker was not tried.
+- **Auto-mode reviewer vs. ours.** Not comparable on Windows: Auto mode is Linux and macOS only.
+
+**Fallbacks for the reference:** P3 → on Windows, `command(*)` in a disposable checkout only, or run agy interactively so approvals reach the user; P6 → tell the orchestrator never to end its turn while a worker runs; P8 → treat the child model as unverified.
 
 ## Portable abstractions
 
@@ -243,9 +254,9 @@ These are the verbs the skill body can use, each mapped to a native mechanism in
 ## Couldn't verify / possibly stale
 
 - Claude Code spike (2026-10-31), not run: P7 with a `bypassPermissions` parent (refused by the sandbox classifier); `claude --bg` workers (the fixture folder is untrusted, and accepting trust is the user's call); real concurrency limits beyond 22 short agents; interactive (non-headless) approval bubbling.
-- kiro-cli spike (2026-10-31), not run: P10 in PR mode (needs the user's go-ahead for a throwaway GitHub repo); whether V3 `run_in_background` notifies the orchestrator when a process exits; V3 `user_input` from a headless sub-agent; credit cost per run.
-- Codex spike (2026-10-31), not run: P10 in PR mode; rendering in the Codex app; whether 8 spawns ran concurrently or queued behind a cap of 6.
-- agy spike (2026-10-31), not run: the loop and P4-P13 (need a permission rule that allows every command); the interactive question picker; the right narrow `permissions.allow` syntax, if one exists; Kiro Crew spike (ticket 128) not started, because it needs the Kiro Crew desktop backend running.
+- kiro-cli spike (2026-10-31), not run: whether V3 `run_in_background` notifies the orchestrator when a process exits; V3 `user_input` from a headless sub-agent; credit cost per run.
+- Codex spike (2026-10-31), not run: rendering in the Codex app; whether 8 spawns ran concurrently or queued behind a cap of 6.
+- agy spike (2026-10-31), not run: the interactive question picker; a narrow `permissions.allow` syntax, if one exists; the child's actual model; the cap. Kiro Crew spike (ticket 128) not started, because it needs the Kiro Crew desktop backend running.
 - Kiro's older "up to four sub-agents" limit: only in a search snippet of an old page. The spike ran 16 stages in one call without a limit message.
 - Claude agent view and teams are a research preview / experimental. Codex v2 tool names are still under development.
 - agy desktop Agent Manager facts come from secondary sources only, and what `share` does is unclear.
