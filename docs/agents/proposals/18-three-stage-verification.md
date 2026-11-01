@@ -1,10 +1,11 @@
 # Proposal 18: three-stage verification, local first, rebuilt from zero
 
-**Status:** proposed 2026-11-01; revised the same day from three research notes. Step 0 (remove the
-old gate) is done (commit 545a80f).
+**Status:** accepted 2026-11-01 ([decisions](#decisions)); revised the same day from three research
+notes. Step 0 (remove the old gate) is done (commit 545a80f).
 **Supersedes:** the layout in [local gates](../local-gates.md) and the `check-repo.mjs` modes.
 **Absorbs:** tickets 137, 138, 151, 152, 153 ([disposition](#ticket-disposition)).
-**Terms:** **Git hook**, **agent hook**, **test lifecycle hook** and **stage** as ruled in the
+**Terms:** **Git hook**, **agent hook**, **test lifecycle hook**, **stage** and **speed / stability
+phase** as ruled in the
 [glossary](../../../GLOSSARY.md#verification-terms). Bare "hook" is not used.
 **Research:** [staged verification](../research/staged-verification-prior-art-20261101.md),
 [local-first verification](../research/local-first-verification-20261101.md),
@@ -39,8 +40,9 @@ Git pre-push hook and a Claude Code `PreToolUse` agent hook shipped in the plugi
    (`bin/ci`) as the default for small-to-mid apps; DHH scopes it away from Shopify-size codebases
    (prior art). Do not use act or Earthly as a stand-in: act is Linux-container-only and
    incomplete, Earthly is unmaintained (local-first §2).
-2. **Small until released.** Test what is cheap to break and costly to miss; grow when the project
-   ships. No primary source states "keep tests small until a release"; this is grey-matter's rule,
+2. **Small until the owner chooses stability.** Test what is cheap to break and costly to miss;
+   grow when the owner trades speed for release stability. No primary source states "keep tests
+   small until a release"; this is grey-matter's rule,
    built on Beck ("test as little as possible to reach a given level of confidence") and
    Dodds ("not too many, mostly integration"). Fowler disagrees for non-trivial code; we resolve it
    by testing what survives exploration, not what is explored (local-first §3).
@@ -48,13 +50,17 @@ Git pre-push hook and a Claude Code `PreToolUse` agent hook shipped in the plugi
    discipline or a release receipt can enforce a stage. The check list and runner are the same.
 4. **Bounded or out.** A check that can hang, prompt or flake does not run in any stage until fixed.
 
-## Project phase: before and after the first release
+## Project phase: speed or stability
 
-A project is **released** once something outside the repo depends on a version of it: a store
-build, a tag others install, a plugin installed from `main`. grey-matter is released (consumers
-install from `main`); most consumer projects are not yet.
+Every project starts in the **speed phase**. It moves to the **stability phase** only when the owner
+declares it, by a line in the project's `AGENTS.md` (`Verification phase: stability`), because the
+owner chooses to trade iteration speed for release stability. Tags, store builds and early
+releases do not switch it: a tagged release can still be pre-production. Agents read the
+declaration; they never infer it, and they may suggest it (for example when a project gains
+persisted user data or outside users) but leave the choice to the owner. `init-project` writes the
+line as `speed`; `conformance-audit` reports a missing line.
 
-| | Before the first release | After releases exist |
+| | Speed phase (default) | Stability phase (owner-declared) |
 |---|---|---|
 | Entry point | one `check` command (npm script, `just`, `mise`, `make`, `bin/ci`) | the same command, now with `--stage` |
 | Contents | tier 0 (format, lint, typecheck, data-file parse); unit tests only where the author or agent has actually been wrong or the logic is tangled; one headless smoke that boots the app or steps the game loop | adds: a regression test for every shipped bug fix at the lowest tier that reproduces it (Google's Beyoncé Rule); migration tests over previous save versions; the pre-release stage |
@@ -62,11 +68,12 @@ install from `main`); most consumer projects are not yet.
 | Not yet | prototype code (promote to tested code when it survives), coverage targets, a device matrix, any Git hook or agent hook, hosted CI | hosted CI still only by explicit request or the four needs above |
 | Budget | `check` under 60 s warm | pre-push 30 s, pre-merge 5 min, pre-release unbounded |
 | Stages in use | pre-merge only: the agent runs `check` before pushing finished work | all three |
+| Switch back | n/a | the owner may return to speed, for example during a rewrite |
 
 The 60 s figure is grey-matter's, from the ladder's "about a minute" inner loop, not an external
 standard.
 
-## The three stages (released projects)
+## The three stages (stability phase)
 
 | | Pre-push (most critical) | Pre-merge (important) | Pre-release (end to end) |
 |---|---|---|---|
@@ -177,7 +184,8 @@ plugin owns, not each project's checks (check-selection §6).
 
 0. **Remove** (done): the plugin agent hook, the Git pre-push and pre-commit hooks, the installer
    and their tests. `check-repo.mjs` stays on demand so `release-product.mjs` works until step 3.
-1. **Runner and pre-push**: `gates.json`, `gate.mjs` (timeouts, process-tree kill, outcome
+1. **Runner and pre-push**: grey-matter's `AGENTS.md` declares `Verification phase: stability`
+   (this proposal builds all three stages for it; the owner can revert); `gates.json`, `gate.mjs` (timeouts, process-tree kill, outcome
    classes, SKIP, stdin refs), the four pre-push checks, an opt-in Git pre-push hook. Tests: a
    docs-only push runs nothing; a two-ref and a new-branch push select correctly; a seeded broken
    manifest blocks; a hung and a `spawnSync`-blocked check both end as `timeout`.
@@ -186,7 +194,8 @@ plugin owns, not each project's checks (check-selection §6).
 3. **Pre-release**: move the slow groups and platform workflow under `gate.mjs pre-release`;
    `release-product.mjs` calls it; slim deployer and release tests (137); retire `check-repo.mjs`.
 4. **Guidance**: rewrite `local-gates.md` around project phase and the three stages; `init-project`
-   scaffolds the `check` command and, for released projects, `gates.json`; `conformance-audit`
+   scaffolds the `check` command and the `Verification phase: speed` line, and `gates.json` once
+   the owner declares stability; `conformance-audit`
    flags unbounded Git hooks, plugin agent hooks used as gates, hosted CI on every push, and
    unbounded scratch; `retro` points at it; lefthook consumers get the `use_stdin` note (152).
 
@@ -199,14 +208,20 @@ plugin owns, not each project's checks (check-selection §6).
 - **137** (slow deployer and release tests): step 3.
 - **134, 135**: pre-merge admission blockers, step 2.
 
-## Open decisions
+## Decisions
 
-1. **Pre-merge timing on trunk**: before the push that carries a ticket's code (recommended, per
-   trunkbaseddevelopment.com), or at `tkt close` (later than the code reaching `main`)?
-2. **Git pre-push hook**: opt-in per clone (recommended), or installed by `deploy.mjs` for
-   maintainers?
-3. **Consumers**: guidance plus runner pattern, no shipped agent hook (recommended)?
-4. **Released threshold**: is "something outside the repo depends on a version of it" the right
-   trigger for the expanded guidance, or should the owner declare it in `AGENTS.md`?
-5. **Scaling**: if several agents push to `main` at once, a serialization point (commit queue)
-   rather than a heavier pre-push (Google, TBD prior art). Not needed now.
+Recorded 2026-11-01 from the owner's answers.
+
+1. **Pre-merge runs before the push that carries a ticket's code**, cited at `tkt close`; not at
+   close, which is after the code reaches `main`.
+2. **The Git pre-push hook is opt-in per clone**; `deploy.mjs` never installs it.
+3. **Consumers get guidance plus the runner pattern**; the plugin ships no agent hook.
+4. **The owner declares the phase.** Tags and releases can still be pre-production; switching from
+   speed to stability is the owner's choice, never inferred.
+5. **Pre-commit is not a stage** (see above); a Git pre-commit hook is allowed only as non-blocking
+   formatter tooling.
+
+## Deferred
+
+- **Scaling**: if several agents push to `main` at once, add a serialization point (commit queue)
+  rather than a heavier pre-push (Google, TBD prior art). Not needed now.

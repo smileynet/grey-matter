@@ -240,6 +240,12 @@ One of the three verification points of
 **pre-release**. A stage says *when* a check runs; a Git hook or agent hook is only one way to
 enforce it.
 
+### speed phase / stability phase
+A project's verification phase, declared by the owner in its `AGENTS.md`
+(`Verification phase: speed` or `stability`). **Speed** (the default) keeps one small local `check`
+command; **stability** adds the three stages. The owner chooses it; tags and releases do not set it,
+because a tagged release can still be pre-production. Avoid: "released project" as a stand-in.
+
 ## Cross-context mapping
 
 Match strength is honest (exact / close / broad / narrow); a blank counterpart is
