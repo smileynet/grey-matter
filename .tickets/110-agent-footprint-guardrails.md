@@ -12,6 +12,8 @@ validation_criteria:
   - "conformance-audit flags a pytest project with no tmp_path_retention_policy and tracked manifests that cite .scratch paths."
   - "orient prints free space and, under 40 GiB, the three largest uncommitted footprints."
   - "docs/agents/test-environment-ladder.md defines tiers 0-5 with cost, what only each tier catches and default cadence; tdd, implement, implement-spec, the game-native-design engine references, init-project and conformance-audit point at it."
+  - "inspect-footprint.mjs covers agent home folders and the runner temp root, and flags a family that regrew after cleanup."
+  - "A test that checks out the repo does not copy a tracked LFS archive (rule and fixture)."
   - "node scripts/check-repo.mjs passes."
 tags: ["type:feature", "stream:tooling"]
 ---
