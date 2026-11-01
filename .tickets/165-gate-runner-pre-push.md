@@ -1,7 +1,7 @@
 ---
 id: "165"
 title: "Proposal 18 step 1: gate.mjs runner, gates.json and the pre-push stage"
-status: in_progress
+status: done
 blocked_by: []
 tags: ["stream:tooling"]
 ---
@@ -25,6 +25,10 @@ declares `Verification phase: stability`.
 
 ## Acceptance criteria
 
-- [ ] `node --test scripts/gate.test.mjs` passes: a docs-only push runs nothing; a two-ref push unions paths; a new-branch push uses the commits not on the remote; a deletion runs nothing; a failing check blocks; a hung check and a `spawnSync`-blocked check both end as `timeout`, not `pass`; `SKIP` is reported; a full trigger selects every check.
-- [ ] A real `git push` through the Git hook in this repo runs the pre-push stage within its 30 s budget, with the output as evidence.
-- [ ] `AGENTS.md` declares the phase and names `gate.mjs` as the check command.
+- [x] `node --test scripts/gate.test.mjs` passes: a docs-only push runs nothing; a two-ref push unions paths; a new-branch push uses the commits not on the remote; a deletion runs nothing; a failing check blocks; a hung check and a `spawnSync`-blocked check both end as `timeout`, not `pass`; `SKIP` is reported; a full trigger selects every check.
+- [x] A real `git push` through the Git hook in this repo runs the pre-push stage within its 30 s budget, with the output as evidence.
+- [x] `AGENTS.md` declares the phase and names `gate.mjs` as the check command.
+
+## Resolution (2026-11-01)
+
+done: gate.mjs runner (runner-owned timeouts, process-tree kill, worktree snapshot of the judged commit, SKIP, --include), gates.json with four pre-push checks and the runner's own pre-merge tests, opt-in .githooks/pre-push; commits 66141a8 (swept, ticket 140), 204465e, 2c9d7e7
