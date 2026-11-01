@@ -14,6 +14,8 @@ import { spawnSync } from "node:child_process";
 
 const SCRIPT = join(dirname(fileURLToPath(import.meta.url)), "probe-agent-shell.mjs");
 const unix = process.platform !== "win32";
+// The fake harness binaries are #!/bin/sh scripts, which Windows cannot execute directly.
+const posixOnly = unix ? false : "fake harness binaries are POSIX shell scripts";
 
 function withDir(fn) {
   const d = mkdtempSync(join(tmpdir(), "gm-agentshell-"));
@@ -38,7 +40,7 @@ function run(d, settings, extra = []) {
   return { ...r, s, good };
 }
 
-test("unset key is a finding that names the recommended bash", { skip: !unix }, () => {
+test("unset key is a finding that names the recommended bash", { skip: posixOnly }, () => {
   withDir((d) => {
     const r = run(d, { model: "x" });
     assert.equal(r.status, 1);
@@ -46,7 +48,7 @@ test("unset key is a finding that names the recommended bash", { skip: !unix }, 
   });
 });
 
-test("--apply adds the key, keeps other keys, and then reports ok", { skip: !unix }, () => {
+test("--apply adds the key, keeps other keys, and then reports ok", { skip: posixOnly }, () => {
   withDir((d) => {
     const r = run(d, { model: "x", env: { FOO: "1" }, hooks: { a: 1 } }, ["--apply"]);
     assert.equal(r.status, 0, r.stdout);
@@ -56,7 +58,7 @@ test("--apply adds the key, keeps other keys, and then reports ok", { skip: !uni
   });
 });
 
-test("without --apply the settings file is never written", { skip: !unix }, () => {
+test("without --apply the settings file is never written", { skip: posixOnly }, () => {
   withDir((d) => {
     const before = '{ "model": "x" }';
     const r = run(d, before);
@@ -64,14 +66,14 @@ test("without --apply the settings file is never written", { skip: !unix }, () =
   });
 });
 
-test("a configured modern bash is ok", { skip: !unix }, () => {
+test("a configured modern bash is ok", { skip: posixOnly }, () => {
   withDir((d) => {
     const b = fakeBash(join(d, "mine", "bash"), 5);
     assert.equal(run(d, { env: { CLAUDE_CODE_SHELL: b } }).status, 0);
   });
 });
 
-test("bash 3, a non-bash, a missing path and a Cellar path are each findings", { skip: !unix }, () => {
+test("bash 3, a non-bash, a missing path and a Cellar path are each findings", { skip: posixOnly }, () => {
   withDir((d) => {
     const old = fakeBash(join(d, "old", "bash"), 3);
     const zsh = exe(join(d, "zsh"), 'echo "zsh 5.9"');
@@ -84,7 +86,7 @@ test("bash 3, a non-bash, a missing path and a Cellar path are each findings", {
   });
 });
 
-test("invalid JSON is reported and left untouched, even with --apply", { skip: !unix }, () => {
+test("invalid JSON is reported and left untouched, even with --apply", { skip: posixOnly }, () => {
   withDir((d) => {
     const r = run(d, "{ not json", ["--apply"]);
     assert.equal(r.status, 1);
@@ -93,7 +95,7 @@ test("invalid JSON is reported and left untouched, even with --apply", { skip: !
   });
 });
 
-test("darwin: Homebrew bash installed only as a dependency is a finding", { skip: !unix }, () => {
+test("darwin: Homebrew bash installed only as a dependency is a finding", { skip: posixOnly }, () => {
   withDir((d) => {
     const real = fakeBash(join(d, "Cellar", "bash", "5.3.20", "bin", "bash"), 5);
     const link = join(d, "bin", "bash");

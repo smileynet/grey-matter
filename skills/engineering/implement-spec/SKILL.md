@@ -29,7 +29,7 @@ Communicate between agents sparsely, via **context pointers** (spec-slug, ticket
 
    Pass large inputs (spec excerpts, exploration notes) as file paths, not inline in the prompt. When an implementer stalls or comes back empty, inspect its worktree first (`git status`, the expected files, test output) before re-dispatching: it may have finished and only lost its report. Report a failed or partial implementer explicitly; never absorb it silently.
 
-5. When an implementer completes, a **merger subagent** merges its branch to the integration branch. **After every merge, the integration branch build and tiers 0 to 2 of the [test-environment ladder](../../../docs/agents/test-environment-ladder.md) must be green before the next merge or the next frontier ticket.** A clean textual merge is not enough: two slices can each pass alone and break together. If the gate fails, fix it before proceeding.
+5. When an implementer completes, a **merger subagent** merges its branch to the integration branch. **After every merge, the integration branch build and the project's pre-merge check (tiers 0 to 2 of the [test-environment ladder](../../../docs/agents/test-environment-ladder.md) for the changed areas) must be green before the next merge or the next frontier ticket.** A clean textual merge is not enough: two slices can each pass alone and break together. If the gate fails, fix it before proceeding.
 
 6. Recompute the frontier (`tkt ready`); fan out implementers for the newly-unblocked tickets (or take the next one, sequentially).
 

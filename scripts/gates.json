@@ -54,6 +54,123 @@
       "run": ["node", "--test", "--test-timeout=60000", "scripts/gate.test.mjs"],
       "timeout_s": 120,
       "measured": { "s": 16.7, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "ticket-graph",
+      "stage": "pre-merge",
+      "catches": "a ticket graph with a cycle, a dangling blocker or a malformed ticket file",
+      "scope": [".tickets/"],
+      "run": ["tkt", "validate"],
+      "timeout_s": 30,
+      "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "skill-syntax-fixtures",
+      "stage": "pre-merge",
+      "catches": "a YAML checker change that accepts malformed frontmatter native validation misses",
+      "scope": ["scripts/check-skill-syntax", "scripts/skill-syntax"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/skill-syntax.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 0.5, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "knowledge-relocation",
+      "stage": "pre-merge",
+      "catches": "adopt-project relocating or relinking knowledge files wrongly",
+      "scope": ["scripts/relocate-knowledge", "skills/meta/adopt-project/scripts/relocate-knowledge"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/relocate-knowledge.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 2.2, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "agent-guidance",
+      "stage": "pre-merge",
+      "catches": "the global-rules installer clobbering text outside its managed block, or the guidance check missing a dead pointer",
+      "scope": ["scripts/install-agents-md", "scripts/check-guidance", "global/"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/install-agents-md.test.mjs", "scripts/check-guidance.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 1.2, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "crew-uninstall",
+      "stage": "pre-merge",
+      "catches": "the crew-research uninstaller removing files outside its own install",
+      "scope": ["scripts/uninstall-crew-research"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/uninstall-crew-research.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 0.6, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "repo-survey",
+      "stage": "pre-merge",
+      "catches": "adopt-project's portfolio survey putting a repo in the wrong tier",
+      "scope": ["scripts/survey-repos", "skills/meta/adopt-project/scripts/survey-repos"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/survey-repos.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 1.7, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "artifact-hygiene",
+      "stage": "pre-merge",
+      "catches": "the artifact and footprint inspectors misclassifying a folder, or hanging (ticket 151)",
+      "scope": ["scripts/repository-artifact-hygiene", "scripts/inspect-footprint", "scripts/scratch-citations-baseline.json", "skills/meta/repository-artifact-hygiene/scripts/"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/repository-artifact-hygiene.test.mjs", "scripts/inspect-footprint.test.mjs"],
+      "timeout_s": 120,
+      "measured": { "s": 9.0, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "agent-shell-probe",
+      "stage": "pre-merge",
+      "catches": "the agent shell probe misreporting a harness's shell setting; POSIX only, all but one test skip on Windows",
+      "scope": ["scripts/probe-agent-shell"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/probe-agent-shell.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "dashboard-contract",
+      "stage": "pre-merge",
+      "catches": "a delivery-dashboard template, checker or snapshot change that breaks the contract or its CLI (ticket 134)",
+      "scope": ["scripts/delivery-dashboard", "skills/productivity/delivery-dashboard/"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/delivery-dashboard.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 1.4, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "review-receipt",
+      "stage": "pre-merge",
+      "catches": "a review receipt that stays accepted after its source or captures changed",
+      "scope": ["scripts/review-receipt", "skills/productivity/delivery-dashboard/scripts/review-receipt"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/review-receipt.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 0.7, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "critic-model-probe",
+      "stage": "pre-merge",
+      "catches": "the critic model probe reporting a model it cannot verify; POSIX only, every test skips on Windows",
+      "scope": ["scripts/probe-critic-model"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/probe-critic-model.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "orchestrate-spike-fixture",
+      "stage": "pre-merge",
+      "catches": "the orchestrate spike fixture escaping its sandbox or misreporting a run",
+      "scope": ["scripts/spike-orchestrate-fixture"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/spike-orchestrate-fixture.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 3.3, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "harness-versions",
+      "stage": "pre-merge",
+      "catches": "harness-changelog's version detector missing an upgrade or misreading the baseline",
+      "scope": ["scripts/harness-versions", "skills/meta/harness-changelog/"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/harness-versions.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 1.7, "date": "2026-11-01", "host": "win" }
     }
   ]
 }

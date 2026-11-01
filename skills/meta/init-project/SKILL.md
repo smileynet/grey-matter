@@ -84,10 +84,10 @@ Set up only what is installed:
   source once they exist.
 - **game projects**: point `AGENTS.md` at `game-native-design` and `game-modeling` as
   the defaults, and record the engine.
-- **test commands by tier**: list the project's single-test command, commit gate, and slow
+- **test commands by tier**: list the project's single-test command, pre-merge check, and slow
   tier with the environment it needs, per the
   [test-environment ladder](../../../docs/agents/test-environment-ladder.md). Ask the user
-  for any you cannot find in the build files. Add hooks only per
+  for any you cannot find in the build files. Add Git hooks only per
   [local gates](../../../docs/agents/local-gates.md), each with its scope and measured time.
 - **provider fallback**: add the `## Provider fallback` section in its off state, exactly as
   scaffolded in [provider switching](../../../docs/agents/provider-switching.md#scaffold-start-from-the-off-state),

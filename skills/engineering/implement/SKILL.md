@@ -10,7 +10,7 @@ Fetch the referenced ticket from tkt (read `.tickets/NN-*.md`, or `tkt query`), 
 
 Call the Skill tool with "tdd" to build it, at the pre-agreed seams. (tdd re-points the seam for a game; you don't need to.)
 
-After each slice, typecheck and run the slice's tests at the leftmost tier that observes them. Before you commit, run the project's commit gate: up to tier 2 of the [test-environment ladder](../../../docs/agents/test-environment-ladder.md). Run tier 3 and above only when the ticket's outcome lives there, and report each tier you did not run as "not run".
+After each slice, typecheck and run the slice's tests at the leftmost tier that observes them. Before the push that carries the ticket's code, run the pre-merge check the project's `AGENTS.md` names (its `check` command in the speed phase) and cite its output at close: up to tier 2 of the [test-environment ladder](../../../docs/agents/test-environment-ladder.md) for the changed areas. Run tier 3 and above only when the ticket's outcome lives there, and report each tier you did not run as "not run".
 
 When the ticket's acceptance criteria are met, review the work at the depth its risk calls for (see [Review depth](#review-depth) below). Code-review, when it runs, files its findings as tickets; a spec check reports its unmet items. Fix only the findings that block *this* ticket's acceptance criteria before committing; the rest stay as follow-up tickets, don't balloon this ticket into fixing everything review surfaces.
 

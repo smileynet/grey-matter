@@ -13,6 +13,8 @@ import { join } from "node:path";
 import { probe } from "./probe-critic-model.mjs";
 
 const unix = process.platform !== "win32";
+// The fake harness binaries are #!/bin/sh scripts, which Windows cannot execute directly.
+const posixOnly = unix ? false : "fake harness binaries are POSIX shell scripts";
 
 function exe(dir, name, body) {
   writeFileSync(join(dir, name), `#!/bin/sh\n${body}\n`);
@@ -69,7 +71,7 @@ async function withEnv(env, fn) {
 }
 const probeWith = (env, h) => withEnv(env, () => probe(h, { timeout: 20 }));
 
-test("each harness records the model it ran on, from its own record", { skip: !unix }, async (t) => {
+test("each harness records the model it ran on, from its own record", { skip: posixOnly }, async (t) => {
   const env = sandbox(t, { kiroHasOpus55: true });
   const claude = await probeWith(env, "claude");
   assert.equal(claude.status, "ok"); assert.equal(claude.recorded, "claude-opus-5-5"); assert.equal(claude.evidence, "modelUsage");
@@ -79,7 +81,7 @@ test("each harness records the model it ran on, from its own record", { skip: !u
   assert.equal(oc.status, "ok"); assert.equal(oc.recorded, "zai-coding-plan/glm-5.3"); assert.equal(oc.evidence, "opencode export");
 });
 
-test("Kiro has no model record: unverified, and reported below ceiling when Opus 5.5 is missing", { skip: !unix }, async (t) => {
+test("Kiro has no model record: unverified, and reported below ceiling when Opus 5.5 is missing", { skip: posixOnly }, async (t) => {
   const missing = await probeWith(sandbox(t), "kiro");
   assert.equal(missing.status, "unverified");
   assert.equal(missing.requested, "claude-opus-4.5");
@@ -90,7 +92,7 @@ test("Kiro has no model record: unverified, and reported below ceiling when Opus
   assert.match(present.level, /at ceiling \(model unverified\)/);
 });
 
-test("a model below the ceiling is reported, not hidden", { skip: !unix }, async (t) => {
+test("a model below the ceiling is reported, not hidden", { skip: posixOnly }, async (t) => {
   const env = sandbox(t, { codexModel: "gpt-5.6-sol", claudeModel: "claude-sonnet-5-5", opencodeModel: "glm-5.3-flash" });
   for (const h of ["claude", "codex", "opencode"]) {
     const r = await probeWith(env, h);
@@ -99,25 +101,25 @@ test("a model below the ceiling is reported, not hidden", { skip: !unix }, async
   }
 });
 
-test("expired credentials are reported as not-authenticated, not as a missing model", { skip: !unix }, async (t) => {
+test("expired credentials are reported as not-authenticated, not as a missing model", { skip: posixOnly }, async (t) => {
   const env = sandbox(t, { auth: true });
   for (const h of ["claude", "codex"]) assert.equal((await probeWith(env, h)).status, "not-authenticated", h);
 });
 
-test("a harness that is not installed is unavailable", { skip: !unix }, async (t) => {
+test("a harness that is not installed is unavailable", { skip: posixOnly }, async (t) => {
   const env = sandbox(t, { only: ["codex"] });
   const r = await probeWith(env, "claude");
   assert.equal(r.status, "unavailable");
   assert.match(r.note, /not on PATH/);
 });
 
-test("a result with no usable record is unverified, never ok", { skip: !unix }, async (t) => {
+test("a result with no usable record is unverified, never ok", { skip: posixOnly }, async (t) => {
   const r = await probeWith(sandbox(t, { noUsage: true }), "claude");
   assert.equal(r.status, "unverified");
   assert.match(r.note, /no modelUsage/);
 });
 
-test("a harness that accepts a model that does not exist fails the missing-model check", { skip: !unix }, async (t) => {
+test("a harness that accepts a model that does not exist fails the missing-model check", { skip: posixOnly }, async (t) => {
   const env = sandbox(t, { accepts: true, kiroHasOpus55: true });
   for (const h of ["claude", "codex", "opencode", "kiro"]) {
     const r = await probeWith(env, h);
@@ -126,7 +128,7 @@ test("a harness that accepts a model that does not exist fails the missing-model
   }
 });
 
-test("Codex's read-only mode is shown to hold by a forced write attempt", { skip: !unix }, async (t) => {
+test("Codex's read-only mode is shown to hold by a forced write attempt", { skip: posixOnly }, async (t) => {
   const held = await probeWith(sandbox(t), "codex");
   assert.equal(held.status, "ok");
   assert.equal(held.readOnly, "enforced (attempt rejected)");
@@ -135,7 +137,7 @@ test("Codex's read-only mode is shown to hold by a forced write attempt", { skip
   assert.match(leaked.readOnly, /^FAIL/);
 });
 
-test("a Codex critic that only declines to write leaves the boundary unproven", { skip: !unix }, async (t) => {
+test("a Codex critic that only declines to write leaves the boundary unproven", { skip: posixOnly }, async (t) => {
   const r = await probeWith(sandbox(t, { noAttempt: true }), "codex");
   assert.equal(r.status, "ok");
   assert.match(r.readOnly, /^no write .*unproven/);

@@ -51,17 +51,16 @@ anti-pattern Android names: run a device smoke before release, not only overnigh
 | When | Run |
 |---|---|
 | Each slice | tiers 0 and 1 for the affected code |
-| Before commit | up to tier 2 for the affected set, or the project's declared commit gate |
-| Before merge | the full tier 0 to 2 suite; tier 3 critical flows; a tier 4 smoke when platform code changed |
+| Pre-merge: before the push or branch merge that lands a ticket's code | the project's declared pre-merge check: tiers 0 to 2 for the changed areas; tier 3 critical flows and a tier 4 smoke when their scope changed |
 | Before release | the tier 4 matrix and tier 5 checks the ticket or release names |
 
-This is what the agent runs. A Git hook enforces only a small, budgeted subset; see
-[local gates](local-gates.md).
+This is what the agent runs. A commit is a local save point, not a stage; a pre-push Git hook
+enforces only a small, budgeted subset ([proposal 18](proposals/18-three-stage-verification.md)).
 
 ## Projects declare their commands
 
 The ladder runs only if a project names its commands. A project's `AGENTS.md` lists them by tier:
-at least the single-test command, the commit gate, and the slow tier with the environment it needs.
+at least the single-test command, the pre-merge check, and the slow tier with the environment it needs.
 `init-project` writes that list; `conformance-audit` reports its absence.
 
 ## Footprint
