@@ -192,7 +192,7 @@
       "scope": ["scripts/check-docs-consistency", "scripts/check-invocation-policy", "scripts/check-plugin-manifest", "scripts/static-checks"],
       "run": ["node", "--test", "--test-timeout=60000", "scripts/static-checks.test.mjs"],
       "timeout_s": 60,
-      "measured": { "s": 0, "date": "2026-11-01", "host": "win" }
+      "measured": { "s": 3.3, "date": "2026-11-01", "host": "win" }
     },
     {
       "id": "provider-fallback-fixtures",
@@ -210,7 +210,7 @@
       "scope": ["scripts/release"],
       "run": ["node", "--test", "--test-timeout=60000", "scripts/release-cargo-credentials.test.mjs", "scripts/release-cargo-upload.test.mjs", "scripts/release-ci-artifacts.test.mjs", "scripts/release-github.test.mjs", "scripts/release-publish.test.mjs", "scripts/release-registry.test.mjs", "scripts/release-tkt-publication.test.mjs", "scripts/release-version.test.mjs"],
       "timeout_s": 120,
-      "measured": { "s": 6.7, "date": "2026-11-01", "host": "win" }
+      "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
     },
     {
       "id": "deployer",
@@ -219,7 +219,7 @@
       "scope": ["scripts/deploy"],
       "run": ["node", "--test", "--test-timeout=300000", "scripts/deploy.test.mjs", "scripts/deploy-validation.test.mjs"],
       "timeout_s": 600,
-      "measured": { "s": 90.8, "date": "2026-11-01", "host": "win" }
+      "measured": { "s": 91.9, "date": "2026-11-01", "host": "win" }
     },
     {
       "id": "release-integration",
@@ -228,7 +228,7 @@
       "scope": ["scripts/release"],
       "run": ["node", "--test", "--test-timeout=300000", "scripts/release-artifacts.test.mjs", "scripts/release-development.test.mjs", "scripts/release-entrypoints.test.mjs", "scripts/release-git.test.mjs", "scripts/release-native.test.mjs", "scripts/release-product.test.mjs", "scripts/release-verify.test.mjs", "scripts/release.test.mjs"],
       "timeout_s": 900,
-      "measured": { "s": 116.2, "date": "2026-11-01", "host": "win" }
+      "measured": { "s": 145.9, "date": "2026-11-01", "host": "win" }
     }
   ]
 }
