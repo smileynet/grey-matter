@@ -1,7 +1,7 @@
 ---
 id: "135"
 title: "release-artifacts test 31 fails on Windows: bash gets a backslash path"
-status: open
+status: in_progress
 blocked_by: []
 tags: ["stream:tooling"]
 ---
