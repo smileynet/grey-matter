@@ -165,6 +165,24 @@ own, calling its own `gate.mjs`: a Git pre-push hook via `core.hooksPath`, and o
 components page recommends plugin agent hooks for rules that must always hold; that fits rules the
 plugin owns, not each project's checks (check-selection §6).
 
+**Projects vendor; nothing installs.** grey-matter keeps the reference files: `gate.mjs` with a
+version line at the top, the `gates.json` schema and a sample `.githooks/pre-push` (a few lines
+calling `node scripts/gate.mjs pre-push`). A project commits its own copies and its own
+`gates.json`, so its checks change only when it commits a change. A clone opts in with Git's own
+`git config core.hooksPath .githooks`; there is no installer script. Two alternatives are rejected:
+
+- **An installer** (the removed `install-hooks.mjs`) existed to preserve foreign Git hooks, honour
+  `core.hooksPath` and handle worktrees, and needed its own test group; Git's setting does the job.
+- **Calling grey-matter's installed copy in place** binds the project to one machine's install path
+  and plugin version, breaks for collaborators, and changes behaviour silently on a plugin update
+  (153's contract drift).
+
+`core.hooksPath` replaces the clone's whole Git hook directory, so a project already using
+lefthook, husky or pre-commit adds a pre-push job to that manager instead (lefthook needs
+`use_stdin: true`). Drift is reported, never auto-applied: `conformance-audit` and `sync` compare
+the vendored `gate.mjs` version line with the reference and offer the update. tkt's vendored
+`tools/deploy.mjs` is the precedent in this repo.
+
 ## Initial admission for grey-matter (from the 2026-11-01 timings)
 
 | Check | Stage | Measured |
@@ -186,7 +204,7 @@ plugin owns, not each project's checks (check-selection §6).
    and their tests. `check-repo.mjs` stays on demand so `release-product.mjs` works until step 3.
 1. **Runner and pre-push**: grey-matter's `AGENTS.md` declares `Verification phase: stability`
    (this proposal builds all three stages for it; the owner can revert); `gates.json`, `gate.mjs` (timeouts, process-tree kill, outcome
-   classes, SKIP, stdin refs), the four pre-push checks, an opt-in Git pre-push hook. Tests: a
+   classes, SKIP, stdin refs), the four pre-push checks, the reference `.githooks/pre-push`, opt-in by `core.hooksPath`. Tests: a
    docs-only push runs nothing; a two-ref and a new-branch push select correctly; a seeded broken
    manifest blocks; a hung and a `spawnSync`-blocked check both end as `timeout`.
 2. **Pre-merge**: fix 151, 135 and 134; admit tests one at a time. `tkt-work` and `implement` run
@@ -194,9 +212,10 @@ plugin owns, not each project's checks (check-selection §6).
 3. **Pre-release**: move the slow groups and platform workflow under `gate.mjs pre-release`;
    `release-product.mjs` calls it; slim deployer and release tests (137); retire `check-repo.mjs`.
 4. **Guidance**: rewrite `local-gates.md` around project phase and the three stages; `init-project`
-   scaffolds the `check` command and the `Verification phase: speed` line, and `gates.json` once
-   the owner declares stability; `conformance-audit`
-   flags unbounded Git hooks, plugin agent hooks used as gates, hosted CI on every push, and
+   scaffolds the `check` command and the `Verification phase: speed` line; once the owner declares
+   stability, `init-project` or `adopt-project` vendors `gate.mjs` and `.githooks/pre-push`, writes
+   `gates.json` and, on the owner's opt-in, runs `git config core.hooksPath .githooks`;
+   `conformance-audit` reports a vendored `gate.mjs` behind the reference version, and flags unbounded Git hooks, plugin agent hooks used as gates, hosted CI on every push, and
    unbounded scratch; `retro` points at it; lefthook consumers get the `use_stdin` note (152).
 
 ## Ticket disposition
@@ -214,12 +233,16 @@ Recorded 2026-11-01 from the owner's answers.
 
 1. **Pre-merge runs before the push that carries a ticket's code**, cited at `tkt close`; not at
    close, which is after the code reaches `main`.
-2. **The Git pre-push hook is opt-in per clone**; `deploy.mjs` never installs it.
+2. **The Git pre-push hook is opt-in per clone**, by `git config core.hooksPath .githooks`;
+   `deploy.mjs` never installs it.
 3. **Consumers get guidance plus the runner pattern**; the plugin ships no agent hook.
 4. **The owner declares the phase.** Tags and releases can still be pre-production; switching from
    speed to stability is the owner's choice, never inferred.
 5. **Pre-commit is not a stage** (see above); a Git pre-commit hook is allowed only as non-blocking
    formatter tooling.
+6. **Projects vendor the runner and Git hook; no installer script.** Each project commits its own
+   `gate.mjs`, `gates.json` and `.githooks/pre-push`, and drift from the reference is reported,
+   not applied ([above](#what-grey-matter-ships-to-consumers)).
 
 ## Deferred
 
