@@ -13,7 +13,7 @@ Gathered 2026-11-01 on Windows 11, Git Bash.
 | API | `kiro-cli acp` | 2.37.0 | `kiro-cli acp --help` | `b1c25994dfac` |
 | API | `kiro-cli serve` | 2.37.0 | `kiro-cli serve --help` | `a200fe6008a3` |
 | V3 engine (KAS) | `%LOCALAPPDATA%\Kiro-Cli\kas\<ver>-<sha>\` | newest dir 2.33.0 | `ls` of the `kas` dir | n/a |
-| GUI | Kiro IDE launcher `C:\Users\uosmi\AppData\Local\Programs\Kiro\bin\kiro` | 1.3.11 (commit `5a336feb6649`, x64) | `kiro --version` | `5303d61aa005` |
+| GUI | Kiro IDE launcher `%USERPROFILE%\AppData\Local\Programs\Kiro\bin\kiro` | 1.3.11 (commit `5a336feb6649`, x64) | `kiro --version` | `5303d61aa005` |
 
 Hashes: `<cmd> --help | tr -d '\r' | sha256sum | cut -c1-12`. **L**
 
