@@ -1,7 +1,7 @@
 ---
 id: "151"
 title: "inspect-footprint test hangs and fails the release gate"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
