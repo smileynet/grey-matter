@@ -10,7 +10,7 @@ tags: ["stream:tooling", "type:research"]
 
 ## What to build
 
-Set Kiro Crew's worker backend (`agent.acp_backend` or `agent.member_acp_backend`) to `claude` or `codex`, both labelled experimental, and run the trunk loop with the built-in conductor on KAS.
+Set Kiro Crew's worker backend (`agent.acp_backend` or `agent.member_acp_backend`) to `claude` or `codex`, both labelled experimental, and run the trunk loop with the built-in conductor on KAS. Prerequisite: only `kas`, `kiro` and `opencode` are installed on this machine; `claude` needs `claude-agent-acp` and `codex` needs `codex-acp` ([kiro-crew surfaces](../docs/agents/harness-surfaces/kiro-crew.md)), and installing them is the user's call.
 
 **Question:** Do `work_report`, the work-ledger wake and the conductor's acceptance still work when workers run on another harness?
 
