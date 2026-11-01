@@ -1,7 +1,7 @@
 ---
 id: "135"
 title: "release-artifacts test 31 fails on Windows: bash gets a backslash path"
-status: in_progress
+status: done
 blocked_by: []
 tags: ["stream:tooling"]
 ---
@@ -28,9 +28,13 @@ Pass bash a path it can read (forward slashes or `cygpath`), or skip the wrapper
 
 ## Acceptance criteria
 
-- [ ] Test 31 passes on Windows, or is skipped there with a stated reason.
-- [ ] `node scripts/check-repo.mjs` invariant 11 is green on Windows.
+- [x] Test 31 passes on Windows, or is skipped there with a stated reason.
+- [x] `node scripts/check-repo.mjs` invariant 11 is green on Windows.
 
 ## Flaky, not constant (2026-10-31, later)
 
 A later `node scripts/check-repo.mjs` run on the same machine passed invariant 11, so test 31's failure depends on the environment it runs in (likely which `bash` resolves first), not on the code alone.
+
+## Resolution (2026-11-01)
+
+done: the wrapper test uses Git for Windows' bash next to git, or skips with a stated reason (commit c00e62b). Root cause reproduced: with System32 first on PATH, bash resolved to the WSL launcher and failed exactly as recorded; after the fix it passes that way too. release-artifacts.test.mjs 31/31.
