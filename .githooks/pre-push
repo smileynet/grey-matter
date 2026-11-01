@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+# grey-matter pre-push Git hook (proposal 18). Opt in per clone:
+#   git config core.hooksPath .githooks
+# Runs only the pre-push stage of scripts/gates.json for the commits being pushed.
+# Git exports repository-local variables into Git hooks; drop them so checks that run Git act on
+# the right repository.
+set -eu
+unset $(git rev-parse --local-env-vars)
+cd "$(git rev-parse --show-toplevel)"
+exec node scripts/gate.mjs pre-push --stdin --remote "$1"
