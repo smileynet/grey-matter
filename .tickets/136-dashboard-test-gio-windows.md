@@ -1,7 +1,7 @@
 ---
 id: "136"
 title: "delivery-dashboard tests 31-32 fail on Windows: cleanup calls gio trash"
-status: open
+status: done
 blocked_by: []
 tags: ["stream:tooling"]
 ---
@@ -30,5 +30,9 @@ Clean the temp fixture portably (`rmSync(dir, { recursive: true, force: true })`
 
 ## Acceptance criteria
 
-- [ ] `node --test scripts/delivery-dashboard.test.mjs` passes on Windows.
-- [ ] `node scripts/check-repo.mjs` invariant 15 is green on Windows.
+- [x] `node --test scripts/delivery-dashboard.test.mjs` passes on Windows.
+- [x] `node scripts/check-repo.mjs` invariant 15 is green on Windows.
+
+## Resolution (2026-11-01)
+
+done: dashboard fixture cleanup uses rmSync instead of gio trash (commit 70219ca); same fix for review-receipt, whose recycle-bin dialog hung the gate
