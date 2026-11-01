@@ -53,8 +53,7 @@ claude plugin install grey-matter@grey-matter
 ```
 
 The dependency installs tkt's workflow skills. Install the
-[`tkt` CLI](https://github.com/smileynet/tkt#install) separately. The Claude push hook
-requires Claude 2.1.310+ and Node 22+; Codex and agy receive no Claude hooks.
+[`tkt` CLI](https://github.com/smileynet/tkt#install) separately. The plugin installs no hooks.
 
 ### Codex plugin
 

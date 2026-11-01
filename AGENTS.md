@@ -70,7 +70,7 @@ skills, manifests, deployment or release guidance. It covers plugin updates, own
 shared release-tool synchronization, per-host validation and the consistency checks.
 
 - Setup: Node 22+, then `npm ci --ignore-scripts` after clone or lockfile changes.
-- Gate: `node scripts/check-repo.mjs --push` (static checks, seconds) must exit 0 before pushing; the test groups run as `--full` in the release workflow, never at push. Cadence and budgets: [local gates](./docs/agents/local-gates.md).
+- Checks: no hook gates commits or pushes; the old gate was removed while [proposal 18](./docs/agents/proposals/18-three-stage-verification.md) rebuilds pre-push, pre-merge and pre-release stages. Until then, `node scripts/check-repo.mjs --static` (seconds) before pushing skill or manifest changes; `--full` before a release.
 - Syntax fixtures: `node --test scripts/skill-syntax.test.mjs` must pass; native validation alone misses malformed YAML.
 
 ## When blocked
@@ -84,7 +84,6 @@ for version authorities, mode boundaries, publishers and remaining gates.
 ## Working rhythm
 
 - **Commit after every task.** When a unit of work is complete and verified, commit it — don't let finished work sit unstaged.
-- **Check before you push, once.** The opt-in pre-push hook (`node scripts/install-hooks.mjs --hook pre-push`) runs `check-repo.mjs --push`: the static checks only. Test groups run before a release. With it installed, the push itself is the check; without it, run that command before pushing. The opt-in pre-commit hook runs `--static` (seconds). (Local gates by default; manually dispatched platform validation supplies Windows/Linux evidence.)
 - **Push after every commit.** A commit isn't done until it's pushed. Another session may be pushing to `main` too — if a push is rejected, `git pull --rebase` (or fetch + rebase) and push again; don't force-push. (`tkt new`/`claim`/`close` auto-push, so they interleave with manual commits — the same rebase-and-retry applies.)
 - **Deploy by default.** After skill or guidance changes, run `node scripts/deploy.mjs` once: it verifies Claude reads this checkout directly, refreshes the enabled Codex plugin, selects bare roots without duplicates, and refreshes the Antigravity plugin when `~/.gemini` exists. `sync` uses that same command; the legacy wrappers are alternatives, not extra deploy steps. Install changed global rules with `node scripts/install-agents-md.mjs`. Restart chats to load refreshed plugin skills.
 

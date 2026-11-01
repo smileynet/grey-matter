@@ -32,9 +32,9 @@ jobs:
       - name: Archive symlink rejection
         if: always()
         run: node --test --test-name-pattern 'committed symlinks' scripts/release-artifacts.test.mjs
-      - name: Native deployment and hook fixtures
+      - name: Native deployment fixtures
         if: always()
-        run: node --test scripts/deploy.test.mjs scripts/install-hooks.test.mjs
+        run: node --test scripts/deploy.test.mjs
 
   full-gate:
     strategy:

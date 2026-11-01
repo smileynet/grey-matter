@@ -19,7 +19,6 @@
 //   9. Claude plugin manifest      -> scripts/check-plugin-manifest.mjs (buckets, version, marketplace)
 //  10. YAML syntax and core types  -> scripts/check-skill-syntax.mjs (npm ci once for maintainers)
 //  11. release draft/artifact/publisher safety -> release*.test.mjs (isolated repos and fake services)
-//  12. opt-in Git hooks            -> install-hooks.test.mjs (disposable repositories)
 //  13. repository artifact inspection -> repository-artifact-hygiene.test.mjs, inspect-footprint.test.mjs (read-only fixtures)
 //  14. agent shell probe          -> probe-agent-shell.test.mjs (fake settings and binaries)
 //  15. delivery-dashboard contract -> delivery-dashboard.test.mjs (template, example and checker)
@@ -35,15 +34,11 @@
 //  - Each sub-check is independently runnable; this is the aggregator.
 //
 // Modes (docs/agents/local-gates.md):
-//   --static    the static checks (2, 3, 4, 9, 10): the pre-commit and pre-push gate. They
-//               read files only, take seconds and guard what a consumer installs.
-//   --push      the pre-push gate; the same as --static. --affected and
-//               CHECK_REPO_MODE=affected are accepted names for it (the Claude push hook
-//               sets that variable for every project's checker).
-//   --full      every group (the default): the release workflow's product gate
-//               (release-product.mjs runs it), or on request. Test groups never gate a push.
+// On demand only: no hook runs it (proposal 18 rebuilds the gates).
+//   --static    the static checks (2, 3, 4, 9, 10): read files only, seconds.
+//   --full      every group (the default); release-product.mjs runs it.
 //
-// Run:  node scripts/check-repo.mjs [--static | --push | --full] [--require-tools]
+// Run:  node scripts/check-repo.mjs [--static | --full] [--require-tools]
 // Exit: 0 = all pass; 1 = at least one invariant failed.
 
 import { spawnSync } from "node:child_process";
@@ -56,17 +51,13 @@ const ROOT = join(SCRIPTS, "..");
 const SELF = "check-repo.mjs";
 const results = [];
 const args = process.argv.slice(2);
-const MODES = ["--static", "--push", "--affected", "--full"];
+const MODES = ["--static", "--full"];
 if (args.some((arg) => arg !== "--require-tools" && !MODES.includes(arg)) || args.filter((arg) => MODES.includes(arg)).length > 1) {
-  console.error("usage: node scripts/check-repo.mjs [--static | --push | --full] [--require-tools]");
+  console.error("usage: node scripts/check-repo.mjs [--static | --full] [--require-tools]");
   process.exit(2);
 }
 const requireTools = args.includes("--require-tools");
-// CHECK_REPO_MODE lets the Claude push hook ask for the push gate without passing a flag a
-// foreign project's checker would reject.
-const PUSH = ["push", "affected"];
-let mode = args.find((arg) => MODES.includes(arg))?.slice(2) ?? (PUSH.includes(process.env.CHECK_REPO_MODE) ? "push" : "full");
-if (PUSH.includes(mode)) mode = "static";
+const mode = args.find((arg) => MODES.includes(arg))?.slice(2) ?? "full";
 
 // Orphan guard (ticket 34 nice-to-have): every sibling `check-*.mjs` sub-check (excluding
 // this aggregator and any `*.test.mjs`) must be named in this file's run list, so a future
@@ -114,7 +105,7 @@ const node = process.execPath;
 
 const test = (...files) => ["--test", ...files.map((f) => join(SCRIPTS, f))];
 
-// Static checks only read files and run in every mode (the commit and push gates). Test
+// Static checks only read files and run in every mode. Test
 // groups run only in --full, before a release: a slow or flaky fixture must not block
 // publishing tickets or docs.
 const STATIC = [
@@ -133,7 +124,6 @@ const TESTS = [
   ["7. crew-research uninstall scope", test("uninstall-crew-research.test.mjs")],
   ["8. repo survey tiers (adopt-project portfolio)", test("survey-repos.test.mjs")],
   ["11. release draft, artifact and publisher safety", test("release-artifacts.test.mjs", "release-version.test.mjs", "release.test.mjs", "release-product.test.mjs", "release-native.test.mjs", "release-entrypoints.test.mjs", "release-verify.test.mjs", "release-publish.test.mjs", "release-registry.test.mjs", "release-tkt-publication.test.mjs", "release-cargo-credentials.test.mjs", "release-cargo-upload.test.mjs", "release-git.test.mjs", "release-development.test.mjs", "release-github.test.mjs", "release-ci-artifacts.test.mjs", "skill-syntax.test.mjs")],
-  ["12. Git and Claude plugin hooks", test("install-hooks.test.mjs", "claude-hooks.test.mjs")],
   ["13. repository artifact hygiene", test("repository-artifact-hygiene.test.mjs", "inspect-footprint.test.mjs")],
   ["14. agent shell probe", test("probe-agent-shell.test.mjs")],
   ["15. delivery-dashboard contract", test("delivery-dashboard.test.mjs")],

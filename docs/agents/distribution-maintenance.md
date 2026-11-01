@@ -57,15 +57,10 @@ removal or source-link workaround is required.
 
 ### Keeping the Claude plugin current
 
-Claude-only hooks use `.claude-plugin/claude-hooks.json`; keep their files in
-`metadata.deploy.claudeFiles`, never shared `runtimeFiles` or Markdown resource links.
-Codex explicitly selects no hooks. Release packaging includes the private files only
-in the Claude archive and removes the Claude hook declaration from the Codex archive.
-The push gate checks the launch project's `scripts/check-repo.mjs` for recognizable
-`git push` commands in Bash or PowerShell, with `CHECK_REPO_MODE=affected`, which grey-matter's checker treats as `--push`. It defers to an
-installed Git pre-push hook, so a push runs the checker once. Keep the Git pre-push gate for aliases,
-wrappers and commands that redirect to another repository. These hooks target Claude
-2.1.310+ and Node 22+. See [the hook contract](research/claude-plugin-hooks.md).
+The plugin ships no hooks: the Claude push hook was removed on 2026-11-01 because it fired in
+every consumer project ([proposal 18](proposals/18-three-stage-verification.md)). Packaging still
+supports Claude-only files: list them in `metadata.deploy.claudeFiles`, never shared
+`runtimeFiles`; release packaging keeps them out of the Codex archive.
 
 When a change touches skills, the plugin manifests, or tkt's plugin:
 
@@ -154,28 +149,8 @@ the fixtures need Git but no provider login, network or LFS payload download.
 Fixtures proving each invariant fails when seeded live in `scripts/check-repo.test.mjs`
 (`node --test`).
 
-An **opt-in pre-commit hook** can run this automatically: `node scripts/install-hooks.mjs`
-installs a `pre-commit` hook that runs `check-repo.mjs --static` and blocks the commit on failure;
-`list` / `uninstall` manage it, and it refuses to clobber a foreign hook. It is not forced
-on clone — install it if you want the local gate. (Normal gates remain local; the manually dispatched platform job below supplies
-Windows/Linux evidence.)
-
-For a push gate, run `node scripts/install-hooks.mjs --hook pre-push`. This installs
-the committed `.githooks/pre-push` in Git's effective hook directory. It runs
-`node scripts/check-repo.mjs --push` (the static checks), blocks on failure or missing Node, and clears Git's repository
-context before checks create temporary repositories. Manage it with `list --hook pre-push`
-or `uninstall --hook pre-push`. The installer respects `core.hooksPath`, preserves
-foreign hooks, and refuses to delete its tracked source when `.githooks` is configured
-directly. Both hooks remain opt-in. Invariant 12 tests ownership, worktrees and a real
-green/red/green push against a disposable bare remote.
-
-Git requires executable hooks and aborts a push on a nonzero pre-push exit. Its
-[hook documentation](https://git-scm.com/docs/githooks) also requires clearing exported
-repository variables before operating in another repository;
-[`--local-env-vars`](https://git-scm.com/docs/git-rev-parse) supplies their names.
-[`core.hooksPath`](https://git-scm.com/docs/git-config) changes the effective directory.
-Sources read 2026-10-23. Clearing all `GIT_*` variables would also discard unrelated
-configuration, so the hook clears only Git's repository-local list.
+No hook runs these checks; see [proposal 18](proposals/18-three-stage-verification.md) for the
+pre-push, pre-merge and pre-release stages that replace the removed hooks.
 
 
 Release bundle construction and verification are documented in
@@ -198,7 +173,7 @@ Sources read 2026-10-23. Failed jobs are evidence to fix, not a passing platform
 
 The [2026-10-23 platform evidence](research/evidence/windows-prepush-20261023.json)
 records a passing 12-invariant gate on Windows/Git Bash, Ubuntu and macOS. The
-targeted Windows job also checks worktree recovery, archive links, deployment and hooks.
+targeted Windows job also checks worktree recovery, archive links and deployment.
 Native Windows plugin-client validation remains a separate release gate in ticket 69.
 
 ### Windows native probe boundaries
