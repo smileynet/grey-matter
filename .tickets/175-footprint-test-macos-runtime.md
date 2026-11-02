@@ -1,7 +1,7 @@
 ---
 id: "175"
 title: "Reproduce the inspect-footprint test hang on macOS and confirm the lsof cause"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "On macOS, time `node --test scripts/inspect-footprint.test.mjs` and one `lsof -Fn -w` call; record both."
@@ -46,3 +46,7 @@ verify the ticket's premises against current source and run its acceptance check
 Root's batch-mode, strict-known-host SSH attempt to SpaceJam on port 22 timed out. No inspector
 or lsof measurement ran on macOS; the causal hypothesis is still unverified. Mac availability
 was requested from the user. Recheck access before claiming this host-specific ticket.
+
+The user supplied the Mac account/address and installed the public key. Direct SSH to the
+address succeeded (macOS 26.6.2); the hostname path still timed out. Host access is available
+for the bounded inspector/lsof measurements; no causal or runtime result is claimed yet.
