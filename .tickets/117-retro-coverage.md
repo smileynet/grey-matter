@@ -1,7 +1,7 @@
 ---
 id: "117"
 title: "Declare retrospective coverage and distinguish repairs from remaining work"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "A sampled/truncated trace scenario produces explicit partial coverage with inspected scope and unresolved gaps."
@@ -29,10 +29,10 @@ Do not require replaying the entire trace or redispatching facts already in cont
 
 ## Acceptance criteria
 
-- [ ] A sampled/truncated trace scenario produces explicit partial coverage with inspected scope and unresolved gaps.
-- [ ] A report with inspected tests but no execution cannot claim fresh test success; repaired defects with existing regressions are not filed as new implementation work.
-- [ ] Focused reread and retained coverage limits are both supported without requiring an exhaustive trace audit.
-- [ ] Applicable guidance scenarios and `node scripts/gate.mjs pre-merge` pass.
+- [x] A sampled/truncated trace scenario produces explicit partial coverage with inspected scope and unresolved gaps.
+- [x] A report with inspected tests but no execution cannot claim fresh test success; repaired defects with existing regressions are not filed as new implementation work.
+- [x] Focused reread and retained coverage limits are both supported without requiring an exhaustive trace audit.
+- [x] Applicable guidance scenarios and `node scripts/gate.mjs pre-merge` pass.
 
 ## Workstream reconciliation 2026-11-02
 
@@ -57,3 +57,13 @@ remains pending because browser policy blocked local-file access; human review w
 Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
 integration; local commit history and this evidence remain in Git. The current deployment
 package is retained until the next deployment.
+
+## Resolution (2026-11-02)
+
+done: worker a07218a/98c6ac5, critic feedback fixed and accepted, root merged/pushed/verified/deployed; ticket and dashboard record delivery. Retain owned t117-worker about10.3MB and dependency junction only through final stream audit/cleanup: automatic approval review rejected combined junction-removal/worktree cleanup as blocked by policy, so no alternate removal attempted. Shared stream helpers retained until completion, deployment until next deploy. Dashboard visual acceptance remains pending; source checks only.
+
+### Verification
+1. ✓ A sampled/truncated trace scenario produces explicit partial coverage with inspected scope and unresolved gaps. — "Compact retro coverage statement names corpus, trace/file reference when available, inspected scope, sampling/extraction, truncation and unresolved gaps; missing locators remain explicit gaps. Worker fixed critic's sole omission in98c6ac5; renewed critic review accepted."
+2. ✓ A report with inspected tests but no execution cannot claim fresh test success; repaired defects with existing regressions are not filed as new implementation work. — "Manual scenarios separate inspected tests from fresh runs and classify observed defect, repaired verification gap, already-landed repair and remaining recommendation; existing regressions do not become duplicate implementation tickets."
+3. ✓ Focused reread and retained coverage limits are both supported without requiring an exhaustive trace audit. — "Focused reread OR retained coverage gap supported; no exhaustive replay or completeness from nonempty subagent result. Existing retro owner and ticket owners reused."
+4. ✓ Applicable guidance scenarios and `node scripts/gate.mjs pre-merge` pass. — "Root after merge premerge4/4 and prepush5/5 passed; canonical deploy check/default50skills passed. Worker forced2/2 only after dependency-junction fix; original infrastructure failure and zero-selected default run not relabeled as pass. No historical trace audit claimed."
