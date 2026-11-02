@@ -193,9 +193,10 @@ referenced by symlink rather than copied. The distro VHD measured 79,691,776 byt
 | Guest unlink and sparse VHD reclaim | In the owned distro, `dd if=/dev/urandom of=/tmp/t133-reclaim.bin bs=1M count=16` raised `df -Pk /` Used from 237,848 to 254,232 KiB; after deleting that owned file and syncing, Used returned to 237,848 KiB. | Guest-available blocks were restored. This single sample does not establish host-volume reclaim or sparse-mode behavior. |
 | WSL sparse-mode toggle | `wsl --manage GreyMatter-Footprint-133 --set-sparse false` after terminating the owned distro returned `ERROR_SHARING_VIOLATION`: “The VHDX is currently in use.” WSL suggested `wsl.exe --shutdown`. | Not verified. A global shutdown was not run because it would affect other distros. No sparse/non-sparse comparison or reclaim claim is made; #133 remains partial for this acceptance criterion. |
 
-The four D-side working inputs totaled 63,181,213 bytes (rootfs archive and checksum, Node archive
-and SHASUMS file, plus a 40,960-byte source bundle). The private distro's VHD grew from 381,681,664
-to 448,790,528 bytes during later Linux gate activity; E: free space fell from 96,149,934,080 to
+The D-side working inputs totaled 63,181,213 bytes across five files: the rootfs archive and its
+checksum; the Node archive and its SHASUMS file; and a 40,960-byte source bundle. The private
+distro's VHD grew from 381,681,664 to 448,790,528 bytes during later Linux gate activity; E: free
+space fell from 96,149,934,080 to
 96,082,825,216 bytes over that interval. After explicitly terminating only this distro, its VHD
 measured 456,130,560 bytes and E: had 96,075,485,184 bytes free. VHD plus D-side inputs total
 519,311,773 bytes (about 495.2 MiB); the D: worker worktree is separate and not included. These
