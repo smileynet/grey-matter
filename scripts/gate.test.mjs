@@ -27,8 +27,6 @@ function fixture(checks, fn, { fullTriggers = [] } = {}) {
   try {
     mkdirSync(repo);
     git("init", "-q", "-b", "main");
-    git("config", "user.email", "gate@test"); git("config", "user.name", "gate test");
-    git("config", "core.hooksPath", join(dir, "no-git-hooks"));
     mkdirSync(join(repo, "scripts"));
     copyFileSync(GATE, join(repo, "scripts/gate.mjs"));
     put("scripts/gates.json", JSON.stringify({ full_triggers: fullTriggers, checks }));

@@ -38,7 +38,7 @@ async function fixture(fn) {
   const put = (file, bytes) => { mkdirSync(dirname(file), { recursive: true }); writeFileSync(file, bytes); };
   const git = (...args) => execFileSync("git", ["-C", repo, ...args], { encoding: "utf8", stdio: "pipe" }).trim();
   try {
-    mkdirSync(repo); git("init", "-b", "main"); git("config", "user.name", "Fixture"); git("config", "user.email", "fixture@example.invalid"); git("config", "core.autocrlf", "false");
+    mkdirSync(repo); git("init", "-b", "main");
     put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify({ name: "fixture", version: "0.1.0", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE"] } } }));
     put(join(repo, ".claude-plugin/marketplace.json"), '{"name":"fixture","plugins":[{"name":"fixture","source":"./"}]}');
     put(join(repo, ".codex-plugin/plugin.json"), '{"name":"fixture","version":"0.1.0","skills":"./skills/"}');

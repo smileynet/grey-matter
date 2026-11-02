@@ -1,5 +1,5 @@
 import "./test-git-env.mjs";
-import test from "node:test";
+import test, { after } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -7,23 +7,37 @@ import { join } from "node:path";
 import { git } from "./release-git.mjs";
 import { prepareDevelopment } from "./release-development.mjs";
 
-function fixture(t) {
-  const root = mkdtempSync(join(tmpdir(), "release development ")); t.after(() => rmSync(root, { recursive: true, force: true }));
-  const repo = join(root, "source"), remotePath = join(root, "remote.git"), out = join(root, "integration");
+const seedRoot = mkdtempSync(join(tmpdir(), "release-development-seed-"));
+after(() => rmSync(seedRoot, { recursive: true, force: true }));
+let seed;
+const commit = (repo, message) => { git(repo, ["add", "."]); git(repo, ["commit", "-m", message]); return git(repo, ["rev-parse", "HEAD"]).trim(); };
+const setVersion = (repo, version) => { for (const file of [".claude-plugin/plugin.json", ".codex-plugin/plugin.json"]) writeFileSync(join(repo, file), JSON.stringify({ name: "grey-matter", version })); };
+
+function seedFixture() {
+  const root = seedRoot, repo = join(root, "source"), remotePath = join(root, "remote.git");
   git(root, ["init", "--bare", remotePath]); git(root, ["init", "-b", "main", repo]);
   git(repo, ["remote", "add", "origin", remotePath]);
-  const commit = (message) => { git(repo, ["add", "."]); git(repo, ["commit", "-m", message]); return git(repo, ["rev-parse", "HEAD"]).trim(); };
-  const setVersion = (version) => { for (const file of [".claude-plugin/plugin.json", ".codex-plugin/plugin.json"]) writeFileSync(join(repo, file), JSON.stringify({ name: "grey-matter", version })); };
   for (const dir of [".claude-plugin", ".codex-plugin", "scripts"]) mkdirSync(join(repo, dir));
   writeFileSync(join(repo, "package.json"), '{"name":"fixture","version":"0.0.0","private":true}');
   writeFileSync(join(repo, "package-lock.json"), '{"name":"fixture","version":"0.0.0","lockfileVersion":3,"packages":{"":{"name":"fixture","version":"0.0.0"}}}');
   writeFileSync(join(repo, ".gitignore"), "node_modules/\n");
   writeFileSync(join(repo, "scripts/gate.mjs"), 'console.log("full integration gate ran");\n');
-  setVersion("0.1.0"); const base = commit("Base"); git(repo, ["push", "origin", "main"]);
-  git(repo, ["checkout", "-b", "candidate"]); setVersion("0.2.0"); const candidateSha = commit("Candidate");
+  setVersion(repo, "0.1.0"); const base = commit(repo, "Base"); git(repo, ["push", "origin", "main"]);
+  git(repo, ["checkout", "-b", "candidate"]); setVersion(repo, "0.2.0"); const candidateSha = commit(repo, "Candidate");
+  return { repo, remotePath, base, candidateSha };
+}
+
+function fixture(t) {
+  seed ??= seedFixture();
+  const root = mkdtempSync(join(tmpdir(), "release development ")); t.after(() => rmSync(root, { recursive: true, force: true }));
+  const repo = join(root, "source"), remotePath = join(root, "remote.git"), out = join(root, "integration");
+  git(root, ["clone", "--shared", "--bare", seed.remotePath, remotePath]);
+  git(root, ["clone", "--shared", seed.repo, repo]);
+  git(repo, ["remote", "set-url", "origin", remotePath]);
+  const { base, candidateSha } = seed;
   const options = { repo, remote: "origin", candidateSha, product: "grey-matter", version: "0.2.0", out };
   const run = (extra = {}) => prepareDevelopment({ ...options, ...extra });
-  return { root, repo, remotePath, out, base, candidateSha, commit, setVersion, options, run };
+  return { root, repo, remotePath, out, base, candidateSha, commit: (message) => commit(repo, message), setVersion: (version) => setVersion(repo, version), options, run };
 }
 
 test("development preparation: default creates no files, refs or remote changes", (t) => {

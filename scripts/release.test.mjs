@@ -30,8 +30,6 @@ async function fixture(fn, cargo = false) {
   try {
     mkdirSync(repo); mkdirSync(home);
     git(repo, "init", "-b", "main");
-    git(repo, "config", "user.name", "Prepare Fixture"); git(repo, "config", "user.email", "fixture@example.invalid");
-    git(repo, "config", "core.autocrlf", "false"); git(repo, "config", "core.hooksPath", join(repo, ".git/hooks"));
     const manifest = { name: "example", version: "0.1.0", description: "A fixture plugin", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE"] } } };
     put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(manifest, null, 2) + "\n");
     put(join(repo, ".claude-plugin/marketplace.json"), '{"name":"example","plugins":[{"name":"example","source":"./"}]}\n');
