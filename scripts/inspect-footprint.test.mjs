@@ -415,11 +415,11 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
   process.env.PATH = `${dir}${delimiter}${originalPath ?? ""}`;
   process.env.WSL_DISTRO_NAME = name;
   const record = (overrides = {}) => ({ Name: name, BasePath: "R:\\fixture with spaces\\$literal & path", VhdExists: true, Drive: "R", VolumeId: "volume-r", Free: "1234", Total: "9876", ...overrides });
-  const run = (response, exit = 0, floor = 0, recheck, freeSpaceHistory) => {
+  const run = (response, exit = 0, floor = 0, recheck, freeSpaceHistory, spaceStat) => {
     const encoded = Buffer.from(JSON.stringify(response), "utf8").toString("base64");
     writeFileSync(executable, `#!/bin/sh\nprintf '%s\\n' '${encoded}'\nexit ${exit}\n`);
     chmodSync(executable, 0o755);
-    return inspect({ ...base, repo, floor, preservation, recheck, freeSpaceHistory });
+    return inspect({ ...base, repo, floor, preservation, recheck, freeSpaceHistory }, Date.now(), lstatSync, undefined, spaceStat);
   };
   try {
     const valid = run([record()]);
@@ -436,13 +436,14 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
     const uppercaseResult = run([record({ Drive: "", VolumeId: canonicalVolumeId })]);
     assert.equal(uppercaseResult.freeSpace.volumeId, volumeIdResult.freeSpace.volumeId);
 
-    const repoFs = statfsSync(repo), repoFree = repoFs.bavail * repoFs.bsize;
-    const history = join(fixtureBase, "ambiguous-volume-history.json");
+    const history = join(fixtureBase, "ambiguous-volume-history.json"), repoFs = statfsSync(repo), repoFree = repoFs.bavail * repoFs.bsize;
     writeFileSync(history, JSON.stringify({ version: 1, freshForMinutes: 60, samples: [
       { volumeId: "any-volume", observedAt: new Date(Date.now() - 60000).toISOString(), freeBytes: repoFree },
       { volumeId: "any-volume", observedAt: new Date().toISOString(), freeBytes: repoFree },
     ] }));
-    const equalMinimum = run([record({ Free: String(repoFree), Total: String(repoFree + 1) })], 0, 0, undefined, history);
+    const equalMinimum = run([record({ Free: String(repoFree), Total: String(repoFree + 1) })], 0, 0, undefined, history, () => repoFs);
+    assert.equal(equalMinimum.freeSpace.entries.length, 2);
+    assert.equal(equalMinimum.freeSpace.entries[0].free, equalMinimum.freeSpace.entries[1].free);
     assert.equal(equalMinimum.freeSpace.volumeId, null);
     assert.equal(equalMinimum.freeSpaceTrend.status, "unavailable");
     assert.match(equalMinimum.freeSpaceTrend.reason, /ambiguous/);

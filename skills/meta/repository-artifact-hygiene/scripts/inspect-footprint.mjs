@@ -302,8 +302,8 @@ function worktrees(repo) {
   return out;
 }
 
-function freeSpace(repo, coverage, volumeIdentity) {
-  const fs = statfsSync(repo), entries = [{ path: repo, free: fs.bavail * fs.bsize, total: fs.blocks * fs.bsize, volumeId: volumeIdentity(repo) ?? null }];
+function freeSpace(repo, coverage, volumeIdentity, statfs) {
+  const fs = statfs(repo), entries = [{ path: repo, free: fs.bavail * fs.bsize, total: fs.blocks * fs.bsize, volumeId: volumeIdentity(repo) ?? null }];
   const version = existsSync("/proc/version") ? readFileSync("/proc/version", "utf8") : "";
   const isWsl = /microsoft/i.test(version);
   let hostUnverified = false;
@@ -595,7 +595,7 @@ function workspaceIdentity(repo) {
 
 const canonicalPath = (path) => existsSync(path) ? realpathSync(path) : resolve(path);
 
-export function inspect(opts, now = Date.now(), stat = lstatSync, volumeIdentity = filesystemDevice) {
+export function inspect(opts, now = Date.now(), stat = lstatSync, volumeIdentity = filesystemDevice, statfs = statfsSync) {
   const repo = realpathSync(opts.repo), coverage = { complete: true, inventoryComplete: true,
     sizes: "filesystem block allocation; legacy bytes falls back to logical length when unavailable", allocation: "complete" };
   // opts.open supplies the open-file set; the fixture tests pass one so each call skips a machine-wide lsof.
@@ -751,7 +751,7 @@ export function inspect(opts, now = Date.now(), stat = lstatSync, volumeIdentity
     families.push(f);
   }
   if (opts.dedupe) dedupe(families, tracked, repo);
-  const space = freeSpace(repo, coverage, volumeIdentity);
+  const space = freeSpace(repo, coverage, volumeIdentity, statfs);
   const trend = freeSpaceTrend(opts.freeSpaceHistory, space, now);
   const observedCoverage = {
     complete: coverage.complete,
