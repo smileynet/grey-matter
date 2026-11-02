@@ -1,0 +1,75 @@
+{
+  "schema": "grey-matter.footprint-windows-bin-cap.v1",
+  "recordedAt": "2026-11-02T16:41:45.5653088Z",
+  "environment": {
+    "host": "Windows 11 Pro 10.0.26300",
+    "sandbox": "Windows 11 Enterprise build 26100",
+    "sandboxUser": "WDAGUtilityAccount",
+    "sandboxUserInteractive": true,
+    "sandboxMemoryMiB": 2048,
+    "hostFreeMemoryGiBBeforeStart": 5.09,
+    "hostDVolumeFreeGiBBeforeStart": 93.25
+  },
+  "isolation": {
+    "networking": "disabled",
+    "clipboardRedirection": "disabled",
+    "mappedHostFolders": 1,
+    "mappedFolderReadOnly": false,
+    "mappedFolderContents": "owned script and result only",
+    "hostRecycleBinSettingsOrContentsReadOrChanged": false
+  },
+  "commands": {
+    "host": "Start-Process C:\\Windows\\System32\\WindowsSandbox.exe -ArgumentList <owned .wsb> -WindowStyle Hidden",
+    "sandboxLogon": "powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File C:\\t132\\run.ps1",
+    "deleteCall": "Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin)",
+    "binObservation": "SHQueryRecycleBinW(C:\\) before and after each completed deletion"
+  },
+  "configuredSandboxBin": {
+    "volume": "sandbox C:",
+    "perVolumeMaxCapacityBefore": 6137,
+    "perVolumeMaxCapacitySetTo": 1,
+    "requestedCapacityMiB": 1,
+    "emptyBaseline": {
+      "itemCount": 0,
+      "sizeBytes": 0
+    }
+  },
+  "underCapControl": {
+    "fixtureBytes": 524288,
+    "sourceExistsAfterDelete": false,
+    "binAfter": {
+      "itemCount": 1,
+      "sizeBytes": 524288
+    },
+    "outcome": "recycled"
+  },
+  "overCapProbe": {
+    "fixtureBytes": 2097152,
+    "binBefore": {
+      "itemCount": 1,
+      "sizeBytes": 524288
+    },
+    "sourceExistsAfterDelete": false,
+    "binAfter": {
+      "itemCount": 1,
+      "sizeBytes": 524288
+    },
+    "outcome": "source removed without a new C: Recycle Bin item; consistent with permanent deletion in this test"
+  },
+  "result": "pass",
+  "limits": [
+    "One disposable Windows Sandbox user and virtual C: volume only; this does not report the host user's Bin cap or contents.",
+    "The measured sizes bracket the configured threshold with a 512 KiB control and 2 MiB probe; no other file types or filesystems were tested.",
+    "OneDrive online-only placeholder behavior was not tested here."
+  ],
+  "source": {
+    "sandboxConfigSha256": "f6d92eaa020de29a5b354cd9767acf2e8f0c03aa1c0ed5acdf2f539cf1083d8f",
+    "sandboxScriptSha256": "9880534933ffaacfaf2fdc9d7de503782ad5dd2f490f6bf137e566f76ded02a6",
+    "microsoftDocs": [
+      "https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/windows-sandbox-configure-using-wsb-file",
+      "https://learn.microsoft.com/en-us/dotnet/api/microsoft.visualbasic.fileio.filesystem.deletefile?view=net-5.0",
+      "https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shqueryrecyclebinw",
+      "https://learn.microsoft.com/en-us/windows/win32/api/shellapi/ns-shellapi-shqueryrbinfo"
+    ]
+  }
+}

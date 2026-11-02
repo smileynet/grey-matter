@@ -39,8 +39,8 @@ and command separators.
 |---|---|---|
 | Free space | `(Get-Volume -FilePath <path>).SizeRemaining` | docs |
 | Folder size | `Get-ChildItem <dir> -Recurse -File -Force \| Measure-Object Length -Sum`: logical bytes, every hard link counted again, slow on big trees. ReFS and Dev Drive block cloning share clusters, so it is an upper bound | docs |
-| Recoverable delete | No built-in command; `Remove-Item` deletes permanently. `Add-Type -AssemblyName Microsoft.VisualBasic; [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile($p, 'AllDialogs', 'SendToRecycleBin')` (`DeleteDirectory` for folders). `OnlyErrorDialogs` answers "Yes to All", so a file over the bin's cap is deleted permanently: list those files instead | docs, inferred |
-| Recycle Bin cap | Set per drive, about 5% by default; a larger file cannot be recycled | secondary |
+| Recoverable delete | No built-in command; `Remove-Item` deletes permanently. `Add-Type -AssemblyName Microsoft.VisualBasic; [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile($p, 'AllDialogs', 'SendToRecycleBin')` (`DeleteDirectory` for folders). In one disposable Windows Sandbox with a 1 MiB per-volume cap, `OnlyErrorDialogs` recycled a 512 KiB control; a 2 MiB file disappeared while the C: Bin count/size stayed unchanged. Check the actual cap and list files that may exceed it; do not generalize this probe to the host Bin ([evidence](../../../../docs/agents/research/evidence/footprint-win-bin-cap-20261102.json)) | docs, observed in disposable Sandbox |
+| Recycle Bin cap | Set per drive; the about-5% default remains secondary. In the isolated 1 MiB-cap probe, a 2 MiB file was not recycled while the 512 KiB control was | observed in disposable Sandbox; default is secondary |
 | OneDrive folders | An online-only placeholder reports its full size but uses almost no disk; deleting it deletes it in the cloud on every device. Inspect, never delete, inside OneDrive | docs |
 | Open files | Sysinternals `handle.exe <fragment>`: a separate download that needs admin. Without it, report open files as unchecked | docs |
 | Hard links | `fsutil hardlink list <file>` | docs |

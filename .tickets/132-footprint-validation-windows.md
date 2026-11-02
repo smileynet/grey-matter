@@ -41,7 +41,7 @@ Fix wrong rows and inspector bugs in place; file anything larger as its own tick
 ## Acceptance criteria
 
 - [ ] Each Windows row is observed, corrected, or marked with why it could not run.
-- [ ] Recycle Bin behaviour over the cap is observed and the guidance matches it.
+- [x] Recycle Bin behaviour over the cap is observed and the guidance matches it.
 - [ ] The inspector's fixture test runs and reports open files as unchecked, or the failure is fixed or filed.
 - [ ] Inspector free space matches `Get-Volume`; OneDrive placeholders are handled or filed.
 - [ ] Commands and output are recorded; `node scripts/gate.mjs pre-merge` passes on Windows.
@@ -77,13 +77,30 @@ Current inspector fixtures pass 7/7 and worker full pre-merge passes 19/19. Wind
 Get-Volume and inspector free-space values match exactly on this host. Historical failures
 did not reproduce; no cause or source fix is claimed. Open-file coverage is unavailable and
 incomplete. A tiny owned hardlink fixture was recycled; no existing Bin contents were inspected.
-The over-cap Bin and real OneDrive online-only placeholder scenarios remain unrun: no safe
-isolated environment or owned placeholder is available. No Bin settings or cloud data changed.
-This ticket stays in progress with those acceptance gaps explicit. Retain its worker checkout
-and dependency junction through shared test-verification integration cleanup.
+At that point, the over-cap Bin scenario remained unrun because no safe isolated environment was
+available. No host Bin settings or cloud data were changed.
 
-The cloud-placeholder acceptance branch is captured independently by
-[#192](192-footprint-onedrive-placeholder.md), as permitted by this ticket's "handled or
-filed" criterion. It requires an owner-approved online-only fixture; no cloud behavior is
-claimed from the local hardlink/free-space tests. The Recycle Bin over-cap criterion remains
-unobserved pending the disposable Windows Sandbox probe; host Bin settings/data stay untouched.
+## Isolated Recycle Bin cap probe 2026-11-02
+
+Observed the `OnlyErrorDialogs` over-cap behavior in a disposable Windows Sandbox; this replaces
+the earlier unrun status above. The host was Windows 11 Pro 10.0.26300, non-admin, with 5.09 GiB
+available RAM and 93.25 GiB free on D: before startup. The Sandbox guest was Windows 11 Enterprise
+build 26100 under interactive `WDAGUtilityAccount`, with 2048 MiB memory, networking and clipboard
+redirection disabled, and exactly one writable mapping: an owned disposable fixture folder. The
+per-volume C: `MaxCapacity` value changed only inside the Sandbox from 6137 to 1. The C: Bin began
+empty; `SHQueryRecycleBinW` returned 0 items and 0 bytes.
+
+The guest ran `Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path,
+UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin)`. A 512 KiB control disappeared from its
+source and appeared in the C: Bin (1 item, 524,288 bytes). A 2 MiB fixture also disappeared from its
+source, while the C: Bin stayed at 1 item and 524,288 bytes. This is direct evidence that the larger
+fixture was not recycled under the tested cap; paired Bin counts and sizes distinguish it from the
+under-cap control. No host Bin settings or contents were read or changed. The guest shut down, the
+Sandbox window was closed after the report was written, and no Sandbox VM/client processes remained.
+
+The guidance now labels this as observed only in the disposable Sandbox and keeps the default cap
+claim secondary. Full measurements and official API/config references are in
+[the Windows Sandbox Bin-cap evidence](../docs/agents/research/evidence/footprint-win-bin-cap-20261102.json).
+OneDrive online-only placeholder behavior was not tested; [ticket 192](192-footprint-onedrive-placeholder.md)
+tracks an owned placeholder follow-up. Other Windows rows and the current Windows pre-merge gate
+remain to be checked before ticket close.
