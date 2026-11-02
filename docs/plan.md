@@ -169,7 +169,7 @@ recycle owned artifacts; leave unresolved external evidence explicit rather than
 
 ## Orchestration workstream (reconciled 2026-11-02)
 
-Scope: the 33 tickets tagged `stream:orchestration`, including the dashboard
+Scope: the 34 tickets tagged `stream:orchestration`, including the dashboard
 ticket #191 in the inventory below; their current statuses are shown in the tables.
 Other tooling, test-verification, dashboard and release work remains in its
 existing stream. Related parked #06 (skill/version drift evaluations) and #09
@@ -184,7 +184,11 @@ fabricated task and no independent Mate acceptance review. Keep the requirements
 and acceptance gate outside that loop. The #158 controls now qualify fixed
 commands and one folder boundary; #193 owns an unexpected regex Ask/Allow overlap.
 The #157 probe confirms native typed workflow controls and registered worktrees;
-#194 qualifies model routing before relying on per-role tiers. Next run #159.
+#194 qualifies model routing before relying on per-role tiers. The separately
+dispatched #159 and #160 reports passed independent critic review and were
+integrated by the parent. #159's runtime behavior remains unverified behind the
+missing companion host; #160 confirmed one message/reply/idle exchange, with
+fixture dispatch still trust-blocked. Next in the proposed queue is #161.
 The #158-before-#157 order is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before
@@ -203,8 +207,8 @@ auth remains conditional on the result of #186.
 | 156 | 3. Qualify Mate report/wake recovery across gateway restart | ✅ done |
 | 158 | 4. Test narrower agy regex permissions with negative controls | ✅ done |
 | 157 | 5. Test agy native workflow dispatch and per-role model selection | ✅ done |
-| 159 | 6. Test available Codex multi-agent/message-board/wake features | in_progress |
-| 160 | 7. Test Claude background sessions and idle notification semantics | in_progress |
+| 159 | 6. Test available Codex multi-agent/message-board/wake features | ✅ done |
+| 160 | 7. Test Claude background sessions and idle notification semantics | ✅ done |
 | 161 | 8. Test Kiro V3 workflow execution, pause, resume and retry | open |
 | 188 | 9. Diagnose Codex's missing code-mode tool host before claiming tool execution | open |
 | 189 | 10. Qualify Kiro V3 ACP EOF shutdown and descendant settlement | open |
