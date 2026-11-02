@@ -1,7 +1,7 @@
 ---
 id: "183"
 title: "Preserve artifact ownership across agent handoffs"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
