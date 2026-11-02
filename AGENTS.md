@@ -39,6 +39,9 @@ harness reads one source.
 
 ## Scratch
 
+**Delivery dashboard:** [docs/status.html](./docs/status.html). Update its delivery entries and
+generated ticket snapshot after closing work; use the delivery-dashboard skill.
+
 `.scratch/` (gitignored) is the project-local place for non-committed working files:
 handoff documents, agent notes, throwaway output. One consistent location per project
 so a fresh agent knows where to look.

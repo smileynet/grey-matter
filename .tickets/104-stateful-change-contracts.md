@@ -41,3 +41,15 @@ historical source commit was unavailable locally during #105; this brief remains
 
 Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
 verify the ticket's premises against current source and run its acceptance checks when picked up.
+
+## Delegated implementation 2026-11-02
+
+Worker commit ee118e6 implemented only to-spec, to-tickets and TDD guidance. Critic independently reviewed Spec and Standards and found no blocking issue. Root merged it and forced the main pre-merge checks: ticket-graph 0.4 s, syntax fixtures 0.3 s, guidance 1.0 s (3/3 commands). Main pre-push completed 5/5 selected commands. Worker direct syntax fixtures passed 10/10 and docs consistency passed. Its snapshot-only missing-yaml infrastructure error was resolved by the main-checkout runs, not called a product failure. Conditional ownership actions, relevant counts/error identity and final state were reviewed at the real public seam; no device test was claimed.
+
+Delivery dashboard: [current status](../docs/status.html). The shared renderer is unchanged;
+strict source/data checks and critic source review pass. Actual laptop/phone visual review
+remains pending because browser policy blocked local-file access; human review was requested.
+[Observation limits](../docs/agents/research/evidence/dashboard-ui-20261102.json) preserve that boundary.
+Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
+integration; local commit history and this evidence remain in Git. The current deployment
+package is retained until the next deployment.

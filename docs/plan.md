@@ -100,7 +100,7 @@ manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 2
 ## Test optimization and verification
 
 Reconciled 2026-11-02 at the user's request. Scope: `stream:test-verification`.
-16 open tickets and 7 completed tickets. This stream excludes orchestration and dashboard
+16 unfinished tickets (10 open, 6 in progress) and 7 completed tickets. This stream excludes orchestration and dashboard
 feature work; #116 covers only the evidence/current-summary contract. Existing release
 authorization and frozen candidate scope are unchanged.
 
@@ -121,12 +121,12 @@ scripts/snapshot are recycled after their conclusions are recorded here.
 
 | ID | Work | Status |
 | --- | --- | --- |
-| 104 | 1. Stateful ownership and terminal-behavior contracts | open |
-| 106 | 1. Numbered verification attempts and failure retention | open |
-| 114 | 1. Portable check discovery and fail-stop dependent mutations | open |
-| 112 | 2. UI capabilities and qualified observations | open |
-| 115 | 2. Positive scoped preservation evidence | open |
-| 117 | 2. Retrospective coverage and repaired-versus-remaining work | open |
+| 104 | 1. Stateful ownership and terminal-behavior contracts | in_progress |
+| 106 | 1. Numbered verification attempts and failure retention | in_progress |
+| 114 | 1. Portable check discovery and fail-stop dependent mutations | in_progress |
+| 112 | 2. UI capabilities and qualified observations | in_progress |
+| 115 | 2. Positive scoped preservation evidence | in_progress |
+| 117 | 2. Retrospective coverage and repaired-versus-remaining work | in_progress |
 | 113 | 3. Exact bundle inventory and portable byte hashes | open |
 | 116 | 4. Current summaries derived from scoped evidence | open |
 | 120 | 5. Documented vendor repair and checkout divergence handling | open |

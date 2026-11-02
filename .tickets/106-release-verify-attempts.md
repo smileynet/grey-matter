@@ -45,3 +45,15 @@ the maintained reference, preserving the closed ticket.
 
 Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
 verify the ticket's premises against current source and run its acceptance checks when picked up.
+
+## Delegated implementation 2026-11-02
+
+Worker commit 2c6e0a updated release/preparation guidance and the maintained retention rule, preserving closed ticket97. Critic Spec/Standards review found no blocking issue. Existing release-verify regression passed 41/41 in the worker, including output-folder reuse refusal; code behavior was unchanged. After merge root forced main pre-merge 3/3 commands (ticket-graph 0.4 s, syntax fixtures 0.3 s, guidance 1.0 s); main pre-push 5/5 selected commands passed. Numbered invocation paths and failed/cited evidence retention were reviewed. No release was prepared, published or authorized by this guidance change.
+
+Delivery dashboard: [current status](../docs/status.html). The shared renderer is unchanged;
+strict source/data checks and critic source review pass. Actual laptop/phone visual review
+remains pending because browser policy blocked local-file access; human review was requested.
+[Observation limits](../docs/agents/research/evidence/dashboard-ui-20261102.json) preserve that boundary.
+Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
+integration; local commit history and this evidence remain in Git. The current deployment
+package is retained until the next deployment.

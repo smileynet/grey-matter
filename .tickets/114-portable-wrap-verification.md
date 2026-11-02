@@ -53,3 +53,15 @@ fail-stop orchestration.
 
 Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
 verify the ticket's premises against current source and run its acceptance checks when picked up.
+
+## Delegated implementation 2026-11-02
+
+Worker commit e2702a1 updated portable gate discovery, wrap/sync guidance and a real gate/caller marker fixture. Critic Spec/Standards review found no blocking issue. Worker gate tests passed 23/23, syntax fixtures 10/10 and docs consistency passed. After merge root pre-merge completed 4/4 commands: gate-runner 22.0 s, ticket-graph 0.4 s, syntax fixtures 0.3 s, guidance 1.1 s. Main pre-push completed 6/6 selected commands. The fixture covers an exit-code caller contract for failure, timeout, missing executable and pass; it does not prove an LLM obeys asynchronous scheduling instructions. That caller limitation is explicit in the guidance.
+
+Delivery dashboard: [current status](../docs/status.html). The shared renderer is unchanged;
+strict source/data checks and critic source review pass. Actual laptop/phone visual review
+remains pending because browser policy blocked local-file access; human review was requested.
+[Observation limits](../docs/agents/research/evidence/dashboard-ui-20261102.json) preserve that boundary.
+Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
+integration; local commit history and this evidence remain in Git. The current deployment
+package is retained until the next deployment.

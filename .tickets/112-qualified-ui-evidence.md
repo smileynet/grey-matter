@@ -37,3 +37,15 @@ here.
 
 Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
 verify the ticket's premises against current source and run its acceptance checks when picked up.
+
+## Delegated implementation 2026-11-02
+
+Worker commit 888bcb9 updated prototype UI guidance, dashboard preflight and receipt notes. Critic Spec/Standards review found no blocking issue. Worker receipt tests passed 13/13; the three new prose scenarios were manually reviewed, not represented as automated policy tests. Root pre-merge completed 5/5 commands after merge: ticket-graph 0.3 s, syntax fixtures 0.3 s, guidance 1.1 s, dashboard-contract 1.5 s, review-receipt 0.5 s. Main pre-push completed 5/5 selected commands. Root observed an actual browser policy refusal and preserved it as blocked with no alternate route; missing telemetry/human-report cases remain bounded examples. The newly created dashboard's visual acceptance is pending, not a completed UI observation.
+
+Delivery dashboard: [current status](../docs/status.html). The shared renderer is unchanged;
+strict source/data checks and critic source review pass. Actual laptop/phone visual review
+remains pending because browser policy blocked local-file access; human review was requested.
+[Observation limits](../docs/agents/research/evidence/dashboard-ui-20261102.json) preserve that boundary.
+Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
+integration; local commit history and this evidence remain in Git. The current deployment
+package is retained until the next deployment.
