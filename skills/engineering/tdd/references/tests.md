@@ -7,6 +7,39 @@ Before choosing a test shape, route the assertion through the shared
 Its review examples distinguish the actual native parser from a JavaScript stand-in and simulator
 integration from physical installed-update evidence. Use those limits when naming what a test proves.
 
+## Qualify the oracle
+
+An **oracle** decides whether observed behavior satisfies the contract. Before trusting a new
+test oracle or worker's verdict:
+
+1. Locate the governing spec, schema or public contract for each expected result. Distinguish a
+   required rule from an illustrative example. If they disagree, correct the test; if the contract
+   is unresolved, keep the alleged product defect unconfirmed and resolve the requirement first.
+2. Run a known-good and a known-bad case through the same real seam and oracle. Derive their
+   expected outcomes independently from that contract. A mutation is useful only after a diff
+   confirms it landed on the exercised input or implementation.
+3. Make an execution dependency unavailable in an owned fixture, or supply an equivalent
+   controlled harness failure. Verify it reports **infrastructure error**, separately from the
+   known-bad case's assertion failure. A missing tool, setup error or timeout cannot qualify as
+   rejection of the product behavior.
+4. Retain the command, case identity, diagnostic and evidence of the specific assertion executing
+   (runner result/count or an assertion-bound receipt). Check discovery, skips and early exits.
+   For a worker, require the execution evidence behind its verdict; a narrative "pass" is not a
+   receipt. Both controls must exercise the assertion that decides the claim, not just start a process.
+
+Worked contract: a record requires `id`; `alias` is optional. The example `{id: "A", alias: "B"}`
+does not make `alias` mandatory.
+
+| Control | Expected interpretation |
+|---|---|
+| `{id: "A"}` through the actual validator | Accept; a generated test demanding `alias` is wrong |
+| `{alias: "B"}` through that validator | Reject for missing `id`; capture the relevant assertion, not an unrelated setup error |
+| Validator executable unavailable in the test-owned fixture | Infrastructure error; neither product acceptance nor product rejection |
+| Both data cases exit successfully but the deciding assertion was skipped | Oracle unqualified; inspect discovery/control flow before trusting a verdict |
+
+These are review scenarios, not a claim that a particular validator was executed. Once qualified,
+run the original failing case: its contract-correct assertion failure is evidence of a product defect.
+
 ## Good Tests
 
 **Integration-style**: Test through real interfaces, not mocks of internal parts.

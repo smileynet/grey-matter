@@ -4,6 +4,10 @@ title: "Check generated tests against the contract and prove the assertion ran"
 status: in_progress
 blocked_by: []
 priority: medium
+validation_criteria:
+  - "TDD checks generated test expectations against the governing contract before treating red as a product defect."
+  - "Diagnosis qualifies a new oracle or worker using known-good, known-bad and infrastructure controls with proof the assertion executed."
+  - "Applicable guidance fixtures and node scripts/gate.mjs pre-merge pass."
 tags: ["kind:enhancement"]
 ---
 

@@ -23,6 +23,11 @@ If the redacted output is not enough to diagnose the bug, say so and ask the use
 
 Spend disproportionate effort here. **Be aggressive. Be creative. Refuse to give up.**
 
+Before counting an agent-written test failure as the product bug, check its expectation against
+the governing contract. For a new oracle or worker, run the
+[contract and control procedure](../tdd/references/tests.md#qualify-the-oracle): known-good acceptance,
+known-bad rejection and a separate infrastructure outcome, with evidence the assertion executed.
+
 ### Ways to construct one, in roughly this order
 
 1. **Failing test** at whatever seam reaches the bug: unit, integration, e2e.

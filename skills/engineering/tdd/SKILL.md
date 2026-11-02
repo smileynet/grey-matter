@@ -31,6 +31,10 @@ refactors because it doesn't care about internal structure. (This is why tests m
 only at system boundaries, never internal collaborators: a test coupled to internals
 breaks when `code-review` later refactors them, defeating the point.)
 
+Before treating a failing generated or agent-written test as a product defect, check its
+expectation against the governing contract. Qualify a new oracle or worker using the
+[contract and control procedure](references/tests.md#qualify-the-oracle) before trusting its red/green verdict.
+
 See [references/tests.md](references/tests.md) for worked good/bad examples when a test's shape is unclear, and [references/mocking.md](references/mocking.md) when the change touches a system boundary (external API, DB, time, filesystem) and you need to decide what to mock.
 
 ## Seams: where tests go
