@@ -4,9 +4,9 @@ import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { chmodSync, existsSync, linkSync, mkdirSync, mkdtempSync, readFileSync, rmSync, utimesSync, writeFileSync, appendFileSync } from "node:fs";
+import { chmodSync, existsSync, linkSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, symlinkSync, utimesSync, writeFileSync, appendFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { delimiter, join } from "node:path";
+import { delimiter, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { conformance, inspect, options, summary } from "../skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs";
 
@@ -54,6 +54,18 @@ function fixture() {
   return { base, repo };
 }
 
+function preservationState({ base, repo }, families = {}, workspace = "fixture-workspace") {
+  const path = join(base, "preservation.json");
+  writeFileSync(path, JSON.stringify({ version: 1, workspace, families }));
+  return path;
+}
+
+const ownedCandidate = {
+  owner: "fixture-worker",
+  retention: "ticket evidence reviewed",
+  dependencies: { complete: true, active: [] },
+};
+
 function registeredHostVolume() {
   const name = Buffer.from(process.env.WSL_DISTRO_NAME, "utf8").toString("base64");
   const script = `$ErrorActionPreference='Stop'; $name=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('${name}')); $item=Get-ChildItem -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Lxss' | ForEach-Object { $entry=Get-ItemProperty -LiteralPath $_.PSPath; if($entry.DistributionName -ceq $name){ [pscustomobject]@{Name=$entry.DistributionName;BasePath=$entry.BasePath} } } | Select-Object -First 1; if($null -eq $item){exit 4}; $volume=Get-Volume -FilePath $item.BasePath; $report=[pscustomobject]@{Name=$item.Name;Drive=$volume.DriveLetter;Free=[string]$volume.SizeRemaining}; $json=ConvertTo-Json -Compress -InputObject $report; [Console]::WriteLine([Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($json)))`;
@@ -72,18 +84,26 @@ async function holdOpen(path) {
 const base = { paths: [], quietMinutes: 0, floor: 0, topUnder: 0, open: new Set() };
 
 test("seeded families get the right facts and outcomes, and the run goes red", async (t) => {
-  const { repo } = fixture();
+  const { base: dir, repo } = fixture();
   const holder = await holdOpen(join(repo, ".scratch/t171-open/held.txt"));
   try {
-    const r = inspect({ ...base, open: undefined, repo, cap: 1024 ** 2 });
-    assert.equal(family(r, ".scratch/t170-run-1").outcome, "delete");
+    const preservation = preservationState({ base: dir, repo }, {
+      ".scratch/t170-run-1": ownedCandidate,
+      ".scratch/t170-cited": ownedCandidate,
+    });
+    const r = inspect({ ...base, open: undefined, repo, preservation, cap: 1024 ** 2 });
+    assert.equal(family(r, ".scratch/t170-run-1").outcome, r.coverage.complete ? "delete" : "ask");
     assert.equal(family(r, ".scratch/t170-run-1").epochDatedFiles, 1);
     const cited = family(r, ".scratch/t170-cited");
-    assert.equal(cited.outcome, "slim");
+    assert.equal(cited.outcome, r.coverage.complete ? "slim" : "ask");
     assert.deepEqual(cited.keep, [".scratch/t170-cited/report.json", ".scratch/t170-cited/sub"]);
     assert.deepEqual(cited.citedBy, ["docs/report.md"]);
     assert.equal(family(r, ".scratch/t171-wip").outcome, "keep");
     assert.deepEqual(family(r, ".scratch/t170-linked").hardLinkedFiles, [".scratch/t170-linked/x"]);
+    assert.equal(family(r, ".scratch/t170-linked").logicalBytes, MiB.length);
+    assert.equal(family(r, ".scratch/t171-wip").logicalBytes, MiB.length);
+    assert.equal(family(r, ".scratch/t170-linked").reclaimableBytes, null);
+    assert.equal(family(r, ".scratch/t170-linked").allocatedBytes + family(r, ".scratch/t171-wip").allocatedBytes, MiB.length);
     assert.equal(family(r, ".scratch/notes").outcome, "ask");
     assert.equal(family(r, "build").kind, "ignored");
     const open = family(r, ".scratch/t171-open");
@@ -106,26 +126,133 @@ test("seeded families get the right facts and outcomes, and the run goes red", a
 });
 
 test("the quiet floor skips recent writes: 15 minutes by default, 24 hours for agent state", () => {
-  const { repo } = fixture();
+  const { base: dir, repo } = fixture();
   assert.equal(options([]).quietMinutes, 15);
   assert.equal(options(["--agent-state"]).quietMinutes, 1440);
   const r = inspect({ ...base, repo, quietMinutes: 15 });
   assert.equal(family(r, ".scratch/t170-run-1").outcome, "skip");
   assert.match(family(r, ".scratch/t170-run-1").activeReasons[0], /quiet floor 15m/);
-  const later = inspect({ ...base, repo, quietMinutes: 15 }, Date.now() + 16 * 60000);
+  const owned = preservationState({ base: dir, repo }, { ".scratch/t170-run-1": ownedCandidate });
+  const later = inspect({ ...base, repo, preservation: owned, quietMinutes: 15 }, Date.now() + 16 * 60000);
   assert.equal(family(later, ".scratch/t170-run-1").outcome, "delete");
 });
 
 test("a citation added after the list was made turns removal into 'keep list changed'", () => {
   const { base: dir, repo } = fixture();
+  const preservation = preservationState({ base: dir, repo }, { ".scratch/t170-run-1": ownedCandidate });
   const prior = join(dir, "prior.json");
-  writeFileSync(prior, JSON.stringify(inspect({ ...base, repo })));
+  writeFileSync(prior, JSON.stringify(inspect({ ...base, repo, preservation })));
   appendFileSync(join(repo, "docs/report.md"), "Also `.scratch/t170-run-1/blob`.\n");
-  const r = inspect({ ...base, repo, recheck: prior });
+  const r = inspect({ ...base, repo, preservation, recheck: prior });
   assert.equal(family(r, ".scratch/t170-run-1").outcome, "keep list changed");
   assert.deepEqual(r.findings.map((f) => f.kind), ["keep-list-changed"]);
-  const cli = spawnSync(process.execPath, [SCRIPT, "--repo", repo, "--floor", "0B", "--quiet", "0m", "--recheck", prior]);
+  const cli = spawnSync(process.execPath, [SCRIPT, "--repo", repo, "--floor", "0B", "--quiet", "0m", "--preservation", preservation, "--recheck", prior]);
   assert.equal(cli.status, 1);
+});
+
+test("unknown ownership and incomplete dependency observations stay review-only", () => {
+  const { base: dir, repo } = fixture();
+  const before = git(repo, "status", "--porcelain");
+  const sample = readFileSync(join(repo, ".scratch/t170-run-1/blob"));
+  const unknown = inspect({ ...base, repo });
+  assert.equal(git(repo, "status", "--porcelain"), before);
+  assert.deepEqual(readFileSync(join(repo, ".scratch/t170-run-1/blob")), sample);
+  assert.equal(family(unknown, ".scratch/t170-run-1").ownership, "unknown");
+  assert.equal(family(unknown, ".scratch/t170-run-1").outcome, "ask");
+  assert.equal(unknown.coverage.preservation, "not supplied");
+
+  const { base: ownedDir, repo: ownedRepo } = fixture();
+  const preservation = preservationState({ base: ownedDir, repo: ownedRepo }, {
+    ".scratch/t170-run-1": { ...ownedCandidate, dependencies: { complete: false, active: [] } },
+  });
+  const partial = inspect({ ...base, repo: ownedRepo, preservation });
+  assert.equal(family(partial, ".scratch/t170-run-1").dependencyStatus, "partial");
+  assert.equal(family(partial, ".scratch/t170-run-1").outcome, "ask");
+
+  const outside = join(dir, "t170-outside-state");
+  const outsideFile = join(outside, "blob");
+  put(outsideFile, "outside");
+  const older = new Date(Date.now() - 60000);
+  utimesSync(outsideFile, older, older);
+  const externalOwner = preservationState({ base: dir, repo }, { [outside.replaceAll("\\", "/")]: ownedCandidate });
+  const external = inspect({ ...base, repo, preservation: externalOwner, paths: [outside] });
+  assert.equal(family(external, outside).ownership, "known");
+  assert.equal(family(external, outside).outcome, "delete");
+
+  const missing = join(dir, "t170-missing");
+  const missingOwner = preservationState({ base: dir, repo }, { [missing.replaceAll("\\", "/")]: ownedCandidate });
+  const unavailable = inspect({ ...base, repo, preservation: missingOwner, paths: [missing] });
+  assert.equal(family(unavailable, missing).outcome, "ask");
+  assert.ok(unavailable.coverage.scopeIssues.some((issue) => issue.kind === "missing-root"));
+});
+
+test("recheck makes a candidate stale when scope, inventory, ownership, workspace, or dependencies change", () => {
+  const { base: dir, repo } = fixture();
+  let preservation = preservationState({ base: dir, repo }, { ".scratch/t170-run-1": ownedCandidate });
+  const prior = join(dir, "prior.json");
+  const check = (mutate, currentOptions = {}) => {
+    writeFileSync(prior, JSON.stringify(inspect({ ...base, repo, preservation })));
+    mutate?.();
+    const result = inspect({ ...base, repo, preservation, recheck: prior, ...currentOptions });
+    const current = family(result, ".scratch/t170-run-1");
+    if (current) assert.ok(!["delete", "slim"].includes(current.outcome), current.outcome);
+    assert.ok(result.findings.some((finding) => finding.kind === "preservation-changed"));
+  };
+
+  put(join(dir, "additional-root/file"), "external");
+  check(undefined, { paths: [join(dir, "additional-root")] });
+  writeFileSync(prior, JSON.stringify(inspect({ ...base, repo, preservation })));
+  renameSync(join(repo, ".scratch/t170-run-1"), join(repo, ".scratch/t170-run-1-moved"));
+  const moved = inspect({ ...base, repo, preservation, recheck: prior });
+  assert.ok(moved.findings.some((finding) => finding.kind === "preservation-changed" && finding.path === ".scratch/t170-run-1"));
+  renameSync(join(repo, ".scratch/t170-run-1-moved"), join(repo, ".scratch/t170-run-1"));
+  const ticketFile = join(repo, ".tickets/170-old.md"), doneTicket = readFileSync(ticketFile, "utf8");
+  writeFileSync(prior, JSON.stringify(inspect({ ...base, repo, preservation })));
+  writeFileSync(ticketFile, doneTicket.replace("status: done", "status: in_progress"));
+  const reopened = inspect({ ...base, repo, preservation, recheck: prior });
+  assert.equal(family(reopened, ".scratch/t170-run-1").outcome, "keep");
+  assert.ok(reopened.findings.some((finding) => finding.kind === "preservation-changed"));
+  writeFileSync(ticketFile, doneTicket);
+  check(() => put(join(repo, ".scratch/t170-run-1/new-file"), "new"));
+  rmSync(join(repo, ".scratch/t170-run-1/new-file"));
+  check(() => {
+    preservation = preservationState({ base: dir, repo }, {
+      ".scratch/t170-run-1": { ...ownedCandidate, owner: "different-worker" },
+    });
+  });
+  check(() => { preservation = preservationState({ base: dir, repo }, { ".scratch/t170-run-1": ownedCandidate }, "other-workspace"); });
+  check(undefined, { open: new Set([join(repo, ".scratch/t170-run-1/blob")]) });
+  check(() => {
+    preservation = preservationState({ base: dir, repo }, {
+      ".scratch/t170-run-1": { ...ownedCandidate, dependencies: { complete: true, active: ["session-9"] } },
+    });
+  });
+});
+
+test("symlink escapes are reported without traversing targets, and overlapping roots are not counted twice", () => {
+  const { base: dir, repo } = fixture();
+  const target = join(dir, "outside-target");
+  put(join(target, "payload"), Buffer.alloc(4096, 7));
+  const escape = join(repo, "escape-link");
+  symlinkSync(target, escape, process.platform === "win32" ? "junction" : "dir");
+  symlinkSync(target, join(repo, ".scratch/t170-run-1/nested-link"), process.platform === "win32" ? "junction" : "dir");
+  const preservation = preservationState({ base: dir, repo }, { ".scratch/t170-run-1": ownedCandidate });
+  const escaped = inspect({ ...base, repo, preservation, paths: [escape] });
+  const candidate = family(escaped, ".scratch/t170-run-1");
+  assert.ok(escaped.coverage.scopeIssues.some((issue) => issue.kind === "symlink-escape"));
+  assert.ok(candidate.inventory.every((entry) => !entry.path.includes("payload")));
+  assert.equal(candidate.inventory.find((entry) => entry.path === "nested-link").type, "symlink");
+  assert.equal(family(escaped, escape), undefined);
+  assert.equal(escaped.coverage.complete, false);
+  assert.equal(candidate.reclaimableBytes, null);
+  assert.ok(Number.isSafeInteger(candidate.logicalBytes));
+  assert.ok(Number.isSafeInteger(candidate.allocatedBytes));
+
+  const overlap = inspect({ ...base, repo, preservation, paths: [join(repo, ".scratch/t170-run-1/subset")] });
+  assert.ok(overlap.coverage.scopeIssues.some((issue) => issue.kind === "overlapping-roots"));
+  assert.equal(family(overlap, ".scratch/t170-run-1"), undefined);
+  assert.equal(overlap.families.filter((entry) => entry.path === join(repo, ".scratch/t170-run-1/subset")).length, 0);
+  assert.equal(overlap.coverage.complete, false);
 });
 
 test("the free-space floor and the summary line", () => {
@@ -221,14 +348,15 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
   }
 });
 
-test("goes green once the seeded problems are cleaned up", () => {
+test("cleaned families without ownership evidence remain review-only", () => {
   const { base: dir, repo } = fixture();
   for (const p of [".scratch/t170-run-1", ".scratch/t170-linked", ".scratch/notes", ".scratch/t170-cited/junk.bin", "build"]) rmSync(join(repo, p), { recursive: true });
   git(repo, "worktree", "prune");
   const r = inspect({ ...base, repo, cap: 5 * 1024 ** 3 });
   assert.equal(family(r, ".scratch/t170-cited").outcome, "keep");
   assert.deepEqual(r.findings, []);
-  assert.equal(r.status, "pass", JSON.stringify(r.families.map((f) => [f.path, f.outcome])));
+  assert.equal(r.status, "review", JSON.stringify(r.families.map((f) => [f.path, f.outcome])));
+  assert.equal(r.coverage.preservation, "not supplied");
   const cli = spawnSync(process.execPath, [SCRIPT, "--repo", repo, "--floor", "0B", "--quiet", "0m"], { encoding: "utf8" });
   assert.equal(cli.status, 0, cli.stdout + cli.stderr);
 });

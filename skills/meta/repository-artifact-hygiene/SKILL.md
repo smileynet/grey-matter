@@ -113,11 +113,16 @@ node <skill-dir>/scripts/inspect-footprint.mjs --repo <repository-root> [--ticke
 ```
 
 The inspector reads and never writes. For each family (`.scratch/*`, ignored build output,
-linked worktrees, `--path` folders) it reports size, owning ticket and status, tracked files
-citing it by exact sub-path with the resulting keep list, hard links, open files, and an
-outcome: delete, slim (keep the keep list), keep, ask, prune, or skip (written within the
-quiet floor, holding open files, or an active worktree). Rerun with `--recheck <saved.json>`
-right before removing anything from a list; "keep list changed" means stop and re-list.
+linked worktrees, `--path` folders) it reports logical and allocated size, owning ticket and
+status, tracked files citing it by exact sub-path with the resulting keep list, hard links,
+open files, and an outcome: delete, slim (keep the keep list), keep, ask, prune, or skip
+(written within the quiet floor, holding open files, or an active worktree). Delete/slim
+recommendations require the explicit owner, retention and dependency observations described
+in the [footprint inspector reference](references/inspection.md#preservation-input-and-recheck);
+missing or partial observations stay at ask. Rerun with `--recheck <saved.json>` immediately
+before using a recommendation. Recheck binds canonical scope, workspace, candidate inventory,
+preservation inputs and observable active dependencies; a changed or missing family means
+stop and review. It never proves reclaimable bytes or deletes files.
 Flags and exit codes: [footprint inspector](references/inspection.md#footprint-inspector).
 
 ## At ticket close

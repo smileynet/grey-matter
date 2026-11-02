@@ -120,7 +120,7 @@ open-file table; it never deletes, stages or fetches.
 ```text
 node <skill-dir>/scripts/inspect-footprint.mjs --repo PATH [--path DIR]... [--ticket N]
   [--quiet 15m | --agent-state] [--floor 20GiB] [--cap 5GiB] [--dedupe]
-  [--recheck PRIOR.json] [--summary [--top-under 40GiB]]
+  [--preservation FILE] [--recheck PRIOR.json] [--summary [--top-under 40GiB]]
 ```
 
 | Flag | Effect |
@@ -130,15 +130,18 @@ node <skill-dir>/scripts/inspect-footprint.mjs --repo PATH [--path DIR]... [--ti
 | `--quiet 15m` | skip a family written within this window; `--agent-state` sets 24h for session stores |
 | `--floor` / `--cap` | free-space floor (default 20GiB) and optional per-ticket total; breaking one exits 1 |
 | `--dedupe` | sha256 files whose size matches a tracked file, plus the LFS store; reports identical bytes. Opt-in: it reads every candidate file |
-| `--recheck PRIOR.json` | compare keep lists with a saved run; a changed one on a delete/slim family becomes "keep list changed" and exits 1 |
+| `--preservation FILE` | load explicit project ownership, retention and dependency observations (version 1; see below) |
+| `--recheck PRIOR.json` | compare preservation context and keep lists with a saved run; changed delete/slim families become `ask` and exit 1 |
 | `--summary` | one line: free space, and the three largest families when free space is under `--top-under` (40GiB) |
 
 Output is JSON: `status` (`pass`, `review` when candidates exist or coverage is incomplete,
 `fail` when a limit breaks), `freeSpace` (under WSL, the lower of the distro and the Windows
 volume holding that distro's registered `ext4.vhdx`), `coverage`,
 `findings`, `families` sorted by size, and `conformance` (pytest retention, tracked
-`.scratch` citations). Sizes are allocated bytes, an upper bound on copy-on-write
-filesystems; a hard-linked file counts once. Files dated before 2000 are counted but
+.scratch` citations). Families report `logicalBytes`, `allocatedBytes` and
+`reclaimableBytes: null`; logical length and allocated estimates do not prove physical
+reclaim. Allocated bytes are an upper bound on copy-on-write filesystems. A hard-linked
+file's logical length appears at each path while the shared allocation counts once. Files dated before 2000 are counted but
 ignored for the newest write. A citation counts only by exact sub-path; a bare mention
 of the folder is a `lead`, which makes the outcome `ask`, never `delete`.
 The WSL host lookup matches the exact `WSL_DISTRO_NAME` to one HKCU Lxss registration,
@@ -151,3 +154,42 @@ volume and says the free-space floor is unverified. Exit 0 reports,
 Coverage is partial, and says so, where a probe is missing: open files come from
 `/proc` on Linux (other users' processes only as root), `lsof` elsewhere, and are
 unavailable on Windows without Sysinternals `handle.exe`.
+
+### Preservation input and recheck
+
+The optional preservation file is a local project observation; the inspector does not
+discover owners or query an agent registry. Use repo-relative family keys for repo paths
+and absolute paths for `--path` roots outside the repo:
+
+```json
+{
+  "version": 1,
+  "workspace": "project-workspace-id",
+  "families": {
+    "build": {
+      "owner": "worker-170",
+      "retention": "keep report.json through ticket review",
+      "dependencies": { "complete": true, "active": [] }
+    }
+  }
+}
+```
+
+`owner` and `retention` must be nonempty strings. `dependencies.complete` records whether
+the project-side dependency observation is complete; `active` names known dependencies.
+Missing ownership/retention or incomplete dependency observations leave a candidate at
+`ask`; a known active dependency yields `skip`. A missing preservation file is reported as `coverage.preservation: not supplied`
+and also prevents delete/slim recommendations. An unavailable open-file probe likewise
+keeps candidates uncertain. `coverage.scopeIssues` reports overlapping roots and
+symlink-root escapes, plus missing or unreadable roots; conflicting roots are excluded
+from measurement, and symlink targets are not traversed.
+
+Each family snapshot binds the canonical repo and Git common directory, `HEAD`, project
+workspace label, canonical selected roots, candidate paths/types/sizes/timestamps,
+ownership/retention input, and observed/provided dependency state. Recheck immediately
+before using a report; a changed or missing family receives `preservation-changed` and
+cannot retain a delete/slim outcome. Citation changes still receive `keep-list-changed`.
+Candidate contents are not hashed: ordinary edits change recorded timestamps, but a
+same-size edit that preserves timestamps is outside this check. `dependencies.complete`
+is the project's assertion, not an independently verified registry result. The helper
+never removes files.

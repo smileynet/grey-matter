@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Inspect the uncommitted footprint of a repository without changing anything.
 // Usage: node inspect-footprint.mjs --repo PATH [--path DIR]... [--ticket N] [--quiet 15m] [--agent-state]
-//   [--floor 20GiB] [--cap 5GiB] [--dedupe] [--recheck PRIOR.json] [--summary [--top-under 40GiB]]
-// Exit codes: 0 = report, 1 = a stated limit exceeded or a keep list changed, 2 = inspection/input error.
+//   [--floor 20GiB] [--cap 5GiB] [--dedupe] [--preservation FILE] [--recheck PRIOR.json] [--summary [--top-under 40GiB]]
+// Exit codes: 0 = report, 1 = a stated limit exceeded or preservation changed, 2 = inspection/input error.
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, lstatSync, readdirSync, readFileSync, readlinkSync, realpathSync, statfsSync } from "node:fs";
@@ -38,6 +38,7 @@ export function options(args) {
     else if (arg === "--cap") out.cap = bytes(value());
     else if (arg === "--top-under") out.topUnder = bytes(value());
     else if (arg === "--recheck") out.recheck = value();
+    else if (arg === "--preservation") out.preservation = value();
     else if (arg === "--dedupe") out.dedupe = true;
     else if (arg === "--summary") out.summary = true;
     else throw new Error(`Unknown option: ${arg}`);
@@ -52,11 +53,14 @@ function git(repo, args) {
 }
 
 const posix = (p) => p.split(sep).join("/");
-const inside = (child, parent) => child === parent || child.startsWith(parent.endsWith(sep) ? parent : parent + sep);
+const inside = (child, parent) => {
+  if (process.platform === "win32") { child = child.toLowerCase(); parent = parent.toLowerCase(); }
+  return child === parent || child.startsWith(parent.endsWith(sep) ? parent : parent + sep);
+};
 
 // Allocated bytes (blocks) where the OS reports them; on copy-on-write filesystems this is an upper bound.
 function walk(root, seen = new Set()) {
-  const out = { bytes: 0, files: 0, newest: 0, epochDated: 0, hardLinked: [], all: [], errors: 0 };
+  const out = { bytes: 0, logicalBytes: 0, files: 0, newest: 0, epochDated: 0, hardLinked: [], all: [], errors: 0 };
   const stack = [root];
   while (stack.length) {
     const path = stack.pop();
@@ -70,11 +74,15 @@ function walk(root, seen = new Set()) {
     if (st.mtimeMs < EPOCH_FLOOR) out.epochDated++;
     else out.newest = Math.max(out.newest, st.mtimeMs);
     if (st.isFile()) {
-      out.all.push({ path, size: st.size });
+      out.all.push({ path, size: st.size, type: "file", modified: st.mtimeMs, changed: st.ctimeMs });
+      out.logicalBytes += st.size;
       if (st.nlink > 1) out.hardLinked.push(path);
       const key = `${st.dev}:${st.ino}`;
       if (st.nlink > 1 && seen.has(key)) continue;
       seen.add(key);
+    } else if (st.isSymbolicLink()) {
+      out.all.push({ path, size: st.size, type: "symlink", target: readlinkSync(path), modified: st.mtimeMs, changed: st.ctimeMs });
+      out.logicalBytes += st.size;
     }
     out.bytes += st.blocks !== undefined ? st.blocks * 512 : st.size;
   }
@@ -286,11 +294,52 @@ function outcome(f) {
   return "ask";
 }
 
+function preservationInput(path) {
+  if (!path) return { workspace: null, families: {}, supplied: false };
+  const input = JSON.parse(readFileSync(path, "utf8"));
+  if (!input || input.version !== 1 || typeof input.workspace !== "string" || !input.workspace.trim()
+    || !input.families || typeof input.families !== "object" || Array.isArray(input.families)) {
+    throw new Error("Preservation input must have version 1, a workspace name, and a families object");
+  }
+  const families = Object.create(null);
+  for (const [name, value] of Object.entries(input.families)) {
+    const normalized = posix(name);
+    const absolute = isAbsolute(name) || /^[A-Za-z]:\//.test(normalized);
+    if (!name || normalized.includes("\\") || normalized.split("/").includes("..") || (!absolute && normalized.startsWith("/"))
+      || !value || typeof value !== "object" || Array.isArray(value)) {
+      throw new Error(`Invalid preservation family: ${name}`);
+    }
+    if (Object.hasOwn(families, normalized)) throw new Error(`Duplicate preservation family: ${name}`);
+    if (value.owner !== undefined && (typeof value.owner !== "string" || !value.owner.trim())) throw new Error(`Invalid owner for ${name}`);
+    if (value.retention !== undefined && (typeof value.retention !== "string" || !value.retention.trim())) throw new Error(`Invalid retention for ${name}`);
+    if (value.dependencies !== undefined && (!value.dependencies || typeof value.dependencies.complete !== "boolean"
+      || !Array.isArray(value.dependencies.active) || value.dependencies.active.some((item) => typeof item !== "string"))) {
+      throw new Error(`Invalid dependency observation for ${name}`);
+    }
+    families[normalized] = value;
+  }
+  return { workspace: input.workspace, families, supplied: true };
+}
+
+function workspaceIdentity(repo) {
+  const common = git(repo, ["rev-parse", "--git-common-dir"]).trim();
+  return {
+    root: repo,
+    gitCommon: realpathSync(isAbsolute(common) ? common : resolve(repo, common)),
+    head: git(repo, ["rev-parse", "HEAD"]).trim(),
+  };
+}
+
+const canonicalPath = (path) => existsSync(path) ? realpathSync(path) : resolve(path);
+
 export function inspect(opts, now = Date.now()) {
   const repo = realpathSync(opts.repo), coverage = { complete: true, sizes: "allocated bytes; upper bound on copy-on-write filesystems" };
   // opts.open supplies the open-file set; the fixture tests pass one so each call skips a machine-wide lsof.
   if (opts.open) coverage.openFiles = "supplied";
   const tracked = trackedText(repo), status = tickets(repo), open = opts.open ?? openPaths(coverage), trees = worktrees(repo);
+  const preservation = preservationInput(opts.preservation);
+  coverage.preservation = preservation.supplied ? "supplied" : "not supplied";
+  if (!preservation.supplied) coverage.complete = false;
   const roots = [];
   const scratch = join(repo, ".scratch");
   if (existsSync(scratch)) for (const name of readdirSync(scratch)) roots.push({ abs: join(scratch, name), kind: "scratch" });
@@ -301,32 +350,81 @@ export function inspect(opts, now = Date.now()) {
   for (const t of trees) if (!roots.some((r) => inside(t.path, r.abs))) roots.push({ abs: t.path, kind: "worktree" });
   for (const p of opts.paths) roots.push({ abs: resolve(p), kind: "outside" });
 
+  const scope = roots.map((root) => ({ ...root, canonical: canonicalPath(root.abs) }));
+  const collisions = new Set();
+  coverage.scopeIssues = [];
+  for (let i = 0; i < scope.length; i++) {
+    const root = scope[i];
+    if (inside(root.abs, repo) && !inside(root.canonical, repo)) {
+      coverage.scopeIssues.push({ kind: "symlink-escape", path: root.abs, target: root.canonical });
+      collisions.add(i);
+    }
+    for (let j = i + 1; j < scope.length; j++) {
+      const other = scope[j];
+      if (inside(root.canonical, other.canonical) || inside(other.canonical, root.canonical)) {
+        coverage.scopeIssues.push({ kind: "overlapping-roots", paths: [root.abs, other.abs] });
+        collisions.add(i);
+        collisions.add(j);
+      }
+    }
+  }
+  if (coverage.scopeIssues.length) coverage.complete = false;
+  const scopedRoots = scope.filter((_, index) => !collisions.has(index));
+  const scopeIdentity = scopedRoots.map(({ abs, canonical, kind }) => ({ path: abs, canonical, kind })).sort((a, b) => a.path.localeCompare(b.path));
+  const workspace = { ...workspaceIdentity(repo), project: preservation.workspace };
+
   const seen = new Set(), families = [];
-  for (const r of roots) {
+  for (const r of scopedRoots) {
     const rel = inside(r.abs, repo) ? posix(relative(repo, r.abs)) : undefined;
     const name = basename(r.abs), ticket = ticketOf(name);
     if (opts.ticket !== undefined && ticket !== opts.ticket) continue;
-    const w = existsSync(r.abs) ? walk(r.abs, seen) : { bytes: 0, files: 0, newest: 0, epochDated: 0, hardLinked: [], all: [], errors: 0 };
-    if (w.errors) coverage.complete = false;
-    const cite = citations(rel, r.abs, tracked, repo);
     const worktree = trees.find((t) => t.path === r.abs);
+    if (!existsSync(r.abs) && !worktree?.prunable) {
+      coverage.complete = false;
+      coverage.scopeIssues.push({ kind: "missing-root", path: r.abs });
+    }
+    const w = existsSync(r.abs) ? walk(r.abs, seen) : { bytes: 0, logicalBytes: 0, files: 0, newest: 0, epochDated: 0, hardLinked: [], all: [], errors: 0 };
+    if (w.errors) {
+      coverage.complete = false;
+      coverage.scopeIssues.push({ kind: "incomplete-root", path: r.abs, errors: w.errors });
+    }
+    const cite = citations(rel, r.abs, tracked, repo);
     const activeReasons = [];
     const quietFor = (now - w.newest) / 60000;
     if (w.newest && quietFor < opts.quietMinutes) activeReasons.push(`written ${Math.floor(quietFor)}m ago (quiet floor ${opts.quietMinutes}m)`);
     const openHere = [...open].filter((p) => inside(p, r.abs));
     if (openHere.length) activeReasons.push(`${openHere.length} open file(s)`);
     for (const t of trees) if (t.active && inside(t.path, r.abs)) activeReasons.push(`active worktree ${posix(relative(repo, t.path)) || t.path}${t.branch ? ` on ${t.branch}` : ""}${t.dirty ? " with uncommitted changes" : ""}`);
+    const identity = preservation.families[rel ?? posix(r.abs)];
+    const ownership = identity?.owner && identity?.retention ? "known" : "unknown";
+    const dependencyStatus = !identity?.dependencies ? "unavailable" : identity.dependencies.complete ? "complete" : "partial";
+    const externalActive = identity?.dependencies?.active ?? [];
+    activeReasons.push(...externalActive.map((dependency) => `active dependency ${dependency}`));
     const f = {
-      path: rel ?? r.abs, kind: r.kind, bytes: w.bytes, files: w.files,
+      path: rel ?? r.abs, kind: r.kind, bytes: w.bytes, allocatedBytes: w.bytes, logicalBytes: w.logicalBytes,
+      reclaimableBytes: null, files: w.files,
       newestWrite: w.newest ? new Date(w.newest).toISOString() : null, epochDatedFiles: w.epochDated,
       ticket, ticketStatus: ticket === undefined ? undefined : status.get(ticket) ?? "unknown",
       citedBy: cite.citedBy, keep: cite.keep, leads: cite.leads, dangling: cite.dangling,
       keepBytes: cite.keep.reduce((n, k) => n + walk(join(repo, k)).bytes, 0),
       hardLinkedFiles: w.hardLinked.map((p) => posix(relative(repo, p))), openFiles: openHere.map((p) => posix(relative(repo, p))),
-      worktree, activeReasons, walk: w,
+      worktree, activeReasons, ownership, dependencyStatus,
+      inventory: w.all.map((entry) => ({ path: posix(relative(r.abs, entry.path)), size: entry.size, type: entry.type, modified: entry.modified, changed: entry.changed, ...(entry.target === undefined ? {} : { target: entry.target }) })).sort((a, b) => a.path.localeCompare(b.path)),
+      walk: w,
     };
     f.unkeptFiles = w.all.filter((x) => !cite.keep.some((k) => inside(x.path, join(repo, k)))).length;
     f.outcome = outcome(f);
+    if (f.outcome === "delete" || f.outcome === "slim") {
+      if (ownership !== "known" || dependencyStatus !== "complete" || !coverage.complete) f.outcome = "ask";
+    }
+    f.preservationState = {
+      workspace,
+      scope: scopeIdentity,
+      inventory: f.inventory,
+      ticket: { id: ticket ?? null, status: f.ticketStatus ?? null },
+      ownership: identity ? { owner: identity.owner ?? null, retention: identity.retention ?? null } : null,
+      dependencies: { status: dependencyStatus, suppliedActive: externalActive, activeReasons: [...activeReasons].sort(), openFiles: f.openFiles, openFileProbe: coverage.openFiles ?? "unavailable", worktree },
+    };
     families.push(f);
   }
   if (opts.dedupe) dedupe(families, tracked, repo);
@@ -339,11 +437,14 @@ export function inspect(opts, now = Date.now()) {
     for (const [ticket, total] of perTicket) if (total > opts.cap) findings.push({ kind: "ticket-cap", ticket, bytes: total, cap: opts.cap });
   }
   if (opts.recheck) {
-    // A citation added after the list was made must stop the removal, never ride along with it.
     const prior = JSON.parse(readFileSync(opts.recheck, "utf8"));
     for (const before of prior.families ?? []) {
       if (!["delete", "slim"].includes(before.outcome)) continue;
       const now = families.find((f) => f.path === before.path);
+      if (!now || !before.preservationState || JSON.stringify(now.preservationState) !== JSON.stringify(before.preservationState)) {
+        if (now && !["skip", "keep"].includes(now.outcome)) now.outcome = "ask";
+        findings.push({ kind: "preservation-changed", path: before.path, before: before.preservationState ?? null, now: now?.preservationState ?? null });
+      }
       if (now && JSON.stringify(now.keep) !== JSON.stringify(before.keep)) {
         now.outcome = "keep list changed";
         findings.push({ kind: "keep-list-changed", path: before.path, before: before.keep, now: now.keep });
