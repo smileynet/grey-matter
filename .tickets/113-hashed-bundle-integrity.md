@@ -1,7 +1,7 @@
 ---
 id: "113"
 title: "Verify portable bundle hashes across fresh copies and Git checkouts"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Bundle guidance requires exact inventory and raw-byte hash checks when a manifest promises them."
