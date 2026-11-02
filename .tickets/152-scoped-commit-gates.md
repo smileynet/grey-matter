@@ -1,7 +1,7 @@
 ---
 id: "152"
 title: "Scope project commit gates to vital, changed parts and bound verification scratch"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
