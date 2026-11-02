@@ -143,3 +143,23 @@ Scratch repo: `git lfs track "*.bin"`, a 200,000-byte random `big.bin`, commit, 
   `man trash` on a 15.x host.
 - No official Microsoft page found for the Recycle Bin size-limit behaviour.
 - Whether `fsutil hardlink list` needs elevation; whether `df -Pk /mnt/c` from WSL matches `Get-Volume C`.
+
+## Windows host follow-up (2026-11-02)
+
+**Host:** Windows 11 Pro 10.0.26300, PowerShell 7.6.9, Node v22.22.3, D: NTFS. The
+measurements below used the private D: worktree and an owned, ignored 512-byte hard-link fixture;
+they do not describe other filesystems or cloud allocation. No provider/model calls were involved.
+
+| Claim | Command and observed output | Outcome and limit |
+|---|---|---|
+| Volume free space matches the inspector | `Get-Volume -FilePath (Get-Location).Path` → `SizeRemaining 100243001344`; `node skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs --repo . --floor 0B --quiet 0m` → exit 0, `status: review`, `freeSpace.free 100243001344`, 13 families, 0 findings | Pass, exact byte match (delta 0) on D: NTFS at 2026-11-02. A later summary read `free 93.4 GiB`; free space is time-sensitive. The report remains `review` because candidate families existed. |
+| PowerShell directory-size row and hard-link double count | `$probeRoot` named the owned fixture directory; `Get-ChildItem $probeRoot -Recurse -File -Force | Measure-Object Length -Sum` → `Count 2`, `Sum 1024`; fixture held one 512-byte file and one hard link. `fsutil hardlink list $source` listed both paths. | Pass for logical length and hard-link listing on this NTFS host; no ReFS/Dev Drive block-clone claim. Own fixture was sent to the OS Recycle Bin using `FileSystem.DeleteDirectory(..., AllDialogs, SendToRecycleBin)`; its Bin contents were not enumerated. |
+| Footprint fixture and open-file coverage | `node --test scripts/inspect-footprint.test.mjs` → 7 passed, 0 failed, 0 skipped. Diagnostic: `open-file detection unavailable on this host; asserted incomplete coverage instead`. | Pass for the fixture suite; Windows result explicitly has `openFiles: unavailable`, `coverage.complete: false`; no open-file detection claim. `handle.exe` was not found on PATH. |
+| Real-repository summary | `node skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs --repo . --summary --floor 0B --quiet 0m` → exit 0, `free 93.4 GiB (floor 0.0 MiB)` | No limit finding; the JSON report had `status: review` because candidate families existed, and incomplete open-file coverage. Summary output is not a clean/pass classification. |
+| `fsutil fsinfo volumeinfo D:` | Command returned `Error 5: Access is denied.` | Infrastructure/privilege limit: volume metadata from this command was not observed without elevation. `Get-Volume -FilePath` did work. |
+| `handle.exe` availability | `Get-Command handle.exe -ErrorAction SilentlyContinue` returned no command. | Not installed/on PATH; the inspector correctly reports open-file coverage unavailable rather than treating the set as empty. |
+| Recycle Bin operation below/over cap and cap value | Not run. | No isolated volume with a separate Recycle Bin was available. No near-cap fixture was placed in the user's real Recycle Bin, no per-drive Bin setting was changed, and the existing guidance remains based on .NET/Win32 source plus secondary cap documentation. Over-cap behavior is still unverified on Windows. |
+| OneDrive online-only placeholder | Not run. `OneDrive` environment variable exists, but no owned disposable online-only fixture was available. | No cloud file was opened, hydrated, or deleted. Full logical-size versus allocated-size behavior remains documented/inferred from Files On-Demand documentation, not observed on this account. |
+
+The October 31 failure is not reproduced on the current Windows host: all seven current fixture
+tests pass. This does not resolve the over-cap Recycle Bin or placeholder observations above.
