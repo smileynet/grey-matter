@@ -1,7 +1,7 @@
 ---
 id: "177"
 title: "gate.mjs --record writes measured timings into gates.json"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "--record updates only measurements for passed checks, to 0.1 seconds with the local date and supported host name, preserving other bytes."
@@ -26,10 +26,10 @@ way to write it. Keep the file's formatting: replace only each recorded check's 
 
 ## Acceptance criteria
 
-- [ ] `node scripts/gate.mjs <stage> --record` rewrites `measured` (seconds to 0.1, today's date, host
+- [x] `node scripts/gate.mjs <stage> --record` rewrites `measured` (seconds to 0.1, today's date, host
       `win`/`mac`/`linux`) for each check that passed in that run, and leaves every other byte unchanged.
-- [ ] A failed, skipped or timed-out check keeps its old `measured`.
-- [ ] `scripts/gate.test.mjs` covers both; `node scripts/gate.mjs pre-merge` passes.
+- [x] A failed, skipped or timed-out check keeps its old `measured`.
+- [x] `scripts/gate.test.mjs` covers both; `node scripts/gate.mjs pre-merge` passes.
 
 ## Local preparation 2026-11-02
 
@@ -46,3 +46,12 @@ review axes found no remaining findings. Candidate `67320db` passed the complete
 29.8 s through `node scripts/gate.mjs pre-merge --base d62347c` (19 selected commands complete).
 The hostile-config pre-release run also completed all 28 commands; Windows platform skips remain.
 No scratch artifact belongs exclusively to this ticket; shared gate evidence lives with #137/#176.
+
+## Resolution (2026-11-02)
+
+done: gate --record records only successful measurements while preserving manifest formatting. Standards/spec reviews found no remaining findings. Docs deployed; shared evidence promoted under docs/agents/research/evidence/test-optimization-20261102.json and owned scratch recycled. Current deployment packages kept until next deploy.
+
+### Verification
+1. ✓ --record updates only measurements for passed checks, to 0.1 seconds with the local date and supported host name, preserving other bytes. — "Public CLI fixtures verify replacement/insertion changes only measured bytes, preserves CRLF/Unicode and surrounding fields, writes 0.1-second precision/local date/host, and rejects concurrent edits or invalid UTF-8."
+2. ✓ Failed, skipped and timed-out checks retain their old measurements. — "CLI fixture covers failed, skipped and timed-out retention; multi-tip fixture preserves prior measurement when any judged tip fails."
+3. ✓ Gate CLI regression fixtures cover recording and node scripts/gate.mjs pre-merge passes. — "Six focused CLI fixtures pass; fresh node scripts/gate.mjs pre-merge --base d62347c completed 19 commands with gate-runner 29.8s. Full hostile-config pre-release completed 28 commands; Windows platform skips remain."
