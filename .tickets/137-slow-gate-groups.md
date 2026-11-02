@@ -1,7 +1,7 @@
 ---
 id: "137"
 title: "Slim the deployer and release-integration checks (92 s and 146 s at pre-release)"
-status: open
+status: in_progress
 blocked_by: []
 tags: ["stream:tooling"]
 ---
