@@ -28,6 +28,7 @@ const CODEX_MODEL_MINIMUMS = { "gpt-6.1-terra": "0.159.0" };
 const KIRO_ORDER = ["claude-opus-5-5", "claude-opus-5", "claude-opus-4.8", "claude-opus-4.7", "claude-opus-4.6", "claude-opus-4.5"];
 const PROMPT = "Reply with exactly: OK";
 const AUTH = /authenticat|oauth|refresh token|sign in again|log ?in|log out and sign|401|expired|unauthori[sz]ed/i;
+const SAFE_CODEX_MODEL_ID = /^[A-Za-z0-9][A-Za-z0-9._/-]*$/;
 
 const WINDOWS_CODEX_DISPATCH = "$ErrorActionPreference = 'Stop'; $exe = Get-Command -Name 'codex' -CommandType Application -ErrorAction Stop; $codexArgs = @(ConvertFrom-Json -InputObject $env:GM_CODEX_ARGS); & $exe.Source @codexArgs; exit $LASTEXITCODE";
 
@@ -142,9 +143,13 @@ function kiroPick(ctx) {
 
 export function probe(harness, { ceilings = CEILINGS, timeout = 60 } = {}) {
   const cmd = harness === "kiro" ? "kiro-cli" : harness;
+  const requested = ceilings[harness];
+  if (harness === "codex" && (typeof requested !== "string" || !SAFE_CODEX_MODEL_ID.test(requested))) return {
+    harness, status: "invalid-model-id",
+    note: "Codex model ID must start with an ASCII letter or digit and contain only letters, digits, dot, underscore, slash or hyphen.",
+  };
   const v = version(cmd, { timeout });
   if (!v) return { harness, status: "unavailable", note: `${cmd} is not on PATH` };
-  const requested = ceilings[harness];
   const minimum = harness === "codex" ? CODEX_MODEL_MINIMUMS[requested] : null;
   if (minimum && belowVersion(v, minimum)) return {
     harness, version: v, ceiling: requested, requested, status: "unsupported-version",

@@ -64,8 +64,10 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **Windows launch and Bun install pitfall.** Node's `spawnSync` does not launch a PATH
   `.cmd` shim directly. The critic probe resolves the `codex` application with Windows
   PowerShell, then passes its argv as JSON data for array invocation; it does not construct
-  a shell command from argument text. This supports the Bun global `.cmd` launcher without
-  copying a `codex.exe` that goes stale on upgrade. In the observed Bun 1.3.12 link failure,
+  PowerShell source from argument text. A `.cmd` is still parsed by `cmd.exe`, so the probe
+  first accepts only model IDs matching `[A-Za-z0-9][A-Za-z0-9._/-]*` and rejects invalid IDs
+  before any launcher call. This supports the Bun global `.cmd` launcher without copying a
+  `codex.exe` that goes stale on upgrade. In the observed Bun 1.3.12 link failure,
   `codex.bunx` was left empty and a copied native executable was only a temporary workaround.
   Check `codex --version` after repairing/reinstalling the global package; do not keep the
   copied binary as the install.
@@ -207,7 +209,8 @@ Rules, with the evidence for each in the spike results:
 
 - **Model-specific CLI floor (verified 2026-11-02):** the official [model guide](https://learn.chatgpt.com/docs/models)
   requires Codex CLI 0.159.0 or later for GPT-6.1 Terra. It gives no CLI minimum for GPT-6.1
-  Sol, the selected critic model; availability depends on account, client, workspace and rollout.
+  Sol, the selected critic model; availability depends on plan/sign-in method, client, workspace
+  and rollout.
   The probe guards the published Terra floor. A Sol `not supported` response stays an
   availability diagnostic and does not assume that upgrading the CLI fixes it.
 

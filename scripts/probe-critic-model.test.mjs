@@ -7,7 +7,7 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -181,13 +181,23 @@ test("Codex reaches a .cmd shim through a path with spaces and metacharacters", 
   assert.ok(calls.some((args) => args[0] === "exec" && args.includes("gpt-9-no-such-model")));
 });
 
-test("Codex .cmd argument arrays keep metacharacters inside the model argument", { skip: process.platform !== "win32" }, async (t) => {
+test("a canonical Codex model ID remains one argument through a .cmd shim under a path with metacharacters", { skip: process.platform !== "win32" }, async (t) => {
   const env = windowsCodexShim(t);
-  const model = "gpt-6.1-sol & echo INJECTED";
+  const model = "org/gpt-6.1-sol";
   const r = await probeWith(env, "codex", { ceilings: { ...CEILINGS, codex: model } });
   assert.equal(r.status, "below-ceiling");
   const calls = readFileSync(env.log, "utf8").trim().split(/\r?\n/).map((line) => JSON.parse(line));
   assert.ok(calls.some((args) => args[args.indexOf("-m") + 1] === model));
+});
+
+test("unsafe Codex model IDs are rejected before any .cmd shim invocation", { skip: process.platform !== "win32" }, async (t) => {
+  const env = windowsCodexShim(t);
+  for (const model of ["gpt-6.1-sol & echo INJECTED", "gpt-6.1-sol%PATH%", "gpt-6.1-sol!GM_SENTINEL!", "gpt-6.1-sol`quoted`", "-gpt-6.1-sol"]) {
+    const r = await probeWith(env, "codex", { ceilings: { ...CEILINGS, codex: model } });
+    assert.equal(r.status, "invalid-model-id");
+    assert.doesNotMatch(r.note, /HTTP 400/);
+  }
+  assert.equal(existsSync(env.log), false, "invalid IDs must be rejected before even --version reaches the shim");
 });
 
 test("Codex .cmd rejects a below-floor Terra version before invoking a model", { skip: process.platform !== "win32" }, async (t) => {
