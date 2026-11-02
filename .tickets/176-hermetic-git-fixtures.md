@@ -1,7 +1,7 @@
 ---
 id: "176"
 title: "Test fixtures isolate Git from the user's global config (signing, hooks, editor)"
-status: open
+status: in_progress
 blocked_by: []
 tags: ["stream:tooling"]
 ---
