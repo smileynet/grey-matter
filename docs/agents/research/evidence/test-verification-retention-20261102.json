@@ -191,6 +191,15 @@
     "purpose": "Retain bounded source checkouts and original failure/pass logs through the remaining platform regression/reproduction audit. Source is recoverable from Git; compact native findings are promoted separately. Retire checkouts/logs after that audit no longer needs their exact inputs.",
     "dependencies": "Root integration checkout references existing root node_modules by junction; do not traverse or delete the shared dependency target. Owned WSL distro and native runtime remain reusable through deferred platform follow-ups.",
     "unowned": "Earlier preserved artifacts retain their recorded sizes above. Concurrent orchestration artifacts, user OneDrive data and Mac simulators remain untouched.",
-    "limits": "File lengths exclude skipped links and are not allocation or reclaimable bytes. No whole-drive scan or raw evidence bundle was added."
+    "limits": "File lengths exclude skipped links and are not allocation or reclaimable bytes. No whole-drive scan or raw evidence bundle was added.",
+    "cleanup": {
+      "temporaryIndexFiles": 8,
+      "bytes": 797728,
+      "completedHelperAndDraftFiles": 5,
+      "completedHelperAndDraftBytes": 10791,
+      "completedHelperAndDraftNames": ["t-close-final.mjs", "t-final-artifacts.mjs", "t-final-index-cleanup.ps1", "t-normalize-retention.mjs", "t182-native-evidence-draft.md"],
+      "method": "Microsoft.VisualBasic DeleteFile SendToRecycleBin",
+      "observation": "Calls returned without error and original paths are absent; host Bin contents were not inspected."
+    }
   }
 }
