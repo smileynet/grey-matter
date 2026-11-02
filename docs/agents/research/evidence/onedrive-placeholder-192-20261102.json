@@ -1,0 +1,110 @@
+{
+  "ticket": "192",
+  "observedOn": "2026-11-02",
+  "fixture": {
+    "alias": "A",
+    "ownerApprovedExactPath": true,
+    "pathOrFilenameRecorded": false,
+    "providerStateMutationRequested": false,
+    "contentRead": false,
+    "contentHashed": false,
+    "contentCopied": false,
+    "otherCloudFilesEnumerated": false,
+    "providerContact": "not instrumented"
+  },
+  "method": {
+    "GetFileAttributesExW": "GetFileExInfoStandard metadata only",
+    "CreateFileW": {
+      "desiredAccess": "FILE_READ_ATTRIBUTES (0x80)",
+      "shareMode": "READ|WRITE|DELETE",
+      "creationDisposition": "OPEN_EXISTING",
+      "flags": [
+        "FILE_FLAG_OPEN_NO_RECALL (0x00100000)",
+        "FILE_FLAG_OPEN_REPARSE_POINT (0x00200000)"
+      ]
+    },
+    "GetFileInformationByHandleEx": [
+      "FileStandardInfo",
+      "FileAttributeTagInfo"
+    ],
+    "CfGetPlaceholderStateFromAttributeTag": "local FileAttributes/ReparseTag metadata",
+    "CfGetPlaceholderInfo": {
+      "infoClass": "CF_PLACEHOLDER_INFO_STANDARD",
+      "handleAccess": "FILE_READ_ATTRIBUTES",
+      "result": "0x80070178",
+      "returnedBytes": 0,
+      "resultDecoded": false
+    },
+    "snapshots": "same metadata APIs immediately before and after one exact-file inspector invocation"
+  },
+  "before": {
+    "logicalEndOfFileBytes": 11745765,
+    "fileStandardInfoEndOfFileBytes": 11745765,
+    "fileStandardInfoAllocationSizeBytes": 11747328,
+    "fileAttributesHex": "0x00000020",
+    "reparseTagHex": "0x00000000",
+    "cloudPlaceholderStateHex": "0x00000000",
+    "cloudPlaceholder": false,
+    "partial": false,
+    "partiallyOnDisk": false,
+    "recallOnOpen": false,
+    "recallOnDataAccess": false
+  },
+  "inspector": {
+    "scope": "one exact external file path via --path; no directory/tree argument",
+    "dedupe": false,
+    "sourceReview": "walk used lstat metadata on this exact file; no content hash/read path was enabled",
+    "exitCode": 0,
+    "status": "review",
+    "coverageComplete": false,
+    "openFilesCoverage": "unavailable; lsof was not installed",
+    "familyKind": "outside",
+    "familyBytes": 11747328,
+    "familyFiles": 1,
+    "familyOutcome": "ask",
+    "findings": [],
+    "classification": "exit 0 with status review is not a pass for online-only placeholder behavior"
+  },
+  "after": {
+    "logicalEndOfFileBytes": 11745765,
+    "fileStandardInfoEndOfFileBytes": 11745765,
+    "fileStandardInfoAllocationSizeBytes": 11747328,
+    "fileAttributesHex": "0x00000020",
+    "reparseTagHex": "0x00000000",
+    "cloudPlaceholderStateHex": "0x00000000",
+    "cloudPlaceholder": false,
+    "partial": false,
+    "partiallyOnDisk": false,
+    "recallOnOpen": false,
+    "recallOnDataAccess": false
+  },
+  "comparison": {
+    "metadataUnchanged": true,
+    "lastAccessTimeUnchanged": true,
+    "lastWriteTimeUnchanged": true,
+    "inspectorBytesEqualNativeAllocationSize": true
+  },
+  "conclusion": {
+    "onlineOnlyPlaceholderObserved": false,
+    "inspectorDefectConfirmed": false,
+    "ticketAcceptanceMet": false,
+    "limits": [
+      "The approved path currently resolves to a regular local file, not a Cloud Files placeholder; this observation does not validate online-only behavior.",
+      "FILE_FLAG_OPEN_NO_RECALL requests that file data remain remote for this open, but provider contact was not instrumented and is not claimed absent.",
+      "CfGetPlaceholderInfo returned an undecoded failure for this non-placeholder, so OnDiskDataSize was unavailable.",
+      "The inspector's open-file coverage is incomplete on this host."
+    ]
+  },
+  "primarySources": [
+    "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfileattributesexw",
+    "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea",
+    "https://learn.microsoft.com/en-us/windows/win32/api/winbase/ns-winbase-file_standard_info",
+    "https://learn.microsoft.com/en-us/windows/win32/api/cfapi/nf-cfapi-cfgetplaceholderinfo",
+    "https://learn.microsoft.com/en-us/windows/win32/api/cfapi/ne-cfapi-cf_placeholder_state"
+  ],
+  "artifacts": {
+    "probeHelperFileCreated": false,
+    "probeImplementation": "inline in-memory PowerShell Add-Type P/Invoke; no persistent helper or output file",
+    "report": "this sanitized JSON file; no user path, filename, provider identity, or content hash"
+  }
+}

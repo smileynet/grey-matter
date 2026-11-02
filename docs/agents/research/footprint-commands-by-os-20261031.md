@@ -149,7 +149,9 @@ Scratch repo: `git lfs track "*.bin"`, a 200,000-byte random `big.bin`, commit, 
 
 **Host:** Windows 11 Pro 10.0.26300, PowerShell 7.6.9, Node v22.22.3, D: NTFS. The
 measurements below used the private D: worktree and an owned, ignored 512-byte hard-link fixture;
-they do not describe other filesystems or cloud allocation. No provider/model calls were involved.
+they do not describe other filesystems or cloud allocation. Those local samples made no
+provider/model calls. The separate OneDrive metadata observation below did not read file content
+or request a provider-state change; provider contact was not instrumented.
 
 | Claim | Command and observed output | Outcome and limit |
 |---|---|---|
@@ -160,11 +162,12 @@ they do not describe other filesystems or cloud allocation. No provider/model ca
 | `fsutil fsinfo volumeinfo D:` | Command returned `Error 5: Access is denied.` | Infrastructure/privilege limit: volume metadata from this command was not observed without elevation. `Get-Volume -FilePath` did work. |
 | `handle.exe` availability | `Get-Command handle.exe -ErrorAction SilentlyContinue` returned no command. | Not installed/on PATH; the inspector correctly reports open-file coverage unavailable rather than treating the set as empty. |
 | Recycle Bin operation below/over cap and cap value | Hidden `WindowsSandbox.exe` launch of an owned `.wsb` mapped only one disposable fixture folder read/write; guest ran `powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File C:\t132\run.ps1`. The script set only the Sandbox user's C: `MaxCapacity` value to 1 MiB, then used `FileSystem.DeleteFile(..., OnlyErrorDialogs, SendToRecycleBin)` and `SHQueryRecycleBinW(C:\)` before and after. | Windows 11 Enterprise build 26100, interactive `WDAGUtilityAccount`: empty Bin baseline (0 items/0 bytes); 512 KiB control disappeared from source and appeared in Bin (1 item/524,288 bytes); 2 MiB fixture disappeared from source while Bin remained at 1 item/524,288 bytes. Observed over-cap source removal without a new Bin entry, consistent with permanent deletion for this call. The guest's previous capacity value was 6137 and read back as 1 after the change. Network and clipboard were disabled, guest memory capped at 2048 MiB, and the guest ran its own shutdown. No host Bin setting or content was read or changed. Report: [Windows Sandbox Bin-cap evidence](evidence/footprint-win-bin-cap-20261102.json). |
-| OneDrive online-only placeholder | Not run. `OneDrive` environment variable exists, but no owned disposable online-only fixture was available. | No cloud file was opened, hydrated, or deleted. Full logical-size versus allocated-size behavior remains documented/inferred from Files On-Demand documentation, not observed on this account. The owned-fixture follow-up is tracked by [ticket 192](../../../.tickets/192-footprint-onedrive-placeholder.md). |
+| Approved OneDrive file metadata (#192; regular-local file observed, online-only case unverified) | One owner-approved exact file queried once as alias A; [sanitized evidence](evidence/onedrive-placeholder-192-20261102.json). | Its current metadata identified a regular local file, not a Cloud Files placeholder: logical EOF 11,745,765 B, allocated size 11,747,328 B, CF state `NO_STATES`. The exact-file inspector reported 11,747,328 B, exit 0/status `review`, with open-file coverage unavailable. Before/after metadata and timestamps matched. No content read, hash, copy, hydration or provider-state mutation; provider contact was not instrumented. This does not establish online-only behavior or close the prerequisite in [ticket 192](../../../.tickets/192-footprint-onedrive-placeholder.md). |
 
 The October 31 failure is not reproduced on the current Windows host: all seven current fixture
-tests pass. The over-cap Bin result above applies to the disposable Sandbox only; the OneDrive
-placeholder remains unobserved on this account.
+tests pass. The over-cap Bin result above applies to the disposable Sandbox only. The alias-A
+OneDrive file's current metadata was observed, but its online-only placeholder behavior remains
+unverified.
 
 ## WSL host-volume follow-up (#133, 2026-11-02)
 
