@@ -122,6 +122,10 @@ discussion. Don't open pilot, ledger or decision tickets for it, and don't run m
 on it; tagalog-helper stalled five tickets deep on a change that took one commit. Reserve heavy
 evidence for user data, acceptance and release risk. Other skills point here rather than restate it.
 
+A Git hook failing on a check unrelated to the change is a gate-scope bug. Propose moving that
+check to a later stage; investigate its underlying failure outside the hook instead of debugging
+or adding a time box to unrelated work there.
+
 ## Findings
 
 For `retro` and `conformance-audit`, each needs judgment, never an automatic fix:
