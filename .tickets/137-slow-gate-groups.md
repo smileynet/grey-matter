@@ -1,12 +1,12 @@
 ---
 id: "137"
-title: "check-repo groups 1 and 11 exceed the 2 min pre-push budget (91 s and 116 s)"
-status: in_progress
+title: "Slim the deployer and release-integration checks (92 s and 146 s at pre-release)"
+status: open
 blocked_by: []
 tags: ["stream:tooling"]
 ---
 
-# check-repo groups 1 and 11 exceed the 2 min pre-push budget (91 s and 116 s)
+# Slim the deployer and release-integration checks (92 s and 146 s at pre-release)
 
 ## Observed (2026-11-01, Windows 11, `node scripts/check-repo.mjs --full`)
 
@@ -28,9 +28,10 @@ only the release files whose sources changed, then move whatever stays slow to `
 
 ## Acceptance criteria
 
-- [ ] `check-repo.mjs --full` timing per group is recorded, and groups 1 and 11 are narrowed or split where a fixture is rebuilt needlessly.
-- [ ] `--full` still runs every test it ran before.
-- [ ] `node scripts/check-repo.mjs --full` passes, apart from ticket 138's known failure.
+- [x] Timing per file is recorded, and the release group is split: fast files pre-merge (`release-units`), slow files pre-release (`release-integration`).
+- [ ] The four slow release files (artifacts, development, product, git/verify) and `deploy.test.mjs` share or narrow fixtures that are rebuilt needlessly, with before and after times recorded here.
+- [x] Pre-release still runs every test it ran before (`gates-coverage` fails on any unrun test file).
+- [ ] `node scripts/gate.mjs pre-release` passes after the slimming (it passes 25/25 in 294 s before it).
 
 ## Progress 2026-11-01 (proposal 18 step 3)
 
