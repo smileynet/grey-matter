@@ -28,4 +28,15 @@ Prior art to borrow techniques from (not authority): [eval prior art](../docs/ag
 
 ## Reconciliation (2026-11-02)
 
+Input from #162: use its qualified live Kiro V3 ACP driver for the initial
+request/cancel/reload control, keeping #189's EOF teardown limit explicit.
+The [driver receipt](../docs/agents/research/evidence/headless-drivers-20261102.json)
+names five owned native histories (Claude, agy, Codex, Kiro chat and Kiro ACP)
+retained for GUI visibility inspection. Inspect only those identified histories;
+their private fixture is recycled at #162 close. Once this GUI inspection
+settles, archive/recycle the owned records through a supported targeted path,
+or record why individual records must remain. Never remove a shared native
+conversation database or user telemetry log. Codex tool execution needs #188
+before a real tool-capable Codex lane is claimed; its text transport did pass.
+
 Consume #162's named stable headless driver and fixture signals. Compare each GUI against the same worker identities, pending approval and question; distinguish visible state from an action actually answered through the GUI. Unavailable clients remain explicit unsupported coverage, not a reason to install or sign into new services silently.

@@ -405,3 +405,144 @@ this ticket and was left untouched. The existing managed primary checkout
 serves this orchestration workstream; the app's primary-checkout archive guard
 still governs its eventual removal. The separate 98,400-byte ticket 158 fixture
 is retained until that probe finishes. No ticket 155 runtime data is retained.
+
+## Ticket 162: headless driver probes (2026-11-02)
+
+**Answer (observed, Windows):** Claude and agy paired JSONL streams support a
+question/follow-up exchange in one process; Codex exec/resume and Kiro V3
+chat/resume preserve the same session across processes. Kiro V3 ACP additionally
+exposed a native approval request, cancellation, and session/load recovery.
+No approval answer was scripted. None of these results establishes a complete
+unattended orchestrator or GUI integration. Confidence is high for the specific
+captured exchanges and lower for unexercised paths listed below.
+
+Versions read locally: Claude Code 2.1.316, Codex 0.166.0, kiro-cli 2.37.1,
+agy 1.4.12. Runs used the shared fixture tree
+`7fd72339921451e85440698acda748c0bde512bb`, without a remote. Each worker was
+asked to remember a marker, report QUESTION for a missing function name, then
+report DONE with the remembered marker and the controller's `returningUser`
+answer. The second prompt omitted the marker. A third prompt requested one
+harmless Git status command. This is a transport test, not an implementation,
+quality, model-tier or cost benchmark. All provider runs were planned arms of
+the comparison, not fallback after a failure or usage limit.
+
+The [sanitized receipt](evidence/headless-drivers-20261102.json) contains selected
+native results, session identity hashes, outcome fields and the owned history
+IDs retained for #173. Raw captures include local paths/global-hook metadata
+and are not durable deliverables. Existing user hooks ran under their current
+configuration; no global hook, trust, agent or credential setting was changed.
+
+### Observed results and exact scope
+
+| Surface | Question / follow-up | Command / approvals | Terminal and recovery evidence |
+| --- | --- | --- | --- |
+| Claude paired stream-json | **Pass:** two JSON texts, same session and remembered marker | Native Bash call `git status --short`; `is_error=false`, `(Bash completed with no output)`. No approval request for this command | Three native `result` events, process exit 0. New-process resume/cancellation not tested |
+| agy paired stream-json | **Pass:** QUESTION and DONE in the same conversation with the marker | Native denial: `denied_actions` contained `command`; stderr said headless could not prompt. No human rejection occurred | Third result had `status: SUCCESS`, empty response, exit 0 despite denial. **Assertion failure** for requested BLOCKED text; not successful command execution |
+| Codex exec/resume | **Pass:** schema-shaped QUESTION/DONE in identical `thread_id` across new processes | **Infrastructure error:** missing `codex-code-mode-host.exe` prevented shell execution before an approval test | `turn.completed` and exit 0 coexisted with native error items; the final tool result was BLOCKED. Follow-up retained the marker; abrupt interruption not tested |
+| Kiro V3 chat stream-json/resume | **Pass:** same `sess_…` ID, marker and supplied name across processes | Native tool update `completed`, `Exit Code: 0` for `git status --short`. No approval requested for this command | `runFinished` success/end_turn, exit 0. Final JSON was fenced text inside the envelope, not a schema-enforced object |
+| Kiro V3 ACP | **Pass:** QUESTION then DONE with remembered marker | Native `session/request_permission` for `git -c core.pager=cat status --short`; controller sent `session/cancel` without selecting an option | Prompt returned `cancelled`; tool output: `The tool call was cancelled before it was approved.` New process session/load and a new prompt recalled marker/name. Both model-bearing relay processes exited 1 on EOF teardown |
+
+### Working recipes and primary evidence
+
+**Claude (observed):**
+`claude -p --input-format stream-json --output-format stream-json --verbose --model sonnet --effort low --permission-prompts none --tools Bash`.
+Input envelopes were `type: user` with `message.role: user` and text content.
+The controller sent the next message only after a native result. The returned
+usage metadata reported `claude-sonnet-5-5` for the `sonnet` alias; this does not
+establish a fixed model identity for a later alias invocation. Current local
+help says `--permission-prompts` selects `host` or `none`. Host-mediated approval
+answering was not exercised. The first two JSON texts were requested in the
+prompt; no schema enforcement was tested on this run.
+
+**agy (observed):**
+`agy --input-format stream-json --output-format stream-json --print-timeout 25s --print=`.
+Input was `event: user` with `message.content`. The initial ordering
+`-p --input-format …` exited 2 before a model session: `-p` consumed
+`--input-format` as its prompt. The corrected invocation did three turns.
+The native denial explains why final text cannot be the only acceptance signal:
+stderr said a tool needed the command permission “that headless mode cannot
+prompt for, so it was auto-denied.” Inspect `denied_actions`, tool states and
+result termination fields even when process/result status appears successful.
+No rule was added to repair the denial in this probe; #158 owns narrow grants.
+
+**Codex (observed):**
+`codex exec --json --ignore-user-config --ignore-rules --sandbox read-only --output-schema <schema> <prompt>`,
+then `codex exec resume <thread-id> --json --ignore-user-config --ignore-rules --output-schema <schema> <answer>`.
+Authentication used the existing native store. The schema required four string
+fields (status, marker, question, functionName); both responses matched it.
+The captured error item said `Code Mode is unavailable` and the shell attempt
+ended with `OS error 2`. Those are infrastructure errors, not approval denials;
+#188 owns diagnosis. Official OpenAI guidance distinguishes exec jobs from
+“app-server for applications that need persistent conversations, streamed events,
+and approval handling” ([Codex platform guidance](https://developers.openai.com/blog/codex-as-a-platform),
+read 2026-11-02). App-server approval control was not tested here.
+
+**Kiro chat (observed):**
+`kiro-cli chat --no-interactive --trust-workspace --agent-engine v3 --output-format stream-json --model claude-haiku-4.5 <prompt>`,
+then the same command with `--resume-id <session-id>`. `runFinished` carries
+status, stopReason and finalText; correlate updates by session ID. The reported
+JSON inside finalText was fenced and needs explicit parsing/validation.
+
+**Kiro ACP (observed):**
+`kiro-cli acp --agent-engine v3 --auth-method cli`; `initialize`, then
+`session/new` with fixture cwd, empty client MCP array and requested model under
+`_meta.kiro.modelId`. Each turn used `session/prompt`. Register update and
+reverse-request handlers before starting the session. The observed permission
+request supplied `allow_once`, `allow_always`, `reject_once`, `reject_always`.
+Display actual supplied options; this research neither chose nor fabricated an
+approval answer. `session/cancel` settled the waiting prompt with `cancelled`.
+
+On the new process, `session/load` used the same ID, cwd and empty MCP array.
+Prior messages were explicitly marked `replay: true`; fresh subsequent chunks
+returned the remembered marker/name and the new prompt response was `end_turn`.
+Thus replay was not miscounted as a fresh response. At EOF both processes
+reported `error: the v3 engine did not exit within 5 seconds after ACP stdin closed`
+and exited 1. The controller's own 60-second timeout did not fire, and both
+captured engine PIDs were absent after settlement. **Infrastructure error for
+teardown**, separate from the successful turns and expected cancellation. #189
+owns the supported shutdown investigation; this is not an excuse to delete a
+durable session or kill unrelated processes.
+
+### Driver recommendation and remaining unknowns
+
+For #173's live approval/question watch experiment, use the **Kiro V3 ACP
+driver with explicit CLI auth**, session-ID routing, registered reverse handlers,
+and completion from actual prompt responses. It is qualified for the observed
+live exchange, cancel and reload; EOF settlement remains an explicit #189 limit.
+The Claude/agy streams and Codex/Kiro resume wrappers demonstrated only the
+captured read-only exchanges. Full worker dispatch still requires separately
+verified tools, permissions and artifact acceptance on the selected installation.
+Do not interpret empty agy text, model prose, a `turn_end` notification, or
+process exit alone as accepted work.
+
+**Couldn't verify:** Codex app-server approval control; cross-process Claude/agy
+resume; new abrupt-process recovery/cancellation for those CLIs; GUI discovery
+of these histories; general sandbox containment; usage attribution. Current
+`codex queue --help` says it queues to an existing thread and failed automatic
+resume can still succeed as a command; queue delivery was not live-tested.
+`kiro-cli serve --help` identifies a persistent V3 WebSocket server; that server
+was not started. Their help surfaces are documentation-level evidence only.
+
+The earlier [ticket 111 dry-run receipt](orchestrate-skill-dry-runs-20261101.md)
+already preserves selected Git/test outcomes, Kiro outer-process interruption,
+resume and question/answer evidence. It remains the durable prior observation;
+its missing terminal DONE lines remain partial protocol compliance, not repaired
+by this new minimal probe. Its private t111 fixtures/logs are now eligible for
+recycling after the independent audit; no raw-log copy is needed in Git.
+
+Baseline `npm --prefix <fixture> test`: **pass**, 1 test, 0 failures/skips.
+Independent `git status --short` remained empty after the current probes.
+Private raw evidence/fixture cleanup and repository checks are recorded at
+ticket close; native session histories are retained only for #173's GUI
+inspection with their exact IDs in the sanitized receipt.
+
+**Audit and cleanup (observed):** the
+[independent scoped audit](harness-experimental-features-20261101-t162-audit.md)
+rates the captured evidence 8/10 and preserves the qualified driver limits.
+After audit, recycled 20 old t111 artifacts (1,764,849 bytes), the current private
+probe (1,569,869 bytes) and fixture (98,400 bytes). Exact resolved targets,
+unchanged old-artifact byte counts, absence of reparse points and adequate
+Recycle Bin capacities were checked first. All private targets were absent
+afterward. Old fixture registrations showed only their own main worktrees.
+Existing harness installations and shared stores were left intact. Five owned
+native histories remain scoped to #173, not as an indefinite raw-log archive.

@@ -23,6 +23,14 @@ Source: [harness experimental features](../docs/agents/research/harness-experime
 
 ## Acceptance criteria
 
+Current observations: [dated driver findings](../docs/agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02),
+[sanitized receipt](../docs/agents/research/evidence/headless-drivers-20261102.json)
+and [independent audit](../docs/agents/research/harness-experimental-features-20261101-t162-audit.md).
+Question/follow-up transport passed on the captured surfaces. agy soft denial,
+Codex missing tool host (#188) and Kiro ACP EOF teardown (#189) remain explicit
+limits. Kiro ACP is qualified for #173's live request/cancel/reload experiment,
+not a general unattended production driver.
+
 Input from ticket 111: [authored-skill dry runs](../docs/agents/research/orchestrate-skill-dry-runs-20261101.md)
 show Kiro native summaries omitting DONE, a parent pre-answering T2, and a saved
 session recovered after an outer process interruption. A separate native-summary

@@ -157,8 +157,8 @@ recycle owned artifacts; leave unresolved external evidence explicit rather than
 
 ## Orchestration workstream (reconciled 2026-11-02)
 
-Scope: exactly the 28 tickets in the two tables below, tagged
-`stream:orchestration`: 16 open, #162 in progress and 11 done.
+Scope: exactly the 30 tickets in the two tables below, tagged
+`stream:orchestration`; their current statuses are shown in the tables.
 Other tooling, test-verification, dashboard and release work remains in its
 existing stream. Related parked #06 (skill/version drift evaluations) and #09
 (fresh-process versus subagent guidance) remain deferred outside this active
@@ -173,7 +173,7 @@ independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before
 the model comparisons.
 
-Hard remaining edges are #162 → #173 and #174 → #167–172. The rest of each
+Hard edges are #162 → #173/#188/#189 and #174 → #167–172. The rest of each
 ticket's blocked_by records completed fixture/baseline prerequisites, retained
 for provenance. #174 must leave a runnable selected recipe. If both runner
 paths fail, create and link the missing execution prerequisite to #167–172
@@ -191,15 +191,17 @@ auth remains conditional on the result of #186.
 | 159 | 6. Test available Codex multi-agent/message-board/wake features | open |
 | 160 | 7. Test Claude background sessions and idle notification semantics | open |
 | 161 | 8. Test Kiro V3 workflow execution, pause, resume and retry | open |
-| 173 | 9. Compare GUI watch/answer surfaces against #162's stable driver | open |
-| 174 | 10. Select and demonstrate Harbor or a thin runner for the model trials | open |
-| 167 | 11. Compare implementation worker tiers | open |
-| 168 | 12. Compare reviewer tiers with planted defects and false positives | open |
-| 169 | 13. Compare research/exploration tiers against a fixed answer key | open |
-| 170 | 14. Compare documentation, triage and classification tiers | open |
-| 171 | 15. Sweep effort levels while holding each model fixed | open |
-| 172 | 16. Compare Claude fast mode on/off with measured quality and usage | open |
-| 187 | 17. Research ACPa, resolve its identity and propose evidence-led spikes | open |
+| 188 | 9. Diagnose Codex's missing code-mode tool host before claiming tool execution | open |
+| 189 | 10. Qualify Kiro V3 ACP EOF shutdown and descendant settlement | open |
+| 173 | 11. Compare GUI watch/answer surfaces against #162's qualified live driver | open |
+| 174 | 12. Select and demonstrate Harbor or a thin runner for the model trials | open |
+| 167 | 13. Compare implementation worker tiers | open |
+| 168 | 14. Compare reviewer tiers with planted defects and false positives | open |
+| 169 | 15. Compare research/exploration tiers against a fixed answer key | open |
+| 170 | 16. Compare documentation, triage and classification tiers | open |
+| 171 | 17. Sweep effort levels while holding each model fixed | open |
+| 172 | 18. Compare Claude fast mode on/off with measured quality and usage | open |
+| 187 | 19. Research Agent Client Protocol (ACP) and propose evidence-led spikes | open |
 
 Solid arrows below are hard dependencies; dotted arrows are proposed order only.
 Completed prerequisites are omitted from this graph and remain in the tickets.
@@ -207,6 +209,8 @@ Completed prerequisites are omitted from this graph and remain in the tickets.
 ```mermaid
 flowchart TD
   D162["162 Headless drivers"] --> G173["173 GUI watch layer"]
+  D162 --> C188["188 Codex tool-host diagnosis"]
+  D162 --> K189["189 Kiro ACP EOF diagnosis"]
   D162 -.-> A186["186 KAS auth ownership"]
   A186 -.-> M156["156 Mate restart/recovery"]
   P158["158 agy regex permissions"] -.-> W157["157 agy workflows"]
@@ -221,7 +225,7 @@ flowchart TD
   R174 --> T170["170 Text-task tiers"]
   R174 --> F171["171 Effort sweep"]
   R174 --> S172["172 Claude fast mode"]
-  S172 -. "queue last" .-> Q187["187 ACPa research / spike options"]
+  S172 -. "queue last" .-> Q187["187 ACP research / spike options"]
 ```
 
 Completed baseline and delivered guidance (historical closure evidence preserved):
@@ -243,24 +247,34 @@ Completed baseline and delivered guidance (historical closure evidence preserved
 Closed tickets received tag-only metadata corrections; statuses, acceptance
 checkboxes, dependencies and resolution bodies were preserved. Existing unchecked
 historical boxes on #125–129 remain visible warnings, not newly claimed passes.
-All 17 remaining tickets now have concrete validation fields, current context and
+All remaining tickets have concrete validation fields, current context and
 explicit prerequisites. #155 is not reopened: a new mixed-backend probe requires
 a supported configuration/version or a separately chosen design, not repetition
 of the same unsupported split.
 
 Native tkt 0.4.0 context queries also include untagged tickets. Use the exact
-28-ticket membership above rather than treating every context-query result as
+30-ticket membership above rather than treating every context-query result as
 in scope. The initial scoped frontier is #162, #186, #156–161 and #174;
 #173 awaits #162 and #167–172 await #174. Plan order is advisory among frontier
 members, while declared dependencies remain authoritative.
 
 Follow-up request: #162 is now claimed and active. #187 was appended at the
 user's request with low priority and no artificial dependency edge; it stays
-last in this queue. Its subject name ACPa is pending clarification, so research
-must establish the intended primary source before considering new spikes.
+last in this queue. The user clarified that ACPa means Agent Client Protocol
+(ACP); #187 now names that subject and will consider spikes from its findings.
 
-Retained private t111 evidence belongs to #162; the prepared 98,400-byte t158
-fixture belongs to #158. The managed deployment checkout is retained: the app
+#162 found two bounded infrastructure gaps, tracked separately in #188 and #189.
+Their place before GUI/runner qualification is recommended order, not a blanket
+blocker on unrelated harnesses. #173 can observe a live ACP session with the EOF
+caveat; #174 can record an unavailable Codex lane. A real tool-executing Codex
+lane requires #188's remedy, and clean ACP EOF settlement requires #189's result.
+
+After #162's independent audit, its 20 retained t111 artifacts (1,764,849 bytes),
+current probe (1,569,869 bytes) and fixture (98,400 bytes) were recycled. The
+existing tracked dry-run report and new sanitized receipt preserve the selected
+evidence. Five native histories remain only for #173's GUI inspection, with
+exact IDs and retention scope in the driver receipt. The prepared 98,400-byte
+t158 fixture belongs to #158. The managed deployment checkout is retained: the app
 refused archival because another active task still uses it. Preserve it until
 the app permits normal archival; do not bypass that active-use guard.
 No new model run, adapter installation, credential change or fixture cleanup was

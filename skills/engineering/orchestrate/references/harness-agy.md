@@ -12,6 +12,10 @@ observed 2026-10-31 on 1.4.12/Windows. Recheck current tools and account feature
   conversation id woke a questioning worker in the same worktree.
   Headless -p skips the interactive question picker, so QUESTION must travel
   in the status line.
+  An external driver can use paired stream-json with an explicit `--print=`;
+  see [ticket 162](../../../../docs/agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02).
+  Inspect native denied actions and tool states: exit 0 and an empty SUCCESS
+  result coexisted with automatic command denial. They do not establish DONE.
 - Headless shell calls failed closed. Narrow command allow rules did not work in
   the spike; only a session command(*) rule in a user-approved disposable fixture
   succeeded. Do not broaden production permissions to reproduce that result.

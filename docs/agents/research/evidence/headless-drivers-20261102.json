@@ -1,0 +1,230 @@
+{
+  "ticket": 162,
+  "date": "2026-11-02",
+  "versions": {
+    "claude": "2.1.316",
+    "codex": "0.166.0",
+    "kiro": "2.37.1",
+    "agy": "1.4.12"
+  },
+  "fixture_tree": "7fd72339921451e85440698acda748c0bde512bb",
+  "scope": "Windows, read-only local fixture, question/follow-up then harmless Git command; no provider fallback or scripted approval answers",
+  "runs": [
+    {
+      "exit_code": 0,
+      "timeout": false,
+      "elapsed_ms": 15690,
+      "session_hash": "5dfa55db1925cd10dfb3072c7b281e962235c5568d1a55e0d3b69c7ec9c63ecf",
+      "finals": [
+        "{\"status\":\"QUESTION\",\"marker\":\"T162-cedar-47\",\"question\":\"What function name should I use?\"}\n",
+        "{\"status\":\"DONE\",\"marker\":\"T162-cedar-47\",\"functionName\":\"returningUser\"}\n",
+        ""
+      ],
+      "denied_actions": [
+        {
+          "action": "command",
+          "display_name": "RunCommand"
+        }
+      ],
+      "error_items": 0,
+      "permission_requests": [],
+      "label": "agy-stream-2"
+    },
+    {
+      "exit_code": 2,
+      "timeout": false,
+      "elapsed_ms": 170,
+      "session_hash": null,
+      "finals": [],
+      "denied_actions": [],
+      "error_items": 0,
+      "permission_requests": [],
+      "label": "agy-stream"
+    },
+    {
+      "exit_code": 0,
+      "timeout": false,
+      "elapsed_ms": 12777,
+      "session_hash": "700423842b4e3dcd4d13e77aff55ef47dcc4a7177d8ddca4471baec36fe661ce",
+      "finals": [
+        "{\"status\":\"QUESTION\",\"marker\":\"T162-cedar-47\",\"question\":\"What function name should I use?\"}",
+        "{\"status\":\"DONE\",\"marker\":\"T162-cedar-47\",\"functionName\":\"returningUser\"}",
+        "The command ran and was not blocked. `git status --short` printed nothing, so the working tree in the fixture is clean. I ran nothing else."
+      ],
+      "denied_actions": [],
+      "error_items": 0,
+      "permission_requests": [],
+      "label": "claude-stream"
+    },
+    {
+      "exit_code": 0,
+      "timeout": false,
+      "elapsed_ms": 7874,
+      "session_hash": "0ccbe2d05d71638446c6881ab909b0433b15969ae623db19753e28805971dbe4",
+      "finals": [
+        "I’ll attempt `git status --short` once and report the result.",
+        "BLOCKED: The command could not start because the code-mode host executable was missing (OS error 2). No retry was attempted."
+      ],
+      "denied_actions": [],
+      "error_items": 1,
+      "permission_requests": [],
+      "label": "codex-approval"
+    },
+    {
+      "exit_code": 0,
+      "timeout": false,
+      "elapsed_ms": 6788,
+      "session_hash": "0ccbe2d05d71638446c6881ab909b0433b15969ae623db19753e28805971dbe4",
+      "finals": [
+        "{\"status\":\"QUESTION\",\"marker\":\"T162-cedar-47\",\"question\":\"What function name should I use?\"  ,  \"functionName\":\"\"}"
+      ],
+      "denied_actions": [],
+      "error_items": 1,
+      "permission_requests": [],
+      "label": "codex-first"
+    },
+    {
+      "exit_code": 0,
+      "timeout": false,
+      "elapsed_ms": 7694,
+      "session_hash": "0ccbe2d05d71638446c6881ab909b0433b15969ae623db19753e28805971dbe4",
+      "finals": [
+        "{\"status\":\"DONE\",\"marker\":\"T162-cedar-47\",\"question\":\"\",\"functionName\":\"returningUser\"}"
+      ],
+      "denied_actions": [],
+      "error_items": 1,
+      "permission_requests": [],
+      "label": "codex-follow"
+    },
+    {
+      "exit_code": 1,
+      "timeout": false,
+      "session_hash": "666c6ada19572c35f2cb496528ca5ecec1714315ddbcf977fa717813826bbdfc",
+      "finals": [],
+      "acp_agent_text": "```json\n{\n  \"status\": \"QUESTION\",\n  \"marker\": \"T162-pine-83\",\n  \"question\": \"What function name should I use?\"\n}\n``````json\n{\n  \"status\": \"DONE\",\n  \"marker\": \"T162-pine-83\",\n  \"functionName\": \"returningUser\"\n}\n``````json\n{\n  \"status\": \"DONE\",\n  \"marker\": \"T162-pine-83\",\n  \"functionName\": \"returningUser\"\n}\n```",
+      "prompt_stop_reasons": [
+        "end_turn"
+      ],
+      "denied_actions": [],
+      "error_items": 0,
+      "permission_requests": [],
+      "label": "kiro-acp-recovery"
+    },
+    {
+      "exit_code": 1,
+      "timeout": false,
+      "session_hash": "666c6ada19572c35f2cb496528ca5ecec1714315ddbcf977fa717813826bbdfc",
+      "finals": [],
+      "acp_agent_text": "```json\n{\n  \"status\": \"QUESTION\",\n  \"marker\": \"T162-pine-83\",\n  \"question\": \"What function name should I use?\"\n}\n``````json\n{\n  \"status\": \"DONE\",\n  \"marker\": \"T162-pine-83\",\n  \"functionName\": \"returningUser\"\n}\n```",
+      "prompt_stop_reasons": [
+        "end_turn",
+        "end_turn",
+        "cancelled"
+      ],
+      "denied_actions": [],
+      "error_items": 0,
+      "permission_requests": [
+        {
+          "method": "session/request_permission",
+          "optionKinds": [
+            "allow_once",
+            "allow_always",
+            "reject_once",
+            "reject_always"
+          ],
+          "title": "git -c core.pager=cat status --short"
+        }
+      ],
+      "label": "kiro-acp"
+    },
+    {
+      "exit_code": 0,
+      "timeout": false,
+      "elapsed_ms": 6078,
+      "session_hash": "ed203d1719a0b3f0302e06c26a5afde52061364bea82279ada8cc0fbc72a3114",
+      "finals": [
+        "```json\n{\"status\":\"SUCCESS\",\"command\":\"git status --short\",\"output\":\"\",\"exitCode\":0}\n```"
+      ],
+      "denied_actions": [],
+      "error_items": 0,
+      "permission_requests": [],
+      "label": "kiro-chat-approval"
+    },
+    {
+      "exit_code": 0,
+      "timeout": false,
+      "elapsed_ms": 8552,
+      "session_hash": "ed203d1719a0b3f0302e06c26a5afde52061364bea82279ada8cc0fbc72a3114",
+      "finals": [
+        "```json\n{\"status\":\"QUESTION\",\"marker\":\"T162-cedar-47\",\"question\":\"What function name should I use?\"}\n```"
+      ],
+      "denied_actions": [],
+      "error_items": 0,
+      "permission_requests": [],
+      "label": "kiro-chat-first"
+    },
+    {
+      "exit_code": 0,
+      "timeout": false,
+      "elapsed_ms": 4409,
+      "session_hash": "ed203d1719a0b3f0302e06c26a5afde52061364bea82279ada8cc0fbc72a3114",
+      "finals": [
+        "```json\n{\"status\":\"DONE\",\"marker\":\"T162-cedar-47\",\"functionName\":\"returningUser\"}\n```"
+      ],
+      "denied_actions": [],
+      "error_items": 0,
+      "permission_requests": [],
+      "label": "kiro-chat-follow"
+    }
+  ],
+  "notes": {
+    "agy_setup": "-p consumed --input-format as prompt; corrected to paired stream flags with --print=",
+    "codex_tool_error": "Code Mode is unavailable: failed to spawn companion codex-code-mode-host.exe; OS error 2",
+    "kiro_acp_teardown": "error: the v3 engine did not exit within 5 seconds after ACP stdin closed",
+    "kiro_recovery": "First two agent messages were marked replay=true; fresh subsequent chunks reproduced original marker/functionName and the new prompt returned end_turn",
+    "claude_tool_result": "Bash(git status --short), is_error=false, (Bash completed with no output)",
+    "kiro_chat_tool_result": "tool_call_update completed; Output blank; Exit Code: 0",
+    "kiro_acp_cancel_tool_result": "The tool call was cancelled before it was approved. Exit Code: -1"
+  },
+  "baseline": {
+    "npm_test": {
+      "outcome": "pass",
+      "tests": 1,
+      "failures": 0,
+      "skips": 0
+    },
+    "git_status": "clean"
+  },
+  "native_histories": {
+    "lifecycle": "Retain these probe histories for ticket173 GUI visibility inspection; archive/recycle only these owned records when that inspection settles, using native supported lifecycle where available. Do not delete a shared store.",
+    "sessions": {
+      "agy-stream-2.json": "195bc80a-f461-456d-b4cc-ffd1801275bf",
+      "claude-stream.json": "05305f5f-07f6-4033-b7c4-5c1187f52fc6",
+      "codex-approval.json": "01a19cc7-0a9a-7ff1-9acf-85370067ebdd",
+      "codex-first.json": "01a19cc7-0a9a-7ff1-9acf-85370067ebdd",
+      "codex-follow.json": "01a19cc7-0a9a-7ff1-9acf-85370067ebdd",
+      "kiro-acp-recovery.json": "sess_ad6e7317-8444-4745-b044-a4a5146d0c3f",
+      "kiro-acp.json": "sess_ad6e7317-8444-4745-b044-a4a5146d0c3f",
+      "kiro-chat-approval.json": "sess_48b38ebb-fca8-4430-8cb0-d85805242c29",
+      "kiro-chat-first.json": "sess_48b38ebb-fca8-4430-8cb0-d85805242c29",
+      "kiro-chat-follow.json": "sess_48b38ebb-fca8-4430-8cb0-d85805242c29"
+    }
+  },
+  "cleanup": {
+    "method": "OS Recycle Bin after independent audit",
+    "old_t111_items": 20,
+    "old_t111_bytes": 1764849,
+    "current_probe_bytes": 1569869,
+    "current_fixture_bytes": 98400,
+    "all_private_targets_absent_after": true,
+    "native_histories": "retained only for ticket173 as identified above"
+  },
+  "limits": [
+    "No approval option was answered",
+    "No new abrupt-process recovery test; earlier ticket111 observation retained in tracked dry-run report",
+    "Codex queue and kiro serve inspected via help only",
+    "Cross-process Claude/agy resume untested",
+    "Full GUI integration and usage attribution untested",
+    "No current snapshot of global/default approval policy; harmless-command outcomes are account/session-specific"
+  ]
+}

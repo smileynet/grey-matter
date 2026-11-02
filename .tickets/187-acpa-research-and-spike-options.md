@@ -1,30 +1,31 @@
 ---
 id: "187"
-title: "Research: identify ACPa, assess orchestration fit and propose evidence-led spikes"
+title: "Research: Agent Client Protocol (ACP), orchestration fit and evidence-led spikes"
 status: open
 blocked_by: []
 priority: low
 validation_criteria:
-  - "The intended ACPa project/protocol is identified with primary sources, version/date and a clear distinction from similarly named ACP projects."
+  - "Authoritative Agent Client Protocol sources and versions are recorded, distinguishing the standard from MCP, client implementations and Kiro extensions."
   - "Dated audited findings compare its capabilities and gaps with this workstream's observed driver results and recommend bounded spikes or no further work."
   - "Any recommended actionable spikes are separately ticketed with dependencies and acceptance criteria; required checks pass and owned artifacts have a recorded disposition."
 tags: ["stream:orchestration", "type:research"]
 ---
 
-# Research: identify ACPa, assess orchestration fit and propose evidence-led spikes
+# Research: Agent Client Protocol (ACP), orchestration fit and evidence-led spikes
 
 ## What to build
 
-Identify the project/protocol the user called **ACPa**, research its architecture
-and supported integrations from primary sources, and decide whether it merits
-new orchestration spikes. Intent source: this chat's 2026-11-02 request to append
-the research to the end of the orchestration queue.
+Research **Agent Client Protocol (ACP)**, its architecture and supported
+integrations from primary sources, and decide whether it merits new
+orchestration spikes. Intent source: this chat's 2026-11-02 request to append
+research to the end of the orchestration queue, followed by the user's explicit
+clarification that "ACPa" meant Agent Client Protocol.
 
-The name is not yet resolved: the user has been asked whether they mean Agent
-Client Protocol (ACP), the acpx command-line client, or another specific project.
-Preserve the requested name until clarified; do not silently substitute one of
-the similarly named protocols. Record the authoritative URL/repository and
-version before evaluating capabilities.
+Start from the Agent Client Protocol project's own specification, SDK and
+repository. Record authoritative URLs and versions before evaluating
+capabilities. Distinguish standard ACP behavior from a particular client's
+implementation, adapter limitations, Kiro extensions and the separate MCP
+tool-server boundary.
 
 Compare the confirmed subject with the observed driver/session/approval results
 from #162 and the KAS architecture research in #185, plus any later completed
@@ -45,7 +46,7 @@ because higher-priority model trials are waiting on their runner prerequisite.
 
 ## Acceptance criteria
 
-- [ ] The intended ACPa project/protocol is identified with primary sources, version/date and a clear distinction from similarly named ACP projects.
+- [ ] Authoritative Agent Client Protocol sources and versions are recorded, distinguishing the standard from MCP, client implementations and Kiro extensions.
 - [ ] Dated audited findings compare capabilities and gaps with this workstream's observed driver results and recommend bounded spikes or no further work.
 - [ ] Any recommended actionable spikes are separately ticketed with dependencies and acceptance criteria; required checks pass and owned artifacts have a recorded disposition.
 
