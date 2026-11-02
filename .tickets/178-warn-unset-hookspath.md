@@ -1,7 +1,7 @@
 ---
 id: "178"
 title: "Warn when grey-matter's own clone has no core.hooksPath, so pushes skip the pre-push stage"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "Default deploy/list prints one opt-in warning for this clone when its tracked pre-push hook is not selected, and stays quiet when selected."
@@ -26,10 +26,10 @@ one line when this checkout's `core.hooksPath` is not `.githooks`, naming the co
 
 ## Acceptance criteria
 
-- [ ] With `core.hooksPath` unset in a grey-matter checkout, the chosen command prints one warning
+- [x] With `core.hooksPath` unset in a grey-matter checkout, the chosen command prints one warning
       naming `git config core.hooksPath .githooks`; with it set, it prints nothing.
-- [ ] It never changes Git config itself, and stays silent in consumer projects.
-- [ ] `node scripts/gate.mjs pre-merge` passes.
+- [x] It never changes Git config itself, and stays silent in consumer projects.
+- [x] `node scripts/gate.mjs pre-merge` passes.
 
 ## Local preparation 2026-11-02
 
@@ -50,3 +50,12 @@ Deployment initially stopped on tkt's vendored-engine drift. Its clean checkout 
 to upstream, the canonical deployer copied to `tools/deploy.mjs`, and the applicable Node tooling
 fixtures passed again (38 pass, one platform skip). Companion commit `3841188` is pushed. Both
 packs then deployed successfully; the existing generic-icon warning remains advisory.
+
+## Resolution (2026-11-02)
+
+done: advisory opt-in hook reminder on default own-checkout deployment/listing. Both review axes clear. Canonical deployer synchronized to tkt; both packs deployed. Promoted verification evidence and recycled owned scratch; current deployment packages retained until next deploy. Optional strict host audit still reports three existing unowned-root findings and 46 inventory-only overlap notices; no duplicate/error finding, user-managed skills preserved.
+
+### Verification
+1. ✓ Default deploy/list prints one opt-in warning for this clone when its tracked pre-push hook is not selected, and stays quiet when selected. — "Focused unset-hook fixture failed before implementation, then passed. Default install/list warns exactly once for this checkout and recognizes relative/absolute selected tracked hook paths."
+2. ✓ The warning never changes Git configuration and stays silent in consumer projects. — "Focused tests assert byte-identical Git config and silence in consumer and vendored packs; all three pass. No real repository configuration was changed."
+3. ✓ node scripts/gate.mjs pre-merge passes. — "Candidate 67320db: pinned-base pre-merge completed 19 commands; hostile-config pre-release completed 28 commands. Companion tkt tooling: 38 pass, one platform skip after fast-forward and vendored sync; commit 3841188 pushed."
