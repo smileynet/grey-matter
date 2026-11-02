@@ -240,6 +240,15 @@
       "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
     },
     {
+      "id": "tkt-usage-compatibility",
+      "stage": "pre-merge",
+      "catches": "the tkt skill-pack compatibility audit missing unsupported commands or reusing help results for changed CLI, pack, command, directory or environment identities",
+      "scope": ["scripts/verify-tkt-usage", "skills/meta/verify-tkt-usage/", "skills/meta/sync/SKILL.md"],
+      "run": ["node", "--test", "scripts/verify-tkt-usage.test.mjs"],
+      "timeout_s": 30,
+      "measured": { "s": 3.5, "date": "2026-11-02", "host": "win" }
+    },
+    {
       "id": "deployer",
       "stage": "pre-release",
       "catches": "deploy.mjs writing outside the skill roots it owns, duplicating roots, or refreshing a plugin wrongly",
