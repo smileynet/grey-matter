@@ -1,7 +1,7 @@
 ---
 id: "122"
 title: "Find why the deployer check (deploy.test.mjs) fails intermittently on Windows"
-status: open
+status: in_progress
 blocked_by: []
 priority: low
 validation_criteria:
