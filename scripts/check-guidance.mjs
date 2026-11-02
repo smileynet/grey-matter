@@ -8,8 +8,9 @@
 // Errors (exit 1): dead-path, dead-command, dead-skill, dead-link (steering symlink to a missing
 // file), generator (a file another tool regenerates), budget, duplicate (one line in both a
 // global and a repo file). For judgment: contradiction (a known pair in
-// global/conflict-pairs.json; `<!-- overrides: <id> -->` on the line above makes it info) and
-// re-read (a repo file the guidance names changed after the guidance's last commit).
+// global/conflict-pairs.json; `<!-- overrides: <id> -->` on the line above makes it info),
+// ambiguous-skill (an unexplained slash token), and re-read (a repo file the guidance names
+// changed after the guidance's last commit).
 // Commands resolve against this host's PATH, so a tool installed only on another host reads as
 // dead here.
 
@@ -163,8 +164,19 @@ function check(a) {
         if (!r.ok) add("error", "dead-path", f.path, n, `${ref} does not resolve`);
         else if (r.path) live.get(f).add({ path: r.path, line: n });
       }
-      const named = [...line.matchAll(/the `([a-z0-9][a-z0-9:-]*)` skill/gi)].map((m) => m[1])
-        .concat([...line.matchAll(/`\/([a-z][a-z0-9-]*(?::[a-z0-9-]+)?)(?:\s[^`]*)?`/g)].map((m) => m[1]).filter((s) => !SLASH_BUILTINS.has(s)));
+      const named = [...line.matchAll(/the `([a-z0-9][a-z0-9:-]*)` skill/gi)].map((m) => m[1]);
+      const slashRefs = [...line.matchAll(/`\/([a-z][a-z0-9-]*(?::[a-z0-9-]+)?)(?:\s[^`]*)?`/g)];
+      for (const ref of slashRefs) {
+        const name = ref[1];
+        if (SLASH_BUILTINS.has(name)) continue;
+        const after = line.slice(ref.index + ref[0].length);
+        const explicitSkill = /^\s*(?:skill\b|by name\b)/i.test(after) &&
+          (/^\s*skill\b/i.test(after) || /\bskill\b/i.test(line));
+        if (explicitSkill) named.push(name);
+        else if (!/\b(?:argument|arguments|flag|option|switch|rewrit(?:e|es|ing|ten)|path conversion)\b|git bash/i.test(line)) {
+          add("judgment", "ambiguous-skill", f.path, n, `slash token /${name} may be a skill reference; verify it is intended as one`);
+        }
+      }
       for (const s of named) if (!skills.has(s.split(":").pop())) add("error", "dead-skill", f.path, n, `\`${s}\` is not provided by any installed skill root or plugin`);
     });
   }
