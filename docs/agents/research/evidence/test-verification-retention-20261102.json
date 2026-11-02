@@ -140,5 +140,57 @@
     "An earlier automatic approval review rejected the combined t117-worker junction removal/worktree recycle command as blocked by policy, without a more specific reason. It was not retried through another route; that worktree remains retained.",
     "The aggregate crosses the 500 MiB workflow threshold. Downloads and VM samples were measured and bounded; project node_modules were referenced by junction/shared storage. The separate Linux runtime/packages are included in the VHD measurement. This threshold is not a disk-capacity limit.",
     "Mac simulator trees remain untouched and deferred at the user's request. No remote test data was added below its 20 GiB floor."
-  ]
+  ],
+  "final181182Audit": {
+    "date": "2026-11-02",
+    "owner": "test-verification root session",
+    "worktrees": [
+      {
+        "path": ".scratch/t181-worker",
+        "bytes": 20564588,
+        "files": 848,
+        "links": 0
+      },
+      {
+        "path": ".scratch/t182-worker",
+        "bytes": 19365225,
+        "files": 834,
+        "links": 0
+      },
+      {
+        "path": ".scratch/t183-worker",
+        "bytes": 19327095,
+        "files": 835,
+        "links": 0
+      },
+      {
+        "path": ".scratch/t195-worker",
+        "bytes": 19324336,
+        "files": 835,
+        "links": 0
+      }
+    ],
+    "logs": [
+      {
+        "path": ".scratch/t182-native-001.log",
+        "bytes": 16878
+      },
+      {
+        "path": ".scratch/t182-native-002.log",
+        "bytes": 6975
+      },
+      {
+        "path": ".scratch/t182-native-003.log",
+        "bytes": 6856
+      },
+      {
+        "path": ".scratch/t182-native-004.log",
+        "bytes": 5919
+      }
+    ],
+    "purpose": "Retain bounded source checkouts and original failure/pass logs through the remaining platform regression/reproduction audit. Source is recoverable from Git; compact native findings are promoted separately. Retire checkouts/logs after that audit no longer needs their exact inputs.",
+    "dependencies": "Root integration checkout references existing root node_modules by junction; do not traverse or delete the shared dependency target. Owned WSL distro and native runtime remain reusable through deferred platform follow-ups.",
+    "unowned": "Earlier preserved artifacts retain their recorded sizes above. Concurrent orchestration artifacts, user OneDrive data and Mac simulators remain untouched.",
+    "limits": "File lengths exclude skipped links and are not allocation or reclaimable bytes. No whole-drive scan or raw evidence bundle was added."
+  }
 }

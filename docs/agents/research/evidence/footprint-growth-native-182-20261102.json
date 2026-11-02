@@ -1,0 +1,119 @@
+{
+  "ticket": "182",
+  "observedOn": "2026-11-02",
+  "sourceCommit": "910597f3c681d25054294f257281910fe529d380",
+  "command": "wsl.exe --distribution GreyMatter-Footprint-133 --exec /usr/bin/env PATH=/opt/node-v22.23.4/bin:/usr/bin:/bin:/mnt/c/Windows/System32/WindowsPowerShell/v1.0:/mnt/c/Windows/System32 /opt/node-v22.23.4/bin/node --test /mnt/d/code/grey-matter/.scratch/t182-worker/scripts/inspect-footprint.test.mjs",
+  "capture": "Root redirected combined output to .scratch/t182-native-004.log, retained the exec session, printed NATIVE_EXIT_CODE=0 and observed outer process exit 0.",
+  "environment": {
+    "runtime": "native Node in the existing disposable WSL2 Alpine x86_64 musl distro",
+    "nodeVersion": "v22.23.4",
+    "gitVersion": "2.54.0",
+    "windowsPowerShell": "5.1.26100.9818",
+    "interopPath": "/opt/node-v22.23.4/bin:/usr/bin:/bin:/mnt/c/Windows/System32/WindowsPowerShell/v1.0:/mnt/c/Windows/System32"
+  },
+  "source": {
+    "access": "direct read from the existing Windows worktree through DrvFs; no source clone or copy",
+    "headBefore": "910597f3c681d25054294f257281910fe529d380",
+    "headAfter": "910597f3c681d25054294f257281910fe529d380",
+    "trackedTreeCleanBefore": true,
+    "trackedTreeCleanAfter": true
+  },
+  "spaceBytes": {
+    "linuxRootFreeBefore": 1025852162048,
+    "windowsSourceDriveFreeBefore": 98872643584,
+    "windowsBackingDriveFreeBefore": 96101367808,
+    "windowsSourceDriveFreeAfter": 98872217600,
+    "windowsBackingDriveFreeAfter": 96061915136,
+    "linuxRootFreeAfter": null,
+    "minimumThresholdBytes": 21474836480
+  },
+  "result": {
+    "processExitCode": 0,
+    "tests": 25,
+    "passed": 24,
+    "failed": 0,
+    "skipped": 1,
+    "cancelled": 0,
+    "nodeDurationMs": 84379.053539,
+    "classification": "pass with one explicit skip; native Git LFS checkout remains unverified"
+  },
+  "skip": {
+    "test": "skip-smudge worktree checkout keeps a tracked LFS pointer while ordinary checkout materializes it",
+    "reason": "git-lfs is unavailable in this disposable distro; the test was skipped before creating its fixture and no network download was attempted"
+  },
+  "attemptHistory": [
+    {
+      "attempt": "001",
+      "sourceCommit": "9edef8f30a1977fe8b1cb6fdfe590b639ea0f226",
+      "processExitCode": 1,
+      "tests": 25,
+      "passed": 13,
+      "failed": 10,
+      "skipped": 2,
+      "nodeDurationMs": 4293.086722,
+      "classification": "infrastructure plus assertion failure; PATH omitted Windows PowerShell/System32, causing powershell.exe ENOENT for nine dependent test outcomes; one separate GUID-case assertion failed",
+      "log": { "path": ".scratch/t182-native-001.log", "bytes": 16878 }
+    },
+    {
+      "attempt": "002",
+      "sourceCommit": "73d24b412b7971ab10f63b16628525df5b1042ac",
+      "processExitCode": null,
+      "tests": 25,
+      "passed": 23,
+      "failed": 1,
+      "skipped": 1,
+      "nodeDurationMs": 83088.123394,
+      "classification": "assertion failure: the canonical uppercase volume GUID was rejected when parsed again; the outer exit code was not retained after the command yielded",
+      "log": { "path": ".scratch/t182-native-002.log", "bytes": 6975 }
+    },
+    {
+      "attempt": "003",
+      "sourceCommit": "e8ed25a6756ac9a8705c1c065309501080ca270d",
+      "processExitCode": 1,
+      "tests": 25,
+      "passed": 23,
+      "failed": 1,
+      "skipped": 1,
+      "nodeDurationMs": 82843.225202,
+      "classification": "fixture assertion failure: the fixture sampled repo free space before later writes; at inspection repo dev:2096 was uniquely limiting. The exact intervening space delta was not measured. The final fixture injects fixed statfs input and explicitly asserts equal entries before checking ambiguity; CLI defaults are unchanged.",
+      "log": { "path": ".scratch/t182-native-003.log", "bytes": 6856 }
+    },
+    {
+      "attempt": "004",
+      "sourceCommit": "910597f3c681d25054294f257281910fe529d380",
+      "processExitCode": 0,
+      "tests": 25,
+      "passed": 24,
+      "failed": 0,
+      "skipped": 1,
+      "nodeDurationMs": 84379.053539,
+      "classification": "pass with the Git LFS case explicitly skipped",
+      "log": { "path": ".scratch/t182-native-004.log", "bytes": 5919 }
+    }
+  ],
+  "hostState": {
+    "otherDistrosStoppedBeforeAndAfter": true,
+    "podmanDefaultUnchanged": true,
+    "wslDefaultVersion": 2,
+    "ownedDistroStoppedAfterRun": true,
+    "globalWslShutdown": false,
+    "sparseModeChanged": false,
+    "userDataOrProviderOperations": false
+  },
+  "coverage": [
+    "The free-space history fixture passed against the registered E: backing volume's stable identity.",
+    "The Git LFS checkout case was skipped because git-lfs is unavailable in the disposable distro; no native Linux Git LFS result is claimed.",
+    "macOS was not tested; no macOS result is claimed.",
+    "This is the focused inspector fixture suite, not the full repository pre-merge gate."
+  ],
+  "artifactLifecycle": {
+    "rawLogs": "Root owns all four logs, including failed attempts; retain through the remaining platform reproduction audit, then retire when the exact inputs are no longer required. The tracked test-verification retention inventory records sizes and lifecycle.",
+    "sanitizedReport": "Compact promoted native evidence, retained in Git with the source and owning ticket.",
+    "scratchDraft": ".scratch/t182-native-evidence-draft.md",
+    "disposition": "No raw logs or other scratch were removed by this worker; retire the worker-owned draft only after the promoted report is accepted."
+  },
+  "limits": [
+    "Linux root free space was measured before the final run; no post-run Linux-root measurement was taken. The Windows source and backing drive free-space measurements were taken after the run.",
+    "The 001-003 failure and setup histories are retained and classified separately; only attempt 004 is a passing native run, and its LFS-specific branch is skipped."
+  ]
+}
