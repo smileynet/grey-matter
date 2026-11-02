@@ -53,7 +53,7 @@
   "inspector": {
     "scope": "one exact external file path via --path; no directory/tree argument",
     "dedupe": false,
-      "sourceReview": "walk used lstat metadata on this exact file; no content hash/read path was enabled",
+    "sourceReview": "walk used lstat metadata on this exact file; no content hash/read path was enabled",
     "exitCode": 0,
     "status": "review",
     "coverageComplete": false,
