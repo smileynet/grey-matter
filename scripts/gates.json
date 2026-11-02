@@ -1,6 +1,7 @@
 {
   "full_triggers": ["package.json", "package-lock.json", "scripts/gates.json", "scripts/gate.mjs", "scripts/test-git-env.mjs", "scripts/test-git.config", ".githooks/pre-push"],
   "not_gated": {
+    "scripts/orchestration-dashboard.test.mjs": "needs Playwright Core and an installed Chrome; run manually whenever the orchestration dashboard renderer or data changes",
     "scripts/check-guidance.mjs": "reads this host's installed guidance files, not the repository; the sync skill runs it",
     "scripts/delivery-dashboard-browser.test.mjs": "needs Playwright and a Chrome binary (CHROME_BIN); run it by hand before a release that changes the dashboard template"
   },

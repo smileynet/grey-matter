@@ -19,9 +19,9 @@ The output needs no server, network connection, or external asset.
 `node scripts/orchestration-dashboard.test.mjs` uses Playwright Core and an installed
 Chrome. Set `PLAYWRIGHT_MODULE` to its module entry and `CHROME_BIN` to the browser
 executable when the defaults are unavailable. No browser download is required.
-The module can be installed in disposable scratch with `npm install --prefix
-.scratch/orchestration-browser --ignore-scripts --no-audit --no-fund --save-exact
-playwright-core@1.64.1`.
+Install `playwright-core@1.64.1` in a disposable probe directory with npm's
+`--ignore-scripts --no-audit --no-fund --save-exact` options, then point
+`PLAYWRIGHT_MODULE` at its `index.mjs` entry.
 
 The test opens the real local file at 1280×900 and 390×900, captures both views,
 checks collapsed tickets, keyboard tabs, search, status filters, completed-work
