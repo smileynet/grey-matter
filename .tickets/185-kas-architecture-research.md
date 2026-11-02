@@ -1,7 +1,7 @@
 ---
 id: "185"
 title: "Research: KAS architecture and its relationship to kiro-cli"
-status: open
+status: in_progress
 blocked_by: []
 tags: ["stream:tooling", "type:research"]
 ---
