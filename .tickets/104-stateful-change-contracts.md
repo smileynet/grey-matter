@@ -1,7 +1,7 @@
 ---
 id: "104"
 title: "Acceptance for stateful changes names ownership and terminal behavior"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "`to-spec` and `to-tickets` ask stateful work for ownership and terminal-behavior criteria"
