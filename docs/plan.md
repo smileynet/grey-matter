@@ -165,9 +165,9 @@ existing stream. Related parked #06 (skill/version drift evaluations) and #09
 spike set. This reconciliation does not authorize release publication or new
 global harness settings.
 
-The remaining-work table is the proposed serial execution order. First finish
-#162's retained transport/recovery thread, then resolve #186's current KAS auth
-question. #162 and #186 have high priority. Run #158 before #157 to inform its
+The remaining-work table is the proposed serial execution order. #162's driver
+comparison is complete; next resolve #186's current KAS auth question. #186 has
+high priority. Run #158 before #157 to inform its
 permission setup; this is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before
@@ -183,7 +183,6 @@ auth remains conditional on the result of #186.
 
 | ID | Work | Status |
 | --- | --- | --- |
-| 162 | 1. Finish headless driver comparison, recovery and retained t111 evidence | in_progress |
 | 186 | 2. Verify KAS relay authentication ownership and record a supported recipe | open |
 | 156 | 3. Qualify Mate report/wake recovery across gateway restart | open |
 | 158 | 4. Test narrower agy regex permissions with negative controls | open |
@@ -204,11 +203,12 @@ auth remains conditional on the result of #186.
 | 187 | 19. Research Agent Client Protocol (ACP) and propose evidence-led spikes | open |
 
 Solid arrows below are hard dependencies; dotted arrows are proposed order only.
-Completed prerequisites are omitted from this graph and remain in the tickets.
+Completed prerequisites remain in the tickets; #162 is retained below as
+completed context for the newly unblocked work.
 
 ```mermaid
 flowchart TD
-  D162["162 Headless drivers"] --> G173["173 GUI watch layer"]
+  D162["162 Headless drivers (done)"] --> G173["173 GUI watch layer"]
   D162 --> C188["188 Codex tool-host diagnosis"]
   D162 --> K189["189 Kiro ACP EOF diagnosis"]
   D162 -.-> A186["186 KAS auth ownership"]
@@ -243,6 +243,7 @@ Completed baseline and delivered guidance (historical closure evidence preserved
 | 154 | KAS allowlist denial/escalation qualified; unattended approvals not established | ✅ done |
 | 155 | External adapters initialized; ordinary mixed-backend loop remains unverified | ✅ done |
 | 185 | KAS architecture and initialize-only protocol research | ✅ done |
+| 162 | Headless driver question/follow-up, command outcomes and qualified ACP control | ✅ done |
 
 Closed tickets received tag-only metadata corrections; statuses, acceptance
 checkboxes, dependencies and resolution bodies were preserved. Existing unchecked
@@ -258,7 +259,7 @@ in scope. The initial scoped frontier is #162, #186, #156–161 and #174;
 #173 awaits #162 and #167–172 await #174. Plan order is advisory among frontier
 members, while declared dependencies remain authoritative.
 
-Follow-up request: #162 is now claimed and active. #187 was appended at the
+Follow-up request: #162 is complete. #187 was appended at the
 user's request with low priority and no artificial dependency edge; it stays
 last in this queue. The user clarified that ACPa means Agent Client Protocol
 (ACP); #187 now names that subject and will consider spikes from its findings.
@@ -367,5 +368,3 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 182 | Detect footprint growth outside repository scratch | open |
 | 183 | Preserve artifact ownership across agent handoffs | open |
 | 184 | Revalidate preservation state before cleanup recommendations | open |
-| 188 | Diagnose: Codex CLI tool execution fails because code-mode host is missing | open |
-| 189 | Diagnose: Kiro V3 ACP relay times out after stdin closes | open |
