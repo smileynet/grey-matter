@@ -1,7 +1,7 @@
 ---
 id: "186"
 title: "Probe: KAS relay authentication ownership with current kiro-cli"
-status: open
+status: in_progress
 blocked_by: ["185"]
 validation_criteria:
   - "Runtime observations distinguish CLI-owned from client-owned authentication on the actual Crew launch argv without exposing tokens."
