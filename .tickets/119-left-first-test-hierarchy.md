@@ -1,7 +1,7 @@
 ---
 id: "119"
 title: "Choose the cheapest faithful test environment with explicit lifecycle gates"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Guidance maps each assertion to its lowest faithful environment and separates cost from criticality"
