@@ -2,7 +2,7 @@
 id: "167"
 title: "Spike: cheap vs default models as implementation workers on well-specified tickets"
 status: open
-blocked_by: []
+blocked_by: ["174"]
 tags: ["stream:tooling", "type:research"]
 ---
 
