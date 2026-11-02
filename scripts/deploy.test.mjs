@@ -605,15 +605,16 @@ test("portfolio: reject cross-pack name collisions and vendored drift before wri
     writeFileSync(join(other, ".claude-plugin", "plugin.json"), JSON.stringify({ name: "other", version: "1.0.0" }));
     mkdirSync(join(other, "skills", "orient"), { recursive: true });
     writeFileSync(join(other, "skills", "orient", "SKILL.md"), "---\nname: orient\n---\nOther pack");
-    writeFileSync(join(other, "deploy.mjs"), "old vendor copy");
+    mkdirSync(join(other, "tools"), { recursive: true });
+    writeFileSync(join(other, "tools", "deploy.mjs"), "old vendor copy");
     const portfolio = join(sb.home, "packs.json");
     writeFileSync(portfolio, JSON.stringify({ packs: [
-      { name: "grey-matter", path: dirname(HERE) }, { name: "other", path: other, engine: "deploy.mjs" },
+      { name: "grey-matter", path: dirname(HERE) }, { name: "other", path: other, engine: "tools/deploy.mjs" },
     ] }));
-    const r = runWithEnv(["--portfolio", portfolio, "--no-agy"], sb.env);
+    const r = runWithEnv(["check", "--portfolio", portfolio, "--no-agy"], sb.env);
     assert.equal(r.status, 1);
     assert.match(r.stdout, /cross-pack collision: orient/);
-    assert.match(r.stdout, /vendored deployer drift/);
+    assert.match(r.stdout, new RegExp(`vendored deployer drift.*node scripts/sync-release-tools\\.mjs --target "${other.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}" --deployer --write`));
     assert.ok(!sb.has(".agents/skills"));
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });

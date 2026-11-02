@@ -85,14 +85,30 @@ copies when a refresh fails.
    Report whatever it finds in the final delta (step 7). **Do not gate the deploy on it** —
    drift is a follow-up to fix, not a reason to leave the harnesses stale.
 
-5. **Synchronize owned release tools and verify invariants.** If the pull changed
-   shared release modules, resolve tkt's registered checkout from `skill-packs.json`.
-   When present, run `node scripts/sync-release-tools.mjs --target /path/to/tkt`
-   to inspect drift, then `--write` for owned updates. Keep its private package/lock
-   aligned with canonical development dependencies. A foreign/local edit refusal is
-   a mechanical stop; preserve the files and report it. Run `mise run check` in
-   tkt, then commit/push the owned update. A tkt-only installation runs its own copies
-   and needs no grey-matter checkout. Do not add another deploy inside this step.
+5. **Synchronize owned tools and verify invariants.** Resolve tkt's registered checkout
+   from `skill-packs.json`. Before a tkt vendor repair, fetch its configured upstream and
+   compare history and vendor files:
+
+   ```bash
+   git -C /path/to/tkt fetch
+   git -C /path/to/tkt status -sb
+   git -C /path/to/tkt log --oneline --left-right HEAD...@{upstream}
+   git -C /path/to/tkt diff HEAD @{upstream} -- tools/deploy.mjs
+   ```
+
+   If tkt is behind, inspect the upstream vendor bytes before fast-forwarding. If it is
+   ahead or diverged, compare both versions and ask the tkt owner before dropping or
+   rebasing any local commit; matching vendor bytes do not authorize a history rewrite.
+   The repair command refuses dirty vendor paths, unregistered checkouts, and any
+   ahead/behind history. After owner-approved history alignment and a clean tree, use
+   `node scripts/sync-release-tools.mjs --target /path/to/tkt --deployer` to inspect the
+   deployer vendor, then add `--write` to repair it. The output identifies the owner and
+   records its hash in tkt. If shared release modules changed, use the existing command
+   without `--deployer` to check/sync that owned inventory independently. Keep tkt's
+   private package/lock aligned with canonical development dependencies. A foreign/local
+   edit refusal is a mechanical stop; preserve the files and report it. Run `mise run
+   check` in tkt, then commit/push the owned update. A tkt-only installation runs its own
+   copies and needs no grey-matter checkout. Do not add another deploy inside this step.
 
    Run the consistency checker (it owns installer-safety,
    invocation-policy, doc-consistency, and `tkt validate`):
