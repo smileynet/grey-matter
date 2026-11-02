@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
+import "./test-git-env.mjs";
 import { releaseFiles, syncReleaseTools } from "./sync-release-tools.mjs";
 const scripts = dirname(fileURLToPath(import.meta.url)), repo = dirname(scripts), wrapper = join(repo, "skills/meta/release/references/release.sh");
 const put = (file, text) => { mkdirSync(dirname(file), { recursive: true }); writeFileSync(file, text); };
@@ -55,7 +56,6 @@ function deployerFixture(fn) {
       return result.stdout.trim();
     };
     git("checkout", "-b", "main");
-    git("config", "user.name", "Fixture"); git("config", "user.email", "fixture@example.invalid");
     put(join(target, "tools/deploy.mjs"), "stale vendor\n");
     git("add", "tools/deploy.mjs"); git("commit", "--no-verify", "-m", "Old deployer");
     git("remote", "add", "origin", origin);
@@ -145,7 +145,7 @@ test("deployer repair refuses divergence and preserves its local commit and vend
   assert.match(JSON.parse(divergent.stderr).errors[0], /1 commit\(s\) ahead and 1 behind/);
   assert.equal(git("rev-parse", "HEAD"), localHead);
   assert.notEqual(git("rev-parse", "HEAD"), upstreamCommit);
-  assert.equal(readFileSync(join(target, "tools/deploy.mjs"), "utf8"), "local deployer bytes\r\n");
+  assert.equal(readFileSync(join(target, "tools/deploy.mjs"), "utf8"), "local deployer bytes\n");
 }));
 test("vendor default is read-only; explicit sync/check replay the same reviewed inventory", () => vendorFixture(({ source, target, run }) => {
   const before = readdirSync(target); assert.equal(run().status, "fail"); assert.deepEqual(readdirSync(target), before);
