@@ -1,7 +1,7 @@
 ---
 id: "192"
 title: "Validate footprint reporting for an owned OneDrive online-only placeholder"
-status: open
+status: backlog
 blocked_by: []
 priority: medium
 validation_criteria:
