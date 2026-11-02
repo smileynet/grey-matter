@@ -100,6 +100,9 @@ tickets [98](../../.tickets/98-sync-tkt-skills-ahead-of-cli.md),
 [104](../../.tickets/104-stateful-change-contracts.md), [105](../../.tickets/105-qualify-generated-oracles.md)
 and [106](../../.tickets/106-release-verify-attempts.md): executable/pack identity, stateful contracts,
 oracle qualification and release-attempt retention respectively.
+Tickets [114](../../.tickets/114-portable-wrap-verification.md) and
+[115](../../.tickets/115-preservation-evidence.md) own fail-stop orchestration and positive,
+scoped preservation evidence; the ladder only chooses environments and cadence for those claims.
 
 ## Worked assertion routes
 
