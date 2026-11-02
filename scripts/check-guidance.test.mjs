@@ -79,6 +79,26 @@ test("the cutover fixtures are reported: dead command, dead skill, dead steering
   });
 });
 
+test("slash-style arguments and ambiguous tokens are distinct from named skill references", () => {
+  fixture((f) => {
+    cutover(f);
+    f.put(join(f.repo, "AGENTS.md"), [
+      "- Git Bash rewrites `/args` into a Windows path.",
+      "- The bare token `/mystery` appears in this explanation.",
+      "- Use the `/missing-skill` skill for this task.",
+      "- Use the `/tdd` skill by name for slices.",
+    ].join("\n"));
+
+    const r = f.run("--json", "--no-global");
+    assert.equal(r.status, 1, r.stdout + r.stderr);
+    const found = parse(r);
+    assert.deepEqual(found.filter((x) => x.rule === "dead-skill").map((x) => x.message.match(/`([^`]+)`/)[1]), ["missing-skill"]);
+    assert.ok(has(found, "judgment", "ambiguous-skill", /AGENTS\.md:2 .*mystery/));
+    assert.ok(!found.some((x) => x.rule === "ambiguous-skill" && /AGENTS\.md:1 .*args/.test(`${x.file}:${x.line} ${x.message}`)));
+    assert.ok(!found.some((x) => x.rule === "dead-skill" && /args|mystery|tdd/.test(x.message)));
+  });
+});
+
 test("judgment findings are reported, overrides listed as info, and nothing is edited", () => {
   fixture((f) => {
     cutover(f);
