@@ -92,3 +92,40 @@ hold for host sudo. Do not upgrade those limits into completed evidence.
 ## October 31 follow-up
 
 The source deployment HOLD described above is historical to its pinned evidence; the host installation and bounded worker-manager deployment subsequently completed. Physical pilot and broader cleanup claims remain separate gates. #114 owns fail-stop orchestration; #115 owns positive-byte preservation interpretation. Retain already-added authorization lifetime, interrupted-retry and exact container-ID regressions when extending adapters; no duplicate policy document or native matrix is needed.
+
+## Implementation and verification 2026-11-02
+
+The existing `docs/agents/test-environment-ladder.md` owns assertion routing, cost versus
+criticality, four lifecycle gates, evidence identity/reuse and worked scenarios. TDD and both
+implementation workflows point to it; no new checker, device matrix or hosted job was added.
+Platform boundaries were cross-checked against the linked Android strategy and Flutter testing
+documentation. The historical source commit was unavailable in the local trip checkout; this
+ticket's self-contained brief supplied the project-specific requirements.
+
+Two-axis review of `f623c73..c858c6a`: Standards found no actionable issue. Spec confirmed an
+omitted #114/#115 ownership pointer; commit `c858c6a` added it, and renewed Spec review found all
+seven acceptance criteria covered. Manual scenario review (guidance behavior, not device execution):
+
+| Scenario | Decision in the final guidance |
+|---|---|
+| JavaScript stand-in for a native parser | Insufficient; run the actual parser in its runtime |
+| Simulator records survive an update | Simulator integration only; phone retention remains unverified |
+| Cheap authorization rule | Can remain critical; provider enforcement is a separate assertion |
+| DAV lost response, concurrency, shutdown or rollback | Actual process/provider/storage integration with deterministic faults |
+| Same signed artifact, changed provider availability | Label matching-input evidence reused; obtain fresh provider read-back |
+
+Fresh candidate checks: `node scripts/gate.mjs pre-merge --base b66576c --include agent-guidance
+--include skill-syntax-fixtures` completed 3/3 selected commands (ticket graph 0.7 s, syntax fixtures
+0.5 s, guidance 1.1 s). `node --test scripts/check-guidance.test.mjs scripts/skill-syntax.test.mjs`
+passed 16/16, no skips, in 0.705 s; this explicit run exposes the counts hidden by successful gate
+summaries. `node scripts/check-docs-consistency.mjs` passed for 50 skills. The tracked pre-push hook
+completed 5/5 selected commands. `node scripts/deploy.mjs check` and default deployment passed;
+50 skills installed, with the existing generic-icon advisory. No native UI, physical-device or
+live-provider validation was run or claimed for this guidance-only change.
+
+Artifact disposition: verification summaries and scenario decisions promoted here; four owned
+scratch logs (8,146 bytes) recycled after promotion. Keep the current `dist/agy-plugin` package
+(8,640,192 bytes) until its next deployment. Unrelated scratch was preserved: `harness-probe`
+(1,303 bytes), empty `review-installer-safety`, `t50-fixtures` (1,152,040 bytes),
+`learning-library-sync-check.log` (108,823 bytes), and the other session's active `t155-probe`
+(842,044,678 bytes at inspection). That session's uncommitted orchestration files remain untouched.
