@@ -1,7 +1,7 @@
 ---
 id: "121"
 title: "Critic probe launches Codex on Windows and says when the CLI is too old"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
