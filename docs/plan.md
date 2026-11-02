@@ -108,7 +108,7 @@ feature work; #116 covers only the evidence/current-summary contract. Existing r
 authorization and frozen candidate scope are unchanged.
 
 The order below is the session's chosen execution policy, not new dependency edges. All
-existing blocked_by values are preserved. In progress: none; #192 waits for an approved online-only fixture. Pursue #122 only when a useful
+existing blocked_by values are preserved. In progress: none; #192 waits for another approved online-only fixture (the supplied file was local). Pursue #122 only when a useful
 failure is captured. macOS work needs a Mac; WSL and destructive footprint probes need a
 suitable owned environment. No host-only criterion is satisfied by a Windows fixture pass.
 
@@ -193,7 +193,7 @@ auth remains conditional on the result of #186.
 | ID | Work | Status |
 | --- | --- | --- |
 | 156 | 3. Qualify Mate report/wake recovery across gateway restart | ✅ done |
-| 158 | 4. Test narrower agy regex permissions with negative controls | open |
+| 158 | 4. Test narrower agy regex permissions with negative controls | in_progress |
 | 157 | 5. Test agy native workflow dispatch and per-role model selection | open |
 | 159 | 6. Test available Codex multi-agent/message-board/wake features | open |
 | 160 | 7. Test Claude background sessions and idle notification semantics | open |
@@ -386,3 +386,4 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 183 | Preserve artifact ownership across agent handoffs | open |
 | 184 | Revalidate preservation state before cleanup recommendations | open |
 | 191 | Dashboard: orchestration findings and expandable ticket flow in two tabs | ✅ done |
+| 193 | Diagnose: agy regex Ask rule does not override identical Allow rule | open |
