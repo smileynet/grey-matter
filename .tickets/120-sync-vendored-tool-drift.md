@@ -1,7 +1,7 @@
 ---
 id: "120"
 title: "sync resolves vendored-tool drift and a diverged tkt checkout without guesswork"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -27,9 +27,9 @@ Files: `scripts/deploy.mjs` (line ~733, the drift finding), `scripts/sync-releas
 
 ## Acceptance criteria
 
-- [ ] A fixture with a stale vendored `tools/deploy.mjs` is repaired by one documented command, and the deploy lint message names that command.
-- [ ] `skills/meta/sync/SKILL.md` states what to do when the tkt checkout is behind or diverged: fetch, compare the vendored files with upstream, and stop for the owner's decision before dropping or rebasing a local commit.
-- [ ] `node scripts/gate.mjs pre-merge` passes.
+- [x] A fixture with a stale vendored `tools/deploy.mjs` is repaired by one documented command, and the deploy lint message names that command.
+- [x] `skills/meta/sync/SKILL.md` states what to do when the tkt checkout is behind or diverged: fetch, compare the vendored files with upstream, and stop for the owner's decision before dropping or rebasing a local commit.
+- [x] `node scripts/gate.mjs pre-merge` passes.
 
 ## Out of scope
 
@@ -45,5 +45,31 @@ behind/diverged fixtures. This gap recurred during #178: tkt was fast-forwarded 
 synchronized in companion commit 3841188. That manual recovery is evidence of need, not completion
 of this automation ticket. Compare upstream bytes before proposing any history change.
 
-Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
-verify the ticket's premises against current source and run its acceptance checks when picked up.
+That reconciliation preceded the implementation below.
+
+## Delegated implementation 2026-11-02
+
+Worker commits 9b5ef95 and 68bc02d implemented and qualified the guarded `--deployer`
+repair path. Independent critic accepted Spec and Standards, including actual CLI repair,
+foreign ownership refusal, a genuinely diverged fixture preserving HEAD and CRLF bytes,
+and shared Git-environment isolation. Worker fixtures passed 13/13, including under
+hostile parent Git configuration. Root integrated the source; full pre-merge passed all
+19 selected commands. The release-module vendor inventory was unchanged.
+
+The production command `node scripts/sync-release-tools.mjs --target D:/code/tkt --deployer --write`
+repaired one deployer and recorded its ownership manifest. The subsequent absolute-path
+read-only check passed with zero findings. Companion tkt tests passed 38 with one Windows
+platform skip; commit 62c8226 was pushed. An intervening check invoked from the wrong cwd
+failed to find the script; correcting the invocation passed. No history was discarded.
+Canonical `node scripts/deploy.mjs check` and `node scripts/deploy.mjs` subsequently passed,
+installing 50 grey-matter skills. Companion pack compatibility is tracked separately by #98.
+Retain the owned worker checkout/dependency junction through final stream integration cleanup.
+
+## Resolution (2026-11-02)
+
+done: one-command guarded deployer repair shipped and exercised on companion tkt; reviewed, merged, pushed and grey-matter deployed. No history discarded. Companion pack compatibility remains #98; visual dashboard acceptance pending. Evidence promoted in ticket/source, retain t120-worker/dependency junction and shared test-verification artifacts through final stream cleanup.
+
+### Verification
+1. ✓ A fixture with a stale vendored `tools/deploy.mjs` is repaired by one documented command, and the deploy lint message names that command. — "Actual CLI fixture repair, divergence and foreign-owner guards13/13 pass including hostile parent Git config; production --deployer --write repaired tkt then read-only check zero findings; companion62c8226 pushed, tests38pass1platformskip."
+2. ✓ `skills/meta/sync/SKILL.md` states what to do when the tkt checkout is behind or diverged: fetch, compare the vendored files with upstream, and stop for the owner's decision before dropping or rebasing a local commit. — "Sync guidance fetch/compare/stop before owner history decision reviewed by independent critic; genuine1ahead1behind fixture preserves HEAD and CRLF bytes, release vendor inventory unchanged."
+3. ✓ `node scripts/gate.mjs pre-merge` passes. — "Root integrated full premerge19/19 commands passed; canonical deploy check/default passed50skills. See dated implementation evidence in ticket."
