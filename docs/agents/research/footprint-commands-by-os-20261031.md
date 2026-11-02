@@ -196,8 +196,10 @@ referenced by symlink rather than copied. The distro VHD measured 79,691,776 byt
 The four D-side working inputs totaled 63,181,213 bytes (rootfs archive and checksum, Node archive
 and SHASUMS file, plus a 40,960-byte source bundle). The private distro's VHD grew from 381,681,664
 to 448,790,528 bytes during later Linux gate activity; E: free space fell from 96,149,934,080 to
-96,082,825,216 bytes over that interval.
-These observations include gate temporary files and do not isolate sparse-mode reclaim. The distro
-is retained for #133 review at the explicit path above; its then-current VHD length was 448,790,528
-bytes. Downloaded Alpine/Node input archives totaled 63,181,213 bytes and are retained with this
-work until root completes the review and artifact-retention decision.
+96,082,825,216 bytes over that interval. After explicitly terminating only this distro, its VHD
+measured 456,130,560 bytes and E: had 96,075,485,184 bytes free. VHD plus D-side inputs total
+519,311,773 bytes (about 495.2 MiB); the D: worker worktree is separate and not included. These
+observations include gate temporary files and do not isolate sparse-mode reclaim. After termination,
+`wsl --list --verbose` showed all three registered distros stopped and `podman-machine-default`
+still the default. The disposable distro and input files remain retained for #133 review; no
+unregister/permanent VHD deletion was performed, pending root's artifact-retention decision.
