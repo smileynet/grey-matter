@@ -1,7 +1,7 @@
 ---
 id: "157"
 title: "Spike: agy run_workflow and custom agents running the orchestrate loop"
-status: open
+status: in_progress
 blocked_by: ["124","129"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
