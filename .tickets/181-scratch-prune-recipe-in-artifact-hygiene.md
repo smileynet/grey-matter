@@ -26,3 +26,10 @@ Extend `skills/meta/repository-artifact-hygiene/SKILL.md` with a scratch-prune r
 - [ ] The recipe states the dry-run → citation-match → promote → repoint → apply sequence.
 - [ ] Done-ticket citations and generated dashboard data count as durable references.
 - [ ] Whole run directories, raw xcresults and sqlite snapshots are excluded from promotion.
+
+## Portable preservation follow-up (2026-11-02)
+
+Sam approved refining this ticket after the Philippines storage review. Excluding raw result bundles or database snapshots from ordinary tracked documentation does not authorize destroying their only copy. Distinguish compact promoted proof from necessary originals retained privately with scope, hashes and verified recovery. Raw originals may be needed for unresolved failure analysis or release evidence. Missing citations and age alone do not establish disposability. Keep the recipe small and use existing project authorization; no new generic cleanup executor. #183 owns handoff ownership and #184 owns stale-plan inspection; #182 retains growth/trend scope.
+
+- [ ] The recipe distinguishes tracked summaries from protected necessary raw originals and requires recovery/disposition before their local removal.
+- [ ] Missing citations or an ended ticket are review signals rather than proof that unknown source/private artifacts are disposable.
