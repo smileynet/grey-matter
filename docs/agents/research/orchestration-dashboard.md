@@ -91,6 +91,48 @@ module (13,658,899 bytes), publication archive (40,471 bytes), preparation scrip
 generated `dist/agy-plugin` (16,464,451 bytes at this check) was left untouched;
 this ticket changes research and the effort dashboard, not distributed skills.
 
+### Supervised dispatch findings (#159 and #160, 2026-11-02)
+
+Both isolated worker reports passed separate independent critics (0.92/high),
+were integrated by the parent, and closed through tkt with evidence. Codex
+process feature toggles are confirmed; its native dispatch/wake behavior remains
+unverified behind the missing companion host. Claude confirmed one same-machine
+message/reply/idle exchange; fixture background dispatch and worktree creation
+were trust-blocked. Neither report treats an idle notice or exit zero as accepted
+ticket output. Settings snapshots do not establish before/after equality.
+
+The effort dashboard now has 34 tickets (15 remaining, 19 done), ten findings,
+and the existing two-tab layout. Local browser checks passed both viewport
+sizes and all interactions. The independent dashboard critic accepted receipt
+`804ae2a01ff7a77ddc18dc9a28f428d88f48ba17ed9c24f3e3ffa1f3a0039515`
+in `evidence/orchestration-dashboard/t159-t160-final/` (five sources, four
+captures). Updating the plan did not change the rendered HTML hash; receipt
+verification still accepted the exact sources. Parent syntax fixtures and
+selected pre-push checks passed. The initial audit path-normalization failures
+were corrected and rerun; the worker's missing-yaml syntax infrastructure error
+was superseded by the passing parent run. Ticket validation passed with the
+same seven historical unchecked-acceptance warnings on other closed tickets.
+
+The existing owner-private Site publication succeeded from pushed source
+`cacaa192133d83825478cbb0a0a796987b5c62c1`: deployment
+`appgdep_6ae8f07cf72081918b15ba24bffff1a1`, version
+`appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_558d846660508191868487d0f201d745`.
+Only evidence-link targets differ in the hosted copy. Local browser behavior and
+native deployment success were verified; production browser interaction was not.
+
+Promote the reports, native receipts, companion audits and accepted captures.
+Both receipts record exact fixture/raw disposal. Claude's owned marker session
+was stopped and removed before cleanup; Codex's exact saved record was recycled.
+Recycle the disposable browser module (13,658,899 bytes), publication archive
+(41,599 bytes) and preparation script (837 bytes). Retain the Site checkout
+(413,245 bytes) until its next update. App archival refused the two clean managed
+worker checkouts: #159 (19,337,323 bytes) is still referenced by an active task;
+#160 (19,367,661 bytes) is the task's primary checkout. Keep these recoverable
+attachments until the host releases them; do not bypass the refusal with manual
+deletion. The pre-existing generated plugin bundle (17,579,656 bytes), other
+worktrees, and another session's plan/status edits were left untouched. Only
+the orchestration plan hunks were selected into the parent commit.
+
 Edit `docs/orchestration-findings.json` for findings and short ticket outcomes.
 Keep observations distinct from proposed capabilities and preserve source links.
 Run `node scripts/build-orchestration-dashboard.mjs` after changing scoped tickets,
