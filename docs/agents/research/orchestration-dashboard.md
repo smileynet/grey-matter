@@ -28,6 +28,16 @@ Windows System32 first on the child process PATH succeeded. No plugin code chang
 
 ## Maintain it
 
+The #156 update is live at the same private URL: seven findings, two unproven
+possibilities, 17 open and 15 completed tickets. Native Sites publication returned
+`succeeded` for source `120e4e9e2375b05846541c69f00122b21e83d156`, deployment
+`appgdep_6ae8ccbd32448191a570f96cd998522d`, version
+`appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_eda12d11b0f08191b33fe03e267914c0`.
+The final reviewed local captures and accepted receipt are in
+`evidence/orchestration-dashboard/t156-final/`. The hosted copy changes repository
+link targets only; production publication is verified by Sites, while rendered
+interaction checks cover the local copy at laptop and phone widths.
+
 Edit `docs/orchestration-findings.json` for findings and short ticket outcomes.
 Keep observations distinct from proposed capabilities and preserve source links.
 Run `node scripts/build-orchestration-dashboard.mjs` after changing scoped tickets,
@@ -43,6 +53,8 @@ executable when the defaults are unavailable. No browser download is required.
 Install `playwright-core@1.64.1` in a disposable probe directory with npm's
 `--ignore-scripts --no-audit --no-fund --save-exact` options, then point
 `PLAYWRIGHT_MODULE` at its `index.mjs` entry.
+Set `DASHBOARD_CAPTURE_DIR` to a fresh ticket/attempt evidence folder to preserve
+earlier accepted capture bytes. Create a new manifest and receipt for each update.
 
 The test opens the real local file at 1280×900 and 390×900, captures both views,
 checks collapsed tickets, keyboard tabs, search, status filters, completed-work

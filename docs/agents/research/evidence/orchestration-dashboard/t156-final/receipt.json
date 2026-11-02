@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "25608db2b33260d64db63bfc2708334c8615590a33f600f4de85c448cc6b02d7",
+  "subject": "Mate recovery finding after ticket closure",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 12095,
+      "sha256": "a595cd48ea86f0fcec7b3a507a1508f52c1b4afa1a1fec227800f8512997116e"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 133942,
+      "sha256": "38344f4fc78d9cb4792ca2d9632a4a527b17dc6fc50f0ddcf1d24531afae1b81"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4263,
+      "sha256": "468a6099ced8129e9efa1134e864f0188a8f98cbcbc40ee5d084ca763ca8e0ca"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t156-final/findings-1280.png",
+      "bytes": 256324,
+      "sha256": "2b84c148a242468e9299ab0308576ffadbf69a5803ee2b3b1c9b10906ebb30cd",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t156-final/tickets-1280.png",
+      "bytes": 247620,
+      "sha256": "197ed551edd89e9a9781ccab46b4bc19005587abd5e1ad16d00279b8d02e7dac",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t156-final/findings-390.png",
+      "bytes": 243234,
+      "sha256": "6f29f2bf7ca102b33d6de04d90f6aa1894c5852d00876b25a458f38f4f554a61",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t156-final/tickets-390.png",
+      "bytes": 210514,
+      "sha256": "7ebdab408e6ef29404955fd2017bfcc30c91070bd1f690cb4da4d7c0eed40b99",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "80bf710501e178b8cc23e6638300ed29364877725318174616fd442bf903389d",
+  "id": "d97b058f6d406ddce0d8fde1050c0e8fa7269cac42da6869027da3ffd05783a5",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/dashboard_critic (Codex agent)",
+    "note": "Observer: /root/dashboard_critic (Codex agent); surface: local Chromium file rendering through Playwright; scenario: inspect the final closed-state dashboard at 1280x900 and 390x900 in both tabs and compare the captured page to current HTML; outcome: accepted. The rendered findings tab shows seven findings and two separate unproven possibilities. The ticket tab shows 17 open and 15 completed, with #156 collapsed under Other tickets; remaining ticket details are also collapsed. The added recovery finding remains evidence-limited and the dependency graph structure is unchanged. Limits: this is tool-observed rendering at the declared viewport sizes, not a human usability study or product screenshots; later flow nodes require internal scrolling.",
+    "acceptedAt": "2026-11-02T17:46:05.312Z",
+    "snapshotId": "d97b058f6d406ddce0d8fde1050c0e8fa7269cac42da6869027da3ffd05783a5"
+  }
+}
