@@ -1,7 +1,7 @@
 ---
 id: "105"
 title: "Check generated tests against the contract and prove the assertion ran"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -25,9 +25,9 @@ one, reports infrastructure failure separately, and that the assertion actually 
 
 ## Acceptance criteria
 
-- [ ] `tdd` covers checking a generated test's expectation against the contract
-- [ ] `diagnosing-bugs` covers qualifying a new oracle with a positive and a negative control
-- [ ] `node scripts/gate.mjs pre-merge` passes
+- [x] `tdd` covers checking a generated test's expectation against the contract
+- [x] `diagnosing-bugs` covers qualifying a new oracle with a positive and a negative control
+- [x] `node scripts/gate.mjs pre-merge` passes
 
 ## Implementation and evidence 2026-11-02
 
@@ -62,3 +62,12 @@ Artifact disposition: observations promoted here; four owned scratch logs (8,147
 Keep the current `dist/agy-plugin` package (8,654,209 bytes) until next deployment. Preserved
 unrelated scratch: `harness-probe` (1,303 bytes), empty `review-installer-safety`, `t50-fixtures`
 (1,152,040 bytes), and `learning-library-sync-check.log` (108,823 bytes).
+
+## Resolution (2026-11-02)
+
+done: qualify generated expectations against the governing contract and new oracle/worker verdicts with controls and execution evidence. Shared TDD reference, two workflow pointers; no new gate. Promoted verification/scenario results into this ticket, recycled four owned logs8147bytes. Keep current8654209-byte deployment package until next deploy; unrelated scratch preserved with sizes listed. Existing generic-icon advisory remains.
+
+### Verification
+1. ✓ TDD checks generated test expectations against the governing contract before treating red as a product defect. — "TDD requires contract-checking before treating generated or agent-written red as a product defect; shared reference distinguishes required id from optional alias in examples. Independent Standards and Spec reviews of378a96a..bcdaf85 clear."
+2. ✓ Diagnosis qualifies a new oracle or worker using known-good, known-bad and infrastructure controls with proof the assertion executed. — "Diagnosis points to shared known-good acceptance, known-bad rejection and infrastructure controls; same real seam, independent expected values, mutation verification and assertion execution evidence required. Scenario review rejects skipped assertions and worker narrative-only passes."
+3. ✓ Applicable guidance fixtures and node scripts/gate.mjs pre-merge pass. — "Candidate bcdaf85: pre-merge --base378a96a --include agent-guidance --include skill-syntax-fixtures completed3/3 commands; direct guidance/syntax fixtures16/16 pass, no skips; docs consistency50skills pass; tracked pre-push5/5 selected commands, deploy check/default deployment pass. Validator examples were reviewed, not claimed executed."
