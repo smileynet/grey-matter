@@ -4,7 +4,7 @@ import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { chmodSync, existsSync, linkSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, symlinkSync, utimesSync, writeFileSync, appendFileSync } from "node:fs";
+import { chmodSync, existsSync, linkSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, statfsSync, symlinkSync, utimesSync, writeFileSync, appendFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { delimiter, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -82,6 +82,16 @@ async function holdOpen(path) {
 
 // An empty open-file set: only the open-file test pays for a machine-wide scan.
 const base = { paths: [], quietMinutes: 0, floor: 0, topUnder: 0, open: new Set() };
+
+test("the CLI parses explicit outside roots and paired growth inputs", () => {
+  const parsed = options(["--agent-state-root", "state", "--runner-temp-root", "tmp", "--regrowth", "prior.json", "--cleanup-record", "cleanup.json", "--free-space-history", "free.json"]);
+  assert.deepEqual(parsed.agentStateRoots, ["state"]);
+  assert.deepEqual(parsed.runnerTempRoots, ["tmp"]);
+  assert.equal(parsed.regrowth, "prior.json");
+  assert.equal(parsed.cleanupRecord, "cleanup.json");
+  assert.equal(parsed.freeSpaceHistory, "free.json");
+  assert.throws(() => options(["--cleanup-record", "cleanup.json"]), /requires --regrowth/);
+});
 
 test("seeded families get the right facts and outcomes, and the run goes red", async (t) => {
   const { base: dir, repo } = fixture();
@@ -188,6 +198,7 @@ test("unknown ownership and incomplete dependency observations stay review-only"
   const unavailable = inspect({ ...base, repo, preservation: missingOwner, paths: [missing] });
   assert.equal(family(unavailable, missing).outcome, "ask");
   assert.ok(unavailable.coverage.scopeIssues.some((issue) => issue.kind === "missing-root"));
+
 });
 
 test("retention disposition and allocation uncertainty fail closed", () => {
@@ -211,6 +222,7 @@ test("retention disposition and allocation uncertainty fail closed", () => {
   assert.equal(candidate.outcome, "ask");
   assert.equal(candidate.allocationStatus, "unavailable");
   assert.equal(candidate.allocatedBytes, null);
+  assert.equal(candidate.allocatedBytesAtLeast, undefined);
   assert.ok(candidate.logicalBytes > 0);
   assert.equal(candidate.reclaimableBytes, null);
   assert.equal(report.coverage.allocation, "partial");
@@ -366,7 +378,7 @@ test("the free-space floor and the summary line", () => {
   const { repo } = fixture();
   const r = inspect({ ...base, repo, floor: 1024 ** 5 * 1000 });
   assert.deepEqual(r.findings.map((f) => f.kind), ["free-space-floor"]);
-  assert.match(summary(r, 1024 ** 5 * 1000), /^free .* under, stop adding data\); largest uncommitted: \.scratch\/t170-run-1 2\.0 MiB/);
+  assert.match(summary(r, 1024 ** 5 * 1000), /^free .* under, stop adding data\); free-space trend unavailable \(history not supplied\); largest uncommitted: \.scratch\/t170-run-1 2\.0 MiB/);
   assert.doesNotMatch(summary(r, 0), /largest/);
   const cli = spawnSync(process.execPath, [SCRIPT, "--repo", repo, "--floor", "1000TiB", "--summary"]);
   assert.equal(cli.status, 1);
@@ -403,11 +415,11 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
   process.env.PATH = `${dir}${delimiter}${originalPath ?? ""}`;
   process.env.WSL_DISTRO_NAME = name;
   const record = (overrides = {}) => ({ Name: name, BasePath: "R:\\fixture with spaces\\$literal & path", VhdExists: true, Drive: "R", VolumeId: "volume-r", Free: "1234", Total: "9876", ...overrides });
-  const run = (response, exit = 0, floor = 0, recheck) => {
+  const run = (response, exit = 0, floor = 0, recheck, freeSpaceHistory) => {
     const encoded = Buffer.from(JSON.stringify(response), "utf8").toString("base64");
     writeFileSync(executable, `#!/bin/sh\nprintf '%s\\n' '${encoded}'\nexit ${exit}\n`);
     chmodSync(executable, 0o755);
-    return inspect({ ...base, repo, floor, preservation, recheck });
+    return inspect({ ...base, repo, floor, preservation, recheck, freeSpaceHistory });
   };
   try {
     const valid = run([record()]);
@@ -418,7 +430,22 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
     writeFileSync(prior, JSON.stringify(valid));
     const volumeId = "\\\\?\\Volume{12345678-1234-1234-1234-123456789abc}\\";
     const volumeIdResult = run([record({ Drive: "", VolumeId: volumeId })]);
-    assert.equal(volumeIdResult.coverage.hostDrive, `registered ${volumeId} volume for this WSL distro`);
+    const canonicalVolumeId = volumeId.toUpperCase();
+    assert.equal(volumeIdResult.coverage.hostDrive, `registered ${canonicalVolumeId} volume for this WSL distro`);
+    assert.equal(volumeIdResult.freeSpace.entries.find((entry) => entry.path === `Windows ${canonicalVolumeId}`).volumeId, canonicalVolumeId);
+    const uppercaseResult = run([record({ Drive: "", VolumeId: canonicalVolumeId })]);
+    assert.equal(uppercaseResult.freeSpace.volumeId, volumeIdResult.freeSpace.volumeId);
+
+    const repoFs = statfsSync(repo), repoFree = repoFs.bavail * repoFs.bsize;
+    const history = join(fixtureBase, "ambiguous-volume-history.json");
+    writeFileSync(history, JSON.stringify({ version: 1, freshForMinutes: 60, samples: [
+      { volumeId: "any-volume", observedAt: new Date(Date.now() - 60000).toISOString(), freeBytes: repoFree },
+      { volumeId: "any-volume", observedAt: new Date().toISOString(), freeBytes: repoFree },
+    ] }));
+    const equalMinimum = run([record({ Free: String(repoFree), Total: String(repoFree + 1) })], 0, 0, undefined, history);
+    assert.equal(equalMinimum.freeSpace.volumeId, null);
+    assert.equal(equalMinimum.freeSpaceTrend.status, "unavailable");
+    assert.match(equalMinimum.freeSpaceTrend.reason, /ambiguous/);
 
     for (const [label, response, exit] of [
       ["missing registration", [], 0],
@@ -442,6 +469,7 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
       assert.equal(result.coverage.complete, false, label);
       assert.equal(result.coverage.hostDrive, "unavailable", label);
       assert.equal(result.status, "fail", label);
+      assert.equal(result.freeSpace.volumeId, null, label);
       assert.equal(family(result, ".scratch/t170-run-1").outcome, "ask", label);
       assert.ok(result.findings.some((finding) => finding.kind === "preservation-changed"), label);
       assert.equal(result.freeSpace.entries.some((entry) => entry.path.startsWith("Windows ")), false, label);
@@ -475,6 +503,303 @@ test("cleaned families without ownership evidence remain review-only", () => {
   assert.equal(r.coverage.preservation, "not supplied");
   const cli = spawnSync(process.execPath, [SCRIPT, "--repo", repo, "--floor", "0B", "--quiet", "0m"], { encoding: "utf8" });
   assert.equal(cli.status, 0, cli.stdout + cli.stderr);
+});
+
+test("explicit agent and runner roots report bounded child families and protect active state", () => {
+  const { base: dir, repo } = fixture();
+  const agentRoot = join(dir, "configured-agent-state"), runnerRoot = join(dir, "configured-runner-temp");
+  const agent = join(agentRoot, "session-a"), held = join(runnerRoot, "run-a");
+  put(join(agent, "transcript.jsonl"), "agent state");
+  put(join(held, "worker.log"), "active run");
+  put(join(runnerRoot, "orphan.log"), "runner log");
+  const preservation = preservationState({ base: dir, repo }, {
+    [agent.replaceAll("\\", "/")]: ownedCandidate,
+    [held.replaceAll("\\", "/")]: ownedCandidate,
+    [join(runnerRoot, "orphan.log").replaceAll("\\", "/")]: ownedCandidate,
+  });
+  const r = inspect({ ...base, repo, preservation, agentStateRoots: [agentRoot], runnerTempRoots: [runnerRoot],
+    open: new Set([join(held, "worker.log")]) }, Date.now() + 16 * 60000);
+
+  const session = family(r, agent);
+  assert.equal(session.kind, "agent-state");
+  assert.equal(session.files, 1);
+  const run = family(r, held);
+  assert.equal(run.kind, "runner-temp");
+  assert.equal(run.outcome, "skip");
+  assert.deepEqual(run.openFiles, ["worker.log"]);
+  assert.match(run.activeReasons.join(), /open file/);
+  assert.equal(family(r, join(runnerRoot, "orphan.log")).kind, "runner-temp");
+  assert.equal(family(r, agentRoot), undefined);
+  assert.ok(r.snapshot.scope.some((root) => root.path === agentRoot));
+  assert.ok(!r.snapshot.scope.some((root) => root.path === agent));
+  assert.equal(r.coverage.complete, true);
+
+  const cli = spawnSync(process.execPath, [SCRIPT, "--repo", repo, "--floor", "0B", "--quiet", "0m", "--agent-state-root", agentRoot], { encoding: "utf8" });
+  assert.equal(cli.status, 0, cli.error?.message ?? `${cli.stdout}\n${cli.stderr}`);
+  assert.equal(family(JSON.parse(cli.stdout), agent).kind, "agent-state");
+
+  const missing = inspect({ ...base, repo, agentStateRoots: [join(dir, "missing-state-root")] });
+  assert.equal(missing.coverage.complete, false);
+  assert.ok(missing.coverage.scopeIssues.some((issue) => issue.kind === "missing-root"));
+
+  const activeRoot = join(dir, "wt-active");
+  const active = inspect({ ...base, repo, agentStateRoots: [activeRoot] });
+  const metadata = family(active, join(activeRoot, ".git"));
+  assert.equal(metadata.outcome, "skip");
+  assert.match(metadata.activeReasons.join(), /active worktree .* on feature/);
+});
+
+test("configured roots bound child discovery and report escaping symlinks", () => {
+  const { base: dir, repo } = fixture(), root = join(dir, "many-agent-families"), outside = join(dir, "outside-state");
+  mkdirSync(root);
+  for (let i = 0; i < 256; i++) writeFileSync(join(root, `family-${String(i).padStart(3, "0")}.log`), "x");
+  put(join(root, "a-t170-session", "state.json"), "known session");
+  put(join(outside, "secret.log"), "outside");
+  symlinkSync(outside, join(root, "escape"), process.platform === "win32" ? "junction" : "dir");
+  const r = inspect({ ...base, repo, agentStateRoots: [root], cap: 50 * 1024 ** 2 });
+  assert.equal(r.coverage.complete, false);
+  assert.equal(r.coverage.inventoryComplete, false);
+  assert.ok(r.coverage.scopeIssues.some((issue) => issue.kind === "configured-family-limit" && issue.path === root));
+  assert.ok(r.coverage.scopeIssues.some((issue) => issue.kind === "symlink-escape" && issue.path === join(root, "escape")));
+  const link = family(r, join(root, "escape"));
+  assert.ok(link);
+  assert.equal(link.inventory.some((entry) => entry.path.includes("secret.log")), false);
+  const cap = r.findings.find((finding) => finding.kind === "ticket-cap-unverified" && finding.ticket === 170);
+  assert.ok(cap);
+  assert.ok(cap.families.includes(`${root} (family inventory incomplete)`));
+});
+
+test("configured child-list changes do not redefine the stable recheck scope", () => {
+  const { base: dir, repo } = fixture(), root = join(dir, "configured-agent-state"), first = join(root, "t170-old-run");
+  put(join(first, "state.json"), "old run");
+  const at = Date.now() + 16 * 60000;
+  const firstOwner = preservationState({ base: dir, repo }, { [first.replaceAll("\\", "/")]: ownedCandidate });
+  const args = { ...base, repo, agentStateRoots: [root], preservation: firstOwner };
+  const before = inspect(args, at);
+  const priorPath = join(dir, "prior-configured-root.json");
+  writeFileSync(priorPath, JSON.stringify(before));
+
+  const second = join(root, "t170-new-run");
+  put(join(second, "state.json"), "new run");
+  const bothOwned = preservationState({ base: dir, repo }, {
+    [first.replaceAll("\\", "/")]: ownedCandidate,
+    [second.replaceAll("\\", "/")]: ownedCandidate,
+  }, "fixture-workspace", "both-roots.json");
+  const after = inspect({ ...args, preservation: bothOwned, recheck: priorPath }, at + 60000);
+  assert.deepEqual(after.snapshot.scope, before.snapshot.scope);
+  if (family(before, first).outcome === "delete") assert.equal(family(after, first).outcome, "delete");
+  assert.notEqual(family(after, second).outcome, "delete");
+});
+
+test("configured child walks stop at the per-family entry budget", () => {
+  const { base: dir, repo } = fixture(), root = join(dir, "large-agent-root"), child = join(root, "t170-session");
+  mkdirSync(child, { recursive: true });
+  for (let i = 0; i < 10000; i++) writeFileSync(join(child, `file-${String(i).padStart(5, "0")}`), "x");
+  const withBlocks = (path, options) => {
+    const st = lstatSync(path, options);
+    if (st.isFile()) st.blocks = Math.ceil(st.size / 512);
+    return st;
+  };
+  const r = inspect({ ...base, repo, agentStateRoots: [root], cap: 50 * 1024 ** 2 }, Date.now(), withBlocks);
+  const state = family(r, child);
+  assert.equal(state.inventory.length, 9999);
+  assert.equal(state.inventoryComplete, false);
+  assert.equal(state.allocatedBytes, null);
+  assert.equal(state.allocationStatus, "inventory-incomplete");
+  assert.ok(state.logicalBytesAtLeast > 0);
+  assert.ok(state.allocatedBytesAtLeast > 0);
+  assert.match(summary({ ...r, families: [state] }, Infinity), /allocated at least .* observed partial/);
+  assert.match(summary({ ...r, families: [state] }, Infinity), /observed partial/);
+  assert.equal(r.coverage.inventoryComplete, false);
+  assert.ok(r.coverage.scopeIssues.some((issue) => issue.kind === "family-entry-limit" && issue.path === child));
+  assert.ok(r.findings.some((finding) => finding.kind === "ticket-cap-unverified" && finding.ticket === 170), JSON.stringify({ ticket: state.ticket, allocatedBytes: state.allocatedBytes, findings: r.findings }));
+});
+
+test("a configured child stat error keeps partial bytes but marks the ticket cap unverified", () => {
+  const { base: dir, repo } = fixture(), root = join(dir, "agent-state-errors"), child = join(root, "t170-session");
+  put(join(child, "readable"), "known bytes");
+  put(join(child, "unreadable"), "unknown bytes");
+  const failingStat = (path, options) => {
+    if (path === join(child, "unreadable")) throw new Error("fixture permission failure");
+    const st = lstatSync(path, options);
+    if (st.isFile()) st.blocks = Math.ceil(st.size / 512);
+    return st;
+  };
+  const r = inspect({ ...base, repo, agentStateRoots: [root], cap: 10 * 1024 ** 2 }, Date.now() + 60000, failingStat);
+  const state = family(r, child);
+  assert.equal(state.inventory.length, 1);
+  assert.equal(state.inventoryComplete, false);
+  assert.equal(state.allocatedBytes, null);
+  assert.equal(state.allocationStatus, "inventory-incomplete");
+  assert.ok(state.logicalBytesAtLeast > 0);
+  assert.ok(state.allocatedBytesAtLeast > 0);
+  assert.ok(r.coverage.scopeIssues.some((issue) => issue.kind === "incomplete-root" && issue.path === child));
+  assert.ok(r.findings.some((finding) => finding.kind === "ticket-cap-unverified" && finding.ticket === 170), JSON.stringify({ ticket: state.ticket, allocatedBytes: state.allocatedBytes, findings: r.findings }));
+  const knownBreach = inspect({ ...base, repo, agentStateRoots: [root], cap: 1 }, Date.now() + 60000, failingStat);
+  const lowerBoundFinding = knownBreach.findings.find((finding) => finding.kind === "ticket-cap" && finding.ticket === 170);
+  assert.ok(lowerBoundFinding.allocatedBytesAtLeast > lowerBoundFinding.cap);
+  assert.ok(lowerBoundFinding.unknownFamilies.includes(child));
+  assert.equal(knownBreach.findings.some((finding) => finding.kind === "ticket-cap-unverified" && finding.ticket === 170), false);
+});
+
+test("free-space history requires the current measured volume and reports a timed rate", (t) => {
+  const { base: dir, repo } = fixture(), path = join(dir, "free-space-history.json");
+  const now = Date.parse("2026-11-02T12:00:00.000Z");
+  const volumeId = inspect({ ...base, repo }, now).freeSpace.volumeId;
+  if (!volumeId) return t.skip("current free-space volume has no stable identity on this host");
+  writeFileSync(path, JSON.stringify({ version: 1, freshForMinutes: 180, samples: [
+    { volumeId, observedAt: "2026-11-02T10:00:00.000Z", freeBytes: 9000000 },
+    { volumeId, observedAt: "2026-11-02T11:00:00.000Z", freeBytes: 5400000 },
+  ] }));
+  const r = inspect({ ...base, repo, freeSpaceHistory: path }, now);
+  assert.deepEqual(r.freeSpaceTrend, {
+    status: "available", volumeId, changeBytes: -3600000, elapsedMs: 3600000, bytesPerHour: -3600000,
+  });
+  assert.ok(summary(r, 0).includes(`free-space trend changed -3600000 bytes over 1h (-3600000 bytes/hour) on ${volumeId}`));
+
+  if (!onWsl) {
+    const noBinding = inspect({ ...base, repo, freeSpaceHistory: path }, now, lstatSync, () => null);
+    assert.equal(noBinding.freeSpaceTrend.status, "unavailable");
+    assert.match(noBinding.freeSpaceTrend.reason, /current free-space volume/);
+  }
+
+  writeFileSync(path, JSON.stringify({ version: 1, freshForMinutes: 180, samples: [
+    { volumeId, observedAt: "2026-11-02T10:00:00.000Z", freeBytes: 9000000 },
+    { volumeId: "other-volume", observedAt: "2026-11-02T11:00:00.000Z", freeBytes: 5400000 },
+  ] }));
+  const mismatch = inspect({ ...base, repo, freeSpaceHistory: path }, now);
+  assert.equal(mismatch.freeSpaceTrend.status, "unavailable");
+  assert.match(mismatch.freeSpaceTrend.reason, /does not match/);
+
+  writeFileSync(path, JSON.stringify({ version: 1, freshForMinutes: 30, samples: [
+    { volumeId, observedAt: "2026-11-02T10:00:00.000Z", freeBytes: 9000000 },
+    { volumeId, observedAt: "2026-11-02T11:00:00.000Z", freeBytes: 5400000 },
+  ] }));
+  const stale = inspect({ ...base, repo, freeSpaceHistory: path }, now);
+  assert.equal(stale.freeSpaceTrend.status, "unavailable");
+  assert.match(stale.freeSpaceTrend.reason, /stale/);
+
+  const absent = inspect({ ...base, repo }, now);
+  assert.deepEqual(absent.freeSpaceTrend, { status: "unavailable", reason: "history not supplied" });
+  assert.match(summary(absent, 0), /free-space trend unavailable \(history not supplied\)/);
+  writeFileSync(path, "{bad json");
+  const malformed = inspect({ ...base, repo, freeSpaceHistory: path }, now);
+  assert.equal(malformed.freeSpaceTrend.status, "unavailable");
+  assert.match(malformed.freeSpaceTrend.reason, /could not be read/);
+  writeFileSync(path, JSON.stringify({ version: 1, freshForMinutes: 180, samples: [
+    { volumeId, observedAt: "2026-11-02T11:00:00.000Z", freeBytes: 9000000 },
+    { volumeId, observedAt: "2026-11-02T10:00:00.000Z", freeBytes: -1 },
+  ] }));
+  const invalidSamples = inspect({ ...base, repo, freeSpaceHistory: path }, now);
+  assert.equal(invalidSamples.freeSpaceTrend.status, "unavailable");
+  assert.match(invalidSamples.freeSpaceTrend.reason, /invalid sample/);
+  writeFileSync(path, JSON.stringify({ version: 1, freshForMinutes: 180, samples: [
+    { volumeId, observedAt: "2026-11-02T11:00:00.000Z", freeBytes: 9000000 },
+    { volumeId, observedAt: "2026-11-02T10:00:00.000Z", freeBytes: 5400000 },
+  ] }));
+  const unordered = inspect({ ...base, repo, freeSpaceHistory: path }, now);
+  assert.equal(unordered.freeSpaceTrend.status, "unavailable");
+  assert.match(unordered.freeSpaceTrend.reason, /strictly increasing/);
+
+  writeFileSync(path, JSON.stringify({ version: 1, freshForMinutes: 180, samples: [] }));
+  const empty = inspect({ ...base, repo, freeSpaceHistory: path }, now);
+  assert.equal(empty.freeSpaceTrend.status, "unavailable");
+  assert.match(empty.freeSpaceTrend.reason, /fewer than two/);
+  writeFileSync(path, JSON.stringify({ version: 1, freshForMinutes: 180, samples: [
+    { volumeId, observedAt: new Date(now + 1000).toISOString(), freeBytes: 9000000 },
+    { volumeId, observedAt: new Date(now + 2000).toISOString(), freeBytes: 5400000 },
+  ] }));
+  const future = inspect({ ...base, repo, freeSpaceHistory: path }, now);
+  assert.equal(future.freeSpaceTrend.status, "unavailable");
+  assert.match(future.freeSpaceTrend.reason, /future/);
+});
+
+test("only an explicit whole-family cleanup record turns later bytes into regrowth", () => {
+  const { base: dir, repo } = fixture(), root = join(dir, "agent-state"), candidate = join(root, "session-a");
+  put(join(candidate, "state.json"), "old state");
+  const preservation = preservationState({ base: dir, repo }, { [candidate.replaceAll("\\", "/")]: ownedCandidate });
+  const initialAt = Date.parse("2026-11-02T10:00:00.000Z"), cleanedAt = "2026-11-02T10:30:00.000Z", laterAt = Date.parse("2026-11-02T11:00:00.000Z");
+  const args = { ...base, repo, preservation, agentStateRoots: [root] };
+  const priorReport = inspect(args, initialAt);
+  const priorFamily = family(priorReport, candidate);
+  assert.match(priorFamily.inventoryFingerprint, /^[0-9a-f]{64}$/);
+  const prior = join(dir, "prior-footprint.json");
+  writeFileSync(prior, JSON.stringify(priorReport));
+
+  put(join(candidate, "new-state.json"), "growth without cleanup");
+  const ordinary = inspect({ ...args, regrowth: prior }, laterAt);
+  assert.equal(family(ordinary, candidate).growth.classification, "ordinary growth");
+  assert.ok(family(ordinary, candidate).growth.changeBytes > 0);
+  assert.match(summary(ordinary, 0), /ordinary growth: .* changed \d+ logical bytes/);
+
+  rmSync(candidate, { recursive: true });
+  put(join(candidate, "recreated.json"), "state after recorded cleanup");
+  const cleanupRecord = join(dir, "cleanup-record.json");
+  const completeRecord = { version: 1, status: "completed", scope: "whole-family", cleanedAt,
+    snapshot: priorReport.snapshot, families: [{ path: candidate, inventoryFingerprint: priorFamily.inventoryFingerprint }] };
+  writeFileSync(cleanupRecord, JSON.stringify(completeRecord));
+  const regrowth = inspect({ ...args, regrowth: prior, cleanupRecord }, laterAt);
+  assert.equal(family(regrowth, candidate).growth.classification, "regrowth");
+  assert.ok(family(regrowth, candidate).growth.currentBytes > 0);
+  assert.match(summary(regrowth, 0), /regrowth: .* reappeared with \d+ logical bytes/);
+
+  const rejectRecord = (name, value) => {
+    const path = join(dir, `${name}.json`);
+    writeFileSync(path, JSON.stringify(value));
+    assert.throws(() => inspect({ ...args, regrowth: prior, cleanupRecord: path }, laterAt), /Cleanup record|does not match prior family/);
+  };
+  rejectRecord("planned-cleanup", { ...completeRecord, status: "planned" });
+  rejectRecord("partial-cleanup", { ...completeRecord, scope: "partial" });
+  rejectRecord("early-cleanup", { ...completeRecord, cleanedAt: priorReport.observedAt });
+  rejectRecord("late-cleanup", { ...completeRecord, cleanedAt: new Date(laterAt).toISOString() });
+  rejectRecord("different-snapshot", { ...completeRecord, snapshot: { ...priorReport.snapshot, workspace: { ...priorReport.snapshot.workspace, root: "other" } } });
+  rejectRecord("wrong-family", { ...completeRecord, families: [{ path: `${candidate}-other`, inventoryFingerprint: priorFamily.inventoryFingerprint }] });
+  rejectRecord("wrong-fingerprint", { ...completeRecord, families: [{ path: candidate, inventoryFingerprint: "0".repeat(64) }] });
+
+  const incompletePrior = join(dir, "incomplete-prior.json");
+  writeFileSync(incompletePrior, JSON.stringify({ ...priorReport, coverage: { ...priorReport.coverage, inventoryComplete: false } }));
+  assert.throws(() => inspect({ ...args, regrowth: incompletePrior }, laterAt), /complete version 1 report/);
+});
+
+const hasGitLfs = spawnSync("git", ["lfs", "version"], { encoding: "utf8" }).status === 0;
+test("skip-smudge worktree checkout keeps a tracked LFS pointer while ordinary checkout materializes it", { skip: !hasGitLfs && "git-lfs is unavailable" }, () => {
+  const baseDir = mkdtempSync(join(tmpdir(), "footprint-lfs-")), source = join(baseDir, "source");
+  const skipped = join(baseDir, "skip-smudge"), materialized = join(baseDir, "ordinary-checkout");
+  made.push(baseDir);
+  mkdirSync(source);
+  git(source, "init", "-q", "-b", "main");
+  const install = spawnSync("git", ["-C", source, "lfs", "install", "--local"], { encoding: "utf8", windowsHide: true });
+  assert.equal(install.status, 0, install.error?.message ?? install.stderr);
+  put(join(source, ".gitattributes"), "payload.bin filter=lfs diff=lfs merge=lfs -text\n");
+  const payload = Buffer.alloc(4096, 7);
+  writeFileSync(join(source, "payload.bin"), payload);
+  git(source, "add", "-A");
+  git(source, "commit", "-qm", "seed a local LFS object");
+  const pointer = Buffer.from(git(source, "show", "HEAD:payload.bin"));
+  assert.ok(pointer.length < payload.length);
+
+  const objectStore = join(source, ".git", "lfs", "objects");
+  const objectBytes = (dir) => existsSync(dir) ? readdirSync(dir, { withFileTypes: true }).reduce((total, entry) => {
+    const path = join(dir, entry.name);
+    return total + (entry.isDirectory() ? objectBytes(path) : lstatSync(path).size);
+  }, 0) : 0;
+  assert.equal(objectBytes(objectStore), payload.length);
+  const skipSmudge = spawnSync("git", ["-C", source, "worktree", "add", "--detach", skipped, "HEAD"], {
+    encoding: "utf8", timeout: 15000, windowsHide: true,
+    env: { ...process.env, GIT_LFS_SKIP_SMUDGE: "1" },
+  });
+  assert.equal(skipSmudge.status, 0, skipSmudge.error?.message ?? `${skipSmudge.stdout}\n${skipSmudge.stderr}`);
+  assert.deepEqual(readFileSync(join(skipped, "payload.bin")), pointer);
+  assert.equal(objectBytes(objectStore), payload.length);
+
+  const env = { ...process.env };
+  delete env.GIT_LFS_SKIP_SMUDGE;
+  const ordinary = spawnSync("git", ["-C", source, "worktree", "add", "--detach", materialized, "HEAD"], {
+    encoding: "utf8", timeout: 15000, windowsHide: true, env,
+  });
+  assert.equal(ordinary.status, 0, ordinary.error?.message ?? `${ordinary.stdout}\n${ordinary.stderr}`);
+  assert.deepEqual(readFileSync(join(materialized, "payload.bin")), payload);
+  assert.equal(objectBytes(objectStore), payload.length);
 });
 
 test("--dedupe counts bytes identical to tracked files", () => {
