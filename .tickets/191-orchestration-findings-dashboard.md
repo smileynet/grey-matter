@@ -1,7 +1,7 @@
 ---
 id: "191"
 title: "Dashboard: orchestration findings and expandable ticket flow in two tabs"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "The standalone effort dashboard has exactly two tabs, with evidence-bounded value-oriented findings and labeled diagrams."
