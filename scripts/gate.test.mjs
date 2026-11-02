@@ -44,6 +44,10 @@ function fixture(checks, fn, { fullTriggers = [] } = {}) {
 const check = (id, scope, body = pass, extra = {}) => ({ id, stage: "pre-push", catches: `${id} failure`, scope, run: ["node", "-e", body], timeout_s: 10, ...extra });
 const ran = (out, id) => new RegExp(`\\] +[\\d.]+s  ${id}\\b`).test(out);
 
+function recordDependentMutation(result, marker, command) {
+  if (result.status === 0) writeFileSync(marker, JSON.stringify({ command, outcome: "pass", output: result.out }));
+}
+
 test("an empty selection discloses uncommitted changes without judging them", () => fixture([check("a", ["a/"])], ({ git, run }) => {
   const clean = run(["pre-merge"]);
   assert.equal(clean.status, 0, clean.out);
@@ -151,6 +155,30 @@ test("a missing tool is an infrastructure error", () => fixture([{ ...check("a",
   assert.equal(r.status, 1);
   assert.match(r.out, /a: infrastructure error/);
 }));
+
+test("only a completed passing gate result permits and records a dependent mutation", () => {
+  const cases = [
+    { name: "failure", check: check("a", ["a/"], "console.error('rejected'); process.exit(1)") },
+    { name: "timeout", check: check("a", ["a/"], "setInterval(() => {}, 1000)", { timeout_s: 0.2 }) },
+    { name: "missing executable", check: { ...check("a", ["a/"]), run: ["no-such-tool-for-gate-test"] } },
+    { name: "pass", check: check("a", ["a/"], "console.log('all assertions ran'); process.exit(0)") },
+  ];
+  for (const scenario of cases) fixture([scenario.check], ({ git, commit, run, push, base }) => {
+    const root = git("rev-parse", "--show-toplevel");
+    const marker = join(root, "dependent-mutation.json");
+    const result = run(["pre-push", "--stdin", "--remote", "origin"], { input: push(commit("a/x"), base) });
+    recordDependentMutation(result, marker, "commit-or-deploy");
+    if (scenario.name === "pass") {
+      assert.equal(result.status, 0, result.out);
+      assert.deepEqual(JSON.parse(readFileSync(marker, "utf8")), {
+        command: "commit-or-deploy", outcome: "pass", output: result.out,
+      });
+    } else {
+      assert.equal(result.status, 1, `${scenario.name}: ${result.out}`);
+      assert.equal(existsSync(marker), false, `${scenario.name} must stop the dependent mutation`);
+    }
+  });
+});
 
 test("a locked check temp directory reports infrastructure failure and preserves its output", { skip: process.platform !== "win32" }, async () => {
   let holder, retained;

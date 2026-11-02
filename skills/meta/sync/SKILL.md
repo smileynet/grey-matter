@@ -19,8 +19,9 @@ The four couplings it keeps aligned:
    rename a flag or drop a subcommand and break a skill mid-task.
 3. **Local tickets ↔ upstream tickets.** A pull can collide ticket IDs; `tkt rebase`
    resolves them (upstream wins).
-4. **Repo invariants.** `gate.mjs pre-merge` must stay green (indexes, links, invocation
-   sidecars, ticket graph).
+4. **Repo invariants.** `gate.mjs pre-merge` checks indexes, links, invocation sidecars and
+   the ticket graph. Its result gates a dependent commit or push that carries the relevant
+   changes; a red result is a follow-up only when no such dependent mutation is planned.
 
 Read the [release contract](../../../docs/agents/release-contract.md) when choosing
 development, stable or pinned sources. Sync refreshes the configured source; it
@@ -29,11 +30,13 @@ does not publish a release or promote stable.
 **Sync is an orchestrator.** It does the pull/deploy *judgement* itself and hands every
 specialized check to the skill or script that owns it — it reimplements none of them.
 
-**Disposition: report, don't gate.** No *finding* stops the deploy. The deploy is
-mechanically safe regardless (the installer is idempotent, manifest-tracked, and never
-touches a dir it didn't install), so drift and red checks are surfaced loudly as follow-ups
-rather than used as a gate. Mechanical failures stop the run: a non-fast-forward pull or a failed plugin
-refresh. Preserve existing copies when a refresh fails.
+**Disposition: findings and required gates differ.** Drift, guidance findings and optional
+observations are reported without gating. A required verification result gates only the
+dependent mutation it protects: do not commit, push, publish or deploy work that requires a
+red or unresolved gate. A safe read-only investigation or an independently safe operation may
+continue. The deployer's installer safety does not make an unrelated required gate pass. A
+non-fast-forward pull or failed plugin refresh remains a mechanical stop; preserve existing
+copies when a refresh fails.
 
 ## Steps
 
@@ -98,9 +101,10 @@ refresh. Preserve existing copies when a refresh fails.
    node scripts/gate.mjs pre-merge
    ```
 
-   If it's red, **report the failure** and still proceed to deploy (the installer is safe
-   regardless); flag the red check as needs-fixing. A green run is the normal case after a
-   clean pull.
+   Read the completed result. If it's red or unresolved, record the check and its owner; do
+   not commit or push changes that depend on it. Deployment may proceed only when it is an
+   independent, locally safe refresh and no required verification gate protects that
+   deployment. Otherwise stop before deploy. A green run records the result for the delta.
 
 6. **Redeploy to the harnesses.** Push the current skills back out to every owned root and
    refresh installed plugins through the single deploy command:
@@ -167,7 +171,8 @@ refresh. Preserve existing copies when a refresh fails.
      which plugin caches were refreshed.
    - **tkt**: version before → after, and any **drift** `verify-tkt-usage` found.
    - **Ticket health**: whether a rebase ran, and `tkt validate` status.
-   - **Repo check**: green, or exactly what `gate.mjs pre-merge` flagged.
+   - **Repo check**: command and completed outcome, or unresolved gate with owner; distinguish
+     required gates from optional findings.
    - **Agent shell**: `ok`, `n/a`, or each `probe-agent-shell.mjs` finding with its fix.
    - **Critic models**: each harness's `probe-critic-model.mjs` line (model it ran on, ceiling, auth).
    - **Guidance**: standing-rules install result, and each `check-guidance.mjs` finding.

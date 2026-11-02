@@ -87,9 +87,20 @@ move on; this is a quick currency check, not a rewrite.
 
 ### 5. Verify and report
 
-Run `node scripts/gate.mjs pre-merge` so anything landed in step 3 (a new check, a new
-skill/doc, a moved pointer) passes the consistency invariants and link checks, and confirm
-`tkt validate` is clean. Then **confirm the working tree is clean** (`git status --porcelain`):
+Before any verification-dependent commit, push, deploy or publish, discover the adopting
+project's required checks from its `AGENTS.md` and applicable project docs. Run the single
+documented `check` command in the speed phase, or the documented gate stage in the stability
+phase. If the project documents only individual required commands, run each one and retain
+each completed result. If the required command for the declared or default phase is missing,
+the executable is unavailable, a run fails or times out, or its result is incomplete, report
+an unresolved gate with its owner and stop dependent mutations; do not invent a checker or treat
+a missing result as green. Optional observations may be reported separately and do not block.
+Read the completed command result before scheduling the dependent action; unrelated read-only
+work may continue.
+
+For this repository, run `node scripts/gate.mjs pre-merge` so anything landed in step 3 (a new
+check, a new skill/doc, a moved pointer) passes the consistency invariants and link checks, and
+confirm `tkt validate` is clean. Then **confirm the working tree is clean** (`git status --porcelain`):
 a non-empty tree at wrap time means finished work is stranded unpushed — commit and push it
 (or say why it's deliberately left), because the "commit + push after every task" rhythm means
 the next session should find nothing dangling. Likewise list uncommitted artifacts this
