@@ -1,7 +1,7 @@
 ---
 id: "94"
 title: "Kiro hook: run check-repo.mjs before an agent's git push"
-status: open
+status: done
 blocked_by: []
 priority: low
 tags: ["stream:tooling", "type:enhancement"]
@@ -32,4 +32,8 @@ kiro-cli already approved it, the hook is informational.
 - [ ] It is a no-op (exit 0) for non-push commands, other tools, and repos without `scripts/check-repo.mjs`.
 - [ ] Fixtures cover push-pass, push-fail, unrelated repo, and malformed input.
 - [ ] Install path (deploy step or documented manual step) is recorded in distribution maintenance docs.
-- [ ] `node scripts/check-repo.mjs` passes.
+- [ ] `node scripts/gate.mjs pre-merge` passes.
+
+## Resolution (2026-11-02)
+
+Superseded by proposal 18: grey-matter ships no agent hook as a gate, and check-repo.mjs is retired. Agents run gate.mjs pre-merge before pushing a ticket's code; an opt-in Git pre-push hook (.githooks/pre-push via core.hooksPath) covers every client, Kiro included.
