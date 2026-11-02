@@ -435,10 +435,13 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
       ["object volume identity", [record({ Drive: "invalid", VolumeId: { value: "R:" } })], 0],
       ["empty volume identity", [record({ Drive: "invalid", VolumeId: "" })], 0],
     ]) {
+      const unverified = run(response, exit);
+      assert.equal(unverified.status, "review", label);
+      assert.equal(family(unverified, ".scratch/t170-run-1").outcome, "ask", label);
       const result = run(response, exit, 0, prior);
       assert.equal(result.coverage.complete, false, label);
       assert.equal(result.coverage.hostDrive, "unavailable", label);
-      assert.equal(result.status, "review", label);
+      assert.equal(result.status, "fail", label);
       assert.equal(family(result, ".scratch/t170-run-1").outcome, "ask", label);
       assert.ok(result.findings.some((finding) => finding.kind === "preservation-changed"), label);
       assert.equal(result.freeSpace.entries.some((entry) => entry.path.startsWith("Windows ")), false, label);
