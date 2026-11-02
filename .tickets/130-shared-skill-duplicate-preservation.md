@@ -32,7 +32,7 @@ Then model the operator's separately authorized archival outside every discovery
 - [ ] Audit reports the Codex and OpenCode duplicate paths and preserves the distinction between installed duplicates and inventory-only overlaps.
 - [ ] An explicit fixture archive retains all files, checksums and diff outside discovery roots; the following deploy/audit shows one source per applicable harness.
 - [ ] Archive and foreign-copy fixtures prove preservation and do not exercise a real user home or invoke models.
-- [ ] Applicable fixtures and `node scripts/check-repo.mjs` pass; sync canonical deployer changes to tkt only if the implementation changes.
+- [ ] Applicable fixtures and `node scripts/gate.mjs pre-merge` pass; sync canonical deployer changes to tkt only if the implementation changes.
 
 ## Evidence context
 

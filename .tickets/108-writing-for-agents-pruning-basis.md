@@ -24,7 +24,7 @@ reviews the wording before it lands, because this is a core reference.
 
 - [ ] The sprawl passage ties restructuring to an observed failure, not an assumed gain
 - [ ] Owner approved the wording
-- [ ] `node scripts/check-repo.mjs` passes
+- [ ] `node scripts/gate.mjs pre-merge` passes
 
 ## Field report — 2026-11-01
 

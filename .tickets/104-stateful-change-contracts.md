@@ -24,4 +24,4 @@ private helper. Keep it conditional; reversible edits don't need an integration 
 
 - [ ] `to-spec` and `to-tickets` ask stateful work for ownership and terminal-behavior criteria
 - [ ] `tdd` says to assert final state, counts and error identity at the public seam for stateful changes
-- [ ] `node scripts/check-repo.mjs` passes
+- [ ] `node scripts/gate.mjs pre-merge` passes

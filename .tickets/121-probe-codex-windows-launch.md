@@ -30,4 +30,4 @@ Files: `scripts/probe-critic-model.mjs` and its test, `docs/agents/harnesses.md`
 - [ ] On Windows the probe reaches a Codex installed as a `.cmd` shim, covered by a fixture.
 - [ ] A Codex CLI below the documented minimum produces a line naming the minimum version, not a raw 400.
 - [ ] `docs/agents/harnesses.md` records the Windows install pitfall and the working launch path.
-- [ ] `node scripts/check-repo.mjs` passes.
+- [ ] `node scripts/gate.mjs pre-merge` passes.

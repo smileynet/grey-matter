@@ -8,7 +8,7 @@ validation_criteria:
   - "Every macOS row of footprint-by-os.md was run on a Mac (macOS version, chip and shell recorded) and is retagged observed, corrected, or kept with the reason it could not run."
   - "node --test scripts/inspect-footprint.test.mjs passes on macOS, including the open-file skip through lsof; a failure is fixed or filed with its output."
   - "inspect-footprint.mjs --repo <a real repo> --summary reports free space within 1% of command df -Pk and sizes that match command du -sk on an APFS volume, with the clone caveat confirmed or corrected."
-  - "The research file footprint-commands-by-os-20261031.md (or a dated successor) records the commands and output; node scripts/check-repo.mjs passes."
+  - "The research file footprint-commands-by-os-20261031.md (or a dated successor) records the commands and output; node scripts/gate.mjs pre-merge passes."
 tags: ["stream:tooling", "type:chore"]
 ---
 
@@ -42,4 +42,4 @@ Fix wrong rows and inspector bugs in place; file anything larger as its own tick
 - [ ] Each macOS row is observed, corrected, or marked with why it could not run.
 - [ ] The inspector's fixture test passes on macOS, or its failure is fixed or filed.
 - [ ] Inspector free space and sizes agree with `command df` / `command du` on APFS.
-- [ ] Commands and output are recorded in the research file; `node scripts/check-repo.mjs` passes.
+- [ ] Commands and output are recorded in the research file; `node scripts/gate.mjs pre-merge` passes.

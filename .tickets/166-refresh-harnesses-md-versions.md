@@ -24,4 +24,4 @@ Each claim changed is re-probed on this machine, not copied from the review.
 
 - [ ] Every version and binary path in harnesses.md matches versions.json, or says why it differs.
 - [ ] Each changed test command was run once and its output read.
-- [ ] `node scripts/check-repo.mjs --static` passes.
+- [ ] `node scripts/gate.mjs pre-push` passes.

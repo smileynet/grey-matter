@@ -6,7 +6,7 @@ blocked_by: []
 validation_criteria:
   - "Template and worked example show all unfinished tickets in a connected dependency diagram with stable execution order"
   - "Seeded serial-WIP, owner, ordering, snapshot, and visual-evidence failures are rejected"
-  - "Phone/laptop and offline dashboard checks plus node scripts/check-repo.mjs pass"
+  - "Phone/laptop and offline dashboard checks plus node scripts/gate.mjs pre-merge pass"
 tags: ["stream:tooling", "kind:enhancement"]
 priority: low
 ---
@@ -87,7 +87,7 @@ retrievable under the artifact-hygiene guidance.
 - [ ] Completed, cancelled and deferred tickets remain inspectable with the established tracker semantics; no work is silently marked done.
 - [ ] Offline, keyboard and phone/laptop checks show readable diagrams and usable ticket details; the relevant same dashboard view is opened/refreshed for the user.
 - [ ] Reachability guidance distinguishes local-file, LAN and public scope and preserves private content boundaries.
-- [ ] Applicable dashboard tests and `node scripts/check-repo.mjs` pass.
+- [ ] Applicable dashboard tests and `node scripts/gate.mjs pre-merge` pass.
 
 ## October 31 follow-up: bounded inspection
 

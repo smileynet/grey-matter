@@ -27,4 +27,4 @@ PATH failure. Fix the instructions, not the code:
 
 - [ ] The release skill and preparation doc say to use a new numbered folder per attempt and keep failed ones
 - [ ] Ticket 97's rule 3 is reconciled with this
-- [ ] `node scripts/check-repo.mjs` passes
+- [ ] `node scripts/gate.mjs pre-merge` passes

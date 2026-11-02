@@ -27,4 +27,4 @@ The tagalog-helper owner asked on 2026-11-01 to break that app down by learner j
 
 - [ ] Contract section and schema documented; template tab renders a sample map.
 - [ ] Checker validates the schema and fails a seeded bad status or missing issue.
-- [ ] `node scripts/check-repo.mjs` passes.
+- [ ] `node scripts/gate.mjs pre-merge` passes.

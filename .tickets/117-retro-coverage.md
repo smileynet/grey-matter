@@ -31,4 +31,4 @@ Do not require replaying the entire trace or redispatching facts already in cont
 - [ ] A sampled/truncated trace scenario produces explicit partial coverage with inspected scope and unresolved gaps.
 - [ ] A report with inspected tests but no execution cannot claim fresh test success; repaired defects with existing regressions are not filed as new implementation work.
 - [ ] Focused reread and retained coverage limits are both supported without requiring an exhaustive trace audit.
-- [ ] Applicable guidance scenarios and `node scripts/check-repo.mjs` pass.
+- [ ] Applicable guidance scenarios and `node scripts/gate.mjs pre-merge` pass.

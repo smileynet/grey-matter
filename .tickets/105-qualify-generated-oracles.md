@@ -23,4 +23,4 @@ one, reports infrastructure failure separately, and that the assertion actually 
 
 - [ ] `tdd` covers checking a generated test's expectation against the contract
 - [ ] `diagnosing-bugs` covers qualifying a new oracle with a positive and a negative control
-- [ ] `node scripts/check-repo.mjs` passes
+- [ ] `node scripts/gate.mjs pre-merge` passes

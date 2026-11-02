@@ -22,4 +22,4 @@ defensible next change exists, the skill recommends keeping the current structur
 
 - [ ] Each opportunity the skill reports names the next real change it simplifies
 - [ ] The skill says to keep the current structure when no such change exists
-- [ ] `node scripts/check-repo.mjs` passes
+- [ ] `node scripts/gate.mjs pre-merge` passes

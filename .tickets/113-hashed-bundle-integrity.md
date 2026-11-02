@@ -5,7 +5,7 @@ status: open
 blocked_by: []
 validation_criteria:
   - "Artifact-hygiene guidance covers exact inventory, LF bytes and fresh Git export checks when bundle hashes are contractual"
-  - "Positive and changed-byte fixtures pass with node scripts/check-repo.mjs"
+  - "Positive and changed-byte fixtures pass with node scripts/gate.mjs pre-merge"
 tags: ["stream:tooling"]
 priority: medium
 ---

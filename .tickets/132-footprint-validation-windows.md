@@ -9,7 +9,7 @@ validation_criteria:
   - "The Recycle Bin route is tested with a file under and a file over the drive's bin cap: what OnlyErrorDialogs and AllDialogs actually do to the oversized file is recorded, and the guidance matches."
   - "node --test scripts/inspect-footprint.test.mjs runs on Windows; with no open-file probe it reports partial coverage rather than a false skip or pass, and any failure is fixed or filed with its output."
   - "inspect-footprint.mjs --repo <a real repo> --summary reports free space that matches Get-Volume, and an online-only OneDrive placeholder is reported without being counted as disk use or offered for deletion (or the gap is filed)."
-  - "The research file records the commands and output; node scripts/check-repo.mjs passes on Windows."
+  - "The research file records the commands and output; node scripts/gate.mjs pre-merge passes on Windows."
 tags: ["stream:tooling", "type:chore"]
 ---
 
@@ -43,7 +43,7 @@ Fix wrong rows and inspector bugs in place; file anything larger as its own tick
 - [ ] Recycle Bin behaviour over the cap is observed and the guidance matches it.
 - [ ] The inspector's fixture test runs and reports open files as unchecked, or the failure is fixed or filed.
 - [ ] Inspector free space matches `Get-Volume`; OneDrive placeholders are handled or filed.
-- [ ] Commands and output are recorded; `node scripts/check-repo.mjs` passes on Windows.
+- [ ] Commands and output are recorded; `node scripts/gate.mjs pre-merge` passes on Windows.
 
 ## Observed failure (2026-10-31, from the ticket 125 session)
 

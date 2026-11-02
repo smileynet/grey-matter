@@ -31,4 +31,4 @@ Coordinate with #118 for dashboard order and #106 for verification attempts; the
 - [ ] Worked records distinguish distributed availability from pending installation/account/accessibility/retention observations for the same build and audience.
 - [ ] A seeded current-summary mismatch fails and repaired state passes; dated historical summaries remain valid.
 - [ ] A custom execution queue is preserved despite different raw frontier sorting; no false dependency is introduced.
-- [ ] Guidance reuses an existing registry when present and applicable fixtures plus `node scripts/check-repo.mjs` pass.
+- [ ] Guidance reuses an existing registry when present and applicable fixtures plus `node scripts/gate.mjs pre-merge` pass.

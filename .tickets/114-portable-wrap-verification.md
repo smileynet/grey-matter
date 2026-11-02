@@ -31,4 +31,11 @@ Inspect current `sync`, hook and verification guidance for overlap and contradic
 - [ ] Scenarios cover an adopter with an aggregate and one with only documented individual commands; neither reports a missing gate as passed.
 - [ ] A failing check, timeout and missing executable prevent a downstream marker mutation; a passing check permits it with its result recorded.
 - [ ] Guidance distinguishes required gates from optional observations and reconciles conflicting wrap/sync wording without silently expanding authorization.
-- [ ] Applicable behavioral fixtures and `node scripts/check-repo.mjs` pass.
+- [ ] Applicable behavioral fixtures and `node scripts/gate.mjs pre-merge` pass.
+
+## Update 2026-11-01
+
+`wrap-session` step 5 now names `node scripts/gate.mjs pre-merge` instead of `check-repo.mjs`,
+but that is still grey-matter's own command. Per [local gates](../docs/agents/local-gates.md), a
+project names its `check` command (speed phase) or its `gate.mjs` stages (stability) in its
+`AGENTS.md`; the portable wrap should run whichever that file names.

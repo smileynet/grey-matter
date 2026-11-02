@@ -27,4 +27,4 @@ is out of scope here.
 - [ ] The placement decision is recorded (skill body vs. harness reference).
 - [ ] Under Kiro Crew, claiming a ticket tags the chat `implementation` and records the ticket in the ledger; closing tags it `done`.
 - [ ] Other harnesses see no new required steps.
-- [ ] `node scripts/check-repo.mjs` passes.
+- [ ] `node scripts/gate.mjs pre-merge` passes.

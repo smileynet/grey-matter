@@ -31,4 +31,4 @@ The source project's #68 now has a bounded worker capture/verify validator with 
 - [ ] Worked examples correctly classify healthy service plus empty inventory as service-only evidence and nonempty matched observations as scoped preservation evidence.
 - [ ] Fixtures or behavioral review reject zero bytes/files, missing baseline, scope mismatch and changed identity/hash; valid unchanged observations pass.
 - [ ] Guidance states observation limits and preserves authorization boundaries without forcing simulator/device tests for worker-only assertions.
-- [ ] Applicable fixtures and `node scripts/check-repo.mjs` pass.
+- [ ] Applicable fixtures and `node scripts/gate.mjs pre-merge` pass.

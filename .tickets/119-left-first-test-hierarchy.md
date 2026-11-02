@@ -6,7 +6,7 @@ blocked_by: []
 validation_criteria:
   - "Guidance maps each assertion to its lowest faithful environment and separates cost from criticality"
   - "Worked scenarios distinguish change, merge, release, and physical-pilot gates with evidence reuse limits"
-  - "Applicable guidance fixtures and node scripts/check-repo.mjs pass"
+  - "Applicable guidance fixtures and node scripts/gate.mjs pre-merge pass"
 tags: ["stream:tooling", "kind:enhancement"]
 priority: low
 ---
@@ -87,7 +87,7 @@ hold for host sudo. Do not upgrade those limits into completed evidence.
 - [ ] Evidence/reuse rules bind results to relevant inputs, reject zero-test passes and preserve failed attempts.
 - [ ] Worked scenarios route byte/time/auth cases left, process/DAV/rollback cases to integration, controls to native UI and installed-update retention to a physical pilot.
 - [ ] Scenario review catches a JavaScript stand-in for a native parser and a simulator-only claim of phone retention.
-- [ ] Existing related tickets are cross-referenced without duplicating their ownership; applicable fixtures and `node scripts/check-repo.mjs` pass.
+- [ ] Existing related tickets are cross-referenced without duplicating their ownership; applicable fixtures and `node scripts/gate.mjs pre-merge` pass.
 
 ## October 31 follow-up
 

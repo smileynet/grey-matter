@@ -28,7 +28,7 @@ Files: `scripts/deploy.mjs` (line ~733, the drift finding), `scripts/sync-releas
 
 - [ ] A fixture with a stale vendored `tools/deploy.mjs` is repaired by one documented command, and the deploy lint message names that command.
 - [ ] `skills/meta/sync/SKILL.md` states what to do when the tkt checkout is behind or diverged: fetch, compare the vendored files with upstream, and stop for the owner's decision before dropping or rebasing a local commit.
-- [ ] `node scripts/check-repo.mjs` passes.
+- [ ] `node scripts/gate.mjs pre-merge` passes.
 
 ## Out of scope
 

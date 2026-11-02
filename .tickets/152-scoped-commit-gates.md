@@ -9,7 +9,7 @@ validation_criteria:
   - "The guidance states the defaults: gate files run the gate's own tests, dependency pins run everything, docs/tickets/art run nothing, and the full gate runs before a release or device build."
   - "conformance-audit flags a pre-commit hook that runs the full suite unconditionally, and a scratch directory with unbounded run history."
   - "Critic and reconcile guidance says an owner's explicit decision ends a deliberation chain; heavy evidence belongs to data and acceptance risk, not tooling ergonomics."
-  - "node scripts/check-repo.mjs passes."
+  - "node scripts/gate.mjs pre-merge passes."
 ---
 
 # Scope project commit gates to vital, changed parts and bound verification scratch
@@ -44,7 +44,7 @@ Owner request on 2026-10-31 from a tagalog-helper session: "fix the precommit ga
 - [ ] The scaffolded pattern and its defaults are documented with a worked example (tagalog-helper's scope file can seed it).
 - [ ] conformance-audit reports unconditional full hooks and unbounded scratch, with the measured size.
 - [ ] The proportionality rule is in the owning skill and referenced, not restated, by the others.
-- [ ] `node scripts/check-repo.mjs` passes.
+- [ ] `node scripts/gate.mjs pre-merge` passes.
 
 ## Out of scope
 

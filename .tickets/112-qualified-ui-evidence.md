@@ -5,7 +5,7 @@ status: open
 blocked_by: []
 validation_criteria:
   - "Conditional UI verification guidance distinguishes protocol capability, artifact checks, human reports and learner outcomes"
-  - "Guidance fixtures and node scripts/check-repo.mjs pass"
+  - "Guidance fixtures and node scripts/gate.mjs pre-merge pass"
 tags: ["stream:tooling"]
 priority: medium
 ---

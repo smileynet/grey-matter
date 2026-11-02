@@ -32,7 +32,7 @@ cross-family option) before wiring the dispatch. Evidence: [critic-model-selecti
 - [ ] `wrap-session` updates a recorded dashboard and `orient` surfaces its open asks.
 - [ ] `conformance-audit` reports checker errors as safe-tier and critic findings as judgment-tier.
 - [ ] The critic model table is in `docs/agents/harnesses.md` with its verification date and official sources, and every critic result records the model and effort it ran on (after the owner decides the Claude and OpenAI preference lists in proposal 13).
-- [ ] `node scripts/check-repo.mjs` passes.
+- [ ] `node scripts/gate.mjs pre-merge` passes.
 
 ## Scope change (2026-10-29, ticket 101)
 

@@ -69,4 +69,4 @@ Extend `conformance-audit` with a release-aware upgrade mode rather than adding 
 - [ ] A project adopted before proposal 18 can be brought to the post-18 shape by running it, shown on one real consumer repo (philippines-trip or tagalog-helper), with the diff as evidence.
 - [ ] Running it twice in a row makes no further change.
 - [ ] Mechanical steps apply only behind the approval gate; judgement calls are reported.
-- [ ] `node scripts/check-repo.mjs --static` passes.
+- [ ] `node scripts/gate.mjs pre-push` passes.

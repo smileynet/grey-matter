@@ -1,15 +1,15 @@
 ---
 id: "122"
-title: "Find why check-repo invariant 1 (deployer tests) fails intermittently on Windows"
+title: "Find why the deployer check (deploy.test.mjs) fails intermittently on Windows"
 status: open
 blocked_by: []
 priority: low
 validation_criteria:
-  - "Cause of the intermittent invariant 1 failure identified from a failing run's log"
-  - "20 consecutive check-repo runs on an unchanged tree pass invariant 1, or the remaining flake is isolated and recorded"
+  - "Cause of the intermittent deployer failure identified from a failing run's log"
+  - "20 consecutive gate.mjs pre-merge --include deployer runs on an unchanged tree pass, or the remaining flake is isolated and recorded"
 tags: ["stream:tooling", "type:bug"]
 ---
-# Find why check-repo invariant 1 (deployer tests) fails intermittently on Windows
+# Find why the deployer check (deploy.test.mjs) fails intermittently on Windows
 
 ## What to build
 
@@ -20,5 +20,15 @@ Capture a failing run's full output (loop `check-repo` and keep each log), ident
 ## Acceptance criteria
 
 - [ ] The cause is identified from a captured failing log and recorded here.
-- [ ] 20 consecutive `check-repo` runs on an unchanged tree pass invariant 1, or the remaining flake is isolated to a named test and recorded.
-- [ ] `node scripts/check-repo.mjs` passes.
+- [ ] 20 consecutive `node scripts/gate.mjs pre-merge --include deployer` runs on an unchanged tree pass the deployer check, or the remaining flake is isolated to a named test and recorded.
+- [ ] `node scripts/gate.mjs pre-merge` passes.
+
+## Update 2026-11-01
+
+`check-repo.mjs` is retired; the deployer suite is now the pre-release `deployer` check in
+`scripts/gates.json` (`deploy.test.mjs` and `deploy-validation.test.mjs`, 91.9 s), which the gate
+runs in a worktree snapshot with its own timeout. Run it alone with
+`node scripts/gate.mjs pre-merge --include deployer`; the gate prints the failing output. One
+candidate cause seen today: under host load (bare `git` calls averaging 324 ms, 3 GB RAM free)
+`deploy.test.mjs` hit its 120 s per-file timeout with a `git.exe` that had no child process. It
+passed 45/45 in 81.5 s once the load eased. Ticket 137 has the timings.
