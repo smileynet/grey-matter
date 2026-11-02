@@ -132,7 +132,11 @@ function runCheck(check, cwd) {
     const finish = (outcome) => {
       clearTimeout(timer);
       child.stdout.destroy(); child.stderr.destroy();
-      rmSync(temp, { recursive: true, force: true });
+      try { rmSync(temp, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 }); }
+      catch (error) {
+        output += `\nTemporary directory cleanup failed; retained ${temp}: ${error.message}`;
+        if (outcome === "pass") outcome = "infrastructure error";
+      }
       done({ outcome, seconds: (Date.now() - started) / 1000, output });
     };
     child.on("error", (error) => { output += error.message; finish("infrastructure error"); });

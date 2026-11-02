@@ -3,10 +3,11 @@
 import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { copyFileSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
+import { once } from "node:events";
 import { fileURLToPath } from "node:url";
 
 const GATE = join(dirname(fileURLToPath(import.meta.url)), "gate.mjs");
@@ -122,6 +123,44 @@ test("a missing tool is an infrastructure error", () => fixture([{ ...check("a",
   assert.equal(r.status, 1);
   assert.match(r.out, /a: infrastructure error/);
 }));
+
+test("a locked check temp directory reports infrastructure failure and preserves its output", { skip: process.platform !== "win32" }, async () => {
+  let holder, retained;
+  try {
+    fixture([], ({ git, commit, run, push, base }) => {
+      const repo = git("rev-parse", "--show-toplevel");
+      const marker = join(repo, "holder-path"), ready = join(repo, "holder-ready");
+      holder = spawn(process.execPath, ["-e", `
+        const fs = require('node:fs');
+        const timer = setInterval(() => {
+          if (!fs.existsSync(${JSON.stringify(marker)})) return;
+          process.chdir(fs.readFileSync(${JSON.stringify(marker)}, 'utf8'));
+          fs.writeFileSync(${JSON.stringify(ready)}, 'ready');
+          clearInterval(timer); setInterval(() => {}, 1000);
+        }, 10);
+      `], { stdio: "ignore" });
+      const body = `
+        const fs = require('node:fs');
+        fs.writeFileSync(${JSON.stringify(marker)}, process.env.TEMP);
+        const until = Date.now() + 5000;
+        while (!fs.existsSync(${JSON.stringify(ready)}) && Date.now() < until) Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 10);
+        if (!fs.existsSync(${JSON.stringify(ready)})) process.exit(23);
+        console.log('check output retained');
+      `;
+      writeFileSync(join(repo, "scripts/gates.json"), JSON.stringify({ checks: [check("locked", ["a/"], body)] }));
+      const head = commit("a/x");
+      const result = run(["pre-push", "--stdin"], { input: push(head, base) });
+      retained = readFileSync(marker, "utf8");
+      assert.equal(result.status, 1, result.out);
+      assert.match(result.out, /locked: infrastructure error/);
+      assert.match(result.out, /Temporary directory cleanup failed; retained/);
+      assert.match(result.out, /check output retained/);
+    });
+  } finally {
+    if (holder) { holder.kill(); await once(holder, "exit"); }
+    if (retained) rmSync(retained, { recursive: true, force: true, maxRetries: 3 });
+  }
+});
 
 test("SKIP is reported, never silent", () => fixture([check("a", ["a/"], "process.exit(1)")], ({ commit, run, push, base }) => {
   const r = run(["pre-push", "--stdin", "--remote", "origin"], { input: push(commit("a/x"), base), env: { SKIP: "a" } });
