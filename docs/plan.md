@@ -195,7 +195,7 @@ auth remains conditional on the result of #186.
 | ID | Work | Status |
 | --- | --- | --- |
 | 156 | 3. Qualify Mate report/wake recovery across gateway restart | ✅ done |
-| 158 | 4. Test narrower agy regex permissions with negative controls | in_progress |
+| 158 | 4. Test narrower agy regex permissions with negative controls | ✅ done |
 | 157 | 5. Test agy native workflow dispatch and per-role model selection | open |
 | 159 | 6. Test available Codex multi-agent/message-board/wake features | open |
 | 160 | 7. Test Claude background sessions and idle notification semantics | open |
@@ -226,7 +226,7 @@ flowchart TD
   D162 -.-> A186["186 KAS auth ownership (done)"]
   A186 -.-> M156["156 Mate restart/recovery (done)"]
   A186 --> A190["190 Crew Windows auth integration"]
-  P158["158 agy regex permissions"] -.-> W157["157 agy workflows"]
+  P158["158 agy regex permissions (done)"] -.-> W157["157 agy workflows"]
   P158 --> A193["193 regex Ask overlap diagnosis"]
   subgraph Other["Independent harness probes"]
     C159["159 Codex messaging"]

@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "2ad0078cc1beb0bda6f385694e5dab58c1d15e1d67a35ff7fcc21e05479d01f5",
+  "subject": "Narrow permissions finding after ticket closure",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 13607,
+      "sha256": "88bde075ffd0708a3d0ed32bccf5172b8b8914bbd46a9e2363348d0ede4a8b88"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 142131,
+      "sha256": "bd81c06d5f311079b19edc07ca47645e3a2e54a4dc10782c4491fef877a6967c"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4263,
+      "sha256": "7823739d7cfe6bad41b4c6fb3d757de6ecb05aa1f45372ed48ae286831d1ad69"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t158-final/findings-1280.png",
+      "bytes": 276537,
+      "sha256": "54b9e0367f4814905679194884160c9c623ea5587f03dba113e5e11fb5ca2932",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t158-final/tickets-1280.png",
+      "bytes": 249538,
+      "sha256": "3aaa62f24312d86ea28ba0f25ccb02bd3c76397cf534f5847f6b02480310bc81",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t158-final/findings-390.png",
+      "bytes": 271978,
+      "sha256": "48ee42d6fe7f1b074f5021906aac9ce3342d93b47ffda0bfe79c75fdad1d1c0c",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t158-final/tickets-390.png",
+      "bytes": 214436,
+      "sha256": "bdde95cf371d12f09c62fb26efb5e011ccb5f0b5c2248a9a2e2c8aa1a95e0287",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "81378207ddb497f93fe5dac3bb4ce898803225beb4c003dbd9f2798efa713431",
+  "id": "24138deca578fd7712152ffdf7b85924acd6df40f668696545b5416fe27722b5",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/dashboard_critic (Codex agent)",
+    "note": "Observer: /root/dashboard_critic (Codex agent); surface: local Chromium file rendering via Playwright; scenario: inspect the closed-state page at 1280x900 and 390x900 in both tabs and compare current HTML; outcome: accepted. The findings tab still shows eight cards and two unproven possibilities. The ticket tab shows 17 open/16 completed; #158 is done and collapsed under Other, while #193 is open and visibly unblocked after its #158 prerequisite completed. Ticket details begin collapsed at both sizes. Limits: tool-observed rendering at the stated sizes, not a human usability study or product screenshots; lower nodes in the contained flow require internal scrolling.",
+    "acceptedAt": "2026-11-02T18:14:43.159Z",
+    "snapshotId": "24138deca578fd7712152ffdf7b85924acd6df40f668696545b5416fe27722b5"
+  }
+}

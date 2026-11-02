@@ -28,7 +28,7 @@ Windows System32 first on the child process PATH succeeded. No plugin code chang
 
 ## Maintain it
 
-The #156 update is live at the same private URL: seven findings, two unproven
+The historical #156 update had seven findings, two unproven
 possibilities, 17 open and 15 completed tickets. Native Sites publication returned
 `succeeded` for source `120e4e9e2375b05846541c69f00122b21e83d156`, deployment
 `appgdep_6ae8ccbd32448191a570f96cd998522d`, version
@@ -37,6 +37,16 @@ The final reviewed local captures and accepted receipt are in
 `evidence/orchestration-dashboard/t156-final/`. The hosted copy changes repository
 link targets only; production publication is verified by Sites, while rendered
 interaction checks cover the local copy at laptop and phone widths.
+
+The #158 update is now live at the same private URL: eight findings, two unproven
+possibilities, 17 open and 16 completed tickets. The new #193 follow-up is in the
+queue before the final ACP research ticket. Sites returned `succeeded` for source
+`64629ed997d7c3e759066f3f23cada064ed2afd3`, deployment
+`appgdep_6ae8d373351c8191b9b5c6ca4c382104`, version
+`appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_826638958078819191aeb8cbe1101988`.
+Accepted local captures and the final receipt are in
+`evidence/orchestration-dashboard/t158-final/`. The same link-target-only hosting
+transformation and local-versus-production verification boundary apply.
 
 Edit `docs/orchestration-findings.json` for findings and short ticket outcomes.
 Keep observations distinct from proposed capabilities and preserve source links.
