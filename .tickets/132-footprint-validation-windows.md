@@ -1,7 +1,7 @@
 ---
 id: "132"
 title: "Validate footprint guidance and inspector on Windows"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
