@@ -48,6 +48,15 @@ Accepted local captures and the final receipt are in
 `evidence/orchestration-dashboard/t158-final/`. The same link-target-only hosting
 transformation and local-versus-production verification boundary apply.
 
+After the #158 publication, the stale broad-command recommendation in the
+Antigravity reference was replaced by the tested narrow controls and the Ask
+overlap limit. `node scripts/deploy.mjs` refreshed 50 skills and passed native
+plugin validation with the existing generic-icon notice. The generated bundle
+(14,971,048 bytes) is retained for the installed pack until the next deployment.
+The disposable browser module (13,658,897 bytes), publication archive (38,979
+bytes), and preparation script (1,063 bytes) were recycled. The three probe
+configuration files still matched their pre-probe hashes after deployment.
+
 Edit `docs/orchestration-findings.json` for findings and short ticket outcomes.
 Keep observations distinct from proposed capabilities and preserve source links.
 Run `node scripts/build-orchestration-dashboard.mjs` after changing scoped tickets,
