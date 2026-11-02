@@ -1,7 +1,7 @@
 ---
 id: "114"
 title: "Discover project verification gates and stop dependent mutations on failure"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Scenarios cover an adopter with an aggregate and one with only documented individual commands; neither reports a missing gate as passed."
