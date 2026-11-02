@@ -73,3 +73,51 @@ Other observations:
   `command du -sk`.
 - The `simctl delete unavailable` behavior remains unobserved; run only with explicit
   confirmation that affected devices are disposable and owned for this task.
+
+## CoreSimulator read-only follow-up
+
+After the initial free-space stop, a further read-only inspection was requested to identify
+possible simulator cleanup. Free space remained below the 20 GiB floor: a fresh
+`command df -Pk "$HOME"` reported 11,134,636 KiB available (98% used). No deletion or
+other write was performed.
+
+`xcrun simctl list runtimes` showed one available runtime: iOS 27.0, build 24A434.
+`xcrun simctl list devices unavailable` returned no unavailable devices. `xcrun simctl
+list devices` showed 12 devices, all Shutdown: ten generic iPhone/iPad devices, plus two
+named devices, `Philippines Guide` and `Tagalog Helper`. No older installed runtime was
+listed. The runtime's `simctl list runtimes -j` bundle path was under a mounted Apple
+cryptex; `/Library/Developer/CoreSimulator/Profiles/Runtimes` had no entries. The runtime
+bundle itself was not traversed for size.
+
+Allocated `du -sk` results for the two named, shutdown simulator directories:
+
+| Device | Directory | `du -sk` KiB | Approx. GiB |
+|---|---|---:|---:|
+| Philippines Guide | `~/Library/Developer/CoreSimulator/Devices/71C98FA5-66DD-491E-A642-A40AE91978CC` | 12,708,076 | 12.12 |
+| Tagalog Helper | `~/Library/Developer/CoreSimulator/Devices/757E91C9-09FD-4E85-B93D-7BD16FCBCB0C` | 9,423,016 | 8.99 |
+
+The other ten registered simulator directories measured 17,912 KiB each, except the
+Shutdown iPhone 17 at
+`~/Library/Developer/CoreSimulator/Devices/BA44BA40-9345-485D-88A7-5E0846E0407E`,
+which measured 518,008 KiB (~0.49 GiB). Three other device UUID directories existed on
+disk but were absent from `simctl list devices`; each had only an empty `data` directory
+and `du -sk` measured 0 KiB: `5108C41D-BBD2-4D46-9D01-B12C27CE7048`,
+`5E9042AD-0E8F-47F2-BDB7-158B357CA79A`, and
+`D379EF18-E182-4064-966D-4A2305ADB8C6`. They cannot provide meaningful disk recovery.
+The registered device directory totals (22,810,308 KiB) differ from the enclosing
+`Devices` scan (22,810,324 KiB) by 16 KiB; the enclosing CoreSimulator scan was
+22,810,336 KiB, another 12 KiB of directory accounting.
+
+### Cleanup proposal (not executed)
+
+The only material candidates are the two named simulator data trees, together measuring
+22,131,092 KiB (`du` upper-bound, about 21.1 GiB). Both appear to contain substantial
+simulator state, and their names suggest project/user content; shutdown status does not
+show that the app data is disposable. Preserve both unless their owner confirms they can
+be recreated and their in-simulator data is no longer needed. If confirmed, use
+`xcrun simctl delete 71C98FA5-66DD-491E-A642-A40AE91978CC` and/or
+`xcrun simctl delete 757E91C9-09FD-4E85-B93D-7BD16FCBCB0C` as the user, then remeasure
+`df` and `du`. Actual freed APFS space may be lower than `du` because clones/shared blocks
+can remain referenced. No specific runtime removal is supported by the observed inventory:
+only iOS 27.0 is installed and it is available. The three unregistered empty directories
+have a 0 KiB measured footprint and are not actionable cleanup targets.
