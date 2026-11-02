@@ -1,8 +1,12 @@
 ---
 id: "178"
 title: "Warn when grey-matter's own clone has no core.hooksPath, so pushes skip the pre-push stage"
-status: open
+status: in_progress
 blocked_by: []
+validation_criteria:
+  - "Default deploy/list prints one opt-in warning for this clone when its tracked pre-push hook is not selected, and stays quiet when selected."
+  - "The warning never changes Git configuration and stays silent in consumer projects."
+  - "node scripts/gate.mjs pre-merge passes."
 tags: ["stream:tooling"]
 ---
 # Warn when grey-matter's own clone has no core.hooksPath, so pushes skip the pre-push stage
@@ -26,3 +30,8 @@ one line when this checkout's `core.hooksPath` is not `.githooks`, naming the co
       naming `git config core.hooksPath .githooks`; with it set, it prints nothing.
 - [ ] It never changes Git config itself, and stays silent in consumer projects.
 - [ ] `node scripts/gate.mjs pre-merge` passes.
+
+## Local preparation 2026-11-02
+
+Reserved locally alongside #177 while publishing the branch is gated on the unfinished #137/#176
+verification. See [the local claim rationale](177-gate-record-timings.md#local-preparation-2026-11-02).
