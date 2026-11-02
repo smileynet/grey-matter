@@ -253,8 +253,9 @@ in scope. The initial scoped frontier is #162, #186, #156–161 and #174;
 members, while declared dependencies remain authoritative.
 
 Retained private t111 evidence belongs to #162; the prepared 98,400-byte t158
-fixture belongs to #158. The managed primary checkout serves this workstream
-until the app permits normal archival; do not bypass its primary-checkout guard.
+fixture belongs to #158. The managed deployment checkout is retained: the app
+refused archival because another active task still uses it. Preserve it until
+the app permits normal archival; do not bypass that active-use guard.
 No new model run, adapter installation, credential change or fixture cleanup was
 performed by this reconciliation.
 
@@ -263,9 +264,15 @@ closed bodies preserved with tag-only changes, three validation fields per open
 ticket, exactly one plan row per scoped ticket, and the expected nine-ticket
 frontier. `tkt sync-plan --check --brief` passed with zero findings;
 `tkt validate --brief` passed with the seven existing closed-checkbox warnings.
-Documentation consistency and home-path checks passed. Owned temporary
-reconciliation scripts and snapshot are recycled after these conclusions are
-recorded; the retained fixtures above are outside this cleanup.
+Documentation consistency and home-path checks passed. On reconciliation commit
+`e81b53e`, pre-merge passed ticket-graph and syntax fixtures (2 selected checks),
+and pre-push passed documentation links and home-path (2 selected checks).
+Deployment from that clean pinned checkout passed for all 50 skills; the
+installed tag-conventions resource matched the source hash. The existing native
+plugin generic-icon warning remains. Recycled the 22,915-byte owned temporary
+reconciliation scripts/snapshot and 8,702,671-byte generated deployment bundle;
+the retained fixtures above are outside this cleanup. Another chat's pending
+AGENTS/dashboard files were excluded from this commit and deployment source.
 
 ## Open work order (reconciled 2026-10-31)
 
