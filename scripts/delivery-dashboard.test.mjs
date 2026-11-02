@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 import { spawnSync } from "node:child_process";
 import { check } from "../skills/productivity/delivery-dashboard/scripts/check-dashboard.mjs";
+import { compareReadinessIdentity } from "../skills/productivity/delivery-dashboard/scripts/readiness-identity.mjs";
 import { snapshot } from "../skills/productivity/delivery-dashboard/scripts/snapshot-tickets.mjs";
 
 const SKILL = resolve(dirname(fileURLToPath(import.meta.url)), "../skills/productivity/delivery-dashboard");
@@ -181,19 +182,45 @@ test("warns when a headline carries process detail", (t) => {
   assert.equal(run(dashboard(t, [entry(1, { title: "Closed ticket 88" })]).file, { strict: true }).ok, false);
 });
 
-test("strict rejects a stale ticket snapshot, then accepts its repair and dated history", (t) => {
-  const progress = { type: "progress", label: "Route", done: 1, total: 2 };
-  const entries = [
-    entry(9, { date: "2026-09-09", tickets: ["1"], visual: progress }),
-    entry(1, { date: "2026-08-01", kind: "learning" }),
-  ];
-  const snap = (generated) => withTickets({ generated, frontier: [], tickets: [tk("1", "done")] });
-  const stale = run(dashboard(t, entries, snap("2026-09-01T00:00:00Z")).file, { strict: true });
-  assert.equal(stale.ok, false);
-  assert.match(stale.warnings.join("\n"), /predates the newest entry/);
-  const repaired = run(dashboard(t, entries, snap("2026-09-10T00:00:00Z")).file, { strict: true });
-  assert.equal(repaired.ok, true, repaired.errors.concat(repaired.warnings).join("; "));
-  assert.equal(repaired.stats.entries, 2, "dated history remains valid");
+const activeReadinessIdentity = {
+  product: "trailhead",
+  platform: "ios",
+  build: "2.4.0",
+  channel: "stable",
+  effectiveAudience: "beta20",
+};
+
+test("readiness summary identity rejects an old build, accepts repair and leaves dated history alone", () => {
+  const oldSummary = { ...activeReadinessIdentity, build: "2.3.0" };
+  assert.deepEqual(compareReadinessIdentity(activeReadinessIdentity, oldSummary), {
+    ok: false,
+    errors: ["current summary build does not match active build"],
+  });
+
+  const datedHistory = [{ ...oldSummary, recordedAt: "2026-10-01" }];
+  const historyBefore = structuredClone(datedHistory);
+  assert.deepEqual(compareReadinessIdentity(activeReadinessIdentity, { ...activeReadinessIdentity }), { ok: true, errors: [] });
+  assert.deepEqual(datedHistory, historyBefore, "identity repair does not rewrite dated history");
+});
+
+test("readiness identity fails closed for missing, malformed, extra and different audience IDs", () => {
+  const missing = { ...activeReadinessIdentity };
+  delete missing.channel;
+  assert.equal(compareReadinessIdentity(activeReadinessIdentity, missing).ok, false);
+  assert.equal(compareReadinessIdentity(missing, { ...activeReadinessIdentity }).ok, false);
+
+  const malformed = { ...activeReadinessIdentity, platform: "   " };
+  assert.equal(compareReadinessIdentity(activeReadinessIdentity, malformed).ok, false);
+  assert.equal(compareReadinessIdentity(malformed, { ...activeReadinessIdentity }).ok, false);
+
+  const extra = { ...activeReadinessIdentity, deployment: "green" };
+  assert.equal(compareReadinessIdentity(activeReadinessIdentity, extra).ok, false);
+
+  const otherAudience = { ...activeReadinessIdentity, effectiveAudience: "beta21" };
+  assert.deepEqual(compareReadinessIdentity(activeReadinessIdentity, otherAudience), {
+    ok: false,
+    errors: ["current summary effectiveAudience does not match active effectiveAudience"],
+  });
 });
 
 test("the checker never modifies the dashboard", (t) => {

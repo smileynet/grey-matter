@@ -116,6 +116,16 @@ paths follow the existing [numbered attempt guidance](../../../../docs/agents/re
 If no readiness record applies, report that missing source and keep unobserved states unverified;
 do not invent a second global registry to make the summary look complete.
 
+An adopter with an existing readiness source may project its active record and current summary
+reference into exactly five canonical, nonempty stable string IDs: `product`, `platform`, `build`,
+`channel` and `effectiveAudience`. The optional
+`scripts/readiness-identity.mjs` `compareReadinessIdentity(activeIdentity, currentSummaryIdentity)`
+helper rejects missing, malformed or extra fields and requires exact equality for every ID,
+including the audience ID. Use an adapter for the adopter's schema; the helper stores no state and
+does not discover, validate or establish the truth of either record. It proves identity consistency
+only, not distribution availability, installation, account access, retention, accessibility or
+learner outcomes. No readiness source means no helper call is required.
+
 **Worked record (illustrative fields, not a required schema or real delivery evidence):**
 
 Identity: Trailhead / iOS / build 2.4.0 / stable / 20-person beta cohort; record ID
@@ -136,7 +146,9 @@ against the active record structurally: a summary reference to `trailhead/ios/2.
 while the registry's current record is `trailhead/ios/2.4.0/stable/beta20` fails; correcting the
 reference to the active record passes without rewriting the dated 2.3.0 history. Do not search
 summary prose for words such as “pending.” Use the adopter registry's checker/fixture when present;
-otherwise record the manual comparison without claiming an automated pass. The shared
+otherwise an adapter may use the optional comparison helper above or record a manual comparison,
+identifying which was done. Neither helper tests nor a manual comparison establish real delivery
+readiness. The shared
 `check-dashboard.mjs` only checks ticket-snapshot freshness against the newest entry date; it
 does not verify an external readiness registry.
 
