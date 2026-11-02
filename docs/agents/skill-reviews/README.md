@@ -24,6 +24,7 @@ TBD so the index and its owning ticket agree.
 
 | Skill | Bucket | Invocation | Verdict | Note |
 | --- | --- | --- | --- | --- |
+| orchestrate | engineering | user | new | [orchestrate.md](orchestrate.md) |
 | review-skill | meta | user | new | [review-skill.md](review-skill.md) |
 | init-project | meta | user | new (replaces setup-matt-pocock-skills) | [init-project.md](init-project.md) |
 | grilling | productivity | model | adapt | [grilling.md](grilling.md) |

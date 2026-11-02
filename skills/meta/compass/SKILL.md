@@ -21,8 +21,9 @@ The route most work travels. You have an idea and want it built. The tracker thr
    - **prototype** to answer the question with throwaway code (logic demo, UI variants, or a Godot game-feel scene),
    - **handoff** back what you learned, and reference it from the original idea thread.
 3. **Branch: is this a multi-session build?**
-   - **Yes** -> **to-spec** (turn the thread into a spec), then **to-tickets** to split it into tracer-bullet tkt tickets, each declaring its **blocking edges**. Then work the tickets one of two ways:
+   - **Yes** -> **to-spec** (turn the thread into a spec), then **to-tickets** to split it into tracer-bullet tkt tickets, each declaring its **blocking edges**. Then choose the execution scope:
      - **implement** per ticket, clearing context between each one. `tkt ready` surfaces the frontier (any ticket whose blockers are done); each ticket is self-contained, so the last one's context is disposable.
+     - **orchestrate** when the user asks for a session over independent frontier tickets: isolated workers, risk-scaled review, contextual landing and a dashboard plus chat visual per close.
      - **implement-spec** for the whole spec in one run. It reads the tickets as a **task graph**, runs implementer subagents across the ready **frontier** in parallel, and lands everything on one **integration branch**. Reach for it when you'd rather orchestrate the build than drive each ticket yourself.
    - **No** -> **implement** right here, in the same context window.
 

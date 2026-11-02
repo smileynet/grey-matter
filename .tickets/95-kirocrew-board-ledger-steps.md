@@ -22,6 +22,13 @@ portable skill body or in a per-harness reference file loaded on demand
 (see `docs/agents/skill-frontmatter.md`). `tkt-work` belongs to tkt, not grey-matter, so it
 is out of scope here.
 
+## Placement decision (2026-11-01)
+
+**Harness reference**, per [proposal 17](../docs/agents/proposals/17-orchestrator-skill.md#4-per-harness-references).
+The guarded orchestration steps live in
+[orchestrate’s Kiro Crew reference](../skills/engineering/orchestrate/references/harness-kirocrew.md).
+Ticket 95 still owns wiring the single-ticket orient/implement path and live validation.
+
 ## Acceptance criteria
 
 - [ ] The placement decision is recorded (skill body vs. harness reference).

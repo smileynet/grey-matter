@@ -90,7 +90,8 @@ Reach for `compass` only when the pick genuinely isn't a straight build:
 | An external request not yet groomed into a ticket | `triage` |
 | A foggy effort too big for one session | `wayfinder` |
 | Something broken: a resistant bug, a flake, a regression | `diagnosing-bugs` |
-| The whole ready frontier in one orchestrated run | `implement-spec` |
+| User asks to orchestrate independent frontier tickets | Recommend user-invoked `orchestrate`; start only with that authorization |
+| A whole spec landing together on one integration branch | `implement-spec` |
 
 Call `compass` (don't guess from the table) when the pick matches no row cleanly, more than
 one applies, or the session context implies a goal the frontier alone doesn't show. The
