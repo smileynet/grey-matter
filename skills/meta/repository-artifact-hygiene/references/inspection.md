@@ -120,31 +120,60 @@ open-file table; it never deletes, stages or fetches.
 ```text
 node <skill-dir>/scripts/inspect-footprint.mjs --repo PATH [--path DIR]... [--ticket N]
   [--quiet 15m | --agent-state] [--floor 20GiB] [--cap 5GiB] [--dedupe]
-  [--preservation FILE] [--recheck PRIOR.json] [--summary [--top-under 40GiB]]
+  [--agent-state-root DIR]... [--runner-temp-root DIR]...
+  [--preservation FILE] [--recheck PRIOR.json] [--regrowth PRIOR.json [--cleanup-record FILE]]
+  [--free-space-history FILE] [--summary [--top-under 40GiB]]
 ```
 
 | Flag | Effect |
 |---|---|
 | `--path DIR` | add a family outside the repo (a release work folder, an agent state store) |
+| `--agent-state-root DIR` | explicitly scan immediate child files/directories as separate `agent-state` families; repeat for configured roots |
+| `--runner-temp-root DIR` | explicitly scan immediate child files/directories as separate `runner-temp` families; repeat for configured roots |
 | `--ticket N` | only families whose name carries ticket N (`t110-…`, `ticket-110`, `110-…`) |
 | `--quiet 15m` | skip a family written within this window; `--agent-state` sets 24h for session stores |
 | `--floor` / `--cap` | free-space floor (default 20GiB) and optional per-ticket total; breaking one exits 1 |
 | `--dedupe` | sha256 files whose size matches a tracked file, plus the LFS store; reports identical bytes. Opt-in: it reads every candidate file |
 | `--preservation FILE` | load explicit project ownership, retention and dependency observations (version 1; see below) |
 | `--recheck PRIOR.json` | compare preservation context and keep lists with a saved run; changed delete/slim/prune families become `ask` and exit 1 |
-| `--summary` | free space and largest families when under `--top-under` (40GiB), plus any measured or unverified ticket-cap findings |
+| `--regrowth PRIOR.json` | compare logical family bytes and inventory against an earlier complete inspector report from the same workspace and stable scope; a larger family is ordinary growth unless its path has a matching completed cleanup record |
+| `--cleanup-record FILE` | with `--regrowth`, attest that whole prior families were cleared; the record cannot authorize or perform cleanup |
+| `--free-space-history FILE` | compare host-supplied free-byte samples to the inspector's currently limiting filesystem/volume; see the input schema below |
+| `--summary` | current free space, a validated trend when supplied, and growth classifications, plus largest families when under `--top-under` (40GiB) and ticket-cap findings |
+
+Configured agent-state and runner-temp roots are explicit containers, never inferred home
+directories. The container path is part of the stable snapshot scope; its immediate child
+files and directories are separate families and are not repeated in that scope identity.
+At most 256 immediate entries per container and 10,000 filesystem entries per child family
+are inspected. Limit overflow, missing/unreadable roots, unsupported child entries, overlaps
+or escaping symlinks appear in `coverage.scopeIssues`, set `coverage.inventoryComplete` to
+false, and prevent cleanup recommendations. Symlink targets are recorded but not traversed.
+Recheck and regrowth bind the stable container path while allowing its child list to change.
+Ordinary `--path DIR` behavior remains one family rooted at that path.
 
 Output is JSON: `status` (`pass`, `review` when candidates exist or coverage is incomplete,
 `fail` when a measured limit breaks or a requested cap cannot be verified), `freeSpace`
 (under WSL, the lower of the distro and the Windows
 volume holding that distro's registered `ext4.vhdx`), `coverage`,
 `findings`, `families` sorted by size, and `conformance` (pytest retention, tracked
-`.scratch` citations). Families report `logicalBytes`, `allocatedBytes` and
+`.scratch` citations). `observedAt` records the report time. `freeSpace.volumeId` identifies
+the uniquely limiting filesystem or volume when available, and `freeSpaceTrend` contains an
+available change/rate or an explicit unavailable reason. `coverage.inventoryComplete`
+describes whether family inventory enumeration finished; `coverage.complete` also accounts
+for unrelated probes such as ownership, open files, allocation and backing-volume checks.
+Families report `logicalBytes`, `allocatedBytes` and
 `reclaimableBytes: null`; logical length and allocated measurements do not prove physical
-reclaim. `allocatedBytes` is null if the filesystem does not report blocks; `bytes` keeps
-the legacy estimate and falls back to logical length in that case. Coverage names the
+reclaim. `allocatedBytes` is null if the filesystem does not report blocks or a family
+inventory is incomplete; `allocationStatus` distinguishes those cases. Partial families
+retain `logicalBytesAtLeast`; when some entries report allocated blocks, they also expose
+`allocatedBytesAtLeast`, which excludes entries without block data. `bytes` keeps the
+legacy estimate and falls back to logical length when block allocation is unavailable. Coverage names the
 partial allocation probe, summaries label the logical fallback and show cap findings,
 and `--cap` reports `ticket-cap-unverified` instead of treating that fallback as allocation.
+An incomplete family or configured-parent enumeration makes the cap unverified for
+ticketed families observed under that parent, unless their known allocated lower bound
+already exceeds the cap. In that case the finding reports the lower bound and the unknown
+families; it never presents a partial family subtotal as an exact total.
 If known allocations already exceed the cap while other families are unknown, `ticket-cap`
 reports the known lower bound and lists those families. `ticket-cap-unverified` means the
 cap could not be checked, not that an exceedance was measured. On copy-on-write
@@ -190,7 +219,9 @@ and absolute paths for `--path` roots outside the repo:
 }
 ```
 
-`owner` must be a nonempty string. `retention.disposition` is `retained`, `released`, or
+`owner` names the accountable retention owner, not the current assignee, and must be a
+nonempty string. If the owner cannot be established, omit it and use
+`retention.disposition: "unknown"`. `retention.disposition` is `retained`, `released`, or
 `unknown`; only `released` can permit cleanup, while `retained` yields `keep` and unknown
 or missing disposition stays at `ask`. `dependencies.complete` records whether the
 project-side observation is complete; `active` names known dependencies. Dependency
@@ -200,9 +231,10 @@ and leaves a candidate at `ask`; a fresh active dependency yields `skip`. Proven
 time and completeness are caller assertions, not independently verified facts. A missing
 preservation file is reported as `coverage.preservation: not supplied` and prevents
 delete/slim/prune recommendations. An unavailable open-file or allocation probe likewise
-keeps candidates uncertain. Unknown input fields are rejected. `coverage.scopeIssues` reports overlapping roots and
-symlink-root escapes, plus missing, unreadable or allocation-unavailable roots; conflicting roots are excluded
-from measurement, and symlink targets are not traversed.
+keeps candidates uncertain. Unknown input fields are rejected. `coverage.scopeIssues` reports overlapping roots,
+symlink escapes, missing or unreadable roots, unsupported child entries, configured-root
+child-count limits and per-family traversal limits. Conflicting roots are excluded from
+measurement, and symlink targets are not traversed.
 
 Each report has `reportVersion: 1` and a workspace/scope snapshot. Recheck rejects malformed
 or empty prior reports, and current candidates without an earlier actionable recommendation
@@ -215,3 +247,66 @@ Candidate contents are not hashed: ordinary edits change recorded timestamps, bu
 same-size edit that preserves timestamps is outside this check. `dependencies.complete`
 is the project's assertion, not an independently verified registry result. The helper
 never removes files.
+
+### Growth and cleanup records
+
+Use `--regrowth` with a previously saved version 1 inspector report. The prior must have
+complete family-inventory coverage and a strictly earlier `observedAt`; its workspace root,
+Git common directory, project label and stable scope must match. `HEAD` may advance; the repo
+identity and configured parent roots may not change. A larger logical byte count without a
+cleanup record is labeled `ordinary growth`, not regrowth. A current, nonempty family that
+matches a completed whole-family cleanup is labeled `regrowth`. The report's
+`inventoryFingerprint` is SHA-256 over its snapshot, family path and canonical metadata
+inventory (paths, types, sizes and timestamps); it does not hash file contents.
+
+The cleanup file is explicit caller evidence that the *whole family* was cleared; planned or
+partial cleanup cannot be represented:
+
+```json
+{
+  "version": 1,
+  "status": "completed",
+  "scope": "whole-family",
+  "cleanedAt": "2026-11-02T10:30:00.000Z",
+  "snapshot": { "...": "copy the snapshot object from the prior report" },
+  "families": [
+    { "path": "C:/agent-state/session-a", "inventoryFingerprint": "copy from that prior family" }
+  ]
+}
+```
+
+`snapshot` is the prior report's JSON object, not a literal string. The record must match that
+exact prior snapshot and family fingerprint; `prior.observedAt < cleanedAt < current.observedAt`.
+The inspector trusts this record as a caller assertion, does not verify a deletion, and never
+removes or authorizes files. A bigger second sample alone remains ordinary growth.
+
+### Free-space history
+
+History is optional and supplied by the host; the inspector installs no sampler or scheduler.
+Each sample carries the ID for the filesystem or volume whose free space was measured:
+
+```json
+{
+  "version": 1,
+  "freshForMinutes": 60,
+  "samples": [
+    { "volumeId": "dev:12345", "observedAt": "2026-11-02T11:00:00.000Z", "freeBytes": 123456789 },
+    { "volumeId": "dev:12345", "observedAt": "2026-11-02T11:30:00.000Z", "freeBytes": 120000000 }
+  ]
+}
+```
+
+The report exposes its currently limiting `freeSpace.volumeId`; every sample must match it.
+For the repository filesystem this uses Node's host-local `stat.dev` identity. Under WSL, a Windows
+backing-volume trend requires the registered volume's stable GUID; a drive letter alone is
+not stable enough. If the limiting volume is ambiguous or lacks an identity, the trend is
+`unavailable`. Caller-supplied IDs and timestamps are assertions, not independently
+authenticated telemetry. At least two samples are required; bytes must be nonnegative safe
+integers, UTC timestamps must strictly increase, and the latest sample must be within
+`freshForMinutes` (1–1,440). The summary reports signed free-byte change and bytes per hour
+for that same volume. Missing, malformed, stale, future, or mismatched history is explicitly
+`unavailable`; it is never interpreted as zero growth.
+
+The regression fixture uses a local 4 KiB LFS object and two disposable worktrees: ordinary
+checkout materializes the object, while the documented skip-smudge checkout keeps the pointer
+and does not add an object copy. It uses no network or large payload.
