@@ -1,0 +1,26 @@
+# Audit: Codex dispatch feature probe (2026-11-02)
+
+## Score: 0.92 / high
+
+The report answers the ticket with an appropriately bounded “couldn't verify.” Its three preserved native JSON transcripts match the receipt's event summaries: each attempted CLI run reports the missing code-mode host, an empty native `wait` receiver list, no child result, and marker text emitted by the parent. The report does not present that marker or exit code 0 as a successful dispatch. Feature catalog state is kept distinct from runtime behavior.
+
+## Per-claim verdicts
+
+| Claim | Verdict | Evidence check |
+| --- | --- | --- |
+| Codex CLI version and executable identity | **Supported** | Receipt records version `0.166.0`, executable location and SHA-256. This is a local binary claim, supported by the recorded invocation evidence, not a public-doc claim. |
+| Three feature names default off and become enabled for the process override | **Supported** | Receipt records `codex features list` results with defaults false, override results true, and a subsequent no-override listing false. The report describes catalog state only; it does not call this runtime confirmation. |
+| The `--enable` option is process scoped and no config write occurred | **Supported, with an evidence limit stated** | Receipt records the CLI help finding and says `features enable` and config edits were not used. A before/after global config hash was not captured; the report accurately relies on the recorded invocation and absence of persistent-write operations rather than claiming hash-level proof. |
+| Baseline and `multi_agent_v2` dispatch did not create a worker | **Supported** | Raw JSONL for `baseline-no-flags.txt` and `multi-agent-v2.txt` each has a `Code Mode is unavailable` error, then `collab_tool_call wait` with `receiver_thread_ids: []`, followed by parent `agent_message` marker and `turn.completed`. No child identity or spawn event is present. Both report and receipt explicitly classify the marker as non-evidence of a child result. |
+| A saved-session `multi_agent_v2` attempt repeated the failure | **Supported** | `multi-agent-v2-saved.txt` has the same host error and empty receiver list, no child identity, and the parent marker. Its distinct thread ID and non-ephemeral command are recorded. This only shows the failure repeated in that run; it does not isolate all causes. |
+| The flags' effects on spawn/depth, board delivery, wake, question/answer and polling replacement remain unknown | **Supported** | The transcripts contain no worker, message-board event or wake event. The receipt identifies these outcomes as unverified, and the report says only catalog overrides were checked for the latter two flags. |
+| Current official documentation describes subagents in local Codex CLI | **Supported, broader scope only** | The fetched official [Subagents guide](https://learn.chatgpt.com/docs/agent-configuration/subagents) says current Codex releases enable subagent workflows by default and describes asking an interactive CLI session to delegate, including `/subagents`. It does not document this installed CLI version's three flags or message-board/wake semantics. The report makes that same scope distinction. |
+| The missing code-mode host is a runtime setup failure relevant to these attempts | **Supported as an observed co-occurring error** | All three raw outputs name `C:\Users\uosmi\.bun\bin\codex-code-mode-host.exe` and say it was not found. The report calls this an infrastructure error and tracks related work in #188; it does not claim the host absence is the sole cause of dispatch failure. |
+
+## Findings for the producer
+
+No material citation or evidence gaps found. Retain the current caveat that the probes do not establish what would happen after repairing the code-mode host. The saved-session record is owned evidence and should be removed only after the parent confirms the exact record identity; the report appropriately leaves that cleanup pending rather than deleting it during audit.
+
+Raw evidence was read at `.scratch/t159-evidence/` (6,206 bytes as recorded) and matched the promoted receipt. It is clear for cleanup of the disposable fixture (98,400 bytes) and those three raw transcript files after this review. The exact saved Codex session `01a19dd6-572d-78f1-b0d3-b485e6ead15e` maps to `C:\Users\uosmi\.codex\sessions\2026\11\02\rollout-2026-11-02T11-57-12-01a19dd6-572d-78f1-b0d3-b485e6ead15e.jsonl` (172,195 bytes), measured for parent-controlled cleanup; I did not remove it. No repository or harness settings were changed by this audit.
+
+Audit re-fetches: `codex --version` returned `codex-cli 0.166.0`; the installed executable SHA-256 matched the receipt. `codex --help` and `codex features list --help` both state that repeatable `--enable <FEATURE>` is equivalent to `-c features.<name>=true`. The fixture's `git remote -v` and `git status --short` returned no output. The current first-party [Subagents guide](https://learn.chatgpt.com/docs/agent-configuration/subagents) says current Codex releases support subagent workflows in the CLI; it does not document the three feature-specific flags. These checks support the report's version/scope boundary; they do not repair or rerun the failed native dispatch.

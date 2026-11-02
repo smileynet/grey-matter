@@ -61,9 +61,10 @@ session record; its local identity is listed in the receipt for later cleanup.
 
 ## Artifact status
 
-The worktree report and native CLI transcripts are in `.scratch/t159-evidence/`;
-the fixture is `%TEMP%/gm-t159-fixture`. Keep these until the independent critic
-has checked the evidence. Then recycle the fixture and raw evidence to the OS
-trash, after promoting any selected excerpts into the receipt. The fixture is
-small and remote-free; exact current byte sizes and the saved CLI session
-identity are recorded in the receipt. No harness configuration needs restoring.
+The independent audit accepted the evidence at 0.92/high and cleared cleanup.
+After promoting the selected results and file hashes, I recycled the exact
+98,400-byte fixture, the 6,206-byte raw transcript folder, and the 172,195-byte
+saved CLI session record to the OS trash. Verified that all three paths are
+absent. The audit and sanitized receipt are retained in the repository. No
+harness configuration needs restoring; a before/after config hash was not
+captured, as the receipt states.

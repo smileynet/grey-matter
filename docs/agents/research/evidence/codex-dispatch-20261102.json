@@ -92,12 +92,13 @@
       {"path":".scratch/t159-evidence/multi-agent-v2.txt","bytes":2050,"sha256":"B12A315D93C2C0B2B42824EF216838C9A07382471E7F79D87BF6909DF9A0B93D"},
       {"path":".scratch/t159-evidence/multi-agent-v2-saved.txt","bytes":2084,"sha256":"11AB4781AA499FEBE36AF737EF822A7344EA752829E52057E14A2F79C03C4CA4"}
     ],
-    "retain_until_critic_review": true
+    "retain_until_critic_review": false,
+    "critic": {"audit":"docs/agents/research/codex-dispatch-20261102-audit.md","score":0.92,"rating":"high","outcome":"accepted; raw cleanup cleared"}
   },
   "cleanup": {
-    "fixture": {"path": "%TEMP%/gm-t159-fixture", "bytes": 98400, "status": "pending critic review, then recycle to OS trash"},
-    "raw_evidence": {"path": ".scratch/t159-evidence", "bytes": 6206, "status": "pending critic review, then recycle to OS trash"},
-    "saved_cli_record": {"thread_id": "01a19dd6-572d-78f1-b0d3-b485e6ead15e", "bytes": null, "status": "identify and recycle exact owned session record only after critic review"},
+    "fixture": {"path": "%TEMP%/gm-t159-fixture", "bytes": 98400, "status": "recycled to OS trash after critic approval; exact path verified absent"},
+    "raw_evidence": {"path": ".scratch/t159-evidence", "bytes": 6206, "status": "recycled to OS trash after critic approval; exact path verified absent; per-file hashes retained above"},
+    "saved_cli_record": {"thread_id": "01a19dd6-572d-78f1-b0d3-b485e6ead15e", "path": "%USERPROFILE%/.codex/sessions/2026/11/02/rollout-2026-11-02T11-57-12-01a19dd6-572d-78f1-b0d3-b485e6ead15e.jsonl", "bytes": 172195, "status": "exact owned record recycled to OS trash after critic approval; exact path verified absent"},
     "global_settings": "No restore needed; only process overrides were used."
   },
   "sources": [
