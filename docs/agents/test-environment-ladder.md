@@ -1,7 +1,9 @@
 # Test-environment ladder
 
-Answer each question in the **leftmost tier** that can observe it. Climb only when that tier
-cannot. When a right-hand tier catches a bug, add a test in a left-hand tier that pins it. Report
+Answer each question in the **leftmost tier** that executes the actual implementation and can
+observe the asserted boundary. Climb to prove an added boundary. When a higher tier catches a bug,
+pin it lower where the same failure can be reproduced faithfully; retain the higher-tier check
+for the boundary only it observes. Report
 the tier each claim was verified at; a tier you did not run is "not run", an outcome class, never
 a pass.
 
@@ -13,16 +15,35 @@ device](research/simulator-vs-device-testing-20261031.md), [agent prior
 art](research/agent-test-tiering-prior-art-20261031.md). Decided in [proposal
 16](proposals/16-agent-footprint-guardrails.md) (P7).
 
+## Select by assertion
+
+Before planning commands, record one row per distinct assertion:
+**assertion → implementation/seam → environment → added boundary or exclusion → measured cost
+(setup, runtime, disk) → criticality → lifecycle gate**. Use the rows below as starting points,
+not a required test-count ratio or device matrix. Group assertions that share a command.
+
+Cost and criticality are independent: an authorization decision can be both cheap and release
+critical; an installed-update retention check can be expensive and release critical. Cost chooses
+the feedback loop and setup reuse; criticality determines which claims must be proved before
+promotion. Run the project's declared gates as defined in [local gates](local-gates.md); this
+ladder selects evidence environments, not new mandatory hooks or hosted jobs.
+
+Execute the shipped reader/model/parser, in its own runtime, for claims about its behavior.
+Use fakes or injected faults to control adjacent boundaries; name the real provider, UI or storage
+boundary those fakes exclude. A web mock proves its design/web surface. It cannot establish native
+controls, OS secure storage or installation behavior. A real provider read-back establishes the
+provider state queried, not that a device installed the build.
+
 ## Tiers
 
 | Tier | Runs in | Cost | What only this tier catches | Default cadence |
 |---|---|---|---|---|
 | 0. Static | typecheck, lint, format, parse/import | seconds, no runtime | ill-typed code, banned patterns, broken links, config syntax | every slice |
 | 1. Logic | one process, no I/O: unit tests, a seeded simulation step, golden output | milliseconds per test | logic and edge cases; regressions pinned from higher tiers | every slice, affected tests |
-| 2. Headless | one machine: real filesystem, database, subprocess, `godot --headless`, Unreal automation with NullRHI | seconds per test | seam and contract errors, fakes that drift from the real thing, save/load, config wiring | affected set before pushing finished work; full set at pre-merge |
+| 2. Headless | isolated processes, real filesystem/database, owned non-production provider data, `godot --headless`, Unreal automation with NullRHI | measure setup and runtime; network cost varies | process/provider contracts, save/load, config wiring | affected integration set before merge |
 | 3. Rendered | a real browser engine; an engine scene with a display and injected input | seconds to tens of seconds; flake-prone | layout, real DOM and event timing, input handling | affected critical flows before merge |
 | 4. Simulator | iOS Simulator, Android emulator | tens of seconds to minutes; boot cost; 1.4 to 1.9 GiB per Android system image | OS integration, lifecycle, permissions, platform APIs across versions | smoke before merge when platform code changed; matrix before release |
-| 5. Device | physical hardware, a device farm, a packaged build | minutes; scarce hardware or farm fees; often a human | real GPU, performance and memory, input feel and frame pacing, sensors, install and store builds | before release; on demand when no lower tier reproduces |
+| 5. Device | physical hardware running the packaged build | minutes; scarce hardware or farm fees; often a human | real GPU, performance and memory, input feel and frame pacing, sensors, actual installation/update | release device checks; approved installed-update pilot after availability |
 
 ## What forces a climb
 
@@ -43,19 +64,71 @@ much of what would otherwise need tiers 4 and 5. Build that seam first; see `gam
 
 A check stays in the every-slice loop while it is fast (tiers 0 and 1 for the affected code within
 about a minute), deterministic and local. Split or select the tests rather than skipping them.
-Move a check to pre-merge or pre-release when it is slow, flaky (Google's 2017 data: 25.5%
-of Android emulator tests flaky, against 1.65% of all tests), costly, or needs fidelity a lower
-tier lacks. Move it back once it is made deterministic. Device tests only nightly is the
-anti-pattern Android names: run a device smoke before release, not only overnight.
+Schedule expensive fidelity checks at the lifecycle gate their assertion requires. Diagnose
+flakiness and preserve failures; quarantine only with an owner, ticket, residual risk and return
+gate. A later stage is not a substitute for a critical check needed before merge. Move a check
+back into the tight loop when it becomes cheap and deterministic. Device tests only nightly is
+the anti-pattern Android names: run required release device checks before exposure.
 
 | When | Run |
 |---|---|
-| Each slice | tiers 0 and 1 for the affected code |
-| Pre-merge: before the push or branch merge that lands a ticket's code | the project's declared pre-merge check: tiers 0 to 2 for the changed areas; tier 3 critical flows and a tier 4 smoke when their scope changed |
-| Before release | the tier 4 matrix and tier 5 checks the ticket or release names |
+| Each logical change | complete cheap relevant suites and affected build/lint; use deterministic faults or clocks for edge cases at the selected seam |
+| Pre-merge: before the push or branch merge that lands a ticket's code | declared pre-merge gate plus full affected feature/integration coverage; native UI/OS smoke only for boundaries changed |
+| Frozen release | verify the exact signed artifact, runtime/config and provider target; run the simulator/device checks the release names before availability |
+| Physical pilot, after availability and before wider exposure or installed-update retention claims | with approval, install the exact available artifact over the prior installation on physical hardware; observe the named retained state and relevant assistive technology/hardware/network boundary |
+
+Stop dependent promotion when a lower-layer check fails. Preserve its first failure and
+investigate before retrying. A later passing layer does not clear an earlier failure. Project
+release authorization still governs availability and pilot exposure; this table grants none.
 
 This is what the agent runs. A commit is a local save point, not a stage; a pre-push Git hook
 enforces only a small, budgeted subset ([proposal 18](proposals/18-three-stage-verification.md)).
+
+## Evidence and reuse
+
+Record source/config/schema/toolchain/fixture identities, command, working directory, timestamp,
+executed test/assertion count, outcome and exclusions; include the artifact hash for artifact
+claims. Distinguish assertion failure, infrastructure error, timeout, skip, survivor and not run.
+Zero executed tests is not a pass. Report the narrow claim observed, not the unrun next tier.
+
+Reuse expensive evidence only when its relevant inputs are unchanged: identify the prior run,
+compare those inputs and label the result **reused**. Rerun after a relevant change, failure or
+uncertainty. Mutable provider audience/track/availability state needs fresh authoritative
+read-back even if source and artifact hashes match. Keep numbered failed attempts until their
+useful evidence is promoted and recovery no longer needs them. Related ownership stays in
+tickets [98](../../.tickets/98-sync-tkt-skills-ahead-of-cli.md),
+[104](../../.tickets/104-stateful-change-contracts.md), [105](../../.tickets/105-qualify-generated-oracles.md)
+and [106](../../.tickets/106-release-verify-attempts.md): executable/pack identity, stateful contracts,
+oracle qualification and release-attempt retention respectively.
+
+## Worked assertion routes
+
+These are planning examples, not evidence that the checks ran. Each escalation adds a claim.
+
+| Assertion | Lowest faithful check | Added boundary and evidence limit |
+|---|---|---|
+| UTF-8 payload exceeds a byte limit; midnight changes eligibility | Actual serializer/model in its host runtime, with literal byte cases and injected clock | Provider acceptance is a separate integration assertion; no waiting for tomorrow or phone required for the model rule |
+| Expired authorization is rejected | Actual authorization implementation with a controlled clock/token fixture | Critical even when cheap; live provider enforcement requires a real owned test identity |
+| Lost DAV response, concurrent writers or shutdown leaves the right terminal state | Real client in isolated processes against an owned non-production DAV provider, deterministic response-loss/barrier faults | Host rule tests do not establish remote locking, response ambiguity or process termination behavior |
+| Rollback restores the previous persisted state | Real installer/storage adapter and prior-format fixture in isolated process integration | OS secure-storage behavior needs native integration; actual installed-update retention still needs the pilot |
+| Native control focus, permission dialog or OS storage binding works | Native UI/OS integration with a driver that can observe that surface | A browser mock cannot prove it; actual assistive technology/hardware claims need the relevant physical check |
+| Update preserves an existing phone's stored state | Approved physical pilot of the available signed artifact over the old installation | Simulator success or provider track read-back cannot establish this claim; read-back separately proves audience/track/availability |
+
+### Review the route before running it
+
+- A JavaScript rewrite agrees with examples from a native parser: **insufficient** for the native
+  parser claim. Execute that parser in its supported host runtime; use shared vectors as inputs.
+- A simulator update keeps seeded records: **simulator integration only**. Keep the physical
+  installed-update claim unverified until the approved pilot observes it.
+- An unchanged signed artifact has last week's passing install result: **reuse only for matching
+  installation inputs**, explicitly labelled; query mutable provider availability/audience again.
+
+Platform cross-check (2026-11-02): [Android's strategy](https://developer.android.com/training/testing/fundamentals/strategies)
+treats scope, fidelity, execution and cadence as separate choices, with release-candidate coverage.
+[Flutter's testing guide](https://docs.flutter.dev/testing/overview) distinguishes unit, widget and
+integration environments and explicitly limits native platform UI access in `integration_test`.
+Check the selected driver's capabilities rather than treating any simulator test as native UI proof.
+The assertion routes, evidence rules and pilot sequencing above are grey-matter's workflow choices.
 
 ## Projects declare their commands
 

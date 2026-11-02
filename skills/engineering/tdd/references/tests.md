@@ -1,5 +1,12 @@
 # Good and Bad Tests
 
+## Environment choice
+
+Before choosing a test shape, route the assertion through the shared
+[worked assertion routes](../../../../docs/agents/test-environment-ladder.md#worked-assertion-routes).
+Its review examples distinguish the actual native parser from a JavaScript stand-in and simulator
+integration from physical installed-update evidence. Use those limits when naming what a test proves.
+
 ## Good Tests
 
 **Integration-style**: Test through real interfaces, not mocks of internal parts.

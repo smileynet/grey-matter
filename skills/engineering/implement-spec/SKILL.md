@@ -14,7 +14,10 @@ Communicate between agents sparsely, via **context pointers** (spec-slug, ticket
 
 ## Steps
 
-1. Read the spec and tickets to understand the task graph.
+1. Read the spec and tickets to understand the task graph. Plan verification by assertion with the
+   [test-environment ladder](../../../docs/agents/test-environment-ladder.md#select-by-assertion):
+   assign the lowest faithful environment and lifecycle gate, separate cost from criticality, and
+   identify evidence that can be reused across tickets without repeating expensive setup.
 
 2. (optional) Use an **exploration subagent** for any codebase or external-doc exploration the tickets need. It saves markdown notes where all later subagents can read them (shared location per above), so implementers focus on implementation, not exploration.
 
