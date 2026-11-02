@@ -215,6 +215,7 @@ test("readiness identity fails closed for missing, malformed, extra and differen
 
   const extra = { ...activeReadinessIdentity, deployment: "green" };
   assert.equal(compareReadinessIdentity(activeReadinessIdentity, extra).ok, false);
+  assert.equal(compareReadinessIdentity(extra, { ...activeReadinessIdentity }).ok, false);
 
   const otherAudience = { ...activeReadinessIdentity, effectiveAudience: "beta21" };
   assert.deepEqual(compareReadinessIdentity(activeReadinessIdentity, otherAudience), {
