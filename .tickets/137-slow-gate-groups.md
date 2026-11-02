@@ -1,7 +1,7 @@
 ---
 id: "137"
 title: "Slim the deployer and release-integration checks (92 s and 146 s at pre-release)"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "Per-file timings are recorded and fast release unit tests are separated from release integration checks."
@@ -34,9 +34,9 @@ only the release files whose sources changed, then move whatever stays slow to `
 ## Acceptance criteria
 
 - [x] Timing per file is recorded, and the release group is split: fast files pre-merge (`release-units`), slow files pre-release (`release-integration`).
-- [ ] The four slow release files (artifacts, development, product, git/verify) and `deploy.test.mjs` share or narrow fixtures that are rebuilt needlessly, with before and after times recorded here.
+- [x] The four slow release files (artifacts, development, product, git/verify) and `deploy.test.mjs` share or narrow fixtures that are rebuilt needlessly, with before and after times recorded here.
 - [x] Pre-release still runs every test it ran before (`gates-coverage` fails on any unrun test file).
-- [ ] `node scripts/gate.mjs pre-release` passes after the slimming (it passes 25/25 in 294 s before it).
+- [x] `node scripts/gate.mjs pre-release` passes after the slimming (it passes 25/25 in 294 s before it).
 
 ## Progress 2026-11-01 (proposal 18 step 3)
 
@@ -110,3 +110,13 @@ fixtures skip on Windows. No SKIP override or outer timeout increase was used.
 
 The evidence file now includes the fresh successful observations as `latestVerification`; earlier
 timeouts remain historical evidence. The deployer flake investigation continues separately in #122.
+
+## Resolution (2026-11-02)
+
+done: narrowed repeat fixture setup and removed duplicate validation, preserving gated coverage. Pre-merge 19 commands and pre-push 7 completed. Promoted profiles and final evidence; recycled owned scratch and 20 MiB failed fixtures/worktrees. Kept current deployment packages until next deploy; preserved others' artifacts with sizes recorded. Historical deployer cause remains tracked separately in 122.
+
+### Verification
+1. ✓ Per-file timings are recorded and fast release unit tests are separated from release integration checks. — "Per-file baseline/optimized timings and full eight-file manifest are recorded in docs/agents/research/evidence/test-optimization-20261102.json; release-units stays pre-merge and release-integration pre-release."
+2. ✓ The targeted release fixtures and deployer avoid repeated setup, with observed before/after timings and limits recorded. — "Immutable artifact/development/ref/verification seeds, shared Git defaults and direct Windows Git reduce repeated setup; duplicate deploy validation removed. Observed deployer 116.8s before and 86.0s after under different host loads; limits recorded."
+3. ✓ Pre-release still covers every previously gated test file. — "Hostile-config pre-release completed all 28 commands, including gates-coverage and all eight release integration files; no SKIP override."
+4. ✓ node scripts/gate.mjs pre-release passes after the optimization. — "Candidate 67320db: node scripts/gate.mjs pre-release with hostile GIT_CONFIG_GLOBAL completed 28 commands; deployer 86.0s, release-integration 228.9s. Existing Windows platform skips remain."
