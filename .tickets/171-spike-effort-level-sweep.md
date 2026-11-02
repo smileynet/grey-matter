@@ -16,6 +16,8 @@ Prior art to borrow techniques from (not authority): [eval prior art](../docs/ag
 
 **Question:** Where does extra effort stop paying for itself on each provider, and is the harness default level the right one for orchestration and review?
 
+**Open question carried here (2026-11-01):** Codex sub-agents are configured `[agents] default_subagent_model = "gpt-6-luna"`, `default_subagent_reasoning_effort = "low"` (the ticket 127 setup). Codex docs suggest Luna start at `high` (its catalog default is `medium`). This sweep should settle which level to keep; the user has not chosen yet.
+
 ## Acceptance criteria
 
 - [ ] A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note.
