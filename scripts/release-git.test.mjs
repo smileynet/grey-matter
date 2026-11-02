@@ -13,8 +13,6 @@ function fixture(t) {
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const remote = join(root, "remote.git"), repo = join(root, "work");
   git(root, ["init", "--bare", remote]); git(root, ["init", repo]);
-  git(repo, ["config", "user.name", "Fixture"]); git(repo, ["config", "user.email", "fixture@example.invalid"]);
-  git(repo, ["config", "commit.gpgsign", "false"]); git(repo, ["config", "tag.gpgsign", "false"]);
   writeFileSync(join(repo, "file"), "candidate"); git(repo, ["add", "file"]); git(repo, ["commit", "-m", "candidate"]);
   git(repo, ["tag", "-a", "v1.0.0", "-m", "release"]); git(repo, ["remote", "add", "origin", remote]);
   return { remotePath: remote, repo, branch: "refs/heads/candidate", tag: "refs/tags/v1.0.0", candidateSha: git(repo, ["rev-parse", "HEAD"]).trim(), tagObject: git(repo, ["rev-parse", "v1.0.0"]).trim() };

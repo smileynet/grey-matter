@@ -29,10 +29,6 @@ function fixture(fn) {
   const repo = join(dir, "repo"), out = join(dir, "out");
   mkdirSync(repo);
   git(repo, "init", "-b", "main");
-  git(repo, "config", "user.name", "Release Fixture");
-  git(repo, "config", "user.email", "release@example.invalid");
-  git(repo, "config", "core.autocrlf", "false");
-  git(repo, "config", "core.hooksPath", join(repo, ".git/hooks"));
   const pack = { name: "example", version: "0.2.0", description: "Fixture", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE", "NOTICE"], skillLicenseFiles: ["LICENSE"], runtimeFiles: ["scripts/command.mjs"] } } };
   put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(pack));
   put(join(repo, ".claude-plugin/marketplace.json"), JSON.stringify({ name: "example", plugins: [{ name: "example", source: "./" }] }));

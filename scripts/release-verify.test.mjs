@@ -25,7 +25,7 @@ async function fixture(fn, check = 'console.log("fixture gate passed");', produc
   const temp = mkdtempSync(join(tmpdir(), "candidate verify ")), repo = join(temp, "repo"), artifacts = join(temp, "artifacts"), out = join(temp, "evidence");
   const git = (...args) => execFileSync("git", ["-C", repo, ...args], { encoding: "utf8", stdio: "pipe" }).trim();
   try {
-    mkdirSync(repo); git("init", "-b", "main"); git("config", "user.name", "Fixture"); git("config", "user.email", "fixture@example.invalid"); git("config", "core.autocrlf", "false");
+    mkdirSync(repo); git("init", "-b", "main");
     const manifest = { name: product, version: "0.1.0", description: "Fixture", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE"] } } };
     put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(manifest)); put(join(repo, ".codex-plugin/plugin.json"), JSON.stringify({name: product, version: "0.1.0", skills: "./skills/"}));
     put(join(repo, ".claude-plugin/marketplace.json"), JSON.stringify({name: product, plugins: [{name: product, source: "./"}]}));

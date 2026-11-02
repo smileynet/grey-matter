@@ -11,7 +11,7 @@ const put = (file, bytes) => { mkdirSync(dirname(file), { recursive: true }); wr
 function fixture(fn, source = 'if (!process.argv.includes("pre-release")) process.exit(3); console.log("product fixture passed");') {
   const dir = realpathSync(mkdtempSync(join(tmpdir(), "product gate "))), repo = join(dir, "repo"), out = join(dir, "evidence");
   try {
-    mkdirSync(repo); git(repo, "init", "-b", "main"); git(repo, "config", "user.name", "Fixture"); git(repo, "config", "user.email", "fixture@example.invalid"); git(repo, "config", "core.autocrlf", "false");
+    mkdirSync(repo); git(repo, "init", "-b", "main");
     for (const host of ["claude", "codex"]) put(join(repo, `.${host}-plugin/plugin.json`), '{"name":"grey-matter","version":"0.1.0"}\n');
     put(join(repo, "scripts/gate.mjs"), source);
     git(repo, "add", "."); git(repo, "-c", `core.hooksPath=${join(dir, "no hooks")}`, "commit", "-m", "Product fixture");

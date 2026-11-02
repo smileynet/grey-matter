@@ -1,5 +1,5 @@
 {
-  "full_triggers": ["package.json", "package-lock.json", "scripts/gates.json", "scripts/gate.mjs", "scripts/test-git-env.mjs", ".githooks/pre-push"],
+  "full_triggers": ["package.json", "package-lock.json", "scripts/gates.json", "scripts/gate.mjs", "scripts/test-git-env.mjs", "scripts/test-git.config", ".githooks/pre-push"],
   "not_gated": {
     "scripts/check-guidance.mjs": "reads this host's installed guidance files, not the repository; the sync skill runs it",
     "scripts/delivery-dashboard-browser.test.mjs": "needs Playwright and a Chrome binary (CHROME_BIN); run it by hand before a release that changes the dashboard template"
@@ -72,7 +72,7 @@
       "id": "git-fixture-isolation",
       "stage": "pre-merge",
       "catches": "test fixtures loading the owner's signing keys, hooks or editor instead of their isolated Git config",
-      "scope": ["scripts/test-git-env"],
+      "scope": ["scripts/test-git-env", "scripts/test-git.config"],
       "run": ["node", "--test", "scripts/test-git-env.test.mjs"],
       "timeout_s": 30,
       "measured": { "s": 3.0, "date": "2026-11-01", "host": "win" }

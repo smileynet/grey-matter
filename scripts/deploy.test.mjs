@@ -983,5 +983,3 @@ test("bare copy: empty shared directories are owned without shared files", () =>
     assert.ok(!existsSync(empty));
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
-
-import "./deploy-validation.test.mjs";

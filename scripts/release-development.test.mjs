@@ -11,8 +11,7 @@ function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), "release development ")); t.after(() => rmSync(root, { recursive: true, force: true }));
   const repo = join(root, "source"), remotePath = join(root, "remote.git"), out = join(root, "integration");
   git(root, ["init", "--bare", remotePath]); git(root, ["init", "-b", "main", repo]);
-  git(repo, ["config", "user.name", "Fixture"]); git(repo, ["config", "user.email", "fixture@example.invalid"]);
-  git(repo, ["config", "commit.gpgsign", "false"]); git(repo, ["config", "core.autocrlf", "false"]); git(repo, ["remote", "add", "origin", remotePath]);
+  git(repo, ["remote", "add", "origin", remotePath]);
   const commit = (message) => { git(repo, ["add", "."]); git(repo, ["commit", "-m", message]); return git(repo, ["rev-parse", "HEAD"]).trim(); };
   const setVersion = (version) => { for (const file of [".claude-plugin/plugin.json", ".codex-plugin/plugin.json"]) writeFileSync(join(repo, file), JSON.stringify({ name: "grey-matter", version })); };
   for (const dir of [".claude-plugin", ".codex-plugin", "scripts"]) mkdirSync(join(repo, dir));
