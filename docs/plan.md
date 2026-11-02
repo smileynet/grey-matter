@@ -100,7 +100,7 @@ manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 2
 ## Test optimization and verification
 
 Reconciled 2026-11-02 at the user's request. Scope: `stream:test-verification`.
-12 unfinished tickets (8 open, 4 in progress) and 11 completed tickets. This stream excludes orchestration and dashboard
+10 unfinished tickets (8 open, 2 in progress) and 13 completed tickets. This stream excludes orchestration and dashboard
 feature work; #116 covers only the evidence/current-summary contract. Existing release
 authorization and frozen candidate scope are unchanged.
 
@@ -183,7 +183,7 @@ auth remains conditional on the result of #186.
 
 | ID | Work | Status |
 | --- | --- | --- |
-| 162 | 1. Finish headless driver comparison, recovery and retained t111 evidence | open |
+| 162 | 1. Finish headless driver comparison, recovery and retained t111 evidence | in_progress |
 | 186 | 2. Verify KAS relay authentication ownership and record a supported recipe | open |
 | 156 | 3. Qualify Mate report/wake recovery across gateway restart | open |
 | 158 | 4. Test narrower agy regex permissions with negative controls | open |
