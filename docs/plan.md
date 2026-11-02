@@ -1,5 +1,8 @@
 # Current work plan
 
+The [orchestration dashboard](orchestration.html) presents this effort's findings,
+evidence limits, dependency flow and expandable ticket log in two tabs.
+
 The coordinated [release plan](agents/proposals/09-release-readiness.md) and
 [release contract](agents/release-contract.md) define scope and acceptance.
 User-approved staging versions: grey-matter 0.2.0 and tkt 0.5.0. Publication is

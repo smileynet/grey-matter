@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "ac3a4668fd00bd38e58e21b50f58f4ba93c093e9830f1d815b64d63bc3d83db8",
+  "subject": "Orchestration two-tab dashboard, closed-state refresh",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 10944,
+      "sha256": "2785e12168fbfadb008e08064982643092046407389871aa3a6a444845b0b7f0"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 130680,
+      "sha256": "b9c80cd5b24e403cf35f529ab70cb8a75c2c9d500188c10ad90579630c9f42b4"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4226,
+      "sha256": "a43e66e785d4a16dc95f2088610304697821f3b85193e9a46cb05ec6b5992d6f"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/findings-1280-final.png",
+      "bytes": 227367,
+      "sha256": "9e21f172b056f9d33efffe1a98c236d345cbdb09f688405ce7fefc9032da0827",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/tickets-1280-final.png",
+      "bytes": 240453,
+      "sha256": "b3ca373021a922bc0bea98e192e42bfcd134146ad093cea61a451c1736569aee",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/findings-390-final.png",
+      "bytes": 227910,
+      "sha256": "593216ddd7c9ba250205733a42e1504319b164c48142fd205f105bd71f65bb1d",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/tickets-390-final.png",
+      "bytes": 212216,
+      "sha256": "064baa606e70513d7f58a15a1d4f2db0df74e7883a1e169d9b8e17427f508057",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "d0814d707d95e49881649d475fb7350a9940b7c8a87169733e17d53ffd2260a3",
+  "id": "64c3a3460d39ce1c4afb56b259953732e92c4b4b32e4b26b5daeecf4741c23ee",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/dashboard_critic (Codex agent)",
+    "note": "Observer: /root/dashboard_critic (Codex agent); surface: local Chromium file rendering through Playwright; scenario: rebind the already inspected final laptop and phone dashboard captures after normalizing the manifest line endings; outcome: accepted. I compared all five source identities and all four capture byte counts and SHA-256 values with the prior accepted final receipt: they are unchanged. Only manifest newline encoding changed. The inspected views show the closed-state ticket counts, collapsed #191, the two tabs and truthful dependency diagram. Limits: tool-observed rendering only, not a human usability study or product screenshot; later flow nodes require scrolling within the diagram.",
+    "acceptedAt": "2026-11-02T16:23:28.725Z",
+    "snapshotId": "64c3a3460d39ce1c4afb56b259953732e92c4b4b32e4b26b5daeecf4741c23ee"
+  }
+}
