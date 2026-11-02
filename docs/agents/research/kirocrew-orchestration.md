@@ -25,6 +25,222 @@
 - **Ledger server.** `mcp_work.py`. The dispatch wrapper is in `mcp_dashboard_session_tools.py:686-747`.
 - **Decisions and RFCs.** `docs/decisions/`, `docs/request-for-change/rfc-conductor-*.md`, `docs/reference/ledger-conductor-sequence.md`.
 
+## KAS under Kiro Crew 0.11.1 (2026-11-02)
+
+This section traces the KAS backend in the installed Kiro Crew 0.11.1 package,
+compares it with the installed Kiro CLI 2.37.1 and KAS engine package 0.66.70,
+and checks the available local engine directories. The installed files are the
+versioned primary source for Crew behavior; Kiro's current V3 docs are the
+primary source for the public CLI/ACP contract. File paths below are relative
+to `kiro_crew/` in Crew's installed Python package, or are linked public docs.
+**Source-traced** means read from installed code, not a running session.
+**Observed** means a direct local read or earlier runtime probe. Confidence is
+high for those narrow statements and lower where explicitly marked.
+
+### What KAS is
+
+KAS means **Kiro Agent Server** in Kiro Crew's source. It is Kiro's V3 agent
+engine exposed to a host such as Kiro Crew over ACP. Crew sends newline-framed
+JSON-RPC through the child process's standard input/output; it does not call
+the engine's private model loop. Kiro describes V3 as the shared harness used
+by its IDE, web and CLI: “CLI V3 uses the same unified agent harness as Kiro IDE
+and Kiro Web.” ([Kiro V3 overview](https://kiro.dev/docs/cli/v3/), current page,
+updated 2026-10-31.) That is Kiro's product statement; the observations below
+concern Crew's adapter.
+
+**Public architecture, documented rather than locally exercised.** Kiro's
+[engineering account](https://kiro.dev/blog/one-agent/) (2026-08-03) describes
+the harness as a “standalone server process”. The client owns presentation;
+the server owns conversation execution, tools, context and model interaction.
+Clients can supply native tools, such as IDE file operations, instead of the
+server's built-ins. ACP connects a client to the agent; MCP connects the agent
+to external tools. The engine runs beside the code locally or remotely, rather
+than moving local files and commands into the model provider's infrastructure.
+
+Kiro's [turn description](https://kiro.dev/docs/how-kiro-works/) (updated
+2026-10-23) says: “Context is assembled.” It describes a loop that collects
+prompt/history/steering and attachments, calls the selected model, checks
+proposed tools against policy and hooks, executes permitted tools, and feeds
+results back until completion. Compaction manages growing context. This is the
+product's documented architecture, not a model/tool execution test in this
+research.
+
+The current [permission reference](https://kiro.dev/docs/permissions/)
+describes “deny > ask > allow > evaluate”. Its rules target capabilities such
+as filesystem reads/writes, shell and MCP across scopes. Parent and subagent
+policies both constrain subagent tool calls. User and workspace policies live
+outside the repository; workspace trust and built-in invariants can still
+require consent. Network host rules inside an enabled sandbox are a documented
+first-match exception. This current native policy system should not be
+confused with Crew's translation of older agent fields or its additional
+approval gates below.
+
+### Crew can reach the same engine in two ways
+
+**Relay through `kiro-cli` (the default).** Crew launches the CLI's ACP
+subcommand with `--agent-engine v3`. Installed `acp/kas_transport.py` says:
+“the relay forwards ACP frames to KAS in both directions,” and defines
+`KAS_RELAY_SUBCMD = "acp"`, `KAS_RELAY_ENGINE = "v3"`. `kiro-cli` therefore
+owns how the extracted engine is found and launched. Crew does not locate or
+spawn the CLI's internal engine files itself.
+
+Authentication is intended to have two owners on this route. With CLI
+ownership, Crew adds `--auth-method cli`; Kiro CLI resolves the token from its
+own sign-in. Crew's `acp/kas_transport.py` says: “Who answers the engine's
+credential callback is a per-spawn choice.” It intends to select Crew-vault
+ownership by omitting the flag, then answer `_kiro/auth/getAccessToken` itself.
+There is a compatibility question in the installed versions: **observed**
+`kiro-cli acp --help` on CLI 2.37.1 says authentication defaults to `cli`,
+and `client` is the value that forwards token requests to the ACP client.
+Crew 0.11.1 omits the flag for its host-owned case. That help/source mismatch
+means the intended callback path is not established by these two artifacts;
+it does not by itself demonstrate an authentication failure. A fresh
+`initialize`/auth callback probe would settle whether Crew launches a sibling
+binary with different defaults or whether the CLI default changed underneath
+this Crew build. The Crew-bundle route below has no such ambiguity in source:
+Crew is always its auth owner.
+
+**Crew's own pinned bundle.** With `agent.kas_bundle = true`, Crew launches
+the KAS ACP server using its own installed Node runtime. The command is
+`node --experimental-wasm-modules <acp-server.js> --transport=stdio
+--auth=acp-callback`. Crew's `acp/kas_bundle.py` resolves the exact engine
+version pinned by that Crew release; it verifies downloaded artifacts against
+a SHA-256-pinned manifest. This route does not use the `kiro-cli` binary or its
+credential store. Crew is always the auth owner here.
+
+The engine version is distinct from the CLI version. **Observed on this host:**
+`kiro-cli --version` returned `2.37.1`; its extracted KAS directory for that
+CLI release contained `@kiro/agent` version `0.66.70`. Kiro Crew's own
+`~/.kiro/crew/engines/kas` directory was absent. The local Crew config omitted
+`agent.kas_bundle`, whose installed default is `false`. This confirms that the
+Crew-bundled route was not installed/enabled here; it does not prove what route
+every Crew installation uses. The CLI help/source auth mismatch above remains
+unresolved and may affect the relay auth callback path. Kiro's release docs confirm that V3 has its own
+ACP launch: “`kiro-cli acp --agent-engine=v3`” ([ACP migration guide](https://kiro.dev/docs/cli/v3/acp-migration/),
+current page). Kiro also warns that ACP protocol version alone does not tell
+you whether the server is V2 or V3 because “both negotiate version 1.” Use the
+engine-selection argument or negotiated feature surface, not protocol version,
+to identify it.
+
+### Session lifecycle and agent selection
+
+Crew's KAS harness is a client adapter around shared Crew runtime code. The
+installed `acp/harness/kas.py` declares `PROTOCOL_VERSION_KAS = 1` and says the
+agent definition is sent in `session/new`, “not from a flag.” The source-traced
+flow is:
+
+1. Crew selects the relay or its own bundle and starts the ACP process.
+2. The client and server exchange `initialize` and capability information.
+3. Crew resolves and projects the requested agent definition into the session
+   start data under `_meta.kiro.customAgents`.
+4. Crew creates or reloads the session, then selects the requested agent with
+   `session/set_mode`. The harness treats this response as the confirmation;
+   there is no `--agent` launch flag to assume worked.
+5. Prompts, tool requests, permission requests and update notifications flow
+   over ACP. Crew's runtime routes them to the owning session and its approval
+   handlers.
+6. On resume, Crew sends the custom agent definitions again. The KAS source
+   explains that KAS keeps the registered batch for the session lifetime and
+   that resuming without it can make the requested mode disappear.
+
+Crew also chooses models per session over ACP instead of pinning `--model` to
+the long-lived process. Kiro's V3 ACP guide likewise says to read the server's
+advertised configuration options and use `session/set_config_option` for model
+or effort. It says: “The running server's advertisement is authoritative.”
+([ACP migration guide](https://kiro.dev/docs/cli/v3/acp-migration/), current
+page.) Model names, extension methods and modes can vary by account/release.
+
+**Observed initialize-only relay probe (2026-11-02).** The relay was started
+with `--agent-engine v3 --auth-method cli`; it returned an `initialize`
+response, protocol version 1, and exited cleanly. It made no reverse auth
+request. Its response advertised `session/list`, `loadSession`, close/delete/
+fork, MCP HTTP/SSE, and Kiro extensions for memory, context, compacting,
+workflows, source providers and local/cloud-sandbox execution targets. These
+are advertised surfaces only: the probe sent no `session/new` and no prompt,
+so it did not exercise model access, tools or those methods. This CLI-owned
+auth probe also does not resolve whether Crew's omitted flag correctly selects
+the client-owned callback path. Local logging paths were removed from the
+[sanitized handshake receipt](evidence/kas-initialize-20261102.json); no token
+or model response was obtained or retained.
+
+### Tools, MCP and custom agent profiles
+
+KAS does not mean “Kiro Crew's orchestration tools are built into the engine.”
+Crew supplies its own capabilities through MCP servers and ACP session data.
+The KAS adapter's `session_mcp_servers()` returns the requested server array
+unchanged; a separate Crew session-MCP layer resolves the servers, applies
+trust and injects Crew's own servers. `kirocrew-work`, for example, exposes
+`work_brief` and `work_report`. Other dashboard and filesystem/session-control
+tools are also Crew-side services. KAS itself hosts its agent/tool loop and
+connects to the declared MCP servers.
+
+An owner-level agent profile can contribute prompt, tools, MCP servers,
+permissions, hooks and other supported settings, but Crew applies a governance
+ceiling before sending it. A project checkout is a trust boundary: the KAS
+adapter's `PROJECT_SPEC_HONOURED_KEYS` is only `name`, `description`, `prompt`,
+`tools`, `excludedTools` and `model`. Its comments explain that excluded fields
+could otherwise make KAS launch commands, auto-approve calls, or read files.
+Thus a project-local spec can describe an agent, but cannot itself grant
+permissions or start its MCP server through this projection.
+
+Approval is split between what the engine can see and what Crew authorizes.
+Crew projects some eligible grants into KAS's session agent definition, then
+records which tools it auto-approved. Tools that remain ask-gated can be
+approved by Crew's gate after its own checks. The gate can also apply Crew's
+KAS-specific shell `denyByDefault` allowlist and write `fallbackAction: deny`
+allowlist. MCP `autoApprove` is not blindly copied through; the installed
+`kas_agents.py` removes that key from the projected server entries. These are
+source-level behaviors, not a claim that every profile or tool combination
+has been experimentally validated.
+
+### Sandboxing and practical limits
+
+ACP is a protocol boundary, not an OS sandbox. The KAS server has its own
+sandbox facilities, but Crew's relay command does not pass KAS's `--sandbox`
+argument. Crew therefore relies on the sandboxing of the launched relay where
+one exists, plus its own command/file permission gates. On this Windows host,
+Kiro Crew reports that it has no OS-level sandbox backend; the relay route does
+not turn KAS into process isolation. Crew's policy denial can still block a
+particular tool call, but that is not equivalent to containing arbitrary code
+or protecting host credentials from a compromised process.
+
+**Observed in the earlier ticket 154 probe:** with the owner-scoped KAS profile
+and YOLO off, the tested README deletion was blocked by KAS policy and the
+worker reported `BLOCKED needs-human`; intended allowlisted shell commands
+still prompted. That establishes one policy outcome, not complete sandboxing
+or unattended pre-authorization. See [ticket 154's audited findings](./harness-experimental-features-20261101.md#ticket-154-kas-allowlist-probe-2026-11-01).
+
+### What is directly known here
+
+- **Source-traced, installed Kiro Crew 0.11.1:** relay and bundle launch
+  contracts; ACP session selection; model/agent data sent per session; Crew's
+  custom-agent projection, MCP injection point and permission gate.
+- **Observed local state:** Kiro CLI 2.37.1 and its extracted KAS engine
+  package 0.66.70 exist; Crew's own KAS bundle directory is absent and the
+  omitted bundle setting defaults off.
+- **Observed ACP runtime in ticket 155:** both external Claude and Codex ACP
+  adapters initialized under ACP protocol version 1. That was their own
+  protocol test, not a KAS session. KAS also advertises protocol version 1 by
+  source; this environment's KAS session itself was not freshly started for
+  this note.
+- **Not established:** actual KAS model output in a new session for this note;
+  which auth owner a particular user's next spawn will select without checking
+  its current vault; every projected tool's behavior; a supported Windows OS
+  sandbox for relay KAS; and cross-harness `work_report`/wake/acceptance.
+
+This is a point-in-time description, not a promise that Kiro CLI or Crew will
+keep the same KAS build, config keys or ACP extensions. For protocol clients,
+follow the running server's `initialize` capabilities and use the versioned
+Kiro/ACP documentation for the matching server generation.
+
+The [independent scoped audit](kirocrew-orchestration-kas-20261102-audit.md)
+found the claims supported (trust 0.95), with the actual Crew-owned auth callback
+path still untested. After audit, the 9,752-byte private probe (script, raw
+handshake and disposable Kiro home/logs) was recycled; its path was confirmed
+absent. Existing CLI/engine installations were referenced in place and left
+untouched; their removal was outside this research. The durable sanitized
+receipt above contains no private logging paths or credential values.
+
 ## Vocabulary
 
 | Kiro Crew term | Meaning | Closest grey-matter term |
