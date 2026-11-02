@@ -1,7 +1,7 @@
 ---
 id: "112"
 title: "Plan UI checks against available capabilities and preserve evidence boundaries"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "Applicable UI workflows establish permitted capabilities before selecting checks and record unavailable checks without substituting unobserved success."
@@ -21,9 +21,9 @@ Read skills/engineering/prototype/SKILL.md, skills/productivity/delivery-dashboa
 
 ## Acceptance criteria
 
-- [ ] Applicable UI workflows establish permitted capabilities before selecting checks and record unavailable checks without substituting unobserved success.
-- [ ] Receipt guidance binds evidence to artifact identity and distinguishes tool observation, human report and unvalidated learning.
-- [ ] Fixtures cover a blocked protocol, unavailable telemetry and human functionality report; repository guidance checks pass.
+- [x] Applicable UI workflows establish permitted capabilities before selecting checks and record unavailable checks without substituting unobserved success.
+- [x] Receipt guidance binds evidence to artifact identity and distinguishes tool observation, human report and unvalidated learning.
+- [x] Fixtures cover a blocked protocol, unavailable telemetry and human functionality report; repository guidance checks pass.
 
 ## Workstream reconciliation 2026-11-02
 
@@ -49,3 +49,12 @@ remains pending because browser policy blocked local-file access; human review w
 Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
 integration; local commit history and this evidence remain in Git. The current deployment
 package is retained until the next deployment.
+
+## Resolution (2026-11-02)
+
+done: worker changed guidance, critic accepted, root merged/pushed/deployed. Ticket holds evidence and dashboard path. Recycled clean merged worker112 worktree10255190bytes; shared stream helpers kept until orchestration ends, current deployment package until next deploy. Browser refusal/human review limits are durable evidence; no invented screenshots, accepted UIreceipt or rendered-navigation claim.
+
+### Verification
+1. ✓ Applicable UI workflows establish permitted capabilities before selecting checks and record unavailable checks without substituting unobserved success. — "Worker888bcb9 adds permitted/available surface preflight to prototype/dashboard workflows; blocked or unavailable stays unresolved, no alternate route; missing required capture keeps UIacceptance pending. Critic accepted Spec/Standards."
+2. ✓ Receipt guidance binds evidence to artifact identity and distinguishes tool observation, human report and unvalidated learning. — "Receipt notes bind to snapshot identity and state observer/surface/scenario/outcome/limits; source checks, tool observation, human report and learning remain distinct. Existing receipt tooling retained and worker tests13/13 passed."
+3. ✓ Fixtures cover a blocked protocol, unavailable telemetry and human functionality report; repository guidance checks pass. — "Blocked file, absent telemetry, human-functionality examples manually reviewed as guidance scenarios, not automated prose tests. Root observed genuine fileURL denial without workaround; main premerge5/5 including dashboardcontract/receipt, prepush5/5, deploy50skills passed. Dashboard actual visualreview remains pending."
