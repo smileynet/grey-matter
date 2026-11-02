@@ -20,8 +20,8 @@ Plan status drift and missing open-ticket rows were reconciled without expanding
 
 All six registered Mac worktrees were clean at inspection. No worktree, branch, simulator, or scratch payload was deleted.
 
-- `agent-footprint-guardrails` and the Kilo detached worktree have no commits whose patches are absent from upstream.
-- `footprint-addendum-20261031` at bad784d and detached gm-push at d5e02bb contain identical proposal-16 and #110 changes. On 2026-11-01 Sam authorized their review: relevant proposal evidence was merged with historical attribution and current-source dispositions; unmet requirements are in [#182](../../../.tickets/182-footprint-outside-repo-regrowth.md). #110 remains unchanged. Both worktrees remain preserved; no deletion was requested.
+- After integration, Sam authorized footprint cleanup: removed the clean `gm-footprint`, `gm-footprint2` and `gm-push` worktrees (about 31 MiB allocated) and local branches `agent-footprint-guardrails` and `footprint-addendum-20261031`. Citation recheck found no keep-list changes; open-file coverage was unavailable. The unrelated Kilo worktree remains untouched.
+- The identical addendum patches at bad784d and d5e02bb were reconciled in bdad968: relevant proposal evidence merged, unmet requirements in [#182](../../../.tickets/182-footprint-outside-repo-regrowth.md), #110 unchanged. Local recovery tags `archive/footprint-addendum-20261031` and `archive/footprint-gm-push-20261031` retain the original tips; no matching remote footprint branches existed.
 - `codex/release-grey-matter-0.2.0-d9978415` at e071b7b is a frozen release candidate explicitly retained by docs/plan.md. Its version/changelog changes must not merge into live main as ordinary cleanup.
 - Ticket #179's checkout is outside this worktree inventory and was not touched.
 
