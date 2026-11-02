@@ -100,12 +100,12 @@ manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 2
 ## Test optimization and verification
 
 Reconciled 2026-11-02 at the user's request. Scope: `stream:test-verification`.
-16 unfinished tickets (10 open, 6 in progress) and 7 completed tickets. This stream excludes orchestration and dashboard
+12 unfinished tickets (10 open, 2 in progress) and 11 completed tickets. This stream excludes orchestration and dashboard
 feature work; #116 covers only the evidence/current-summary contract. Existing release
 authorization and frozen candidate scope are unchanged.
 
 The order below is the session's chosen execution policy, not new dependency edges. All
-existing blocked_by values are preserved. Start with #104; pursue #122 only when a useful
+existing blocked_by values are preserved. Active workers: #115 and #117; next unclaimed ticket: #113. Pursue #122 only when a useful
 failure is captured. macOS work needs a Mac; WSL and destructive footprint probes need a
 suitable owned environment. No host-only criterion is satisfied by a Windows fixture pass.
 
@@ -121,10 +121,10 @@ scripts/snapshot are recycled after their conclusions are recorded here.
 
 | ID | Work | Status |
 | --- | --- | --- |
-| 104 | 1. Stateful ownership and terminal-behavior contracts | in_progress |
-| 106 | 1. Numbered verification attempts and failure retention | in_progress |
-| 114 | 1. Portable check discovery and fail-stop dependent mutations | in_progress |
-| 112 | 2. UI capabilities and qualified observations | in_progress |
+| 104 | 1. Stateful ownership and terminal-behavior contracts | ✅ done |
+| 106 | 1. Numbered verification attempts and failure retention | ✅ done |
+| 114 | 1. Portable check discovery and fail-stop dependent mutations | ✅ done |
+| 112 | 2. UI capabilities and qualified observations | ✅ done |
 | 115 | 2. Positive scoped preservation evidence | in_progress |
 | 117 | 2. Retrospective coverage and repaired-versus-remaining work | in_progress |
 | 113 | 3. Exact bundle inventory and portable byte hashes | open |
