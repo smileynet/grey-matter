@@ -125,11 +125,11 @@ are in the order to take them. Release themes above still say what ships in 0.3.
 | 114 | Wave 4: discover project verification gates and stop dependent mutations on failure | open |
 | 118 | Wave 4: show a complete visual execution queue with one active ticket in serial mode | open |
 | 119 | Wave 4: choose the cheapest faithful test environment with explicit lifecycle gates | open |
-| 111 | Wave 5, owner input first: build the orchestrate skill (proposal 17; three open questions) | open |
-| 95 | Wave 5: Kiro Crew chat_tag and session_ledger steps (after 111's placement decision) | open |
+| 111 | Wave 5, owner input first: build the orchestrate skill (proposal 17; three open questions) | ✅ done |
+| 95 | Wave 5: Kiro Crew chat_tag and session_ledger steps (after 111's placement decision) | ✅ done |
 | 87 | Owner decision: setup-repo links shadow handoff and grill-me in Kiro | open |
 | 89 | Owner approval per repo: adopt the dashboard template in three other repos | open |
-| 94 | Low: Kiro hook runs check-repo before an agent push | open |
+| 94 | Low: Kiro hook runs check-repo before an agent push | ✅ done |
 
 ## Parked work
 
@@ -156,4 +156,55 @@ their release dispositions; this table does not clear any blocker.
 | 43 | Revisit adopt-project glossary seeding: (b) stage-then-write vs (c) hybrid, from real-use findings | backlog |
 | 44 | orient could nudge if the pre-commit hook isn't installed (optional) | open |
 | 96 | Docker containment option for Codex critics (only if critics must read files) | backlog |
-| 110 | Keep agent footprint bounded while work runs, not only at ticket close (proposal 16) | backlog |
+| 110 | Keep agent footprint bounded while work runs, not only at ticket close (proposal 16) | ✅ done |
+
+## Additional tracked work (reconciled 2026-11-01)
+
+Verification #137/#152/#176–178 retains its Windows chat owner. Orchestration follow-ups retain their separate chat. This ID-ordered inventory adds missing rows without changing approved release scope; dependencies remain authoritative. See [chat ownership and integration handoff](agents/handoffs/2026-11-01-chat-cleanup.md).
+
+| ID | Work | Status |
+| --- | --- | --- |
+| 130 | Regress shared user-managed skill duplicates without overwriting local changes | open |
+| 131 | Validate footprint guidance and inspector on macOS | open |
+| 132 | Validate footprint guidance and inspector on Windows | open |
+| 133 | Validate footprint guidance and inspector under WSL 2 | open |
+| 137 | Slim the deployer and release-integration checks (92 s and 146 s at pre-release) | open |
+| 139 | Validate the delivery-dashboard contract on custom dashboard pages | open |
+| 140 | Ticket commands must not sweep staged work into ticket commits | open |
+| 141 | code-review accepts staged or uncommitted work as its fixed point | open |
+| 142 | Installed plugin lags the repo so orient routes to skills that are not installed | open |
+| 143 | init-project and conformance-audit check cross-harness readiness (Antigravity, Codex) | open |
+| 144 | Artifact hygiene rewrites relative links and screens privacy and copyright when promoting scratch | open |
+| 145 | Detect another live session in the same checkout and suggest a worktree | open |
+| 146 | delivery-dashboard lists only open questions, generated from a structured source | open |
+| 147 | to-questionnaire offers an HTML decision form with recommendations and copy-for-chat | open |
+| 148 | Take over another agent's worktrees and branches safely | open |
+| 149 | reconcile-tickets runs a priority review over workstreams, queue and blockers | open |
+| 150 | Add an optional product map (jobs, workflows, feature status) to the delivery dashboard | open |
+| 152 | Scope project commit gates to vital, changed parts and bound verification scratch | open |
+| 154 | Spike: Kiro Crew workers on KAS allow-lists instead of YOLO (rerun P3 and P13) | open |
+| 155 | Spike: Kiro Crew conductor dispatching Claude Code or Codex workers | open |
+| 156 | Spike: a Kiro Crew Mate as the standing orchestrator | open |
+| 157 | Spike: agy run_workflow and custom agents running the orchestrate loop | open |
+| 158 | Spike: agy command(regex:...) rules narrower than command(*) | open |
+| 159 | Spike: Codex multi_agent_v2 with the agent message board and wake-on-message | open |
+| 160 | Spike: Claude Code --bg sessions and notify_when_idle as the dispatch layer | open |
+| 161 | Spike: kiro-cli V3 workflows expressing the orchestrate loop natively | open |
+| 162 | Spike: compare headless driver surfaces across harnesses | open |
+| 164 | Upgrade path: bring a project up to a new grey-matter release's standards (conformance-audit mode recommended) | open |
+| 166 | Refresh harnesses.md to the installed harness versions (first harness-changelog review) | open |
+| 167 | Spike: cheap vs default models as implementation workers on well-specified tickets | open |
+| 168 | Spike: cheap vs default models as reviewers catching planted defects | open |
+| 169 | Spike: fast models for read-only research and codebase exploration fan-out | open |
+| 170 | Spike: fast models for doc edits, triage and changelog classification | open |
+| 171 | Spike: effort levels (low to max) on one model per provider for diagnosis and design tasks | open |
+| 172 | Spike: Claude Code fast mode speed, quality and credit cost on orchestrate workers | open |
+| 173 | Spike: GUI surfaces as the watch layer over a headless orchestrator | open |
+| 174 | Spike: harbor as the runner for the model-tier and harness spikes, vs a thin runner of our own | open |
+| 175 | Reproduce the inspect-footprint test hang on macOS and confirm the lsof cause | open |
+| 176 | Test fixtures isolate Git from the user's global config (signing, hooks, editor) | open |
+| 177 | gate.mjs --record writes measured timings into gates.json | open |
+| 178 | Warn when grey-matter's own clone has no core.hooksPath, so pushes skip the pre-push stage | open |
+| 179 | Implement inter-harness session messaging and wakeups | open |
+| 180 | Review philippines-trip's worktree rules and audit script for adoption | open |
+| 181 | Add a scratch-prune recipe to repository-artifact-hygiene | open |

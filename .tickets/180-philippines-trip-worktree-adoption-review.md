@@ -12,6 +12,10 @@ tags: ["stream:tooling", "type:research"]
 
 # Review philippines-trip's worktree rules and audit script for adoption
 
+## Migration trace
+
+Recovered from local commit `b2c4bb4`, originally ticket 164. `tkt rebase` assigned 180 to preserve upstream 164.
+
 ## Origin
 
 philippines-trip, 2026-11-01. After the concurrent-session collisions behind #145 and the
