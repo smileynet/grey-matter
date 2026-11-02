@@ -103,24 +103,25 @@ manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 2
 ## Test optimization and verification
 
 Reconciled 2026-11-02 at the user's request. Scope: `stream:test-verification`.
-4 unfinished tickets (1 open, 1 in progress, 2 deferred) and 19 completed tickets. This stream excludes orchestration and dashboard
+5 unfinished tickets (2 open, 1 in progress, 2 deferred) and 19 completed tickets. This stream excludes orchestration and dashboard
 feature work; #116 covers only the evidence/current-summary contract. Existing release
 authorization and frozen candidate scope are unchanged.
 
 The order below is the session's chosen execution policy, not new dependency edges. All
-existing blocked_by values are preserved. In progress: #132; all other actionable work is assigned. Pursue #122 only when a useful
+existing blocked_by values are preserved. In progress: #132; #192 waits for an approved online-only fixture. Pursue #122 only when a useful
 failure is captured. macOS work needs a Mac; WSL and destructive footprint probes need a
 suitable owned environment. No host-only criterion is satisfied by a Windows fixture pass.
 
 On the installed tkt 0.4.0, tag-context queries also include untagged tickets. Exact stream
-membership is the 23 rows below; an untagged result does not add a ticket to this plan.
-Reconciliation verified all 23 tags, unchanged statuses/dependencies/acceptance checks, and
-tag-only edits to the seven closed tickets. The 16 open tickets' validation fields now mirror
-their existing acceptance checklists; reconciliation itself establishes no new implementation pass.
-Fresh reconciliation checks: pre-merge ticket-graph passed (1 selected check, 0.7 s), documentation
-consistency passed for 50 skills, and plan status checking passed with zero findings. Ticket
-validation passed with seven pre-existing closed-ticket checkbox warnings. Temporary audit
-scripts/snapshot are recycled after their conclusions are recorded here.
+membership is the 24 rows below; an untagged result does not add a ticket to this plan.
+All 24 tickets carry the stream tag. #192 captures the remaining cloud-placeholder observation
+per #132's handled-or-filed criterion, with no false dependency between them. Initial
+reconciliation mirrored existing acceptance checklists into validation fields; metadata edits
+alone establish no implementation pass. Native status and per-ticket evidence govern completion.
+Documentation consistency passes for 50 skills, the strict delivery-dashboard source/data check
+has zero errors or warnings, and ticket validation has seven pre-existing closed-ticket checkbox
+warnings. Shared test-verification artifacts are retained for remaining platform regression checks,
+with their lifecycle recorded in ticket resolutions; none of this establishes rendered UI acceptance.
 
 | ID | Work | Status |
 | --- | --- | --- |
@@ -136,6 +137,7 @@ scripts/snapshot are recycled after their conclusions are recorded here.
 | 98 | 5. CLI/pack compatibility and identity-bound reuse | ✅ done |
 | 121 | 5. Windows critic launch and unsupported-version diagnostics | ✅ done |
 | 132 | 6. Windows footprint rows and disposable bin/placeholder probes | in_progress |
+| 192 | 6. OneDrive placeholder allocation; needs an approved online-only fixture | open |
 | 133 | 7. WSL 2 backing-volume and reclaim validation | ✅ done |
 | 175 | 8. macOS inspector/lsof hang diagnosis | backlog |
 | 131 | 8. macOS/APFS footprint validation | backlog |

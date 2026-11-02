@@ -81,3 +81,9 @@ The over-cap Bin and real OneDrive online-only placeholder scenarios remain unru
 isolated environment or owned placeholder is available. No Bin settings or cloud data changed.
 This ticket stays in progress with those acceptance gaps explicit. Retain its worker checkout
 and dependency junction through shared test-verification integration cleanup.
+
+The cloud-placeholder acceptance branch is captured independently by
+[#192](192-footprint-onedrive-placeholder.md), as permitted by this ticket's "handled or
+filed" criterion. It requires an owner-approved online-only fixture; no cloud behavior is
+claimed from the local hardlink/free-space tests. The Recycle Bin over-cap criterion remains
+unobserved pending the disposable Windows Sandbox probe; host Bin settings/data stay untouched.
