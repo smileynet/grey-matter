@@ -1,0 +1,29 @@
+# Audit: Claude background sessions (2026-11-02)
+
+## Score: 0.92 / high
+
+The reported bounded findings are supported by first-party docs, captured native caller events, the worker transcript and an independent check of the named session. Cleanup is now evidenced for the exact probe session, fixture and collector artifacts. The remaining limitation is explicit: the settings snapshot was taken after the run, so it cannot establish before/after equality. That does not invalidate the tested exchange or the accurate setup limits.
+
+The [sanitized receipt](evidence/claude-background-20261102.json) contains the exact `SendMessage` parameters/result, caller event excerpts, session identity, fixture outcomes, settings snapshot, cleanup commands and artifact sizes. The raw streams are no longer retained in the worktree.
+
+## Per-claim verdicts
+
+| Claim | Verdict | Evidence |
+| --- | --- | --- |
+| `claude --bg` starts a background session and checks workspace trust | **Supported** | Current [CLI reference](https://code.claude.com/docs/en/cli-usage) states that `--bg` starts a background session, prints its ID and checks workspace trust (lines 114–115). On installed native Windows CLI 2.1.316, both fixture attempts exited 1 with `Workspace not trusted`. This supports the denial path only. |
+| The marker worker belonged to this probe and ran from its isolated worktree | **Supported** | The captured `claude --bg` invocation returned short ID `9031e15d`; its rendered transcript contains the matching marker prompt and subsequent message response. Independent `claude agents --json --all --cwd <the exact worker worktree>` returned that ID, full session ID `9031e15d-71b7-4f88-b165-acddb9573b77`, name `t160_background_control` and matching cwd, with no other session in the listing. This resolves ownership. |
+| A same-machine main session can message a named peer and receive an idle notice | **Supported for one exchange** | The receipt records `ListAgents`, a successful `SendMessage` call to the unique named peer with `notify_when_idle: true`, message ID `e042e562-8c02-4a1e-9383-dcb75960d839`, and the later notice. The separate worker transcript contains the incoming prompt and marker response. The repeat lines are terminal redraws; they do not show repeated sends or replies. This is one controlled exchange, not a reliability estimate. |
+| The idle notice proves completed or accepted work | **Unsupported if inferred; report correctly rejects it** | Current first-party [cross-session messaging docs](https://code.claude.com/docs/en/cross-session-messaging) define idle as a finished turn with nothing queued and describe a one-shot notice on next idle or exit (lines 120, 131–138). Here, the worker marker is separate evidence it handled the probe. Neither proves ticket artifact correctness or acceptance. |
+| The installed version supports native Windows messaging and idle notices | **Supported, documented** | Current docs state Windows cross-session support from 2.1.234 and `notify_when_idle` support from 2.1.236 in both sessions (cross-session page lines 63, 120). The captured installed version is 2.1.316. |
+| Fixture dispatch and `--bg --worktree` behavior were blocked before creation | **Supported** | Both commands returned the trust error. The captured `git worktree list --porcelain` showed only the fixture root. First-party CLI docs say trust is checked before a background session starts. Automatic worktree creation on a trusted fixture remains untested. |
+| A worker can push a ticket branch without pushing `main` | **Correctly listed as unverified** | The local trunk fixture has no remote. The alternative fixture expects a separately created GitHub repository, which this probe did not create. No push was attempted. Fixture instructions do not establish runtime behavior. |
+| The approximately one-hour idle reaper applies | **Documented, not observed** | Current first-party [agent view docs](https://code.claude.com/docs/en/agent-view) state that a finished/waiting unattached session is stopped “for about an hour” (lines 781–784). No timed run was performed. |
+| Settings and trust state were unchanged | **Weakly supported, accurately qualified** | No trust prompt was accepted and the captured commands contain no settings-write operation. The receipt records post-run hashes/timestamps for user settings and states that project settings files were absent. It explicitly says no pre-run hashes exist and therefore makes no before/after equality claim. |
+| The fixture baseline test passed | **Supported as reported** | The findings record `npm.cmd test` with 1 passed, 0 failed/skipped/cancelled/todo and no fixture source changes. This baseline outcome is preserved in the receipt. |
+| Owned session and probe artifacts were cleaned up | **Supported** | The receipt records verifying the exact session ID/name/cwd, stopping and removing that session, and a final `claude agents --json --all --cwd <exact worktree>` result of `[]`. An independent post-cleanup listing also returned `[]`; `claude daemon status` reported no running worker. The 156,047-byte fixture, 174,595-byte rendered log and 5,907-byte collector were sent to the OS recycle bin, and the report records their paths as absent. |
+
+## Final verdict
+
+The report answers the ticket's question with the right limits: one messaging/notice exchange worked; fixture background dispatch and automatic worktree creation could not be tested because trust stopped them; push/landing has no remote-backed evidence; and the reaper is documented only. The idle notice is a wake-up signal, not an acceptance signal. Cleanup is evidenced. Keep the settings claim scoped to the observed commands and post-run snapshot; the missing before-run hashes remain unknown.
+
+Sources were re-fetched on 2026-11-02 from the current first-party pages linked above. The installed CLI version and native outcomes are local observations, not inferences from docs.
