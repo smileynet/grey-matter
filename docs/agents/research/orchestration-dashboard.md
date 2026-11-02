@@ -5,6 +5,27 @@ with visible evidence limits, and the complete `stream:orchestration` ticket log
 All ticket details start collapsed. Dependency lines reflect `blocked_by`, while
 the suggested queue follows the first matching row in `docs/plan.md`.
 
+## Remote access
+
+The [private hosted dashboard](https://orchestration-findings.honestriver130.chatgpt.site)
+is available while signed in as its owner. Published through Sites on 2026-11-02;
+the native deployment returned `succeeded`, with no failure message.
+
+- Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
+- Pushed Site source: `09937a0f2577453f4430ff99fb237d30a54c7e4f`.
+- Deployment: `appgdep_6ae8c6fe17288191bb85cf2fdd19544a`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_347159afd8e881919113db1b0d7b73c6`.
+
+The hosted page preserves the reviewed UI and embeds the same findings/tickets;
+its evidence and source links target GitHub so they work remotely. This is a
+published snapshot; later local ticket changes need republication. No audience
+change was made. Source is retained in Sites' repository and can be reopened with
+the source helper using a new write credential for the same Site. The small local
+Site checkout is retained until its next update; packaging output and preparation
+script are recycled after successful publication. Initial packaging failed because
+GNU tar interpreted the Windows drive prefix as a remote host; rerunning with
+Windows System32 first on the child process PATH succeeded. No plugin code changed.
+
 ## Maintain it
 
 Edit `docs/orchestration-findings.json` for findings and short ticket outcomes.
