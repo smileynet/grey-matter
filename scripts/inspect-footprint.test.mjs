@@ -214,6 +214,13 @@ test("retention disposition and allocation uncertainty fail closed", () => {
   assert.ok(report.findings.some((finding) => finding.kind === "ticket-cap-unverified"));
   assert.match(summary(report, Infinity), /logical \(allocation unavailable\)/);
 
+  const oneUnknown = (path, options) => path === join(repo, ".scratch/t170-run-1/blob") ? noBlocks(path, options) : lstatSync(path, options);
+  const mixed = inspect({ ...base, repo, preservation: released, cap: 1024 }, Date.now(), oneUnknown);
+  assert.ok(mixed.findings.some((finding) => finding.kind === "ticket-cap"));
+  assert.ok(mixed.findings.some((finding) => finding.kind === "ticket-cap-unverified"));
+  assert.match(summary(mixed, Infinity), /allocated .* exceeds cap/);
+  assert.match(summary(mixed, Infinity), /cap .* unverified/);
+
   const expired = inspect({ ...base, repo, preservation: released }, Date.now() + 61 * 60000);
   assert.equal(family(expired, ".scratch/t170-run-1").dependencyStatus, "stale");
   assert.equal(family(expired, ".scratch/t170-run-1").outcome, "ask");

@@ -132,7 +132,7 @@ node <skill-dir>/scripts/inspect-footprint.mjs --repo PATH [--path DIR]... [--ti
 | `--dedupe` | sha256 files whose size matches a tracked file, plus the LFS store; reports identical bytes. Opt-in: it reads every candidate file |
 | `--preservation FILE` | load explicit project ownership, retention and dependency observations (version 1; see below) |
 | `--recheck PRIOR.json` | compare preservation context and keep lists with a saved run; changed delete/slim/prune families become `ask` and exit 1 |
-| `--summary` | one line: free space, and the three largest families when free space is under `--top-under` (40GiB) |
+| `--summary` | free space and largest families when under `--top-under` (40GiB), plus any measured or unverified ticket-cap findings |
 
 Output is JSON: `status` (`pass`, `review` when candidates exist or coverage is incomplete,
 `fail` when a limit breaks), `freeSpace` (under WSL, the lower of the distro and the Windows
@@ -142,8 +142,8 @@ volume holding that distro's registered `ext4.vhdx`), `coverage`,
 `reclaimableBytes: null`; logical length and allocated measurements do not prove physical
 reclaim. `allocatedBytes` is null if the filesystem does not report blocks; `bytes` keeps
 the legacy estimate and falls back to logical length in that case. Coverage names the
-partial allocation probe, summaries label the logical fallback, and `--cap` reports an
-unverified finding instead of treating that fallback as allocation. On copy-on-write
+partial allocation probe, summaries label the logical fallback and show cap findings,
+and `--cap` reports an unverified finding instead of treating that fallback as allocation. On copy-on-write
 filesystems, reported allocated bytes are an upper bound. A hard-linked file's logical
 length appears at each path while the shared allocation counts once. `keepBytes` is null
 when retained-file allocation is unavailable; `keepLogicalBytes` remains available. Files dated before 2000 are counted but

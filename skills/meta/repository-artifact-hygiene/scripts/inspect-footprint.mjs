@@ -486,8 +486,8 @@ export function inspect(opts, now = Date.now(), stat = lstatSync) {
       perTicket.set(f.ticket, record);
     }
     for (const [ticket, record] of perTicket) {
+      if (record.bytes > opts.cap) findings.push({ kind: "ticket-cap", ticket, bytes: record.bytes, cap: opts.cap });
       if (record.unknown.length) findings.push({ kind: "ticket-cap-unverified", ticket, families: record.unknown, cap: opts.cap });
-      else if (record.bytes > opts.cap) findings.push({ kind: "ticket-cap", ticket, bytes: record.bytes, cap: opts.cap });
     }
   }
   if (opts.recheck) {
@@ -550,6 +550,10 @@ export function summary(result, topUnder) {
     line.push(`Windows backing volume unavailable (${result.coverage.hostDriveReason}); free-space floor unverified`);
   }
   if (result.freeSpace.free < topUnder) line.push(`largest uncommitted: ${result.families.slice(0, 3).map((f) => `${f.path} ${gib(f.allocatedBytes ?? f.logicalBytes)}${f.allocatedBytes === null ? " logical (allocation unavailable)" : ""}`).join(", ") || "none"}`);
+  for (const finding of result.findings) {
+    if (finding.kind === "ticket-cap") line.push(`ticket ${finding.ticket} allocated ${gib(finding.bytes)} exceeds cap ${gib(finding.cap)}`);
+    if (finding.kind === "ticket-cap-unverified") line.push(`ticket ${finding.ticket} cap ${gib(finding.cap)} unverified for ${finding.families.join(", ")}`);
+  }
   return line.join("; ");
 }
 
