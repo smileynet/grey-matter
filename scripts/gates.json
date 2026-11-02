@@ -253,7 +253,7 @@
       "stage": "pre-release",
       "catches": "the release flow tagging, pushing, verifying or publishing the wrong candidate in a real Git repository",
       "scope": ["scripts/release"],
-      "run": ["node", "--test", "--test-timeout=300000", "scripts/release-artifacts.test.mjs", "scripts/release-development.test.mjs", "scripts/release-entrypoints.test.mjs", "scripts/release-git.test.mjs", "scripts/release-native.test.mjs", "scripts/release-product.test.mjs", "scripts/release-verify.test.mjs", "scripts/release.test.mjs"],
+      "run": ["node", "--test", "--test-concurrency=1", "--test-timeout=300000", "scripts/release-artifacts.test.mjs", "scripts/release-development.test.mjs", "scripts/release-entrypoints.test.mjs", "scripts/release-git.test.mjs", "scripts/release-native.test.mjs", "scripts/release-product.test.mjs", "scripts/release-verify.test.mjs", "scripts/release.test.mjs"],
       "timeout_s": 900,
       "measured": { "s": 145.9, "date": "2026-11-01", "host": "win" }
     }

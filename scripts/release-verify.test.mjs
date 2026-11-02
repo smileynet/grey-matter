@@ -3,7 +3,7 @@ import { publishStaged } from "./release-publication.mjs";
 import { publicationFailure } from "./release-publish.mjs";
 import { ciFixture } from "./release-ci-fixtures.mjs";
 import { readStagedCandidate, readStagedTktCandidate } from "./release-staging.mjs";
-import { test } from "node:test";
+import { after, test } from "node:test";
 import assert from "node:assert/strict";
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { execFileSync, spawnSync } from "node:child_process";
@@ -21,18 +21,38 @@ function tree(dir) {
   const walk = (at) => { for (const item of readdirSync(at, { withFileTypes: true })) { const file = join(at, item.name); if (item.isDirectory()) walk(file); else if (item.isFile()) files[relative(dir, file)] = hash(readFileSync(file)); } };
   walk(dir); return files;
 }
+const templates = new Map();
+const seedRoot = mkdtempSync(join(tmpdir(), "candidate-verify-seeds-"));
+after(() => rmSync(seedRoot, { recursive: true, force: true }));
+
+function template(check, product) {
+  const key = JSON.stringify([check, product]);
+  if (templates.has(key)) return templates.get(key);
+  const temp = mkdtempSync(join(seedRoot, "template-")), repo = join(temp, "repo"), artifacts = join(temp, "artifacts");
+  const git = (...args) => execFileSync("git", ["-C", repo, ...args], { encoding: "utf8", stdio: "pipe" }).trim();
+  mkdirSync(repo); git("init", "-b", "main");
+  const manifest = { name: product, version: "0.1.0", description: "Fixture", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE"] } } };
+  put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(manifest)); put(join(repo, ".codex-plugin/plugin.json"), JSON.stringify({name: product, version: "0.1.0", skills: "./skills/"}));
+  put(join(repo, ".claude-plugin/marketplace.json"), JSON.stringify({name: product, plugins: [{name: product, source: "./"}]}));
+  put(join(repo, "skills/example/SKILL.md"), "---\nname: example\ndescription: Candidate fixture\n---\nFixture.\n"); put(join(repo, "LICENSE"), "Fixture notice\n");
+  cpSync(join(scripts, "deploy.mjs"), join(repo, "scripts/deploy.mjs")); put(join(repo, "scripts/gate.mjs"), check);
+  git("add", "."); git("commit", "-m", "Fixture");
+  const sha = git("rev-parse", "HEAD"); buildArtifacts({ repo, ref: sha, out: artifacts });
+  const seed = { repo, artifacts, sha };
+  templates.set(key, seed);
+  return seed;
+}
+
 async function fixture(fn, check = 'console.log("fixture gate passed");', product = "grey-matter") {
+  const seed = template(check, product);
   const temp = mkdtempSync(join(tmpdir(), "candidate verify ")), repo = join(temp, "repo"), artifacts = join(temp, "artifacts"), out = join(temp, "evidence");
   const git = (...args) => execFileSync("git", ["-C", repo, ...args], { encoding: "utf8", stdio: "pipe" }).trim();
   try {
-    mkdirSync(repo); git("init", "-b", "main");
-    const manifest = { name: product, version: "0.1.0", description: "Fixture", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE"] } } };
-    put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(manifest)); put(join(repo, ".codex-plugin/plugin.json"), JSON.stringify({name: product, version: "0.1.0", skills: "./skills/"}));
-    put(join(repo, ".claude-plugin/marketplace.json"), JSON.stringify({name: product, plugins: [{name: product, source: "./"}]}));
-    put(join(repo, "skills/example/SKILL.md"), "---\nname: example\ndescription: Candidate fixture\n---\nFixture.\n"); put(join(repo, "LICENSE"), "Fixture notice\n");
-    cpSync(join(scripts, "deploy.mjs"), join(repo, "scripts/deploy.mjs")); put(join(repo, "scripts/gate.mjs"), check);
+    execFileSync("git", ["clone", "--shared", "--origin", "fixture-source", seed.repo, repo], { stdio: "pipe" });
+    // Each test can corrupt its artifacts without changing the immutable template or another test.
+    cpSync(seed.artifacts, artifacts, { recursive: true });
+    const sha = seed.sha;
     const commit = () => { git("add", "."); git("-c", `core.hooksPath=${join(temp, "no hooks")}`, "commit", "-m", "Fixture"); return git("rev-parse", "HEAD"); };
-    const sha = commit(); buildArtifacts({ repo, ref: sha, out: artifacts });
     await fn({ temp, repo, artifacts, out, sha, git, commit, run: (extra = {}) => verifyCandidate({ repo, sha, artifacts, out, ...extra }) });
   } finally { rmSync(temp, { recursive: true, force: true }); }
 }
