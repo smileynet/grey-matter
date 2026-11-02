@@ -1,7 +1,7 @@
 ---
 id: "175"
 title: "Reproduce the inspect-footprint test hang on macOS and confirm the lsof cause"
-status: in_progress
+status: backlog
 blocked_by: []
 validation_criteria:
   - "On macOS, time `node --test scripts/inspect-footprint.test.mjs` and one `lsof -Fn -w` call; record both."
