@@ -5,9 +5,13 @@ status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
-  - "Scenario fixtures cover retained ownership and protected unknown state"
-  - "Applicable repository gates pass with explicit coverage limits"
-tags: ["stream:tooling"]
+  - "Synthetic fixtures make recommendations stale after scope/path identity, candidate inventory, ownership, workspace or observable dependency changes."
+  - "Unknown ownership and partial probes retain explicit uncertainty rather than authorize cleanup."
+  - "Symlink escapes and overlapping roots cannot silently widen scope or double count totals."
+  - "Measurement output distinguishes logical and allocated accounting from unproven reclaimable space."
+  - "Existing citation recheck behavior remains covered and the inspector stays read-only."
+  - "Applicable inspector tests and repository gates pass; no whole-drive or live deletion test is needed."
+tags: ["stream:test-verification"]
 ---
 
 # Revalidate preservation state before cleanup recommendations
@@ -42,3 +46,14 @@ Define a small bounded optional ownership/retention input seam rather than hard-
 ## Out of scope
 
 Automatic cleanup, deletion approval APIs, a central agent registry, a daemon, #182's trend/regrowth work, and changing device or cloud data.
+
+## Execution pickup 2026-11-02
+
+After the user deferred OneDrive work, this related footprint-verification follow-up was
+selected for the session. Moved from stream:tooling to stream:test-verification, preserving
+the original intent, dependencies and acceptance scope. The validation fields now mirror
+the existing six acceptance criteria. Code inspection confirmed that current --recheck only
+compares citation keep lists when a current family exists. Revalidation comes before broader
+growth/trend work so that later reports can reuse a sound preservation-state boundary; this
+ordering introduces no dependency edge. Worker implementation and independent critic review
+must precede root integration, evidence closure and dashboard update.

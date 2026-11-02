@@ -63,10 +63,18 @@ Root integrated at 700de75; explicit pre-merge agent-guidance passed 1/1 in 1.0 
 pre-push doc-links/home-path passed 2/2. JSON parsing and docs consistency passed; no code
 changed and no full test gate was repeated for this evidence-only update.
 
-Next: supply another owner-approved file already showing an online-only cloud icon, or
-leave this ticket pending. Do not change the current file's availability to manufacture a
-fixture. The worker unit is complete; release its claim while the prerequisite is absent.
+Resumption requires another owner-approved file already showing an online-only cloud icon.
+This is pending at the user's request; no further fixture request or probe is planned until
+they resume it. Do not change the current file's availability to manufacture a fixture.
+The completed metadata-only worker unit does not satisfy the missing online-only prerequisite.
 Retain the named t192-evidence checkout (14,585,938 file bytes at worker measurement)
 through the next fixture comparison/final platform audit, then retire it. Metadata handles
 belonged to terminated probe processes; no persistent helper or raw private-path output
 was created. The original user file remains outside repository artifact cleanup scope.
+
+## User deferral 2026-11-02
+
+The user instructed: move on to other work and leave OneDrive pending. Parked in backlog;
+no further fixture request, file inspection or availability change is planned until the user
+resumes this work. The supplied file's local-only observation remains valid within its recorded
+scope; online-only placeholder acceptance is still unmet.
