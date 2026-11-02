@@ -1,7 +1,7 @@
 ---
 id: "95"
 title: "orient/implement: optional Kiro Crew chat_tag and session_ledger steps"
-status: open
+status: in_progress
 blocked_by: ["111"]
 priority: low
 tags: ["stream:tooling", "type:enhancement"]
