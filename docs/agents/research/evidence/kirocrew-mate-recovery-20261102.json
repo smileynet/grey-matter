@@ -152,7 +152,7 @@
       "sid": "sess_7e967645-56f6-4eb3-89be-9ee0fff20dfb",
       "timestamp": "2026-11-02T17:35:06.851Z",
       "type": "assistant",
-      "content": "File path: `C:/Users/uosmi/AppData/Local/Temp/gm-t156-fixture-1/test.txt`\n\nFirst line: `T156_FIXTURE_1_DONE`"
+      "content": "File path: `%USERPROFILE%/AppData/Local/Temp/gm-t156-fixture-1/test.txt`\n\nFirst line: `T156_FIXTURE_1_DONE`"
     }
   ],
   "excerpts": [
@@ -184,7 +184,7 @@
       "actor": "mate",
       "role": "assistant",
       "ts": "2026-11-02T09:35:31.827555-08:00",
-      "content": "Fixture ticket 1 complete. Worker created the file and reported success. File exists at `C:/Users/uosmi/AppData/Local/Temp/gm-t156-fixture-1/test.txt` with content `T156_FIXTURE_1_DONE`."
+      "content": "Fixture ticket 1 complete. Worker created the file and reported success. File exists at `%USERPROFILE%/AppData/Local/Temp/gm-t156-fixture-1/test.txt` with content `T156_FIXTURE_1_DONE`."
     },
     {
       "actor": "mate",
@@ -220,7 +220,7 @@
       "actor": "worker",
       "role": "assistant",
       "ts": "2026-11-02T09:35:06.90975-08:00",
-      "content": "File path: `C:/Users/uosmi/AppData/Local/Temp/gm-t156-fixture-1/test.txt`\n\nFirst line: `T156_FIXTURE_1_DONE`"
+      "content": "File path: `%USERPROFILE%/AppData/Local/Temp/gm-t156-fixture-1/test.txt`\n\nFirst line: `T156_FIXTURE_1_DONE`"
     }
   ],
   "controller_sequence": [

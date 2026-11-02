@@ -1,7 +1,7 @@
 # Kiro Crew Mate recovery: source guide
 
 **Date:** 2026-11-02. **Target runtime:** installed Kiro Crew 0.11.1 on Windows.
-The installed package under `C:/Users/uosmi/AppData/Local/Programs/KiroCrew/`
+The installed package under `%USERPROFILE%/AppData/Local/Programs/KiroCrew/`
 is the primary source for the live spike. Its
 `dashboard/mate_thread_wakes.py` SHA-256 is
 `3d28987f8fbe48ba73f60b358e4e74aefd9ed0330d9d9bcb4b65ff0ad41c1c47`.
@@ -72,7 +72,7 @@ scheduled check-in, or manual chat.
   or model access.
 
 **Source records:** installed package files beneath
-`C:/Users/uosmi/AppData/Local/Programs/KiroCrew/resources/backend-dist/kirocrew-backend/Lib/site-packages/kiro_crew/`:
+`%USERPROFILE%/AppData/Local/Programs/KiroCrew/resources/backend-dist/kirocrew-backend/Lib/site-packages/kiro_crew/`:
 `dashboard/mate_thread_wakes.py`, `dashboard/mate_welcome.py`, and
 `dashboard/session_control_parts/session_tree.py`. The separate 0.12.0 reference
 checkout includes `test/test_mate_thread_wakes.py`, whose restart-drain test
