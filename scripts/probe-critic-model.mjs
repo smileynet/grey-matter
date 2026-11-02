@@ -23,18 +23,39 @@ export const CEILINGS = {
   kiro: "claude-opus-5-5",
   opencode: "zai-coding-plan/glm-5.3",
 };
+const CODEX_MODEL_MINIMUMS = { "gpt-6.1-terra": "0.159.0" };
 // Kiro offers no alias, so the probe picks the strongest Claude it lists, in this order.
 const KIRO_ORDER = ["claude-opus-5-5", "claude-opus-5", "claude-opus-4.8", "claude-opus-4.7", "claude-opus-4.6", "claude-opus-4.5"];
 const PROMPT = "Reply with exactly: OK";
 const AUTH = /authenticat|oauth|refresh token|sign in again|log ?in|log out and sign|401|expired|unauthori[sz]ed/i;
+const SAFE_CODEX_MODEL_ID = /^[A-Za-z0-9][A-Za-z0-9._/-]*$/;
+
+const WINDOWS_CODEX_DISPATCH = "$ErrorActionPreference = 'Stop'; $exe = Get-Command -Name 'codex' -CommandType Application -ErrorAction Stop; $codexArgs = @(ConvertFrom-Json -InputObject $env:GM_CODEX_ARGS); & $exe.Source @codexArgs; exit $LASTEXITCODE";
 
 const run = (cmd, args, { cwd, timeout, env } = {}) => {
-  const r = spawnSync(cmd, args, { cwd, encoding: "utf8", timeout: (timeout ?? 60) * 1000, env: { ...process.env, ...env }, stdio: ["ignore", "pipe", "pipe"] });
+  let executable = cmd, argv = args;
+  const childEnv = { ...process.env, ...env };
+  if (process.platform === "win32" && cmd === "codex") {
+    executable = join(process.env.SystemRoot || "C:\\Windows", "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
+    argv = ["-NoLogo", "-NoProfile", "-NonInteractive", "-Command", WINDOWS_CODEX_DISPATCH];
+    childEnv.GM_CODEX_ARGS = JSON.stringify(args);
+  }
+  const r = spawnSync(executable, argv, { cwd, encoding: "utf8", timeout: (timeout ?? 60) * 1000, env: childEnv, stdio: ["ignore", "pipe", "pipe"] });
   return { code: r.error ? 127 : r.status ?? 1, out: r.stdout ?? "", err: r.stderr ?? "", missing: r.error?.code === "ENOENT", timedOut: r.error?.code === "ETIMEDOUT" };
 };
 const lines = (s) => s.split(/\r?\n/).filter((l) => l.trim().startsWith("{")).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
-const version = (cmd) => { const r = run(cmd, ["--version"], { timeout: 10 }); return r.missing ? null : (r.out.trim().split("\n")[0] || null).replace(/\s*\(.*$/, ""); };
+const version = (cmd, options) => { const r = run(cmd, ["--version"], { ...options, timeout: 10 }); return r.missing ? null : (r.out.trim().split("\n")[0] || null).replace(/\s*\(.*$/, ""); };
 const classify = (r) => (AUTH.test(r.out + r.err) ? "not-authenticated" : r.timedOut ? "timed-out" : "failed");
+function belowVersion(value, minimum) {
+  const parse = (text) => {
+    const match = /(?:^|\D)(\d+)\.(\d+)\.(\d+)(-[0-9A-Za-z.-]+)?/.exec(text);
+    return match && { numbers: match.slice(1, 4).map(Number), prerelease: match[4] };
+  };
+  const found = parse(value), floor = parse(minimum);
+  if (!found || !floor) return false;
+  for (let i = 0; i < 3; i++) if (found.numbers[i] !== floor.numbers[i]) return found.numbers[i] < floor.numbers[i];
+  return Boolean(found.prerelease) && !floor.prerelease;
+}
 
 // Each adapter returns { status, recorded, effort, evidence, note } for the pinned call.
 const adapters = {
@@ -49,6 +70,9 @@ const adapters = {
     const r = run("codex", ["exec", "-m", model, "-c", "model_reasoning_effort=high", "--json", "--skip-git-repo-check", "-s", "read-only", PROMPT], ctx);
     const ev = lines(r.out);
     const failed = ev.find((e) => e.type === "turn.failed" || (e.type === "error" && e.message));
+    if (model === "gpt-6.1-sol" && r.code !== 0 && /\b400\b/.test(r.out + r.err) && /not supported/i.test(r.out + r.err)) {
+      return { status: "model-unavailable", note: "Codex rejected GPT-6.1 Sol. No documented CLI minimum exists for Sol; official availability depends on plan, client and workspace. Check current model availability and rollout." };
+    }
     if (r.code !== 0 || failed) return { status: classify({ ...r, out: r.out + JSON.stringify(failed ?? "") }), note: JSON.stringify(failed ?? r.err).slice(0, 160) };
     const tid = ev.find((e) => e.type === "thread.started")?.thread_id;
     const home = ctx.env?.CODEX_HOME || process.env.CODEX_HOME || join(homedir(), ".codex");
@@ -119,12 +143,21 @@ function kiroPick(ctx) {
 
 export function probe(harness, { ceilings = CEILINGS, timeout = 60 } = {}) {
   const cmd = harness === "kiro" ? "kiro-cli" : harness;
-  const v = version(cmd);
+  const requested = ceilings[harness];
+  if (harness === "codex" && (typeof requested !== "string" || !SAFE_CODEX_MODEL_ID.test(requested))) return {
+    harness, status: "invalid-model-id",
+    note: "Codex model ID must start with an ASCII letter or digit and contain only letters, digits, dot, underscore, slash or hyphen.",
+  };
+  const v = version(cmd, { timeout });
   if (!v) return { harness, status: "unavailable", note: `${cmd} is not on PATH` };
+  const minimum = harness === "codex" ? CODEX_MODEL_MINIMUMS[requested] : null;
+  if (minimum && belowVersion(v, minimum)) return {
+    harness, version: v, ceiling: requested, requested, status: "unsupported-version",
+    note: `Codex CLI ${v} is below the documented minimum ${minimum} for GPT-6.1 Terra; update Codex CLI to ${minimum} or later.`,
+  };
   const dir = mkdtempSync(join(tmpdir(), `gm-critic-${harness}-`));
   const ctx = { cwd: dir, timeout };
   try {
-    let requested = ceilings[harness];
     let picked = null;
     if (harness === "kiro") { picked = kiroPick(ctx); if (!picked.chosen) return { harness, version: v, status: "unavailable", note: "no Claude model in `kiro-cli chat --list-models`" }; requested = picked.chosen; }
     const res = adapters[harness](requested, ctx);

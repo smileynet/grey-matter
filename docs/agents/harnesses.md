@@ -57,12 +57,23 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - Packaging reference: [OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins).
 
 
-- Binary `codex` (a `.ps1` shim via fnm on this machine), probed 0.163.0. Auto-scans its
-  root. Uses the `agents/openai.yaml` sidecar for invocation policy.
+- Binary `codex`; `codex --version` reported `codex-cli 0.166.0` on this Windows host on
+  2026-11-02. `--help` and `exec --help` confirm `-m/--model`, `exec` and its JSON mode.
+  Auto-scans its root. Uses the `agents/openai.yaml` sidecar for invocation policy.
 - **User root**: `~/.codex/skills/`. **Install**: default set, or `--root ~/.codex/skills`.
+- **Windows launch and Bun install pitfall.** Node's `spawnSync` does not launch a PATH
+  `.cmd` shim directly. The critic probe resolves the `codex` application with Windows
+  PowerShell, then passes its argv as JSON data for array invocation; it does not construct
+  PowerShell source from argument text. A `.cmd` is still parsed by `cmd.exe`, so the probe
+  first accepts only model IDs matching `[A-Za-z0-9][A-Za-z0-9._/-]*` and rejects invalid IDs
+  before any launcher call. This supports the Bun global `.cmd` launcher without copying a
+  `codex.exe` that goes stale on upgrade. In the observed Bun 1.3.12 link failure,
+  `codex.bunx` was left empty and a copied native executable was only a temporary workaround.
+  Check `codex --version` after repairing/reinstalling the global package; do not keep the
+  copied binary as the install.
 - **Test**: `codex exec --dangerously-bypass-approvals-and-sandbox -C <dir> "<prompt>"`
-  (needs the bypass or it hangs on approval). On Windows the shim won't launch via
-  `Start-Process`; run it through a `Start-Job`/pwsh call.
+  (needs the bypass or it hangs on approval). For direct Windows process launch of a `.cmd`
+  Codex shim, use the PowerShell application path exercised by `probe-critic-model.mjs`.
 - **Invocation filter**: **honored, cleanly isolated**, a skill with
   `policy.allow_implicit_invocation: false` is absent from the model's catalog.
 - **Shell** (probed live 2026-10-26 in the Codex app; source read on 0.147): the account's
@@ -190,11 +201,18 @@ model facts are from [critic-model-selection](./research/critic-model-selection-
 | Harness | Ceiling | Pin with | Effort | Model of record | Needs |
 | --- | --- | --- | --- | --- | --- |
 | Claude Code | `opus` (Claude Opus 5.5) | Subagent: the `Agent` tool's `model` parameter. CLI: `--model opus` and `--agents` JSON with `model:` | `effort` parameter or `--effort high` (Opus defaults to `medium`) | In-session: the subagent transcript's `model` and `effort`. CLI: `modelUsage` in `--output-format json` | Logged in (`claude auth login`) |
-| Codex | `gpt-6.1-sol` | `codex exec -m gpt-6.1-sol -c model_reasoning_effort=high -s read-only` with the whole packet in the prompt (default); `--dangerously-bypass-approvals-and-sandbox` instead of `-s read-only` only when the critic must read files or use tools. Or a `~/.codex/agents/*.toml` file with `model` and `model_reasoning_effort` | `high` | The rollout's `turn_context` (`model`, `effort`); not written with `--ephemeral`. A spawned agent has its own rollout | CLI 0.159 or later for the 6.1 models (0.164 verified); logged in |
+| Codex | `gpt-6.1-sol` | `codex exec -m gpt-6.1-sol -c model_reasoning_effort=high -s read-only` with the whole packet in the prompt (default); `--dangerously-bypass-approvals-and-sandbox` instead of `-s read-only` only when the critic must read files or use tools. Or a `~/.codex/agents/*.toml` file with `model` and `model_reasoning_effort` | `high` | The rollout's `turn_context` (`model`, `effort`); not written with `--ephemeral`. A spawned agent has its own rollout | Logged in; model availability depends on plan, client and workspace |
 | Kiro CLI | Strongest Claude in `--list-models` (Opus 4.5 on 2.16.0) | `--model <id>` on a top-level `kiro-cli chat --no-interactive` call. Subagents cannot take a model | `--effort high` | None. Record "requested, unverified" | Logged in |
 | opencode | `zai-coding-plan/glm-5.3` (owner's z.ai subscription) | `-m provider/model --variant high`, or `model:` in an agent file; a `-m` flag outranks the file | `--variant` | `opencode export <sessionID>`: `providerID`, `modelID`, `variant` per message; a subagent's model in the `task` tool metadata | A provider with a live key |
 
 Rules, with the evidence for each in the spike results:
+
+- **Model-specific CLI floor (verified 2026-11-02):** the official [model guide](https://learn.chatgpt.com/docs/models)
+  requires Codex CLI 0.159.0 or later for GPT-6.1 Terra. It gives no CLI minimum for GPT-6.1
+  Sol, the selected critic model; availability depends on plan/sign-in method, client, workspace
+  and rollout.
+  The probe guards the published Terra floor. A Sol `not supported` response stays an
+  availability diagnostic and does not assume that upgrading the CLI fixes it.
 
 - **Pin on every spawn; never inherit.** An unpinned subagent ran on the parent's model in Claude
   Code, Codex and opencode. In Codex, spawn with `fork_turns: "none"` so the critic does not also
