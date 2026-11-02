@@ -145,7 +145,7 @@
       "stage": "pre-merge",
       "catches": "the artifact and footprint inspectors misclassifying a folder, or hanging (ticket 151)",
       "scope": ["scripts/repository-artifact-hygiene", "scripts/inspect-footprint", "scripts/scratch-citations-baseline.json", "skills/meta/repository-artifact-hygiene/scripts/"],
-      "run": ["node", "--test", "--test-timeout=60000", "scripts/repository-artifact-hygiene.test.mjs", "scripts/inspect-footprint.test.mjs"],
+      "run": ["node", "--test", "scripts/repository-artifact-hygiene.test.mjs", "scripts/inspect-footprint.test.mjs"],
       "timeout_s": 120,
       "measured": { "s": 9.0, "date": "2026-11-01", "host": "win" }
     },

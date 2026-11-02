@@ -92,28 +92,58 @@ test("a failing check blocks and shows its output", () => fixture([check("a", ["
   assert.match(r.out, /manifest broken/);
 }));
 
-test("a hung check and a check blocked in spawnSync both end as timeout, and the tree dies", () => {
-  const mark = join(mkdtempSync(join(tmpdir(), "gate-mark-")), "grandchild-survived");
+for (const strategy of ["tree", "parent"]) test(`timeout descendant probe: ${strategy === "tree" ? "tree termination passes" : "parent-only termination is rejected"}`, () => {
+  const mark = join(mkdtempSync(join(tmpdir(), "gate-mark-")), "grandchild-pid");
+  const stop = join(dirname(mark), "stop");
   const writer = join(dirname(mark), "writer.js");
-  writeFileSync(writer, `setTimeout(() => require('fs').writeFileSync(${JSON.stringify(mark)}, 'x'), 3000)`);
+  writeFileSync(writer, `process.chdir(${JSON.stringify(dirname(mark))}); require('fs').writeFileSync(${JSON.stringify(mark)}, String(process.pid)); setInterval(() => { if (require('fs').existsSync(${JSON.stringify(stop)})) process.exit(0); }, 20); setTimeout(() => process.exit(0), 30000);`);
   // A Node parent on Windows takes its own children down when killed, so the intermediate is a
   // shell, as when a real check launches a tool through cmd, bash or PowerShell.
   const run = process.platform === "win32" ? ["cmd", "/c", process.execPath, writer] : ["sh", "-c", `"${process.execPath}" "${writer}"`];
   const hung = check("hung", ["a/"], "setInterval(() => {}, 1000)", { timeout_s: 1 });
-  const blocked = { ...check("blocked", ["a/"]), run, timeout_s: 1 };
-  // Keeps gate.mjs alive past the grandchild's 3 s mark. On Windows, Node kills its own
-  // descendants when gate.mjs exits, so only an orphan seen while gate.mjs runs proves a leak.
-  const later = check("later", ["a/"], "Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 3500)");
+  const blocked = { ...check("blocked", ["a/"]), run, timeout_s: 3 };
+  // Observe after termination returns, while gate.mjs is alive: exiting Node can hide a leak.
+  const later = check("later", ["a/"], `
+    const pid = Number(require('fs').readFileSync(${JSON.stringify(mark)}, 'utf8'));
+    const until = Date.now() + 1000;
+    while (true) {
+      try { process.kill(pid, 0); }
+      catch (error) { if (error.code === 'ESRCH') process.exit(0); throw error; }
+      if (Date.now() >= until) { require('fs').writeFileSync(${JSON.stringify(stop)}, 'stop'); console.error('timeout survivor'); process.exit(1); }
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 20);
+    }
+  `);
   try {
-    fixture([hung, blocked, later], ({ commit, run, push, base }) => {
+    fixture([hung, blocked, later], ({ git, commit, run, push, base }) => {
+      if (strategy === "parent") {
+        const file = join(git("rev-parse", "--show-toplevel"), "scripts/gate.mjs");
+        const original = readFileSync(file, "utf8"), mutant = original.replace("killTree(child);", "child.kill();");
+        assert.notEqual(mutant, original, "the parent-only control mutation landed");
+        writeFileSync(file, mutant);
+      }
       const r = run(["pre-push", "--stdin", "--remote", "origin"], { input: push(commit("a/x"), base) });
       assert.equal(r.status, 1, r.out);
       assert.match(r.out, /hung: timeout/);
       assert.match(r.out, /blocked: timeout/);
-      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 1000);
-      assert.equal(existsSync(mark), false, "the grandchild outlived the timeout: the process tree was not killed");
+      if (strategy === "tree") assert.match(r.out, /\[ok\s*\][^\n]*\blater\b/, r.out);
+      else {
+        assert.match(r.out, /later: fail/);
+        assert.match(r.out, /timeout survivor/);
+      }
     });
-  } finally { rmSync(dirname(mark), { recursive: true, force: true }); }
+  } finally {
+    writeFileSync(stop, "stop");
+    if (existsSync(mark)) {
+      const pid = Number(readFileSync(mark, "utf8"));
+      const until = Date.now() + 2000;
+      while (Date.now() < until) {
+        try { process.kill(pid, 0); }
+        catch (error) { if (error.code !== "ESRCH") throw error; break; }
+        Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 20);
+      }
+    }
+    rmSync(dirname(mark), { recursive: true, force: true, maxRetries: 10 });
+  }
 });
 
 test("a missing tool is an infrastructure error", () => fixture([{ ...check("a", ["a/"]), run: ["no-such-tool-for-gate-test"] }], ({ commit, run, push, base }) => {
