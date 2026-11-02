@@ -31,7 +31,7 @@ read-only; use the user's existing authorization for subsequent changes.
    to 1,000 commits and 10,000 objects; limits and incomplete coverage are reported.
    Body inspection is bounded to 32 MiB/blob and 64 MiB total. Read `coverage`,
    `history` limits and `errors` before drawing conclusions. No fetch, checkout,
-   worktree walk, filters, staging or hook installation occurs.
+   worktree walk, filters, staging or Git hook installation occurs.
 
    Report Git blob lengths, declared LFS payload and embedded base64 characters
    separately. They are not allocation, billed storage, staleness or reclaimable

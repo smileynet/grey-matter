@@ -84,11 +84,15 @@ Set up only what is installed:
   source once they exist.
 - **game projects**: point `AGENTS.md` at `game-native-design` and `game-modeling` as
   the defaults, and record the engine.
-- **test commands by tier**: list the project's single-test command, pre-merge check, and slow
-  tier with the environment it needs, per the
-  [test-environment ladder](../../../docs/agents/test-environment-ladder.md). Ask the user
-  for any you cannot find in the build files. Add Git hooks only per
-  [local gates](../../../docs/agents/local-gates.md), each with its scope and measured time.
+- **verification**: per [local gates](../../../docs/agents/local-gates.md), write
+  `Verification phase: speed` and one `check` command in the project's own runner (npm script,
+  `just`, `mise`, `make`): tier 0, any round-trip test for persisted data, one headless smoke,
+  under 60 s warm. List the single-test command and the slow tier with the environment it needs,
+  per the [test-environment ladder](../../../docs/agents/test-environment-ladder.md); ask the user
+  for any you cannot find in the build files. Add no Git hook, agent hook or hosted CI. Only when
+  the owner declares `Verification phase: stability`: vendor grey-matter's `scripts/gate.mjs` and
+  `.githooks/pre-push`, write `scripts/gates.json` with each check's scope and measured time, and
+  run `git config core.hooksPath .githooks` only on the owner's opt-in.
 - **provider fallback**: add the `## Provider fallback` section in its off state, exactly as
   scaffolded in [provider switching](../../../docs/agents/provider-switching.md#scaffold-start-from-the-off-state),
   then validate it with `node scripts/check-provider-fallback.mjs AGENTS.md` from a grey-matter checkout.

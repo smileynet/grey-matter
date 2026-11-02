@@ -16,7 +16,7 @@ session** instead of leaving every improvement as a ticket for later.
   make).
 - Then the new beat: for each accepted **mechanical** finding that's cheap and unambiguous,
   **build it now** — write the check, the guardrail, or the project-level skill/note — and
-  verify it. A new check runs on demand; it joins a hook only when it passes
+  verify it. A new check runs on demand; it joins a stage only when it passes
   [local gates](../../../docs/agents/local-gates.md). Everything else stays a ticket (reconcile already captured it).
 
 Composes the two existing skills; it does not re-spell them. Both remain invokable alone.

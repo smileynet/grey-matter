@@ -1,50 +1,131 @@
 # Local gates
 
-A **gate** is a check a Git hook runs on every commit or push. It taxes every commit for the
-life of the project, so the default is no gate: the agent's own cadence on the
-[test-environment ladder](test-environment-ladder.md) and on-demand check commands cover the rest.
-Add a gate sparingly, for a key area, with a focused scope and a measured budget.
+Where a project's checks run, and what may block a commit, push, merge or release. Decided in
+[proposal 18](proposals/18-three-stage-verification.md); terms (**Git hook**, **agent hook**,
+**stage**, **speed / stability phase**) as ruled in the [glossary](../../GLOSSARY.md#verification-terms).
+Which tier a question needs is the [test-environment ladder](test-environment-ladder.md); this doc
+says when each check runs.
 
-## Where each check runs
+Every check runs on the owner's machine first. A check that taxes every commit or push taxes the
+whole life of the project, so the default is fewer, faster, scoped checks.
 
-| Stage | Runs | Budget (all gates together, warm cache) |
+## Phase: speed until the owner declares stability
+
+A project's `AGENTS.md` carries one line, `Verification phase: speed` or
+`Verification phase: stability`. `init-project` writes `speed`. Only the owner changes it, when
+they choose release stability over iteration speed; a tag, a store build or an early release does
+not switch it. Agents may suggest the switch (persisted user data, outside users) but never infer
+it. With no line, assume speed and report the gap.
+
+| | Speed (default) | Stability (owner-declared) |
 |---|---|---|
-| pre-commit | tier 0 on staged files: format, lint, parse, a focused invariant | 10 s |
-| pre-push | tier 0 critical invariants only: the checks that stop a broken install or manifest from publishing | 30 s |
-| release workflow | the full test suite, before the release is staged | none; it runs once per release |
-| on demand, before merge | full tier 0 to 2 suite, tier 3 critical flows, agent review (`code-review`, critics) | none; the agent runs and reports it |
-| hosted CI (GitHub Actions) | manual dispatch only, for evidence no local host gives (another OS, a clean machine) | none |
+| Entry point | one `check` command (npm script, `just`, `mise`, `make`, `bin/ci`) | `gate.mjs <stage>` over `gates.json` |
+| Runs | tier 0 (format, lint, typecheck, data-file parse); unit tests only where someone has been wrong or the logic is tangled; one headless smoke that boots the app or steps the game loop | adds a regression test per shipped bug fix, migration tests over old save versions, the pre-release stage |
+| From day one | a round-trip test for anything persisted: saves, schemas, wire formats | same |
+| Budget | `check` under 60 s warm | pre-push 30 s, pre-merge 5 min, pre-release none |
+| Who runs it | the agent, before pushing finished work, citing the output at close | as below |
+| Not yet | Git hooks, agent hooks, hosted CI, coverage targets, a device matrix, tests of prototype code | hosted CI only as in [Hosted CI](#hosted-ci) |
 
-Test suites run in the release workflow, not at push: a slow or flaky fixture must never block
-publishing tickets, docs or fixes. Hosted CI does not run them either.
-Agent and LLM reviews take minutes and vary run to run, so they run on demand before merge,
-never in a Git hook or agent hook. Builds, full suites, rendered, simulator and device tiers also stay out of both.
+## The three stages (stability)
 
-## When a gate earns its place
+| Stage | Question | Runs | Budget | Enforced by |
+|---|---|---|---|---|
+| pre-push | Would this push break whoever pulls or installs now? | tier 0 invariants on consumer-facing files, scoped to the pushed paths | 30 s total, 10 s per check; 0 s when no scope matched | an opt-in Git pre-push hook per clone |
+| pre-merge | Does this change work before it joins the trunk? | tiers 0 to 2 for the changed areas; a tier 3 or 4 smoke only when its scope changed | 5 min total, 2 min per check | the agent, before the push that carries a ticket's code, citing the output at `tkt close` |
+| pre-release | Does the release work where users run it? | every check in every stage, plus the release artifact on every OS, real installs, simulators and devices | none; once per release | the `release` skill, as receipts |
 
-All four hold:
+A check not run is "not run", never a pass. Agent and LLM reviews take minutes and vary run to
+run: they run on demand at pre-merge, never in a Git hook.
 
-1. **Key area**: a failure there is costly or surfaces late (release manifest, save or wire
-   format, schema, public API, generated index).
-2. **Observed**: the failure has happened, not just could.
-3. **Mechanical**: a deterministic check catches it with no judgement.
-4. **In budget**: measured on a typical change, it fits the stage's budget with the gates
-   already there.
+**Pre-commit is not a stage.** On trunk a commit integrates only when pushed, so pre-push judges
+everything a pre-commit check could. A Git pre-commit hook fires on every `tkt new`, `claim` and
+`close` and judges a staged index that can hold another session's work. A project may keep one
+only as formatter tooling: it fixes staged files in about a second, never blocks, and sits outside
+`gates.json`.
 
-Anything else is a linter rule or a check script the agent runs on demand, listed in the
-project's `AGENTS.md` test commands.
+## Admitting a check
 
-## Each gate declares
+A check enters a stage only with all of:
 
-- **Scope**: the paths it watches. With none changed it exits 0 at once.
-- **Catches**: the one failure it exists for.
-- **Command** and **measured time**, with the date measured.
+1. **Catches** one named failure that has happened, often enough to earn its time.
+2. **Scope**: repo-relative path prefixes (`assets/saves/`, `scripts/deploy`). Out of scope, it does
+   not run. Dependency pins and the gate's own files go in `full_triggers`, which run the whole stage.
+3. **Measured** on this host, dated, inside the stage budget.
+4. **Bounded by the runner**: the runner owns the timeout and kills the process tree; stdin closed,
+   `CI=true`, a fresh temp dir. Killed is `timeout`; a missing tool is `infrastructure error`;
+   neither is a pass.
+5. **Cannot prompt**: no stdin reads, OS trash or credential prompts.
+6. **Green on every supported host**, or skipped there with a stated reason. Quarantine a flaky check
+   with a ticket naming the stage it returns to; never retry to green.
 
-Record these in a header comment in the Git hook and in the `AGENTS.md` test commands.
+Over budget moves a check one stage later; budgets are never raised. A check that catches nothing
+over three releases moves later too. Docs, tickets and art match no scope and run nothing.
 
-## Over budget
+## Manifest and runner
 
-Move it one stage later (pre-commit, pre-push, release), else remove it. A test is not
-critical enough for a Git hook unless its failure would publish something broken to consumers.
-Re-time the Git hook whenever a gate is added, and whenever a commit or push feels slow. A gate over budget, without a
-scope, or guarding a failure no longer seen is a finding for `retro` and `conformance-audit`.
+grey-matter keeps the reference files: [`scripts/gate.mjs`](../../scripts/gate.mjs) (version line at
+the top), [`scripts/gates.json`](../../scripts/gates.json) and
+[`.githooks/pre-push`](../../.githooks/pre-push). A stability project **vendors** copies: it commits
+its own `gate.mjs`, `.githooks/pre-push` and `gates.json`, so its checks change only when it commits
+a change. A clone opts in with `git config core.hooksPath .githooks`; there is no installer. A
+project already using lefthook, husky or pre-commit adds a pre-push job to that manager instead, since
+`core.hooksPath` replaces the whole Git hook directory; lefthook needs `use_stdin: true` or it hangs.
+`conformance-audit` reports a vendored `gate.mjs` behind the reference version and offers the update;
+nothing applies it automatically.
+
+A worked example, shaped on ticket 152: tagalog-helper's Git pre-commit hook ran 32 stages on every
+commit, docs and tickets included, for 6 to 8 minutes, about 250 s of it native suites that matter
+only when persistence code changes. Its areas (decks, the mirrored engine, native persistence) map
+onto checks like these; the paths, commands and times are illustrative, not its real values:
+
+```json
+{
+  "full_triggers": ["requirements.txt", "package-lock.json", "scripts/gates.json", "scripts/gate.mjs"],
+  "checks": [
+    { "id": "deck-schema", "stage": "pre-push", "catches": "a deck file that no longer parses, so the app crashes on load",
+      "scope": ["decks/"], "run": ["python", "scripts/check_decks.py"], "timeout_s": 10,
+      "measured": { "s": 0.8, "date": "2026-10-31", "host": "mac" } },
+    { "id": "engine", "stage": "pre-merge", "catches": "the Python and TypeScript scheduling engines disagreeing",
+      "scope": ["engine/", "web/src/engine/"], "run": ["python", "-m", "pytest", "tests/engine", "-q"], "timeout_s": 120,
+      "measured": { "s": 21, "date": "2026-10-31", "host": "mac" } },
+    { "id": "native-persistence", "stage": "pre-merge", "catches": "a Swift persistence change that loses saved progress",
+      "scope": ["ios/Persistence/"], "run": ["python", "-m", "pytest", "tests/native", "-q"], "timeout_s": 120,
+      "measured": { "s": 95, "date": "2026-10-31", "host": "mac" } }
+  ]
+}
+```
+
+A docs or ticket push then runs nothing (tagalog-helper's own scoped fix brought docs commits to
+0.3 s), and the native suites run only when persistence code changes.
+
+## Hosted CI
+
+Only when the user explicitly asks, or for a need no local machine meets: an OS the owner has no
+machine for, a clean-machine check before release, contributors outside the trusted circle, or
+signed provenance. Prefer manual dispatch; never on every push.
+
+## Scratch from checks
+
+The runner gives each check a fresh temp dir and removes it. A check or test that keeps run
+directories, screenshots or simulator builds follows
+[repository-artifact-hygiene](../../skills/meta/repository-artifact-hygiene/SKILL.md#while-you-work):
+keep the latest three, never every run.
+
+## Changing a gate is a reversible tooling change
+
+Adding, scoping, moving or removing a check is reversible: the owner's decision closes the
+discussion. Don't open pilot, ledger or decision tickets for it, and don't run multi-stage evidence
+on it; tagalog-helper stalled five tickets deep on a change that took one commit. Reserve heavy
+evidence for user data, acceptance and release risk. Other skills point here rather than restate it.
+
+## Findings
+
+For `retro` and `conformance-audit`, each needs judgment, never an automatic fix:
+
+- a Git hook or check over its stage budget, without a scope, or guarding a failure no longer seen;
+- a blocking Git pre-commit hook, or one that runs a full suite;
+- an agent hook used as a gate, including one shipped in a plugin;
+- hosted CI on every push or pull request without one of the needs above;
+- a vendored `gate.mjs` behind the reference version;
+- a missing `Verification phase` line, or stability-phase checks in a speed project;
+- verification scratch that keeps every run.

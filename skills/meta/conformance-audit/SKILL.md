@@ -71,9 +71,11 @@ When unsure which tier, it is needs-judgment. The safe tier is for the genuinely
    target without writing: its errors join the safe tier, its judgment findings the needs-judgment tier.
    A repo `AGENTS.md` with no test commands by tier (the
    [test-environment ladder](../../../docs/agents/test-environment-ladder.md)) is needs-judgment:
-   naming the commands takes the project's intent. Time each Git hook and read hosted CI
-   triggers against [local gates](../../../docs/agents/local-gates.md): a hook over budget or
-   without a scope, or CI on every push, is needs-judgment.
+   naming the commands takes the project's intent. Read the `Verification phase:` line, time
+   each Git hook and read hosted CI triggers against
+   [local gates](../../../docs/agents/local-gates.md); each item in its Findings list is
+   needs-judgment. Compare a vendored `gate.mjs` version line with grey-matter's
+   `scripts/gate.mjs` and offer the update; never apply it unasked.
 4. **Docs & organization** — `README.md` currency, `docs/` layout, relative links, stale or duplicate
    docs.
 

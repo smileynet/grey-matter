@@ -19,7 +19,7 @@ art](research/agent-test-tiering-prior-art-20261031.md). Decided in [proposal
 |---|---|---|---|---|
 | 0. Static | typecheck, lint, format, parse/import | seconds, no runtime | ill-typed code, banned patterns, broken links, config syntax | every slice |
 | 1. Logic | one process, no I/O: unit tests, a seeded simulation step, golden output | milliseconds per test | logic and edge cases; regressions pinned from higher tiers | every slice, affected tests |
-| 2. Headless | one machine: real filesystem, database, subprocess, `godot --headless`, Unreal automation with NullRHI | seconds per test | seam and contract errors, fakes that drift from the real thing, save/load, config wiring | affected set before commit; full set before merge |
+| 2. Headless | one machine: real filesystem, database, subprocess, `godot --headless`, Unreal automation with NullRHI | seconds per test | seam and contract errors, fakes that drift from the real thing, save/load, config wiring | affected set before pushing finished work; full set at pre-merge |
 | 3. Rendered | a real browser engine; an engine scene with a display and injected input | seconds to tens of seconds; flake-prone | layout, real DOM and event timing, input handling | affected critical flows before merge |
 | 4. Simulator | iOS Simulator, Android emulator | tens of seconds to minutes; boot cost; 1.4 to 1.9 GiB per Android system image | OS integration, lifecycle, permissions, platform APIs across versions | smoke before merge when platform code changed; matrix before release |
 | 5. Device | physical hardware, a device farm, a packaged build | minutes; scarce hardware or farm fees; often a human | real GPU, performance and memory, input feel and frame pacing, sensors, install and store builds | before release; on demand when no lower tier reproduces |
@@ -43,7 +43,7 @@ much of what would otherwise need tiers 4 and 5. Build that seam first; see `gam
 
 A check stays in the every-slice loop while it is fast (tiers 0 and 1 for the affected code within
 about a minute), deterministic and local. Split or select the tests rather than skipping them.
-Move a check to before commit, merge or release when it is slow, flaky (Google's 2017 data: 25.5%
+Move a check to pre-merge or pre-release when it is slow, flaky (Google's 2017 data: 25.5%
 of Android emulator tests flaky, against 1.65% of all tests), costly, or needs fidelity a lower
 tier lacks. Move it back once it is made deterministic. Device tests only nightly is the
 anti-pattern Android names: run a device smoke before release, not only overnight.
@@ -60,7 +60,7 @@ enforces only a small, budgeted subset ([proposal 18](proposals/18-three-stage-v
 ## Projects declare their commands
 
 The ladder runs only if a project names its commands. A project's `AGENTS.md` lists them by tier:
-at least the single-test command, the pre-merge check, and the slow tier with the environment it needs.
+at least the single-test command, the `check` command (speed) or `gate.mjs` stages (stability), and the slow tier with the environment it needs.
 `init-project` writes that list; `conformance-audit` reports its absence.
 
 ## Footprint

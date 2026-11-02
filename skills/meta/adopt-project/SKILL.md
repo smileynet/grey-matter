@@ -153,7 +153,7 @@ to an existing `AGENTS.md`), and the consistency checks. It runs *after* reconci
 safe, so it fills real gaps rather than bailing on a non-empty repo.
 
 Then the hygiene wiring from Step 1 ([references/repo-hygiene.md](references/repo-hygiene.md)):
-the approved artifact storage plan (current tree only, preserving hook ownership), untrack
+the approved artifact storage plan (current tree only, preserving Git hook ownership), untrack
 sensitive content, and complete the `.references/` index with a clone command per entry.
 
 - **subsume-semantics:** the replacement supersedes the incumbent plumbing; never `tkt init` beside a

@@ -11,7 +11,7 @@ to the existing adoption gate and apply only the authorized storage changes in
 Step 5. Binary presence is a review signal, not an automatic LFS recommendation.
 
 When the approved plan selects LFS, preserve existing/foreign hooks while
-installing its upload hook, convert only the selected current paths, and document
+installing its upload Git hook, convert only the selected current paths, and document
 the client's retrieval setup. Adoption does not rewrite existing history. Use the
 classification workflow's empty-cache current/historical hash and build checks;
 upload progress or one file's MIME type alone is insufficient recovery evidence.

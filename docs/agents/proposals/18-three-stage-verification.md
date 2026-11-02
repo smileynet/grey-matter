@@ -230,6 +230,9 @@ the vendored `gate.mjs` version line with the reference and offer the update. tk
    `gates.json` and, on the owner's opt-in, runs `git config core.hooksPath .githooks`;
    `conformance-audit` reports a vendored `gate.mjs` behind the reference version, and flags unbounded Git hooks, plugin agent hooks used as gates, hosted CI on every push, and
    unbounded scratch; `retro` points at it; lefthook consumers get the `use_stdin` note (152).
+   Done 2026-11-01: `local-gates.md` rewritten (phases, stages, admission, vendoring, a worked
+   example, hosted CI, the reversible-tooling rule from 152, the findings list); the global rule,
+   `init-project`, `conformance-audit`, `retro`, `wrap-session` and the ladder follow it.
 
 ## Ticket disposition
 
