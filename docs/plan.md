@@ -160,7 +160,7 @@ their release dispositions; this table does not clear any blocker.
 
 ## Additional tracked work (reconciled 2026-11-01)
 
-Verification #137/#152/#176–178 retains its Windows chat owner. Orchestration follow-ups retain their separate chat. This ID-ordered inventory adds missing rows without changing approved release scope; dependencies remain authoritative. See [chat ownership and integration handoff](agents/handoffs/2026-11-01-chat-cleanup.md).
+The Windows chat retains ownership of verification tickets #137, #152, and #176–178. Orchestration follow-ups retain their separate chat. This ID-ordered inventory adds missing rows without changing approved release scope; dependencies remain authoritative. See [chat ownership and integration handoff](agents/handoffs/2026-11-01-chat-cleanup.md).
 
 | ID | Work | Status |
 | --- | --- | --- |

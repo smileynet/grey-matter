@@ -12,7 +12,7 @@ Snapshot from direct chat reads and local Git inspection. Recheck Git before res
 
 ## Integration trace
 
-Mac main began clean, diverged with three local commits. Upstream had independently allocated 164/165. `tkt rebase` moved the local requests to 180/181; Git rebase retained the #152 unrelated-hook-failure addendum while preserving upstream's replacement gate command and progress notes. Original commits: e041d09, b2c4bb4, bd11e83. #181's stub body was completed from its existing validation criteria. No request was discarded.
+Mac main began clean, diverged with three local commits. Upstream had independently allocated 164/165. `tkt rebase` moved the local requests to 180/181; Git rebase retained the  #152 addendum about unrelated hook failures while preserving upstream's replacement gate command and progress notes. Original commits: e041d09, b2c4bb4, bd11e83. #181's stub body was completed from its existing validation criteria. No request was discarded.
 
 Plan status drift and missing open-ticket rows were reconciled without expanding release authorization.
 
@@ -20,9 +20,13 @@ Plan status drift and missing open-ticket rows were reconciled without expanding
 
 All six registered Mac worktrees were clean at inspection. No worktree, branch, simulator, or scratch payload was deleted.
 
-- `agent-footprint-guardrails` and the Kilo detached worktree have no patch-unique commits against upstream.
+- `agent-footprint-guardrails` and the Kilo detached worktree have no commits whose patches are absent from upstream.
 - `footprint-addendum-20261031` at bad784d and detached gm-push at d5e02bb contain the same unique proposal-16 addendum and additions to now-closed #110. They remain intact: the originating owner is unknown, and the closed-ticket contract prevents silently widening #110. A future owner should preserve the proposal evidence and file any unmet implementation requirements as a new ticket before integration. Neither is classified as disposable.
 - `codex/release-grey-matter-0.2.0-d9978415` at e071b7b is a frozen release candidate explicitly retained by docs/plan.md. Its version/changelog changes must not merge into live main as ordinary cleanup.
 - Ticket #179's checkout is outside this worktree inventory and was not touched.
 
 Coverage: active Codex history inventories were read for local, both listed Windows hosts, and randomserver; relevant grey-matter message histories were read. Other projects and archived history were not changed. Historical completion claims were checked against upstream ticket states and commits; their product tests were not rerun by this coordination task.
+
+## Local verification limits
+
+The legacy `.git/hooks/pre-push` called retired `check-repo.mjs`; this clone now opts into committed `.githooks` as documented. The current pre-push stage passes doc-links but fails home-path on existing research evidence outside this change. Integration uses documented `SKIP=home-path`, leaving those historical receipts unchanged. `tkt validate --brief` passes with seven existing closed-ticket warnings; #179 temporarily added a stub warning while its owner was publishing. Plan synchronization passes with zero findings.
