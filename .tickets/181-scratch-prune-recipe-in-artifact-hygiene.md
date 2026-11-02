@@ -5,10 +5,12 @@ status: in_progress
 blocked_by: []
 priority: low
 validation_criteria:
-  - "The skill's scratch section gives a dry-run, citation-match, promote-small-final-artefact, repoint, apply sequence"
-  - "It says citations in done tickets and generated dashboard data files count as durable references"
-  - "It says whole run directories, raw xcresults and sqlite snapshots are never promoted"
-tags: ["stream:tooling", "type:chore"]
+  - "The recipe states the dry-run, citation-match, compact promotion, repoint and apply sequence."
+  - "Done-ticket citations and generated dashboard data count as durable references."
+  - "Whole run directories, raw xcresults and sqlite snapshots are excluded from ordinary tracked proof promotion."
+  - "The recipe distinguishes tracked summaries from protected necessary raw originals and requires recovery/disposition before local removal."
+  - "Missing citations or an ended ticket are review signals, not proof that unknown source/private artifacts are disposable."
+tags: ["stream:test-verification", "type:chore"]
 ---
 
 # Add a scratch-prune recipe to repository-artifact-hygiene
@@ -25,7 +27,7 @@ Extend `skills/meta/repository-artifact-hygiene/SKILL.md` with a scratch-prune r
 
 - [ ] The recipe states the dry-run → citation-match → promote → repoint → apply sequence.
 - [ ] Done-ticket citations and generated dashboard data count as durable references.
-- [ ] Whole run directories, raw xcresults and sqlite snapshots are excluded from promotion.
+- [ ] Whole run directories, raw xcresults and sqlite snapshots are excluded from ordinary tracked proof promotion.
 
 ## Portable preservation follow-up (2026-11-02)
 
@@ -33,3 +35,11 @@ Sam approved refining this ticket after the Philippines storage review. Excludin
 
 - [ ] The recipe distinguishes tracked summaries from protected necessary raw originals and requires recovery/disposition before their local removal.
 - [ ] Missing citations or an ended ticket are review signals rather than proof that unknown source/private artifacts are disposable.
+
+## Execution pickup 2026-11-02
+
+The user asked this session to proceed with related work. After #183's canonical retention
+rule landed, this small recipe follow-up moved to stream:test-verification. Validation fields
+mirror the existing five acceptance checks, with raw-promotion wording clarified by the user's
+portable preservation refinement above. Existing dependencies are unchanged. The change is
+guidance only; no live prune, source-data operation or new approval executor is authorized.

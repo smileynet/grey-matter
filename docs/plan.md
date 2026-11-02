@@ -103,19 +103,19 @@ manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 2
 ## Test optimization and verification
 
 Reconciled 2026-11-02 at the user's request. Scope: `stream:test-verification`.
-7 unfinished tickets (1 open, 3 in progress, 3 deferred) and 21 completed tickets. This stream excludes orchestration and dashboard
+6 unfinished tickets (1 open, 2 in progress, 3 deferred) and 23 completed tickets. This stream excludes orchestration and dashboard
 feature work; #116 covers only the evidence/current-summary contract. Existing release
 authorization and frozen candidate scope are unchanged.
 
 The order below is the session's chosen execution policy, not new dependency edges. All
-existing blocked_by values are preserved. In progress: #182 and #183 and #195; all other actionable work is assigned. Pursue #122 only when a useful
+existing blocked_by values are preserved. In progress: #182 and #181; all other actionable work is assigned. Pursue #122 only when a useful
 failure is captured. macOS work needs a Mac; WSL and destructive footprint probes need a
 suitable owned environment. No host-only criterion is satisfied by a Windows fixture pass.
 
 On the installed tkt 0.4.0, tag-context queries also include untagged tickets. Exact stream
-membership is the 28 rows below; an untagged result does not add a ticket to this plan.
-All 28 tickets carry the stream tag. #182/#183 continue the related footprint-growth and
-retention-ownership work after #184. #192 captures the remaining cloud-placeholder observation
+membership is the 29 rows below; an untagged result does not add a ticket to this plan.
+All 29 tickets carry the stream tag. #181/#182/#183 continue the related pruning guidance,
+footprint-growth and retention-ownership work after #184. #192 captures the remaining cloud-placeholder observation
 per #132's handled-or-filed criterion, with no false dependency between them. Initial
 reconciliation mirrored existing acceptance checklists into validation fields; metadata edits
 alone establish no implementation pass. Native status and per-ticket evidence govern completion.
@@ -144,8 +144,9 @@ none of this establishes rendered UI acceptance.
 | 133 | 7. WSL 2 backing-volume and reclaim validation | ✅ done |
 | 184 | 8. Revalidate preservation state before cleanup recommendations | ✅ done |
 | 182 | 9. Bounded external footprint growth, regrowth and free-space trends | in_progress |
-| 183 | 9. Retention ownership across handoffs and policy conflicts | in_progress |
-| 195 | 10. Distinguish CLI slash arguments from missing-skill references | in_progress |
+| 183 | 9. Retention ownership across handoffs and policy conflicts | ✅ done |
+| 181 | 9. Preservation-first scratch-prune recipe | in_progress |
+| 195 | 10. Distinguish CLI slash arguments from missing-skill references | ✅ done |
 | 175 | 8. macOS inspector/lsof hang diagnosis | backlog |
 | 131 | 8. macOS/APFS footprint validation | backlog |
 | 122 | Throughout: diagnose a captured deployer failure; 20-run criterion already met | open |
@@ -397,8 +398,8 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 166 | Refresh harnesses.md to the installed harness versions (first harness-changelog review) | open |
 | 179 | Implement inter-harness session messaging and wakeups | open |
 | 180 | Review philippines-trip's worktree rules and audit script for adoption | open |
-| 181 | Add a scratch-prune recipe to repository-artifact-hygiene | open |
+| 181 | Add a scratch-prune recipe to repository-artifact-hygiene | in_progress |
 | 182 | Detect footprint growth outside repository scratch | in_progress |
-| 183 | Preserve artifact ownership across agent handoffs | in_progress |
+| 183 | Preserve artifact ownership across agent handoffs | ✅ done |
 | 184 | Revalidate preservation state before cleanup recommendations | ✅ done |
 | 191 | Dashboard: orchestration findings and expandable ticket flow in two tabs | ✅ done |
