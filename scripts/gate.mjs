@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// gate.mjs reference version 2 (grey-matter proposal 18). Projects vendor this file; keep this
+// gate.mjs reference version 3 (grey-matter proposal 18). Projects vendor this file; keep this
 // line so conformance-audit can report drift from the reference.
 //
 // Runs the checks that scripts/gates.json declares for one stage, selected by changed paths.
@@ -7,16 +7,17 @@
 // timeout as "ok", so only killing the process tree from outside bounds a check.
 //
 // Usage: node scripts/gate.mjs <pre-push|pre-merge|pre-release> [--stdin --remote NAME]
-//                              [--base REF] [--include ID]... [--manifest PATH]
+//                              [--base REF] [--include ID]... [--manifest PATH] [--record]
 //   --stdin   read Git pre-push lines (<local ref> <local sha> <remote ref> <remote sha>).
 //   --base    pre-merge range start; default: merge-base of HEAD with origin/main.
 //   pre-release runs every check in every stage, whatever changed.
 //   SKIP=id,id  skip named checks; they are reported, never silent.
+//   --record  update only passed checks' measured objects, preserving other manifest bytes.
 // Checks run in a detached worktree of the commit being judged (each pushed tip, else HEAD), so
 // uncommitted files, including another session's in a shared checkout, never pass or block them.
 // Exit: 0 every selected check passed; 1 a check failed, timed out or could not run; 2 usage.
 import { spawn, spawnSync } from "node:child_process";
-import { existsSync, lstatSync, mkdtempSync, readFileSync, rmSync, symlinkSync, unlinkSync } from "node:fs";
+import { existsSync, lstatSync, mkdtempSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
@@ -24,7 +25,7 @@ const STAGES = ["pre-push", "pre-merge", "pre-release"];
 const ZERO = /^0+$/;
 
 function usage(message) {
-  console.error(`gate: ${message}\nusage: node scripts/gate.mjs <${STAGES.join("|")}> [--stdin --remote NAME] [--base REF] [--include ID]... [--manifest PATH]`);
+  console.error(`gate: ${message}\nusage: node scripts/gate.mjs <${STAGES.join("|")}> [--stdin --remote NAME] [--base REF] [--include ID]... [--manifest PATH] [--record]`);
   process.exit(2);
 }
 
@@ -34,6 +35,7 @@ for (let i = 0; i < argv.length; i++) {
   const arg = argv[i];
   if (STAGES.includes(arg) && !opts.stage) opts.stage = arg;
   else if (arg === "--stdin") opts.stdin = true;
+  else if (arg === "--record") opts.record = true;
   else if (["--remote", "--base", "--manifest", "--include"].includes(arg)) {
     if (i + 1 >= argv.length) usage(`${arg} needs a value`);
     if (arg === "--include") opts.include.push(argv[++i]);
@@ -41,6 +43,8 @@ for (let i = 0; i < argv.length; i++) {
   } else usage(`unknown argument ${arg}`);
 }
 if (!opts.stage) usage("a stage is required");
+const recordHosts = { win32: "win", darwin: "mac", linux: "linux" };
+if (opts.record && !recordHosts[process.platform]) usage("--record supports Windows, macOS and Linux");
 
 function git(...args) {
   const r = spawnSync("git", args, { cwd: ROOT, encoding: "utf8" });
@@ -51,8 +55,13 @@ const ROOT = spawnSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf
 
 // The manifest is project-authored input: reject a malformed one rather than guess.
 function loadManifest(path) {
-  let data;
-  try { data = JSON.parse(readFileSync(path, "utf8")); } catch (error) { usage(`cannot read ${path}: ${error.message}`); }
+  let data, source;
+  try {
+    const bytes = readFileSync(path);
+    source = bytes.toString("utf8");
+    if (opts.record && !Buffer.from(source, "utf8").equals(bytes)) usage("--record requires a UTF-8 manifest");
+    data = JSON.parse(source);
+  } catch (error) { usage(`cannot read ${path}: ${error.message}`); }
   if (!Array.isArray(data?.checks)) usage(`${path}: "checks" must be an array`);
   const ids = new Set();
   for (const c of data.checks) {
@@ -65,7 +74,54 @@ function loadManifest(path) {
     if (!(c.timeout_s > 0)) usage(`${where}: "timeout_s" must be a positive number`);
     if (!c.always && (!Array.isArray(c.scope) || !c.scope.length)) usage(`${where}: give "scope" paths or "always": true`);
   }
-  return { checks: data.checks, fullTriggers: data.full_triggers ?? [] };
+  return { checks: data.checks, fullTriggers: data.full_triggers ?? [], source };
+}
+
+function recordMeasurements(file, source, measurements) {
+  // JSON is already validated. Retain value spans so formatting and unrelated fields survive.
+  const tokens = [...source.matchAll(/"(?:\\.|[^"\\])*"|[{}\[\]:,]|[^\s{}\[\]:,]+/g)];
+  let cursor = 0;
+  function value() {
+    const token = tokens[cursor++], node = { start: token.index, end: token.index + token[0].length };
+    if (token[0] === "{") {
+      node.members = new Map();
+      while (tokens[cursor][0] !== "}") {
+        const key = JSON.parse(tokens[cursor++][0]);
+        cursor++;
+        node.members.set(key, value());
+        if (tokens[cursor][0] === ",") cursor++;
+      }
+      node.end = tokens[cursor++].index + 1;
+    } else if (token[0] === "[") {
+      node.items = [];
+      while (tokens[cursor][0] !== "]") {
+        node.items.push(value());
+        if (tokens[cursor][0] === ",") cursor++;
+      }
+      node.end = tokens[cursor++].index + 1;
+    }
+    return node;
+  }
+  const nodes = value().members.get("checks").items;
+  const now = new Date(), date = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, "0"), String(now.getDate()).padStart(2, "0")].join("-");
+  const edits = [];
+  for (const [index, node] of nodes.entries()) {
+    const seconds = measurements.get(checks[index].id);
+    if (seconds === undefined || seconds === null) continue;
+    const text = `{ "s": ${seconds.toFixed(1)}, "date": "${date}", "host": "${recordHosts[process.platform]}" }`;
+    const span = node.members.get("measured");
+    if (span) edits.push({ ...span, text });
+    else {
+      const end = [...node.members.values()].at(-1).end;
+      edits.push({ start: end, end, text: `, "measured": ${text}` });
+    }
+  }
+  if (!edits.length) return 0;
+  if (!readFileSync(file).equals(Buffer.from(source, "utf8"))) throw new Error("manifest changed during the run; measurements were not written");
+  let updated = source;
+  for (const edit of edits.sort((a, b) => b.start - a.start)) updated = updated.slice(0, edit.start) + edit.text + updated.slice(edit.end);
+  writeFileSync(file, updated);
+  return edits.length;
 }
 
 // Paths changed by what is being published; null when the range cannot be known, which selects
@@ -120,7 +176,7 @@ function runCheck(check, cwd) {
   return new Promise((done) => {
     const temp = mkdtempSync(join(tmpdir(), "gate-"));
     const env = { ...process.env, CI: "true", GIT_TERMINAL_PROMPT: "0", TMPDIR: temp, TEMP: temp, TMP: temp };
-    const started = Date.now();
+    const started = performance.now();
     const [cmd, ...args] = check.run;
     const child = spawn(cmd === "node" ? process.execPath : cmd, args, {
       cwd, env, stdio: ["ignore", "pipe", "pipe"], detached: process.platform !== "win32", windowsHide: true,
@@ -137,7 +193,7 @@ function runCheck(check, cwd) {
         output += `\nTemporary directory cleanup failed; retained ${temp}: ${error.message}`;
         if (outcome === "pass") outcome = "infrastructure error";
       }
-      done({ outcome, seconds: (Date.now() - started) / 1000, output });
+      done({ outcome, seconds: (performance.now() - started) / 1000, output });
     };
     child.on("error", (error) => { output += error.message; finish("infrastructure error"); });
     child.on("exit", (code) => finish(timedOut ? "timeout" : code === 0 ? "pass" : "fail"));
@@ -150,7 +206,8 @@ async function readStdin() {
   return text;
 }
 
-const { checks, fullTriggers } = loadManifest(resolve(ROOT, opts.manifest ?? "scripts/gates.json"));
+const manifestFile = resolve(ROOT, opts.manifest ?? "scripts/gates.json");
+const { checks, fullTriggers, source: manifestSource } = loadManifest(manifestFile);
 const unknown = opts.include.filter((id) => !checks.some((c) => c.id === id));
 if (unknown.length) usage(`--include names no check: ${unknown.join(", ")}`);
 
@@ -174,6 +231,7 @@ if (!selected.length && git("status", "--porcelain")?.length) {
   console.log("gate: uncommitted changes were not checked; this run judges committed changes only.");
 }
 let failed = 0;
+const measurements = new Map();
 const toRun = selected.filter((c) => !skip.has(c.id));
 for (const check of selected.filter((c) => skip.has(c.id))) console.log(`  [skip]           ${check.id}: skipped (SKIP)`);
 for (const tip of toRun.length ? tips : []) {
@@ -182,6 +240,10 @@ for (const tip of toRun.length ? tips : []) {
     for (const check of toRun) {
       const r = await runCheck(check, cwd);
       const ok = r.outcome === "pass";
+      if (opts.record) {
+        const previous = measurements.get(check.id);
+        measurements.set(check.id, !ok || previous === null ? null : Math.max(previous ?? 0, r.seconds));
+      }
       if (!ok) failed++;
       const slow = check.measured?.s && r.seconds > 2 * check.measured.s + 1 ? ` (measured ${check.measured.s}s on ${check.measured.date})` : "";
       console.log(`  [${ok ? "ok  " : "FAIL"}] ${r.seconds.toFixed(1).padStart(6)}s  ${check.id}${ok ? "" : `: ${r.outcome}`}${slow}`);
@@ -189,5 +251,10 @@ for (const tip of toRun.length ? tips : []) {
     }
   });
 }
+let recordFailed = false;
+if (opts.record) {
+  try { console.log(`gate: recorded ${recordMeasurements(manifestFile, manifestSource, measurements)} passed check measurement(s)`); }
+  catch (error) { recordFailed = true; console.error(`gate: measurements not recorded (infrastructure error): ${error.message}`); }
+}
 if (failed) console.error(`gate ${opts.stage}: ${failed} check(s) did not pass. Fix them, or skip one knowingly with SKIP=<id>.`);
-process.exit(failed ? 1 : 0);
+process.exit(failed || recordFailed ? 1 : 0);

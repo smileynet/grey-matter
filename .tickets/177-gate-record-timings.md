@@ -1,8 +1,12 @@
 ---
 id: "177"
 title: "gate.mjs --record writes measured timings into gates.json"
-status: open
+status: in_progress
 blocked_by: []
+validation_criteria:
+  - "--record updates only measurements for passed checks, to 0.1 seconds with the local date and supported host name, preserving other bytes."
+  - "Failed, skipped and timed-out checks retain their old measurements."
+  - "Gate CLI regression fixtures cover recording and node scripts/gate.mjs pre-merge passes."
 tags: ["stream:tooling"]
 ---
 # gate.mjs --record writes measured timings into gates.json
@@ -26,3 +30,10 @@ way to write it. Keep the file's formatting: replace only each recorded check's 
       `win`/`mac`/`linux`) for each check that passed in that run, and leaves every other byte unchanged.
 - [ ] A failed, skipped or timed-out check keeps its old `measured`.
 - [ ] `scripts/gate.test.mjs` covers both; `node scripts/gate.mjs pre-merge` passes.
+
+## Local preparation 2026-11-02
+
+Reserved by the test-optimization chat. Native `tkt claim` auto-pushes this branch, which currently
+contains unverified #137/#176 changes. The local lifecycle edit avoids publishing them while required
+gates are timing out under host memory pressure. Publish the claim with the verified work; do not close
+until the required checks pass.

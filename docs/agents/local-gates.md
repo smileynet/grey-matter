@@ -62,6 +62,13 @@ A check enters a stage only with all of:
 6. **Green on every supported host**, or skipped there with a stated reason. Quarantine a flaky check
    with a ticket naming the stage it returns to; never retry to green.
 
+Commit the candidate first, then refresh selected timings with
+`node scripts/gate.mjs pre-merge --base <start-ref> --record`. It updates passed checks' `measured`
+objects with seconds rounded to 0.1, the local calendar date and `win`/`mac`/`linux`, preserving
+other UTF-8 manifest bytes. Failed, skipped and timed-out checks retain their previous measurements.
+For multiple pushed tips, a check records its largest duration only when every checked tip passes.
+Detected manifest edits during the run leave the newer file untouched and make recording fail.
+
 Over budget moves a check one stage later; budgets are never raised. A check that catches nothing
 over three releases moves later too. Docs, tickets and art match no scope and run nothing.
 

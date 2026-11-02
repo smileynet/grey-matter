@@ -235,3 +235,97 @@ test("checks judge the committed tree, never uncommitted edits, and keep node_mo
   const dirty = commit("a/x", "dirty\n");
   assert.equal(run(["pre-push", "--stdin", "--remote", "origin"], { input: push(dirty, head) }).status, 1, "a committed defect still fails");
 }));
+
+test("--record updates passed measurements without changing other manifest bytes", () => {
+  const old = { s: 999, date: "2000-01-01", host: "linux" };
+  fixture([check("recorded", ["a/"], pass, { measured: old })], ({ git, commit, run, push, base }) => {
+    const file = join(git("rev-parse", "--show-toplevel"), "scripts/gates.json");
+    const oldLiteral = '{ "s": 999, "date": "2000-01-01", "host": "linux" }';
+    const definition = JSON.stringify(JSON.parse(readFileSync(file, "utf8")).checks[0])
+      .replace(JSON.stringify(old), oldLiteral).replace('"measured":', '"measured": ');
+    const before = `{\r\n   "notes": ${JSON.stringify('Ω, literal braces { } and escaped "measured"')},\r\n   "checks": [${definition}]\r\n}\r\n`;
+    writeFileSync(file, before);
+    const head = commit("a/x"), started = new Date();
+    const result = run(["pre-push", "--stdin", "--record"], { input: push(head, base) });
+    assert.equal(result.status, 0, result.out);
+    const after = readFileSync(file, "utf8"), measured = JSON.parse(after).checks[0].measured;
+    assert.notDeepEqual(measured, old);
+    assert.equal(Math.round(measured.s * 10) / 10, measured.s);
+    const dates = [started, new Date()].map((date) => new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10));
+    assert.ok(dates.includes(measured.date));
+    assert.equal(measured.host, { win32: "win", darwin: "mac", linux: "linux" }[process.platform]);
+    const literal = /"measured": (\{[^}]*\})/.exec(after)[1];
+    assert.equal(after.replace(literal, oldLiteral), before);
+  });
+});
+
+test("--record keeps failed, skipped and timed-out measurements", () => {
+  const old = { s: 999, date: "2000-01-01", host: "linux" };
+  fixture([
+    check("passed", ["a/"], pass, { measured: old }),
+    check("failed", ["a/"], "process.exit(7)", { measured: old }),
+    check("timed", ["a/"], "setInterval(() => {}, 1000)", { measured: old, timeout_s: 0.1 }),
+    check("skipped", ["a/"], "process.exit(9)", { measured: old }),
+  ], ({ git, commit, run, push, base }) => {
+    const file = join(git("rev-parse", "--show-toplevel"), "scripts/gates.json");
+    const before = readFileSync(file, "utf8");
+    const result = run(["pre-push", "--stdin", "--record"], { input: push(commit("a/x"), base), env: { SKIP: "skipped" } });
+    assert.equal(result.status, 1, result.out);
+    assert.match(result.out, /failed: fail/);
+    assert.match(result.out, /timed: timeout/);
+    assert.match(result.out, /skipped: skipped \(SKIP\)/);
+    assert.match(result.out, /recorded 1 passed check/);
+    const after = readFileSync(file, "utf8"), checks = JSON.parse(after).checks;
+    assert.notDeepEqual(checks[0].measured, old);
+    for (const check of checks.slice(1)) assert.deepEqual(check.measured, old);
+    const literal = /"measured":(\{[^}]*\})/.exec(after)[1];
+    assert.equal(after.replace(literal, JSON.stringify(old)), before);
+  });
+});
+
+test("--record adds an absent measurement without rewriting the surrounding JSON", () => fixture([check("new", ["a/"])], ({ git, commit, run, push, base }) => {
+  const file = join(git("rev-parse", "--show-toplevel"), "scripts/gates.json"), before = readFileSync(file, "utf8");
+  const result = run(["pre-push", "--stdin", "--record"], { input: push(commit("a/x"), base) });
+  assert.equal(result.status, 0, result.out);
+  const after = readFileSync(file, "utf8");
+  assert.equal(typeof JSON.parse(after).checks[0].measured.s, "number");
+  assert.equal(after.replace(/,\s*"measured"\s*:\s*\{[^}]*\}/, ""), before);
+}));
+
+test("--record does not replace a measurement when a pushed tip failed before another passed", () => {
+  const old = { s: 999, date: "2000-01-01", host: "linux" };
+  fixture([check("mixed", ["a/"], "process.exit(require('fs').readFileSync('a/x', 'utf8').includes('bad') ? 1 : 0)", { measured: old })], ({ git, commit, run, push, base }) => {
+    const file = join(git("rev-parse", "--show-toplevel"), "scripts/gates.json"), before = readFileSync(file, "utf8");
+    const good = commit("a/x", "good\n");
+    git("checkout", "-qb", "record-topic", base);
+    const bad = commit("a/x", "bad\n");
+    const result = run(["pre-push", "--stdin", "--record"], { input: push(bad, base, "refs/heads/record-topic") + push(good, base) });
+    assert.equal(result.status, 1, result.out);
+    assert.match(result.out, /mixed: fail/);
+    assert.match(result.out, /\[ok\s*\][^\n]*\bmixed\b/);
+    assert.match(result.out, /recorded 0 passed check/);
+    assert.equal(readFileSync(file, "utf8"), before);
+  });
+});
+
+test("--record preserves a manifest edited while checks run", () => fixture([], ({ git, commit, run, push, base }) => {
+  const file = join(git("rev-parse", "--show-toplevel"), "scripts/gates.json");
+  const peerEdit = '{"checks":[],"note":"edited during the run"}\n';
+  const body = `require('fs').writeFileSync(${JSON.stringify(file)}, ${JSON.stringify(peerEdit)})`;
+  writeFileSync(file, JSON.stringify({ checks: [check("edit", ["a/"], body)] }));
+  const result = run(["pre-push", "--stdin", "--record"], { input: push(commit("a/x"), base) });
+  assert.equal(result.status, 1, result.out);
+  assert.match(result.out, /\[ok\s*\][^\n]*\bedit\b/);
+  assert.match(result.out, /manifest changed during the run/);
+  assert.equal(readFileSync(file, "utf8"), peerEdit);
+}));
+
+test("--record refuses non-UTF-8 input without converting other bytes", () => fixture([check("new", ["a/"])], ({ git, run }) => {
+  const file = join(git("rev-parse", "--show-toplevel"), "scripts/gates.json");
+  const source = Buffer.concat([Buffer.from('{"note":"'), Buffer.from([0xff]), Buffer.from('","checks":[]}')]);
+  writeFileSync(file, source);
+  const result = run(["pre-release", "--record"]);
+  assert.equal(result.status, 2, result.out);
+  assert.match(result.out, /requires a UTF-8 manifest/);
+  assert.deepEqual(readFileSync(file), source);
+}));
