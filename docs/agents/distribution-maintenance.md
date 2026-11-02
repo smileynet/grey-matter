@@ -108,6 +108,15 @@ Release modules are canonical in `scripts/` and vendored into tkt's `tools/` wit
 it checks drift. It protects foreign/local edits and requires a private target package
 with matching canonical development dependencies. Update tkt's package/lock deliberately
 when dependencies change, run both product gates, then commit/push each changed repo.
+
+The deployer is maintained separately from that release-module inventory. To inspect or
+repair tkt's `tools/deploy.mjs`, use
+`node scripts/sync-release-tools.mjs --target /path/to/tkt --deployer` and add `--write`
+for repair. The repair accepts only the tkt checkout registered in `skill-packs.json`,
+requires clean vendor paths and an up-to-date branch, and records the canonical source,
+owner and hash in `tools/deployer-vendor.json`. Fetch and compare upstream first. If the
+branch is ahead or diverged, ask the tkt owner before dropping or rebasing local commits.
+This separate command does not change which release modules are vendored.
 Deploy each changed pack once, or use one `--portfolio skill-packs.json` deployment.
 The release wrappers expose local preparation/verification; publication/resume is unfinished.
 Read [draft preparation](release-preparation.md) for modes, prerequisites and ownership.
