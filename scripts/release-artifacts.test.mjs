@@ -191,11 +191,12 @@ test("CLI validation failures use structured fail/exit 1", () => fixture(({ out 
   assert.equal(JSON.parse(result.stderr).status, "fail");
 }));
 
-for (const change of ["extra", "missing", "version", "dangling", "short-readme"]) test(`verify rejects resealed archive with ${change} defect`, () => fixture(({ dir, out, build }) => {
+for (const change of ["extra", "changed bytes", "missing", "version", "dangling", "short-readme"]) test(`verify rejects resealed archive with ${change} defect`, () => fixture(({ dir, out, build }) => {
   const metadata = build(), asset = metadata.assets.find((item) => item.host === "agy");
   const tree = join(dir, "tamper"); mkdirSync(tree);
   tar.extract({ file: join(out, asset.name), cwd: tree, sync: true, chmod: true });
   if (change === "extra") put(join(tree, "extra.txt"), "unlisted");
+  if (change === "changed bytes") writeFileSync(join(tree, "docs/guide.md"), Buffer.from("changed raw payload\r\n"));
   if (change === "missing") rmSync(join(tree, "docs/guide.md"));
   if (change === "version") { const path = join(tree, "plugin.json"), value = JSON.parse(readFileSync(path)); value.version = "8.0.0"; put(path, JSON.stringify(value)); asset.files["plugin.json"].sha256 = hash(readFileSync(path)); }
   if (change === "dangling") { const path = join(tree, "docs/guide.md"); put(path, "[Missing](missing.md)\n"); asset.files["docs/guide.md"].sha256 = hash(readFileSync(path)); }
@@ -203,8 +204,13 @@ for (const change of ["extra", "missing", "version", "dangling", "short-readme"]
   const files = change === "extra" ? [...Object.keys(asset.files), "extra.txt"] : Object.keys(asset.files).filter((path) => existsSync(join(tree, path)));
   tar.create({ cwd: tree, file: join(out, asset.name), gzip: true, sync: true, portable: true, noMtime: true }, files);
   asset.sha256 = hash(readFileSync(join(out, asset.name)));
-  put(join(out, "release-metadata.json"), JSON.stringify(metadata, null, 2) + "\n");
-  assert.throws(() => verifyArtifacts(out), /unexpected archive entry|missing expected|wrong agy bundle|package resource missing|incomplete agy plugin README/);
+  const metadataBytes = Buffer.from(JSON.stringify(metadata, null, 2) + "\n");
+  put(join(out, "release-metadata.json"), metadataBytes);
+  const sums = [...metadata.assets.map((item) => `${item.sha256}  ${item.name}`), `${hash(metadataBytes)}  release-metadata.json`].join("\n") + "\n";
+  put(join(out, "SHA256SUMS"), sums);
+  assert.throws(() => verifyArtifacts(out), change === "changed bytes"
+    ? /extracted file hash differs: docs\/guide\.md/
+    : /unexpected archive entry|missing expected|wrong agy bundle|package resource missing|incomplete agy plugin README/);
 }));
 
 test("sealed runtime includes its dependency manifest and wrapper works in each host layout", (t) => fixture(({ repo, dir, build, commit }) => {

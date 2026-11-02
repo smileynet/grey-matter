@@ -64,6 +64,18 @@ read-only; use the user's existing authorization for subsequent changes.
    Compare hashes and run the asset-dependent build. Report unavailable gates;
    Git-only mirrors and source ZIPs are not proof of complete asset recovery.
 
+   If a bundle manifest promises exact file bytes, use the project's existing bundle verifier
+   against the exact inventory and raw bytes after export: reject missing, extra or duplicate
+   paths, and compare each file and archive checksum to the manifest. Verify a fresh copy made
+   from the exact source. Label a staged-index export separately from a clean checkout of a
+   committed SHA; export staged files from the index, since `git archive <commit>` contains the
+   commit and omits staged edits. On Windows, verify the materialized checkout/export because
+   checkout filters and `core.autocrlf` can change working bytes. Scope `.gitattributes` rules to
+   bundle paths (`text eol=lf` for an LF contract or `-text` for bytes Git must preserve); do not
+   change global Git configuration or repository-wide line-ending behavior to fix one bundle.
+   The artifact inspector reads Git blobs/index entries without checkout filters, so its hashes
+   do not replace checking the exported bundle.
+
 Finish when every scoped candidate has a role or explicit uncertainty, retained
 recovery inputs and a justified recommendation, with coverage and checks stated.
 
