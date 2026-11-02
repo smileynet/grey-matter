@@ -103,12 +103,12 @@ manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 2
 ## Test optimization and verification
 
 Reconciled 2026-11-02 at the user's request. Scope: `stream:test-verification`.
-5 unfinished tickets (1 open, 2 in progress, 2 deferred) and 18 completed tickets. This stream excludes orchestration and dashboard
+4 unfinished tickets (1 open, 1 in progress, 2 deferred) and 19 completed tickets. This stream excludes orchestration and dashboard
 feature work; #116 covers only the evidence/current-summary contract. Existing release
 authorization and frozen candidate scope are unchanged.
 
 The order below is the session's chosen execution policy, not new dependency edges. All
-existing blocked_by values are preserved. In progress: #132 and #133; all other actionable work is assigned. Pursue #122 only when a useful
+existing blocked_by values are preserved. In progress: #132; all other actionable work is assigned. Pursue #122 only when a useful
 failure is captured. macOS work needs a Mac; WSL and destructive footprint probes need a
 suitable owned environment. No host-only criterion is satisfied by a Windows fixture pass.
 
@@ -136,7 +136,7 @@ scripts/snapshot are recycled after their conclusions are recorded here.
 | 98 | 5. CLI/pack compatibility and identity-bound reuse | ✅ done |
 | 121 | 5. Windows critic launch and unsupported-version diagnostics | ✅ done |
 | 132 | 6. Windows footprint rows and disposable bin/placeholder probes | in_progress |
-| 133 | 7. WSL 2 backing-volume and reclaim validation | in_progress |
+| 133 | 7. WSL 2 backing-volume and reclaim validation | ✅ done |
 | 175 | 8. macOS inspector/lsof hang diagnosis | backlog |
 | 131 | 8. macOS/APFS footprint validation | backlog |
 | 122 | Throughout: diagnose a captured deployer failure; 20-run criterion already met | open |
@@ -379,4 +379,4 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 182 | Detect footprint growth outside repository scratch | open |
 | 183 | Preserve artifact ownership across agent handoffs | open |
 | 184 | Revalidate preservation state before cleanup recommendations | open |
-| 191 | Dashboard: orchestration findings and expandable ticket flow in two tabs | open |
+| 191 | Dashboard: orchestration findings and expandable ticket flow in two tabs | ✅ done |
