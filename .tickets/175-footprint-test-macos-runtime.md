@@ -62,3 +62,7 @@ SpaceJam has about 10.6 GiB free, below the 20 GiB floor, so the inspector tests
 have not run. The user requested CoreSimulator inspection; a reviewed concrete cleanup
 proposal is recorded, with no deletion pending the owner's decision on existing project data.
 This ticket remains in progress and its acceptance criteria remain unchecked.
+
+User decision: preserve both simulators and revisit after other projects free space.
+Deliberately parked in backlog; acceptance remains unchecked. Resume with a fresh free-space
+check and owned-process timeouts before the Mac inspector/gate measurements.
