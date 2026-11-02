@@ -77,3 +77,7 @@ has one available runtime, no unavailable devices, and two large shutdown projec
 deletion remains unexecuted pending confirmation that existing simulator data is disposable.
 Independent critic accepted the report. This ticket remains in progress: APFS clone behavior,
 inspector fixtures and the Mac pre-merge gate have not been validated.
+
+User decision: preserve both simulator data trees and deliberately defer testing until other
+projects wrap up and leave adequate free space. Parked in backlog; no cleanup authorized.
+Resume with a fresh free-space check, then the remaining Mac acceptance observations.

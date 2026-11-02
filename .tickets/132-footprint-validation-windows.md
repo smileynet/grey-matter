@@ -68,3 +68,16 @@ fixing it.
 
 Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
 verify the ticket's premises against current source and run its acceptance checks when picked up.
+
+## Partial Windows verification 2026-11-02
+
+Reviewed worker commit 00552356 updates the
+[OS observation report](../docs/agents/research/footprint-commands-by-os-20261031.md).
+Current inspector fixtures pass 7/7 and worker full pre-merge passes 19/19. Windows
+Get-Volume and inspector free-space values match exactly on this host. Historical failures
+did not reproduce; no cause or source fix is claimed. Open-file coverage is unavailable and
+incomplete. A tiny owned hardlink fixture was recycled; no existing Bin contents were inspected.
+The over-cap Bin and real OneDrive online-only placeholder scenarios remain unrun: no safe
+isolated environment or owned placeholder is available. No Bin settings or cloud data changed.
+This ticket stays in progress with those acceptance gaps explicit. Retain its worker checkout
+and dependency junction through shared test-verification integration cleanup.
