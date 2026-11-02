@@ -78,8 +78,11 @@ Check before you create and prune as you go; the close-out is the second chance.
 2. **Reference large tracked files** by path, hard link, `git worktree` or shared clone.
    Create test clones and worktrees with `GIT_LFS_SKIP_SMUDGE=1`: worktrees share the LFS
    store, but each checks out its own copy. One copy of the same bytes per ticket.
-3. **Bound history as it grows.** Name attempts `t<ticket>-<kind>-<n>`. When attempt N+1
-   lands, delete attempts older than the latest three that are neither failed nor cited.
+3. **Bound history as it grows.** Name attempts `t<ticket>-<kind>-<n>`. Give each release
+   verify or probe invocation a fresh numbered output folder. Preserve failed or cited
+   evidence until its useful findings are promoted and recovery or a release record no
+   longer needs the original; do not delete it to retry. When attempt N+1 lands, prune
+   only attempts older than the latest three that are neither failed nor cited.
 4. **Let tools clean up.** Set test-runner retention so a passing run leaves nothing
    (pytest: `tmp_path_retention_policy = "failed"`), and prune caches with the tool's own
    command before deleting by hand.
