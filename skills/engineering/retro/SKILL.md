@@ -11,6 +11,14 @@ The user has asked for a **retrospective**. You are suggesting improvements to t
 
 2. Read the primary sources for the session the user specifies (default: the current one). This may mean searching session logs on this machine; where logs aren't reachable, work from the session the user points at. **Read the session from a fresh context: dispatch a subagent to analyse the trace and report candidates.** An agent grading its own session is biased and blind to what it never logged; a fresh-context subagent, and leaning on deterministic checks over self-report, counters that. (A shell-invoked fresh agent via the harness CLI is an alternative, spiked separately.)
 
+   Use one compact coverage statement to identify the corpus (with trace/file references
+   when available) and inspected scope, sampling or extraction limits, truncated output
+   and focused rereads, and areas left unverified. If a reference is unavailable, report
+   that as a coverage gap. If a tool result truncates, reread the relevant slice or name
+   the remaining gap. Focused rereads are
+   enough; do not replay the entire trace just to claim completeness or infer completeness
+   from a nonempty subagent report.
+
 3. Look for candidates for improvement in these categories.
 
 - **Navigation**: how easy was it for the agent to find the right files? Are there hidden dependencies between files? Would a **navigation pointer** make it easier? _Use when_ the session took a long time to find a piece of information.
@@ -21,9 +29,27 @@ The user has asked for a **retrospective**. You are suggesting improvements to t
 - **No-ops**: look for instructions in steering files that don't modify the agent's behavior. _Use when_ the steering files are large and unwieldy.
 - **Information access**: look for opportunities to increase the agent's access to information. Teeing dev server logs, readonly access to third-party services. _Use when_ a crucial piece of information was not available to the agent.
 
+   Keep the evidence and status distinct: an observed defect is what the trace or source
+   shows; a corrected verification gap is what the check was missing and how it was resolved;
+   an already-landed repair with an existing regression is repaired work; a remaining
+   recommendation is work not yet done. Inspecting a test file is source inspection, not a
+   fresh test result. Say `not run` unless the check actually ran; only report success from
+   complete execution evidence, following [local-gates](../../../docs/agents/local-gates.md).
+
+   **Scenario fixtures for the report:**
+
+   - A 35.9 MiB session trace yields 180 sampled messages and a truncated result: name
+     the sample and inspected range, reread only the relevant finding window or state the
+     remaining gaps, and mark coverage partial.
+   - Test files are inspected but the command is not executed: report source inspection
+     and `not run`; make no fresh test success claim.
+   - A defect is fixed and an existing regression covers it: mark the repair already
+     landed and cite the regression's execution status. Do not file implementation work
+     for that same repair; route distinct remaining work to its current owner.
+
 4. Present these candidates to the user, in order of severity.
 
-5. File the candidates the user accepts as tickets (see the issue-tracker doc). **First check existing tickets for overlap** (`tkt query`): when a candidate matches or extends an open ticket, update that ticket rather than filing a near-duplicate. Only genuinely new candidates become new tickets.
+5. File the remaining candidates the user accepts as tickets (see the issue-tracker doc). **First check existing tickets for overlap** (`tkt query`): when a candidate matches or extends an open ticket, update that ticket rather than filing a near-duplicate. Do not create implementation work for a repair already landed and covered by an existing regression. Only genuinely new, unimplemented work becomes a new ticket.
 
 Retro grooms the **environment**. To groom the **ticket board** in the same session wrap-up (make open tickets current, capture untracked work, set the frontier ordering), pair this with `reconcile-tickets`. Both run at session *end*; `orient` is the session-*start* bookend that picks up where they leave off.
 
