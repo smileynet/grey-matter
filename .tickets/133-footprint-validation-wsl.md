@@ -1,7 +1,7 @@
 ---
 id: "133"
 title: "Validate footprint guidance and inspector under WSL 2"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
