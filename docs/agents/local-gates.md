@@ -35,7 +35,11 @@ it. With no line, assume speed and report the gap.
 | pre-release | Does the release work where users run it? | every check in every stage, plus the release artifact on every OS, real installs, simulators and devices | none; once per release | the `release` skill, as receipts |
 
 A check not run is "not run", never a pass. Agent and LLM reviews take minutes and vary run to
-run: they run on demand at pre-merge, never in a Git hook.
+run: they run on demand at pre-merge, never in a Git hook. An agent runs a stage expected to take
+over a minute in the background and waits for it, never as a long foreground call.
+
+`SKIP=<id>` is for a failure shown to exist already on `origin/main`, not one the push introduces;
+name the skipped id and why in the ticket's close evidence or the commit message.
 
 **Pre-commit is not a stage.** On trunk a commit integrates only when pushed, so pre-push judges
 everything a pre-commit check could. A Git pre-commit hook fires on every `tkt new`, `claim` and

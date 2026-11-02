@@ -18,9 +18,10 @@ for the cases where a shell command is genuinely the right tool (git, Node, tkt,
   Move-Item -Path .\old\name.md -Destination .\new\name.md
   ```
 
-- **Command separator is `;`, not `&&`.** PowerShell 7 does support `&&`, but `;` is the
-  portable form here. Note `;` does not stop on failure the way `&&` does — if you need
-  "stop on first error," chain with `&&` (pwsh 7+) or check `$LASTEXITCODE` between steps.
+- **`;` runs the next command even after a failure.** Use it only between independent steps.
+  Never chain a check to `git commit` or `git push` with `;` or through a pipe: a red check still
+  pushed that way on 2026-10-22 and 2026-11-01. Run the check bare and chain with `&&` (pwsh 7+,
+  no pipe in between), or check `$LASTEXITCODE` before committing.
 
 - **No `%VAR%` environment syntax.** That's `cmd.exe`. In PowerShell an undefined
   `%TEMP%` becomes a *literal* folder name, silently creating junk. Use `$env:TEMP`,
