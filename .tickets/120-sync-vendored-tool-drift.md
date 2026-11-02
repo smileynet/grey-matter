@@ -1,7 +1,7 @@
 ---
 id: "120"
 title: "sync resolves vendored-tool drift and a diverged tkt checkout without guesswork"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
