@@ -296,8 +296,12 @@ spawning and automatic memory persistence were disabled, and the embedding-path
 override was removed. Permission-policy bytes were unchanged. Probes then ran
 sequentially; no spawn-pressure threshold or sandbox policy was relaxed.
 
-The small receipt is promoted here. Owned gateway data, fixture and helper inputs
-are disposable after audit; the gateway must exit before they go to the OS trash.
+The small receipt is promoted here. After the independent audit, native gateway
+shutdown completed with exit 0 and no listener remained. The owned gateway/helper
+tree (4,858,962 bytes) and fixture (100,074 bytes) were moved to the Windows Recycle
+Bin after verifying the exact targets, absence of links, and each drive's Bin cap.
+No probe settings remain active. The selected receipt and audit are tracked; raw
+probe inputs were available to the auditor before recycling.
 The existing 639,150,592-byte embedding model is reference input, **not cleanup
 scope**. No GitHub repository or adapter installation was needed.
 
@@ -306,3 +310,12 @@ approval capability blocks dispatch; an allowlist entry is not proof of complete
 pre-authorization. P13 supports the tested denial/escalation fallback, not an
 OS-sandbox guarantee, protection against every deletion form, or a complete
 multi-worker acceptance/cleanup loop. Credits consumed were not measured.
+
+Verification: `node scripts/check-docs-consistency.mjs` and
+`node scripts/check-home-path.mjs` passed. On research commit `ba6b7fd`,
+`node scripts/gate.mjs pre-merge --base 5e6520d0d5444dbf486ef458caaa8dcec720886d --include skill-syntax-fixtures`
+passed both selected checks (ticket graph and syntax fixtures). Independent
+Standards and Spec reviews found no implementation blocker; the Spec review's
+pending cleanup item was completed as recorded above. The scoped research audit
+is [recorded separately](harness-experimental-features-20261101-t154-audit.md),
+with high trust (8/10) and no blocking finding.
