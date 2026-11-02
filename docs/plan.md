@@ -125,8 +125,8 @@ scripts/snapshot are recycled after their conclusions are recorded here.
 | 106 | 1. Numbered verification attempts and failure retention | ✅ done |
 | 114 | 1. Portable check discovery and fail-stop dependent mutations | ✅ done |
 | 112 | 2. UI capabilities and qualified observations | ✅ done |
-| 115 | 2. Positive scoped preservation evidence | in_progress |
-| 117 | 2. Retrospective coverage and repaired-versus-remaining work | in_progress |
+| 115 | 2. Positive scoped preservation evidence | ✅ done |
+| 117 | 2. Retrospective coverage and repaired-versus-remaining work | ✅ done |
 | 113 | 3. Exact bundle inventory and portable byte hashes | in_progress |
 | 116 | 4. Current summaries derived from scoped evidence | in_progress |
 | 120 | 5. Documented vendor repair and checkout divergence handling | open |
