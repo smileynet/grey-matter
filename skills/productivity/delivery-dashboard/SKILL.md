@@ -57,11 +57,17 @@ stays out of the way, under folds and links.
    filters. Do not delete or merge old entries to shorten the page. The template does the rolling;
    the changelog still owns release-level history.
 
-6. **Check, open and hand back.** Before closing UI work, inspect the actual laptop/phone
-   rendering and bind required critic acceptance to its source and captures. When recording that
-   acceptance, use [review receipts](references/review-receipt.md); a rendering-input change requires
-   affected checks, new captures and renewed acceptance. Closure-only metadata may change only
-   through the receipt's explicit projections. Run
+6. **Check, open and hand back.** Before selecting UI checks, establish which preview,
+   browser, capture and interaction surfaces are permitted and available. Choose checks
+   from those capabilities; record blocked or unavailable checks with their limits and
+   leave them unverified. Do not try another route to bypass a blocked protocol. Before
+   closing UI work, inspect the actual laptop/phone rendering when a permitted surface
+   is available and bind required critic acceptance to its source and captures. If a
+   required capture or review is unavailable, leave acceptance pending; a human report
+   may be recorded separately but does not substitute for tool-observed rendering.
+   When recording acceptance, use [review receipts](references/review-receipt.md); a
+   rendering-input change requires affected checks, new captures and renewed acceptance.
+   Closure-only metadata may change only through the receipt's explicit projections. Run
    `node <this skill's directory>/scripts/check-dashboard.mjs <file>` and fix
    every error; clear warnings that are real. Then open all three tabs at phone and laptop width and
    read the page as the owner would. Follow one dependency chain, compare visible nodes/edges and status counts with the board, and check that selected streams do not hide remaining work elsewhere. Read [report-format.md](../../../docs/agents/report-format.md)

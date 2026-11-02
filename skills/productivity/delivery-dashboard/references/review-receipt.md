@@ -11,6 +11,30 @@ Use a review receipt when a project requires critic acceptance of UI work. It bi
 
 A checker pass establishes byte identity and the recorded attestation. Whether the interface communicates clearly remains a critic judgement. A viewport in the manifest is reported capture context, not proof that a browser used it.
 
+## Record what the evidence says
+
+The receipt binds declared source and capture bytes to one snapshot. In the review note,
+record each material check compactly with its observer, surface, scenario, outcome and
+limits. Distinguish `tool observed`, `person reported`, `blocked`, `unavailable` and
+`unvalidated`; source/metadata checks do not establish rendered behavior, and a human
+report is not a tool observation. Do not infer a pass from a blocked action or absent
+telemetry, and do not try another route to bypass a blocked protocol.
+
+| Scenario fixture | Record | Claim boundary |
+| --- | --- | --- |
+| Direct file navigation is blocked by the permitted browser protocol | `artifact: <receipt snapshot ID>; observer: tool; surface: browser; scenario: open the local output; outcome: blocked; limits: navigation denied, no alternate route attempted` | The opening check is blocked; file-opening behavior is unknown. |
+| Resource timing telemetry is unavailable | `artifact: <receipt snapshot ID>; observer: tool; surface: browser performance panel; scenario: read resource timing; outcome: unavailable; limits: timing API not exposed` | No timing result or performance pass is established. |
+| A person confirms the file opens and functions | `artifact: <receipt snapshot ID>; observer: person (identify); surface: local file viewer; scenario: open and use the output; outcome: reported working; limits: agent did not observe the interaction` | This is a human functionality report, not tool-verified behavior; learning effectiveness remains unvalidated. |
+
+Keep the note within the accepted snapshot's review record. If the human report or other
+check must remain independently traceable, include its durable record in the declared
+source scope so the receipt digest covers it. Retain limits even when another check
+resolves the user's immediate question.
+
+If no permitted capture exists, record the blocked or unavailable check in the ticket or
+report and leave critic acceptance pending. Do not create a receipt with fabricated
+captures or treat a human report as the missing tool observation.
+
 ## Declare the scope
 
 Paths are relative to one explicit repository root. Files and directories are supported; globs, escaping paths and symlink traversal are rejected. Captures remain in the project rather than being copied into the receipt.
