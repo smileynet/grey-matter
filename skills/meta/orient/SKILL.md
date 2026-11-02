@@ -20,6 +20,10 @@ orient gets you onto the frontier at the start. It does not reconcile the board 
 `reconcile-tickets`, at session end) and does not own the skill map (that's `compass`) —
 it reads the board, picks the top work, and hands into `implement` / `tkt claim`.
 
+Under Kiro Crew, read [ticket-state mirroring](../../../docs/agents/kirocrew-ticket-state.md)
+for optional chat/ledger updates when claiming, resuming or waiting on the human.
+Other harnesses skip this reference.
+
 This is grey-matter's session-start authority. If a global steering rule (e.g. a legacy
 `frontier-work`) also describes "when tickets exist, work the frontier," orient supersedes
 it for this repo.

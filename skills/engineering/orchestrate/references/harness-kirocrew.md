@@ -52,11 +52,9 @@ durable board. Its schema governs the visual.
 
 Ticket 95's placement decision is **harness reference**, per
 [proposal 17](../../../../docs/agents/proposals/17-orchestrator-skill.md#4-per-harness-references).
-When chat_tag exists, mirror claim to implementation, waiting on the human to
-review, and accepted close to done. When session_ledger_record exists, record
-ticket, phase and concrete next action at claim, decisions and context boundaries.
-Skip absent tools; never treat a mirrored tag/ledger as tracker authority.
-These guarded steps do not add requirements to other harnesses.
+Apply the shared [ticket-state mirroring](../../../../docs/agents/kirocrew-ticket-state.md)
+after each owned tracker transition. It also covers single-ticket orient/implement
+sessions; absent tools add no requirements to other harnesses.
 
 After settlement close worker sessions, inspect/remove merged worktrees and
 local branches, and report any remote branches retained. Unbind fixture chats

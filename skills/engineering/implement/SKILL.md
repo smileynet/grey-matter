@@ -8,6 +8,10 @@ Implement the work described by the user in the spec or tickets.
 
 Fetch the referenced ticket from tkt (read `.tickets/NN-*.md`, or `tkt query`), state its title before starting, and `tkt claim` it so it shows as in progress. If the reference is ambiguous, ask. Then state, from the ticket, its one observable outcome (what a user or caller can now see or do) and its main unresolved assumption (the belief that, if wrong, sinks the approach); check that assumption first.
 
+Under Kiro Crew, read [ticket-state mirroring](../../../docs/agents/kirocrew-ticket-state.md)
+and apply its optional updates after claim/resume, when waiting on the human and
+after a successful close. Other harnesses skip this reference.
+
 Call the Skill tool with "tdd" to build it, at the pre-agreed seams. (tdd re-points the seam for a game; you don't need to.)
 
 After each slice, typecheck and run the slice's tests at the leftmost tier that observes them. Before the push that carries the ticket's code, run the pre-merge check the project's `AGENTS.md` names (its `check` command in the speed phase) and cite its output at close: up to tier 2 of the [test-environment ladder](../../../docs/agents/test-environment-ladder.md) for the changed areas. Run tier 3 and above only when the ticket's outcome lives there, and report each tier you did not run as "not run".
