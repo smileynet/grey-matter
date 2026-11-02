@@ -2,7 +2,7 @@
 id: "169"
 title: "Spike: fast models for read-only research and codebase exploration fan-out"
 status: open
-blocked_by: []
+blocked_by: ["174"]
 tags: ["stream:tooling", "type:research"]
 ---
 
