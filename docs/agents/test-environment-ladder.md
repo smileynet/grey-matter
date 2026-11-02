@@ -104,6 +104,41 @@ Tickets [114](../../.tickets/114-portable-wrap-verification.md) and
 [115](../../.tickets/115-preservation-evidence.md) own fail-stop orchestration and positive,
 scoped preservation evidence; the ladder only chooses environments and cadence for those claims.
 
+### Preservation claims need positive, matched observations
+
+Service health and inventory success do not establish byte preservation. Before the operation,
+select an explicit, nonempty fixture in the authorized root and record its expected paths and
+coverage. Capture fresh before and after observations for that same selection. Bind each
+observation to its source/configuration revision and manager version, the evaluated job and
+authorized root; compare those context values against the operation's declared contract. List
+each expected resource once with its path, the provider's documented resource identity and a
+content checksum. Require
+the before and after sets to match the selected coverage, the same identity for each path and
+the same checksum, with at least one resource and positive aggregate bytes. Reject missing,
+malformed or duplicate identities, an absent baseline, missing or out-of-scope paths, changed
+identities or checksums, and zero-file or zero-byte totals. A legitimate empty file may be one
+selected resource, but an empty-only sample has no positive byte coverage. Do not assume inode
+semantics: state and check the identity contract the provider actually supplies. A healthy
+service with a successful but empty inventory supports service-health/inventory claims only.
+
+| Before/after observation | Supported claim |
+|---|---|
+| Service reports healthy; inventory succeeds but contains no selected resources or bytes | Service health and inventory completed; no preservation claim |
+| Preflight selection or before observation is missing | No baseline; preservation not established |
+| Selected coverage has zero resources or zero aggregate bytes | No positive preservation evidence |
+| An observed path is missing, unexpected, under another root, or outside the selected scope | Scope/coverage mismatch; preservation not established |
+| A selected path's provider identity changes between observations | Resource continuity is unverified; preservation not established |
+| A selected path's checksum changes between observations | Content changed; preservation not established |
+| Preselected nonempty fixture has positive bytes; both fresh observations cover the same authorized paths with unchanged provider identities and checksums | Preservation of those selected resources at those two observation times |
+
+These are behavioral review scenarios, not evidence that a provider was contacted. Synthetic
+fixtures can test the comparison at its actual host seam; keep their result separate from live
+provider observations. Two snapshots show only the selected resources at those instants: they do
+not prove continuous retention, staging exclusion, installed-device retention, erasure of every
+copy or authority to delete. Preservation evidence grants no deletion or wider-scope authority.
+Use the leftmost faithful environment for worker-only comparisons; simulator/device checks apply
+only when the asserted boundary includes native OS behavior, hardware or an installed update.
+
 ## Worked assertion routes
 
 These are planning examples, not evidence that the checks ran. Each escalation adds a claim.
