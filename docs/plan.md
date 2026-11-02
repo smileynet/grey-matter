@@ -353,3 +353,5 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 182 | Detect footprint growth outside repository scratch | open |
 | 183 | Preserve artifact ownership across agent handoffs | open |
 | 184 | Revalidate preservation state before cleanup recommendations | open |
+| 188 | Diagnose: Codex CLI tool execution fails because code-mode host is missing | open |
+| 189 | Diagnose: Kiro V3 ACP relay times out after stdin closes | open |
