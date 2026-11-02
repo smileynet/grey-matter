@@ -125,6 +125,18 @@ preservation inputs and observable active dependencies; a changed or missing fam
 stop and review. It never proves reclaimable bytes or deletes files.
 Flags and exit codes: [footprint inspector](references/inspection.md#footprint-inspector).
 
+## Ownership across handoffs
+
+When an assignment ends, changes worker or changes harness, keep retention ownership with an
+accountable person or team; the active assignee is not automatically the retention owner. For
+each artifact kept beyond that work, record its owner, purpose, `retained`/`released`/`unknown`
+state and end condition in the existing project registry or a concise handoff note. Use `released`
+only after required recovery or disposition is recorded. If any detail is unknown, mark `unknown`
+and protect the artifact. Merge, a clean worktree, age or missing citations do not establish
+recovery or release. The [lifecycle reference](references/retention-lifecycle.md) gives scenarios
+and the conformance route. This rule does not add an approval step: apply existing project/user
+authorization for removal.
+
 ## At ticket close
 
 Every uncommitted artifact a ticket made gets one of three outcomes before `tkt close`:

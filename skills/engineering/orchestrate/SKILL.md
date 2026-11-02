@@ -66,7 +66,9 @@ Own admission, decisions, review, landing and reporting; dispatched workers own 
    scoped tool grants and approval context explicitly. Require proof of the
    worker's Git worktree root and base SHA before its first source edit; a plain
    directory is not isolation. Gate secret, spend and
-   destructive operations by the project's existing authorization.
+   destructive operations by the project's existing authorization. If a worker
+   or harness handoff leaves artifacts retained, carry their retention owner,
+   purpose and end condition using [artifact hygiene's lifecycle rule](../../meta/repository-artifact-hygiene/references/retention-lifecycle.md).
 7. Await completion notices, bounded agent waits or ledger events. Each wake
    starts by rereading tkt and the dispatch log. Use no sleep-poll loop.
    Normalize the harness envelope to exactly one terminal status:

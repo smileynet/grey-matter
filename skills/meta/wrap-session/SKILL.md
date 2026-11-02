@@ -110,6 +110,9 @@ apply the [close rule](../repository-artifact-hygiene/SKILL.md#at-ticket-close) 
 **landed** this session (including any rehydration-index fix), and what was **deferred** to a
 ticket and why.
 
+When retained artifacts pass to another session or harness, carry their retention owner, purpose
+and end condition per [artifact hygiene's lifecycle rule](../repository-artifact-hygiene/references/retention-lifecycle.md).
+
 ## Does not
 
 - **Re-spell tkt or retro.** It composes `reconcile-tickets` and `retro`; the command
