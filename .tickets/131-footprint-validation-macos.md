@@ -66,3 +66,14 @@ connection was requested from the user; continue independent Windows/WSL work me
 The user then installed this machine's public key and supplied a reachable LAN address.
 Direct batch-mode SSH to that address as the provided Mac account succeeded and reported
 Darwin/macOS 26.6.2. Access is now available; no footprint acceptance probe has run yet.
+
+## Partial host evidence 2026-11-02
+
+The [observed host report](../docs/agents/research/footprint-macos-host-check-20261102.md)
+records read-only results and limits. Free space is about 10.6 GiB, below the 20 GiB floor;
+no fetch, build, fixture or gate run is permitted until space is available. CoreSimulator
+has one available runtime, no unavailable devices, and two large shutdown project simulators
+(12.12 and 8.99 GiB by du). User requested inspection and a concrete cleanup proposal;
+deletion remains unexecuted pending confirmation that existing simulator data is disposable.
+Independent critic accepted the report. This ticket remains in progress: APFS clone behavior,
+inspector fixtures and the Mac pre-merge gate have not been validated.

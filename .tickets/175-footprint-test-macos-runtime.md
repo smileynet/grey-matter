@@ -50,3 +50,15 @@ was requested from the user. Recheck access before claiming this host-specific t
 The user supplied the Mac account/address and installed the public key. Direct SSH to the
 address succeeded (macOS 26.6.2); the hostname path still timed out. Host access is available
 for the bounded inspector/lsof measurements; no causal or runtime result is claimed yet.
+
+## Partial host evidence 2026-11-02
+
+The [observed host report](../docs/agents/research/footprint-macos-host-check-20261102.md)
+records a repository-scoped lsof completion in 0.63 s and an interrupted whole-host probe
+with no completion at 20 s. That lower bound does not prove the test hang's cause. The worker
+used a broad pattern kill for that probe; its exact collateral scope is unknown and that
+method must not recur. Future timeouts must retain and stop only their owned process handle.
+SpaceJam has about 10.6 GiB free, below the 20 GiB floor, so the inspector tests and Mac gate
+have not run. The user requested CoreSimulator inspection; a reviewed concrete cleanup
+proposal is recorded, with no deletion pending the owner's decision on existing project data.
+This ticket remains in progress and its acceptance criteria remain unchecked.
