@@ -66,3 +66,7 @@ Result caching and automatic risk scoring. Per-project vital-area choices stay a
   `conformance-audit` reporting scratch with its measured size (it names the finding but does not
   yet call `inspect-footprint.mjs` for the size).
 - The last criterion now reads `node scripts/gate.mjs pre-merge`; `check-repo.mjs` is retired.
+
+## Found 2026-11-01 (retro of session b4dc5e5f)
+
+`node scripts/gate.mjs pre-push` run before committing printed `0 of 5 check(s) selected (0 changed path(s))` and exited 0 while the working tree held unjudged changes, which reads as a pass. When nothing is selected and `git status --porcelain` is non-empty, it should say that uncommitted changes were not checked.

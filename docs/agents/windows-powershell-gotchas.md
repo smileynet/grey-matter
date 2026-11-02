@@ -52,6 +52,18 @@ for the cases where a shell command is genuinely the right tool (git, Node, tkt,
 - **Edit code and data with Edit/Write, or a script file.** Backslashes, regexes, and template
   literals inside `node -e`, `python -`, or a heredoc get re-escaped: `"\b"` once landed in JSON as
   a backspace and `"\n"` as a real newline inside a regex. Write a `.mjs` to the scratchpad instead.
+  On 2026-11-01 the same trap struck four times in one session: `"C:\Users"` was a Python
+  unicode-escape error, nested backticks and quotes ended a heredoc early, and `json.dump`
+  reformatted a hand-kept `scripts/gates.json`. To change one entry in a hand-formatted file,
+  insert it as text or use Edit; never re-serialize the whole file.
+- **Git Bash rewrites an argument that starts with `/` into a Windows path.** `kc.py get /api/chat/slots`
+  reached Python as `C:/Program Files/Git/api/chat/slots`, and `kiro-cli chat /usage` reached the
+  model as a prompt naming `C:/Program Files/Git/usage`, which spent a turn. Prefix the command with
+  `MSYS_NO_PATHCONV=1`, or run it from PowerShell.
+- **A scrub chained to a push needs its own exit test.** `grep -c pattern *.md | grep -v ":0" && git commit && git push`
+  pushes when the scrub *failed*, because the grep that finds leftovers succeeds. Check that the count is
+  zero first (`! grep -q pattern files && git commit`). `scripts/check-home-path.mjs`, a pre-push gate, now
+  blocks this machine's home path in tracked files.
 
 Each of these was low-severity (recovered in one retry) but cross-session and cheap to
 document once.

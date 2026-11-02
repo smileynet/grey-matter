@@ -33,7 +33,9 @@ harness reads one source.
   sync.
 - [`docs/agents/windows-powershell-gotchas.md`](./docs/agents/windows-powershell-gotchas.md):
   the recurring Windows/PowerShell command traps in this repo (`Move-Item` vs
-  `Rename-Item`, `;` not `&&`, `$env:` not `%VAR%`, quoting) with the correct form for each.
+  `Rename-Item`, `;` not `&&`, `$env:` not `%VAR%`, quoting, Git Bash rewriting `/args`)
+  with the correct form for each. Read it before editing files through `python -c`, `node -e`
+  or a heredoc: write a script file, or use Edit.
 
 ## Scratch
 

@@ -216,8 +216,15 @@ function removeSandbox(dir) {
   // Worktrees a spike registered outside the sandbox go too; ones inside it go with the directory.
   const list = spawnSync("git", ["worktree", "list", "--porcelain"], { cwd: dir, encoding: "utf8" }).stdout ?? "";
   const worktrees = list.split("\n").filter((l) => l.startsWith("worktree ")).map((l) => resolve(l.slice(9).trim()));
-  for (const wt of worktrees.slice(1)) rmSync(wt, { recursive: true, force: true, maxRetries: 3 });
-  rmSync(dir, { recursive: true, force: true, maxRetries: 3 });
+  try {
+    for (const wt of worktrees.slice(1)) rmSync(wt, { recursive: true, force: true, maxRetries: 3 });
+    rmSync(dir, { recursive: true, force: true, maxRetries: 3 });
+  } catch (e) {
+    // Windows refuses to remove a folder another process holds open: a harness chat or session
+    // still bound to the sandbox (Kiro Crew kept both fixture folders open in ticket 128).
+    if (e.code === "EBUSY" || e.code === "EPERM") fail(`${e.path ?? dir} is in use (${e.code}): close or unbind any harness session, chat or editor still pointed at the sandbox (Kiro Crew: POST /api/chat/slots/<slot>/project with an empty project), then run clean again`);
+    throw e;
+  }
   return worktrees.slice(1);
 }
 

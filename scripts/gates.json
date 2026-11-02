@@ -51,6 +51,15 @@
       "measured": { "s": 0.2, "date": "2026-11-01", "host": "win" }
     },
     {
+      "id": "home-path",
+      "stage": "pre-push",
+      "catches": "this machine's home directory path in a tracked file, which leaks the account name into public history",
+      "always": true,
+      "run": ["node", "scripts/check-home-path.mjs"],
+      "timeout_s": 10,
+      "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
+    },
+    {
       "id": "gates-coverage",
       "stage": "pre-push",
       "catches": "a new check or test script that no stage runs, so it silently never gates anything",
@@ -193,6 +202,15 @@
       "run": ["node", "--test", "--test-timeout=60000", "scripts/static-checks.test.mjs"],
       "timeout_s": 60,
       "measured": { "s": 3.3, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "home-path-fixtures",
+      "stage": "pre-merge",
+      "catches": "a home-path check change that misses a path form or flags a generic one",
+      "scope": ["scripts/check-home-path"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/check-home-path.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 0.5, "date": "2026-11-01", "host": "win" }
     },
     {
       "id": "provider-fallback-fixtures",

@@ -137,6 +137,8 @@ Restart a running gateway (service-aware). (L: `kirocrew restart --help`)
 |---|---|---|
 | `restart` | `--port <PORT>` | Dashboard port (default: resolved from KIROCREW_PORT env or dashboard.url config) |
 
+**Under the desktop app** (L, 0.11.1, twice on 2026-11-01): `restart` asks the gateway to shut down, then exits 1 with `listener PID lookup is unavailable. Not starting a replacement because safe lock release cannot be proven.` The desktop app relaunches the gateway itself within about 20 s. Treat the exit 1 as expected and poll `http://127.0.0.1:5476/` until it answers 200. A restart clears YOLO mode, so set it again afterwards. 0.11.1's changelog says `restart` and `stop` now refuse a gateway the desktop app supervises.
+
 ### `kirocrew stop`
 
 Stop a running gateway. (L: `kirocrew stop --help`)
@@ -891,6 +893,12 @@ Debug-only desktop app diagnostics (requires KIROCREW_DEBUG). (L: `kirocrew desk
 | `desktop tunnel` | `--remote-port <REMOTE_PORT>` | Port the crew listens on over there |
 
 ## Gateway HTTP API
+
+### Driving it from a script (learned in ticket 128)
+
+- **Mint once, then poll with plain Python.** Importing `kiro_crew` to mint a token costs about 0.8 GB per process. A long-lived watcher that kept it loaded used enough of the 0.6–2.5 GB free that Kiro Crew's spawn gate paused and the conductor halted. Mint a token in one short call, write it to a scratch file, poll with `python -I` and `urllib`, and delete the file afterwards.
+- **Approvals need a human decision before dispatch.** An approval prompt nobody answers is declined after `tool_approval_timeout_secs` (600 s). Claude Code's permission check refused a script that answered prompts by policy, so ask the user before dispatch to pick the approval mode (`POST /api/chat/mode` `normal`, `trust_reads`, `trust` or `yolo`), or to answer in the app. YOLO lasts until the next gateway shutdown.
+- **Run API calls from PowerShell, or with `MSYS_NO_PATHCONV=1`.** Git Bash rewrites `/api/...` arguments into Windows paths.
 
 ### Auth
 
