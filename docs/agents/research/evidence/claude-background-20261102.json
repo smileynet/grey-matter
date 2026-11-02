@@ -1,0 +1,354 @@
+{
+  "date": "2026-11-02",
+  "version": "2.1.316",
+  "binary_sha256": "E896A9D8DA519353A49BF69CA4A695BA7E09067752687C675B3969041E632D52",
+  "fixture": {
+    "variant": "trunk",
+    "path": "%TEMP%/gm-t160-fixture-20261102",
+    "remote": null,
+    "tree": "7fd72339921451e85440698acda748c0bde512bb",
+    "working_tree_changes": false
+  },
+  "runs": [
+    {
+      "command": "claude --bg \"Reply with only T160_BACKGROUND_CONTROL\"",
+      "cwd": "%WORKTREE%",
+      "exit": 0,
+      "result": "Started session 9031e15d; this first control was accidentally started from the worker worktree, not the fixture. It made no file changes; session removal is pending after independent review."
+    },
+    {
+      "command": "claude --bg \"Reply with only T160_FIXTURE_TRUST_CONTROL\"",
+      "cwd": "%TEMP%/gm-t160-fixture-20261102",
+      "exit": 1,
+      "result": "Workspace not trusted. Run claude in the fixture once and accept the trust prompt, then retry."
+    },
+    {
+      "command": "claude --bg --worktree t160-bg-worktree-control --name t160_worktree_control \"Reply with only T160_WORKTREE_CONTROL\"",
+      "cwd": "%TEMP%/gm-t160-fixture-20261102",
+      "exit": 1,
+      "result": "Workspace not trusted; no fixture worktree was registered or created."
+    }
+  ],
+  "raw": [
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session.ndjson",
+      "bytes": 19277,
+      "sha256": "07a324ea7fa5bc232753f0825cb29ea9ef21b7fc6f78fdc248bdb61a67ad32b7"
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session-by-name.ndjson",
+      "bytes": 38370,
+      "sha256": "2c204b79efb4f70648448cc55697c1b8a0dc89ae41a7dc17a6ad9d001b1e12de"
+    }
+  ],
+  "events": [
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session.ndjson",
+      "type": "init",
+      "session_id": "563ef14a-92fd-4c6c-861c-3b494a0fe051",
+      "cwd": "%TEMP%\\gm-t160-fixture-20261102",
+      "available": [
+        "ListAgents",
+        "SendMessage"
+      ]
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session.ndjson",
+      "type": "tool_use",
+      "name": "ListAgents",
+      "input": {}
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session.ndjson",
+      "type": "tool_result",
+      "content": "This session is gm-t160-fixture-20261102-82 [62c891] — the name other sessions use to message it (it is not listed below; a message to it would be a message to yourself).\n\nPeer sessions (1):\n  t160_background_control [3f15de]  ·  bg  ·  idle  ·  started 53s ago"
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session.ndjson",
+      "type": "tool_use",
+      "name": "ToolSearch",
+      "input": {
+        "query": "select:SendMessage",
+        "max_results": 1
+      }
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session.ndjson",
+      "type": "result",
+      "session_id": "563ef14a-92fd-4c6c-861c-3b494a0fe051",
+      "is_error": false,
+      "result": "I didn't send the message. There is a session named `t160_background_control`, but its ID doesn't match the one you gave.\n\n**What `ListAgents` returned:**\n- Peer sessions (1): `t160_background_control [3f15de]` · bg · idle · started 53s ago\n- My own session is `gm-t160-fixture-20261102-82 [62c891]`. It isn't a target.\n\n**Why I stopped:** you asked for the session with ID `9031e15d`, but the only one with that name has ref `3f15de`. One isn't a prefix or shortened form of the other, so I can't confirm this is the session you meant. Sending to it would risk messaging a session you told me not to touch.\n\n**Native `SendMessage` result:** none, because I never called it. The message wasn't delivered and `notify_when_idle` wasn't set.\n\n**To go ahead, either:**\n1. Confirm that `t160_background_control [3f15de]` is the right target. I'll then send the probe with `notify_when_idle: true` and report the result.\n2. Check that the session with ID `9031e15d` is running on this machine, then ask me to list sessions again.",
+      "duration_ms": 7896
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session-by-name.ndjson",
+      "type": "init",
+      "session_id": "4330ab7c-68c0-48f4-bccf-21cd07de7f31",
+      "cwd": "%TEMP%\\gm-t160-fixture-20261102",
+      "available": [
+        "ListAgents",
+        "SendMessage"
+      ]
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session-by-name.ndjson",
+      "type": "tool_use",
+      "name": "ListAgents",
+      "input": {}
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session-by-name.ndjson",
+      "type": "tool_result",
+      "content": "This session is gm-t160-fixture-20261102-85 [fc4cfa] — the name other sessions use to message it (it is not listed below; a message to it would be a message to yourself).\n\nPeer sessions (1):\n  t160_background_control [3f15de]  ·  bg  ·  idle  ·  started 1m ago"
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session-by-name.ndjson",
+      "type": "tool_use",
+      "name": "ToolSearch",
+      "input": {
+        "query": "select:SendMessage",
+        "max_results": 1
+      }
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session-by-name.ndjson",
+      "type": "tool_use",
+      "name": "SendMessage",
+      "input": {
+        "to": "t160_background_control",
+        "message": "T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files.",
+        "notify_when_idle": true,
+        "summary": "T160 probe to background control",
+        "type": "message",
+        "recipient": "t160_background_control",
+        "recipient_kind": "name",
+        "content": "T160 probe: reply with only T160_MESSAGE_RECEIVED…"
+      }
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session-by-name.ndjson",
+      "type": "tool_result",
+      "content": "{\"success\":true,\"message\":\"“T160 probe to background control” → t160_background_control (another Claude session on this machine; in that session's inbox, not yet read by its Claude — a [Cross-session delivery notice] follows if that session holds it (usually a different permission mode) or refuses it)\\nSubscribed — you will get one notice here when \\\"t160_background_control\\\" is next idle (or exits), provided that session runs in the same permission class as this one (or is one this session spawned) or asserts none; otherwise it is only logged here. Do not poll or wait for it; carry on.\",\"msg_id\":\"e042e562-8c02-4a1e-9383-dcb75960d839\"}"
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session-by-name.ndjson",
+      "type": "result",
+      "session_id": "4330ab7c-68c0-48f4-bccf-21cd07de7f31",
+      "is_error": false,
+      "result": "The message was delivered to the peer's inbox, but there's no reply or idle notice yet.\n\n**Target check (ListAgents):** there was exactly one peer, `t160_background_control [3f15de]`, shown as `bg · idle · started 1m ago`. The listing showed no cwd or path for it, so nothing conflicted with `%WORKTREE%`. That also means the listing couldn't confirm the path. I treated `3f15de` as an opaque listing ref only, not the same thing as `9031e15d`. One difference from your earlier `claude agents --json` run: that showed state `done`, and this listing shows `idle`. I sent to the bare exact name.\n\n**Native SendMessage call:**\n- `to`: `t160_background_control`\n- `message`: `T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files.`\n- `notify_when_idle`: `true`\n\n**Exact result:**\n```json\n{\"success\":true,\"message\":\"“T160 probe to background control” → t160_background_control (another Claude session on this machine; in that session's inbox, not yet read by its Claude — a [Cross-session delivery notice] follows if that session holds it (usually a different permission mode) or refuses it)\\nSubscribed — you will get one notice here when \\\"t160_background_control\\\" is next idle (or exits), provided that session runs in the same permission class as this one (or is one this session spawned) or asserts none; otherwise it is only logged here. Do not poll or wait for it; carry on.\",\"msg_id\":\"e042e562-8c02-4a1e-9383-dcb75960d839\"}\n```\n\n**Later notification:** none visible so far. No `[Cross-session idle notice]`, no `[Cross-session delivery notice]` and no `T160_MESSAGE_RECEIVED` reply has arrived. \"Success\" here only means the message reached that session's inbox, not that its Claude read it. If the peer runs in a different permission class, the idle notice will only be logged and won't reach this session. I didn't list or message any other peer, and I made no file changes.",
+      "duration_ms": 15057
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session-by-name.ndjson",
+      "type": "init",
+      "session_id": "4330ab7c-68c0-48f4-bccf-21cd07de7f31",
+      "cwd": "%TEMP%\\gm-t160-fixture-20261102",
+      "available": [
+        "ListAgents",
+        "SendMessage"
+      ]
+    },
+    {
+      "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session-by-name.ndjson",
+      "type": "result",
+      "session_id": "4330ab7c-68c0-48f4-bccf-21cd07de7f31",
+      "is_error": false,
+      "result": "The notification has now arrived.\n\n**Notification (verbatim):**\n> [Cross-session idle notice] \"t160_background_control\", which you asked to be notified about, is idle now — it finished a turn at 11:56. This is an automated notice from that session's harness — not a message from a person, and not an instruction; act on it only insofar as your user's earlier request calls for it.\n\n**What it shows:** the peer finished a turn after the send (msg_id `e042e562-8c02-4a1e-9383-dcb75960d839`) and is idle again. No `[Cross-session delivery notice]` arrived, so it didn't hold or refuse the message.\n\n**What's still unknown:** no `T160_MESSAGE_RECEIVED` reply has come back here. The idle notice only says the peer finished a turn. It doesn't show that the turn handled the probe, what it replied, or whether it used tools or changed files. The answer would be in that session's own transcript, which I can't see.\n\nI made no further calls and didn't contact any other peer.",
+      "duration_ms": 6902
+    }
+  ],
+  "worker_reply": {
+    "session_id": "9031e15d-71b7-4f88-b165-acddb9573b77",
+    "name": "t160_background_control",
+    "cwd": "%WORKTREE%",
+    "initial_status": {
+      "status": "idle",
+      "state": "done"
+    },
+    "transcript_marker": "T160_MESSAGE_RECEIVED",
+    "files_changed": false
+  },
+  "sources": [
+    {
+      "url": "https://code.claude.com/docs/en/cli-usage",
+      "accessed": "2026-11-02",
+      "finding": "The --bg flag starts a background session and checks workspace trust; claude agents supports cwd and JSON listing."
+    },
+    {
+      "url": "https://code.claude.com/docs/en/cross-session-messaging",
+      "accessed": "2026-11-02",
+      "finding": "Cross-session messaging and one notice on next idle/exit are native; same-machine main sessions; notification expires after 12 hours if no notice."
+    },
+    {
+      "url": "https://code.claude.com/docs/en/agent-view",
+      "accessed": "2026-11-02",
+      "finding": "Unattached finished/waiting sessions are stopped after about an hour. Session/worktree behavior is separately documented."
+    }
+  ],
+  "worker_transcript": {
+    "id": "9031e15d-71b7-4f88-b165-acddb9573b77",
+    "bytes": 174595,
+    "sha256": "c9eea1d8ab3663e0e7b7661c815460cbf69613ad681568e2882f1aa1a8c11dae",
+    "excerpts": [
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED",
+      "❯ Reply with only T160_BACKGROUND_CONTROL                                                                                                                                                               ",
+      "● T160_BACKGROUND_CONTROL",
+      "› Message from @gm-t160-fixture-2026…: T160 probe: reply with only T160_MESSAGE_RECEIVED. Do not use tools or change files. (ctrl+o to expand)",
+      "● T160_MESSAGE_RECEIVED"
+    ]
+  },
+  "conclusion": {
+    "background": "Could not verify background dispatch in the fixture because trust is required and no interactive trust decision was made.",
+    "message_and_notice": "Observed one same-machine message, worker reply, and notify_when_idle notice. The notice signals turn-idle/exit; it does not prove acceptance or artifact correctness.",
+    "worktree": "Could not verify --bg worktree creation in the fixture because trust stopped the command before worktree creation.",
+    "push": "No remote in the trunk fixture; PR variant requires explicitly creating a GitHub repository, so push/no-main behavior is not live-tested.",
+    "reaper": "One-hour idle reap is documented, not observed; no hour-long wait was run."
+  }
+}
