@@ -1,0 +1,108 @@
+{
+  "date": "2026-11-02",
+  "ticket": "159",
+  "status": "couldn't verify",
+  "cli": {
+    "version": "codex-cli 0.166.0",
+    "executable": "%USERPROFILE%/.bun/bin/codex.exe",
+    "sha256": "9D563EE4E0441FF9D59D612013E0460DDF8E5709735C2D9F6B98B7EF8CA4EB42",
+    "code_mode_host_missing_path": "%USERPROFILE%/.bun/bin/codex-code-mode-host.exe",
+    "code_mode_host_exists": false
+  },
+  "features": {
+    "defaults": {
+      "multi_agent_v2": {"stage": "stable", "enabled": false},
+      "agent_message_board": {"stage": "under development", "enabled": false},
+      "wake_on_agent_messages": {"stage": "under development", "enabled": false}
+    },
+    "one_process_override_catalog_check": {
+      "command": "codex features list --enable multi_agent_v2 --enable agent_message_board --enable wake_on_agent_messages",
+      "results": {
+        "multi_agent_v2": {"stage": "stable", "enabled": true},
+        "agent_message_board": {"stage": "under development", "enabled": true},
+        "wake_on_agent_messages": {"stage": "under development", "enabled": true}
+      }
+    },
+    "process_state_after_override_command": {
+      "command": "codex features list",
+      "results": {
+        "multi_agent_v2": {"stage": "stable", "enabled": false},
+        "agent_message_board": {"stage": "under development", "enabled": false},
+        "wake_on_agent_messages": {"stage": "under development", "enabled": false}
+      }
+    }
+  },
+  "fixture": {
+    "creation_command": "node scripts/spike-orchestrate-fixture.mjs create --variant trunk --dir <TEMP>/gm-t159-fixture",
+    "path": "%TEMP%/gm-t159-fixture",
+    "variant": "trunk",
+    "tree_sha": "7fd72339921451e85440698acda748c0bde512bb",
+    "remote": null,
+    "bytes": 98400
+  },
+  "probe": {
+    "sandbox": "read-only",
+    "prompt": "For this probe, call spawn_agent exactly once with a read-only task to return the marker T159_CHILD_DONE and do not use shell tools. After it starts, wait for that same agent to finish, then report its exact marker. Do not create children from the worker.",
+    "cases": [
+      {
+        "name": "baseline-no-flags-ephemeral",
+        "command": "codex exec --ephemeral --cd <TEMP>/gm-t159-fixture --sandbox read-only --json <prompt>",
+        "exit_code": 0,
+        "thread_id": "01a19dd5-c282-7a33-a011-4e8fdd1512ec",
+        "events": ["thread.started", "error: Code Mode is unavailable because failed to spawn code-mode host %USERPROFILE%/.bun/bin/codex-code-mode-host.exe: host executable was not found; Code mode will fail closed", "turn.started", "agent_message", "collab_tool_call wait receiver_thread_ids=[]", "agent_message: T159_CHILD_DONE", "turn.completed"],
+        "outcome": "CLI exited 0; no worker was started; marker text is not a worker result",
+        "failure_classification": "infrastructure error plus unsupported success assertion"
+      },
+      {
+        "name": "multi-agent-v2-ephemeral",
+        "command": "codex exec --ephemeral --cd <TEMP>/gm-t159-fixture --sandbox read-only --enable multi_agent_v2 --json <same prompt>",
+        "exit_code": 0,
+        "thread_id": "01a19dd6-1473-7690-835f-702b8673c82f",
+        "events": ["thread.started", "error: Code Mode is unavailable because failed to spawn code-mode host %USERPROFILE%/.bun/bin/codex-code-mode-host.exe: host executable was not found; Code mode will fail closed", "turn.started", "agent_message", "collab_tool_call wait receiver_thread_ids=[]", "agent_message: T159_CHILD_DONE", "turn.completed"],
+        "outcome": "Matches no-flag baseline; no worker was started; marker text is not a worker result",
+        "failure_classification": "infrastructure error plus unsupported success assertion"
+      },
+      {
+        "name": "multi-agent-v2-saved-session",
+        "command": "codex exec --cd <TEMP>/gm-t159-fixture --sandbox read-only --enable multi_agent_v2 --json <same prompt>",
+        "exit_code": 0,
+        "thread_id": "01a19dd6-572d-78f1-b0d3-b485e6ead15e",
+        "events": ["thread.started", "error: Code Mode is unavailable because failed to spawn code-mode host %USERPROFILE%/.bun/bin/codex-code-mode-host.exe: host executable was not found; Code mode will fail closed", "turn.started", "agent_message", "collab_tool_call wait receiver_thread_ids=[]", "agent_message: T159_CHILD_DONE", "turn.completed"],
+        "outcome": "Matches baseline and ephemeral v2 result; no worker was started; marker text is not a worker result",
+        "failure_classification": "infrastructure error plus unsupported success assertion",
+        "persistent_session_record": "Created by saved-session probe; recycle only after critic confirms exact owned record"
+      }
+    ]
+  },
+  "questions": {
+    "spawn_and_depth_limits": "Couldn't verify whether the flags change them; no child was created in the matched control or v2 run.",
+    "message_board_delivery_and_polling_replacement": "Couldn't verify; no message-board event or worker receiver existed.",
+    "wake_on_agent_messages": "Couldn't verify; no worker or wake event existed.",
+    "same_worker_question_and_await": "Couldn't verify; no worker existed to ask or resume."
+  },
+  "settings": {
+    "used_process_enable_overrides_only": true,
+    "ran_codex_features_enable": false,
+    "edited_config_toml": false,
+    "global_config_pre_post_hash": "not captured; no persistent write command or manual edit was performed"
+  },
+  "raw_evidence": {
+    "files": [
+      {"path":".scratch/t159-evidence/baseline-no-flags.txt","bytes":2072,"sha256":"F67025EA80A325741AA92035B2FD3372FBCAE8B2568DDA20DB571DC1D32F779D"},
+      {"path":".scratch/t159-evidence/multi-agent-v2.txt","bytes":2050,"sha256":"B12A315D93C2C0B2B42824EF216838C9A07382471E7F79D87BF6909DF9A0B93D"},
+      {"path":".scratch/t159-evidence/multi-agent-v2-saved.txt","bytes":2084,"sha256":"11AB4781AA499FEBE36AF737EF822A7344EA752829E52057E14A2F79C03C4CA4"}
+    ],
+    "retain_until_critic_review": true
+  },
+  "cleanup": {
+    "fixture": {"path": "%TEMP%/gm-t159-fixture", "bytes": 98400, "status": "pending critic review, then recycle to OS trash"},
+    "raw_evidence": {"path": ".scratch/t159-evidence", "bytes": 6206, "status": "pending critic review, then recycle to OS trash"},
+    "saved_cli_record": {"thread_id": "01a19dd6-572d-78f1-b0d3-b485e6ead15e", "bytes": null, "status": "identify and recycle exact owned session record only after critic review"},
+    "global_settings": "No restore needed; only process overrides were used."
+  },
+  "sources": [
+    {"kind": "local primary", "name": "codex --help", "finding": "--enable <FEATURE> is a process option equivalent to a command-line features.<name>=true override"},
+    {"kind": "local primary", "name": "codex features list", "finding": "feature catalog stage and effective defaults/overrides recorded above"},
+    {"kind": "official docs", "url": "https://developers.openai.com/codex/multi-agent", "scope": "The current subagents guide describes current local Codex CLI subagent workflows; it does not specify the three feature flags or their message-board/wake semantics."}
+  ]
+}
