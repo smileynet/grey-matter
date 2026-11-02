@@ -319,3 +319,89 @@ Standards and Spec reviews found no implementation blocker; the Spec review's
 pending cleanup item was completed as recorded above. The scoped research audit
 is [recorded separately](harness-experimental-features-20261101-t154-audit.md),
 with high trust (8/10) and no blocking finding.
+
+## Ticket 155: mixed-backend setup probe (2026-11-02)
+
+**Answer: couldn't verify the requested loop on installed Kiro Crew 0.11.1.**
+The proposed settings do not split an ordinary KAS conductor from its ordinary
+Claude/Codex worker sessions. This is a setup limitation, not a failed
+`work_report`, wake or acceptance test. No worker prompt was dispatched.
+Confidence is high for the tested routing and initialization; cross-harness
+work-ledger behavior remains unknown.
+
+**Observed — installation and adapter health.** With the user's authorization,
+`npm install --prefix <disposable-adapters> --ignore-scripts --no-audit --no-fund --save-exact @agentclientprotocol/claude-agent-acp@0.99.1 @agentclientprotocol/codex-acp@2.5.0`
+added 124 packages. It used 838,019,117 logical bytes (849,527,296 allocated),
+including bundled native Claude and Codex executables. No global install or
+existing configuration was changed. Installed native Crew resolvers accepted
+the local entries through process-only `CLAUDE_AGENT_ACP_BIN` and
+`CODEX_ACP_BIN`. Direct `node <entry>` ACP `initialize` requests returned JSON-RPC
+results with protocol version 1 for both adapters, then exited 0 without timeout:
+**pass for initialization only**. No authenticated model session or tool call was
+tested. The [sanitized receipt](evidence/kirocrew-mixed-backend-20261102.json)
+records versions, lockfile/source hashes, routing and outcomes.
+
+**Observed — native routing.** Calling installed
+`members_parts/member_sessions.py::select_provider_backend` with ordinary
+`dashboard:t155-conductor` and `dashboard:t155-worker` keys, default `kas`, and
+member backend first `claude`, then `codex`, returned `kas` in all four cases.
+Native introspection of `create_session` showed no `backend` parameter. This
+was a direct function probe, not an end-to-end dispatch. Its result agrees with
+the following installed primary source (0.11.1, read 2026-11-02):
+
+- `members_parts/member_sessions.py`, `select_provider_backend`:
+  `if is_member_session_key(session_key) or is_crewmate_worker_session(session_key):`
+  enters the member route; the final fallback is `return configured_default`.
+- `dashboard/session_control_parts/session_create.py`:
+  `child_backend = crewmate_worker_backend(cfg.agent) if own_worker else cfg.agent.acp_backend`.
+  Thus ordinary children use the same configured default as an ordinary
+  conductor. This is source-traced behavior, corroborated at the selector only;
+  a live child was not created.
+- `acp/launch.py`, `_resolve_node_adapter_argv`, documents its first candidate as
+  `*override_env* (explicit override; need not be executable -- a non-executable script is auto-wrapped with node)`.
+
+**Source-traced — why not substitute another spawn path.** Installed
+`agent_parts/spec_prompts.py` states the conductor ledger flow:
+`session_create` the child, then `work_ledger_record` `action=bind`.
+The pipeline charter also says a work item never goes to
+`spawn_run`, `spawn_sub_agents`, `workflow_run` or `task_run`.
+The selector documents an explicit `spawn_run(backend=...)` override, but that
+would test a different path. Changing the default to `claude`/`codex` also changes
+the ordinary conductor's backend. Neither establishes the requested KAS
+conductor plus external worker loop. A pinned existing session, an upstream
+revision with a per-child override, or a crewmate-owned worker may warrant a
+separate design/probe; none was tested here.
+
+**Observed — disposable gateway and baseline.** A loopback gateway reached its
+native READY state under `--test-mode --no-tunnel --no-crons` (Reads approval,
+YOLO off), using private `KIROCREW_HOME` and `KIRO_HOME`. Only disposable config
+set KAS default, Claude member backend, session control, Windows unsandboxed
+execution fallback and `session.eager_spawn=false`. `KIROCREW_SKIP_MODEL_DOWNLOAD=1`
+was process-only. An attempted top-level `embedding.enabled=false` setting was
+reported unrecognized and ignored; it is not a supported recipe. An optional
+HTTP config read with Bearer authentication returned 403 `Token required`:
+**infrastructure error**, not evidence about routing or model access. No chat
+was created through that API. Native `stop --port <probe-port>` requested graceful
+shutdown; the gateway process and listening port were then absent. Fixture
+`npm --prefix <fixture> test`: **pass**, 1 test, 0 failures/skips. This baseline
+does not establish external-worker test execution.
+
+**Couldn't verify / outcome.** The mixed loop is **skipped for the unsupported
+setup through the tested settings**; `work_report`, ledger wake and conductor
+acceptance are unverified across these harnesses. Adapter initialization does
+not establish authentication, model access, MCP grants, shell permissions or
+Windows OS isolation. No global approval setting, agent spec or user credential
+was changed. Owned probe data remains only until independent audit and cleanup;
+final disposition and repository checks are recorded below before ticket close.
+
+**Cleanup and audit (observed).** After the
+[independent scoped audit](harness-experimental-features-20261101-t155-audit.md)
+(8/10; no unsupported claims), recycled the entire 842,044,678-byte probe
+directory (adapters, gateway home, private scripts and logs) and the 98,400-byte
+fixture. Both paths were absent afterward. Resolved exact paths, no reparse
+points, and Recycle Bin capacities above each target were checked first.
+The pre-existing global embedding model (639,150,592 bytes) was not created by
+this ticket and was left untouched. The existing managed primary checkout
+serves this orchestration workstream; the app's primary-checkout archive guard
+still governs its eventual removal. The separate 98,400-byte ticket 158 fixture
+is retained until that probe finishes. No ticket 155 runtime data is retained.

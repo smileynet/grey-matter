@@ -1,0 +1,37 @@
+{
+  "ticket": 155,
+  "date": "2026-11-02",
+  "kirocrew_version": "0.11.1",
+  "fixture_tree": "7fd72339921451e85440698acda748c0bde512bb",
+  "install": {
+    "scope": "disposable project-local prefix; no global install",
+    "flags": ["--ignore-scripts", "--no-audit", "--no-fund", "--save-exact"],
+    "packages": {"@agentclientprotocol/claude-agent-acp": "0.99.1", "@agentclientprotocol/codex-acp": "2.5.0"},
+    "package_lock_sha256": "3f88fcfdf33137b0c460e38aca3ce05cf626bc05a5d9e0936ec70a78010f2089",
+    "packages_added": 124,
+    "initial_logical_bytes": 838019117,
+    "initial_allocated_bytes": 849527296
+  },
+  "adapter_initialize": [
+    {"adapter": "claude-agent-acp", "protocolVersion": 1, "response_received": true, "exit_code": 0, "timeout": false},
+    {"adapter": "codex-acp", "protocolVersion": 1, "response_received": true, "exit_code": 0, "timeout": false}
+  ],
+  "native_resolvers": {"claude": "node plus pinned local entry", "codex": "node plus pinned local entry"},
+  "native_routing": [
+    {"session_kind": "ordinary conductor", "member_backend": "claude", "default": "kas", "selected": "kas"},
+    {"session_kind": "ordinary worker", "member_backend": "claude", "default": "kas", "selected": "kas"},
+    {"session_kind": "ordinary conductor", "member_backend": "codex", "default": "kas", "selected": "kas"},
+    {"session_kind": "ordinary worker", "member_backend": "codex", "default": "kas", "selected": "kas"}
+  ],
+  "create_session_parameters": ["state", "caller_session_key", "title", "agent", "agent_kind", "folder_id", "model", "reasoning_effort", "autocompact_pct", "caller_fenced", "dry_run"],
+  "source_sha256": {
+    "members_parts/member_sessions.py": "f52ca0e05b01c7add06dddc8c58151a7912ad96e25566e8a87a1e80ab54952c8",
+    "dashboard/session_control_parts/session_create.py": "a1de018cbb9d4d6f28d0c43caea457ff2c87ed991ea2f3b45c8c47588b4e9ee9",
+    "agent_parts/spec_prompts.py": "b52db6d4165172c39837e22be199aaa71a8d7945a1d9b3667470bab6234c5b81",
+    "acp/launch.py": "c816822ec929eec1f2e6eade178f84dac3e2b1fa1ff60ef7b2777c5d58321c0a"
+  },
+  "gateway": {"ready": true, "approval": "reads", "yolo": false, "stop_requested": true, "process_and_listener_absent_after_stop": true, "config_read": "infrastructure error: HTTP 403 Token required with attempted Bearer authentication", "ignored_config": "embedding top-level key unrecognized"},
+  "fixture_baseline": {"outcome": "pass", "tests": 1, "failures": 0, "skips": 0},
+  "mixed_loop": {"outcome": "skip", "reason": "Requested backend split not configurable through tested settings for ordinary built-in-conductor children; no worker prompt dispatched", "work_report": "unverified", "wake": "unverified", "acceptance": "unverified"},
+  "cleanup": {"method": "OS Recycle Bin", "probe_logical_bytes": 842044678, "fixture_logical_bytes": 98400, "both_targets_absent_after": true, "runtime_retained": false}
+}

@@ -6,6 +6,14 @@ Observed 2026-11-01 on 0.11.1/KAS; the installed conductor differed from source 
 
 ## Bind before seed
 
+On installed 0.11.1, ordinary conductor children use `agent.acp_backend`.
+`agent.member_acp_backend` applies to crewmate DMs and their own workers;
+`session_create` has no backend override. Do not present it as a mixed-backend
+setting for the built-in KAS conductor. Both external adapters initialized in
+[ticket 155](../../../../docs/agents/research/harness-experimental-features-20261101.md#ticket-155-mixed-backend-setup-probe-2026-11-02),
+but cross-harness reports, wakes and acceptance remain unverified. A
+`spawn_run(backend=...)` probe exercises a different dispatch path.
+
 Keep tkt authoritative; map each ticket to a work-ledger item. When live tools
 support work_dispatch, inspect its schema and returned binding before using it.
 The observed path was: create work item, session_create with explicit writable
