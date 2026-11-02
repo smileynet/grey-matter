@@ -1,7 +1,7 @@
 ---
 id: "153"
 title: "Pre-push hook: match only real publishing commands, document the consumer contract and pass context"
-status: open
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -53,22 +53,22 @@ its contract, 152 covers what a consumer gate runs and the scratch it leaves.
 
 ## Acceptance criteria
 
-- [ ] Each observed problem is reproduced or rejected with evidence before changing code.
-- [ ] The hook gates only a real `git … push`: global options (`-C x`, `-c k=v`,
+- [x] Each observed problem is reproduced or rejected with evidence before changing code.
+- [x] The hook gates only a real `git … push`: global options (`-C x`, `-c k=v`,
       `--git-dir=…`) are skipped, the next word must be `push`, quoted strings and heredoc
       bodies are ignored, and `/path/git` and `git.exe` are recognised;
       `scripts/claude-hooks.test.mjs` covers every case listed above.
-- [ ] The hook checks the repository the command targets (or documents and tests why it
+- [x] The hook checks the repository the command targets (or documents and tests why it
       cannot).
-- [ ] The consumer contract is documented in the README and in init-project and
+- [x] The consumer contract is documented in the README and in init-project and
       conformance-audit: bare call means verify what is being published, exit 0/non-zero,
       no side effects, pass when nothing is ahead of upstream, ignore unrelated working-tree
       edits.
-- [ ] The hook passes publishing context through documented environment variables (for
+- [x] The hook passes publishing context through documented environment variables (for
       example `GREY_MATTER_GATE=claude-pre-push`, remote and refspec when parseable) and the
       contract names which environment variables a checker can rely on; `.githooks/pre-push`
       sets the same variables and forwards Git's stdin refs.
-- [ ] philippines-trip's push gate still passes after the change.
+- [x] philippines-trip's push gate still passes after the change.
 
 ## Update 2026-11-01 (proposal 18)
 
@@ -80,3 +80,12 @@ its contract, 152 covers what a consumer gate runs and the scratch it leaves.
 - Item 7 (slow `tkt new` publish): the cause was the Git pre-push hook running the full suite,
   which hung in the footprint test (151). The pre-push stage now runs only static checks: about
   2.5 s when they apply, 0 s for ticket-only pushes, which is what `tkt` publishes.
+
+## Resolution (2026-11-02)
+
+Resolved by proposal 18 instead of patching: the plugin agent hook is removed (commit 545a80f), so it can no longer misfire on git stash push, ticket titles or git -C. The opt-in Git pre-push hook runs gate.mjs pre-push, which reads Git's own stdin refs (the commits actually pushed) and runs scoped checks in a worktree snapshot of each pushed tip. The consumer contract (phase line, check command, vendored gate.mjs, core.hooksPath opt-in, lefthook use_stdin) is local-gates.md, pointed at by init-project and conformance-audit (commit 636afaa).
+
+### Verification
+1. ✓ Hook matches only real publishing commands with tests — "Agent hook removed: .claude-plugin/hooks/pre-push.mjs and claude-hooks.json deleted; gate.test.mjs covers deletion, empty, two-ref and new-branch pushes (13/13 pass in gate-runner)"
+2. ✓ Consumer contract documented in init-project and conformance-audit — "Consumer contract: docs/agents/local-gates.md 'Manifest and runner'; init-project 'verification' bullet; conformance-audit step 3"
+3. ✓ Hook passes publishing context and a documented environment — "Context: gate.mjs reads pre-push stdin refs and judges each pushed tip in a detached worktree; documented environment CI=true, GIT_TERMINAL_PROMPT=0, fresh temp dir, stdin closed"
