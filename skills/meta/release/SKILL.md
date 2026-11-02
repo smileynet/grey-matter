@@ -48,7 +48,9 @@ own path, so a deployed copy of this skill stops with "Shared release tools miss
    SHA and artifact directory for fresh product/native evidence. Run source/native
    syntax, resource/legal closure, version, checksum, recovery, platform and
    fresh-install/upgrade gates on that candidate; native checks for another OS run on
-   that machine. Obtain the final audit disposition, stage notes/README/changelog and
+   that machine. Give every verify or probe invocation a fresh numbered output folder;
+   retain failed folders until their useful evidence is promoted and recovery no longer
+   needs the original. Obtain the final audit disposition, stage notes/README/changelog and
    repeat gates after edits. No script writes the six gate receipts or the staging
    index: write them to the [staging format](../../../docs/agents/release-staging.md),
    each receipt citing the evidence it rests on, and commit them with the carrier on a

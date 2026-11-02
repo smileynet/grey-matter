@@ -99,7 +99,7 @@ against already-bumped source or reinterpret an old draft state as the new ident
 Use the candidate SHA and artifact directory returned by preparation:
 
 ```sh
-node scripts/release.mjs verify --repo /path/to/candidate --sha FULL_COMMIT_SHA --artifacts /path/to/draft/artifacts --out /path/to/new-verification
+node scripts/release.mjs verify --repo /path/to/candidate --sha FULL_COMMIT_SHA --artifacts /path/to/draft/artifacts --out /path/to/verify-01
 ```
 
 tkt uses the same arguments through `node tools/release.mjs verify` or
@@ -114,8 +114,12 @@ failure skips native execution. Native failure, an intervening checkout move, or
 changed sealed bytes prevents success. The atomically written verification.json index records
 phase states, timestamps and the metadata hash, plus hashes of child reports as they
 finish. Logs/results remain in the product/ and native/ subdirectories. Reports are generated fresh; previous
-output directories are refused. After failure or interruption, inspect the retained
-output and run again at a new path. Preparation can still resume its own draft state;
+output directories are refused. Give each verify or probe invocation its own numbered
+output folder (`verify-01`, `verify-02`, `product-01`, `native-01`, and so on); never
+reuse or delete a failed folder to retry. After failure or interruption, inspect and
+retain its output, then run again at the next number. Keep failed evidence until the
+useful findings are promoted and no recovery or release record still needs the original.
+Preparation can still resume its own draft state;
 verification does not change that state or its immutable artifacts.
 
 Successful product/native verification keeps `publishable: false` and explicit
@@ -128,16 +132,19 @@ contract; the remaining gates are receipts written at staging.
 Inspect the product gate without writing or running it:
 
 ```sh
-node scripts/release-product.mjs --repo /path/to/candidate --sha FULL_COMMIT_SHA --out /path/to/new-evidence
+node scripts/release-product.mjs --repo /path/to/candidate --sha FULL_COMMIT_SHA --out /path/to/product-01
 ```
 
 Add `--execute` to run grey-matter's `gate.mjs pre-release` or tkt's
 `mise run check` in a clean checkout at that exact SHA. Install the candidate's
 maintainer dependencies first; this command does not install or publish anything.
-Evidence needs a new directory outside the checkout. Logs, hashes, exit/signal,
+Evidence needs a new numbered directory outside the checkout for every invocation.
+Logs, hashes, exit/signal,
 command, timestamps and the actual OS/architecture/Node version are recorded there.
 A failed command or changed candidate produces failed evidence. Output is never
-reused as proof: rerunning needs a new evidence path and executes checks again.
+reused as proof: rerunning needs the next numbered evidence path and executes checks
+again. Preserve failed probe evidence until its useful findings are promoted and
+recovery no longer needs the original.
 
 `--require-tools` makes the normally optional missing-tkt check fail. Native checks
 remain a separate gate. Product success always retains `publishable: false` and
@@ -149,7 +156,7 @@ candidate repository. The separate install/upgrade probes use disposable homes.
 ## Native evidence for sealed bundles
 
 ```sh
-node scripts/release-native.mjs --artifacts /path/to/bundles --out /path/to/new-evidence
+node scripts/release-native.mjs --artifacts /path/to/bundles --out /path/to/native-01
 ```
 
 The default verifies bundle structure and reports the native plan without launching
