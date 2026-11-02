@@ -1,7 +1,7 @@
 ---
 id: "115"
 title: "Require positive scoped evidence for preservation claims"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Worked examples correctly classify healthy service plus empty inventory as service-only evidence and nonempty matched observations as scoped preservation evidence."
