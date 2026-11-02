@@ -1,7 +1,7 @@
 ---
 id: "106"
 title: "Release verify keeps numbered attempts instead of overwriting evidence"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "The release skill and preparation doc say to use a new numbered folder per attempt and keep failed ones"
