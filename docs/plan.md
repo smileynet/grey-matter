@@ -157,7 +157,7 @@ recycle owned artifacts; leave unresolved external evidence explicit rather than
 
 ## Orchestration workstream (reconciled 2026-11-02)
 
-Scope: exactly the 30 tickets in the two tables below, tagged
+Scope: exactly the 31 tickets in the two tables below, tagged
 `stream:orchestration`; their current statuses are shown in the tables.
 Other tooling, test-verification, dashboard and release work remains in its
 existing stream. Related parked #06 (skill/version drift evaluations) and #09
@@ -183,7 +183,7 @@ auth remains conditional on the result of #186.
 
 | ID | Work | Status |
 | --- | --- | --- |
-| 186 | 2. Verify KAS relay authentication ownership and record a supported recipe | open |
+| 186 | Verify KAS relay authentication ownership and record a supported recipe | in_progress |
 | 156 | 3. Qualify Mate report/wake recovery across gateway restart | open |
 | 158 | 4. Test narrower agy regex permissions with negative controls | open |
 | 157 | 5. Test agy native workflow dispatch and per-role model selection | open |
@@ -192,6 +192,7 @@ auth remains conditional on the result of #186.
 | 161 | 8. Test Kiro V3 workflow execution, pause, resume and retry | open |
 | 188 | 9. Diagnose Codex's missing code-mode tool host before claiming tool execution | open |
 | 189 | 10. Qualify Kiro V3 ACP EOF shutdown and descendant settlement | open |
+| 190 | Resolve Crew Windows host-auth integration before relying on Crew-owned identity | open |
 | 173 | 11. Compare GUI watch/answer surfaces against #162's qualified live driver | open |
 | 174 | 12. Select and demonstrate Harbor or a thin runner for the model trials | open |
 | 167 | 13. Compare implementation worker tiers | open |
@@ -213,6 +214,7 @@ flowchart TD
   D162 --> K189["189 Kiro ACP EOF diagnosis"]
   D162 -.-> A186["186 KAS auth ownership"]
   A186 -.-> M156["156 Mate restart/recovery"]
+  A186 --> A190["190 Crew Windows auth integration"]
   P158["158 agy regex permissions"] -.-> W157["157 agy workflows"]
   subgraph Other["Independent harness probes"]
     C159["159 Codex messaging"]
@@ -269,6 +271,12 @@ Their place before GUI/runner qualification is recommended order, not a blanket
 blocker on unrelated harnesses. #173 can observe a live ACP session with the EOF
 caveat; #174 can record an unavailable Codex lane. A real tool-executing Codex
 lane requires #188's remedy, and clean ACP EOF settlement requires #189's result.
+
+#186's three-arm routing probe confirmed the Windows omitted-flag mismatch.
+#190 tracks a supported integration correction and depends on the #186 receipt;
+it is conditional for Crew-owned relay identity, not a blocker on #156's verified
+CLI-owned option. The auth probe's private homes/logs/scripts (130,097 bytes)
+were recycled after independent audit, with no auth-probe histories retained.
 
 After #162's independent audit, its 20 retained t111 artifacts (1,764,849 bytes),
 current probe (1,569,869 bytes) and fixture (98,400 bytes) were recycled. The

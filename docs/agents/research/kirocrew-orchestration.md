@@ -92,13 +92,13 @@ ownership by omitting the flag, then answer `_kiro/auth/getAccessToken` itself.
 There is a compatibility question in the installed versions: **observed**
 `kiro-cli acp --help` on CLI 2.37.1 says authentication defaults to `cli`,
 and `client` is the value that forwards token requests to the ACP client.
-Crew 0.11.1 omits the flag for its host-owned case. That help/source mismatch
-means the intended callback path is not established by these two artifacts;
-it does not by itself demonstrate an authentication failure. A fresh
-`initialize`/auth callback probe would settle whether Crew launches a sibling
-binary with different defaults or whether the CLI default changed underneath
-this Crew build. The Crew-bundle route below has no such ambiguity in source:
-Crew is always its auth owner.
+Crew 0.11.1 omits the flag for its host-owned case. At ticket 185 close this
+was an unresolved help/source mismatch. [Ticket 186's Windows probe](#ticket-186-auth-owner-routing-2026-11-02)
+subsequently confirmed that the omitted command behaves like CLI ownership;
+explicit `client` forwards the callback. Windows has no chat-sibling substitution
+in this Crew build. Real Crew-vault token delivery and POSIX defaults remain
+unverified. The Crew-bundle route below has no such ambiguity in source:
+Crew is always its intended auth owner.
 
 **Crew's own pinned bundle.** With `agent.kas_bundle = true`, Crew launches
 the KAS ACP server using its own installed Node runtime. The command is
@@ -114,8 +114,8 @@ CLI release contained `@kiro/agent` version `0.66.70`. Kiro Crew's own
 `~/.kiro/crew/engines/kas` directory was absent. The local Crew config omitted
 `agent.kas_bundle`, whose installed default is `false`. This confirms that the
 Crew-bundled route was not installed/enabled here; it does not prove what route
-every Crew installation uses. The CLI help/source auth mismatch above remains
-unresolved and may affect the relay auth callback path. Kiro's release docs confirm that V3 has its own
+every Crew installation uses. Ticket 186 now captures the Windows relay auth
+mismatch; real Crew-vault refresh remains untested. Kiro's release docs confirm that V3 has its own
 ACP launch: “`kiro-cli acp --agent-engine=v3`” ([ACP migration guide](https://kiro.dev/docs/cli/v3/acp-migration/),
 current page). Kiro also warns that ACP protocol version alone does not tell
 you whether the server is V2 or V3 because “both negotiate version 1.” Use the
@@ -158,8 +158,8 @@ fork, MCP HTTP/SSE, and Kiro extensions for memory, context, compacting,
 workflows, source providers and local/cloud-sandbox execution targets. These
 are advertised surfaces only: the probe sent no `session/new` and no prompt,
 so it did not exercise model access, tools or those methods. This CLI-owned
-auth probe also does not resolve whether Crew's omitted flag correctly selects
-the client-owned callback path. Local logging paths were removed from the
+auth probe alone did not resolve the omitted-flag owner. Ticket 186 below now
+tests Windows callback routing without real Crew-token delivery. Local logging paths were removed from the
 [sanitized handshake receipt](evidence/kas-initialize-20261102.json); no token
 or model response was obtained or retained.
 
@@ -407,3 +407,113 @@ These are tied to Kiro Crew's own runtime:
 
 - **The built-in `report` tool.** It appears in the conductor's `allowedTools` next to `session`, but what it does was not traced (`agent_materialization/conductor_agents.py:55`).
 - **Not read in depth:** `rfc-worker-context-cap.md`, the `team-lead` skill, and the crew-log `envelope.md` and `errors.md` references.
+
+## Ticket 186: auth-owner routing (2026-11-02)
+
+**Finding (observed, high confidence for these Windows builds):** Crew 0.11.1's
+omitted-flag host-auth relay command does not select client-owned authentication
+on installed kiro-cli 2.37.1. It behaves like explicit CLI ownership. Explicit
+`--auth-method client` does forward the engine's token requests. This confirms
+the routing compatibility gap carried by #185; it does not test delivery of a
+real Crew-vault credential or prove which account a future session will use.
+
+Primary inputs were the installed Crew package, current CLI help, three native
+ACP runs, and private persisted assistant messages. The
+[sanitized receipt](evidence/kas-auth-ownership-20261102.json) records executable
+and source hashes plus credential-free outcomes. CLI package/engine versions
+were 2.37.1/0.66.70; the Crew source version was 0.11.1. No product patch,
+login/logout, account switch, global configuration edit or provider fallback
+was performed.
+
+### Selected executable and source intent
+
+**Observed helper execution:** Crew's
+`acp/client_spawn_env.py::_resolve_kiro_bin_for_spawn` resolved the same executable
+as `Get-Command kiro-cli`; the probe used that exact binary (SHA-256 in receipt).
+`kiro_cli.py::chat_sibling` returned `None` on Windows. Pure builder execution
+produced:
+
+```text
+host_auth=False: kiro-cli.exe acp --agent-engine v3 --auth-method cli
+host_auth=True:  kiro-cli.exe acp --agent-engine v3
+```
+
+**Source-traced, installed 0.11.1:** `acp/harness/kas.py` resolves the binary,
+chooses `host_auth` from its vault-presence seam, optionally substitutes a POSIX
+chat sibling, then passes the result to `build_kas_argv`. The Windows sibling
+exception is explicit in `kiro_cli.py`: `None` when the swap does not apply,
+including “on Windows (one self-contained `kiro-cli.exe`)”. The transport builder
+only appends an owner flag under `if not host_auth:`. Its comment says
+`host_auth=True` omits the flag and expects the callback to reach Crew.
+This trace does not assert the normal user's current vault state: no vault probe
+or live Crew gateway was needed to compare both constructed commands.
+
+The current [first-party ACP guide](https://kiro.dev/docs/cli/v3/acp-migration/)
+says CLI login owns token requests by default and instructs clients to pass
+`--auth-method=client` when they must answer them. Its callback-handler
+requirement matches the explicit-client arm below. That is the documented
+contract, separately corroborated by runtime routing here.
+
+### Native three-arm probe
+
+Each process had a different private, process-only `KIRO_HOME` and an empty
+private workspace. Calls were `initialize`, `session/new` (empty client MCP
+array, requested Haiku 4.5), then an authentication-only prompt requesting
+`AUTH_OK` with no tools. The probe recorded method names, safe outcome fields
+and byte counts; it did not persist raw callback parameters/results or stderr.
+Existing CLI sign-in was used internally by CLI-owned arms. The controller did
+not read the Crew vault or supply any token.
+
+| Arm | Owner argument | Callback observation | Prompt result and classification |
+| --- | --- | --- | --- |
+| Explicit client | `--auth-method client` | Nine `_kiro/auth/getAccessToken` requests reached the host | Controller returned only a fixed JSON-RPC -32000 credential-unavailable error. Native prompt failed -32000/authentication unavailable, no assistant output or tool events. **Pass for routing and expected negative-auth control**, not successful client authentication |
+| Explicit CLI | `--auth-method cli` | No token request reached the controller | Prompt returned `end_turn`; persisted assistant content was exactly `AUTH_OK`, seven bytes. **Pass for this CLI-owned prompt**, no model tool events |
+| Crew host-mode argv | Flag omitted | No token request reached the controller | Same `end_turn` and exact persisted `AUTH_OK`. **Pass for the prompt; assertion failure against the intended host-owned callback routing** |
+
+The initial streaming marker flag checked individual chunks, so it did not
+validate a marker split across chunks. That flag was discarded. The exact
+assistant text above was independently read from the private native message
+records before cleanup, without another model call. User prompt text was not
+counted as assistant output.
+
+All three relay processes exited 1 with the known native five-second EOF
+teardown error (#189); the controller's 45-second timeout did not fire. All
+recorded parent PIDs and their direct children were absent at the settlement
+check. **Infrastructure error for teardown** remains separate from authentication
+routing, expected negative authentication, or successful prompt responses.
+
+### Supported choices and remaining limits
+
+- For a CLI-owned external ACP session on this installation, select
+  `--auth-method cli` explicitly and use the intended existing CLI sign-in.
+  That exact native command completed the probe. Do not infer its account
+  identity from a Crew dashboard login.
+- For a client-owned external ACP integration, select `--auth-method client`
+  and register the token-request handler before session creation. Routing and
+  the unavailable-credential error path were tested; successful real-token
+  delivery/refresh was not. Do not turn this negative control into a claim
+  that Crew's vault integration was exercised.
+- Crew 0.11.1's Windows host-auth builder needs a supported integration
+  correction/version before its intended owner can be assumed. This is tracked
+  separately in #190. No untested wrapper or in-place patch is recommended.
+  A future private Crew probe can use its source-traced CLI-owned branch
+  (empty private Crew identity store) and verify the selected argv before work;
+  this ticket did not start a full Crew gateway.
+- POSIX chat-sibling defaults, Crew's standalone bundle, signed-out CLI behavior,
+  different-account controls, and real Crew-vault refresh remain **unverified**.
+  No credential identity was compared. An omitted flag that worked on an older
+  release or another platform is not evidence for these Windows builds.
+
+Private probe homes, logs and scripts remain only through independent audit and
+are recycled before close; durable evidence contains no token values, account
+identifiers or private filesystem paths. Final cleanup/check evidence is recorded
+with the owning ticket.
+
+The [independent scoped audit](kirocrew-orchestration-t186-audit.md) rated these
+claims supported at 0.95 trust, including its own check of the exact private
+assistant payloads. After audit, recycled the 130,097-byte private probe,
+including its three native homes/sessions, logs and scripts. The resolved root,
+absence of reparse points, stable byte count and sufficient Recycle Bin capacity
+were checked first; the target was absent afterward. No auth-probe native
+history is retained. Shared harness installations and credential stores were
+left intact; their existing native refresh behavior was not inspected.

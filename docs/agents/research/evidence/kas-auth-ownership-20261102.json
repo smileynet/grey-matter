@@ -1,0 +1,162 @@
+{
+  "ticket": 186,
+  "date": "2026-11-02",
+  "platform": "Windows",
+  "crew_version": "0.11.1",
+  "cli_version": "2.37.1",
+  "engine_package_version": "0.66.70",
+  "binary_sha256": "f4a6c31a88822b7b67d5c795df87f1465b34c6a4acbba01e9a0158ab0ff4c66c",
+  "resolver_matches_test_binary": true,
+  "windows_chat_sibling": null,
+  "source_sha256": {
+    "kiro_cli.py": "b6306ef1759662bc309c8a1629efac8acfe29fa4a512f71eb0e74cf152d67dd2",
+    "acp/harness/kas.py": "d70294991fd38b035febd95d756a295eaee3af23f948de75e52148d665b2fd4b",
+    "acp/kas_transport.py": "238e91a280d43fc599825c0bd4977d772d37565491fccfaa7fae62d1f182e06b",
+    "acp/kas_host_auth.py": "eda6b56a64e5af1fb744fc9544a2c87d61d474a0139d55bbe19b7463958943b6"
+  },
+  "runs": [
+    {
+      "name": "client-explicit",
+      "argv": [
+        "kiro-cli.exe",
+        "acp",
+        "--agent-engine",
+        "v3",
+        "--auth-method",
+        "client"
+      ],
+      "callbacks": [
+        "_kiro/auth/getAccessToken",
+        "_kiro/auth/getAccessToken",
+        "_kiro/auth/getAccessToken",
+        "_kiro/auth/getAccessToken",
+        "_kiro/auth/getAccessToken",
+        "_kiro/auth/getAccessToken",
+        "_kiro/auth/getAccessToken",
+        "_kiro/auth/getAccessToken",
+        "_kiro/auth/getAccessToken"
+      ],
+      "prompt": null,
+      "agentTextBytes": 0,
+      "toolEvents": 0,
+      "stderrBytes": 1005,
+      "eofTeardownError": true,
+      "controllerTimeout": false,
+      "responses": [
+        {
+          "method": "initialize",
+          "ok": true
+        },
+        {
+          "method": "session/new",
+          "ok": true
+        },
+        {
+          "method": "session/prompt",
+          "ok": false,
+          "errorCode": -32000,
+          "category": "authentication unavailable"
+        }
+      ],
+      "protocolVersion": 1,
+      "failure": "authentication unavailable",
+      "exitCode": 1,
+      "signal": null
+    },
+    {
+      "name": "cli-explicit",
+      "argv": [
+        "kiro-cli.exe",
+        "acp",
+        "--agent-engine",
+        "v3",
+        "--auth-method",
+        "cli"
+      ],
+      "callbacks": [],
+      "prompt": "end_turn",
+      "agentTextBytes": 7,
+      "toolEvents": 0,
+      "stderrBytes": 1070,
+      "eofTeardownError": true,
+      "controllerTimeout": false,
+      "responses": [
+        {
+          "method": "initialize",
+          "ok": true
+        },
+        {
+          "method": "session/new",
+          "ok": true
+        },
+        {
+          "method": "session/prompt",
+          "ok": true,
+          "stopReason": "end_turn"
+        }
+      ],
+      "protocolVersion": 1,
+      "exitCode": 1,
+      "signal": null,
+      "persisted_assistant_exact_AUTH_OK": true,
+      "persisted_assistant_bytes": 7
+    },
+    {
+      "name": "crew-host-omitted",
+      "argv": [
+        "kiro-cli.exe",
+        "acp",
+        "--agent-engine",
+        "v3"
+      ],
+      "callbacks": [],
+      "prompt": "end_turn",
+      "agentTextBytes": 7,
+      "toolEvents": 0,
+      "stderrBytes": 1075,
+      "eofTeardownError": true,
+      "controllerTimeout": false,
+      "responses": [
+        {
+          "method": "initialize",
+          "ok": true
+        },
+        {
+          "method": "session/new",
+          "ok": true
+        },
+        {
+          "method": "session/prompt",
+          "ok": true,
+          "stopReason": "end_turn"
+        }
+      ],
+      "protocolVersion": 1,
+      "exitCode": 1,
+      "signal": null,
+      "persisted_assistant_exact_AUTH_OK": true,
+      "persisted_assistant_bytes": 7
+    }
+  ],
+  "method": {
+    "homes": "private process-only KIRO_HOME per arm, empty private workspace",
+    "auth_callback_reply": "JSON-RPC -32000 controlled credential-unavailable error only; no token values supplied or captured",
+    "marker_validation": "Initial per-chunk substring flag was discarded; exact assistant output was independently checked from private persisted messages, without another model run",
+    "cli_sign_in": "existing native sign-in used internally; no login/logout, vault access or global configuration mutation",
+    "settlement": "all three recorded parent PIDs and direct child processes were absent after exit; native EOF5s error remains ticket189"
+  },
+  "cleanup": {
+    "method": "OS Recycle Bin after independent audit",
+    "private_probe_bytes": 130097,
+    "target_absent_after": true,
+    "private_sessions_logs_scripts_retained": false
+  },
+  "limits": [
+    "No live Crew gateway or Crew vault refresh/delivery tested",
+    "Account identity was not compared; routing does not prove which account credentials belong to",
+    "No signed-out CLI or different-account control",
+    "POSIX launcher/chat sibling and Crew standalone bundle untested",
+    "No model tool calls; no approval answers",
+    "Exit1 on EOF is infrastructure teardown error, not authentication failure for successful prompts"
+  ]
+}

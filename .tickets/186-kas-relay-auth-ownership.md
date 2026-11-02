@@ -42,6 +42,14 @@ ticket is only a prerequisite if that probe chooses Crew-owned relay auth.
 
 ## Acceptance criteria
 
+Observed findings: [dated auth routing section](../docs/agents/research/kirocrew-orchestration.md#ticket-186-auth-owner-routing-2026-11-02)
+and [sanitized receipt](../docs/agents/research/evidence/kas-auth-ownership-20261102.json).
+On these Windows versions, the constructed omitted-flag command behaved like
+CLI ownership, while explicit client ownership forwarded token requests and
+handled the controlled credential-unavailable error. No live Crew vault was
+accessed. The integration correction is tracked separately in #190; the known
+EOF teardown error remains #189.
+
 - [ ] Runtime observations distinguish CLI-owned from client-owned authentication on the actual Crew launch argv without exposing tokens; unavailable paths are labeled with the exact setup limit.
 - [ ] The supported launch recipe or bounded compatibility failure is recorded in the KAS research note with installed versions, primary-source excerpts and a sanitized receipt.
 - [ ] Private probe data is recycled, configuration changes are restored or recorded, and required repository checks pass.

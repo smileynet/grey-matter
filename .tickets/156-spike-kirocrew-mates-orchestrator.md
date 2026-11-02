@@ -22,6 +22,12 @@ Source: [harness experimental features](../docs/agents/research/harness-experime
 
 ## Acceptance criteria
 
+Auth follow-up from #186: on Crew 0.11.1 / CLI 2.37.1 Windows, the omitted-flag
+host-auth argv behaved like CLI ownership. #190 owns a supported correction for
+Crew-owned relay auth. This Mate probe may proceed using the explicitly verified
+CLI-owned branch in a private Crew home; verify the selected argv and intended
+existing sign-in before dispatch, without changing global credentials.
+
 - [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
 - [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
 - [ ] Sandbox folders removed after the run; settings changed for the spike restored or recorded.

@@ -27,6 +27,13 @@ mechanism; work-ledger wakes were observed. session_send resumed T2's same worke
 
 ## Host gates and acceptance
 
+- Choose the auth owner explicitly. On Crew 0.11.1 / CLI 2.37.1 Windows,
+  [ticket 186](../../../../docs/agents/research/kirocrew-orchestration.md#ticket-186-auth-owner-routing-2026-11-02)
+  observed that Crew's omitted-flag host-auth argv behaves like CLI ownership;
+  an external ACP host receives token requests with `--auth-method client`.
+  Real Crew-vault delivery was not tested. Use a verified CLI-owned private
+  probe or resolve #190 before relying on Crew-owned relay identity; never log
+  tokens or silently change sign-ins to make a probe work.
 - Session control and Windows sandbox availability were host blockers. Request
   only the specific missing authorization; leave persistent host configuration
   to an explicitly authorized change.
