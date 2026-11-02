@@ -100,6 +100,50 @@ tags from the same ticket files' inline/block tag lists without changing CLI-pro
 offline, so it shows the board as of `generated`. A blocker missing from the snapshot counts as
 unfinished, so a broken edge never hides work.
 
+## Current delivery readiness
+
+The ticket snapshot is a board view, not a product-delivery readiness registry. If an adopter
+already tracks release or pilot readiness, derive the current dashboard summary from that record
+and link its identity/evidence; do not create a second registry. Bind the current record to
+product, platform, build, channel and effective audience. For that same identity, keep distribution
+availability separate from installation, account access, retention and accessibility
+observations. Each observation needs its evidence path (or an explicit none yet), date, owner and
+relevant inputs. Availability to an audience does not prove anyone installed the build, can access
+an account, retains the update or can use it accessibly.
+Choose observation scope and evidence reuse using the
+[test environment ladder](../../../../docs/agents/test-environment-ladder.md); release verification
+paths follow the existing [numbered attempt guidance](../../../../docs/agents/release-preparation.md#verify-a-prepared-identity).
+If no readiness record applies, report that missing source and keep unobserved states unverified;
+do not invent a second global registry to make the summary look complete.
+
+**Worked record (illustrative fields, not a required schema or real delivery evidence):**
+
+Identity: Trailhead / iOS / build 2.4.0 / stable / 20-person beta cohort; record ID
+`trailhead/ios/2.4.0/stable/beta20`.
+
+| Observation | State and evidence | Owner and relevant inputs |
+| --- | --- | --- |
+| Distribution availability | Available; `release/2.4.0/stable.json`, observed 2026-11-02 | Release lead; build digest, stable channel, cohort |
+| Installation | Pending; evidence none, as of 2026-11-02 | Pilot lead; selected devices and installed build |
+| Account access | Pending; evidence none, as of 2026-11-02 | Account owner; enrolled cohort and build |
+| Retention | Pending; evidence none, as of 2026-11-02 | Test owner; prior install, update path and observation interval |
+| Accessibility | Pending; evidence none, as of 2026-11-02 | Accessibility reviewer; OS version and assistive technology |
+
+Derived summary: “Build 2.4.0 is available to the beta cohort; installation, account access,
+retention and accessibility remain unverified.” Keep any historical build summary dated in the
+entry history. Check the current summary's record ID (or native equivalent/normalized identity)
+against the active record structurally: a summary reference to `trailhead/ios/2.3.0/stable/beta20`
+while the registry's current record is `trailhead/ios/2.4.0/stable/beta20` fails; correcting the
+reference to the active record passes without rewriting the dated 2.3.0 history. Do not search
+summary prose for words such as “pending.” Use the adopter registry's checker/fixture when present;
+otherwise record the manual comparison without claiming an automated pass. The shared
+`check-dashboard.mjs` only checks ticket-snapshot freshness against the newest entry date; it
+does not verify an external readiness registry.
+
+The Plan tab's default order follows `gm-tickets.frontier`. If a project maintains a different
+execution queue, preserve and link to that queue; the graph represents ticket status and actual
+dependencies, not preferred order. Never add a `blocked_by` edge solely to force the queue.
+
 ## Asks
 
 Each open ask is answerable in one line and carries a recommendation, so the person can approve

@@ -181,11 +181,19 @@ test("warns when a headline carries process detail", (t) => {
   assert.equal(run(dashboard(t, [entry(1, { title: "Closed ticket 88" })]).file, { strict: true }).ok, false);
 });
 
-test("warns when the ticket snapshot predates the newest entry", (t) => {
+test("strict rejects a stale ticket snapshot, then accepts its repair and dated history", (t) => {
   const progress = { type: "progress", label: "Route", done: 1, total: 2 };
-  const r = run(dashboard(t, [entry(9, { tickets: ["1"], visual: progress })], withTickets({ generated: "2026-09-01T00:00:00Z", frontier: [], tickets: [tk("1", "done")] })).file);
-  assert.equal(r.ok, true, r.errors.join("; "));
-  assert.match(r.warnings.join("\n"), /predates the newest entry/);
+  const entries = [
+    entry(9, { date: "2026-09-09", tickets: ["1"], visual: progress }),
+    entry(1, { date: "2026-08-01", kind: "learning" }),
+  ];
+  const snap = (generated) => withTickets({ generated, frontier: [], tickets: [tk("1", "done")] });
+  const stale = run(dashboard(t, entries, snap("2026-09-01T00:00:00Z")).file, { strict: true });
+  assert.equal(stale.ok, false);
+  assert.match(stale.warnings.join("\n"), /predates the newest entry/);
+  const repaired = run(dashboard(t, entries, snap("2026-09-10T00:00:00Z")).file, { strict: true });
+  assert.equal(repaired.ok, true, repaired.errors.concat(repaired.warnings).join("; "));
+  assert.equal(repaired.stats.entries, 2, "dated history remains valid");
 });
 
 test("the checker never modifies the dashboard", (t) => {

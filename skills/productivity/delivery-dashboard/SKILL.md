@@ -38,6 +38,8 @@ stays out of the way, under folds and links.
 
    Move a visual up the ladder only when its evidence supports the new label. Work worth
    surfacing that had no ticket gets an entry too, without `tickets`.
+   When an entry summarizes release or pilot readiness, follow the contract's
+   [current delivery readiness guidance](references/dashboard-contract.md#current-delivery-readiness).
 
 3. **Keep the sausage out of sight.** Headline, summary and the three visible changes carry no
    ticket numbers, commit hashes, file paths, tool names, test counts or refactoring talk. Put
@@ -51,6 +53,8 @@ stays out of the way, under folds and links.
    including deferred tickets; tag-based work-stream views and completed context are optional.
    Configure them through `gm-config.ticketFlow` per the [flow contract](references/dashboard-contract.md#remaining-ticket-flow).
    Set `ticketFlow: false` when a graph does not help the owner's task; keep every ticket in the list.
+   If the project has an explicit execution queue, preserve and link to it; the snapshot's frontier
+   and dependency graph do not replace that queue or justify adding artificial blockers.
 
 5. **Let the page roll.** The overview shows the newest entry in full and the next four as
    collapsed rows; the "All entries" tab keeps every entry as a collapsed row with search and
