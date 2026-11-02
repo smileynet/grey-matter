@@ -1,7 +1,7 @@
 ---
 id: "131"
 title: "Validate footprint guidance and inspector on macOS"
-status: in_progress
+status: backlog
 blocked_by: []
 priority: high
 validation_criteria:
