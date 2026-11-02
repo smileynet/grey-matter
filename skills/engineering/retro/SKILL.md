@@ -11,9 +11,11 @@ The user has asked for a **retrospective**. You are suggesting improvements to t
 
 2. Read the primary sources for the session the user specifies (default: the current one). This may mean searching session logs on this machine; where logs aren't reachable, work from the session the user points at. **Read the session from a fresh context: dispatch a subagent to analyse the trace and report candidates.** An agent grading its own session is biased and blind to what it never logged; a fresh-context subagent, and leaning on deterministic checks over self-report, counters that. (A shell-invoked fresh agent via the harness CLI is an alternative, spiked separately.)
 
-   Use one compact coverage statement to identify the corpus and inspected scope, sampling
-   or extraction limits, truncated output and focused rereads, and areas left unverified.
-   If a tool result truncates, reread the relevant slice or name the remaining gap. Focused rereads are
+   Use one compact coverage statement to identify the corpus (with trace/file references
+   when available) and inspected scope, sampling or extraction limits, truncated output
+   and focused rereads, and areas left unverified. If a reference is unavailable, report
+   that as a coverage gap. If a tool result truncates, reread the relevant slice or name
+   the remaining gap. Focused rereads are
    enough; do not replay the entire trace just to claim completeness or infer completeness
    from a nonempty subagent report.
 
