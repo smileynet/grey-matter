@@ -74,3 +74,8 @@ historical load/Git-latency observation is a candidate explanation, not proof of
 failure's cause. No source fix or repeated stress loop was justified. Keep this ticket open;
 the next actual failure needs full output, exact command/commit, host-resource and process
 observations preserved before retry. No existing artifact or configuration was changed.
+
+The combined pre-release gate at 8e6396b also passed all 29 checks; its deployer check
+completed in 95.7 s. This is another non-reproduction, not proof of the intermittent
+failure's cause. No additional stress loop was run and the next-failure capture requirement
+is unchanged.
