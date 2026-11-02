@@ -31,6 +31,12 @@ refactors because it doesn't care about internal structure. (This is why tests m
 only at system boundaries, never internal collaborators: a test coupled to internals
 breaks when `code-review` later refactors them, defeating the point.)
 
+For stateful changes or resource ownership, test through the real public seam and assert
+the contract's final state, relevant operation counts, and error identity where errors
+are part of the contract. Cover only applicable ownership and terminal behaviors; use the
+test-environment ladder to select the lowest faithful environment, and escalate only for
+boundaries it cannot establish. Reversible edits do not need an integration campaign.
+
 Before treating a failing generated or agent-written test as a product defect, check its
 expectation against the governing contract. Qualify a new oracle or worker using the
 [contract and control procedure](references/tests.md#qualify-the-oracle) before trusting its red/green verdict.

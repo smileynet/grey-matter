@@ -24,6 +24,8 @@ Look for opportunities to prefactor the code to make the implementation easier. 
 
 Break the work into **tracer bullet** tickets.
 
+For stateful changes or changes that own a resource, include acceptance criteria for relevant ownership actions (who may read, close, replace, retry, cancel or retain it) and the required terminal behavior. Keep checks proportionate: reversible edits do not need an integration campaign.
+
 <vertical-slice-rules>
 
 - Each slice cuts a narrow but COMPLETE path through every layer the behaviour touches (schema, API, UI, tests, or whatever this behaviour actually spans): vertical, NOT a horizontal slice of one layer
