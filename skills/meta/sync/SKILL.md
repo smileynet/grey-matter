@@ -75,15 +75,14 @@ copies when a refresh fails.
    (stale WIP, untracked work, re-ordering), that's **`reconcile-tickets`**'s job; name it
    as a suggested follow-up rather than running it inside sync.
 
-4. **Check tkt drift if tkt changed.** Compare `tkt --version` now against the snapshot. If
-   it changed, the skills' inlined tkt commands may have drifted — hand to the skill that
-   owns that check:
-
-   > Call the Skill tool with **`verify-tkt-usage`** (it diffs every inlined tkt command
-   > against the live `tkt capabilities` manifest).
-
-   Report whatever it finds in the final delta (step 7). **Do not gate the deploy on it** —
-   drift is a follow-up to fix, not a reason to leave the harnesses stale.
+4. **Check tkt compatibility before deploying its pack.** Call **`verify-tkt-usage`** for
+   every tkt pack deployment, even when the installed CLI version is unchanged. It records
+   the CLI executable/version/build, pack commit, commands, working directory and environment
+   identity, then checks the actual CLI help where the capabilities manifest is partial.
+   If the pack uses an unsupported command or flag, stop that pack deployment. Ask the owner
+   to choose a pack release tag compatible with the installed CLI or approve a CLI upgrade;
+   do not infer that updating the pack upgrades the CLI. Report the finding and choice in the
+   final delta (step 7). An unrelated pack may proceed only if its deployment is independent.
 
 5. **Synchronize owned tools and verify invariants.** Resolve tkt's registered checkout
    from `skill-packs.json`. Before a tkt vendor repair, fetch its configured upstream and
