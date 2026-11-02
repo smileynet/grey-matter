@@ -152,8 +152,10 @@ test("WSL free space is bounded by the Windows volume containing this distro VHD
   assert.equal(host.Name, process.env.WSL_DISTRO_NAME);
   assert.match(host.Drive, /^[A-Z]$/);
   const r = inspect({ ...base, repo, floor: 0 });
-  const distroFree = r.freeSpace.entries.find((entry) => entry.path === repo).free;
-  assert.equal(r.freeSpace.free, Math.min(distroFree, Number(host.Free)), JSON.stringify({ distroFree, host }));
+  const hostEntry = r.freeSpace.entries.find((entry) => entry.path === `Windows ${host.Drive}:`);
+  assert.ok(hostEntry, JSON.stringify(r.freeSpace.entries));
+  assert.ok(Number.isSafeInteger(hostEntry.free) && hostEntry.free >= 0 && Number.isSafeInteger(hostEntry.total) && hostEntry.total > 0);
+  assert.equal(r.freeSpace.free, Math.min(...r.freeSpace.entries.map((entry) => entry.free)));
 });
 
 test("WSL host-volume lookup fails closed for ambiguous or unavailable registrations", { skip: !onWsl && "requires WSL2 and its Windows host" }, () => {
@@ -166,11 +168,11 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
   process.env.PATH = `${dir}${delimiter}${originalPath ?? ""}`;
   process.env.WSL_DISTRO_NAME = name;
   const record = (overrides = {}) => ({ Name: name, BasePath: "R:\\fixture with spaces\\$literal & path", VhdExists: true, Drive: "R", VolumeId: "volume-r", Free: "1234", Total: "9876", ...overrides });
-  const run = (response, exit = 0) => {
+  const run = (response, exit = 0, floor = 0) => {
     const encoded = Buffer.from(JSON.stringify(response), "utf8").toString("base64");
     writeFileSync(executable, `#!/bin/sh\nprintf '%s\\n' '${encoded}'\nexit ${exit}\n`);
     chmodSync(executable, 0o755);
-    return inspect({ ...base, repo, floor: 0 });
+    return inspect({ ...base, repo, floor });
   };
   try {
     const valid = run([record()]);
@@ -202,6 +204,10 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
       assert.equal(result.freeSpace.entries.some((entry) => entry.path.startsWith("Windows ")), false, label);
       assert.match(summary(result, 0), /Windows backing volume unavailable .*; free-space floor unverified/, label);
     }
+
+    const underFloor = run([], 0, 1024 ** 5);
+    assert.equal(underFloor.status, "fail");
+    assert.match(summary(underFloor, 0), /under, stop adding data.*Windows backing volume unavailable .*; free-space floor unverified/);
 
     delete process.env.WSL_DISTRO_NAME;
     const missingName = inspect({ ...base, repo, floor: 0 });
