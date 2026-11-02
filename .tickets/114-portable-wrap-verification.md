@@ -4,10 +4,11 @@ title: "Discover project verification gates and stop dependent mutations on fail
 status: open
 blocked_by: []
 validation_criteria:
-  - "Behavioral scenarios verify the reported session failure and corrected outcome"
-  - "Guidance has one maintained owner with scoped implementation and evidence limits"
-  - "Applicable fixtures and repository consistency gate pass"
-tags: ["stream:tooling"]
+  - "Scenarios cover an adopter with an aggregate and one with only documented individual commands; neither reports a missing gate as passed."
+  - "A failing check, timeout and missing executable prevent a downstream marker mutation; a passing check permits it with its result recorded."
+  - "Guidance distinguishes required gates from optional observations and reconciles conflicting wrap/sync wording without silently expanding authorization."
+  - "Applicable behavioral fixtures and `node scripts/gate.mjs pre-merge` pass."
+tags: ["stream:test-verification"]
 priority: medium
 ---
 
@@ -39,3 +40,16 @@ Inspect current `sync`, hook and verification guidance for overlap and contradic
 but that is still grey-matter's own command. Per [local gates](../docs/agents/local-gates.md), a
 project names its `check` command (speed phase) or its `gate.mjs` stages (stability) in its
 `AGENTS.md`; the portable wrap should run whichever that file names.
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Next: exercise aggregate-only and individual-command adopters, plus failed/timeout/missing-tool
+results preventing a downstream marker. Current wrap-session and sync still name this repository's
+gate; #119 supplies environment/cadence choices but does not complete portable command discovery or
+fail-stop orchestration.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.

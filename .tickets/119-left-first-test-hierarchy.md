@@ -7,7 +7,7 @@ validation_criteria:
   - "Guidance maps each assertion to its lowest faithful environment and separates cost from criticality"
   - "Worked scenarios distinguish change, merge, release, and physical-pilot gates with evidence reuse limits"
   - "Applicable guidance fixtures and node scripts/gate.mjs pre-merge pass"
-tags: ["stream:tooling", "kind:enhancement"]
+tags: ["kind:enhancement","stream:test-verification"]
 priority: low
 ---
 

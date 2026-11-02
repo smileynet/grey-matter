@@ -4,10 +4,11 @@ title: "Declare retrospective coverage and distinguish repairs from remaining wo
 status: open
 blocked_by: []
 validation_criteria:
-  - "Behavioral scenarios verify the reported session failure and corrected outcome"
-  - "Guidance has one maintained owner with scoped implementation and evidence limits"
-  - "Applicable fixtures and repository consistency gate pass"
-tags: ["stream:tooling"]
+  - "A sampled/truncated trace scenario produces explicit partial coverage with inspected scope and unresolved gaps."
+  - "A report with inspected tests but no execution cannot claim fresh test success; repaired defects with existing regressions are not filed as new implementation work."
+  - "Focused reread and retained coverage limits are both supported without requiring an exhaustive trace audit."
+  - "Applicable guidance scenarios and `node scripts/gate.mjs pre-merge` pass."
+tags: ["stream:test-verification"]
 priority: medium
 ---
 
@@ -32,3 +33,15 @@ Do not require replaying the entire trace or redispatching facts already in cont
 - [ ] A report with inspected tests but no execution cannot claim fresh test success; repaired defects with existing regressions are not filed as new implementation work.
 - [ ] Focused reread and retained coverage limits are both supported without requiring an exhaustive trace audit.
 - [ ] Applicable guidance scenarios and `node scripts/gate.mjs pre-merge` pass.
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Next: add compact coverage limits to the existing retro owner and review sampled/truncated traces
+and inspection-only test claims. Preserve already-repaired defects as repaired; route genuinely
+remaining work to existing owners. #119's execution/reuse guidance is shipped.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.

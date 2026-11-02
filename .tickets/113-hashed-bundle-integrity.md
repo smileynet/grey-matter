@@ -4,9 +4,10 @@ title: "Verify portable bundle hashes across fresh copies and Git checkouts"
 status: open
 blocked_by: []
 validation_criteria:
-  - "Artifact-hygiene guidance covers exact inventory, LF bytes and fresh Git export checks when bundle hashes are contractual"
-  - "Positive and changed-byte fixtures pass with node scripts/gate.mjs pre-merge"
-tags: ["stream:tooling"]
+  - "Bundle guidance requires exact inventory and raw-byte hash checks when a manifest promises them."
+  - "Guidance accounts for Windows checkout normalization and distinguishes staged from committed exports."
+  - "Fixtures detect an extra file and changed bytes; repository checks pass without global line-ending rewrites."
+tags: ["stream:test-verification"]
 priority: medium
 ---
 
@@ -23,3 +24,16 @@ Read skills/meta/repository-artifact-hygiene/SKILL.md and its inspector. Add a c
 - [ ] Bundle guidance requires exact inventory and raw-byte hash checks when a manifest promises them.
 - [ ] Guidance accounts for Windows checkout normalization and distinguishes staged from committed exports.
 - [ ] Fixtures detect an extra file and changed bytes; repository checks pass without global line-ending rewrites.
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Next: add conditional exact-inventory/raw-byte bundle verification guidance and
+positive/extra-file/changed-byte fixtures, distinguishing staged export from clean committed
+checkout. Use scoped normalization policy; do not change repository-wide Git configuration. This
+does not authorize publication.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.

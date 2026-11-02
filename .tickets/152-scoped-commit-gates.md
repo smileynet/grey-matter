@@ -11,6 +11,7 @@ validation_criteria:
   - "Critic and reconcile guidance says an owner's explicit decision ends a deliberation chain; heavy evidence belongs to data and acceptance risk, not tooling ergonomics."
   - "Guidance tells agents that a hook failing on a check unrelated to the change is a gate-scope bug: propose moving the check to a later stage instead of debugging or time-boxing it in the hook."
   - "node scripts/gate.mjs pre-merge passes."
+tags: ["stream:test-verification"]
 ---
 
 # Scope project commit gates to vital, changed parts and bound verification scratch

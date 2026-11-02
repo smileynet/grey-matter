@@ -74,7 +74,7 @@ value should be a deliberate addition to this table.
 | Triage disposition | `triage:` | needs-triage, needs-info, ready-for-agent, ready-for-human, wontfix | 0..1 |
 | Category | `kind:` | bug, enhancement | 0..1 |
 | Epic grouping | `epic:` | `<epic-slug>` | 0..n |
-| Stream / area | `stream:` | skills-review, game-lens, tooling | 0..1 |
+| Stream / area | `stream:` | skills-review, game-lens, tooling, test-verification | 0..1 |
 | Wayfinder | `wayfinder:` | map, research, prototype, grilling, task | 0..1 |
 
 Use `tkt context stream:<name>` to scope a working session so new tickets inherit

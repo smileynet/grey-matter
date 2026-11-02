@@ -3,8 +3,12 @@ id: "106"
 title: "Release verify keeps numbered attempts instead of overwriting evidence"
 status: open
 blocked_by: []
+validation_criteria:
+  - "The release skill and preparation doc say to use a new numbered folder per attempt and keep failed ones"
+  - "Ticket 97's rule 3 is reconciled with this"
+  - "`node scripts/gate.mjs pre-merge` passes"
 priority: medium
-tags: ["kind:enhancement"]
+tags: ["kind:enhancement","stream:test-verification"]
 ---
 
 # Release verify keeps numbered attempts instead of overwriting evidence
@@ -28,3 +32,16 @@ PATH failure. Fix the instructions, not the code:
 - [ ] The release skill and preparation doc say to use a new numbered folder per attempt and keep failed ones
 - [ ] Ticket 97's rule 3 is reconciled with this
 - [ ] `node scripts/gate.mjs pre-merge` passes
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Next: update release/preparation instructions and the maintained artifact-retention policy for
+numbered attempts. The existing output-folder refusal is already implemented; reverify its
+regression rather than build it again. #97 is terminal historical evidence: reconcile its policy in
+the maintained reference, preserving the closed ticket.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.

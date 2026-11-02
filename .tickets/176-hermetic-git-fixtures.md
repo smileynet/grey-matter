@@ -7,7 +7,7 @@ validation_criteria:
   - "Repository-creating test suites isolate global/system Git config and use a test-owned identity."
   - "A hostile forced-signing config with an unreachable key fails the control but leaves isolated fixtures able to commit and annotate tags without prompting."
   - "node scripts/gate.mjs pre-release passes with the hostile config supplied to the parent process."
-tags: ["stream:tooling"]
+tags: ["stream:test-verification"]
 ---
 # Test fixtures isolate Git from the user's global config (signing, hooks, editor)
 

@@ -4,10 +4,11 @@ title: "Require positive scoped evidence for preservation claims"
 status: open
 blocked_by: []
 validation_criteria:
-  - "Behavioral scenarios verify the reported session failure and corrected outcome"
-  - "Guidance has one maintained owner with scoped implementation and evidence limits"
-  - "Applicable fixtures and repository consistency gate pass"
-tags: ["stream:tooling"]
+  - "Worked examples correctly classify healthy service plus empty inventory as service-only evidence and nonempty matched observations as scoped preservation evidence."
+  - "Fixtures or behavioral review reject zero bytes/files, missing baseline, scope mismatch and changed identity/hash; valid unchanged observations pass."
+  - "Guidance states observation limits and preserves authorization boundaries without forcing simulator/device tests for worker-only assertions."
+  - "Applicable fixtures and `node scripts/gate.mjs pre-merge` pass."
+tags: ["stream:test-verification"]
 priority: medium
 ---
 
@@ -32,3 +33,16 @@ The source project's #68 now has a bounded worker capture/verify validator with 
 - [ ] Fixtures or behavioral review reject zero bytes/files, missing baseline, scope mismatch and changed identity/hash; valid unchanged observations pass.
 - [ ] Guidance states observation limits and preserves authorization boundaries without forcing simulator/device tests for worker-only assertions.
 - [ ] Applicable fixtures and `node scripts/gate.mjs pre-merge` pass.
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Next: qualify preservation claims with nonempty matching before/after resources, rejecting zero
+coverage, missing baseline and identity/hash mismatch. #104 owns stateful contracts, #119
+environment selection and #113 portable bundle hashes; these related tickets are ordering/context,
+not newly invented blockers.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.

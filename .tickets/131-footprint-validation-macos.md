@@ -5,11 +5,11 @@ status: open
 blocked_by: []
 priority: high
 validation_criteria:
-  - "Every macOS row of footprint-by-os.md was run on a Mac (macOS version, chip and shell recorded) and is retagged observed, corrected, or kept with the reason it could not run."
-  - "node --test scripts/inspect-footprint.test.mjs passes on macOS, including the open-file skip through lsof; a failure is fixed or filed with its output."
-  - "inspect-footprint.mjs --repo <a real repo> --summary reports free space within 1% of command df -Pk and sizes that match command du -sk on an APFS volume, with the clone caveat confirmed or corrected."
-  - "The research file footprint-commands-by-os-20261031.md (or a dated successor) records the commands and output; node scripts/gate.mjs pre-merge passes."
-tags: ["stream:tooling", "type:chore"]
+  - "Each macOS row is observed, corrected, or marked with why it could not run."
+  - "The inspector's fixture test passes on macOS, or its failure is fixed or filed."
+  - "Inspector free space and sizes agree with `command df` / `command du` on APFS."
+  - "Commands and output are recorded in the research file; `node scripts/gate.mjs pre-merge` passes."
+tags: ["type:chore","stream:test-verification"]
 ---
 
 # Validate footprint guidance and inspector on macOS
@@ -43,3 +43,16 @@ Fix wrong rows and inspector bugs in place; file anything larger as its own tick
 - [ ] The inspector's fixture test passes on macOS, or its failure is fixed or filed.
 - [ ] Inspector free space and sizes agree with `command df` / `command du` on APFS.
 - [ ] Commands and output are recorded in the research file; `node scripts/gate.mjs pre-merge` passes.
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Next: obtain macOS/APFS host evidence for every named row, alias, clone/link/open-file behavior and
+size/free-space comparison. Windows passing gates cannot satisfy this ticket. Use the same Mac
+session as #175 where practical; if a hang is reproduced, retain that diagnosis under #175 and
+recheck affected evidence after the fix.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.

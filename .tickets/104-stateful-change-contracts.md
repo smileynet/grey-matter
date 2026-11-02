@@ -3,8 +3,12 @@ id: "104"
 title: "Acceptance for stateful changes names ownership and terminal behavior"
 status: open
 blocked_by: []
+validation_criteria:
+  - "`to-spec` and `to-tickets` ask stateful work for ownership and terminal-behavior criteria"
+  - "`tdd` says to assert final state, counts and error identity at the public seam for stateful changes"
+  - "`node scripts/gate.mjs pre-merge` passes"
 priority: medium
-tags: ["kind:enhancement"]
+tags: ["kind:enhancement","stream:test-verification"]
 ---
 
 # Acceptance for stateful changes names ownership and terminal behavior
@@ -25,3 +29,15 @@ private helper. Keep it conditional; reversible edits don't need an integration 
 - [ ] `to-spec` and `to-tickets` ask stateful work for ownership and terminal-behavior criteria
 - [ ] `tdd` says to assert final state, counts and error identity at the public seam for stateful changes
 - [ ] `node scripts/gate.mjs pre-merge` passes
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Next: add conditional ownership/terminal-state criteria to to-spec, to-tickets and TDD. Reuse the
+shipped #105 oracle procedure and #119 environment ladder; do not reopen their completed scope. The
+historical source commit was unavailable locally during #105; this brief remains self-contained.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.

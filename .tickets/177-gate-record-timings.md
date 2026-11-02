@@ -7,7 +7,7 @@ validation_criteria:
   - "--record updates only measurements for passed checks, to 0.1 seconds with the local date and supported host name, preserving other bytes."
   - "Failed, skipped and timed-out checks retain their old measurements."
   - "Gate CLI regression fixtures cover recording and node scripts/gate.mjs pre-merge passes."
-tags: ["stream:tooling"]
+tags: ["stream:test-verification"]
 ---
 # gate.mjs --record writes measured timings into gates.json
 

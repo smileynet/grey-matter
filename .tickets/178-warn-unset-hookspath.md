@@ -7,7 +7,7 @@ validation_criteria:
   - "Default deploy/list prints one opt-in warning for this clone when its tracked pre-push hook is not selected, and stays quiet when selected."
   - "The warning never changes Git configuration and stays silent in consumer projects."
   - "node scripts/gate.mjs pre-merge passes."
-tags: ["stream:tooling"]
+tags: ["stream:test-verification"]
 ---
 # Warn when grey-matter's own clone has no core.hooksPath, so pushes skip the pre-push stage
 

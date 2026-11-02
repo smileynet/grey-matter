@@ -8,7 +8,7 @@ validation_criteria:
   - "The targeted release fixtures and deployer avoid repeated setup, with observed before/after timings and limits recorded."
   - "Pre-release still covers every previously gated test file."
   - "node scripts/gate.mjs pre-release passes after the optimization."
-tags: ["stream:tooling"]
+tags: ["stream:test-verification"]
 ---
 
 # Slim the deployer and release-integration checks (92 s and 146 s at pre-release)

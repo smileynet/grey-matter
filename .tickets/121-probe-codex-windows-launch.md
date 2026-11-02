@@ -5,9 +5,11 @@ status: open
 blocked_by: []
 priority: medium
 validation_criteria:
-  - "probe-critic-model reaches codex when it is installed as a .cmd shim or bun global on Windows"
-  - "A Codex CLI older than the documented minimum is reported as such, not as a generic failure"
-tags: ["stream:tooling", "type:bug"]
+  - "On Windows the probe reaches a Codex installed as a `.cmd` shim, covered by a fixture."
+  - "A Codex CLI below the documented minimum produces a line naming the minimum version, not a raw 400."
+  - "`docs/agents/harnesses.md` records the Windows install pitfall and the working launch path."
+  - "`node scripts/gate.mjs pre-merge` passes."
+tags: ["type:bug","stream:test-verification"]
 ---
 # Critic probe launches Codex on Windows and says when the CLI is too old
 
@@ -31,3 +33,16 @@ Files: `scripts/probe-critic-model.mjs` and its test, `docs/agents/harnesses.md`
 - [ ] A Codex CLI below the documented minimum produces a line naming the minimum version, not a raw 400.
 - [ ] `docs/agents/harnesses.md` records the Windows install pitfall and the working launch path.
 - [ ] `node scripts/gate.mjs pre-merge` passes.
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Next: reproduce native Windows shim/package-launch behavior with owned CLI fixtures, and qualify
+unsupported-version diagnostics independently. Treat the old model/CLI minimum in the incident as
+historical; reverify the current governing requirement before encoding it. The POSIX critic fixtures
+skip on Windows, so those results do not establish this acceptance.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.

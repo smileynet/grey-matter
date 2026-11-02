@@ -6,7 +6,8 @@ blocked_by: []
 validation_criteria:
   - "A fixture where pack skills use a flag the installed CLI lacks is reported before deploy"
   - "sync documents whether to pin the tkt pack to the installed CLI's tag or upgrade the CLI"
-tags: ["stream:tooling", "type:enhancement"]
+  - "`verify-tkt-usage` records the CLI identity it checked (version and build hash) and reruns when that identity, the pack commit or the command changes; a stored result is reused only when all of them match"
+tags: ["type:enhancement","stream:test-verification"]
 priority: medium
 ---
 
@@ -45,3 +46,17 @@ verification result is only valid for the commit, command, working directory, en
 and executable it ran against. Today `verify-tkt-usage` reruns only when the tkt version
 changes, which is how this ticket's drift went unnoticed. Pairs with tkt ticket 153
 (stale-binary guard).
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Next: compare pack commands against the actual installed CLI and bind reuse to executable/build,
+pack commit, command, directory and environment identities. At reconciliation the installed CLI is
+still tkt 0.4.0 (92d4833), whose help lacks tag-edit/agent flags advertised by newer skills. #120
+handles vendor repair; do not silently upgrade the CLI or treat a pack deployment as compatibility
+proof.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.

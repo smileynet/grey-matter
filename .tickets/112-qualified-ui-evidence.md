@@ -4,9 +4,10 @@ title: "Plan UI checks against available capabilities and preserve evidence boun
 status: open
 blocked_by: []
 validation_criteria:
-  - "Conditional UI verification guidance distinguishes protocol capability, artifact checks, human reports and learner outcomes"
-  - "Guidance fixtures and node scripts/gate.mjs pre-merge pass"
-tags: ["stream:tooling"]
+  - "Applicable UI workflows establish permitted capabilities before selecting checks and record unavailable checks without substituting unobserved success."
+  - "Receipt guidance binds evidence to artifact identity and distinguishes tool observation, human report and unvalidated learning."
+  - "Fixtures cover a blocked protocol, unavailable telemetry and human functionality report; repository guidance checks pass."
+tags: ["stream:test-verification"]
 priority: medium
 ---
 
@@ -23,3 +24,16 @@ Read skills/engineering/prototype/SKILL.md, skills/productivity/delivery-dashboa
 - [ ] Applicable UI workflows establish permitted capabilities before selecting checks and record unavailable checks without substituting unobserved success.
 - [ ] Receipt guidance binds evidence to artifact identity and distinguishes tool observation, human report and unvalidated learning.
 - [ ] Fixtures cover a blocked protocol, unavailable telemetry and human functionality report; repository guidance checks pass.
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Next: review blocked protocol, absent telemetry and human-report cases in existing UI/report
+workflows. #119 now defines environment limits and #105 oracle controls; preserve the distinct tool
+observation, human report and unvalidated learning claims. No new video-guide implementation belongs
+here.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.

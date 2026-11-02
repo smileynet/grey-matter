@@ -97,6 +97,60 @@ Already on main for these versions: grey `bca9a2a` and `734c5ee`, tkt `752b14c` 
 `dd559e5`. Land tkt 138 before theme A's fields so they declare themselves in the
 manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 227.
 
+## Test optimization and verification
+
+Reconciled 2026-11-02 at the user's request. Scope: `stream:test-verification`.
+16 open tickets and 7 completed tickets. This stream excludes orchestration and dashboard
+feature work; #116 covers only the evidence/current-summary contract. Existing release
+authorization and frozen candidate scope are unchanged.
+
+The order below is the session's chosen execution policy, not new dependency edges. All
+existing blocked_by values are preserved. Start with #104; pursue #122 only when a useful
+failure is captured. macOS work needs a Mac; WSL and destructive footprint probes need a
+suitable owned environment. No host-only criterion is satisfied by a Windows fixture pass.
+
+On the installed tkt 0.4.0, tag-context queries also include untagged tickets. Exact stream
+membership is the 23 rows below; an untagged result does not add a ticket to this plan.
+Reconciliation verified all 23 tags, unchanged statuses/dependencies/acceptance checks, and
+tag-only edits to the seven closed tickets. The 16 open tickets' validation fields now mirror
+their existing acceptance checklists; reconciliation itself establishes no new implementation pass.
+
+| ID | Work | Status |
+| --- | --- | --- |
+| 104 | 1. Stateful ownership and terminal-behavior contracts | open |
+| 106 | 1. Numbered verification attempts and failure retention | open |
+| 114 | 1. Portable check discovery and fail-stop dependent mutations | open |
+| 112 | 2. UI capabilities and qualified observations | open |
+| 115 | 2. Positive scoped preservation evidence | open |
+| 117 | 2. Retrospective coverage and repaired-versus-remaining work | open |
+| 113 | 3. Exact bundle inventory and portable byte hashes | open |
+| 116 | 4. Current summaries derived from scoped evidence | open |
+| 120 | 5. Documented vendor repair and checkout divergence handling | open |
+| 98 | 5. CLI/pack compatibility and identity-bound reuse | open |
+| 121 | 5. Windows critic launch and unsupported-version diagnostics | open |
+| 132 | 6. Windows footprint rows and disposable bin/placeholder probes | open |
+| 133 | 7. WSL 2 backing-volume and reclaim validation | open |
+| 175 | 8. macOS inspector/lsof hang diagnosis | open |
+| 131 | 8. macOS/APFS footprint validation | open |
+| 122 | Throughout: diagnose a captured deployer failure; 20-run criterion already met | open |
+
+Completed in this chat, with their original closure evidence preserved:
+
+| ID | Work | Status |
+| --- | --- | --- |
+| 105 | Check generated tests against the contract and prove the assertion ran | ✅ done |
+| 119 | Choose the cheapest faithful test environment with explicit lifecycle gates | ✅ done |
+| 137 | Slim the deployer and release-integration checks (92 s and 146 s at pre-release) | ✅ done |
+| 152 | Scope project commit gates to vital, changed parts and bound verification scratch | ✅ done |
+| 176 | Test fixtures isolate Git from the user's global config (signing, hooks, editor) | ✅ done |
+| 177 | gate.mjs --record writes measured timings into gates.json | ✅ done |
+| 178 | Warn when grey-matter's own clone has no core.hooksPath, so pushes skip the pre-push stage | ✅ done |
+
+For each remaining ticket: verify premises, implement its scoped change, run applicable checks,
+review acceptance, commit/push and deploy guidance changes before closing with evidence.
+Finish with integrated pre-release verification plus the named platform checks. Promote or
+recycle owned artifacts; leave unresolved external evidence explicit rather than forcing closure.
+
 ## Open work order (reconciled 2026-10-31)
 
 Order follows the rubric: finish the in-flight threads, earlier ids first, real blockers
@@ -105,26 +159,12 @@ are in the order to take them. Release themes above still say what ships in 0.3.
 
 | ID | Work | Status |
 | --- | --- | --- |
-| 120 | Wave 1, tooling reliability: sync resolves vendored-tool drift and a diverged tkt checkout | open |
-| 98 | Wave 1: sync can deploy tkt skills ahead of the installed CLI (shares sync with 120) | open |
-| 121 | Wave 1: critic probe launches Codex on Windows and says when the CLI is too old | open |
-| 122 | Wave 1: find why check-repo invariant 1 fails intermittently | open |
-| 104 | Wave 2, workflow guidance (theme E): acceptance for stateful changes names ownership and terminal behavior | open |
-| 105 | Wave 2: check generated tests against the contract and prove the assertion ran | open |
-| 106 | Wave 2: release verify keeps numbered attempts | open |
 | 107 | Wave 2: improve-codebase-architecture names the next real change a seam simplifies | open |
 | 108 | Wave 2: writing-for-agents ties pruning to observed navigation failures | open |
 | 92 | Wave 3, dashboard checks itself (theme D): fix the gaps the critic model spike found | open |
 | 90 | Wave 3: build the dashboard copy and results critics (after 92) | open |
 | 109 | Wave 3: delivery-dashboard understands tkt's cancelled status (ships with tkt 227) | open |
-| 116 | Wave 4, evidence cluster: derive current delivery summaries from scoped evidence records | open |
-| 115 | Wave 4: require positive scoped evidence for preservation claims | open |
-| 117 | Wave 4: declare retrospective coverage and distinguish repairs from remaining work | open |
-| 112 | Wave 4: plan UI checks against available capabilities and preserve evidence boundaries | open |
-| 113 | Wave 4: verify portable bundle hashes across fresh copies and Git checkouts | open |
-| 114 | Wave 4: discover project verification gates and stop dependent mutations on failure | open |
 | 118 | Wave 4: show a complete visual execution queue with one active ticket in serial mode | open |
-| 119 | Wave 4: choose the cheapest faithful test environment with explicit lifecycle gates | open |
 | 111 | Wave 5, owner input first: build the orchestrate skill (proposal 17; three open questions) | ✅ done |
 | 95 | Wave 5: Kiro Crew chat_tag and session_ledger steps (after 111's placement decision) | ✅ done |
 | 87 | Owner decision: setup-repo links shadow handoff and grill-me in Kiro | open |
@@ -160,15 +200,11 @@ their release dispositions; this table does not clear any blocker.
 
 ## Additional tracked work (reconciled 2026-11-01)
 
-The Windows chat retains ownership of verification tickets #137, #152, and #176–178. Orchestration follow-ups retain their separate chat. This ID-ordered inventory adds missing rows without changing approved release scope; dependencies remain authoritative. See [chat ownership and integration handoff](agents/handoffs/2026-11-01-chat-cleanup.md).
+The test-verification chat's scope and current order are recorded in the dedicated section above. Orchestration follow-ups retain their separate chat. This ID-ordered inventory adds missing rows without changing approved release scope; dependencies remain authoritative. See [chat ownership and integration handoff](agents/handoffs/2026-11-01-chat-cleanup.md).
 
 | ID | Work | Status |
 | --- | --- | --- |
 | 130 | Regress shared user-managed skill duplicates without overwriting local changes | open |
-| 131 | Validate footprint guidance and inspector on macOS | open |
-| 132 | Validate footprint guidance and inspector on Windows | open |
-| 133 | Validate footprint guidance and inspector under WSL 2 | open |
-| 137 | Slim the deployer and release-integration checks (92 s and 146 s at pre-release) | open |
 | 139 | Validate the delivery-dashboard contract on custom dashboard pages | open |
 | 140 | Ticket commands must not sweep staged work into ticket commits | open |
 | 141 | code-review accepts staged or uncommitted work as its fixed point | open |
@@ -181,9 +217,8 @@ The Windows chat retains ownership of verification tickets #137, #152, and #176�
 | 148 | Take over another agent's worktrees and branches safely | open |
 | 149 | reconcile-tickets runs a priority review over workstreams, queue and blockers | open |
 | 150 | Add an optional product map (jobs, workflows, feature status) to the delivery dashboard | open |
-| 152 | Scope project commit gates to vital, changed parts and bound verification scratch | open |
-| 154 | Spike: Kiro Crew workers on KAS allow-lists instead of YOLO (rerun P3 and P13) | open |
-| 155 | Spike: Kiro Crew conductor dispatching Claude Code or Codex workers | open |
+| 154 | Spike: Kiro Crew workers on KAS allow-lists instead of YOLO (rerun P3 and P13) | ✅ done |
+| 155 | Spike: Kiro Crew conductor dispatching Claude Code or Codex workers | ✅ done |
 | 156 | Spike: a Kiro Crew Mate as the standing orchestrator | open |
 | 157 | Spike: agy run_workflow and custom agents running the orchestrate loop | open |
 | 158 | Spike: agy command(regex:...) rules narrower than command(*) | open |
@@ -201,11 +236,10 @@ The Windows chat retains ownership of verification tickets #137, #152, and #176�
 | 172 | Spike: Claude Code fast mode speed, quality and credit cost on orchestrate workers | open |
 | 173 | Spike: GUI surfaces as the watch layer over a headless orchestrator | open |
 | 174 | Spike: harbor as the runner for the model-tier and harness spikes, vs a thin runner of our own | open |
-| 175 | Reproduce the inspect-footprint test hang on macOS and confirm the lsof cause | open |
-| 176 | Test fixtures isolate Git from the user's global config (signing, hooks, editor) | open |
-| 177 | gate.mjs --record writes measured timings into gates.json | open |
-| 178 | Warn when grey-matter's own clone has no core.hooksPath, so pushes skip the pre-push stage | open |
 | 179 | Implement inter-harness session messaging and wakeups | open |
 | 180 | Review philippines-trip's worktree rules and audit script for adoption | open |
 | 181 | Add a scratch-prune recipe to repository-artifact-hygiene | open |
 | 182 | Detect footprint growth outside repository scratch | open |
+| 183 | Preserve artifact ownership across agent handoffs | open |
+| 184 | Revalidate preservation state before cleanup recommendations | open |
+| 185 | Research: KAS architecture and its relationship to kiro-cli | ✅ done |

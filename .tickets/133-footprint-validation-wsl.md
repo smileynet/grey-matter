@@ -5,11 +5,11 @@ status: open
 blocked_by: []
 priority: high
 validation_criteria:
-  - "Every WSL 2 row of footprint-by-os.md was run in a WSL 2 distro (WSL version, distro, Windows build recorded) and is retagged observed, corrected, or kept with the reason it could not run."
-  - "With the Windows drive's free space below the distro's own df figure, inspect-footprint.mjs --summary reports the lower (Windows) figure and the floor finding follows it."
-  - "Deleting a large file inside the distro is measured on the Windows side before and after wsl --manage --set-sparse true, and the reclaiming guidance matches what was observed."
-  - "node --test scripts/inspect-footprint.test.mjs passes inside WSL 2; the research file records the commands and output, and node scripts/gate.mjs pre-merge passes."
-tags: ["stream:tooling", "type:chore"]
+  - "Each WSL 2 row is observed, corrected, or marked with why it could not run."
+  - "The inspector reports the lower of the distro and Windows free space."
+  - "Reclaiming guidance matches measured behaviour with and without sparse mode."
+  - "The fixture test passes under WSL 2; output recorded; `node scripts/gate.mjs pre-merge` passes."
+tags: ["type:chore","stream:test-verification"]
 ---
 
 # Validate footprint guidance and inspector under WSL 2
@@ -41,3 +41,16 @@ Fix wrong rows and inspector bugs in place; file anything larger as its own tick
 - [ ] The inspector reports the lower of the distro and Windows free space.
 - [ ] Reclaiming guidance matches measured behaviour with and without sparse mode.
 - [ ] The fixture test passes under WSL 2; output recorded; `node scripts/gate.mjs pre-merge` passes.
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Next: verify WSL 2 version, distro backing volume and the lower-of-host/distro free-space behavior,
+then measure reclaim behavior in a disposable environment. Ubuntu is listed by wsl --list, but
+version, usable tooling, backing drive and sparse-mode behavior were not verified in this
+reconciliation. Preserve user distro settings and data; record unavailable probes explicitly.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.

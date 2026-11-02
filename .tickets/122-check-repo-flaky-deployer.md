@@ -5,9 +5,10 @@ status: open
 blocked_by: []
 priority: low
 validation_criteria:
-  - "Cause of the intermittent deployer failure identified from a failing run's log"
-  - "20 consecutive gate.mjs pre-merge --include deployer runs on an unchanged tree pass, or the remaining flake is isolated and recorded"
-tags: ["stream:tooling", "type:bug"]
+  - "The cause is identified from a captured failing log and recorded here."
+  - "20 consecutive `node scripts/gate.mjs pre-merge --include deployer` runs on an unchanged tree pass the deployer check, or the remaining flake is isolated to a named test and recorded."
+  - "`node scripts/gate.mjs pre-merge` passes."
+tags: ["type:bug","stream:test-verification"]
 ---
 # Find why the deployer check (deploy.test.mjs) fails intermittently on Windows
 
@@ -49,3 +50,16 @@ original intermittent failure. No claim is made that #137 fixed that failure. Re
 back to the frontier with the reproduction criterion checked; retain the first criterion open.
 The next failing deployer run must retain its full output before retrying so a named failure can
 be diagnosed. Raw successful-run logs are promoted above; temporary harness files are recycled.
+
+## Workstream reconciliation 2026-11-02
+
+Scope: `stream:test-verification`; execution order and completion requirements are in the
+[workstream plan](../docs/plan.md#test-optimization-and-verification).
+
+Remaining: capture and explain an actual matching deployer failure before claiming the cause is
+known. The 20 consecutive fixed-commit runs already passed (83.8-95.4 seconds, mean 87.2); do not
+restart a blind stress loop simply to obtain another green result. Preserve any failure encountered
+during the rest of this stream. Existing checked criteria and historical evidence remain unchanged.
+
+Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
+verify the ticket's premises against current source and run its acceptance checks when picked up.
