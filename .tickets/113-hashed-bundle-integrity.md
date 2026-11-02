@@ -1,7 +1,7 @@
 ---
 id: "113"
 title: "Verify portable bundle hashes across fresh copies and Git checkouts"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "Bundle guidance requires exact inventory and raw-byte hash checks when a manifest promises them."
@@ -21,9 +21,9 @@ Read skills/meta/repository-artifact-hygiene/SKILL.md and its inspector. Add a c
 
 ## Acceptance criteria
 
-- [ ] Bundle guidance requires exact inventory and raw-byte hash checks when a manifest promises them.
-- [ ] Guidance accounts for Windows checkout normalization and distinguishes staged from committed exports.
-- [ ] Fixtures detect an extra file and changed bytes; repository checks pass without global line-ending rewrites.
+- [x] Bundle guidance requires exact inventory and raw-byte hash checks when a manifest promises them.
+- [x] Guidance accounts for Windows checkout normalization and distinguishes staged from committed exports.
+- [x] Fixtures detect an extra file and changed bytes; repository checks pass without global line-ending rewrites.
 
 ## Workstream reconciliation 2026-11-02
 
@@ -49,3 +49,12 @@ remains pending because browser policy blocked local-file access; human review w
 Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
 integration; local commit history and this evidence remain in Git. The current deployment
 package is retained until the next deployment.
+
+## Resolution (2026-11-02)
+
+done: worker implemented meaningful raw-byte regression, critic accepted, root merged/verified/pushed/deployed and recorded dashboard delivery. Test observations promoted into ticket; shared raw log retained only through final stream integration check. Keep owned t113-worker checkout/dependency junction until final stream audit/cleanup; shared helpers until orchestration completes, current deployment package until next deploy. Dashboard visual acceptance remains pending under browser policy, source/data checks only.
+
+### Verification
+1. ✓ Bundle guidance requires exact inventory and raw-byte hash checks when a manifest promises them. — "Worker38b20e4 adds conditional exact inventory/raw-byte file/archive verification for contractual bundle hashes and fresh materialization; existing public verifyArtifacts reused. Critic Spec/Standards accepted."
+2. ✓ Guidance accounts for Windows checkout normalization and distinguishes staged from committed exports. — "Guidance distinguishes staged-index export from git archive committed SHA and accounts for Windows checkout filters/autocrlf via scoped bundle attributes. No global Git or repo-wide attributes changed; Git blob/index hashes not substituted for materialized bytes."
+3. ✓ Fixtures detect an extra file and changed bytes; repository checks pass without global line-ending rewrites. — "Existing extra-file and new resealed-outer/stale-inner-hash fixtures passed in worker32/32 and root independently32/32 no skips13.461s. Root aftermerge premerge4/4 passed; worker prepush6/6; canonical deploy check/default50skills passed. No release publication claimed."
