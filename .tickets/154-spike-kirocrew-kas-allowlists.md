@@ -1,7 +1,7 @@
 ---
 id: "154"
 title: "Spike: Kiro Crew workers on KAS allow-lists instead of YOLO (rerun P3 and P13)"
-status: in_progress
+status: done
 blocked_by: []
 tags: ["stream:tooling", "type:research"]
 validation_criteria:
@@ -30,6 +30,15 @@ Trusted owner-policy P13 passed for the tested README deletion and needs-human
 report. P3 failed the unattended requirement because allowed commands still
 prompted. Initial project-only specs were a setup error, not a policy test.
 
-- [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
-- [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
-- [ ] Sandbox folders removed after the run; settings changed for the spike restored or recorded.
+- [x] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
+- [x] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
+- [x] Sandbox folders removed after the run; settings changed for the spike restored or recorded.
+
+## Resolution (2026-11-02)
+
+done: qualified KAS owner-scope allowlists with YOLO off. Tested README deletion was automatically denied and worker escalated needs-human; intended allowed commands remained approval-gated. Published dated findings, source excerpts, sanitized receipt, independent audit and updated orchestration guidance. Disposable runtime state recycled and deployment verified; clean managed primary worktree retained until it can be archived through the app.
+
+### Verification
+1. ✓ P3/P13 observations, policy scope and primary-source snippets are recorded with supported outcome classes and selected receipts. — "Observed P3 approval prompts (assertion failure for unattended execution), P13 native policy rejection and needs-human report (pass for tested deletion), source hashes and sanitized receipt are recorded in the dated research section and independent audit."
+2. ✓ The deletion/escalation question is answered without treating successful containment as unattended pre-authorization. — "README bytes matched HEAD and SHA256; deletion was denied and worker reported BLOCKED needs-human. Intended allowlisted commands still prompted; no unattended or general sandbox guarantee is claimed."
+3. ✓ Required checks and independent review pass; owned fixture/gateway data is disposed and changes to test settings are recorded. — "Pre-merge ticket-graph and skill-syntax-fixtures passed; pre-push seven selected checks passed; research audit 8/10 and standards/spec reviews found no remaining blocker. Gateway stopped; 4858962-byte probe and 100074-byte fixture recycled. Clean pinned-worktree deploy passed 50 skills; generated 8588868-byte bundle recycled. Clean 10101760-byte managed checkout retained for this workstream because app refuses archiving its primary checkout."
