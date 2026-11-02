@@ -22,9 +22,10 @@ which was then removed. Two `gio trash` trials under `~/.cache/claude-fp-trial/`
 3. **The Windows "recycle" route can delete permanently with no prompt.** `FileSystem.DeleteFile(path,
    UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin)` sets `FOF_SILENT | FOF_NOCONFIRMATION |
    FOF_ALLOWUNDO` and leaves out `FOF_WANTNUKEWARNING` (dotnet/runtime source). `FOF_NOCONFIRMATION` means
-   "Respond with Yes to All". The confirmation for a file too big to recycle would therefore be accepted,
-   and the file deleted permanently. This is inferred from the source code and the Win32 docs, not run on
-   Windows. Use `UIOption.AllDialogs`, or check the file size against the bin's maximum first.
+   "Respond with Yes to All". A bounded Windows Sandbox probe now observed the result with a 1 MiB
+   per-volume setting: a 512 KiB control entered the Bin; a 2 MiB source disappeared while C: Bin count
+   and size remained unchanged. This is evidence for that isolated setting only. Use `UIOption.AllDialogs`,
+   or check the actual bin maximum and list files that may exceed it.
 4. **`cargo clean` works per workspace, not per project.** With no options it deletes the whole target
    directory. If `CARGO_TARGET_DIR` or `build.target-dir` points at a shared directory, it wipes the build
    output of every project using that directory. Docs only.
@@ -137,8 +138,8 @@ Scratch repo: `git lfs track "*.bin"`, a 200,000-byte random `big.bin`, commit, 
 
 ## Still unknown
 
-- Windows behaviour of item 3 (permanent delete with `OnlyErrorDialogs`) is inferred from source code and
-  docs; it needs a Windows run with a file larger than a small bin maximum.
+- The Windows cap behavior was observed only in a disposable Sandbox; no claim is made about the host
+  user's current Bin setting or all filesystem variants.
 - The macOS `trash` version boundary rests on secondary reports, with no Apple primary source; check
   `man trash` on a 15.x host.
 - No official Microsoft page found for the Recycle Bin size-limit behaviour.
@@ -158,11 +159,12 @@ they do not describe other filesystems or cloud allocation. No provider/model ca
 | Real-repository summary | `node skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs --repo . --summary --floor 0B --quiet 0m` → exit 0, `free 93.4 GiB (floor 0.0 MiB)` | No limit finding; the JSON report had `status: review` because candidate families existed, and incomplete open-file coverage. Summary output is not a clean/pass classification. |
 | `fsutil fsinfo volumeinfo D:` | Command returned `Error 5: Access is denied.` | Infrastructure/privilege limit: volume metadata from this command was not observed without elevation. `Get-Volume -FilePath` did work. |
 | `handle.exe` availability | `Get-Command handle.exe -ErrorAction SilentlyContinue` returned no command. | Not installed/on PATH; the inspector correctly reports open-file coverage unavailable rather than treating the set as empty. |
-| Recycle Bin operation below/over cap and cap value | Not run. | No isolated volume with a separate Recycle Bin was available. No near-cap fixture was placed in the user's real Recycle Bin, no per-drive Bin setting was changed, and the existing guidance remains based on .NET/Win32 source plus secondary cap documentation. Over-cap behavior is still unverified on Windows. |
-| OneDrive online-only placeholder | Not run. `OneDrive` environment variable exists, but no owned disposable online-only fixture was available. | No cloud file was opened, hydrated, or deleted. Full logical-size versus allocated-size behavior remains documented/inferred from Files On-Demand documentation, not observed on this account. |
+| Recycle Bin operation below/over cap and cap value | Hidden `WindowsSandbox.exe` launch of an owned `.wsb` mapped only one disposable fixture folder read/write; guest ran `powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File C:\t132\run.ps1`. The script set only the Sandbox user's C: `MaxCapacity` value to 1 MiB, then used `FileSystem.DeleteFile(..., OnlyErrorDialogs, SendToRecycleBin)` and `SHQueryRecycleBinW(C:\)` before and after. | Windows 11 Enterprise build 26100, interactive `WDAGUtilityAccount`: empty Bin baseline (0 items/0 bytes); 512 KiB control disappeared from source and appeared in Bin (1 item/524,288 bytes); 2 MiB fixture disappeared from source while Bin remained at 1 item/524,288 bytes. Observed over-cap source removal without a new Bin entry, consistent with permanent deletion for this call. The guest's previous capacity value was 6137 and read back as 1 after the change. Network and clipboard were disabled, guest memory capped at 2048 MiB, and the guest ran its own shutdown. No host Bin setting or content was read or changed. Report: [Windows Sandbox Bin-cap evidence](evidence/footprint-win-bin-cap-20261102.json). |
+| OneDrive online-only placeholder | Not run. `OneDrive` environment variable exists, but no owned disposable online-only fixture was available. | No cloud file was opened, hydrated, or deleted. Full logical-size versus allocated-size behavior remains documented/inferred from Files On-Demand documentation, not observed on this account. The owned-fixture follow-up is tracked by [ticket 192](../../../.tickets/192-footprint-onedrive-placeholder.md). |
 
 The October 31 failure is not reproduced on the current Windows host: all seven current fixture
-tests pass. This does not resolve the over-cap Recycle Bin or placeholder observations above.
+tests pass. The over-cap Bin result above applies to the disposable Sandbox only; the OneDrive
+placeholder remains unobserved on this account.
 
 ## WSL host-volume follow-up (#133, 2026-11-02)
 
