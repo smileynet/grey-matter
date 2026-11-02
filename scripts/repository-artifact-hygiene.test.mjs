@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Protect staged-source fidelity, bounded inspection, policy decisions and read-only operation.
 // Run: node --test scripts/repository-artifact-hygiene.test.mjs
+import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";

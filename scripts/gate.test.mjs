@@ -1,5 +1,6 @@
 // gate.test.mjs: gate.mjs selection, bounding and outcome classes against disposable repositories.
 // Run: node --test scripts/gate.test.mjs
+import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { copyFileSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

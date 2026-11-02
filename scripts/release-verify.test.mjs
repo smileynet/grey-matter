@@ -1,3 +1,4 @@
+import "./test-git-env.mjs";
 import { publishStaged } from "./release-publication.mjs";
 import { publicationFailure } from "./release-publish.mjs";
 import { ciFixture } from "./release-ci-fixtures.mjs";

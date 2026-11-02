@@ -1,5 +1,6 @@
 // Fixture tests for repository-artifact-hygiene's footprint inspector: one throwaway repo seeded
 // with each case the inspector must see, never operator data.
+import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";

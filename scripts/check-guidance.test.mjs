@@ -5,6 +5,7 @@
 //
 // Run: node --test scripts/check-guidance.test.mjs
 
+import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";

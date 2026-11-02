@@ -1,5 +1,6 @@
 // Tests for spike-orchestrate-fixture.mjs: builds real sandboxes in the OS temp dir and needs
 // git, tkt and npm on PATH (skipped without tkt). No GitHub repo is ever created here.
+import "./test-git-env.mjs";
 import { after, test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";

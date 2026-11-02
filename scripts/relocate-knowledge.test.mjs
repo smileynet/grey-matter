@@ -4,6 +4,7 @@
 //
 // Run: node --test scripts/relocate-knowledge.test.mjs
 
+import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, symlinkSync } from "node:fs";

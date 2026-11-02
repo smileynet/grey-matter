@@ -3,6 +3,7 @@
 // incumbent layer, and adopted state. Throwaway git repos under the OS temp dir only.
 // Run: node --test scripts/survey-repos.test.mjs
 
+import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
