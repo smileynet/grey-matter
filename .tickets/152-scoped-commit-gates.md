@@ -49,3 +49,20 @@ Owner request on 2026-10-31 from a tagalog-helper session: "fix the precommit ga
 ## Out of scope
 
 Result caching and automatic risk scoring. Per-project vital-area choices stay authored in each project.
+
+## Progress 2026-11-01 (proposal 18 steps 3 and 4, commit 636afaa)
+
+- Done: the change-scoped pattern is `gates.json` plus a vendored `gate.mjs` (scope prefixes,
+  `full_triggers`, `SKIP`, a stage per check); docs, tickets and art match no scope and run
+  nothing; dependency pins and gate files are full triggers. `local-gates.md` documents it with an
+  illustrative example shaped on tagalog-helper (its real `commit-scope.json` is not in the local
+  clone, so the values are not its own). Pre-commit is not a stage at all.
+- Done: `conformance-audit` reads the phase line, the vendored `gate.mjs` version and the
+  local-gates findings list (blocking or full-suite pre-commit, over-budget or unscoped checks,
+  hosted CI on every push, scratch that keeps every run).
+- Done: the proportionality rule ("changing a gate is a reversible tooling change") lives in
+  `local-gates.md`.
+- Left: pointers to that rule from the critic and `reconcile-tickets` guidance, and
+  `conformance-audit` reporting scratch with its measured size (it names the finding but does not
+  yet call `inspect-footprint.mjs` for the size).
+- The last criterion now reads `node scripts/gate.mjs pre-merge`; `check-repo.mjs` is retired.
