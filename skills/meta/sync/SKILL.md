@@ -212,6 +212,8 @@ copies when a refresh fails.
 - `git pull --ff-only` fast-forwarded (or sync stopped cleanly and told you why it couldn't).
 - Each harness sees the source skill set once, through its plugin or selected owned root,
   with new skills present and removed ones pruned.
-- A tkt version change surfaced a `verify-tkt-usage` report; a clean tkt did not.
-- The delta names exactly what changed and what to follow up on — and nothing was gated:
-  the harnesses are current even when a finding needs later attention.
+- Every tkt pack deployment has a `verify-tkt-usage` report, including when the CLI version
+  is unchanged; an incompatible pack is held until the owner chooses a compatible release
+  tag or approves a CLI upgrade.
+- The delta names exactly what changed and what still needs follow-up, including any held
+  pack deployment and the owner's compatibility choice.
