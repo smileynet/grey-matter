@@ -1,7 +1,7 @@
 ---
 id: "112"
 title: "Plan UI checks against available capabilities and preserve evidence boundaries"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Applicable UI workflows establish permitted capabilities before selecting checks and record unavailable checks without substituting unobserved success."
