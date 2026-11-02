@@ -1,7 +1,7 @@
 ---
 id: "156"
 title: "Spike: a Kiro Crew Mate as the standing orchestrator"
-status: open
+status: in_progress
 blocked_by: ["124","128","154"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
