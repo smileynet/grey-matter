@@ -157,8 +157,8 @@ recycle owned artifacts; leave unresolved external evidence explicit rather than
 
 ## Orchestration workstream (reconciled 2026-11-02)
 
-Scope: exactly the 27 tickets in the two tables below, tagged
-`stream:orchestration`: 16 open and 11 done, with no in-progress ticket.
+Scope: exactly the 28 tickets in the two tables below, tagged
+`stream:orchestration`: 16 open, #162 in progress and 11 done.
 Other tooling, test-verification, dashboard and release work remains in its
 existing stream. Related parked #06 (skill/version drift evaluations) and #09
 (fresh-process versus subagent guidance) remain deferred outside this active
@@ -199,6 +199,7 @@ auth remains conditional on the result of #186.
 | 170 | 14. Compare documentation, triage and classification tiers | open |
 | 171 | 15. Sweep effort levels while holding each model fixed | open |
 | 172 | 16. Compare Claude fast mode on/off with measured quality and usage | open |
+| 187 | 17. Research ACPa, resolve its identity and propose evidence-led spikes | open |
 
 Solid arrows below are hard dependencies; dotted arrows are proposed order only.
 Completed prerequisites are omitted from this graph and remain in the tickets.
@@ -220,6 +221,7 @@ flowchart TD
   R174 --> T170["170 Text-task tiers"]
   R174 --> F171["171 Effort sweep"]
   R174 --> S172["172 Claude fast mode"]
+  S172 -. "queue last" .-> Q187["187 ACPa research / spike options"]
 ```
 
 Completed baseline and delivered guidance (historical closure evidence preserved):
@@ -241,16 +243,21 @@ Completed baseline and delivered guidance (historical closure evidence preserved
 Closed tickets received tag-only metadata corrections; statuses, acceptance
 checkboxes, dependencies and resolution bodies were preserved. Existing unchecked
 historical boxes on #125–129 remain visible warnings, not newly claimed passes.
-All 16 open tickets now have concrete validation fields, current context and
+All 17 remaining tickets now have concrete validation fields, current context and
 explicit prerequisites. #155 is not reopened: a new mixed-backend probe requires
 a supported configuration/version or a separately chosen design, not repetition
 of the same unsupported split.
 
 Native tkt 0.4.0 context queries also include untagged tickets. Use the exact
-27-ticket membership above rather than treating every context-query result as
+28-ticket membership above rather than treating every context-query result as
 in scope. The initial scoped frontier is #162, #186, #156–161 and #174;
 #173 awaits #162 and #167–172 await #174. Plan order is advisory among frontier
 members, while declared dependencies remain authoritative.
+
+Follow-up request: #162 is now claimed and active. #187 was appended at the
+user's request with low priority and no artificial dependency edge; it stays
+last in this queue. Its subject name ACPa is pending clarification, so research
+must establish the intended primary source before considering new spikes.
 
 Retained private t111 evidence belongs to #162; the prepared 98,400-byte t158
 fixture belongs to #158. The managed deployment checkout is retained: the app
