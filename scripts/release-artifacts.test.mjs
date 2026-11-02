@@ -1,5 +1,5 @@
 import "./test-git-env.mjs";
-import { test } from "node:test";
+import { after, test } from "node:test";
 import assert from "node:assert/strict";
 import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -24,9 +24,13 @@ const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const git = (repo, ...args) => execFileSync("git", ["-C", repo, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
 const put = (path, text) => { mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, text); };
 
-function fixture(fn) {
-  const dir = mkdtempSync(join(tmpdir(), "release-artifact-test-"));
-  const repo = join(dir, "repo"), out = join(dir, "out");
+const seedRoot = mkdtempSync(join(tmpdir(), "release-artifact-seed-"));
+after(() => rmSync(seedRoot, { recursive: true, force: true }));
+let seed;
+const commit = (repo) => { git(repo, "add", "-A"); git(repo, "commit", "--no-verify", "-m", "Fixture inputs"); return git(repo, "rev-parse", "HEAD"); };
+
+function seedFixture() {
+  const repo = join(seedRoot, "repo");
   mkdirSync(repo);
   git(repo, "init", "-b", "main");
   const pack = { name: "example", version: "0.2.0", description: "Fixture", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE", "NOTICE"], skillLicenseFiles: ["LICENSE"], runtimeFiles: ["scripts/command.mjs"] } } };
@@ -43,9 +47,17 @@ function fixture(fn) {
   put(join(repo, "NOTICE"), "retained attribution\n");
   cpSync(join(here, "deploy.mjs"), join(repo, "scripts/deploy.mjs"));
   for (const file of [".tickets/01.md", ".scratch/result.txt", "target/debug/log", "node_modules/private.txt", ".env", "unrelated.txt"]) put(join(repo, file), "development only\n");
-  const commit = () => { git(repo, "add", "-A"); git(repo, "commit", "--no-verify", "-m", "Fixture inputs"); return git(repo, "rev-parse", "HEAD"); };
-  const ref = commit();
-  try { fn({ dir, repo, out, ref, commit, build: (extra = {}) => buildArtifacts({ repo, ref: git(repo, "rev-parse", "HEAD"), out, ...extra }) }); }
+  return { repo, ref: commit(repo) };
+}
+
+function fixture(fn) {
+  seed ??= seedFixture();
+  const dir = mkdtempSync(join(tmpdir(), "release-artifact-test-"));
+  const repo = join(dir, "repo"), out = join(dir, "out");
+  try {
+    execFileSync("git", ["clone", "--shared", "--origin", "fixture-source", seed.repo, repo], { stdio: "pipe" });
+    fn({ dir, repo, out, ref: seed.ref, commit: () => commit(repo), build: (extra = {}) => buildArtifacts({ repo, ref: git(repo, "rev-parse", "HEAD"), out, ...extra }) });
+  }
   finally { rmSync(dir, { recursive: true, force: true }); }
 }
 

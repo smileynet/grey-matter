@@ -1,5 +1,5 @@
 import "./test-git-env.mjs";
-import test from "node:test";
+import test, { after } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -8,14 +8,28 @@ import { promotePublishedStable } from "./release-publish.mjs";
 import { createHash } from "node:crypto";
 import { git, pushCandidateRefs, requireGithubRemote } from "./release-git.mjs";
 
-function fixture(t) {
-  const root = mkdtempSync(join(tmpdir(), "release-refs-"));
-  t.after(() => rmSync(root, { recursive: true, force: true }));
+const seedRoot = mkdtempSync(join(tmpdir(), "release-refs-seed-"));
+after(() => rmSync(seedRoot, { recursive: true, force: true }));
+let seed;
+
+function seedFixture() {
+  const root = seedRoot;
   const remote = join(root, "remote.git"), repo = join(root, "work");
   git(root, ["init", "--bare", remote]); git(root, ["init", repo]);
   writeFileSync(join(repo, "file"), "candidate"); git(repo, ["add", "file"]); git(repo, ["commit", "-m", "candidate"]);
   git(repo, ["tag", "-a", "v1.0.0", "-m", "release"]); git(repo, ["remote", "add", "origin", remote]);
-  return { remotePath: remote, repo, branch: "refs/heads/candidate", tag: "refs/tags/v1.0.0", candidateSha: git(repo, ["rev-parse", "HEAD"]).trim(), tagObject: git(repo, ["rev-parse", "v1.0.0"]).trim() };
+  return { remotePath: remote, repo, candidateSha: git(repo, ["rev-parse", "HEAD"]).trim(), tagObject: git(repo, ["rev-parse", "v1.0.0"]).trim() };
+}
+
+function fixture(t) {
+  seed ??= seedFixture();
+  const root = mkdtempSync(join(tmpdir(), "release-refs-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const remote = join(root, "remote.git"), repo = join(root, "work");
+  git(root, ["clone", "--shared", "--bare", seed.remotePath, remote]);
+  git(root, ["clone", "--shared", seed.repo, repo]);
+  git(repo, ["remote", "set-url", "origin", remote]);
+  return { remotePath: remote, repo, branch: "refs/heads/candidate", tag: "refs/tags/v1.0.0", candidateSha: seed.candidateSha, tagObject: seed.tagObject };
 }
 
 test("candidate refs: dry-run leaves remote refs untouched", (t) => {
