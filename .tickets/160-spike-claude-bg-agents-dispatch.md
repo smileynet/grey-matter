@@ -1,7 +1,7 @@
 ---
 id: "160"
 title: "Spike: Claude Code --bg sessions and notify_when_idle as the dispatch layer"
-status: open
+status: in_progress
 blocked_by: ["124","125"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
