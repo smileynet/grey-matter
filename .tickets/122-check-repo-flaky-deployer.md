@@ -63,3 +63,14 @@ during the rest of this stream. Existing checked criteria and historical evidenc
 
 Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
 verify the ticket's premises against current source and run its acceptance checks when picked up.
+
+## Retained-evidence audit 2026-11-02
+
+A delegated read-only pass found no newly retained failed deployer run. The tracked
+deployer-stress evidence remains 20/20 passing on unchanged c634acf; the retained sync log's
+deployer TAP summary is 45 pass, zero fail, despite expected negative-case stderr. The full
+pre-merge log is 19/19 passing and does not run the pre-release deployer suite. Ticket137's
+historical load/Git-latency observation is a candidate explanation, not proof of this lost
+failure's cause. No source fix or repeated stress loop was justified. Keep this ticket open;
+the next actual failure needs full output, exact command/commit, host-resource and process
+observations preserved before retry. No existing artifact or configuration was changed.
