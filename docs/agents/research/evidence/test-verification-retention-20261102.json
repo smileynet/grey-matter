@@ -1,0 +1,115 @@
+{
+  "date": "2026-11-02",
+  "scope": "This thread's test-verification artifacts; unrelated artifacts preserved.",
+  "measurement": "File lengths without following reparse points; not allocated-space accounting. Shared Git objects and system-managed Sandbox storage excluded.",
+  "retainedWorktrees": [
+    {
+      "path": ".scratch/t113-worker",
+      "bytes": 10394964,
+      "skippedLinks": 1
+    },
+    {
+      "path": ".scratch/t115-worker",
+      "bytes": 10282575,
+      "skippedLinks": 0
+    },
+    {
+      "path": ".scratch/t116-worker",
+      "bytes": 10402775,
+      "skippedLinks": 0
+    },
+    {
+      "path": ".scratch/t117-worker",
+      "bytes": 10281421,
+      "skippedLinks": 1
+    },
+    {
+      "path": ".scratch/t120-worker",
+      "bytes": 10422642,
+      "skippedLinks": 1
+    },
+    {
+      "path": ".scratch/t121-worker",
+      "bytes": 10436130,
+      "skippedLinks": 1
+    },
+    {
+      "path": ".scratch/t131-t175-worker",
+      "bytes": 10471204,
+      "skippedLinks": 0
+    },
+    {
+      "path": ".scratch/t132-worker",
+      "bytes": 10525571,
+      "skippedLinks": 1
+    },
+    {
+      "path": ".scratch/t132-bin-worker",
+      "bytes": 12604058,
+      "skippedLinks": 0
+    },
+    {
+      "path": ".scratch/t133-worker",
+      "bytes": 73742630,
+      "skippedLinks": 0
+    },
+    {
+      "path": ".scratch/t98-worker",
+      "bytes": 10531248,
+      "skippedLinks": 0
+    },
+    {
+      "path": ".scratch/shared-test-verification-integration",
+      "bytes": 12606546,
+      "skippedLinks": 1
+    }
+  ],
+  "worktreeFileBytes": 192701764,
+  "worktreeLifecycle": "Shared test-verification reproduction/regression audit through remaining #131/#175/#192; retire these named checkouts after final platform integration. Source commits and promoted evidence remain in Git.",
+  "retainedWsl": {
+    "name": "GreyMatter-Footprint-133",
+    "vhd": "E:/WSL/grey-matter-t133-disposable/ext4.vhdx",
+    "logicalBytes": 433061888,
+    "downloadInputsBytes": 63181213,
+    "inputsAlreadyIncludedInWorktreeBytes": true,
+    "purpose": "Reusable native Linux baseline for remaining #131/#175 cross-platform regression checks; retire after final platform integration.",
+    "state": "Stopped; sparse enabled only on this owned disposable VHD. Existing distros/settings/default preserved."
+  },
+  "retainedSmallArtifacts": {
+    "sharedLogsHelpersBytes": 45804,
+    "sandboxFixtureConfigResultsBytes": 7367,
+    "sandboxPath": ".scratch/t132-sandbox-overcap-20261102-1",
+    "sandboxConfig": ".scratch/t132-sandbox-overcap-20261102-1.wsb",
+    "purpose": "Source/reproduction audit through #192 and final platform integration; useful findings promoted in tickets/research. Retire when those checks no longer need the inputs."
+  },
+  "cleanup": {
+    "temporaryIndexFiles": 27,
+    "temporaryIndexBytes": 2383217,
+    "method": "Microsoft.VisualBasic FileSystem.DeleteFile with SendToRecycleBin",
+    "observed": "API returned without error; original paths absent. Host Bin contents were not inspected.",
+    "sandbox": "Guest/window/processes closed; no persistent user VM created."
+  },
+  "preservedPreexisting": [
+    {
+      "path": ".scratch/harness-probe",
+      "bytes": 1303
+    },
+    {
+      "path": ".scratch/review-installer-safety",
+      "bytes": 0
+    },
+    {
+      "path": ".scratch/t50-fixtures",
+      "bytes": 1152040
+    },
+    {
+      "path": ".scratch/learning-library-sync-check.log",
+      "bytes": 108823
+    }
+  ],
+  "limitations": [
+    "An earlier automatic approval review rejected the combined t117-worker junction removal/worktree recycle command as blocked by policy, without a more specific reason. It was not retried through another route; that worktree remains retained.",
+    "The aggregate crosses the 500 MiB workflow threshold. Downloads and VM samples were measured and bounded; project node_modules were referenced by junction/shared storage. The separate Linux runtime/packages are included in the VHD measurement. This threshold is not a disk-capacity limit.",
+    "Mac simulator trees remain untouched and deferred at the user's request. No remote test data was added below its 20 GiB floor."
+  ]
+}

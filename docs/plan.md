@@ -121,7 +121,9 @@ alone establish no implementation pass. Native status and per-ticket evidence go
 Documentation consistency passes for 50 skills, the strict delivery-dashboard source/data check
 has zero errors or warnings, and ticket validation has seven pre-existing closed-ticket checkbox
 warnings. Shared test-verification artifacts are retained for remaining platform regression checks,
-with their lifecycle recorded in ticket resolutions; none of this establishes rendered UI acceptance.
+with their lifecycle recorded in ticket resolutions and the
+[measured retention inventory](agents/research/evidence/test-verification-retention-20261102.json);
+none of this establishes rendered UI acceptance.
 
 | ID | Work | Status |
 | --- | --- | --- |
