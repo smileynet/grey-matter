@@ -217,13 +217,16 @@ function wslHostVolume(coverage) {
   }
 
   const [volume] = volumes;
-  const free = Number(volume?.Free), total = Number(volume?.Total);
+  const integer = (value) => typeof value === "string" && /^(0|[1-9]\d*)$/.test(value) ? Number(value) : NaN;
+  const free = integer(volume?.Free), total = integer(volume?.Total);
   const identity = typeof volume?.Drive === "string" && /^[A-Za-z]$/.test(volume.Drive)
     ? `${volume.Drive.toUpperCase()}:`
-    : volume?.VolumeId;
+    : typeof volume?.VolumeId === "string" && /^\\\\\?\\Volume\{[0-9A-Fa-f-]{36}\}\\$/.test(volume.VolumeId)
+      ? volume.VolumeId
+      : undefined;
   if (volumes.length !== 1 || volume?.Name !== distro || typeof volume.BasePath !== "string" || !volume.BasePath.trim()
     || volume.VhdExists !== true || !identity || !Number.isSafeInteger(free) || free < 0
-    || !Number.isSafeInteger(total) || total < free) {
+    || !Number.isSafeInteger(total) || total <= 0 || total < free) {
     coverage.complete = false;
     coverage.hostDrive = "unavailable";
     coverage.hostDriveReason = "WSL VHD registration or volume data is missing or ambiguous";
@@ -361,6 +364,9 @@ const gib = (n) => n >= 1024 ** 3 ? `${(n / 1024 ** 3).toFixed(1)} GiB` : `${(n 
 
 export function summary(result, topUnder) {
   const line = [`free ${gib(result.freeSpace.free)} (floor ${gib(result.limits.floor)}${result.freeSpace.free < result.limits.floor ? ": under, stop adding data" : ""})`];
+  if (result.status === "review" && result.coverage?.hostDrive === "unavailable") {
+    line.push(`Windows backing volume unavailable (${result.coverage.hostDriveReason}); free-space floor unverified`);
+  }
   if (result.freeSpace.free < topUnder) line.push(`largest uncommitted: ${result.families.slice(0, 3).map((f) => `${f.path} ${gib(f.bytes)}`).join(", ") || "none"}`);
   return line.join("; ");
 }

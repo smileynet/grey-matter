@@ -176,18 +176,31 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
     const valid = run([record()]);
     assert.equal(valid.freeSpace.entries.find((entry) => entry.path === "Windows R:").free, 1234);
     assert.equal(valid.coverage.hostDrive, "registered R: volume for this WSL distro");
+    const volumeId = "\\\\?\\Volume{12345678-1234-1234-1234-123456789abc}\\";
+    const volumeIdResult = run([record({ Drive: "", VolumeId: volumeId })]);
+    assert.equal(volumeIdResult.coverage.hostDrive, `registered ${volumeId} volume for this WSL distro`);
 
     for (const [label, response, exit] of [
       ["missing registration", [], 0],
       ["duplicate registration", [record(), record()], 0],
       ["missing VHD", [record({ VhdExists: false })], 0],
       ["failed host query", [record()], 1],
+      ["null free", [record({ Free: null })], 0],
+      ["empty free", [record({ Free: "" })], 0],
+      ["numeric free", [record({ Free: 1234 })], 0],
+      ["null total", [record({ Total: null })], 0],
+      ["empty total", [record({ Total: "" })], 0],
+      ["numeric total", [record({ Total: 9876 })], 0],
+      ["zero total", [record({ Free: "0", Total: "0" })], 0],
+      ["object volume identity", [record({ Drive: "invalid", VolumeId: { value: "R:" } })], 0],
+      ["empty volume identity", [record({ Drive: "invalid", VolumeId: "" })], 0],
     ]) {
       const result = run(response, exit);
       assert.equal(result.coverage.complete, false, label);
       assert.equal(result.coverage.hostDrive, "unavailable", label);
       assert.equal(result.status, "review", label);
       assert.equal(result.freeSpace.entries.some((entry) => entry.path.startsWith("Windows ")), false, label);
+      assert.match(summary(result, 0), /Windows backing volume unavailable .*; free-space floor unverified/, label);
     }
 
     delete process.env.WSL_DISTRO_NAME;
