@@ -1,0 +1,46 @@
+{
+  "status": "pass",
+  "nativeTransitions": [
+    {
+      "stage": "claim",
+      "tags": [
+        "c9a02de8951c",
+        "implementation"
+      ],
+      "goal": "Ticket 1: mirror the ticket workflow in this chat",
+      "phase": "implementation",
+      "next": "Verify marker.txt",
+      "artifacts": {
+        "ticket": ".tickets/1-marker.md"
+      }
+    },
+    {
+      "stage": "wait",
+      "tags": [
+        "c9a02de8951c",
+        "review"
+      ],
+      "goal": "Ticket 1",
+      "phase": "review",
+      "next": "Await marker acceptance",
+      "artifacts": {
+        "ticket": ".tickets/1-marker.md"
+      }
+    },
+    {
+      "stage": "close",
+      "tags": [
+        "c9a02de8951c",
+        "done"
+      ],
+      "goal": "Ticket 1",
+      "phase": "done",
+      "next": "No remaining action",
+      "artifacts": {
+        "ticket": ".tickets/1-marker.md"
+      }
+    }
+  ],
+  "sourceCommit": "9263741",
+  "limitation": "Read-only API receipts verify native tool effects; no full orient/implement source-editing run was dispatched."
+}

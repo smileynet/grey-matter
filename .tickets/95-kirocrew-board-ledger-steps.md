@@ -31,7 +31,10 @@ is out of scope here.
 **Harness reference**, per [proposal 17](../docs/agents/proposals/17-orchestrator-skill.md#4-per-harness-references).
 The guarded orchestration steps live in
 [orchestrate’s Kiro Crew reference](../skills/engineering/orchestrate/references/harness-kirocrew.md).
-Ticket 95 still owns wiring the single-ticket orient/implement path and live validation.
+The single-ticket orient/implement path now loads the shared
+[ticket-state reference](../docs/agents/kirocrew-ticket-state.md). Native gateway
+[validation and limits](../docs/agents/research/kirocrew-ticket-state-20261101.md)
+record successful claim/wait/close mirroring and the absent-tool guard.
 
 ## Acceptance criteria
 
