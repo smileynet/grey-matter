@@ -1,0 +1,79 @@
+{
+  "ticket": "184",
+  "observedOn": "2026-11-02",
+  "sourceCommit": "4f5ae2588775ea9a410e0d6c917ad71f285207b7",
+  "command": "node --test scripts/inspect-footprint.test.mjs",
+  "environment": {
+    "runtime": "owned disposable WSL2 Alpine x86_64 musl distro",
+    "wslVersion": "2.6.3",
+    "kernel": "6.6.87.2-1",
+    "nodeVersion": "v22.23.4",
+    "gitVersion": "2.54.0",
+    "interopPath": "included Windows PowerShell and System32 directories"
+  },
+  "source": {
+    "access": "direct read from existing Windows worktree through DrvFs; no source clone or copy",
+    "headBefore": "4f5ae2588775ea9a410e0d6c917ad71f285207b7",
+    "headAfter": "4f5ae2588775ea9a410e0d6c917ad71f285207b7",
+    "trackedTreeCleanBefore": true,
+    "trackedTreeCleanAfter": true
+  },
+  "spaceBytes": {
+    "linuxRootFreeBefore": 1025852162048,
+    "windowsSourceDriveFreeBefore": 99051532288,
+    "windowsBackingDriveFreeBefore": 96130924544,
+    "windowsSourceDriveFreeAfter": 99051360256,
+    "windowsBackingDriveFreeAfter": 96141279232,
+    "linuxRootFreeAfter": null,
+    "minimumThresholdBytes": 21474836480
+  },
+  "result": {
+    "processExitCode": 0,
+    "tests": 16,
+    "passed": 16,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "nodeDurationMs": 53063.781243,
+    "wallDurationSeconds": 53.5256373,
+    "classification": "pass"
+  },
+  "supersededRun": {
+    "sourceCommit": "6dbf44f1e24dbabaf7b1b5a950b6d7d5b18dd37f",
+    "tests": 16,
+    "passed": 15,
+    "failed": 1,
+    "skipped": 0,
+    "classification": "assertion failure in the old WSL recheck status expectation; recheck correctly reported changed coverage as preservation-changed",
+    "wrapper": "the shell wrapper failed to capture the child exit and returned an additional infrastructure status error; TAP remains the source of the assertion-failure classification",
+    "supersededBy": "4f5ae2588775ea9a410e0d6c917ad71f285207b7"
+  },
+  "hostState": {
+    "otherDistrosStoppedBeforeAndAfter": true,
+    "podmanDefaultUnchanged": true,
+    "ownedDistroStoppedAfterRun": true,
+    "globalWslShutdown": false,
+    "sparseModeChanged": false,
+    "userFilesOrProviderDataAccessed": false
+  },
+  "artifactLifecycle": {
+    "successfulRawLog": {
+      "alias": "native-run-005",
+      "location": "ignored repository scratch on D:",
+      "bytes": 3849,
+      "retainUntil": "ticket 184 evidence is integrated and reviewed"
+    },
+    "supersededRawLog": {
+      "alias": "native-run-004",
+      "location": "scratch in the owned disposable distro VHD",
+      "bytes": null,
+      "retainUntil": "ticket 184 evidence is integrated and reviewed"
+    },
+    "earlierPreflightLogs": "small failed environment/setup attempts remain in the same owned scratch locations until evidence integration; they are not test passes"
+  },
+  "limits": [
+    "This is the focused inspector fixture suite on the recorded WSL2 environment, not the full repository pre-merge gate.",
+    "No whole-drive scan, live deletion, OneDrive probe, global WSL shutdown, or sparse-mode change was performed.",
+    "Linux root free space was measured before the passing run; no post-run Linux root measurement was taken."
+  ]
+}
