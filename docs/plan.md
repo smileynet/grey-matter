@@ -208,3 +208,4 @@ The Windows chat retains ownership of verification tickets #137, #152, and #176â
 | 179 | Implement inter-harness session messaging and wakeups | open |
 | 180 | Review philippines-trip's worktree rules and audit script for adoption | open |
 | 181 | Add a scratch-prune recipe to repository-artifact-hygiene | open |
+| 182 | Detect footprint growth outside repository scratch | open |

@@ -252,3 +252,43 @@ Checked against primary sources where reachable; blog and package-doc items are 
 3. P2 adds a seventh rule: prefer the tool's own prune command to hand deletion for caches (`uv cache prune`, `go clean -cache`, `cargo clean` for a workspace that does not share its target directory, `xcrun simctl delete unavailable`). The per-OS reference marks each as observed or docs-only.
 4. Decision 6 recommendation: pytest only.
 5. No hook-based or daemon approach found in prior art that beats rule-at-creation plus inspector; "Not proposed" stands.
+
+## Recovered addendum 2026-10-31: whole-drive deep dive
+
+Recovered on 2026-11-01 from preserved commits `bad784d7` and `d5e02bb9`, whose
+proposal and ticket patches are identical. The measurements below are [L3:reported]
+by that first-party session record: its raw inventory was not available in this review,
+and these are historical observations, not current disk measurements.
+
+The record describes a gdu 5.38.0 Data-volume inventory of 3.79 million files, with
+60 unreadable paths and 2.1 GiB of disk usage the inventory could not account for:
+
+- Free space fell from 28.8 GiB to 10.3 GiB in about seven hours of agent work.
+- The runner temp family `$TMPDIR/pytest-of-$USER` held 11.2 GiB across six runs in
+  six hours. Each run reportedly copied a 1.2 GiB tracked archive despite hard-linked
+  Git objects, so moving a run reclaimed only its unshared allocation.
+- `~/.codex/lfs-proof-161` reportedly returned at 3.8 GiB after 3.6 GiB was removed.
+  This is the motivating example for detecting recreation outside repo scratch.
+- 517 deleted-but-open regular files reportedly occupied 1.4 GiB, mostly Codex temp
+  files. Unlinking a file does not release its allocation while a process holds it open.
+- Agent leftovers accounted for about 70 of 418 GiB allocated. Apps, simulators,
+  caches and toolchains remain separate owner decisions.
+
+### Disposition after review on 2026-11-01
+
+[L1:verified] Current source inspection found these boundaries; implementation gaps
+are tracked by [ticket 182](../../../.tickets/182-footprint-outside-repo-regrowth.md).
+Closed ticket #110 and its original completion evidence remain unchanged.
+
+| Addendum request | Current state and disposition |
+| --- | --- |
+| Include agent-home and runner-temp families | `inspect` accepts explicit `--path` roots but does not discover these families. #182 tracks bounded coverage with active-state protections. |
+| Flag a family that regrew after cleanup | `--recheck` compares citation keep lists, not growth or cleanup history. #182 requires a cleanup-aware comparison. |
+| Avoid copying tracked LFS archives in test checkouts | Already stated in the owning skill and P2 above: `GIT_LFS_SKIP_SMUDGE=1` leaves pointers. No matching regression fixture was found in `scripts/inspect-footprint.test.mjs` or `scripts/deploy.test.mjs`; #182 requires one. |
+| Print free-space rate when host history exists | `summary` currently prints level and largest families only. #182 requires a contract and tests for optional host-supplied samples; the host owns collection. |
+| Run a host watch every two hours, alert above 2 GiB/hour or a 5 GiB drop, and flag agent families growing over 3 GiB | Retained as historical suggestions from this Mac session. No scheduler or threshold change is authorized by this integration, and the claimed host-watch implementation was not inspected. |
+| Keep conformance runner policy pytest-only | Unchanged; the addendum supplies no second runner case that warrants broadening decision 6. |
+
+This merges the relevant proposal evidence rather than applying the old additions to
+#110's acceptance criteria. It does not claim the original measurements were reproduced
+or that the follow-up implementation is complete.
