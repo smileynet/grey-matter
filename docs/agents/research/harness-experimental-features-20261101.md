@@ -1,5 +1,39 @@
 # Harness experimental features: follow-up spikes and QoL options
 
+## Ticket 160: Claude background messaging (2026-11-02)
+
+**One native cross-session message/reply/idle exchange confirmed.** Claude Code
+2.1.316 on Windows returned a worker marker and a separate `notify_when_idle`
+notice. The idle notice reports a turn becoming idle; it is not accepted ticket
+output. A preliminary background marker session ran in the worker checkout;
+the actual disposable fixture rejected background and worktree dispatch as
+`Workspace not trusted`. No persistent trust was accepted to continue.
+
+The [dated report](claude-background-20261102.md), [native receipt](evidence/claude-background-20261102.json)
+and [independent audit](claude-background-20261102-audit.md) distinguish this
+bounded exchange from unverified fixture worktrees, safe branch pushes and the
+documented hour-long idle reaper. The exact owned background session was stopped
+and removed, its absence independently checked, and the fixture/raw artifacts
+recycled. Settings hashes were captured after the run only; they do not prove
+before/after equality. No autonomous review/merge loop was established here.
+
+## Ticket 159: Codex dispatch feature toggles (2026-11-02)
+
+**Couldn't verify runtime dispatch or wake behavior.** Codex CLI 0.166.0 accepts
+process-only overrides for `multi_agent_v2`, `agent_message_board` and
+`wake_on_agent_messages`. The matched no-flag/v2 attempts and a saved-session
+control all reported a missing code-mode host, empty worker receivers and no
+child result despite exit 0. Catalog availability is not execution evidence.
+Spawn/depth effects, message delivery, same-worker continuation and polling
+replacement remain unverified; #188 owns the separate setup diagnosis.
+
+The [dated report](codex-dispatch-20261102.md), [native receipt](evidence/codex-dispatch-20261102.json)
+and [independent audit](codex-dispatch-20261102-audit.md) preserve exact attempts
+and limits. The critic accepted the bounded conclusion. Exact owned fixture,
+raw transcripts and saved session record were recycled and verified absent.
+No persistent setting write was performed; pre/post configuration hashes were
+not captured, so byte-level invariance is not claimed.
+
 ## Ticket 157: native agy workflows (2026-11-02)
 
 **Answer: yes for the bounded typed fan-out; model pinning couldn't be verified.**

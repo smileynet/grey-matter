@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "8aa37bc5e44485a82fd27ede9a20ff4bde0b41ba67e1d842eb0db1c6c0c4e91c",
+  "subject": "Supervised Codex and Claude findings after closure",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 16349,
+      "sha256": "180df0b04a4e8a708d239004d674f9e1f1affdb01306fdedc03163b0e449b7b0"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 151353,
+      "sha256": "74da2e727473bf01fc2d98a85c30bf666e82ca69968862db8fa8f63ed2ad3833"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4264,
+      "sha256": "af9eaa9eee2a13656ab14ce17c62248ca84f7ea9eb36fedf558aaacfeed7451a"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t159-t160-final/findings-1280.png",
+      "bytes": 333958,
+      "sha256": "fe75ab5fccc3809a2d075155402e1dfa4cb958d5bb3d3afa2fb0bcc83e1158c0",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t159-t160-final/tickets-1280.png",
+      "bytes": 256297,
+      "sha256": "cccd07c637e296fd4056cbf52434fa42c6a7e2a8ff646e1dc46df050462ad20e",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t159-t160-final/findings-390.png",
+      "bytes": 332059,
+      "sha256": "99948fee3c52cd65fe32e4a63309b27a5c3b61c01040759cbd703dd1e30e87ba",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t159-t160-final/tickets-390.png",
+      "bytes": 217995,
+      "sha256": "a60f971e8395636b0e799fe64f760ec10fd5485c9d3bd5fc19b851898e6b31f6",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "77fb4455fb41496e533f65043cb3b2851ceca40e52ff6816bc7a52ffc728e1d7",
+  "id": "804ae2a01ff7a77ddc18dc9a28f428d88f48ba17ed9c24f3e3ffa1f3a0039515",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic-dashboard",
+    "note": "Reviewed exact five-source snapshot and four laptop/phone screenshots; 10 evidence-bounded findings, collapsed 15/19 ticket split, required dependency graph and separate suggested queue match board and user outcomes.",
+    "acceptedAt": "2026-11-02T20:17:57.155Z",
+    "snapshotId": "804ae2a01ff7a77ddc18dc9a28f428d88f48ba17ed9c24f3e3ffa1f3a0039515"
+  }
+}

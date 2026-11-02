@@ -3,6 +3,16 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "background-notice", "state": "partial", "label": "One message and idle notice confirmed",
+      "title": "Send a background worker a message and hear when its turn ends",
+      "value": "A background worker received a message, replied, and sent a separate idle notice. This gives the controller a signal to inspect the result.",
+      "diagramLabel": "Observed local exchange", "steps": ["Send a message", "Worker replies", "Idle notice", "Inspect the result"],
+      "limit": "Idle does not mean the work is accepted. The test project's trust check blocked background dispatch and automatic worktree creation; those paths remain unverified.",
+      "details": "Claude Code's native message call and receiver transcript confirmed one same-machine exchange. The preliminary marker session belonged to the isolated worker checkout and was stopped and removed after review. Safe branch pushes and the documented idle reaper were not tested. No persistent project trust was accepted; only after-run settings hashes were captured.",
+      "tickets": ["160"],
+      "sources": [{"label": "Background session trial and limits", "href": "agents/research/claude-background-20261102.md"}]
+    },
+    {
       "id": "typed-workflows", "state": "partial", "label": "Typed jobs confirmed; model selection unresolved",
       "title": "Collect structured results from jobs in separate work areas",
       "value": "Two jobs ran in separate worktrees and returned checked results. One worker asked for a missing name, then continued in the same conversation when given an answer.",
@@ -69,8 +79,8 @@
       "diagramLabel": "Two different checks", "steps": ["Run has ended", "Inspect tool result", "Accept or hold the work"],
       "limit": "There is no single exit code or status word that proves accepted work across all of these drivers.",
       "details": "Antigravity returned SUCCESS and exit 0 with an empty response after automatic command denial. Codex completed a text turn while tool execution was blocked by a missing companion host. Kiro's live ACP request/cancel/load worked, but EOF shutdown still exited 1. The follow-up tickets separate these infrastructure limits from transport results.",
-      "tickets": ["162", "188", "189"],
-      "sources": [{"label": "Native outcomes and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02"}]
+      "tickets": ["162", "159", "188", "189"],
+      "sources": [{"label": "Native outcomes and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02"}, {"label": "Codex dispatch controls and setup limit", "href": "agents/research/codex-dispatch-20261102.md"}]
     },
     {
       "id": "sign-in", "state": "partial", "label": "Routing confirmed; delivery untested",
@@ -111,8 +121,8 @@
     "156": ["Recover Mate work after restart", "Resume a worker after a graceful restart; keep task requirements and acceptance under independent oversight."],
     "157": ["Run native Antigravity workflows", "Find whether native workflows can coordinate isolated workers and role-specific models."],
     "158": ["Narrow command permissions", "Allow fixed commands and a selected folder, with tested rejection controls and a separate approval-overlap caveat."],
-    "159": ["Coordinate messages and wake-ups", "Test available Codex message-board and wake behavior without changing global settings."],
-    "160": ["Follow background sessions", "Find whether background workers and idle notices fit the review-and-land loop."],
+    "159": ["Qualify messaging and wake controls", "Process flags work; native dispatch and wake remain unverified behind a missing companion host."],
+    "160": ["Follow a background worker's reply", "One message and idle notice worked; test-project dispatch, automatic worktrees and landing remain unverified."],
     "161": ["Run native Kiro workflows", "Test dispatch, review, pause, resume and retry through a workflow recipe."],
     "162": ["Follow headless sessions", "Compare native results, questions, continuation and approval visibility."],
     "167": ["Compare implementation workers", "Find which cheaper workers meet the measured quality bar on fixed coding tasks."],
