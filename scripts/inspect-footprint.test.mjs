@@ -121,6 +121,10 @@ test("seeded families get the right facts and outcomes, and the run goes red", a
     assert.match(active.activeReasons.join(), /active worktree .* on feature/);
     assert.equal(r.families.find((f) => f.path.endsWith("wt-gone")).outcome, "ask");
     assert.deepEqual(r.findings.map((f) => [f.kind, f.ticket]), [["ticket-cap", 170]]);
+    const exactCap = r.findings.find((f) => f.kind === "ticket-cap");
+    assert.equal(typeof exactCap.bytes, "number");
+    assert.equal(exactCap.allocatedBytesAtLeast, undefined);
+    assert.equal(exactCap.unknownFamilies, undefined);
     assert.equal(r.status, "fail");
   } finally { holder.kill(); }
 });
@@ -212,14 +216,17 @@ test("retention disposition and allocation uncertainty fail closed", () => {
   assert.equal(report.coverage.allocation, "partial");
   assert.equal(family(report, ".scratch/t170-linked").allocatedBytes, null);
   assert.ok(report.findings.some((finding) => finding.kind === "ticket-cap-unverified"));
+  assert.equal(report.findings.some((finding) => finding.kind === "ticket-cap"), false);
   assert.match(summary(report, Infinity), /logical \(allocation unavailable\)/);
 
   const oneUnknown = (path, options) => path === join(repo, ".scratch/t170-run-1/blob") ? noBlocks(path, options) : lstatSync(path, options);
   const mixed = inspect({ ...base, repo, preservation: released, cap: 1024 }, Date.now(), oneUnknown);
-  assert.ok(mixed.findings.some((finding) => finding.kind === "ticket-cap"));
-  assert.ok(mixed.findings.some((finding) => finding.kind === "ticket-cap-unverified"));
-  assert.match(summary(mixed, Infinity), /allocated .* exceeds cap/);
-  assert.match(summary(mixed, Infinity), /cap .* unverified/);
+  const knownBreach = mixed.findings.find((finding) => finding.kind === "ticket-cap");
+  assert.ok(knownBreach.allocatedBytesAtLeast > knownBreach.cap);
+  assert.ok(knownBreach.unknownFamilies.includes(".scratch/t170-run-1"));
+  assert.equal(mixed.findings.some((finding) => finding.kind === "ticket-cap-unverified"), false);
+  assert.match(summary(mixed, Infinity), /allocated at least .* exceeds cap/);
+  assert.match(summary(mixed, Infinity), /allocation unavailable for \.scratch\/t170-run-1/);
 
   const expired = inspect({ ...base, repo, preservation: released }, Date.now() + 61 * 60000);
   assert.equal(family(expired, ".scratch/t170-run-1").dependencyStatus, "stale");
