@@ -1,7 +1,7 @@
 ---
 id: "104"
 title: "Acceptance for stateful changes names ownership and terminal behavior"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "`to-spec` and `to-tickets` ask stateful work for ownership and terminal-behavior criteria"
@@ -26,9 +26,9 @@ private helper. Keep it conditional; reversible edits don't need an integration 
 
 ## Acceptance criteria
 
-- [ ] `to-spec` and `to-tickets` ask stateful work for ownership and terminal-behavior criteria
-- [ ] `tdd` says to assert final state, counts and error identity at the public seam for stateful changes
-- [ ] `node scripts/gate.mjs pre-merge` passes
+- [x] `to-spec` and `to-tickets` ask stateful work for ownership and terminal-behavior criteria
+- [x] `tdd` says to assert final state, counts and error identity at the public seam for stateful changes
+- [x] `node scripts/gate.mjs pre-merge` passes
 
 ## Workstream reconciliation 2026-11-02
 
@@ -53,3 +53,12 @@ remains pending because browser policy blocked local-file access; human review w
 Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
 integration; local commit history and this evidence remain in Git. The current deployment
 package is retained until the next deployment.
+
+## Resolution (2026-11-02)
+
+done: worker implemented, critic accepted, root merged/pushed/deployed. Evidence and dashboard path recorded in ticket. Recycled clean merged worker104 worktree10250077bytes; shared orchestration helpers retained only while this stream is active, deployment package until next deploy. Dashboard strict/source review passed; rendered laptop/phone acceptance remains explicitly pending under browser policy, not claimed by this guidance ticket.
+
+### Verification
+1. ✓ `to-spec` and `to-tickets` ask stateful work for ownership and terminal-behavior criteria — "Worker ee118e6 adds conditional resource ownership and applicable terminal behavior to to-spec/to-tickets; independent critic Spec and Standards review accepted the final diff."
+2. ✓ `tdd` says to assert final state, counts and error identity at the public seam for stateful changes — "TDD requires final state, relevant counts and contract error identity at the public seam, reusing the lowest faithful environment; no broad campaign for reversible changes. Worker syntax fixtures10/10, docs consistency50skills pass."
+3. ✓ `node scripts/gate.mjs pre-merge` passes — "After root merge, main pre-merge forced3/3 checks (ticketgraph/syntaxfixtures/guidance) and tracked prepush5/5 passed; canonical deploy check/default deployment passed50skills. Worker snapshot missing-yaml infrastructure issue was resolved by root verification."
