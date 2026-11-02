@@ -163,3 +163,41 @@ they do not describe other filesystems or cloud allocation. No provider/model ca
 
 The October 31 failure is not reproduced on the current Windows host: all seven current fixture
 tests pass. This does not resolve the over-cap Recycle Bin or placeholder observations above.
+
+## WSL host-volume follow-up (#133, 2026-11-02)
+
+**Scope:** WSL 2.6.3, kernel 6.6.87.2-1 on Windows 11. The test distro was an owned WSL2
+import named `GreyMatter-Footprint-133`, stored on E: at
+`E:\WSL\grey-matter-t133-disposable`. Existing Ubuntu and Podman distros stayed stopped;
+`podman-machine-default` remained the default. No global WSL setting or existing distro was changed.
+
+The test rootfs came from the official [Alpine 3.24.3 x86_64 minirootfs](https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64/alpine-minirootfs-3.24.3-x86_64.tar.gz)
+(3,704,080 bytes; SHA-256 `f8e1cafba9b1b283b5d30d06f9885c8d2bc161ffe9083ade8e2e157813a53407`, matching its
+official `.sha256` sidecar). Node came from the [official Node v22.23.4 archive](https://nodejs.org/dist/v22.23.4/node-v22.23.4-linux-x64-musl.tar.gz)
+(59,432,087 bytes; SHA-256 `63189402eaa222aabf51b4983e512592131cd2d4a9efc3ad9bf291fe74e3e4de`, matching
+the official [release archive](https://nodejs.org/en/download/archive/v22.23.4)). Alpine's minimal
+rootfs initially lacked `libstdc++.so.6` and `libgcc_s.so.1`; installing its `libgcc` and
+`libstdc++` packages (30 packages, 23.3 MiB total) in the owned distro made Node run. This was
+environment setup, not a product failure. The Node archive extracted to 207.7 MiB. A shared Git
+clone of the private worker source was checked out in the distro (about 10.9 MiB of tracked files;
+252 KiB Git metadata sharing the main object store); the existing Windows `node_modules` tree was
+referenced by symlink rather than copied. The distro VHD measured 79,691,776 bytes after import,
+348,127,232 after runtime/setup, 381,681,664 after focused tests, and 448,790,528 after gate work.
+
+| Claim | Command and observed output | Outcome and limit |
+|---|---|---|
+| The inspector selects the actual Windows volume holding this distro | Before the fix, WSL `df -Pk /` exposed about 1.025 TB of virtual free space; the inspector reported `151,043,506,176` bytes from assumed C:, while the exact registry `BasePath\ext4.vhdx` resolved to E: with `96,183,488,512` bytes free. The red regression assertion compared those values. | Confirmed bug: C: was not the distro's backing volume. The inspector now resolves the exact registered distro name through HKCU Lxss, finds its `BasePath\ext4.vhdx`, and queries that file's volume. On the same E:-backed run it reported the lower `96,183,488,512`-byte value. |
+| WSL interop PATH | First focused run with a sanitized Linux-only `PATH` produced 7 passed and 2 failed: `spawnSync powershell.exe ENOENT` in the real-host and clean-repository cases. | Environment setup failure: that shell omitted WSL's Windows interop directories. Rerunning with `/mnt/c/Windows/System32/WindowsPowerShell/v1.0` and `/mnt/c/Windows/System32` in `PATH` passed the final 9/9 suite; no product changes were made for the first failure. |
+| Unavailable or malformed host lookup is safe | WSL `node --test scripts/inspect-footprint.test.mjs` at source commit `60518e72` → 9 passed, 0 failed, 0 skipped. Injected responses covered a valid arbitrary R: volume, missing/duplicate registry matches, absent VHD, failed host query, null/empty/numeric capacity fields, zero total, malformed/empty volume identity, and missing distro name. | Pass. Incomplete lookup leaves the host entry absent, marks coverage incomplete and status `review`, and summary explicitly says the Windows backing volume is unavailable and the floor is unverified. The real WSL test verifies the registered drive identity, returned numeric host entry, and minimum of inspector entries; the fixture proves exact input/output values deterministically. |
+| Native Linux pre-merge gate | `node scripts/gate.mjs pre-merge` in Alpine/Node 22.23.4 at `60518e72` → `1 of 19` selected; `artifact-hygiene` passed in 16.1 s. | Pass for the two committed code/test paths selected by the gate, not all 19 checks. Guidance/doc paths were validated separately with `node scripts/check-docs-consistency.mjs` and `node scripts/check-skill-syntax.mjs`, both exit 0. An earlier gate attempt failed 1 of 32 artifact-hygiene tests because the test compared a host-free-space sample from before suite execution with a later inspector reading; the owned VHD had grown by 33,554,432 bytes between those readings. The final test checks the registered volume identity and inspector's own lower-of-two entries, without comparing against a stale external sample. |
+| Guest unlink and sparse VHD reclaim | In the owned distro, `dd if=/dev/urandom of=/tmp/t133-reclaim.bin bs=1M count=16` raised `df -Pk /` Used from 237,848 to 254,232 KiB; after deleting that owned file and syncing, Used returned to 237,848 KiB. | Guest-available blocks were restored. This single sample does not establish host-volume reclaim or sparse-mode behavior. |
+| WSL sparse-mode toggle | `wsl --manage GreyMatter-Footprint-133 --set-sparse false` after terminating the owned distro returned `ERROR_SHARING_VIOLATION`: “The VHDX is currently in use.” WSL suggested `wsl.exe --shutdown`. | Not verified. A global shutdown was not run because it would affect other distros. No sparse/non-sparse comparison or reclaim claim is made; #133 remains partial for this acceptance criterion. |
+
+The four D-side working inputs totaled 63,181,213 bytes (rootfs archive and checksum, Node archive
+and SHASUMS file, plus a 40,960-byte source bundle). The private distro's VHD grew from 381,681,664
+to 448,790,528 bytes during later Linux gate activity; E: free space fell from 96,149,934,080 to
+96,082,825,216 bytes over that interval.
+These observations include gate temporary files and do not isolate sparse-mode reclaim. The distro
+is retained for #133 review at the explicit path above; its then-current VHD length was 448,790,528
+bytes. Downloaded Alpine/Node input archives totaled 63,181,213 bytes and are retained with this
+work until root completes the review and artifact-retention decision.

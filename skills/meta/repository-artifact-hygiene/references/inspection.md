@@ -133,13 +133,19 @@ node <skill-dir>/scripts/inspect-footprint.mjs --repo PATH [--path DIR]... [--ti
 | `--recheck PRIOR.json` | compare keep lists with a saved run; a changed one on a delete/slim family becomes "keep list changed" and exits 1 |
 | `--summary` | one line: free space, and the three largest families when free space is under `--top-under` (40GiB) |
 
-Output is JSON: `status` (`pass`, `review` when candidates exist, `fail` when a limit
-breaks), `freeSpace` (under WSL, the lower of the distro and `/mnt/c`), `coverage`,
+Output is JSON: `status` (`pass`, `review` when candidates exist or coverage is incomplete,
+`fail` when a limit breaks), `freeSpace` (under WSL, the lower of the distro and the Windows
+volume holding that distro's registered `ext4.vhdx`), `coverage`,
 `findings`, `families` sorted by size, and `conformance` (pytest retention, tracked
 `.scratch` citations). Sizes are allocated bytes, an upper bound on copy-on-write
 filesystems; a hard-linked file counts once. Files dated before 2000 are counted but
 ignored for the newest write. A citation counts only by exact sub-path; a bare mention
-of the folder is a `lead`, which makes the outcome `ask`, never `delete`. Exit 0 reports,
+of the folder is a `lead`, which makes the outcome `ask`, never `delete`.
+The WSL host lookup matches the exact `WSL_DISTRO_NAME` to one HKCU Lxss registration,
+then queries the volume containing its `BasePath\ext4.vhdx`; it never assumes C: or
+`/mnt/c`. Missing, ambiguous, malformed or unavailable registration/volume data leaves
+host free space unmeasured and coverage incomplete. The summary names the missing backing
+volume and says the free-space floor is unverified. Exit 0 reports,
 1 means a limit broke or a keep list changed, 2 means input or inspection failed.
 
 Coverage is partial, and says so, where a probe is missing: open files come from

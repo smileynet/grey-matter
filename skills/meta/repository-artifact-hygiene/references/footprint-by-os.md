@@ -49,8 +49,8 @@ and command separators.
 
 | Need | Command | Tag |
 |---|---|---|
-| Free space | The lower of `command df -Pk <path>` and the Windows drive holding the distro's disk (`command df -Pk /mnt/c`, or `powershell.exe -NoProfile -c "(Get-Volume C).SizeRemaining"`). The distro's own `df` reports the virtual disk's maximum (1 TB by default), not the host's free space | docs, inferred |
-| Reclaiming space | `ext4.vhdx` grows on its own and shrinks only when sparse: `wsl --manage <distro> --set-sparse true` (WSL 2.0.0+). `sparseVhd=true` in `.wslconfig` covers new distros only. Deleting files inside the distro frees nothing on Windows until then; this is the user's call | docs |
+| Free space | The lower of `command df -Pk <path>` and the Windows volume containing this distro's registered `ext4.vhdx`. The inspector matches exact `WSL_DISTRO_NAME` under HKCU Lxss, resolves `BasePath\ext4.vhdx`, and queries its volume; it does not assume C: or `/mnt/c`. If identity or volume lookup is missing/ambiguous, report host space unavailable and the floor unverified. The distro's own `df` reports virtual VHD capacity, not host free space | observed in WSL + Microsoft docs |
+| Reclaiming space | Unlinking a file restores guest `df` availability; this alone does not prove Windows host-space reclaim. Microsoft documents automatic growth and sparse-VHD shrink (`wsl --manage <distro> --set-sparse true`, WSL 2.0.0+) and says `.wslconfig sparseVhd=true` applies to newly created VHDs. Host reclaim with and without sparse mode was not verified in this run: toggling only the owned test distro returned `ERROR_SHARING_VIOLATION`, and no global `wsl --shutdown` was run. Keep the host-reclaim result unresolved until measured in an isolated owned distro | observed guest unlink; Microsoft docs; host reclaim unverified |
 | Everything else | Linux rows above | |
 
 ## Tool caches (all OSes)
