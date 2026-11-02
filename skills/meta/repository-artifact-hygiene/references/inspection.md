@@ -135,7 +135,8 @@ node <skill-dir>/scripts/inspect-footprint.mjs --repo PATH [--path DIR]... [--ti
 | `--summary` | free space and largest families when under `--top-under` (40GiB), plus any measured or unverified ticket-cap findings |
 
 Output is JSON: `status` (`pass`, `review` when candidates exist or coverage is incomplete,
-`fail` when a limit breaks), `freeSpace` (under WSL, the lower of the distro and the Windows
+`fail` when a measured limit breaks or a requested cap cannot be verified), `freeSpace`
+(under WSL, the lower of the distro and the Windows
 volume holding that distro's registered `ext4.vhdx`), `coverage`,
 `findings`, `families` sorted by size, and `conformance` (pytest retention, tracked
 `.scratch` citations). Families report `logicalBytes`, `allocatedBytes` and
@@ -143,7 +144,8 @@ volume holding that distro's registered `ext4.vhdx`), `coverage`,
 reclaim. `allocatedBytes` is null if the filesystem does not report blocks; `bytes` keeps
 the legacy estimate and falls back to logical length in that case. Coverage names the
 partial allocation probe, summaries label the logical fallback and show cap findings,
-and `--cap` reports an unverified finding instead of treating that fallback as allocation. On copy-on-write
+and `--cap` reports `ticket-cap-unverified` instead of treating that fallback as allocation.
+That finding means the cap could not be checked, not that an exceedance was measured. On copy-on-write
 filesystems, reported allocated bytes are an upper bound. A hard-linked file's logical
 length appears at each path while the shared allocation counts once. `keepBytes` is null
 when retained-file allocation is unavailable; `keepLogicalBytes` remains available. Files dated before 2000 are counted but
