@@ -1,7 +1,7 @@
 ---
 id: "182"
 title: "Detect footprint growth outside repository scratch"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
