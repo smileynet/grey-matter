@@ -32,3 +32,20 @@ runs in a worktree snapshot with its own timeout. Run it alone with
 candidate cause seen today: under host load (bare `git` calls averaging 324 ms, 3 GB RAM free)
 `deploy.test.mjs` hit its 120 s per-file timeout with a `git.exe` that had no child process. It
 passed 45/45 in 81.5 s once the load eased. Ticket 137 has the timings.
+
+## Investigation 2026-11-02
+
+After #137/#176 changes, 20 consecutive
+`node scripts/gate.mjs pre-merge --base HEAD --include deployer` runs passed on unchanged commit
+`c634acf` (83.8–95.4 s, mean 87.2 s including snapshot setup). Each run judged a fresh worktree;
+the harness would stop on the first failure or HEAD change. All 20 command logs and outcomes are
+promoted in [deployer stress evidence](../docs/agents/research/evidence/deployer-stress-20261102.json).
+The separate full pinned-base pre-merge run completed 19 commands, and hostile-config pre-release
+completed all 28. Existing POSIX/Linux-only fixtures skip on Windows; no SKIP override was used.
+
+**Cause remains unknown.** The original failing log is missing and this investigation did not
+reproduce a failure. Earlier host-load timeouts are candidates, not a proven explanation for the
+original intermittent failure. No claim is made that #137 fixed that failure. Release this claim
+back to the frontier with the reproduction criterion checked; retain the first criterion open.
+The next failing deployer run must retain its full output before retrying so a named failure can
+be diagnosed. Raw successful-run logs are promoted above; temporary harness files are recycled.

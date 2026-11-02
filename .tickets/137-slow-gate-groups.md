@@ -98,3 +98,15 @@ from gate-runner and artifact-hygiene; their outer limits and the stage budget r
 Structured observations and the reproducible per-file manifest:
 [verification evidence](../docs/agents/research/evidence/test-optimization-20261102.json).
 Required pre-release evidence is still missing, so this ticket remains in progress.
+
+## Verification completed 2026-11-02
+
+After free RAM recovered to about 4.5 GiB, candidate `67320db` passed the fresh pinned-base
+pre-merge run (19 commands, including gate-runner 29.8 s and artifact-hygiene 11.3 s), the tracked
+pre-push hook (7 commands), and the full hostile-config pre-release run (28 commands). Deployer took
+86.0 s versus the earlier 116.8 s group observation; release integration took 228.9 s. These are
+observations on different host loads, not a controlled speedup claim. Existing POSIX/Linux-only
+fixtures skip on Windows. No SKIP override or outer timeout increase was used.
+
+The evidence file now includes the fresh successful observations as `latestVerification`; earlier
+timeouts remain historical evidence. The deployer flake investigation continues separately in #122.

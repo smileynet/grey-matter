@@ -37,3 +37,12 @@ Reserved by the test-optimization chat. Native `tkt claim` auto-pushes this bran
 contains unverified #137/#176 changes. The local lifecycle edit avoids publishing them while required
 gates are timing out under host memory pressure. Publish the claim with the verified work; do not close
 until the required checks pass.
+
+## Verification 2026-11-02
+
+Six focused public CLI fixtures cover byte-preserving replacement/insertion, failed/skipped/timeout
+retention, mixed outcomes across pushed tips, concurrent manifest edits and invalid UTF-8. Both
+review axes found no remaining findings. Candidate `67320db` passed the complete gate-runner in
+29.8 s through `node scripts/gate.mjs pre-merge --base d62347c` (19 selected commands complete).
+The hostile-config pre-release run also completed all 28 commands; Windows platform skips remain.
+No scratch artifact belongs exclusively to this ticket; shared gate evidence lives with #137/#176.

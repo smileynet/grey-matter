@@ -8,7 +8,7 @@
   "platform": "Windows",
   "node": "v22.22.3",
   "git": "2.53.0.windows.2",
-  "state": "verification incomplete; tickets remain in progress",
+  "state": "required pre-merge and hostile-config pre-release verification completed",
   "profile": {
     "command": "node scripts/gate.mjs pre-release --manifest docs/agents/research/evidence/test-optimization-20261102.json",
     "baselineFixtureCommit": "5e6520d",
@@ -265,11 +265,9 @@
     "ticketValidation": "pass with 7 existing closed-ticket warnings"
   },
   "limits": [
-    "Full declared pre-release stage has not passed for these changes.",
-    "Latest pre-merge: gate-runner and artifact-hygiene hit their unchanged 120-second outer bounds.",
     "Free physical RAM fell from about 2.3 GiB to 0.6 GiB; no orphaned test processes were found in the inspected process list.",
     "No macOS, Linux or live-device validation was run.",
-    "The deployer measured 116.8 seconds before duplicate validation was removed; its optimized runtime is not yet measured."
+    "Earlier failed attempts remain above as historical observations; latestVerification records the fresh successful run after free RAM recovered to about 4.5 GiB."
   ],
   "checks": [
     {
@@ -384,5 +382,338 @@
       ],
       "timeout_s": 180
     }
-  ]
+  ],
+  "latestVerification": {
+    "candidate": "67320db",
+    "preMerge": {
+      "command": "node scripts/gate.mjs pre-merge --base d62347c",
+      "checks": [
+        {
+          "id": "git-fixture-isolation",
+          "seconds": 0.7,
+          "outcome": "pass"
+        },
+        {
+          "id": "gate-runner",
+          "seconds": 29.8,
+          "outcome": "pass"
+        },
+        {
+          "id": "ticket-graph",
+          "seconds": 0.6,
+          "outcome": "pass"
+        },
+        {
+          "id": "skill-syntax-fixtures",
+          "seconds": 0.5,
+          "outcome": "pass"
+        },
+        {
+          "id": "knowledge-relocation",
+          "seconds": 2.5,
+          "outcome": "pass"
+        },
+        {
+          "id": "agent-guidance",
+          "seconds": 1.4,
+          "outcome": "pass"
+        },
+        {
+          "id": "crew-uninstall",
+          "seconds": 0.6,
+          "outcome": "pass"
+        },
+        {
+          "id": "repo-survey",
+          "seconds": 1.6,
+          "outcome": "pass"
+        },
+        {
+          "id": "artifact-hygiene",
+          "seconds": 11.3,
+          "outcome": "pass"
+        },
+        {
+          "id": "agent-shell-probe",
+          "seconds": 0.3,
+          "outcome": "pass"
+        },
+        {
+          "id": "dashboard-contract",
+          "seconds": 1.5,
+          "outcome": "pass"
+        },
+        {
+          "id": "review-receipt",
+          "seconds": 0.6,
+          "outcome": "pass"
+        },
+        {
+          "id": "critic-model-probe",
+          "seconds": 0.2,
+          "outcome": "pass"
+        },
+        {
+          "id": "orchestrate-spike-fixture",
+          "seconds": 4.4,
+          "outcome": "pass"
+        },
+        {
+          "id": "harness-versions",
+          "seconds": 2.3,
+          "outcome": "pass"
+        },
+        {
+          "id": "static-check-fixtures",
+          "seconds": 5.9,
+          "outcome": "pass"
+        },
+        {
+          "id": "home-path-fixtures",
+          "seconds": 0.8,
+          "outcome": "pass"
+        },
+        {
+          "id": "provider-fallback-fixtures",
+          "seconds": 0.1,
+          "outcome": "pass"
+        },
+        {
+          "id": "release-units",
+          "seconds": 0.8,
+          "outcome": "pass"
+        }
+      ]
+    },
+    "prePush": {
+      "command": "git push (tracked pre-push hook)",
+      "checks": 7,
+      "outcome": "pass"
+    },
+    "preRelease": {
+      "command": "GIT_CONFIG_GLOBAL=<test-owned hostile config> node scripts/gate.mjs pre-release",
+      "candidate": "67320db",
+      "checks": [
+        {
+          "id": "plugin-manifest",
+          "seconds": 1.7,
+          "outcome": "pass"
+        },
+        {
+          "id": "skill-syntax",
+          "seconds": 0.2,
+          "outcome": "pass"
+        },
+        {
+          "id": "invocation-policy",
+          "seconds": 0.1,
+          "outcome": "pass"
+        },
+        {
+          "id": "doc-links",
+          "seconds": 1.3,
+          "outcome": "pass"
+        },
+        {
+          "id": "provider-fallback",
+          "seconds": 0.1,
+          "outcome": "pass"
+        },
+        {
+          "id": "home-path",
+          "seconds": 0.9,
+          "outcome": "pass"
+        },
+        {
+          "id": "gates-coverage",
+          "seconds": 0.1,
+          "outcome": "pass"
+        },
+        {
+          "id": "git-fixture-isolation",
+          "seconds": 0.5,
+          "outcome": "pass"
+        },
+        {
+          "id": "gate-runner",
+          "seconds": 29.1,
+          "outcome": "pass"
+        },
+        {
+          "id": "ticket-graph",
+          "seconds": 0.3,
+          "outcome": "pass"
+        },
+        {
+          "id": "skill-syntax-fixtures",
+          "seconds": 0.4,
+          "outcome": "pass"
+        },
+        {
+          "id": "knowledge-relocation",
+          "seconds": 2.9,
+          "outcome": "pass"
+        },
+        {
+          "id": "agent-guidance",
+          "seconds": 1.6,
+          "outcome": "pass"
+        },
+        {
+          "id": "crew-uninstall",
+          "seconds": 0.5,
+          "outcome": "pass"
+        },
+        {
+          "id": "repo-survey",
+          "seconds": 1.9,
+          "outcome": "pass"
+        },
+        {
+          "id": "artifact-hygiene",
+          "seconds": 10.5,
+          "outcome": "pass"
+        },
+        {
+          "id": "agent-shell-probe",
+          "seconds": 0.2,
+          "outcome": "pass"
+        },
+        {
+          "id": "dashboard-contract",
+          "seconds": 1.4,
+          "outcome": "pass"
+        },
+        {
+          "id": "review-receipt",
+          "seconds": 0.5,
+          "outcome": "pass"
+        },
+        {
+          "id": "critic-model-probe",
+          "seconds": 0.4,
+          "outcome": "pass"
+        },
+        {
+          "id": "orchestrate-spike-fixture",
+          "seconds": 4.2,
+          "outcome": "pass"
+        },
+        {
+          "id": "harness-versions",
+          "seconds": 2,
+          "outcome": "pass"
+        },
+        {
+          "id": "static-check-fixtures",
+          "seconds": 3.8,
+          "outcome": "pass"
+        },
+        {
+          "id": "home-path-fixtures",
+          "seconds": 0.2,
+          "outcome": "pass"
+        },
+        {
+          "id": "provider-fallback-fixtures",
+          "seconds": 0.1,
+          "outcome": "pass"
+        },
+        {
+          "id": "release-units",
+          "seconds": 0.6,
+          "outcome": "pass"
+        },
+        {
+          "id": "deployer",
+          "seconds": 86,
+          "outcome": "pass"
+        },
+        {
+          "id": "release-integration",
+          "seconds": 228.9,
+          "outcome": "pass"
+        }
+      ],
+      "hostileConfig": "[commit]\n gpgSign = true\n[tag]\n gpgSign = true\n forceSignAnnotated = true\n[gpg]\n format = ssh\n[gpg \"ssh\"]\n program = missing-fixture-signer\n[user]\n signingKey = missing-fixture-key\n[core]\n hooksPath = missing-fixture-hooks\n editor = missing-fixture-editor\n"
+    },
+    "knownSkips": [
+      "POSIX-only critic-model fixtures on Windows",
+      "Unix symlink snapshot and Linux entry fixture in release-cargo-upload on Windows"
+    ]
+  },
+  "deployment": {
+    "outcome": "pass after synchronizing the canonical deployer into tkt",
+    "commands": [
+      "node scripts/deploy.mjs check",
+      "node scripts/deploy.mjs",
+      "node tools/deploy.mjs (in tkt)"
+    ],
+    "companionCommit": "3841188",
+    "companionCheck": {
+      "command": "node --test tools/release-tools.test.mjs tools/release-ci.test.mjs",
+      "passed": 38,
+      "skipped": 1,
+      "failed": 0,
+      "seconds": 22.026104
+    },
+    "warning": "Existing generic plugin icon warning remains advisory.",
+    "hostAudit": {
+      "command": "node scripts/deploy.mjs audit --strict --json",
+      "outcome": "assertion failure: unowned user-managed skills",
+      "findings": [
+        "~\\.kiro\\skills: 1 unowned: cpu-perf-bench",
+        "~\\.codex\\skills: 4 unowned: codex-primary-runtime herdr-local-patches meshtastic-device video-guide",
+        "~\\.claude\\skills: 5 unowned: agentcraft-guide agentcraft-handoff app-setup notice-board synced"
+      ],
+      "errors": [],
+      "inventoryOnlyNotices": 46
+    }
+  },
+  "artifacts": {
+    "otherScratchPreserved": [
+      { "path": ".scratch/harness-probe", "bytes": 1303 },
+      { "path": ".scratch/review-installer-safety", "bytes": 0 },
+      { "path": ".scratch/t50-fixtures", "bytes": 1152040 }
+    ],
+    "promoted": [
+      "docs/agents/research/evidence/test-optimization-20261102.json",
+      "docs/agents/research/evidence/deployer-stress-20261102.json"
+    ],
+    "recycled": {
+      "failedFixturesAndTwoStaleSnapshotsLogicalBytes": 21181955,
+      "scope": "Only this session's explicit owned temp paths; other sessions' worktrees were preserved."
+    },
+    "scratchDisposition": "Promoted observations, then recycled this session's t137/t176/t122 scratch artifacts at close.",
+    "kept": [
+      {
+        "path": "dist/agy-plugin",
+        "bytes": 8613828,
+        "lifecycle": "Current grey-matter deployment; replaced by the next deployment."
+      },
+      {
+        "path": "../tkt/dist/agy-plugin",
+        "bytes": 318563,
+        "lifecycle": "Current tkt deployment; replaced by the next deployment."
+      }
+    ],
+    "notCreatedOrDeleted": [
+      {
+        "path": "other session's t154-deploy worktree",
+        "bytes": 10101760
+      },
+      {
+        "path": "other session's grey-windows-candidate-e071b7b worktree",
+        "bytes": 7491282
+      },
+      {
+        "path": ".scratch/learning-library-sync-check.log",
+        "bytes": 108823
+      },
+      {
+        "path": "pre-existing OS-temp gate-mark-lb7MMQ",
+        "bytes": 137
+      }
+    ]
+  }
 }

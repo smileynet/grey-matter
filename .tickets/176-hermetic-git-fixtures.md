@@ -58,3 +58,15 @@ tickets remain in progress until required verification can complete.
 See [structured verification evidence](../docs/agents/research/evidence/test-optimization-20261102.json)
 for the commands, outcomes, timings and scope limits. Temporary profiles and failed fixtures remain
 scoped to #137/#176 while diagnosis and cleanup are outstanding.
+
+## Verification completed 2026-11-02
+
+Candidate `67320db`: `node scripts/gate.mjs pre-merge --base d62347c` completed all 19 commands,
+and the tracked pre-push hook completed all 7. With the test-owned hostile global config supplied
+through `GIT_CONFIG_GLOBAL`, `node scripts/gate.mjs pre-release` completed all 28 commands, including
+the signing control/isolation regression, deployer and all eight release integration files. The
+hostile config forces annotated-tag/commit signing with a missing signer/key, hooks and editor.
+The helper replaces that configuration inside repository-creating workers. Existing platform-only
+fixtures skip on Windows; macOS/Linux execution remains unverified. No SKIP override was used.
+
+Fresh commands and outcomes are promoted in the evidence file's `latestVerification` section.

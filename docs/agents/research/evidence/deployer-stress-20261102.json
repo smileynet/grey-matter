@@ -1,0 +1,156 @@
+{
+  "candidate": "c634acf0f2cd5167ebfec8d07df2393891c0b953",
+  "command": "node scripts/gate.mjs pre-merge --base HEAD --include deployer",
+  "attempts": [
+    {
+      "attempt": 1,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 85.7,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   85.0s  deployer\n"
+    },
+    {
+      "attempt": 2,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 87.3,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   86.5s  deployer\n"
+    },
+    {
+      "attempt": 3,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 83.8,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   83.2s  deployer\n"
+    },
+    {
+      "attempt": 4,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 85.6,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   84.9s  deployer\n"
+    },
+    {
+      "attempt": 5,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 85.8,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   84.9s  deployer\n"
+    },
+    {
+      "attempt": 6,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 84.1,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   83.3s  deployer\n"
+    },
+    {
+      "attempt": 7,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 88.2,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   87.5s  deployer\n"
+    },
+    {
+      "attempt": 8,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 84.7,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   83.9s  deployer\n"
+    },
+    {
+      "attempt": 9,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 85.6,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   84.9s  deployer\n"
+    },
+    {
+      "attempt": 10,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 84.5,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   83.8s  deployer\n"
+    },
+    {
+      "attempt": 11,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 87.7,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   86.9s  deployer\n"
+    },
+    {
+      "attempt": 12,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 84.3,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   83.4s  deployer\n"
+    },
+    {
+      "attempt": 13,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 86.6,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   85.9s  deployer\n"
+    },
+    {
+      "attempt": 14,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 84.9,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   84.0s  deployer\n"
+    },
+    {
+      "attempt": 15,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 95.4,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   94.6s  deployer\n"
+    },
+    {
+      "attempt": 16,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 94,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   93.1s  deployer\n"
+    },
+    {
+      "attempt": 17,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 90.8,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   89.7s  deployer\n"
+    },
+    {
+      "attempt": 18,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 90.6,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   89.5s  deployer\n"
+    },
+    {
+      "attempt": 19,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 88.3,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   87.6s  deployer\n"
+    },
+    {
+      "attempt": 20,
+      "exitCode": 0,
+      "outcome": "pass",
+      "seconds": 86.4,
+      "log": "gate pre-merge: 1 of 19 check(s) selected (0 changed path(s))\n  [ok  ]   85.4s  deployer\n"
+    }
+  ],
+  "recordedAt": "2026-11-02T10:19:21.844Z",
+  "platform": "Windows",
+  "node": "v22.22.3",
+  "outcome": "20 consecutive deployer-only gate runs passed on one fixed commit",
+  "cause": "unknown; original intermittent failure log was not retained and no failure reproduced",
+  "limits": [
+    "This is the deployer check explicitly included in pre-merge, not 20 full-stage runs.",
+    "Successful repetitions do not identify the cause of an unobserved historical failure.",
+    "No macOS/Linux reproduction was attempted."
+  ]
+}
