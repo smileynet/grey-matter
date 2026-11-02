@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "d730800fa6f5a5c1d1daf90199d0d84e228d05f19ef4801ad4b5cbe0d5d7b02b",
+  "subject": "Orchestration two-tab dashboard",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 10944,
+      "sha256": "2785e12168fbfadb008e08064982643092046407389871aa3a6a444845b0b7f0"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 129113,
+      "sha256": "e69ed5fafa4df435d2b620d2b1ebb436156f6694e6c4ce6b41c3c6df2c93616b"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4226,
+      "sha256": "a43e66e785d4a16dc95f2088610304697821f3b85193e9a46cb05ec6b5992d6f"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/findings-1280.png",
+      "bytes": 227401,
+      "sha256": "a322169ad39c06a6d6c6618a0f95179c1ce2e758a628e9ce3aaac2743bd2a6dc",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/tickets-1280.png",
+      "bytes": 245424,
+      "sha256": "bb9b868b137971cfc2846061de3c5eb9f9f4a03e03a567a51b38b2790fd0dddd",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/findings-390.png",
+      "bytes": 227928,
+      "sha256": "45e5a35214319d17eb52cfd4b6f2bbea6fb7bede1568d94d002e12dd25ea121a",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/tickets-390.png",
+      "bytes": 213744,
+      "sha256": "b0c8451ff869e8582c947d7fde4893b4fa80edcd4816c2f51cf71e5878d08ae7",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "071570437eccdef24ff57ef70fc4db8cf2c61831bac17944391fa59f13c2f888",
+  "id": "0b662f4f47f4060e50e606d3056fc950747f2c91f794cbd9aa5fb9998c2c59a0",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/dashboard_critic (Codex agent)",
+    "note": "Accepted after direct inspection of all four bound Chromium captures at 1280x900 and 390x900 and review of the scoped dashboard source. Two tabs, plain-language observed findings and explicit limits, distinct unproven possibilities, collapsed ticket details, readable open/other grouping, and blocked_by dependency flow are clear at both sizes. Later diagram nodes require scrolling in the contained flow panel; this is visible and does not block use. This attestation is specific to the pre-closure ticket snapshot.",
+    "acceptedAt": "2026-11-02T16:19:37.571Z",
+    "snapshotId": "0b662f4f47f4060e50e606d3056fc950747f2c91f794cbd9aa5fb9998c2c59a0"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "title": "What the orchestration trials have shown",
+  "intro": "See tested capabilities, their limits, and the work still ahead.",
+  "findings": [
+    {
+      "id": "separate-jobs", "state": "confirmed", "label": "Confirmed in fixtures",
+      "title": "Split work into small jobs, then review before merging",
+      "value": "Independent jobs ran in separate work areas. A review step checked the result before accepted changes were brought together.",
+      "diagramLabel": "Observed workflow", "steps": ["Choose jobs", "Separate workers", "Review", "Merge accepted work"],
+      "limit": "These were small test projects. A worker's claim of success was never enough on its own.",
+      "details": "The authored skill dry runs exercised Claude Code and Kiro CLI. Earlier baseline spikes covered Codex, Kiro Crew and Antigravity with different limitations. Admission held overlapping and dependent jobs; the later dry runs held the risky deletion rather than dispatching it.",
+      "tickets": ["111", "124", "125", "126", "127", "128", "129"],
+      "sources": [{"label": "Live skill trial evidence", "href": "agents/research/orchestrate-skill-dry-runs-20261101.md"}]
+    },
+    {
+      "id": "questions", "state": "confirmed", "label": "Confirmed in tested sessions",
+      "title": "A worker can ask a question and continue with the answer",
+      "value": "The tested sessions remembered their context when the controller supplied a missing name. Some continued in one process; others resumed in a fresh process.",
+      "diagramLabel": "Observed exchange", "steps": ["Worker asks", "Controller answers", "Same session continues"],
+      "limit": "This confirms the captured exchanges, not recovery from every kind of interruption.",
+      "details": "Claude and Antigravity carried paired-stream follow-ups. Codex exec/resume and Kiro chat/resume kept the same session identity. Kiro ACP loaded a saved conversation and produced a fresh answer after replayed history; replay was not counted as a new answer.",
+      "tickets": ["162"],
+      "sources": [{"label": "Headless driver comparison", "href": "agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02"}]
+    },
+    {
+      "id": "stop-deletion", "state": "partial", "label": "One safety case confirmed",
+      "title": "The tested deletion can stop for a human decision",
+      "value": "A restrictive policy blocked deletion of the project README, and the worker reported that it needed a human ruling.",
+      "diagramLabel": "Observed narrow safety case", "steps": ["Deletion requested", "Policy blocks it", "Worker asks for help"],
+      "limit": "Ordinary allowed commands still asked for approval. Broad containment and unattended operation are not established.",
+      "details": "This was an owner-scoped KAS policy with YOLO off. It protects one tested command form, not all deletion routes or arbitrary process access. Earlier broad-trust runs did delete and merge the README, so permission setup materially changes the outcome.",
+      "tickets": ["154", "128"],
+      "sources": [{"label": "Audited policy probe", "href": "agents/research/harness-experimental-features-20261101.md#ticket-154-kas-allowlist-probe-2026-11-01"}]
+    },
+    {
+      "id": "actual-results", "state": "confirmed", "label": "Failure signals observed",
+      "title": "Check the work result before calling a run successful",
+      "value": "A run can finish cleanly while a command was denied. Native tool results exposed that difference in the comparison.",
+      "diagramLabel": "Two different checks", "steps": ["Run has ended", "Inspect tool result", "Accept or hold the work"],
+      "limit": "There is no single exit code or status word that proves accepted work across all of these drivers.",
+      "details": "Antigravity returned SUCCESS and exit 0 with an empty response after automatic command denial. Codex completed a text turn while tool execution was blocked by a missing companion host. Kiro's live ACP request/cancel/load worked, but EOF shutdown still exited 1. The follow-up tickets separate these infrastructure limits from transport results.",
+      "tickets": ["162", "188", "189"],
+      "sources": [{"label": "Native outcomes and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02"}]
+    },
+    {
+      "id": "sign-in", "state": "partial", "label": "Routing confirmed; delivery untested",
+      "title": "Choose the sign-in owner explicitly",
+      "value": "The Windows relay default followed command-line sign-in. Selecting client ownership explicitly exposed the host's token-request channel.",
+      "diagramLabel": "Observed routing choices", "steps": ["Select an owner", "CLI handles sign-in", "Or host receives request"],
+      "limit": "Real host-vault token delivery was not tested. The current Crew integration needs a supported correction for that route.",
+      "details": "Crew 0.11.1's Windows host-auth builder omitted the owner flag. On CLI 2.37.1 that command behaved like explicit CLI ownership. Explicit client mode reached the controller, which returned only a controlled credential-unavailable error. No tokens or account identity were recorded.",
+      "tickets": ["185", "186", "190"],
+      "sources": [{"label": "Authentication routing evidence", "href": "agents/research/kirocrew-orchestration.md#ticket-186-auth-owner-routing-2026-11-02"}]
+    },
+    {
+      "id": "visible-state", "state": "confirmed", "label": "Optional integration confirmed",
+      "title": "Keep the ticket and worker state aligned",
+      "value": "The optional integration mirrored active, waiting, review and completed states into the worker's native bookkeeping.",
+      "diagramLabel": "Observed state mapping", "steps": ["Ticket changes", "Native state mirrors it", "Owner reads one plan"],
+      "limit": "The ticket tracker stays authoritative. Missing optional tools are skipped; this does not add a requirement to every harness.",
+      "details": "The guarded Kiro Crew integration was independently checked against native tags and ledger fields. It provides visibility metadata, not evidence that the implementation or a GUI review passed.",
+      "tickets": ["95"],
+      "sources": [{"label": "Ticket-state mirroring evidence", "href": "agents/research/kirocrew-ticket-state-20261101.md"}]
+    }
+  ],
+  "possibilities": [
+    {"title": "Recover a standing teammate after restart", "value": "Test whether reports, workers and pending work reconnect after the gateway restarts.", "tickets": ["156"]},
+    {"title": "Watch and answer through a familiar interface", "value": "Compare which interfaces show worker state and let a person answer questions or approvals.", "tickets": ["173"]},
+    {"title": "Spend less without losing the quality bar", "value": "Choose a repeatable runner, then compare models, effort and fast mode on fixed tasks.", "tickets": ["174", "167", "168", "169", "170", "171", "172"]}
+  ],
+  "ticketNotes": {
+    "95": ["Mirror ticket and worker state", "See native worker bookkeeping follow the authoritative ticket state."],
+    "111": ["Run a controlled ticket-to-review loop", "Delegate separate jobs and review their evidence before accepting changes."],
+    "124": ["Reuse disposable test jobs", "Compare approaches against the same small project and shaped tasks."],
+    "125": ["Claude Code baseline", "Establish which parts of the orchestration loop worked in the baseline trials."],
+    "126": ["Kiro CLI baseline", "Establish the baseline dispatch, question and recovery behavior."],
+    "127": ["Codex baseline", "Establish the baseline worker, review and landing behavior."],
+    "128": ["Kiro Crew baseline", "Understand the conductor loop and where broad trust failed the safety case."],
+    "129": ["Antigravity baseline", "Establish worker isolation, messaging and permission limitations."],
+    "154": ["Stop the tested risky deletion", "Qualify a restrictive policy and its escalation behavior."],
+    "155": ["Check mixed-backend setup", "Identify whether the intended conductor/worker backend split can be configured."],
+    "156": ["Recover Mate work after restart", "Find whether a standing teammate can restore workers and react to reports after restart."],
+    "157": ["Run native Antigravity workflows", "Find whether native workflows can coordinate isolated workers and role-specific models."],
+    "158": ["Narrow command permissions", "Find a working grant smaller than allowing every shell command."],
+    "159": ["Coordinate messages and wake-ups", "Test available Codex message-board and wake behavior without changing global settings."],
+    "160": ["Follow background sessions", "Find whether background workers and idle notices fit the review-and-land loop."],
+    "161": ["Run native Kiro workflows", "Test dispatch, review, pause, resume and retry through a workflow recipe."],
+    "162": ["Follow headless sessions", "Compare native results, questions, continuation and approval visibility."],
+    "167": ["Compare implementation workers", "Find which cheaper workers meet the measured quality bar on fixed coding tasks."],
+    "168": ["Compare reviewer quality", "Measure planted-defect recall and false positives before trusting a cheaper reviewer."],
+    "169": ["Compare research accuracy", "Measure caller recall and citation accuracy against a fixed answer key."],
+    "170": ["Compare routine writing and triage", "Find which lighter models handle bounded text tasks without measured quality loss."],
+    "171": ["Find useful effort levels", "Measure when extra reasoning effort stops helping on a fixed model and task."],
+    "172": ["Measure fast mode", "Compare speed, quality and observed usage with fast mode on and off."],
+    "173": ["Watch and answer through the GUI", "Compare visible worker state and real question or approval actions."],
+    "174": ["Choose a repeatable evaluation runner", "Leave a runnable way to compare model trials on the same fixtures."],
+    "185": ["Understand the shared agent runtime", "Explain where the agent loop, tools, protocol and policy boundaries live."],
+    "186": ["Verify sign-in routing", "Find which process actually receives authentication requests."],
+    "187": ["Research Agent Client Protocol", "Assess the standard and propose small spikes only where findings justify them."],
+    "188": ["Restore Codex tool execution", "Diagnose the missing companion host before claiming a tool-capable lane."],
+    "189": ["Qualify clean agent shutdown", "Separate successful turns from process settlement and find a supported shutdown path."],
+    "190": ["Correct host-owned sign-in routing", "Find a supported integration remedy before relying on Crew-owned relay identity."],
+    "191": ["See findings and the ticket flow", "Review this effort through clear findings and an expandable, evidence-linked work log."]
+  }
+}
