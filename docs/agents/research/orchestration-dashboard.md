@@ -42,7 +42,7 @@ Final verification on 2026-11-02: both local-file browser scenarios passed again
 after closure (18 remaining / 14 done). All 20 pre-merge and seven pre-push checks
 passed after correcting the temporary-path documentation and declaring the manual
 browser check. The independent critic accepted the final snapshot recorded in
-`evidence/orchestration-dashboard/final-receipt.json`; the original pre-close
+`evidence/orchestration-dashboard/portable-receipt.json`; the original pre-close
 receipt and captures remain as historical evidence. The dependency diagram is
 internally scrollable, including on a phone. This is rendered-behavior evidence,
 not a usability study or proof of every agent capability.
@@ -52,3 +52,6 @@ Artifact disposition: promote both capture sets and small review receipts (about
 bytes) and temporary capture backup (914,497 bytes) after final verification.
 No browser binary was downloaded. Existing unrelated repository scratch and build
 artifacts were left untouched; none are required to open the offline page.
+
+The portable receipt supersedes the first final receipt after normalizing the
+manifest's line endings to Git's LF bytes. Source and capture digests are unchanged.
