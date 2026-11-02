@@ -1,7 +1,7 @@
 ---
 id: "115"
 title: "Require positive scoped evidence for preservation claims"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "Worked examples correctly classify healthy service plus empty inventory as service-only evidence and nonempty matched observations as scoped preservation evidence."
@@ -29,10 +29,10 @@ The source project's #68 now has a bounded worker capture/verify validator with 
 
 ## Acceptance criteria
 
-- [ ] Worked examples correctly classify healthy service plus empty inventory as service-only evidence and nonempty matched observations as scoped preservation evidence.
-- [ ] Fixtures or behavioral review reject zero bytes/files, missing baseline, scope mismatch and changed identity/hash; valid unchanged observations pass.
-- [ ] Guidance states observation limits and preserves authorization boundaries without forcing simulator/device tests for worker-only assertions.
-- [ ] Applicable fixtures and `node scripts/gate.mjs pre-merge` pass.
+- [x] Worked examples correctly classify healthy service plus empty inventory as service-only evidence and nonempty matched observations as scoped preservation evidence.
+- [x] Fixtures or behavioral review reject zero bytes/files, missing baseline, scope mismatch and changed identity/hash; valid unchanged observations pass.
+- [x] Guidance states observation limits and preserves authorization boundaries without forcing simulator/device tests for worker-only assertions.
+- [x] Applicable fixtures and `node scripts/gate.mjs pre-merge` pass.
 
 ## Workstream reconciliation 2026-11-02
 
@@ -58,3 +58,13 @@ remains pending because browser policy blocked local-file access; human review w
 Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
 integration; local commit history and this evidence remain in Git. The current deployment
 package is retained until the next deployment.
+
+## Resolution (2026-11-02)
+
+done: worker de12779 implemented, critic accepted, root merged/pushed/verified/deployed and updated dashboard. Evidence promoted into this ticket. Retain owned t115-worker checkout about10.3MB only for final stream audit/cleanup; shared orchestration helpers until stream completes, deployment until next deploy. Dashboard structural/source reviews pass, actual laptop/phone visual acceptance remains pending under browser policy.
+
+### Verification
+1. ✓ Worked examples correctly classify healthy service plus empty inventory as service-only evidence and nonempty matched observations as scoped preservation evidence. — "Existing ladder now distinguishes service/inventory success from selected positive-byte matched preservation; independent critic accepted Spec and Standards."
+2. ✓ Fixtures or behavioral review reject zero bytes/files, missing baseline, scope mismatch and changed identity/hash; valid unchanged observations pass. — "Manual guidance scenarios reject empty totals, absent baseline, missing/extra/out-of-scope paths, malformed/duplicate/mismatched identities and changed hashes; valid selected positive matched observations support narrow two-instant claim. No live-provider experiment claimed."
+3. ✓ Guidance states observation limits and preserves authorization boundaries without forcing simulator/device tests for worker-only assertions. — "Limits exclude continuity, staging exclusion, installed retention, all-copy erasure and deletion authority; provider-specific identity not inode assumption, no device campaign for worker-only assertions."
+4. ✓ Applicable fixtures and `node scripts/gate.mjs pre-merge` pass. — "Root after merge forced main premerge3/3 commands and prepush2/2 passed; worker syntax10/10/docs50pass; canonical deploy check/default50skills passed. Worker defaultpremerge0selection not counted as a check pass."
