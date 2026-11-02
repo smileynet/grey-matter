@@ -1,7 +1,7 @@
 ---
 id: "122"
 title: "Find why the deployer check (deploy.test.mjs) fails intermittently on Windows"
-status: in_progress
+status: open
 blocked_by: []
 priority: low
 validation_criteria:
@@ -20,8 +20,8 @@ Capture a failing run's full output (loop `check-repo` and keep each log), ident
 ## Acceptance criteria
 
 - [ ] The cause is identified from a captured failing log and recorded here.
-- [ ] 20 consecutive `node scripts/gate.mjs pre-merge --include deployer` runs on an unchanged tree pass the deployer check, or the remaining flake is isolated to a named test and recorded.
-- [ ] `node scripts/gate.mjs pre-merge` passes.
+- [x] 20 consecutive `node scripts/gate.mjs pre-merge --include deployer` runs on an unchanged tree pass the deployer check, or the remaining flake is isolated to a named test and recorded.
+- [x] `node scripts/gate.mjs pre-merge` passes.
 
 ## Update 2026-11-01
 
