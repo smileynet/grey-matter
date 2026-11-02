@@ -11,7 +11,7 @@
 // surface a user hits.
 
 import { createHash } from "node:crypto";
-import { test, before, after, beforeEach } from "node:test";
+import { test, before, afterEach, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import {
   mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, symlinkSync,
@@ -69,8 +69,8 @@ beforeEach(() => {
   root = mkdtempSync(join(tmpdir(), "gm-installer-test-"));
 });
 
-after(() => {
-  // beforeEach makes a fresh root each test; clean up the last one.
+afterEach(() => {
+  // beforeEach makes a fresh root for every test, so each one is removed after its test.
   if (root && existsSync(root)) rmSync(root, { recursive: true, force: true });
 });
 
