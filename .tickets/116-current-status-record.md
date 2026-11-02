@@ -1,7 +1,7 @@
 ---
 id: "116"
 title: "Derive current delivery summaries from scoped evidence records"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "Worked records distinguish distributed availability from pending installation/account/accessibility/retention observations for the same build and audience."
@@ -29,10 +29,10 @@ Coordinate with #118 for dashboard order and #106 for verification attempts; the
 
 ## Acceptance criteria
 
-- [ ] Worked records distinguish distributed availability from pending installation/account/accessibility/retention observations for the same build and audience.
-- [ ] A seeded current-summary mismatch fails and repaired state passes; dated historical summaries remain valid.
-- [ ] A custom execution queue is preserved despite different raw frontier sorting; no false dependency is introduced.
-- [ ] Guidance reuses an existing registry when present and applicable fixtures plus `node scripts/gate.mjs pre-merge` pass.
+- [x] Worked records distinguish distributed availability from pending installation/account/accessibility/retention observations for the same build and audience.
+- [x] A seeded current-summary mismatch fails and repaired state passes; dated historical summaries remain valid.
+- [x] A custom execution queue is preserved despite different raw frontier sorting; no false dependency is introduced.
+- [x] Guidance reuses an existing registry when present and applicable fixtures plus `node scripts/gate.mjs pre-merge` pass.
 
 ## Workstream reconciliation 2026-11-02
 
@@ -58,3 +58,13 @@ remains pending because browser policy blocked local-file access; human review w
 Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
 integration; local commit history and this evidence remain in Git. The current deployment
 package is retained until the next deployment.
+
+## Resolution (2026-11-02)
+
+done: scoped current-summary identity comparison and guidance shipped, reviewed, merged, pushed and deployed. Historical evidence retained; actual adopter readiness and dashboard visual acceptance remain unverified. Evidence promoted in ticket and maintained source. Keep owned t116-worker and shared test-verification artifacts through final stream integration cleanup.
+
+### Verification
+1. ✓ Worked records distinguish distributed availability from pending installation/account/accessibility/retention observations for the same build and audience. — "Worked same-build/audience records reviewed by worker and independent critic; distribution remains distinct from pending installation/account/accessibility/retention observations."
+2. ✓ A seeded current-summary mismatch fails and repaired state passes; dated historical summaries remain valid. — "Public compareReadinessIdentity malformed/mismatch/repair fixtures pass; worker dashboard35/35; original historical snapshot regression retained. No adopter readiness registry fabricated."
+3. ✓ A custom execution queue is preserved despite different raw frontier sorting; no false dependency is introduced. — "Custom B,A,C queue example preserves the A,B,C raw frontier without false blockers; critic accepted guidance."
+4. ✓ Guidance reuses an existing registry when present and applicable fixtures plus `node scripts/gate.mjs pre-merge` pass. — "Optional stateless helper reuses adopter identity; root forced premerge4/4 then integrated full19/19; canonical deploy check/default passed50skills."
