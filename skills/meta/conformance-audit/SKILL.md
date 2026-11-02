@@ -107,8 +107,11 @@ skills are installed**, not only in the source repo.
 
 For stored media or generated-evidence growth, consume
 [repository-artifact-hygiene](../repository-artifact-hygiene/SKILL.md) observations.
-Storage/retention choices remain needs-judgment. A warning or binary extension is
-not nonconformance; only an explicit project policy defines a mechanical violation.
+Storage/retention choices remain needs-judgment. When project instructions conflict about the
+same artifact scope, report both and preserve the project-specific rule pending resolution; use
+[artifact hygiene's lifecycle reference](../repository-artifact-hygiene/references/retention-lifecycle.md#conformance-when-local-rules-conflict).
+A warning or binary extension is not nonconformance; only an explicit project policy defines a
+mechanical violation.
 
 Footprint conformance comes from that skill's footprint inspector, whose `conformance` block reads
 the target without writing (`node <skill-dir>/scripts/inspect-footprint.mjs --repo <target> --floor 0B`):

@@ -19,6 +19,8 @@ Include a **suggested skills** section naming which skills the next agent should
 
 Do not duplicate content already captured in other artifacts (specs, plans, ADRs, tickets, commits, diffs). Reference them by path, slug, or URL instead; the artifact is the source of truth, the handoff just points at it.
 
+If an artifact remains after the active assignment, include its accountable retention owner, purpose and end condition, or mark those details unknown, using [artifact hygiene's lifecycle rule](../../meta/repository-artifact-hygiene/references/retention-lifecycle.md). A handoff points to retained originals and evidence; it does not replace them.
+
 Redact any sensitive information (API keys, passwords, PII): the handoff becomes the next agent's prompt, so a secret in it is a leak.
 
 If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.

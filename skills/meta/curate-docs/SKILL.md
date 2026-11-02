@@ -12,7 +12,9 @@ User-invoked: a human runs it when the knowledge base needs tending, as `wrap-se
 
 For retained media, embedded reports or artifact retrieval, use
 [repository-artifact-hygiene](../repository-artifact-hygiene/SKILL.md) to classify
-storage choices. This skill still owns knowledge promotion, relocation and pruning.
+storage choices. When a worker or harness handoff leaves artifacts retained, carry their owner,
+purpose and end condition using its [retention lifecycle](../repository-artifact-hygiene/references/retention-lifecycle.md).
+This skill still owns knowledge promotion, relocation and pruning.
 
 ## What it decides
 
