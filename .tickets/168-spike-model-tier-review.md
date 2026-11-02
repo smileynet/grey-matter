@@ -2,7 +2,7 @@
 id: "168"
 title: "Spike: cheap vs default models as reviewers catching planted defects"
 status: open
-blocked_by: []
+blocked_by: ["174"]
 tags: ["stream:tooling", "type:research"]
 ---
 
