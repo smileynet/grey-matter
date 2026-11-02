@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "4ce1f466449248f09ade122baf04a7616ae9e14aca9da0643ed17a18ee11de56",
+  "subject": "Typed workflows finding after ticket closure",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 14978,
+      "sha256": "45ebb2185c277e49294a7ac6491531e61e469335f1058db13d5b151742f0b8ba"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 147209,
+      "sha256": "a8e1aec9360c4e2dd5c8b4178c4b8ddcf0e6cd40a1c9edb6fb9a3042e39af056"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4263,
+      "sha256": "bebff8b85f6128d4548a73a926215e06c06cf60233d43bd939821faa448dcad1"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t157-final-v2/findings-1280.png",
+      "bytes": 316098,
+      "sha256": "c70ce341b95b23b629e0b1ffde5abc6e875df5b5f8ad91a9ab41c4e4c697f736",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t157-final-v2/tickets-1280.png",
+      "bytes": 255181,
+      "sha256": "157a08137860645918a6278e609fee8b16d4d1c07d9e6273ec413f3b55b2f01a",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t157-final-v2/findings-390.png",
+      "bytes": 303145,
+      "sha256": "0f72533375c1a488389d484de52e12512ea9b299aad3bcb3777505da7e4aab7a",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t157-final-v2/tickets-390.png",
+      "bytes": 219586,
+      "sha256": "2fe9ea5affdcd59290cbe18664ded1813f90d0583b96efa8a4f6737c6a56b764",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "ead15cb3d69b068d01f926a0e1cc176f8b3b8b5a0b70ed2986a2c4ee12262f86",
+  "id": "7d9053cebcda5e48a3bb621833205de78474c2d4013c9a4e0766d0b625166486",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/dashboard_critic (Codex agent)",
+    "note": "Observer: /root/dashboard_critic (Codex agent); surface: local Chromium file rendering through Playwright; scenario: inspect the final closed-state dashboard at 1280x900 and 390x900 in both tabs and compare the typed-workflows evidence and ticket state to current HTML; outcome: accepted. The page shows nine findings, 17 open and 17 completed tickets. Ticket #157 appears completed and collapsed under Other; #194 remains separate in open work for model-routing qualification. The partial finding preserves scripted choices and external review/merge as limits, with per-role model selection still unresolved. Limits: tool-observed rendering at declared sizes, not human usability study/product screenshots; flow needs internal scrolling for later nodes.",
+    "acceptedAt": "2026-11-02T19:31:37.449Z",
+    "snapshotId": "7d9053cebcda5e48a3bb621833205de78474c2d4013c9a4e0766d0b625166486"
+  }
+}

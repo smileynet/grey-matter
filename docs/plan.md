@@ -199,7 +199,7 @@ auth remains conditional on the result of #186.
 | --- | --- | --- |
 | 156 | 3. Qualify Mate report/wake recovery across gateway restart | ✅ done |
 | 158 | 4. Test narrower agy regex permissions with negative controls | ✅ done |
-| 157 | 5. Test agy native workflow dispatch and per-role model selection | in_progress |
+| 157 | 5. Test agy native workflow dispatch and per-role model selection | done |
 | 159 | 6. Test available Codex multi-agent/message-board/wake features | open |
 | 160 | 7. Test Claude background sessions and idle notification semantics | open |
 | 161 | 8. Test Kiro V3 workflow execution, pause, resume and retry | open |

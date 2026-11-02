@@ -57,6 +57,40 @@ The disposable browser module (13,658,897 bytes), publication archive (38,979
 bytes), and preparation script (1,063 bytes) were recycled. The three probe
 configuration files still matched their pre-probe hashes after deployment.
 
+### Native workflow finding (#157, 2026-11-02)
+
+The current published dashboard has 34 scoped tickets (17 remaining, 17 done)
+and nine findings. The new partial finding shows typed jobs in separate
+worktrees, a scripted question/answer continuation and outside review/merge;
+per-role model selection remains unresolved in #194. The dated source report,
+20-case receipt and independent audit distinguish those limits.
+
+Both local-file browser scenarios passed at 1280×900 and 390×900 after closure.
+The independent critic accepted final source/captures in
+`evidence/orchestration-dashboard/t157-final-v2/`, receipt
+`7d9053cebcda5e48a3bb621833205de78474c2d4013c9a4e0766d0b625166486`.
+Preclose evidence remains historical; the superseded unaccepted first final
+captures (1,094,010 bytes) were recycled. The final receipt binds five sources
+and four captures. `tkt validate --brief` passed with seven existing
+unchecked-acceptance warnings on other closed tickets; none concerns #157.
+
+The same owner-private Site was updated from pushed source
+`f53c49ce831ad6c4457bb789fd6f5f962cbccaa0`. Native publication succeeded as
+deployment `appgdep_6ae8e545469c8191bd9187a44e184522`, version
+`appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_3a9e9036e8788191b4049bc037fe80aa`.
+The hosting transformation changes local evidence links to GitHub links only.
+Local rendering and native deployment success were verified; a production
+browser interaction pass was not performed. Opening the URL in Codex was queued.
+
+Artifact disposition: promote the report, sanitized tool evidence, audit and
+accepted capture sets. Fixture/worktree/probe disposal and retained model-control
+histories are recorded in `evidence/agy-workflows-20261102.json`. Retain the Site
+checkout (358,812 bytes) until the next update. Recycle the disposable browser
+module (13,658,899 bytes), publication archive (40,471 bytes), preparation script
+(902 bytes) and cleanup script (3,723 bytes) after publication. The pre-existing
+generated `dist/agy-plugin` (16,464,451 bytes at this check) was left untouched;
+this ticket changes research and the effort dashboard, not distributed skills.
+
 Edit `docs/orchestration-findings.json` for findings and short ticket outcomes.
 Keep observations distinct from proposed capabilities and preserve source links.
 Run `node scripts/build-orchestration-dashboard.mjs` after changing scoped tickets,
