@@ -1,7 +1,7 @@
 ---
 id: "117"
 title: "Declare retrospective coverage and distinguish repairs from remaining work"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "A sampled/truncated trace scenario produces explicit partial coverage with inspected scope and unresolved gaps."
