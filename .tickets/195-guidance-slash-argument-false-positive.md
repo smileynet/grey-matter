@@ -1,7 +1,7 @@
 ---
 id: "195"
 title: "Keep slash-style CLI arguments out of missing-skill errors"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -15,8 +15,28 @@ tags: ["stream:test-verification", "type:bug"]
 
 ## What to build
 
-TBD
+Origin: #183's guidance audit. On unchanged main AGENTS.md line 36,
+`node scripts/check-guidance.mjs --repo . --no-global` reports `dead-skill` for the
+Git Bash argument example `/args`. The text describes command argument rewriting, not
+a skill invocation. Source inspection confirms that every slash-starting inline code span
+is currently added to the named-skill check in scripts/check-guidance.mjs.
+
+Distinguish explicit skill references from argument examples and ambiguous bare slash
+tokens. Preserve deterministic missing-skill errors where the source actually names a
+skill; ambiguous text may be a judgment finding, not a manufactured mechanical error.
+Do not add an args-specific builtin exemption or rewrite AGENTS.md to hide the problem.
+Use public checker fixtures with both false-positive and real missing-skill controls.
+
+Read scripts/check-guidance.mjs, scripts/check-guidance.test.mjs and #88's checker contract.
+The main checkout's prior-art sibling resolves, while a nested private worktree lacks that
+sibling and reports a separate dead-path result. Keep that environment limitation distinct;
+do not edit unrelated project references, global rules or installed skill roots.
+
+No live provider/model call, user-data operation, new approval gate or broad parser rewrite
+is part of this ticket. #183's ownership guidance can land independently.
 
 ## Acceptance criteria
 
-- [ ] TBD
+- [ ] The current AGENTS.md Git Bash argument example no longer produces a missing-skill error, without editing that example or hard-coding args as a builtin.
+- [ ] Public checker fixtures distinguish CLI argument examples and ambiguous slash tokens from explicit missing skill references; valid references and existing detection stay covered.
+- [ ] Applicable checker fixtures and repository gates pass; guidance audit results distinguish baseline worktree path limitations from checker regressions.
