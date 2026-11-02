@@ -1,7 +1,7 @@
 ---
 id: "158"
 title: "Spike: agy command(regex:...) rules narrower than command(*)"
-status: open
+status: in_progress
 blocked_by: ["124","129"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
