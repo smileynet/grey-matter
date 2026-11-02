@@ -1,7 +1,7 @@
 ---
 id: "114"
 title: "Discover project verification gates and stop dependent mutations on failure"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "Scenarios cover an adopter with an aggregate and one with only documented individual commands; neither reports a missing gate as passed."
@@ -29,10 +29,10 @@ Inspect current `sync`, hook and verification guidance for overlap and contradic
 
 ## Acceptance criteria
 
-- [ ] Scenarios cover an adopter with an aggregate and one with only documented individual commands; neither reports a missing gate as passed.
-- [ ] A failing check, timeout and missing executable prevent a downstream marker mutation; a passing check permits it with its result recorded.
-- [ ] Guidance distinguishes required gates from optional observations and reconciles conflicting wrap/sync wording without silently expanding authorization.
-- [ ] Applicable behavioral fixtures and `node scripts/gate.mjs pre-merge` pass.
+- [x] Scenarios cover an adopter with an aggregate and one with only documented individual commands; neither reports a missing gate as passed.
+- [x] A failing check, timeout and missing executable prevent a downstream marker mutation; a passing check permits it with its result recorded.
+- [x] Guidance distinguishes required gates from optional observations and reconciles conflicting wrap/sync wording without silently expanding authorization.
+- [x] Applicable behavioral fixtures and `node scripts/gate.mjs pre-merge` pass.
 
 ## Update 2026-11-01
 
@@ -65,3 +65,13 @@ remains pending because browser policy blocked local-file access; human review w
 Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
 integration; local commit history and this evidence remain in Git. The current deployment
 package is retained until the next deployment.
+
+## Resolution (2026-11-02)
+
+done: worker implemented real caller fixture and portable guidance, critic accepted, root merged/pushed/deployed. Ticket holds evidence and dashboard link. Recycled merged worker114 worktree10255081bytes; shared stream helpers retained until orchestration completes, deployment package until next deploy. Dashboard source checks pass; visual acceptance remains pending without policy workaround.
+
+### Verification
+1. ✓ Scenarios cover an adopter with an aggregate and one with only documented individual commands; neither reports a missing gate as passed. — "Guidance scenarios discover adopting AGENTS/documented aggregate or individual commands; missing required gates remain unresolved with owner. Existing phase semantics preserved. Critic Spec/Standards accepted."
+2. ✓ A failing check, timeout and missing executable prevent a downstream marker mutation; a passing check permits it with its result recorded. — "Worker actual gate/caller fixture covers failure, timeout, missing executable and pass; failing cases don't write marker, pass records command/output. Direct gate tests23/23. This proves the exit-result caller contract, not LLM async compliance."
+3. ✓ Guidance distinguishes required gates from optional observations and reconciles conflicting wrap/sync wording without silently expanding authorization. — "Wrap/sync now wait for completed required results before dependent mutation, distinguish optional findings, and allow independent work within authorization; no universal checker added."
+4. ✓ Applicable behavioral fixtures and `node scripts/gate.mjs pre-merge` pass. — "Root merged and premerge4/4 passed including gate-runner22.0s; prepush6/6 and canonical deployment50skills passed. Worker missing-yaml snapshot infra issue not counted as product failure or green evidence."
