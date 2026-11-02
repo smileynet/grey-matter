@@ -1,7 +1,7 @@
 ---
 id: "155"
 title: "Spike: Kiro Crew conductor dispatching Claude Code or Codex workers"
-status: open
+status: in_progress
 blocked_by: []
 tags: ["stream:tooling", "type:research"]
 ---
