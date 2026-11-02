@@ -14,7 +14,7 @@ const pass = 'process.exit(0)';
 
 function fixture(checks, fn, { fullTriggers = [] } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "gate-test-"));
-  const repo = join(dir, "repo"), remote = join(dir, "remote.git");
+  const repo = join(dir, "repo");
   const git = (...args) => {
     const r = spawnSync("git", args, { cwd: repo, encoding: "utf8" });
     assert.equal(r.status, 0, `git ${args.join(" ")}: ${r.stderr}`);
@@ -24,7 +24,6 @@ function fixture(checks, fn, { fullTriggers = [] } = {}) {
   const commit = (path, body) => { put(path, body); git("add", "-A"); git("commit", "-qm", path); return git("rev-parse", "HEAD"); };
   try {
     mkdirSync(repo);
-    spawnSync("git", ["init", "-q", "--bare", remote]);
     git("init", "-q", "-b", "main");
     git("config", "user.email", "gate@test"); git("config", "user.name", "gate test");
     git("config", "core.hooksPath", join(dir, "no-git-hooks"));
@@ -32,7 +31,7 @@ function fixture(checks, fn, { fullTriggers = [] } = {}) {
     copyFileSync(GATE, join(repo, "scripts/gate.mjs"));
     put("scripts/gates.json", JSON.stringify({ full_triggers: fullTriggers, checks }));
     const base = commit("README.md");
-    git("remote", "add", "origin", remote); git("push", "-q", "origin", "main");
+    git("update-ref", "refs/remotes/origin/main", base);
     const run = (args, { input = "", env = {} } = {}) => {
       const r = spawnSync(process.execPath, ["scripts/gate.mjs", ...args], { cwd: repo, input, encoding: "utf8", env: { ...process.env, ...env } });
       return { status: r.status, out: r.stdout + r.stderr };

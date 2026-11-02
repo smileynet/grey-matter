@@ -73,7 +73,7 @@
       "stage": "pre-merge",
       "catches": "a gate.mjs change that mis-selects checks, lets a hung check pass, or leaks its process tree",
       "scope": ["scripts/gate", ".githooks/"],
-      "run": ["node", "--test", "--test-timeout=60000", "scripts/gate.test.mjs"],
+      "run": ["node", "--test", "scripts/gate.test.mjs"],
       "timeout_s": 120,
       "measured": { "s": 16.7, "date": "2026-11-01", "host": "win" }
     },
