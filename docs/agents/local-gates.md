@@ -38,6 +38,32 @@ A check not run is "not run", never a pass. Agent and LLM reviews take minutes a
 run: they run on demand at pre-merge, never in a Git hook. An agent runs a stage expected to take
 over a minute in the background and waits for it, never as a long foreground call.
 
+## Discovering required checks
+
+Before a dependent commit, push, deploy or publish, follow the adopting project's declared
+verification phase and required commands. With no phase line, use the existing speed default
+and report the gap. In speed phase, run its one documented `check`
+command. In stability phase, run the declared `gate.mjs` stage. A project that documents only
+individual commands has no implied aggregate: run every command it marks required and retain
+each result. A missing required command or executable, timeout, nonzero exit, or incomplete
+tool result is unresolved, not green; identify the owner and stop the dependent
+mutation. Read the completed result before scheduling that action. Independent read-only work
+may continue. Optional probes and observations are reported separately and do not block.
+
+| Adopter declaration | Observed result | Dependent mutation |
+|---|---|---|
+| Speed/default phase with one aggregate `check` | Exit 0 and complete output | May proceed; record command and result |
+| Stability phase with declared stage | Stage passes all selected required checks | May proceed; record stage and result |
+| Only individually documented required commands | Every command completes with exit 0 | May proceed; record each result |
+| No required command is documented for the declared or default phase | Required gate is missing, not run | Stop; identify the project owner |
+| Any required command fails, times out, is unavailable, or returns incomplete output | Failure or unresolved gate | Stop before dependent mutation; record owner and diagnostic |
+| Optional observation is unavailable or reports a finding | Optional finding, not a required gate | May proceed; report it separately |
+
+The caller owns this sequencing contract regardless of shell or tool: wait for the actual
+command completion, classify its exit/structured result, retain the diagnostic, and schedule a
+dependent mutation only after a complete passing result. Shell fail-fast flags alone do not
+establish this for asynchronous tool calls.
+
 `SKIP=<id>` is for a failure shown to exist already on `origin/main`, not one the push introduces;
 name the skipped id and why in the ticket's close evidence or the commit message.
 
