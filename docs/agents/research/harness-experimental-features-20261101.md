@@ -1,5 +1,79 @@
 # Harness experimental features: follow-up spikes and QoL options
 
+## Ticket 157: native agy workflows (2026-11-02)
+
+**Answer: yes for the bounded typed fan-out; model pinning couldn't be verified.**
+Windows agy 1.4.12 ran two fixture tickets in separate registered Git worktrees
+through native `run_workflow` and `parallel`. Both returned schema-validated
+results. The controller supplied a scripted answer to one worker's question;
+that same conversation continued and committed the second job. This confirms
+the captured mechanism, not an autonomous production orchestrator.
+
+The [20-case native receipt](evidence/agy-workflows-20261102.json) records exact
+prompts, session settings, tool calls/results, custom profiles and independent
+Git/test checks. The [source guide](agy-workflows-source-20261102.md) distinguishes
+installed CLI guidance from public SDK documentation. The installed builtin
+skill SHA-256 is `4A524107CB6173D75A54C2A7DE3ADDEB413D7BDB868C8279682DED74672BEB1E`.
+
+### Observed controls and fixture results
+
+| Probe | Native evidence | Classification |
+| --- | --- | --- |
+| Default planner attempts 01–03/05 | Tool advertised, planner declined to invoke it | Inconclusive for availability; planner behavior only |
+| Explicit custom controller 06/09/10 | Native call first denied; exact script grant then hit Windows Store Python alias; process-only real Python path then printed marker | Expected permission rejection; infrastructure failure; positive pass respectively |
+| Typed agent 11 | Parsed strict object from native child `finish` | Pass |
+| Invalid result 13 | `finish` rejected number instead of string and extra property; corrected result accepted | Pass: negative validator control |
+| Parallel model controls 12/16 | All typed marker results returned | Pass for parallel mechanism; model selection unresolved |
+| Ticket attempts 14/15 | Extra ungranted `git rev-parse HEAD` stopped worker before finish | Permission failure; not proof of parent-finish cancellation |
+| Ticket attempt 17 | Worker searched the home directory outside its job; native read denial stopped it | Permission failure; boundary kept closed |
+| Bounded tools 19 | Both jobs committed in separate worktrees; T2 returned QUESTION then DONE in the same conversation | Pass for bounded fan-out and scripted follow-up |
+| Sequential pipeline 20 | FIRST then SECOND typed markers returned | Pass for sequential primitive; no native review/merge claim |
+
+Case 19 parent is `8746fca1-ffcf-4a36-a5ae-99a4d1c56d81`; T1 child
+`52011d6a-6126-4a98-a2d4-a5b7861e2088` produced commit
+`65f9ad082e9fd1c714300706715a8eb842d1ffc4`; T2 child
+`f8513d97-51a8-4f40-a9f0-2814205478b3` produced
+`5fa6cededfcff9581a19d9da32d017fd5eb6667b`. Native `git rev-parse`
+outputs and the controller's independent `git worktree list --porcelain` show
+separate roots with the fixture's shared Git common directory. The installed
+guide calls branch workspaces clones; observed Git registration is more precise.
+
+Independent controller inspection confirmed that T1 changed only `src/a.js`
+and `test/a.test.js`, implementing multiplication, and T2 only `src/b.js` and
+`test/b.test.js`, implementing the supplied returning-user greeting. After
+controller-run `git merge --no-edit <each exact commit>`, `npm.cmd test` passed
+all three tests, with zero failed/skipped/cancelled/todo; `git status --short`
+was empty. These review/merge checks were performed outside agy's workflow,
+so native autonomous acceptance, ticket closure and merge are **not verified**.
+Holding overlapping/dependent/risky tickets was scripted admission, not proof
+of an agent scheduler making those decisions. The fixture had no GitHub remote.
+
+### Model selection: couldn't verify
+
+Custom profiles requested flash, pro and inherit. Workflow controls also
+explicitly requested `model="pro"`; a separate custom `invoke_subagent` control
+was attempted. The opaque native `gen_metadata` blobs contained Flash Tiered
+labels for flash/pro workflow requests, and Argon Medium for the inherit
+control matching its parent. No verified first-party descriptor establishes
+that these fields identify the model that served generation. Neither a working
+pro pin nor an ignored configuration is established. [Ticket 194](../../../.tickets/194-qualify-agy-child-model-routing.md)
+owns the routing/observability qualification before relying on per-role tiers.
+
+### Settings and limits
+
+Every run used disposable session JSON with `toolPermission: request-review`,
+`accept-edits`, no skip-permissions flag and no broad command grant. The final
+worker allowlist named fixed Git/test commands and the exact workflow script.
+The denied home search was never granted. Worker tools were narrowed to avoid
+that unnecessary search. The Windows Store `python3` alias failed; an existing
+CPython 3.13.14 executable was exposed through a disposable same-drive hardlink
+and child-process PATH/PYTHONHOME only. No global Python or agy settings changed;
+all three recorded global hashes matched after every case. A CLI exit 0 or
+SUCCESS was not counted as workflow success without native tool results.
+
+Cleanup and retained-evidence disposition are recorded in the receipt after
+independent audit. No production integration was built by this spike.
+
 ## Ticket 158: narrower agy permissions (2026-11-02)
 
 **Answer: yes, for the tested fixed commands and directory.** On Windows agy

@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "652aab1bf385fa2178ad2a5164b976e8c21b439bdf5401e0118e9e0555276e87",
+  "subject": "Typed workflows finding before ticket closure",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 14978,
+      "sha256": "45ebb2185c277e49294a7ac6491531e61e469335f1058db13d5b151742f0b8ba"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 145664,
+      "sha256": "ba226f7fe261bccfcf48b90358a8a17023b3fed5717b8fc68406e69b6f45eedc"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4263,
+      "sha256": "bebff8b85f6128d4548a73a926215e06c06cf60233d43bd939821faa448dcad1"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t157-preclose/findings-1280.png",
+      "bytes": 316141,
+      "sha256": "9651d753e952140f60cb439baeddb751698b1170a878c5a25f480a7f2bc8d31f",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t157-preclose/tickets-1280.png",
+      "bytes": 254179,
+      "sha256": "f021db4ab12765feb100b3aeedcd1aae2829a6a853f9d486291ede028784b1bb",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t157-preclose/findings-390.png",
+      "bytes": 303191,
+      "sha256": "7523da63b99bb5162fde779e7408d9c5a711383f5689a8f4faa7cd234f8367b9",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t157-preclose/tickets-390.png",
+      "bytes": 222497,
+      "sha256": "7fefc4e6b5fed494a3f90cdb2203a3d64608246766986310afc8245ad5e61e62",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "df1f7874f6818a35e8f5d92b52f1487bfbdbbcb251a8e2ed83a9f64acd492c2b",
+  "id": "079f890955e2111dba3f2409bd1fb63286974e7e67882ea8210d780a6f19c32a",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/dashboard_critic (Codex agent)",
+    "note": "Observer: /root/dashboard_critic (Codex agent); surface: local Chromium file rendering through Playwright; scenario: inspect all four bound captures at 1280x900 and 390x900 and compare the typed-workflows finding, ticket graph and queue to the current HTML; outcome: accepted. The finding leads with structured results across separate work areas, uses a labeled observed workflow, and states that scripted answers/admission and external review/merging limit the result; per-role model selection remains unresolved. The 34-ticket log distinguishes 18 open from 16 completed, keeps all details collapsed, and displays actual blocker links separately from the suggested queue. #194 appears as a separate open routing qualification task. Limits: rendered browser observation at the named viewport sizes, not a human usability study or product screenshots; later nodes require internal flow scrolling.",
+    "acceptedAt": "2026-11-02T19:26:38.459Z",
+    "snapshotId": "079f890955e2111dba3f2409bd1fb63286974e7e67882ea8210d780a6f19c32a"
+  }
+}

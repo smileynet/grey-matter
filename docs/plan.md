@@ -180,8 +180,9 @@ confirmed worker report/wake recovery after a graceful restart, but exposed a
 fabricated task and no independent Mate acceptance review. Keep the requirements
 and acceptance gate outside that loop. The #158 controls now qualify fixed
 commands and one folder boundary; #193 owns an unexpected regex Ask/Allow overlap.
-Next run #157 using checked controls, without depending on that unresolved Ask
-override. The #158-before-#157 order is a recommendation, not a fabricated blocker. Other
+The #157 probe confirms native typed workflow controls and registered worktrees;
+#194 qualifies model routing before relying on per-role tiers. Next run #159.
+The #158-before-#157 order is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before
 the model comparisons.
@@ -206,6 +207,7 @@ auth remains conditional on the result of #186.
 | 189 | 10. Qualify Kiro V3 ACP EOF shutdown and descendant settlement | open |
 | 190 | Resolve Crew Windows host-auth integration before relying on Crew-owned identity | open |
 | 193 | Diagnose overlapping regex approval rules before relying on that override | open |
+| 194 | Qualify agy child model routing before relying on per-role tiers | open |
 | 173 | 11. Compare GUI watch/answer surfaces against #162's qualified live driver | open |
 | 174 | 12. Select and demonstrate Harbor or a thin runner for the model trials | open |
 | 167 | 13. Compare implementation worker tiers | open |
@@ -230,6 +232,7 @@ flowchart TD
   A186 --> A190["190 Crew Windows auth integration"]
   P158["158 agy regex permissions (done)"] -.-> W157["157 agy workflows"]
   P158 --> A193["193 regex Ask overlap diagnosis"]
+  W157 --> M194["194 agy child model routing"]
   subgraph Other["Independent harness probes"]
     C159["159 Codex messaging"]
     B160["160 Claude background"]

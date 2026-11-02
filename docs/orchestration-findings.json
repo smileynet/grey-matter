@@ -3,6 +3,16 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "typed-workflows", "state": "partial", "label": "Typed jobs confirmed; model selection unresolved",
+      "title": "Collect structured results from jobs in separate work areas",
+      "value": "Two jobs ran in separate worktrees and returned checked results. One worker asked for a missing name, then continued in the same conversation when given an answer.",
+      "diagramLabel": "Observed fixture workflow", "steps": ["Choose two jobs", "Separate worktrees", "Check result shape", "Inspect and combine"],
+      "limit": "The answer and admission choices were scripted. Review and merging were checked outside the workflow; per-role model selection remains unverified.",
+      "details": "Native agy parallel and sequential controls completed. An invalid result was rejected before correction. The two ticket commits changed only their assigned files; independent controller inspection, merges and combined tests passed. Earlier attempts stopped on narrow permission denials. No global settings changed. Model requests and opaque route labels are recorded separately, with routing qualification queued before relying on tier pins.",
+      "tickets": ["157", "194"],
+      "sources": [{"label": "Native workflow trials and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-157-native-agy-workflows-2026-11-02"}]
+    },
+    {
       "id": "narrow-actions", "state": "partial", "label": "Matching confirmed; approval overlap unresolved",
       "title": "Give a worker access to a smaller set of actions",
       "value": "Selected Git, test and ticket-reading commands ran with narrow grants. A folder grant allowed a nested file while rejecting a nearby sibling path.",
