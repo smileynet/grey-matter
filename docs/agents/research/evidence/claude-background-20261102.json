@@ -41,6 +41,74 @@
       "sha256": "2c204b79efb4f70648448cc55697c1b8a0dc89ae41a7dc17a6ad9d001b1e12de"
     }
   ],
+  "cleanup": {
+    "owned_background_session": {
+      "short_id": "9031e15d",
+      "session_id": "9031e15d-71b7-4f88-b165-acddb9573b77",
+      "name": "t160_background_control",
+      "cwd": "D:\\.codex\\worktrees\\orchestration-t160\\grey-matter",
+      "commands": [
+        "claude agents --json --all --cwd D:\\.codex\\worktrees\\orchestration-t160\\grey-matter",
+        "claude stop 9031e15d",
+        "claude rm 9031e15d",
+        "claude agents --json --all --cwd D:\\.codex\\worktrees\\orchestration-t160\\grey-matter"
+      ],
+      "result": "Exact session was first verified by id, full session id, name and cwd; stopped, removed; final listing was an empty JSON array."
+    },
+    "recycled": [
+      {
+        "path": "%TEMP%/gm-t160-fixture-20261102",
+        "bytes": 156047,
+        "files": 62,
+        "status": "sent to OS recycle bin; path absent after cleanup"
+      },
+      {
+        "path": "%WORKTREE%/.scratch/t160/raw/worker.log",
+        "bytes": 174595,
+        "status": "parent raw directory sent to OS recycle bin; path absent after cleanup"
+      },
+      {
+        "path": "%WORKTREE%/.scratch/t160/collect.mjs",
+        "bytes": 5907,
+        "status": "sent to OS recycle bin; path absent after cleanup"
+      }
+    ],
+    "settings_snapshot_at_cleanup": {
+      "captured_after_run_only": true,
+      "comparison_claim": "No before-run hashes exist; this snapshot cannot show before/after equality or rule out unrelated process changes.",
+      "paths": [
+        {
+          "path": "%USERPROFILE%/.claude/settings.json",
+          "present": true,
+          "bytes": 592,
+          "last_write_time_utc": "2026-11-01T15:06:36.0465328Z",
+          "sha256": "426132C5583CB714BB28B9CF0C79610513E2A389AF61F52BFDE9935D5B81F31D"
+        },
+        {
+          "path": "%USERPROFILE%/.claude/settings.local.json",
+          "present": true,
+          "bytes": 5278,
+          "last_write_time_utc": "2026-05-23T00:33:44.2114519Z",
+          "sha256": "5BA4F9DAA7DB78BBD1F0C9E8135BA08CC643580F7C35E37761CAB9678FA93150"
+        },
+        {
+          "path": "%USERPROFILE%/.claude.json",
+          "present": true,
+          "bytes": 123395,
+          "last_write_time_utc": "2026-11-02T20:14:13.9764339Z",
+          "sha256": "226DDBFFE4E7396B2D8CE454E5CF51BCF59CB8EABA82903B0A197C6D41F5B612"
+        },
+        {
+          "path": "%WORKTREE%/.claude/settings.json",
+          "present": false
+        },
+        {
+          "path": "%WORKTREE%/.claude/settings.local.json",
+          "present": false
+        }
+      ]
+    }
+  },
   "events": [
     {
       "file": "%TEMP%/gm-t160-fixture-20261102/.scratch/t160/raw/cross-session.ndjson",
