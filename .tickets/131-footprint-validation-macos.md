@@ -56,3 +56,9 @@ recheck affected evidence after the fix.
 
 Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
 verify the ticket's premises against current source and run its acceptance checks when picked up.
+
+## Host prerequisite check 2026-11-02
+
+Root's batch-mode, strict-known-host SSH attempt to the configured SpaceJam host (port 22)
+timed out. No macOS command or footprint acceptance probe executed. Mac availability or another
+connection was requested from the user; continue independent Windows/WSL work meanwhile.

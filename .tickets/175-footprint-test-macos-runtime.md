@@ -40,3 +40,9 @@ Share the Mac setup with #131 but keep distinct acceptance evidence.
 
 Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
 verify the ticket's premises against current source and run its acceptance checks when picked up.
+
+## Host prerequisite check 2026-11-02
+
+Root's batch-mode, strict-known-host SSH attempt to SpaceJam on port 22 timed out. No inspector
+or lsof measurement ran on macOS; the causal hypothesis is still unverified. Mac availability
+was requested from the user. Recheck access before claiming this host-specific ticket.

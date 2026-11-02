@@ -100,12 +100,12 @@ manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 2
 ## Test optimization and verification
 
 Reconciled 2026-11-02 at the user's request. Scope: `stream:test-verification`.
-10 unfinished tickets (7 open, 3 in progress) and 13 completed tickets. This stream excludes orchestration and dashboard
+9 unfinished tickets (7 open, 2 in progress) and 14 completed tickets. This stream excludes orchestration and dashboard
 feature work; #116 covers only the evidence/current-summary contract. Existing release
 authorization and frozen candidate scope are unchanged.
 
 The order below is the session's chosen execution policy, not new dependency edges. All
-existing blocked_by values are preserved. Active workers: #113 and #116; next unclaimed ticket: #120. Pursue #122 only when a useful
+existing blocked_by values are preserved. Active workers: #116 and #120; next unclaimed ticket: #98. Pursue #122 only when a useful
 failure is captured. macOS work needs a Mac; WSL and destructive footprint probes need a
 suitable owned environment. No host-only criterion is satisfied by a Windows fixture pass.
 
@@ -127,7 +127,7 @@ scripts/snapshot are recycled after their conclusions are recorded here.
 | 112 | 2. UI capabilities and qualified observations | ✅ done |
 | 115 | 2. Positive scoped preservation evidence | ✅ done |
 | 117 | 2. Retrospective coverage and repaired-versus-remaining work | ✅ done |
-| 113 | 3. Exact bundle inventory and portable byte hashes | in_progress |
+| 113 | 3. Exact bundle inventory and portable byte hashes | ✅ done |
 | 116 | 4. Current summaries derived from scoped evidence | in_progress |
 | 120 | 5. Documented vendor repair and checkout divergence handling | in_progress |
 | 98 | 5. CLI/pack compatibility and identity-bound reuse | open |

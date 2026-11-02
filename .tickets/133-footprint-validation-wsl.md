@@ -54,3 +54,12 @@ reconciliation. Preserve user distro settings and data; record unavailable probe
 
 Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
 verify the ticket's premises against current source and run its acceptance checks when picked up.
+
+## Host prerequisite check 2026-11-02
+
+The local Ubuntu distro is confirmed WSL 2. A read-only startup probe reported Linux kernel
+6.6.87.2-microsoft-standard-WSL2 and Git at `/usr/bin/git`. Its `node` resolves to an imported
+Windows mise shim that fails with `exec: node: not found`; a working native Linux Node 22+
+runtime is still needed for the inspector checks. This is a tooling prerequisite, not an
+inspector assertion failure. No sparse-mode setting, distro data or free-space behavior was
+changed or claimed validated by that probe.
