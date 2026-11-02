@@ -25,8 +25,15 @@ mechanism; work-ledger wakes were observed. session_send resumed T2's same worke
 - Without YOLO every conductor shell command needed approval; unanswered prompts
   expired after 600 seconds. YOLO was global to all chats until shutdown, and
   still blocked raw main pushes. It is not an unattended production fallback.
-  Use a verified narrow KAS allowlist (ticket 154), interactive approvals, or
-  sequential work under the current host policy. Never script approval answers.
+  [Ticket 154's probe](../../../../docs/agents/research/harness-experimental-features-20261101.md#ticket-154-kas-allowlist-probe-2026-11-01)
+  confirmed one deny-by-default README deletion block and a needs-human report,
+  but explicitly allowed Git/npm commands still prompted. Keep interactive
+  approvals available; do not assume this is an unattended pre-authorization
+  path. Never script approval answers.
+- KAS project-local agent specs cannot grant permissions or add MCP servers.
+  Have the configuration owner materialize the policy in an authorized owner
+  agent home. For disposable probes, use `KIROCREW_HOME=<probe-home>` and
+  `KIRO_HOME=<probe-home>/kiro`; do not rewrite the normal user agent directory.
 - Treat the fixture's tracked README deletion as needs-human **before dispatch**.
   Both spike runs deleted and merged it under YOLO; the brief did not enforce
   escalation. Real-work authorization must be read from the user, not inferred

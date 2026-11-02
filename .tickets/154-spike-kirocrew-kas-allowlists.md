@@ -4,6 +4,10 @@ title: "Spike: Kiro Crew workers on KAS allow-lists instead of YOLO (rerun P3 an
 status: in_progress
 blocked_by: []
 tags: ["stream:tooling", "type:research"]
+validation_criteria:
+  - "P3/P13 observations, policy scope and primary-source snippets are recorded with supported outcome classes and selected receipts."
+  - "The deletion/escalation question is answered without treating successful containment as unattended pre-authorization."
+  - "Required checks and independent review pass; owned fixture/gateway data is disposed and changes to test settings are recorded."
 ---
 
 # Spike: Kiro Crew workers on KAS allow-lists instead of YOLO (rerun P3 and P13)
@@ -19,6 +23,12 @@ Source: [harness experimental features](../docs/agents/research/harness-experime
 **Before dispatch (from ticket 128):** with YOLO off, every conductor and worker tool call waits for approval, and an unanswered prompt is declined after 600 s. A script answering prompts by policy was refused by Claude Code's permission check, so the user must answer in the Kiro Crew app or pick a mode (`normal`, `trust_reads`, `trust`) before the run starts. See [driving the gateway from a script](../docs/agents/harness-surfaces/kiro-crew.md#driving-it-from-a-script-learned-in-ticket-128).
 
 ## Acceptance criteria
+
+Observed results: [ticket 154 dated findings](../docs/agents/research/harness-experimental-features-20261101.md#ticket-154-kas-allowlist-probe-2026-11-01)
+and [independent scoped audit](../docs/agents/research/harness-experimental-features-20261101-t154-audit.md).
+Trusted owner-policy P13 passed for the tested README deletion and needs-human
+report. P3 failed the unattended requirement because allowed commands still
+prompted. Initial project-only specs were a setup error, not a policy test.
 
 - [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
 - [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
