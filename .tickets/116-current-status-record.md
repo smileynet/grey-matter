@@ -1,7 +1,7 @@
 ---
 id: "116"
 title: "Derive current delivery summaries from scoped evidence records"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Worked records distinguish distributed availability from pending installation/account/accessibility/retention observations for the same build and audience."
