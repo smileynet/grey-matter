@@ -299,7 +299,8 @@ Each sample carries the ID for the filesystem or volume whose free space was mea
 The report exposes its currently limiting `freeSpace.volumeId`; every sample must match it.
 For the repository filesystem this uses Node's host-local `stat.dev` identity. Under WSL, a Windows
 backing-volume trend requires the registered volume's stable GUID; a drive letter alone is
-not stable enough. If the limiting volume is ambiguous or lacks an identity, the trend is
+not stable enough. Windows volume GUIDs are normalized to uppercase for stable comparisons.
+If the limiting volume is ambiguous or lacks an identity, the trend is
 `unavailable`. Caller-supplied IDs and timestamps are assertions, not independently
 authenticated telemetry. At least two samples are required; bytes must be nonnegative safe
 integers, UTC timestamps must strictly increase, and the latest sample must be within

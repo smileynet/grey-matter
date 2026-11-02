@@ -430,7 +430,11 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
     writeFileSync(prior, JSON.stringify(valid));
     const volumeId = "\\\\?\\Volume{12345678-1234-1234-1234-123456789abc}\\";
     const volumeIdResult = run([record({ Drive: "", VolumeId: volumeId })]);
-    assert.equal(volumeIdResult.coverage.hostDrive, `registered ${volumeId} volume for this WSL distro`);
+    const canonicalVolumeId = volumeId.toUpperCase();
+    assert.equal(volumeIdResult.coverage.hostDrive, `registered ${canonicalVolumeId} volume for this WSL distro`);
+    assert.equal(volumeIdResult.freeSpace.entries.find((entry) => entry.path === `Windows ${canonicalVolumeId}`).volumeId, canonicalVolumeId);
+    const uppercaseResult = run([record({ Drive: "", VolumeId: canonicalVolumeId })]);
+    assert.equal(uppercaseResult.freeSpace.volumeId, volumeIdResult.freeSpace.volumeId);
 
     const repoFs = statfsSync(repo), repoFree = repoFs.bavail * repoFs.bsize;
     const history = join(fixtureBase, "ambiguous-volume-history.json");
