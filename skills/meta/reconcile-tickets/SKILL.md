@@ -64,9 +64,10 @@ eligible); reserve `backlog` for work deliberately deferred out of this cycle. T
 stream at creation. Dedupe first: extend an existing ticket rather than file a near-
 duplicate (`tkt query`).
 
-### 4. Set the three ordering axes
+### 4. Keep ticket fields and project order distinct
 
-Keep them distinct (the `tkt-core` skill defines each; this is how grey-matter applies them):
+Keep the ticket fields distinct (the `tkt-core` skill defines each; this is how grey-matter
+applies them). A project-owned execution queue is separate from these fields:
 
 - **`blocked_by`** - structural only: A must finish before B *can* start. "We'd rather do
   A first" is not a blocker, that's priority.
@@ -74,11 +75,22 @@ Keep them distinct (the `tkt-core` skill defines each; this is how grey-matter a
   later high-priority ticket jump an in-progress thread.
 - **work-stream tag** - which parallel thread the ticket belongs to.
 
-### 5. The frontier is the plan
+An adopted execution queue is preferred work order from the project's maintained plan. Preserve
+it when it differs from raw `tkt ready` sorting; use the frontier to check status and eligibility,
+not to silently replace the adopted order. Never add `blocked_by` just to encode that preference.
 
-grey-matter has no separate plan doc, **`tkt ready` is the plan**. So "re-organize the
-plan" here means: set `blocked_by`, priority, and tags so the frontier's top picks match
-the agreed priorities. Sanity-check with the ordering rubric:
+### 5. Preserve the adopted plan
+
+When the project maintains an explicit execution queue, that queue controls preferred order and
+`tkt ready` remains the structural frontier. Otherwise, **`tkt ready` is the plan**. Reconcile
+`blocked_by`, priority and tags without changing the adopted queue or turning preferences into
+dependencies. For a project using the frontier as its execution order, sanity-check with the
+ordering rubric below; when a queue is adopted, keep its order and use the frontier to verify
+state and real blockers, not to reorder it.
+
+Scenario: the adopted queue lists B, then A, then C, while raw `tkt ready` sorts A, B, C. Keep
+the adopted order, leave independent tickets unblocked, and add `blocked_by` only for an actual
+prerequisite.
 
 1. **Finish current threads first** - an in-progress ticket and the open tickets
    continuing its stream come before starting a new thread.
@@ -92,9 +104,10 @@ the agreed priorities. Sanity-check with the ordering rubric:
 
 ### 6. Verify and report
 
-`tkt validate --brief` (no cycles, no dangling edges), then `tkt ready` (the frontier's
-first picks match the rubric). Present: tickets created, tickets updated, what the frontier
-now surfaces and why.
+Run `tkt validate --brief` (no cycles or dangling edges), then `tkt ready` to inspect the
+current structural frontier. If an adopted queue differs, report its order separately and
+preserve it; do not replace it with the raw frontier sort. Present tickets created or updated,
+the adopted queue when present, and what the frontier shows about eligibility and blockers.
 
 ## Does not
 
