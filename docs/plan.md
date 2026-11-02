@@ -166,8 +166,8 @@ spike set. This reconciliation does not authorize release publication or new
 global harness settings.
 
 The remaining-work table is the proposed serial execution order. #162's driver
-comparison is complete; next resolve #186's current KAS auth question. #186 has
-high priority. Run #158 before #157 to inform its
+comparison and #186's auth routing investigation are complete; next run #156
+with the verified CLI-owned auth option. Run #158 before #157 to inform its
 permission setup; this is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before
@@ -183,7 +183,6 @@ auth remains conditional on the result of #186.
 
 | ID | Work | Status |
 | --- | --- | --- |
-| 186 | Verify KAS relay authentication ownership and record a supported recipe | in_progress |
 | 156 | 3. Qualify Mate report/wake recovery across gateway restart | open |
 | 158 | 4. Test narrower agy regex permissions with negative controls | open |
 | 157 | 5. Test agy native workflow dispatch and per-role model selection | open |
@@ -204,15 +203,15 @@ auth remains conditional on the result of #186.
 | 187 | 19. Research Agent Client Protocol (ACP) and propose evidence-led spikes | open |
 
 Solid arrows below are hard dependencies; dotted arrows are proposed order only.
-Completed prerequisites remain in the tickets; #162 is retained below as
-completed context for the newly unblocked work.
+Completed prerequisites remain in the tickets; #162 and #186 are retained below
+as completed context for the newly unblocked work.
 
 ```mermaid
 flowchart TD
   D162["162 Headless drivers (done)"] --> G173["173 GUI watch layer"]
   D162 --> C188["188 Codex tool-host diagnosis"]
   D162 --> K189["189 Kiro ACP EOF diagnosis"]
-  D162 -.-> A186["186 KAS auth ownership"]
+  D162 -.-> A186["186 KAS auth ownership (done)"]
   A186 -.-> M156["156 Mate restart/recovery"]
   A186 --> A190["190 Crew Windows auth integration"]
   P158["158 agy regex permissions"] -.-> W157["157 agy workflows"]
@@ -246,6 +245,7 @@ Completed baseline and delivered guidance (historical closure evidence preserved
 | 155 | External adapters initialized; ordinary mixed-backend loop remains unverified | ✅ done |
 | 185 | KAS architecture and initialize-only protocol research | ✅ done |
 | 162 | Headless driver question/follow-up, command outcomes and qualified ACP control | ✅ done |
+| 186 | Windows KAS relay auth routing confirmed; Crew integration follow-up is #190 | ✅ done |
 
 Closed tickets received tag-only metadata corrections; statuses, acceptance
 checkboxes, dependencies and resolution bodies were preserved. Existing unchecked
