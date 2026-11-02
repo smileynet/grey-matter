@@ -58,3 +58,7 @@ Primary interface docs: [Codex queue](https://learn.chatgpt.com/docs/cli/referen
 ## Delivery sequence
 
 Contract and deterministic fixture first; then graduate the proved Codex/Antigravity path, extend/test Claude/kiro-cli/Kiro Crew through their current supported surfaces, and wire into orchestrate. Split implementation children if needed, retaining this end-to-end outcome. No permanent bridge was installed by filing this ticket.
+
+## Filing verification
+
+Ticket brief and evidence-boundary review: PASS; seven acceptance criteria and no findings on this ticket. The strict tracker check retains seven pre-existing unchecked-AC warnings on closed tickets. On macOS the pre-push home-path check also reports 225 locations across 18 unchanged historical files; every offending blob matches origin/main 9074ced. The new ticket passes the actual home-path scanner in isolation. Following docs/agents/local-gates.md, filing uses the named SKIP=home-path baseline exception plus the ticket-graph check; this is not a claim that the full baseline gate passes. No historical receipts are rewritten here.
