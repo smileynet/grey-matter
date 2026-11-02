@@ -1,7 +1,7 @@
 ---
 id: "131"
 title: "Validate footprint guidance and inspector on macOS"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
@@ -62,3 +62,7 @@ verify the ticket's premises against current source and run its acceptance check
 Root's batch-mode, strict-known-host SSH attempt to the configured SpaceJam host (port 22)
 timed out. No macOS command or footprint acceptance probe executed. Mac availability or another
 connection was requested from the user; continue independent Windows/WSL work meanwhile.
+
+The user then installed this machine's public key and supplied a reachable LAN address.
+Direct batch-mode SSH to that address as the provided Mac account succeeded and reported
+Darwin/macOS 26.6.2. Access is now available; no footprint acceptance probe has run yet.
