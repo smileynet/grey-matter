@@ -116,9 +116,9 @@ The inspector reads and never writes. For each family (`.scratch/*`, ignored bui
 linked worktrees, `--path` folders) it reports logical and allocated size, owning ticket and
 status, tracked files citing it by exact sub-path with the resulting keep list, hard links,
 open files, and an outcome: delete, slim (keep the keep list), keep, ask, prune, or skip
-(written within the quiet floor, holding open files, or an active worktree). Delete/slim
-recommendations require the explicit owner, retention and dependency observations described
-in the [footprint inspector reference](references/inspection.md#preservation-input-and-recheck);
+(written within the quiet floor, holding open files, or an active worktree). Delete/slim/prune
+recommendations require an explicit owner, released retention disposition and fresh, complete
+dependency observation described in the [footprint inspector reference](references/inspection.md#preservation-input-and-recheck);
 missing or partial observations stay at ask. Rerun with `--recheck <saved.json>` immediately
 before using a recommendation. Recheck binds canonical scope, workspace, candidate inventory,
 preservation inputs and observable active dependencies; a changed or missing family means

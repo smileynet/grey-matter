@@ -131,17 +131,22 @@ node <skill-dir>/scripts/inspect-footprint.mjs --repo PATH [--path DIR]... [--ti
 | `--floor` / `--cap` | free-space floor (default 20GiB) and optional per-ticket total; breaking one exits 1 |
 | `--dedupe` | sha256 files whose size matches a tracked file, plus the LFS store; reports identical bytes. Opt-in: it reads every candidate file |
 | `--preservation FILE` | load explicit project ownership, retention and dependency observations (version 1; see below) |
-| `--recheck PRIOR.json` | compare preservation context and keep lists with a saved run; changed delete/slim families become `ask` and exit 1 |
+| `--recheck PRIOR.json` | compare preservation context and keep lists with a saved run; changed delete/slim/prune families become `ask` and exit 1 |
 | `--summary` | one line: free space, and the three largest families when free space is under `--top-under` (40GiB) |
 
 Output is JSON: `status` (`pass`, `review` when candidates exist or coverage is incomplete,
 `fail` when a limit breaks), `freeSpace` (under WSL, the lower of the distro and the Windows
 volume holding that distro's registered `ext4.vhdx`), `coverage`,
 `findings`, `families` sorted by size, and `conformance` (pytest retention, tracked
-.scratch` citations). Families report `logicalBytes`, `allocatedBytes` and
-`reclaimableBytes: null`; logical length and allocated estimates do not prove physical
-reclaim. Allocated bytes are an upper bound on copy-on-write filesystems. A hard-linked
-file's logical length appears at each path while the shared allocation counts once. Files dated before 2000 are counted but
+`.scratch` citations). Families report `logicalBytes`, `allocatedBytes` and
+`reclaimableBytes: null`; logical length and allocated measurements do not prove physical
+reclaim. `allocatedBytes` is null if the filesystem does not report blocks; `bytes` keeps
+the legacy estimate and falls back to logical length in that case. Coverage names the
+partial allocation probe, summaries label the logical fallback, and `--cap` reports an
+unverified finding instead of treating that fallback as allocation. On copy-on-write
+filesystems, reported allocated bytes are an upper bound. A hard-linked file's logical
+length appears at each path while the shared allocation counts once. `keepBytes` is null
+when retained-file allocation is unavailable; `keepLogicalBytes` remains available. Files dated before 2000 are counted but
 ignored for the newest write. A citation counts only by exact sub-path; a bare mention
 of the folder is a `lead`, which makes the outcome `ask`, never `delete`.
 The WSL host lookup matches the exact `WSL_DISTRO_NAME` to one HKCU Lxss registration,
@@ -149,7 +154,7 @@ then queries the volume containing its `BasePath\ext4.vhdx`; it never assumes C:
 `/mnt/c`. Missing, ambiguous, malformed or unavailable registration/volume data leaves
 host free space unmeasured and coverage incomplete. The summary names the missing backing
 volume and says the free-space floor is unverified. Exit 0 reports,
-1 means a limit broke or a keep list changed, 2 means input or inspection failed.
+1 means a limit broke, cap verification failed or preservation changed; 2 means input or inspection failed.
 
 Coverage is partial, and says so, where a probe is missing: open files come from
 `/proc` on Linux (other users' processes only as root), `lsof` elsewhere, and are
@@ -168,27 +173,40 @@ and absolute paths for `--path` roots outside the repo:
   "families": {
     "build": {
       "owner": "worker-170",
-      "retention": "keep report.json through ticket review",
-      "dependencies": { "complete": true, "active": [] }
+      "retention": { "disposition": "released", "note": "ticket evidence reviewed" },
+      "dependencies": {
+        "complete": true,
+        "active": [],
+        "provenance": "workspace session inventory",
+        "observedAt": "2026-11-02T12:00:00.000Z",
+        "freshForMinutes": 60
+      }
     }
   }
 }
 ```
 
-`owner` and `retention` must be nonempty strings. `dependencies.complete` records whether
-the project-side dependency observation is complete; `active` names known dependencies.
-Missing ownership/retention or incomplete dependency observations leave a candidate at
-`ask`; a known active dependency yields `skip`. A missing preservation file is reported as `coverage.preservation: not supplied`
-and also prevents delete/slim recommendations. An unavailable open-file probe likewise
-keeps candidates uncertain. `coverage.scopeIssues` reports overlapping roots and
-symlink-root escapes, plus missing or unreadable roots; conflicting roots are excluded
+`owner` must be a nonempty string. `retention.disposition` is `retained`, `released`, or
+`unknown`; only `released` can permit cleanup, while `retained` yields `keep` and unknown
+or missing disposition stays at `ask`. `dependencies.complete` records whether the
+project-side observation is complete; `active` names known dependencies. Dependency
+observations also require caller-declared `provenance`, UTC `observedAt`, and
+`freshForMinutes` from 1 to 1,440. An observation outside its freshness window is stale
+and leaves a candidate at `ask`; a fresh active dependency yields `skip`. Provenance,
+time and completeness are caller assertions, not independently verified facts. A missing
+preservation file is reported as `coverage.preservation: not supplied` and prevents
+delete/slim/prune recommendations. An unavailable open-file or allocation probe likewise
+keeps candidates uncertain. Unknown input fields are rejected. `coverage.scopeIssues` reports overlapping roots and
+symlink-root escapes, plus missing, unreadable or allocation-unavailable roots; conflicting roots are excluded
 from measurement, and symlink targets are not traversed.
 
-Each family snapshot binds the canonical repo and Git common directory, `HEAD`, project
+Each report has `reportVersion: 1` and a workspace/scope snapshot. Recheck rejects malformed
+or empty prior reports, and current candidates without an earlier actionable recommendation
+stay at `ask`. Each family snapshot binds the canonical repo and Git common directory, `HEAD`, project
 workspace label, canonical selected roots, candidate paths/types/sizes/timestamps,
 ownership/retention input, and observed/provided dependency state. Recheck immediately
 before using a report; a changed or missing family receives `preservation-changed` and
-cannot retain a delete/slim outcome. Citation changes still receive `keep-list-changed`.
+cannot retain a delete/slim/prune outcome. Citation changes still receive `keep-list-changed`.
 Candidate contents are not hashed: ordinary edits change recorded timestamps, but a
 same-size edit that preserves timestamps is outside this check. `dependencies.complete`
 is the project's assertion, not an independently verified registry result. The helper

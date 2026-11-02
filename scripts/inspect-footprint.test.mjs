@@ -4,7 +4,7 @@ import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { chmodSync, existsSync, linkSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, symlinkSync, utimesSync, writeFileSync, appendFileSync } from "node:fs";
+import { chmodSync, existsSync, linkSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, symlinkSync, utimesSync, writeFileSync, appendFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { delimiter, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -54,16 +54,16 @@ function fixture() {
   return { base, repo };
 }
 
-function preservationState({ base, repo }, families = {}, workspace = "fixture-workspace") {
-  const path = join(base, "preservation.json");
+function preservationState({ base, repo }, families = {}, workspace = "fixture-workspace", filename = "preservation.json") {
+  const path = join(base, filename);
   writeFileSync(path, JSON.stringify({ version: 1, workspace, families }));
   return path;
 }
 
 const ownedCandidate = {
   owner: "fixture-worker",
-  retention: "ticket evidence reviewed",
-  dependencies: { complete: true, active: [] },
+  retention: { disposition: "released", note: "ticket evidence reviewed" },
+  dependencies: { complete: true, active: [], provenance: "synthetic fixture", observedAt: new Date().toISOString(), freshForMinutes: 60 },
 };
 
 function registeredHostVolume() {
@@ -119,7 +119,7 @@ test("seeded families get the right facts and outcomes, and the run goes red", a
     const active = r.families.find((f) => f.path.endsWith("wt-active"));
     assert.equal(active.outcome, "skip");
     assert.match(active.activeReasons.join(), /active worktree .* on feature/);
-    assert.equal(r.families.find((f) => f.path.endsWith("wt-gone")).outcome, "prune");
+    assert.equal(r.families.find((f) => f.path.endsWith("wt-gone")).outcome, "ask");
     assert.deepEqual(r.findings.map((f) => [f.kind, f.ticket]), [["ticket-cap", 170]]);
     assert.equal(r.status, "fail");
   } finally { holder.kill(); }
@@ -163,7 +163,7 @@ test("unknown ownership and incomplete dependency observations stay review-only"
 
   const { base: ownedDir, repo: ownedRepo } = fixture();
   const preservation = preservationState({ base: ownedDir, repo: ownedRepo }, {
-    ".scratch/t170-run-1": { ...ownedCandidate, dependencies: { complete: false, active: [] } },
+    ".scratch/t170-run-1": { ...ownedCandidate, dependencies: { ...ownedCandidate.dependencies, complete: false } },
   });
   const partial = inspect({ ...base, repo: ownedRepo, preservation });
   assert.equal(family(partial, ".scratch/t170-run-1").dependencyStatus, "partial");
@@ -184,6 +184,99 @@ test("unknown ownership and incomplete dependency observations stay review-only"
   const unavailable = inspect({ ...base, repo, preservation: missingOwner, paths: [missing] });
   assert.equal(family(unavailable, missing).outcome, "ask");
   assert.ok(unavailable.coverage.scopeIssues.some((issue) => issue.kind === "missing-root"));
+});
+
+test("retention disposition and allocation uncertainty fail closed", () => {
+  const { base: dir, repo } = fixture();
+  const held = preservationState({ base: dir, repo }, {
+    ".scratch/t170-run-1": { ...ownedCandidate, retention: { disposition: "retained", note: "keep until owner review" } },
+  });
+  assert.equal(family(inspect({ ...base, repo, preservation: held }), ".scratch/t170-run-1").outcome, "keep");
+
+  const released = preservationState({ base: dir, repo }, { ".scratch/t170-run-1": ownedCandidate });
+  const noBlocks = (path, options) => {
+    const st = lstatSync(path, options);
+    return {
+      size: st.size, blocks: undefined, mtimeMs: st.mtimeMs, ctimeMs: st.ctimeMs,
+      nlink: st.nlink, dev: st.dev, ino: st.ino,
+      isDirectory: () => st.isDirectory(), isFile: () => st.isFile(), isSymbolicLink: () => st.isSymbolicLink(),
+    };
+  };
+  const report = inspect({ ...base, repo, preservation: released, cap: 1024 }, Date.now(), noBlocks);
+  const candidate = family(report, ".scratch/t170-run-1");
+  assert.equal(candidate.outcome, "ask");
+  assert.equal(candidate.allocationStatus, "unavailable");
+  assert.equal(candidate.allocatedBytes, null);
+  assert.ok(candidate.logicalBytes > 0);
+  assert.equal(candidate.reclaimableBytes, null);
+  assert.equal(report.coverage.allocation, "partial");
+  assert.equal(family(report, ".scratch/t170-linked").allocatedBytes, null);
+  assert.ok(report.findings.some((finding) => finding.kind === "ticket-cap-unverified"));
+  assert.match(summary(report, Infinity), /logical \(allocation unavailable\)/);
+
+  const expired = inspect({ ...base, repo, preservation: released }, Date.now() + 61 * 60000);
+  assert.equal(family(expired, ".scratch/t170-run-1").dependencyStatus, "stale");
+  assert.equal(family(expired, ".scratch/t170-run-1").outcome, "ask");
+});
+
+test("recheck rejects malformed or empty snapshots and does not authorize new recommendations", () => {
+  const { base: dir, repo } = fixture();
+  const released = preservationState({ base: dir, repo }, { ".scratch/t170-run-1": ownedCandidate });
+  const prior = join(dir, "prior.json");
+  for (const invalid of [{}, { families: [] }]) {
+    writeFileSync(prior, JSON.stringify(invalid));
+    assert.throws(() => inspect({ ...base, repo, preservation: released, recheck: prior }), /Recheck input/);
+    const cli = spawnSync(process.execPath, [SCRIPT, "--repo", repo, "--floor", "0B", "--quiet", "0m", "--recheck", prior], { encoding: "utf8" });
+    assert.equal(cli.status, 2, cli.stdout + cli.stderr);
+  }
+
+  const held = preservationState({ base: dir, repo }, {
+    ".scratch/t170-run-1": { ...ownedCandidate, retention: { disposition: "retained" } },
+  }, "fixture-workspace", "held.json");
+  writeFileSync(prior, JSON.stringify(inspect({ ...base, repo, preservation: held })));
+  const newlyReleased = inspect({ ...base, repo, preservation: released, recheck: prior });
+  assert.equal(family(newlyReleased, ".scratch/t170-run-1").outcome, "ask", JSON.stringify({ family: family(newlyReleased, ".scratch/t170-run-1"), findings: newlyReleased.findings }));
+  assert.ok(newlyReleased.findings.some((finding) => finding.kind === "preservation-changed"));
+
+  const valid = inspect({ ...base, repo, preservation: released });
+  writeFileSync(prior, JSON.stringify(valid));
+  const unchanged = inspect({ ...base, repo, preservation: released, recheck: prior });
+  assert.equal(family(unchanged, ".scratch/t170-run-1").outcome, "delete");
+  assert.deepEqual(unchanged.findings, []);
+
+  const missingFamilyState = structuredClone(valid);
+  missingFamilyState.families.find((item) => item.outcome === "delete").preservationState = null;
+  writeFileSync(prior, JSON.stringify(missingFamilyState));
+  assert.throws(() => inspect({ ...base, repo, preservation: released, recheck: prior }), /invalid family snapshot/);
+});
+
+test("preservation input rejects unknown fields and missing dependency provenance", () => {
+  const { base: dir, repo } = fixture();
+  const file = join(dir, "invalid-preservation.json");
+  for (const value of [
+    { version: 1, workspace: "fixture", families: {}, typo: true },
+    { version: 1, workspace: "fixture", families: { build: { owner: "worker", retention: { disposition: "released" }, dependencies: { complete: true, active: [] } } } },
+  ]) {
+    writeFileSync(file, JSON.stringify(value));
+    assert.throws(() => inspect({ ...base, repo, preservation: file }), /Preservation input|Invalid dependency observation|needs provenance/);
+  }
+});
+
+test("prunable worktrees require released ownership and their recheck catches retention changes", () => {
+  const { base: dir, repo } = fixture();
+  const gone = join(dir, "wt-gone");
+  const released = preservationState({ base: dir, repo }, { [gone.replaceAll("\\", "/")]: ownedCandidate });
+  const prior = join(dir, "prior.json");
+  const before = inspect({ ...base, repo, preservation: released });
+  assert.equal(family(before, gone).outcome, "prune");
+  writeFileSync(prior, JSON.stringify(before));
+
+  const retained = preservationState({ base: dir, repo }, {
+    [gone.replaceAll("\\", "/")]: { ...ownedCandidate, retention: { disposition: "retained", note: "hold worktree metadata" } },
+  });
+  const current = inspect({ ...base, repo, preservation: retained, recheck: prior });
+  assert.equal(family(current, gone).outcome, "keep");
+  assert.ok(current.findings.some((finding) => finding.kind === "preservation-changed" && finding.path === gone));
 });
 
 test("recheck makes a candidate stale when scope, inventory, ownership, workspace, or dependencies change", () => {
@@ -224,7 +317,7 @@ test("recheck makes a candidate stale when scope, inventory, ownership, workspac
   check(undefined, { open: new Set([join(repo, ".scratch/t170-run-1/blob")]) });
   check(() => {
     preservation = preservationState({ base: dir, repo }, {
-      ".scratch/t170-run-1": { ...ownedCandidate, dependencies: { complete: true, active: ["session-9"] } },
+      ".scratch/t170-run-1": { ...ownedCandidate, dependencies: { ...ownedCandidate.dependencies, active: ["session-9"] } },
     });
   });
 });
@@ -286,25 +379,29 @@ test("WSL free space is bounded by the Windows volume containing this distro VHD
 });
 
 test("WSL host-volume lookup fails closed for ambiguous or unavailable registrations", { skip: !onWsl && "requires WSL2 and its Windows host" }, () => {
-  const { repo } = fixture(), dir = mkdtempSync(join(tmpdir(), "footprint-powershell-")), executable = join(dir, "powershell.exe");
+  const { base: fixtureBase, repo } = fixture(), dir = mkdtempSync(join(tmpdir(), "footprint-powershell-")), executable = join(dir, "powershell.exe");
   made.push(dir);
   writeFileSync(executable, "#!/bin/sh\n");
   chmodSync(executable, 0o755);
   const originalPath = process.env.PATH, originalDistro = process.env.WSL_DISTRO_NAME;
   const name = "fixture distro ; $(touch injected) Ω";
+  const preservation = preservationState({ base: fixtureBase, repo }, { ".scratch/t170-run-1": ownedCandidate });
   process.env.PATH = `${dir}${delimiter}${originalPath ?? ""}`;
   process.env.WSL_DISTRO_NAME = name;
   const record = (overrides = {}) => ({ Name: name, BasePath: "R:\\fixture with spaces\\$literal & path", VhdExists: true, Drive: "R", VolumeId: "volume-r", Free: "1234", Total: "9876", ...overrides });
-  const run = (response, exit = 0, floor = 0) => {
+  const run = (response, exit = 0, floor = 0, recheck) => {
     const encoded = Buffer.from(JSON.stringify(response), "utf8").toString("base64");
     writeFileSync(executable, `#!/bin/sh\nprintf '%s\\n' '${encoded}'\nexit ${exit}\n`);
     chmodSync(executable, 0o755);
-    return inspect({ ...base, repo, floor });
+    return inspect({ ...base, repo, floor, preservation, recheck });
   };
   try {
     const valid = run([record()]);
     assert.equal(valid.freeSpace.entries.find((entry) => entry.path === "Windows R:").free, 1234);
     assert.equal(valid.coverage.hostDrive, "registered R: volume for this WSL distro");
+    assert.equal(family(valid, ".scratch/t170-run-1").outcome, "delete");
+    const prior = join(fixtureBase, "valid-host-report.json");
+    writeFileSync(prior, JSON.stringify(valid));
     const volumeId = "\\\\?\\Volume{12345678-1234-1234-1234-123456789abc}\\";
     const volumeIdResult = run([record({ Drive: "", VolumeId: volumeId })]);
     assert.equal(volumeIdResult.coverage.hostDrive, `registered ${volumeId} volume for this WSL distro`);
@@ -324,10 +421,12 @@ test("WSL host-volume lookup fails closed for ambiguous or unavailable registrat
       ["object volume identity", [record({ Drive: "invalid", VolumeId: { value: "R:" } })], 0],
       ["empty volume identity", [record({ Drive: "invalid", VolumeId: "" })], 0],
     ]) {
-      const result = run(response, exit);
+      const result = run(response, exit, 0, prior);
       assert.equal(result.coverage.complete, false, label);
       assert.equal(result.coverage.hostDrive, "unavailable", label);
       assert.equal(result.status, "review", label);
+      assert.equal(family(result, ".scratch/t170-run-1").outcome, "ask", label);
+      assert.ok(result.findings.some((finding) => finding.kind === "preservation-changed"), label);
       assert.equal(result.freeSpace.entries.some((entry) => entry.path.startsWith("Windows ")), false, label);
       assert.match(summary(result, 0), /Windows backing volume unavailable .*; free-space floor unverified/, label);
     }
