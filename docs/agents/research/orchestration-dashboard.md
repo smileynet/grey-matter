@@ -37,3 +37,18 @@ rather than incorrectly expecting full-text search to return one row.
 The custom two-tab page follows the user's explicit layout rather than the shared
 three-tab renderer. Its dedicated browser test verifies that contract; the stock
 three-tab checker is inapplicable.
+
+Final verification on 2026-11-02: both local-file browser scenarios passed again
+after closure (18 remaining / 14 done). All 20 pre-merge and seven pre-push checks
+passed after correcting the temporary-path documentation and declaring the manual
+browser check. The independent critic accepted the final snapshot recorded in
+`evidence/orchestration-dashboard/final-receipt.json`; the original pre-close
+receipt and captures remain as historical evidence. The dependency diagram is
+internally scrollable, including on a phone. This is rendered-behavior evidence,
+not a usability study or proof of every agent capability.
+
+Artifact disposition: promote both capture sets and small review receipts (about
+1.8 MB total). Recycle the owned disposable browser module directory (13,658,897
+bytes) and temporary capture backup (914,497 bytes) after final verification.
+No browser binary was downloaded. Existing unrelated repository scratch and build
+artifacts were left untouched; none are required to open the offline page.
