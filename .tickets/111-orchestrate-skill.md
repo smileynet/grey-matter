@@ -5,6 +5,10 @@ status: in_progress
 blocked_by: ["124", "125", "126", "127", "128", "129"]
 tags: ["stream:tooling", "type:enhancement"]
 priority: high
+validation_criteria: 
+  - "Structure and routing pass syntax, invocation, and documentation checks plus independent Standards and Spec reviews."
+  - "Live Claude Code and kiro-cli fixture runs evidence claims, isolated worktrees, review before close, per-ticket dashboard/chat visuals, T2 question handling, contextual landing, and T5-only escalation."
+  - "Fresh pre-merge and pre-push gates pass for the shipped change; deployed validator resources and artifact disposition are recorded."
 ---
 
 # Build the orchestrate skill (proposal 17): conductor over the ticket frontier with reviewer gate and per-harness references
