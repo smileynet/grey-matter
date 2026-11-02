@@ -1,7 +1,7 @@
 ---
 id: "159"
 title: "Spike: Codex multi_agent_v2 with the agent message board and wake-on-message"
-status: open
+status: in_progress
 blocked_by: ["124","127"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
