@@ -2,7 +2,7 @@
 id: "172"
 title: "Spike: Claude Code fast mode speed, quality and credit cost on orchestrate workers"
 status: open
-blocked_by: []
+blocked_by: ["174"]
 tags: ["stream:tooling", "type:research"]
 ---
 
