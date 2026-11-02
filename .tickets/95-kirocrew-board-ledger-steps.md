@@ -5,6 +5,10 @@ status: in_progress
 blocked_by: ["111"]
 priority: low
 tags: ["stream:tooling", "type:enhancement"]
+validation_criteria: 
+  - "Shared harness reference records placement and guards each optional tool independently; orient and implement route to it and other harnesses skip."
+  - "Native Kiro Crew fixture mirrors successful claim to implementation with ticket ledger fields, waiting to review, and successful close to done; absent tools skip without changing tracker state."
+  - "Fresh pre-merge/pre-push gates and independent Standards/Spec review pass; deployment and artifact cleanup are evidenced."
 ---
 
 # orient/implement: optional Kiro Crew chat_tag and session_ledger steps
