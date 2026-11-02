@@ -1,7 +1,7 @@
 ---
 id: "119"
 title: "Choose the cheapest faithful test environment with explicit lifecycle gates"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "Guidance maps each assertion to its lowest faithful environment and separates cost from criticality"
@@ -81,13 +81,13 @@ hold for host sudo. Do not upgrade those limits into completed evidence.
 
 ## Acceptance criteria
 
-- [ ] Guidance selects an environment from the assertion and states cost and criticality separately.
-- [ ] Guidance distinguishes host/API, real provider/process, web mock, native UI, physical-device and distribution-provider claims.
-- [ ] A cadence table covers each logical change, pre-merge, frozen release and post-availability physical pilot.
-- [ ] Evidence/reuse rules bind results to relevant inputs, reject zero-test passes and preserve failed attempts.
-- [ ] Worked scenarios route byte/time/auth cases left, process/DAV/rollback cases to integration, controls to native UI and installed-update retention to a physical pilot.
-- [ ] Scenario review catches a JavaScript stand-in for a native parser and a simulator-only claim of phone retention.
-- [ ] Existing related tickets are cross-referenced without duplicating their ownership; applicable fixtures and `node scripts/gate.mjs pre-merge` pass.
+- [x] Guidance selects an environment from the assertion and states cost and criticality separately.
+- [x] Guidance distinguishes host/API, real provider/process, web mock, native UI, physical-device and distribution-provider claims.
+- [x] A cadence table covers each logical change, pre-merge, frozen release and post-availability physical pilot.
+- [x] Evidence/reuse rules bind results to relevant inputs, reject zero-test passes and preserve failed attempts.
+- [x] Worked scenarios route byte/time/auth cases left, process/DAV/rollback cases to integration, controls to native UI and installed-update retention to a physical pilot.
+- [x] Scenario review catches a JavaScript stand-in for a native parser and a simulator-only claim of phone retention.
+- [x] Existing related tickets are cross-referenced without duplicating their ownership; applicable fixtures and `node scripts/gate.mjs pre-merge` pass.
 
 ## October 31 follow-up
 
@@ -129,3 +129,12 @@ scratch logs (8,146 bytes) recycled after promotion. Keep the current `dist/agy-
 (1,303 bytes), empty `review-installer-safety`, `t50-fixtures` (1,152,040 bytes),
 `learning-library-sync-check.log` (108,823 bytes), and the other session's active `t155-probe`
 (842,044,678 bytes at inspection). That session's uncommitted orchestration files remain untouched.
+
+## Resolution (2026-11-02)
+
+done: select the cheapest faithful environment per assertion, separate cost from criticality and bind promotion/reuse to lifecycle evidence. One shared ladder with workflow pointers; no new gate or device matrix. Promoted review/verification/artifact details into this ticket; recycled four owned logs (8146bytes). Keep current 8640192-byte deployment package until next deploy. Other session scratch and uncommitted orchestration work preserved. Existing generic-icon advisory remains.
+
+### Verification
+1. ✓ Guidance maps each assertion to its lowest faithful environment and separates cost from criticality — "Shared ladder maps assertion to actual implementation/seam, environment, added boundary/exclusion, measured cost, criticality and lifecycle gate. TDD/implement/implement-spec point to it. Standards clear; final Spec review confirms all seven acceptance criteria."
+2. ✓ Worked scenarios distinguish change, merge, release, and physical-pilot gates with evidence reuse limits — "Worked cases reject JavaScript native-parser substitution and simulator-only phone retention; route byte/time/auth to actual host code, DAV/process/rollback to integration, native controls to capable UI driver, phone retention to approved post-availability pilot. Four cadence gates and matching-input reuse/fresh mutable-provider read-back rules reviewed."
+3. ✓ Applicable guidance fixtures and node scripts/gate.mjs pre-merge pass — "Candidate c858c6a: node scripts/gate.mjs pre-merge --base b66576c --include agent-guidance --include skill-syntax-fixtures completed 3/3 commands. Explicit guidance/syntax fixtures passed16/16 with no skips; docs consistency passed50skills; pre-push5/5 selected commands and deploy check/default deployment passed. No device/provider validation claimed."
