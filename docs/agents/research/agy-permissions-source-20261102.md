@@ -1,6 +1,6 @@
 # Antigravity CLI permission source guide
 
-**Checked:** 2026-11-02. Official docs were live pages opened on this date. Local CLI: `agy 1.4.12` (`C:\Users\uosmi\AppData\Local\agy\bin\agy.exe`). This records documented behavior and local CLI metadata only; no model calls or settings changes were made. CLI permissions and the older Antigravity App/previous-permissions section are distinct surfaces; findings below use the current **Antigravity CLI** section unless explicitly marked.
+**Checked:** 2026-11-02. Official docs were live pages opened on this date. Local CLI: `agy 1.4.12` (resolved from `%LOCALAPPDATA%\agy\bin\agy.exe`). This records documented behavior and local CLI metadata only; no model calls or settings changes were made. CLI permissions and the older Antigravity App/previous-permissions section are distinct surfaces; findings below use the current **Antigravity CLI** section unless explicitly marked.
 
 ## Permission rules
 
