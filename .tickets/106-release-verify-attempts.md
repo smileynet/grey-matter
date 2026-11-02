@@ -1,7 +1,7 @@
 ---
 id: "106"
 title: "Release verify keeps numbered attempts instead of overwriting evidence"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "The release skill and preparation doc say to use a new numbered folder per attempt and keep failed ones"
@@ -29,9 +29,9 @@ PATH failure. Fix the instructions, not the code:
 
 ## Acceptance criteria
 
-- [ ] The release skill and preparation doc say to use a new numbered folder per attempt and keep failed ones
-- [ ] Ticket 97's rule 3 is reconciled with this
-- [ ] `node scripts/gate.mjs pre-merge` passes
+- [x] The release skill and preparation doc say to use a new numbered folder per attempt and keep failed ones
+- [x] Ticket 97's rule 3 is reconciled with this
+- [x] `node scripts/gate.mjs pre-merge` passes
 
 ## Workstream reconciliation 2026-11-02
 
@@ -57,3 +57,12 @@ remains pending because browser policy blocked local-file access; human review w
 Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
 integration; local commit history and this evidence remain in Git. The current deployment
 package is retained until the next deployment.
+
+## Resolution (2026-11-02)
+
+done: worker implementation and critic feedback integrated by root, pushed and deployed; evidence/dashboard linked in ticket. Recycled clean merged worker106 worktree10249922bytes. Shared stream helpers kept until orchestration finishes; deployment package until next deploy. Dashboard structural/source checks pass while actual visual acceptance stays pending; numbered paths are operator guidance, not new tool enforcement.
+
+### Verification
+1. ✓ The release skill and preparation doc say to use a new numbered folder per attempt and keep failed ones — "Worker2c6e0a updates release skill and preparation examples to use fresh numbered verify/product/native/probe invocation folders; reuse/delete-to-retry prohibited. Critic accepted Spec and Standards."
+2. ✓ Ticket 97's rule 3 is reconciled with this — "Maintained artifact-hygiene retention rule reconciles historic97: failures/cited evidence remain until findings promoted and recovery or release record no longer needs originals. Closed97 untouched; existing output refusal regression41/41 passed in worker."
+3. ✓ `node scripts/gate.mjs pre-merge` passes — "Root after merge forced main premerge3/3 commands and prepush5/5 succeeded; deploy check and default deploy50skills passed. No release publication performed. Worker defaultpremerge0selection was not counted as a test pass."
