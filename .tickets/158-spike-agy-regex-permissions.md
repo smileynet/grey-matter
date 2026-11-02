@@ -29,3 +29,18 @@ Source: [harness experimental features](../docs/agents/research/harness-experime
 ## Reconciliation (2026-11-02)
 
 Preparation in this chat created a 98,400-byte private fixture and its baseline npm test passed 1/1; no regex or write-boundary probe has run. Retain it only through this ticket, then recycle it. Current first-party Windows guidance recommends regex matching; workspace writes may be implicitly allowed, so a successful in-workspace write alone does not prove the write_file rule bounded access. Use harmless negative controls and verify file bytes/command results.
+
+## Live probe update (2026-11-02, after preparation)
+
+The preparation note above is historical. The 22-case matrix now records working
+exact regex and literal command grants, rejected near misses, an external folder
+grant with positive/negative byte checks, and explicit workspace denial. An
+overlapping regex Ask/Allow mismatch reproduced twice is separately tracked by
+#193, blocked on this evidence ticket; it is not a blocker on every #157 workflow.
+The earlier prepared fixture was not located in bounded current scratch/TEMP/
+D:/tmp searches; no deletion of that unknown location is claimed. Fresh probe
+folders have an explicit audit/cleanup disposition in the native receipt.
+
+Read the dated Ticket 158 section in
+`docs/agents/research/harness-experimental-features-20261101.md` and
+`docs/agents/research/evidence/agy-permissions-20261102.json`.

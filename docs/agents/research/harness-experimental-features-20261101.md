@@ -1,5 +1,117 @@
 # Harness experimental features: follow-up spikes and QoL options
 
+## Ticket 158: narrower agy permissions (2026-11-02)
+
+**Answer: yes, for the tested fixed commands and directory.** On Windows agy
+1.4.12, headless workers ran selected `git`, `npm` and `tkt` commands under narrow
+session-only grants. A separate Ask-regex overlap behaved unexpectedly and is
+tracked in #193. This is rule-matching evidence, not an OS sandbox qualification.
+
+The [22-case native receipt](evidence/agy-permissions-20261102.json) contains the
+exact settings, attempted native tool parameters, native outputs/errors and file
+bytes. The [primary-source guide](agy-permissions-source-20261102.md) separates
+documented behavior from observed results. Binary SHA-256 is recorded; all runs
+used Gemini 3.8 Flash Low, `accept-edits`, `toolPermission: request-review`, no
+skip-permissions flag and no sandbox flag. Rules were passed with `--settings
+<private-json-file>` and were never installed globally.
+
+### Observed command controls
+
+| Case | Native observation | Classification |
+| --- | --- | --- |
+| Empty allow/ask/deny; `git --version` | `denied_actions` contains `command`; stderr says headless cannot prompt | Pass: expected baseline rejection |
+| Allow `command(regex:^git --version$)` | `run_command` DONE, exit 0, `git version 2.53.0.windows.2` | Pass: exact positive |
+| Same rule; `git status --short` | Native automatic denial | Pass: near-miss rejection |
+| Same rule; `git --version; echo T158_CHAIN > chain-marker.txt` | Native automatic denial; root confirmed marker absent | Pass: this composition rejected |
+| Allow `command(regex:^npm test$)` | Native TAP output: 1 test passed, zero failed/skipped/cancelled/todo | Pass: intended fixture test ran |
+| Allow `command(regex:^tkt ready$)` | Native output lists the four fixture frontier tickets | Pass: intended ticket read ran |
+| Exact literal grants for `git --version` and `git rev-parse --show-toplevel` | Both native commands completed; latter returned the fixture root | Pass: literal narrow rules also worked now |
+
+These current controls supersede a recommendation to assume that only
+`command(*)` works. They do not erase the earlier #129 observation. The original
+exact `git rev-parse --show-toplevel` command now works with an exact literal
+grant under the explicit session policy above; the cause of the historical
+difference was not established. Do not generalize these fixed-command grants to
+all subcommands or arguments, or to shell/parser bypass resistance.
+
+### Observed precedence gap
+
+**Assertion failure, reproduced twice:** put the identical
+`command(regex:^git --version$)` in both Allow and Ask. The native tool still ran
+`git --version` with exit 0. The same Allow with literal Ask
+`command(git --version)` or broad Ask `command(*)` was automatically denied.
+Putting the regex in Deny alongside Allow produced native ERROR:
+“Matches user-configured deny rule.” No human approval was supplied.
+
+An Ask-only regex case was denied, but that alone does not prove its Ask rule
+matched, since the default also asks. A `list_permissions` attempt returned a
+model assertion that the tool was unavailable even though init advertised it;
+there was no native tool invocation. Effective scope enumeration is therefore
+**unverified**, and model prose was not treated as tool absence. #193 owns the
+matching/precedence diagnosis. Until explained, do not depend on regex Ask
+overriding matching Allow rules. The literal/broad Ask and regex Deny controls
+are bounded alternatives, not a complete permission strategy.
+
+### Observed file controls
+
+The first three write cases used a sibling under system TEMP. All succeeded,
+including the no-grant baseline and the near-miss directory. **Uninformative for
+confinement:** the [first-party CLI changelog](https://antigravity.google/docs/changelog?tab=cli) documents TEMP writes as a default
+grant since 1.1.9. That is separate from the workspace default; those positives
+were not counted as evidence that a directory rule bounded access.
+
+Fresh controls moved outside both the fixture workspace and system TEMP, to the
+owned disposable `D:/code/t158-outside-1` folder, and explicitly set
+`allowNonWorkspaceAccess: false`:
+
+- **Pass — baseline rejection:** no file grant, target `allowed/baseline.txt`;
+  native `write_file` denial and root confirmed the file absent.
+- **Pass — directory grant:** Allow `write_file(D:/code/t158-outside-1/allowed)`;
+  native tool DONE and `allowed/nested/inside.txt` contained exactly
+  `T158_ALLOW_DIR` (root-read bytes).
+- **Pass — sibling rejected:** same grant, target `allowed-near/outside.txt`;
+  native denial and root confirmed it absent.
+- **Pass — explicit workspace denial:** Deny the fixture's `permission-protected`
+  directory; its existing `blocked.txt` remained exactly `BEFORE_T158`, and the
+  native tool returned a permission error. This checked a deny overriding an
+  implicit workspace write grant, not an allow-list confinement of the workspace.
+
+### Scope and remaining unknowns
+
+The three inspected global files (CLI settings, shared config, hooks) had the
+same SHA-256 before and after all 22 calls. No global settings were edited.
+Inherited Project/Shared scopes were not fully enumerated; the baseline controls
+establish rejection only for the specific ungranted commands/paths exercised.
+The host's existing CLI settings contain a Windows escape sequence a strict JSON
+reader rejected; it was left untouched, and no parser behavior was inferred from
+that separate reader error. Every model call used session JSON written by the
+probe. All CLI exits were 0, including denied actions; native events and actual
+file bytes, not exits or model assertions, determine the classifications.
+
+**Couldn't verify:** why overlapping regex Ask failed; historical #129 cause;
+other accounts/OSes/builds; all shell composition or quoting; OS containment;
+whether `--settings` replaces rather than combines every inherited scope;
+interactive approval flow; native workflow/subagent propagation (owned by #157).
+
+The [independent audit](agy-permissions-20261102-audit.md) rated the bounded
+conclusion 8/10 after checking all 22 private cases, native histories, the
+external file bytes and current primary sources. It corrected an initial audit
+path error before finishing; its raw-evidence limitation no longer applies.
+
+**Artifact disposition:** after that audit, recycled the owned private probe,
+98,411-byte fixture, 41-byte TEMP write controls, 14-byte external write controls,
+and 32 native history paths (7,474,074 bytes). Six native conversations and their
+brain folders (12 paths, 2,797,398 bytes) remain only for #193's diagnosis; the
+receipt lists exact IDs and the close-of-#193 removal condition. All 22 CLI
+parents were waited to exit; a later PID-only check briefly matched a reused
+process ID, so no process was signaled on that basis. No recorded `agy.exe`
+identity remained at final check. Shared native backend daemons were neither
+attributed nor terminated. The existing global CLI settings (225 bytes), shared
+config (748 bytes) and hooks (383 bytes) were left unchanged. The earlier prepared
+98,400-byte fixture mentioned in the ticket was not found by the bounded search;
+no deletion of that unknown location is claimed. The browser module remains only
+through final dashboard verification/publication, then is recycled.
+
 ## Ticket 156: Mate restart and report recovery (2026-11-02)
 
 **Answer:** yes for the tested graceful restart between worker turns. The same

@@ -3,6 +3,16 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "narrow-actions", "state": "partial", "label": "Matching confirmed; approval overlap unresolved",
+      "title": "Give a worker access to a smaller set of actions",
+      "value": "Selected Git, test and ticket-reading commands ran with narrow grants. A folder grant allowed a nested file while rejecting a nearby sibling path.",
+      "diagramLabel": "Observed positive and negative controls", "steps": ["Grant a named action", "Matching action runs", "Nearby action stops"],
+      "limit": "A regex approval rule did not pause an action already allowed by the same regex. That needs investigation. These checks do not establish whole-machine confinement.",
+      "details": "The headless Windows agy trial checked native tool results and actual file bytes. Exact literal grants also worked. TEMP writes have a default grant, so the path test moved outside TEMP and the workspace. Explicit denial worked. No global settings changed; inherited permission scopes were not fully enumerated. The approval-overlap follow-up is separate from the working narrow matching cases.",
+      "tickets": ["158", "193"],
+      "sources": [{"label": "Narrow permission trials and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-158-narrower-agy-permissions-2026-11-02"}]
+    },
+    {
       "id": "mate-recovery", "state": "partial", "label": "Recovery confirmed; planning needs oversight",
       "title": "Resume a worker after a gateway restart",
       "value": "A standing teammate reconnected with the same worker after a graceful restart. The worker remembered its earlier reply, and its fresh report woke the teammate.",
@@ -90,7 +100,7 @@
     "155": ["Check mixed-backend setup", "Identify whether the intended conductor/worker backend split can be configured."],
     "156": ["Recover Mate work after restart", "Resume a worker after a graceful restart; keep task requirements and acceptance under independent oversight."],
     "157": ["Run native Antigravity workflows", "Find whether native workflows can coordinate isolated workers and role-specific models."],
-    "158": ["Narrow command permissions", "Find a working grant smaller than allowing every shell command."],
+    "158": ["Narrow command permissions", "Allow fixed commands and a selected folder, with tested rejection controls and a separate approval-overlap caveat."],
     "159": ["Coordinate messages and wake-ups", "Test available Codex message-board and wake behavior without changing global settings."],
     "160": ["Follow background sessions", "Find whether background workers and idle notices fit the review-and-land loop."],
     "161": ["Run native Kiro workflows", "Test dispatch, review, pause, resume and retry through a workflow recipe."],
@@ -109,6 +119,7 @@
     "188": ["Restore Codex tool execution", "Diagnose the missing companion host before claiming a tool-capable lane."],
     "189": ["Qualify clean agent shutdown", "Separate successful turns from process settlement and find a supported shutdown path."],
     "190": ["Correct host-owned sign-in routing", "Find a supported integration remedy before relying on Crew-owned relay identity."],
-    "191": ["See findings and the ticket flow", "Review this effort through clear findings and an expandable, evidence-linked work log."]
+    "191": ["See findings and the ticket flow", "Review this effort through clear findings and an expandable, evidence-linked work log."],
+    "193": ["Check overlapping approval rules", "Explain why a regex approval rule did not pause a command already allowed by the same regex."]
   }
 }

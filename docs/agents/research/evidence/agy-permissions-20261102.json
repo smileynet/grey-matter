@@ -1,0 +1,1436 @@
+{
+  "date": "2026-11-02",
+  "agy_version": "1.4.12",
+  "agy_sha256": "b4bbcc9f65d355bc84523d4f43e1ead34992890baf60c24e4ccbf605e2da6858",
+  "model": "gemini-3.8-flash-low",
+  "session_settings": {
+    "toolPermission": "request-review",
+    "agentMode": "accept-edits",
+    "allowNonWorkspaceAccess": "explicit false in later controls; earlier runs used default"
+  },
+  "fixture_tree": "7fd72339921451e85440698acda748c0bde512bb",
+  "settings_scope": "session-only JSON files; no skip-permissions or sandbox flag",
+  "global_before": {
+    ".gemini\\antigravity-cli\\settings.json": "baed97c8b58059afcb2e5a920907aee6d15de77aabd79e1a4b9677b22e62ebd9",
+    ".gemini\\config\\config.json": "5bec2395036ffcb572cb7e1b292478e1cb6136e4df87c2d106d5dcf808b4dd56",
+    ".gemini\\config\\hooks.json": "6dbc89ccb679d4079d0590075089b8a4fd819175fcedea8833605e128f61ab63"
+  },
+  "global_after": {
+    ".gemini\\antigravity-cli\\settings.json": "baed97c8b58059afcb2e5a920907aee6d15de77aabd79e1a4b9677b22e62ebd9",
+    ".gemini\\config\\config.json": "5bec2395036ffcb572cb7e1b292478e1cb6136e4df87c2d106d5dcf808b4dd56",
+    ".gemini\\config\\hooks.json": "6dbc89ccb679d4079d0590075089b8a4fd819175fcedea8833605e128f61ab63"
+  },
+  "global_config_bytes_unchanged": true,
+  "cases": [
+    {
+      "name": "ask-broad-over-allow",
+      "command": "git --version",
+      "rules": {
+        "allow": [
+          "command(regex:^git --version$)"
+        ],
+        "ask": [
+          "command(*)"
+        ],
+        "deny": []
+      },
+      "pid": 27420,
+      "exit_code": 0,
+      "seconds": 3.84,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "command(regex:^git --version$)"
+          ],
+          "ask": [
+            "command(*)"
+          ],
+          "deny": []
+        }
+      },
+      "conversation_id": "f8f668b1-1908-48e3-8db8-6f6a4870ecd9",
+      "cli_status": "SUCCESS",
+      "denied_actions": [
+        {
+          "action": "command",
+          "display_name": "RunCommand"
+        }
+      ],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "ERROR",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            },
+            "error": {
+              "type": "TOOL_ERROR",
+              "message": "permission check failed for unsandboxed \"git --version\": user denied permission to run command:\ngit --version\nDo not attempt to circumvent this denial by rephrasing the command, using alternative tools/scripts (e.g. python, sh, curl), or accessing the same target resource. Proceed without performing this action."
+            }
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: expected native permission rejection"
+    },
+    {
+      "name": "ask-literal-over-allow",
+      "command": "git --version",
+      "rules": {
+        "allow": [
+          "command(regex:^git --version$)"
+        ],
+        "ask": [
+          "command(git --version)"
+        ],
+        "deny": []
+      },
+      "pid": 42320,
+      "exit_code": 0,
+      "seconds": 4.61,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "allowNonWorkspaceAccess": false,
+        "permissions": {
+          "allow": [
+            "command(regex:^git --version$)"
+          ],
+          "ask": [
+            "command(git --version)"
+          ],
+          "deny": []
+        }
+      },
+      "conversation_id": "2b3a4fe4-f200-4f9c-985d-2f01715d87e1",
+      "cli_status": "SUCCESS",
+      "denied_actions": [
+        {
+          "action": "command",
+          "display_name": "RunCommand"
+        }
+      ],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            }
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: expected native permission rejection"
+    },
+    {
+      "name": "ask-only",
+      "command": "git --version",
+      "rules": {
+        "allow": [],
+        "ask": [
+          "command(regex:^git --version$)"
+        ],
+        "deny": []
+      },
+      "pid": 71448,
+      "exit_code": 0,
+      "seconds": 3.91,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [],
+          "ask": [
+            "command(regex:^git --version$)"
+          ],
+          "deny": []
+        }
+      },
+      "conversation_id": "16503d4c-62a1-4ff2-8a73-7cb8ea33bfdf",
+      "cli_status": "SUCCESS",
+      "denied_actions": [
+        {
+          "action": "command",
+          "display_name": "RunCommand"
+        }
+      ],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "ERROR",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            },
+            "error": {
+              "type": "TOOL_ERROR",
+              "message": "permission check failed for unsandboxed \"git --version\": user denied permission to run command:\ngit --version\nDo not attempt to circumvent this denial by rephrasing the command, using alternative tools/scripts (e.g. python, sh, curl), or accessing the same target resource. Proceed without performing this action."
+            }
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: expected native permission rejection"
+    },
+    {
+      "name": "ask-over-allow",
+      "command": "git --version",
+      "rules": {
+        "allow": [
+          "command(regex:^git --version$)"
+        ],
+        "ask": [
+          "command(regex:^git --version$)"
+        ],
+        "deny": []
+      },
+      "pid": 69648,
+      "exit_code": 0,
+      "seconds": 5.56,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "command(regex:^git --version$)"
+          ],
+          "ask": [
+            "command(regex:^git --version$)"
+          ],
+          "deny": []
+        }
+      },
+      "conversation_id": "76c6b1cf-8f84-4eca-a415-9ac9a47857f7",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            },
+            "output": "Command exited with code 0.\n\nCommand output:\ngit version 2.53.0.windows.2\n"
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "assertion failure: regex Ask did not prevent command allowed by identical regex"
+    },
+    {
+      "name": "ask-regex-repeat",
+      "command": "git --version",
+      "rules": {
+        "allow": [
+          "command(regex:^git --version$)"
+        ],
+        "ask": [
+          "command(regex:^git --version$)"
+        ],
+        "deny": []
+      },
+      "pid": 64996,
+      "exit_code": 0,
+      "seconds": 6.69,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "allowNonWorkspaceAccess": false,
+        "permissions": {
+          "allow": [
+            "command(regex:^git --version$)"
+          ],
+          "ask": [
+            "command(regex:^git --version$)"
+          ],
+          "deny": []
+        }
+      },
+      "conversation_id": "d420b06c-95c6-4fb5-8ace-fbb836ce8b78",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            },
+            "output": "Command exited with code 0.\n\nCommand output:\ngit version 2.53.0.windows.2\n"
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "assertion failure: regex Ask did not prevent command allowed by identical regex"
+    },
+    {
+      "name": "baseline",
+      "command": "git --version",
+      "rules": {
+        "allow": [],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 61520,
+      "exit_code": 0,
+      "seconds": 3.97,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "66b8c127-51fd-40d1-82cb-f2dfcca6a7ed",
+      "cli_status": "SUCCESS",
+      "denied_actions": [
+        {
+          "action": "command",
+          "display_name": "RunCommand"
+        }
+      ],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "ERROR",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            },
+            "error": {
+              "type": "TOOL_ERROR",
+              "message": "permission check failed for unsandboxed \"git --version\": user denied permission to run command:\ngit --version\nDo not attempt to circumvent this denial by rephrasing the command, using alternative tools/scripts (e.g. python, sh, curl), or accessing the same target resource. Proceed without performing this action."
+            }
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: expected native permission rejection"
+    },
+    {
+      "name": "deny-over-allow",
+      "command": "git --version",
+      "rules": {
+        "allow": [
+          "command(regex:^git --version$)"
+        ],
+        "ask": [],
+        "deny": [
+          "command(regex:^git --version$)"
+        ]
+      },
+      "pid": 14012,
+      "exit_code": 0,
+      "seconds": 5.8,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "command(regex:^git --version$)"
+          ],
+          "ask": [],
+          "deny": [
+            "command(regex:^git --version$)"
+          ]
+        }
+      },
+      "conversation_id": "b3635221-d0fa-4d13-bade-6616a00b6d5b",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "ERROR",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            },
+            "error": {
+              "type": "TOOL_ERROR",
+              "message": "permission check failed for unsandboxed \"git --version\": Permission denied for unsandboxed(git --version). Matches user-configured deny rule."
+            }
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: expected native permission rejection"
+    },
+    {
+      "name": "effective-permissions",
+      "command": "PERMISSIONS",
+      "rules": {
+        "allow": [
+          "command(regex:^git --version$)"
+        ],
+        "ask": [
+          "command(regex:^git --version$)"
+        ],
+        "deny": []
+      },
+      "pid": 69804,
+      "exit_code": 0,
+      "seconds": 4.06,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "allowNonWorkspaceAccess": false,
+        "permissions": {
+          "allow": [
+            "command(regex:^git --version$)"
+          ],
+          "ask": [
+            "command(regex:^git --version$)"
+          ],
+          "deny": []
+        }
+      },
+      "conversation_id": "340b2585-e472-44dd-816e-92b8d9f6f0f2",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "unverified: model declined tool invocation; not evidence of absence"
+    },
+    {
+      "name": "external-write-allow-dir",
+      "command": "WRITE:allow-dir",
+      "rules": {
+        "allow": [
+          "write_file(D:/code/t158-outside-1/allowed)"
+        ],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 65324,
+      "exit_code": 0,
+      "seconds": 6.31,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "allowNonWorkspaceAccess": false,
+        "permissions": {
+          "allow": [
+            "write_file(D:/code/t158-outside-1/allowed)"
+          ],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "860f4031-90a0-4c15-a8d3-3d4909c06e02",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "D:/code/t158-outside-1/allowed/nested/inside.txt"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "D:/code/t158-outside-1/allowed/nested/inside.txt"
+            }
+          }
+        }
+      ],
+      "file_check": {
+        "target": "D:\\code\\t158-outside-1\\allowed\\nested\\inside.txt",
+        "before": null,
+        "after": "T158_ALLOW_DIR"
+      },
+      "finished_reason": null,
+      "classification": "pass: native file completion and exact resulting bytes"
+    },
+    {
+      "name": "external-write-baseline",
+      "command": "WRITE:baseline",
+      "rules": {
+        "allow": [],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 74832,
+      "exit_code": 0,
+      "seconds": 5.14,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "allowNonWorkspaceAccess": false,
+        "permissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "5c7fcfc2-134f-4d08-8d67-50a629bf5252",
+      "cli_status": "SUCCESS",
+      "denied_actions": [
+        {
+          "action": "write_file",
+          "display_name": "WriteFile"
+        }
+      ],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "D:/code/t158-outside-1/allowed/baseline.txt"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "ERROR",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "D:/code/t158-outside-1/allowed/baseline.txt"
+            },
+            "error": {
+              "type": "TOOL_ERROR",
+              "message": "permission check failed for write_file \"D:/code/t158-outside-1/allowed/baseline.txt\": user denied permission for write_file(D:/code/t158-outside-1/allowed/baseline.txt)\nDo not attempt to circumvent this denial by rephrasing the command, using alternative tools/scripts (e.g. python, sh, curl), or accessing the same target resource. Proceed without performing this action."
+            }
+          }
+        }
+      ],
+      "file_check": {
+        "target": "D:\\code\\t158-outside-1\\allowed\\baseline.txt",
+        "before": null,
+        "after": null
+      },
+      "finished_reason": null,
+      "classification": "pass: expected native permission rejection"
+    },
+    {
+      "name": "external-write-near-miss",
+      "command": "WRITE:near-miss",
+      "rules": {
+        "allow": [
+          "write_file(D:/code/t158-outside-1/allowed)"
+        ],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 44544,
+      "exit_code": 0,
+      "seconds": 3.78,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "allowNonWorkspaceAccess": false,
+        "permissions": {
+          "allow": [
+            "write_file(D:/code/t158-outside-1/allowed)"
+          ],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "dbe4580f-dbd9-4a8d-8cff-1fb60a10fd8e",
+      "cli_status": "SUCCESS",
+      "denied_actions": [
+        {
+          "action": "write_file",
+          "display_name": "WriteFile"
+        }
+      ],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "D:/code/t158-outside-1/allowed-near/outside.txt"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "ERROR",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "D:/code/t158-outside-1/allowed-near/outside.txt"
+            },
+            "error": {
+              "type": "TOOL_ERROR",
+              "message": "permission check failed for write_file \"D:/code/t158-outside-1/allowed-near/outside.txt\": user denied permission for write_file(D:/code/t158-outside-1/allowed-near/outside.txt)\nDo not attempt to circumvent this denial by rephrasing the command, using alternative tools/scripts (e.g. python, sh, curl), or accessing the same target resource. Proceed without performing this action."
+            }
+          }
+        }
+      ],
+      "file_check": {
+        "target": "D:\\code\\t158-outside-1\\allowed-near\\outside.txt",
+        "before": null,
+        "after": null
+      },
+      "finished_reason": null,
+      "classification": "pass: expected native permission rejection"
+    },
+    {
+      "name": "literal-exact",
+      "command": "git --version",
+      "rules": {
+        "allow": [
+          "command(git --version)"
+        ],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 73832,
+      "exit_code": 0,
+      "seconds": 5.45,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "command(git --version)"
+          ],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "304faad0-e48a-4d83-853e-8e4a12856c01",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            },
+            "output": "Command exited with code 0.\n\nCommand output:\ngit version 2.53.0.windows.2\n"
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: intended native tool completion"
+    },
+    {
+      "name": "literal-original-command",
+      "command": "git rev-parse --show-toplevel",
+      "rules": {
+        "allow": [
+          "command(git rev-parse --show-toplevel)"
+        ],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 66132,
+      "exit_code": 0,
+      "seconds": 5.47,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "command(git rev-parse --show-toplevel)"
+          ],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "f3b985f6-58b6-409f-b776-446d93e443e7",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git rev-parse --show-toplevel"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git rev-parse --show-toplevel"
+            },
+            "output": "Command exited with code 0.\n\nCommand output:\n%USERPROFILE%/AppData/Local/Temp/gm-t158-fixture-1\n"
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: intended native tool completion"
+    },
+    {
+      "name": "regex-composition-deny",
+      "command": "git --version; echo T158_CHAIN > chain-marker.txt",
+      "rules": {
+        "allow": [
+          "command(regex:^git --version$)"
+        ],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 48968,
+      "exit_code": 0,
+      "seconds": 3.28,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "command(regex:^git --version$)"
+          ],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "c76d5d3f-7cb0-47eb-b495-746db791013a",
+      "cli_status": "SUCCESS",
+      "denied_actions": [
+        {
+          "action": "command",
+          "display_name": "RunCommand"
+        }
+      ],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version; echo T158_CHAIN > chain-marker.txt"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "ERROR",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version; echo T158_CHAIN > chain-marker.txt"
+            },
+            "error": {
+              "type": "TOOL_ERROR",
+              "message": "permission check failed for unsandboxed \"git --version; echo T158_CHAIN > chain-marker.txt\": user denied permission to run command:\ngit --version; echo T158_CHAIN > chain-marker.txt\nDo not attempt to circumvent this denial by rephrasing the command, using alternative tools/scripts (e.g. python, sh, curl), or accessing the same target resource. Proceed without performing this action."
+            }
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: expected native permission rejection"
+    },
+    {
+      "name": "regex-exact",
+      "command": "git --version",
+      "rules": {
+        "allow": [
+          "command(regex:^git --version$)"
+        ],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 8328,
+      "exit_code": 0,
+      "seconds": 5.49,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "command(regex:^git --version$)"
+          ],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "ab9d43a6-b1b7-4bb6-9321-e3019ac73c63",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git --version"
+            },
+            "output": "Command exited with code 0.\n\nCommand output:\ngit version 2.53.0.windows.2\n"
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: intended native tool completion"
+    },
+    {
+      "name": "regex-near-miss",
+      "command": "git status --short",
+      "rules": {
+        "allow": [
+          "command(regex:^git --version$)"
+        ],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 39268,
+      "exit_code": 0,
+      "seconds": 3.44,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "command(regex:^git --version$)"
+          ],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "894129de-b41c-438f-af6c-b0279e2dd2b7",
+      "cli_status": "SUCCESS",
+      "denied_actions": [
+        {
+          "action": "command",
+          "display_name": "RunCommand"
+        }
+      ],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git status --short"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "ERROR",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "git status --short"
+            },
+            "error": {
+              "type": "TOOL_ERROR",
+              "message": "permission check failed for unsandboxed \"git status --short\": user denied permission to run command:\ngit status --short\nDo not attempt to circumvent this denial by rephrasing the command, using alternative tools/scripts (e.g. python, sh, curl), or accessing the same target resource. Proceed without performing this action."
+            }
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: expected native permission rejection"
+    },
+    {
+      "name": "regex-npm",
+      "command": "npm test",
+      "rules": {
+        "allow": [
+          "command(regex:^npm test$)"
+        ],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 77412,
+      "exit_code": 0,
+      "seconds": 6.23,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "command(regex:^npm test$)"
+          ],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "feea3678-d6ad-4875-bdc2-6703609b0582",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "npm test"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "npm test"
+            },
+            "output": "Command exited with code 0.\n\nCommand output:\n\n> test\n> node --test\n\nTAP version 13\n# Subtest: add sums two numbers\nok 1 - add sums two numbers\n  ---\n  duration_ms: 0.3775\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 59.1969\n"
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: intended native tool completion"
+    },
+    {
+      "name": "regex-tkt",
+      "command": "tkt ready",
+      "rules": {
+        "allow": [
+          "command(regex:^tkt ready$)"
+        ],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 14832,
+      "exit_code": 0,
+      "seconds": 5.44,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "command(regex:^tkt ready$)"
+          ],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "8c4777d7-d69d-42c4-83bd-580476f831aa",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "tkt ready"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "run_command",
+          "tool_info": {
+            "name": "run_command",
+            "parameters": {
+              "CommandLine": "tkt ready"
+            },
+            "output": "Command exited with code 0.\n\nCommand output:\nReady (4):\n  1  Add multiply to the arithmetic module\n  2  Add the returning-user greeting\n  3  Rename add to sum\n  5  Delete the README\n"
+          }
+        }
+      ],
+      "file_check": null,
+      "finished_reason": null,
+      "classification": "pass: intended native tool completion"
+    },
+    {
+      "name": "write-allow-dir",
+      "command": "WRITE:allow-dir",
+      "rules": {
+        "allow": [
+          "write_file(%USERPROFILE%/AppData/Local/Temp/gm-t158-outside-1/allowed)"
+        ],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 68864,
+      "exit_code": 0,
+      "seconds": 4.81,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "write_file(%USERPROFILE%/AppData/Local/Temp/gm-t158-outside-1/allowed)"
+          ],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "c3db7e0d-925b-4db0-845a-10711c90efc4",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "%USERPROFILE%/AppData/Local/Temp/gm-t158-outside-1/allowed/nested/inside.txt"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "%USERPROFILE%/AppData/Local/Temp/gm-t158-outside-1/allowed/nested/inside.txt"
+            }
+          }
+        }
+      ],
+      "file_check": {
+        "target": "%USERPROFILE%\\AppData\\Local\\Temp\\gm-t158-outside-1\\allowed\\nested\\inside.txt",
+        "before": null,
+        "after": "T158_ALLOW_DIR"
+      },
+      "finished_reason": null,
+      "classification": "uninformative for path confinement: system TEMP default permits writes"
+    },
+    {
+      "name": "write-baseline",
+      "command": "WRITE:baseline",
+      "rules": {
+        "allow": [],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 64976,
+      "exit_code": 0,
+      "seconds": 6.01,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "ce4c31b9-58b5-47c7-926d-8a22d8dbac27",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "%USERPROFILE%/AppData/Local/Temp/gm-t158-outside-1/allowed/baseline.txt"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "%USERPROFILE%/AppData/Local/Temp/gm-t158-outside-1/allowed/baseline.txt"
+            }
+          }
+        }
+      ],
+      "file_check": {
+        "target": "%USERPROFILE%\\AppData\\Local\\Temp\\gm-t158-outside-1\\allowed\\baseline.txt",
+        "before": null,
+        "after": "T158_BASELINE"
+      },
+      "finished_reason": null,
+      "classification": "uninformative for path confinement: system TEMP default permits writes"
+    },
+    {
+      "name": "write-deny-workspace",
+      "command": "WRITE:deny-workspace",
+      "rules": {
+        "allow": [],
+        "ask": [],
+        "deny": [
+          "write_file(%USERPROFILE%/AppData/Local/Temp/gm-t158-fixture-1/permission-protected)"
+        ]
+      },
+      "pid": 61416,
+      "exit_code": 0,
+      "seconds": 4.67,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [],
+          "ask": [],
+          "deny": [
+            "write_file(%USERPROFILE%/AppData/Local/Temp/gm-t158-fixture-1/permission-protected)"
+          ]
+        }
+      },
+      "conversation_id": "ba155b46-09b1-460d-a47c-99bf8a4e90d5",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "%USERPROFILE%/AppData/Local/Temp/gm-t158-fixture-1/permission-protected/blocked.txt"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "ERROR",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "%USERPROFILE%/AppData/Local/Temp/gm-t158-fixture-1/permission-protected/blocked.txt"
+            },
+            "error": {
+              "type": "TOOL_ERROR",
+              "message": "permission check failed for write_file \"%USERPROFILE%/AppData/Local/Temp/gm-t158-fixture-1/permission-protected/blocked.txt\": Permission denied for write_file(%USERPROFILE%/AppData/Local/Temp/gm-t158-fixture-1/permission-protected/blocked.txt). Matches user-configured deny rule."
+            }
+          }
+        }
+      ],
+      "file_check": {
+        "target": "%USERPROFILE%\\AppData\\Local\\Temp\\gm-t158-fixture-1\\permission-protected\\blocked.txt",
+        "before": "BEFORE_T158",
+        "after": "BEFORE_T158"
+      },
+      "finished_reason": null,
+      "classification": "pass: expected native permission rejection"
+    },
+    {
+      "name": "write-near-miss",
+      "command": "WRITE:near-miss",
+      "rules": {
+        "allow": [
+          "write_file(%USERPROFILE%/AppData/Local/Temp/gm-t158-outside-1/allowed)"
+        ],
+        "ask": [],
+        "deny": []
+      },
+      "pid": 77652,
+      "exit_code": 0,
+      "seconds": 5.28,
+      "global_hashes_unchanged": true,
+      "session_settings": {
+        "toolPermission": "request-review",
+        "agentMode": "accept-edits",
+        "permissions": {
+          "allow": [
+            "write_file(%USERPROFILE%/AppData/Local/Temp/gm-t158-outside-1/allowed)"
+          ],
+          "ask": [],
+          "deny": []
+        }
+      },
+      "conversation_id": "edc57c7f-9e18-4bf2-9ba1-e7419e130694",
+      "cli_status": "SUCCESS",
+      "denied_actions": [],
+      "tool_events": [
+        {
+          "step_index": 2,
+          "state": "ACTIVE",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "%USERPROFILE%/AppData/Local/Temp/gm-t158-outside-1/allowed-near/outside.txt"
+            }
+          }
+        },
+        {
+          "step_index": 2,
+          "state": "DONE",
+          "tool_name": "write_file",
+          "tool_info": {
+            "name": "write_file",
+            "parameters": {
+              "Path": "%USERPROFILE%/AppData/Local/Temp/gm-t158-outside-1/allowed-near/outside.txt"
+            }
+          }
+        }
+      ],
+      "file_check": {
+        "target": "%USERPROFILE%\\AppData\\Local\\Temp\\gm-t158-outside-1\\allowed-near\\outside.txt",
+        "before": null,
+        "after": "T158_NEAR_MISS"
+      },
+      "finished_reason": null,
+      "classification": "uninformative for path confinement: system TEMP default permits writes"
+    }
+  ],
+  "chain_marker_exists": false,
+  "limits": [
+    "One Windows host/account/CLI build/model",
+    "No claim of OS sandbox containment",
+    "Only named fixed commands, not all git/npm/tkt operations",
+    "Inherited project/shared scopes not completely enumerated; baseline controls reject tested ungranted operations",
+    "No actual human Ask approval was answered",
+    "No workflow or subagent probe in this ticket"
+  ],
+  "artifact_disposition": {
+    "private_probe": "recycled to OS trash after independent raw-evidence audit",
+    "recorded_cli_identities_currently_live": 0,
+    "native_recycle_bytes": 7474074.0,
+    "old_prepared_fixture": "not located in bounded current scratch, TEMP or D:/tmp searches; no deletion claimed",
+    "retained_native_histories": [
+      {
+        "bytes": 464064.0,
+        "conversation_id": "2b3a4fe4-f200-4f9c-985d-2f01715d87e1",
+        "lifecycle": "retain only until orchestration ticket 193 diagnosis closes",
+        "case": "ask-literal-over-allow"
+      },
+      {
+        "bytes": 466274.0,
+        "conversation_id": "76c6b1cf-8f84-4eca-a415-9ac9a47857f7",
+        "lifecycle": "retain only until orchestration ticket 193 diagnosis closes",
+        "case": "ask-over-allow"
+      },
+      {
+        "bytes": 466274.0,
+        "conversation_id": "ab9d43a6-b1b7-4bb6-9321-e3019ac73c63",
+        "lifecycle": "retain only until orchestration ticket 193 diagnosis closes",
+        "case": "regex-exact"
+      },
+      {
+        "bytes": 466960.0,
+        "conversation_id": "b3635221-d0fa-4d13-bade-6616a00b6d5b",
+        "lifecycle": "retain only until orchestration ticket 193 diagnosis closes",
+        "case": "deny-over-allow"
+      },
+      {
+        "bytes": 466246.0,
+        "conversation_id": "d420b06c-95c6-4fb5-8ace-fbb836ce8b78",
+        "lifecycle": "retain only until orchestration ticket 193 diagnosis closes",
+        "case": "ask-regex-repeat"
+      },
+      {
+        "bytes": 467580.0,
+        "conversation_id": "f8f668b1-1908-48e3-8db8-6f6a4870ecd9",
+        "lifecycle": "retain only until orchestration ticket 193 diagnosis closes",
+        "case": "ask-broad-over-allow"
+      }
+    ],
+    "retained_bytes": 2797398.0,
+    "recorded_cli_processes_waited_to_exit": 22,
+    "shared_backend_processes": "not attributed or terminated; no claim that a shared native daemon is absent",
+    "private_probe_bytes": 777344.0,
+    "fixture_recycled": [
+      {
+        "bytes": 98411.0,
+        "name": "gm-t158-fixture-1"
+      },
+      {
+        "bytes": 41.0,
+        "name": "gm-t158-outside-1"
+      },
+      {
+        "bytes": 14.0,
+        "name": "t158-outside-1"
+      }
+    ],
+    "native_paths_recycled": 32
+  }
+}

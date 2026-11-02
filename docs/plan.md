@@ -164,7 +164,7 @@ recycle owned artifacts; leave unresolved external evidence explicit rather than
 
 ## Orchestration workstream (reconciled 2026-11-02)
 
-Scope: the 32 tickets tagged `stream:orchestration`, including the dashboard
+Scope: the 33 tickets tagged `stream:orchestration`, including the dashboard
 ticket #191 in the inventory below; their current statuses are shown in the tables.
 Other tooling, test-verification, dashboard and release work remains in its
 existing stream. Related parked #06 (skill/version drift evaluations) and #09
@@ -176,13 +176,15 @@ The remaining-work table is the proposed serial execution order. #162's driver
 comparison and #186's auth routing investigation are complete. The #156 trial
 confirmed worker report/wake recovery after a graceful restart, but exposed a
 fabricated task and no independent Mate acceptance review. Keep the requirements
-and acceptance gate outside that loop. Next run #158 before #157 to inform its
-permission setup; this is a recommendation, not a fabricated blocker. Other
+and acceptance gate outside that loop. The #158 controls now qualify fixed
+commands and one folder boundary; #193 owns an unexpected regex Ask/Allow overlap.
+Next run #157 using checked controls, without depending on that unresolved Ask
+override. The #158-before-#157 order is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before
 the model comparisons.
 
-Hard edges are #162 → #173/#188/#189 and #174 → #167–172. The rest of each
+Hard edges are #162 → #173/#188/#189, #158 → #193 and #174 → #167–172. The rest of each
 ticket's blocked_by records completed fixture/baseline prerequisites, retained
 for provenance. #174 must leave a runnable selected recipe. If both runner
 paths fail, create and link the missing execution prerequisite to #167–172
@@ -201,6 +203,7 @@ auth remains conditional on the result of #186.
 | 188 | 9. Diagnose Codex's missing code-mode tool host before claiming tool execution | open |
 | 189 | 10. Qualify Kiro V3 ACP EOF shutdown and descendant settlement | open |
 | 190 | Resolve Crew Windows host-auth integration before relying on Crew-owned identity | open |
+| 193 | Diagnose overlapping regex approval rules before relying on that override | open |
 | 173 | 11. Compare GUI watch/answer surfaces against #162's qualified live driver | open |
 | 174 | 12. Select and demonstrate Harbor or a thin runner for the model trials | open |
 | 167 | 13. Compare implementation worker tiers | open |
@@ -224,6 +227,7 @@ flowchart TD
   A186 -.-> M156["156 Mate restart/recovery (done)"]
   A186 --> A190["190 Crew Windows auth integration"]
   P158["158 agy regex permissions"] -.-> W157["157 agy workflows"]
+  P158 --> A193["193 regex Ask overlap diagnosis"]
   subgraph Other["Independent harness probes"]
     C159["159 Codex messaging"]
     B160["160 Claude background"]
@@ -386,4 +390,3 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 183 | Preserve artifact ownership across agent handoffs | open |
 | 184 | Revalidate preservation state before cleanup recommendations | open |
 | 191 | Dashboard: orchestration findings and expandable ticket flow in two tabs | ✅ done |
-| 193 | Diagnose: agy regex Ask rule does not override identical Allow rule | open |

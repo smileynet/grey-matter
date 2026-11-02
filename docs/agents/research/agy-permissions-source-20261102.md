@@ -25,6 +25,14 @@ Observed `agy --version`: `1.4.12`. The installed `agy changelog` output says 1.
 
 ## Probe design implications
 
+Follow-up source check: CLI settings document `allowNonWorkspaceAccess` as a
+boolean (default false), not an enum. System TEMP is a separate default write
+grant added in 1.1.9; the general non-workspace Ask description is not a reliable
+negative-control design for TEMP. See the [CLI configuration reference](https://antigravity.google/docs/cli/reference/)
+and [versioned CLI changelog](https://antigravity.google/docs/changelog?tab=cli).
+Use an owned folder outside both workspace and system TEMP, and record actual
+bytes. These are documented conditions; the live receipt separately checks them.
+
 1. Test a literal safe command prefix, then a `regex:` rule against both a matching and a near-miss command. Include a Windows command with arguments or shell syntax likely to trigger exact matching; record the full attempted command from tool output/logs. Avoid shell composition or wrappers until the simple case is established.
 2. To establish precedence, use the same target in multiple lists and observe whether the action is allowed, denied, or requests review. In headless mode, an Ask action may be unavailable for interaction; distinguish a permission rejection from a successful command and do not infer the rule from exit code alone.
 3. Test recursive path behavior with a narrow temporary directory and nested file. Test write-implies-read separately. Put write-deny checks on explicit targets because workspace writes are otherwise implicitly allowed.

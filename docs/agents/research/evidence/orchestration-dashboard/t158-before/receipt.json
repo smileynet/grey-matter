@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "95df10589f7c22cf08812e11b2369397536ea8a0ef0a9c05921709cf4422b7a7",
+  "subject": "Narrow permissions finding before ticket closure",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 13607,
+      "sha256": "88bde075ffd0708a3d0ed32bccf5172b8b8914bbd46a9e2363348d0ede4a8b88"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 139715,
+      "sha256": "ee68ee720d77b117562ff986ceac2ca052b3f3fc1832b64ec28efad777366112"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4263,
+      "sha256": "7823739d7cfe6bad41b4c6fb3d757de6ecb05aa1f45372ed48ae286831d1ad69"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t158-before/findings-1280.png",
+      "bytes": 276533,
+      "sha256": "25a2bb89faf77abad9f6ab8f6e0c45991cdee05e554bf1fa1b51107c3da9e93a",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t158-before/tickets-1280.png",
+      "bytes": 247669,
+      "sha256": "bd36725daddcc966d665e9d9df67bedce322251223c90d489218bd2f3b794f8f",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t158-before/findings-390.png",
+      "bytes": 271978,
+      "sha256": "e4276a0d51ac22d52d6d760c1b2e5128890169289230b74819c50d2cc7463ad0",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t158-before/tickets-390.png",
+      "bytes": 215776,
+      "sha256": "8d80ac1cdeace997304fff63f476e31506f43fb69c9e25fe4135d5aa2ef4497e",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "0ff9ca043cc7306afbcd2aa00daac3c9a5130aabdb85c11807eb4c49aac970ac",
+  "id": "a1c462988e7f610ae216c88b8eb5653cf7e9314e7d52880cb42d6fd63bbe56ce",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/dashboard_critic (Codex agent)",
+    "note": "Observer: /root/dashboard_critic (Codex agent); surface: local Chromium file rendering through Playwright; scenario: inspect all four captures at 1280x900 and 390x900 in both tabs and compare the new permission finding, ticket flow and current HTML; outcome: accepted. The finding leads with the user benefit of granting a smaller action set, shows positive and negative command/folder controls, and makes the unresolved Ask-over-Allow overlap and lack of whole-machine confinement visible. The new overlap diagnosis ticket appears in open work and the dependency diagram without turning the preferred order into an edge. Eight findings and two explicitly unproven possibilities remain easy to distinguish; ticket rows are collapsed. Limits: rendered dashboard observation at named sizes only, not human usability study or product screenshots; lower flow nodes require scrolling within the diagram.",
+    "acceptedAt": "2026-11-02T18:10:49.373Z",
+    "snapshotId": "a1c462988e7f610ae216c88b8eb5653cf7e9314e7d52880cb42d6fd63bbe56ce"
+  }
+}

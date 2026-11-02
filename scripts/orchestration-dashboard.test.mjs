@@ -14,7 +14,7 @@ try {
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(pathToFileURL(path.resolve('docs/orchestration.html')).href);
     assert.equal(await page.getByRole('tab').count(), 2);
-    assert.equal(await page.locator('#finding-cards article').count(), 7);
+    assert.equal(await page.locator('#finding-cards article').count(), 8);
     assert.equal(await page.locator('#possibilities article').count(), 2);
     assert.equal(await page.locator('details[open]').count(), 0);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
