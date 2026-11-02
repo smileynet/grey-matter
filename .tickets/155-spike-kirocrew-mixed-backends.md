@@ -1,7 +1,7 @@
 ---
 id: "155"
 title: "Spike: Kiro Crew conductor dispatching Claude Code or Codex workers"
-status: in_progress
+status: done
 blocked_by: []
 tags: ["stream:tooling", "type:research"]
 validation_criteria:
@@ -31,6 +31,15 @@ Source: [harness experimental features](../docs/agents/research/harness-experime
 
 ## Acceptance criteria
 
-- [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
-- [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
-- [ ] Sandbox folders removed after the run; settings changed for the spike restored or recorded.
+- [x] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
+- [x] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
+- [x] Sandbox folders removed after the run; settings changed for the spike restored or recorded.
+
+## Resolution (2026-11-02)
+
+done: tested adapter initialization and corrected the mixed-backend setup premise for KiroCrew0.11.1; source-traced plus selector-probed results are published with an independent audit. The requested KAS-conductor/external-worker ledger loop remains unverified because ordinary children use the default backend. Recycled all ticket155 runtime data. Retained shared dist/agy-plugin as current deploy output until next deployment; retained clean managed primary checkout for orchestration workstream until app permits archive, and separate t158 fixture until its probe completes. No global adapter installation or user configuration change.
+
+### Verification
+1. ✓ Installed adapter initialization and actual backend routing are recorded with primary source excerpts and a sanitized receipt. — "Both pinned local adapters returned ACP initialize protocolVersion 1 and exited 0 without timeout (pass). Native installed selectors returned KAS for all four ordinary-session/member-backend combinations; create_session signature has no backend parameter. Dated section, source excerpts/hashes and sanitized JSON receipt published in 8369376."
+2. ✓ The requested mixed conductor/worker loop is either verified or explicitly bounded as unverified with the setup limitation. — "Could not verify the requested mixed loop through tested settings: member_acp_backend routes crewmate DMs/own workers; ordinary children use default acp_backend. No worker prompt dispatched. Mixed loop skipped; work_report, wake and acceptance unverified, not claimed failed. Optional HTTP config read was infrastructure error403; fixture baseline passed1/1."
+3. ✓ Checks and independent audit pass; owned probe data is recycled and disposable configuration changes are recorded. — "Independent research audit8/10 with no unsupported claims. Fresh node --test scripts/skill-syntax.test.mjs passed10/10. After rebase: gate.mjs pre-merge --base c739cbb --include skill-syntax-fixtures passed2 selected; pre-push passed5 selected. Docs consistency and home-path passed; staged artifact inspection complete5 files49969 bytes no findings. Probe842044678 bytes and fixture98400 bytes recycled after gateway stop and audit; paths absent. Deployment passed50 skills; installed orchestrate reference hash matches source."
