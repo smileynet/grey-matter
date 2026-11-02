@@ -85,6 +85,11 @@ Put the switcher in one shared component so both sub-shapes reuse it.
 
 ### 5. Hand it over
 
+Before selecting UI checks, establish which preview, browser, capture and interaction
+surfaces are permitted and available in this session. Choose checks from those capabilities.
+If a protocol or telemetry source is blocked or unavailable, record that check as blocked
+or unavailable and leave its result unknown; do not try another route to bypass the limit.
+
 When practical, show screenshots, mocks, or embedded interactive views in the
 review dashboard so the user can inspect and compare without navigating away and
 finding their place again. Use a working embed when the behavior can be tested
@@ -93,10 +98,18 @@ and limits.
 
 Name the task to try and the question it helps answer. Provide the comparison URL
 and `?variant=` keys for deeper interaction or a return visit. When the dashboard
-cannot support the needed interaction, open the relevant comparison view using
+cannot support the needed interaction, open the relevant comparison view only if that
+surface is permitted and available, using
 [report-format's handoff contract](../../../docs/agents/report-format.md#html-rules).
-Refresh the review view after revisions, and invite feedback on useful parts from
+If it is blocked or unavailable, record the limit and leave the check unverified; do not
+use the handoff to bypass a blocked protocol. Refresh the review view after revisions,
+and invite feedback on useful parts from
 different variants (e.g. the header from B with the sidebar from C).
+
+Keep claims separate: source and metadata checks describe declared bytes; rendered
+behavior describes only what a tool actually observed on its named surface and scenario;
+a person's functionality result is a human report; learning effectiveness remains
+unvalidated until learner evidence supports it. State the limits with each result.
 
 Use an existing review dashboard when available. A lightweight in-page comparison
 can be enough; this does not require a separate dashboard or embedding every
