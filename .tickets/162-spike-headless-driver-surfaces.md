@@ -1,7 +1,7 @@
 ---
 id: "162"
 title: "Spike: compare headless driver surfaces across harnesses"
-status: open
+status: in_progress
 blocked_by: ["111","124","125","126","127","128","129"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
