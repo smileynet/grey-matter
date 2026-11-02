@@ -2,7 +2,7 @@
 id: "171"
 title: "Spike: effort levels (low to max) on one model per provider for diagnosis and design tasks"
 status: open
-blocked_by: []
+blocked_by: ["174"]
 tags: ["stream:tooling", "type:research"]
 ---
 
