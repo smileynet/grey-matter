@@ -1,7 +1,7 @@
 ---
 id: "154"
 title: "Spike: Kiro Crew workers on KAS allow-lists instead of YOLO (rerun P3 and P13)"
-status: open
+status: in_progress
 blocked_by: []
 tags: ["stream:tooling", "type:research"]
 ---
