@@ -45,6 +45,16 @@ function fixture(checks, fn, { fullTriggers = [] } = {}) {
 const check = (id, scope, body = pass, extra = {}) => ({ id, stage: "pre-push", catches: `${id} failure`, scope, run: ["node", "-e", body], timeout_s: 10, ...extra });
 const ran = (out, id) => new RegExp(`\\] +[\\d.]+s  ${id}\\b`).test(out);
 
+test("an empty selection discloses uncommitted changes without judging them", () => fixture([check("a", ["a/"])], ({ git, run }) => {
+  const clean = run(["pre-merge"]);
+  assert.equal(clean.status, 0, clean.out);
+  assert.doesNotMatch(clean.out, /uncommitted changes were not checked/);
+  writeFileSync(join(git("rev-parse", "--show-toplevel"), "README.md"), "dirty\n");
+  const dirty = run(["pre-merge"]);
+  assert.equal(dirty.status, 0, dirty.out);
+  assert.match(dirty.out, /uncommitted changes were not checked/);
+}));
+
 test("a push touching no scoped path runs nothing", () => fixture([check("a", ["a/"])], ({ commit, run, push, base }) => {
   const head = commit("docs/notes.md");
   const r = run(["pre-push", "--stdin", "--remote", "origin"], { input: push(head, base) });

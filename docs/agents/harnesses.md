@@ -177,6 +177,9 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 
 ## Critic model
 
+When reviewing gate changes, apply [tooling proportionality](local-gates.md#changing-a-gate-is-a-reversible-tooling-change)
+before requesting more evidence or decision tickets.
+
 Review critics (the dashboard copy and results critics, proposal 13) run on the best model a
 harness offers, with the model and effort pinned on the spawn. **Verified 2026-10-27** on
 randomserver by the spike in [critic-model-spike](./research/critic-model-spike-20261027.md);

@@ -54,6 +54,9 @@ longer relevant):
 
 ### 3. Capture untracked work
 
+For gate changes, apply [tooling proportionality](../../../docs/agents/local-gates.md#changing-a-gate-is-a-reversible-tooling-change)
+before creating follow-up tickets.
+
 Scan the session for work with no ticket: decisions needing implementation, issues found,
 follow-ups from closed tickets, anything discussed-but-not-filed. File each as a ticket to
 the tkt quality bar (from the `tkt-core` skill). **Default new tickets to `open`** (frontier-

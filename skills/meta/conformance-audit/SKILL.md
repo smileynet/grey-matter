@@ -113,6 +113,11 @@ not nonconformance; only an explicit project policy defines a mechanical violati
 Footprint conformance comes from that skill's footprint inspector, whose `conformance` block reads
 the target without writing (`node <skill-dir>/scripts/inspect-footprint.mjs --repo <target> --floor 0B`):
 
+Report each scratch family's `path`, measured `bytes`, `outcome` and `activeReasons`, with the
+inspector's coverage and errors. Compare retained attempts with artifact hygiene's bounded-history
+rule; report unbounded run history as needs-judgment with its measured size. Size alone does not
+establish that an artifact can be deleted.
+
 - `pytestRetention.finding`: a pytest project with no `tmp_path_retention_policy` keeps every run.
   Safe tier: add the one line it prints as `fix`.
 - `scratchCitations`: tracked JSON or Markdown citing `.scratch` paths, which dangle once scratch

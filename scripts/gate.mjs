@@ -166,6 +166,9 @@ const skip = new Set((process.env.SKIP ?? "").split(",").map((s) => s.trim()).fi
 
 if (!opts.stdin) tips.add(git("rev-parse", "HEAD")?.[0] ?? "HEAD");
 console.log(`gate ${opts.stage}: ${selected.length} of ${inStage.length} check(s) selected (${source})`);
+if (!selected.length && git("status", "--porcelain")?.length) {
+  console.log("gate: uncommitted changes were not checked; this run judges committed changes only.");
+}
 let failed = 0;
 const toRun = selected.filter((c) => !skip.has(c.id));
 for (const check of selected.filter((c) => skip.has(c.id))) console.log(`  [skip]           ${check.id}: skipped (SKIP)`);

@@ -25,6 +25,9 @@ closing the ticket: it adds the ticket's entry and refreshes the Plan tab.
 
 ## Review depth
 
+For gate changes, apply [tooling proportionality](../../../docs/agents/local-gates.md#changing-a-gate-is-a-reversible-tooling-change)
+when choosing evidence and follow-up work.
+
 Scale review to reversibility and blast radius, not to diff size.
 
 - **Consequential change**: stateful behavior (stored data, migrations, caches, sessions), a public interface (API, CLI flags, file formats, a skill or command others call), release or deploy tooling, security (auth, secrets, permissions, input at a trust boundary), or anything hard to reverse. Call the Skill tool with "code-review" for the full two-axis review.
