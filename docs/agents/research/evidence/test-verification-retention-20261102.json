@@ -107,6 +107,35 @@
       "bytes": 108823
     }
   ],
+  "later184Audit": {
+    "note": "Additional artifacts after the original twelve-worktree snapshot; earlier byte counts remain their recorded observations, not a current allocation inventory.",
+    "worktree": ".scratch/t184-worker",
+    "worktreeFileBytes": 16733878,
+    "skippedLinks": 0,
+    "successfulNativeLog": {
+      "path": ".scratch/t184-native/005-test-4f5ae258.log",
+      "bytes": 3849
+    },
+    "earlierNativeFailureLogs": "Retained inside the owned disposable distro; size unmeasured. The assertion failure and wrapper infrastructure issue are promoted in the native evidence record.",
+    "nativeDistro": "GreyMatter-Footprint-133",
+    "nativeNode": "/opt/node-v22.23.4/bin/node",
+    "sourceAccess": "Direct DrvFs reference to the existing Windows worker checkout; no source clone or copy.",
+    "lifecycle": "Retain the bounded worker/native inputs and shared WSL baseline through #182 and remaining platform regression/reproduction review; retire when that audit no longer needs them.",
+    "cleanupEvents": [
+      {
+        "scope": "Earlier #192 metadata observation",
+        "temporaryIndexFiles": 2,
+        "bytes": 188196
+      },
+      {
+        "scope": "OneDrive parking and #184 completion",
+        "temporaryIndexFiles": 4,
+        "bytes": 388124
+      }
+    ],
+    "cleanupObservation": "SendToRecycleBin calls returned without error and original index paths were absent; host Bin contents were not inspected.",
+    "unownedArtifacts": "Previously inventoried artifacts and concurrent orchestration work were left untouched. No OneDrive or simulator state was changed."
+  },
   "limitations": [
     "An earlier automatic approval review rejected the combined t117-worker junction removal/worktree recycle command as blocked by policy, without a more specific reason. It was not retried through another route; that worktree remains retained.",
     "The aggregate crosses the 500 MiB workflow threshold. Downloads and VM samples were measured and bounded; project node_modules were referenced by junction/shared storage. The separate Linux runtime/packages are included in the VHD measurement. This threshold is not a disk-capacity limit.",
