@@ -6,6 +6,7 @@ import { delimiter, dirname, isAbsolute, resolve } from "node:path";
 // Test workers and their subprocesses must not load the owner's signing keys, hooks or editor.
 process.env.GIT_CONFIG_GLOBAL = fileURLToPath(new URL("./test-git.config", import.meta.url));
 process.env.GIT_CONFIG_NOSYSTEM = "1";
+process.env.GIT_LFS_SKIP_SMUDGE = "1";
 
 // The Git for Windows cmd shim adds a process per call; use the binary from that installation.
 if (process.platform === "win32") {

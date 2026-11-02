@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// gate.mjs reference version 1 (grey-matter proposal 18). Projects vendor this file; keep this
+// gate.mjs reference version 2 (grey-matter proposal 18). Projects vendor this file; keep this
 // line so conformance-audit can report drift from the reference.
 //
 // Runs the checks that scripts/gates.json declares for one stage, selected by changed paths.
