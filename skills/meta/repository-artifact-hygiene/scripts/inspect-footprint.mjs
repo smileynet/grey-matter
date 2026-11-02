@@ -176,11 +176,62 @@ function freeSpace(repo, coverage) {
   const fs = statfsSync(repo), entries = [{ path: repo, free: fs.bavail * fs.bsize, total: fs.blocks * fs.bsize }];
   const version = existsSync("/proc/version") ? readFileSync("/proc/version", "utf8") : "";
   if (/microsoft/i.test(version)) {
-    // A WSL distro reports its virtual disk's size; the Windows drive holding it is the real limit.
-    if (existsSync("/mnt/c")) { const host = statfsSync("/mnt/c"); entries.push({ path: "/mnt/c", free: host.bavail * host.bsize, total: host.blocks * host.bsize }); }
-    coverage.hostDrive = "assumed /mnt/c holds the distro's virtual disk";
+    const host = wslHostVolume(coverage);
+    if (host) entries.push(host);
   }
   return { free: Math.min(...entries.map((e) => e.free)), entries };
+}
+
+function wslHostVolume(coverage) {
+  const distro = process.env.WSL_DISTRO_NAME;
+  if (typeof distro !== "string" || !distro.trim()) {
+    coverage.complete = false;
+    coverage.hostDrive = "unavailable";
+    coverage.hostDriveReason = "WSL_DISTRO_NAME is missing";
+    return undefined;
+  }
+
+  const name = Buffer.from(distro, "utf8").toString("base64");
+  const script = `$ErrorActionPreference='Stop'; $name=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('${name}')); $items=@(Get-ChildItem -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Lxss' | ForEach-Object { $entry=Get-ItemProperty -LiteralPath $_.PSPath; if($entry.DistributionName -ceq $name){ $basePath=[string]$entry.BasePath; $vhd=Join-Path -Path $basePath -ChildPath 'ext4.vhdx'; $exists=Test-Path -LiteralPath $vhd -PathType Leaf; $volume=$null; if($exists){ $volumes=@(Get-Volume -FilePath $vhd -ErrorAction Stop); if($volumes.Count -ne 1){throw 'WSL VHD did not resolve to one Windows volume'}; $volume=$volumes[0] }; [PSCustomObject]@{Name=$entry.DistributionName;BasePath=$basePath;VhdExists=$exists;Drive=[string]$volume.DriveLetter;VolumeId=[string]$volume.UniqueId;Free=[string]$volume.SizeRemaining;Total=[string]$volume.Size} } }); $json=ConvertTo-Json -Compress -InputObject $items; [Console]::WriteLine([Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($json)))`;
+  const run = spawnSync("powershell.exe", ["-NoProfile", "-NonInteractive", "-EncodedCommand", Buffer.from(script, "utf16le").toString("base64")], {
+    encoding: "utf8", timeout: 10000, maxBuffer: 64 * 1024, windowsHide: true,
+  });
+  if (run.error || run.status !== 0) {
+    coverage.complete = false;
+    coverage.hostDrive = "unavailable";
+    coverage.hostDriveReason = run.error?.message ?? "Windows volume lookup failed";
+    return undefined;
+  }
+
+  let volumes;
+  try {
+    const encoded = run.stdout.trim();
+    if (!/^[A-Za-z0-9+/]+={0,2}$/.test(encoded)) throw new Error("invalid PowerShell response");
+    const data = JSON.parse(Buffer.from(encoded, "base64").toString("utf8"));
+    volumes = Array.isArray(data) ? data : data === null ? [] : [data];
+  } catch (error) {
+    coverage.complete = false;
+    coverage.hostDrive = "unavailable";
+    coverage.hostDriveReason = error.message;
+    return undefined;
+  }
+
+  const [volume] = volumes;
+  const free = Number(volume?.Free), total = Number(volume?.Total);
+  const identity = typeof volume?.Drive === "string" && /^[A-Za-z]$/.test(volume.Drive)
+    ? `${volume.Drive.toUpperCase()}:`
+    : volume?.VolumeId;
+  if (volumes.length !== 1 || volume?.Name !== distro || typeof volume.BasePath !== "string" || !volume.BasePath.trim()
+    || volume.VhdExists !== true || !identity || !Number.isSafeInteger(free) || free < 0
+    || !Number.isSafeInteger(total) || total < free) {
+    coverage.complete = false;
+    coverage.hostDrive = "unavailable";
+    coverage.hostDriveReason = "WSL VHD registration or volume data is missing or ambiguous";
+    return undefined;
+  }
+
+  coverage.hostDrive = `registered ${identity} volume for this WSL distro`;
+  return { path: `Windows ${identity}`, free, total };
 }
 
 function dedupe(families, tracked, repo) {
@@ -300,7 +351,7 @@ export function inspect(opts, now = Date.now()) {
   families.sort((a, b) => b.bytes - a.bytes);
   const candidates = families.filter((f) => ["delete", "slim", "prune", "ask"].includes(f.outcome)).length;
   return {
-    status: findings.length ? "fail" : candidates ? "review" : "pass",
+    status: findings.length ? "fail" : candidates || !coverage.complete ? "review" : "pass",
     repo, freeSpace: space, limits: { floor: opts.floor, cap: opts.cap ?? null, quietMinutes: opts.quietMinutes },
     coverage, findings, families, conformance: conformance(tracked),
   };

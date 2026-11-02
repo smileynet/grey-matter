@@ -4,14 +4,15 @@ import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { linkSync, mkdirSync, mkdtempSync, readFileSync, rmSync, utimesSync, writeFileSync, appendFileSync } from "node:fs";
+import { chmodSync, existsSync, linkSync, mkdirSync, mkdtempSync, readFileSync, rmSync, utimesSync, writeFileSync, appendFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { delimiter, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { conformance, inspect, options, summary } from "../skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs";
 
 // fileURLToPath, not URL.pathname: on Windows the pathname is /D:/..., which node cannot load.
 const SCRIPT = fileURLToPath(new URL("../skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs", import.meta.url));
+const onWsl = process.platform === "linux" && existsSync("/proc/version") && /microsoft/i.test(readFileSync("/proc/version", "utf8"));
 const git = (cwd, ...args) => {
   const r = spawnSync("git", ["-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false", ...args], { cwd });
   assert.equal(r.status, 0, r.stderr.toString());
@@ -51,6 +52,14 @@ function fixture() {
   git(repo, "worktree", "add", "-q", "--detach", join(base, "wt-gone"));
   rmSync(join(base, "wt-gone"), { recursive: true, force: true });
   return { base, repo };
+}
+
+function registeredHostVolume() {
+  const name = Buffer.from(process.env.WSL_DISTRO_NAME, "utf8").toString("base64");
+  const script = `$ErrorActionPreference='Stop'; $name=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('${name}')); $item=Get-ChildItem -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Lxss' | ForEach-Object { $entry=Get-ItemProperty -LiteralPath $_.PSPath; if($entry.DistributionName -ceq $name){ [pscustomobject]@{Name=$entry.DistributionName;BasePath=$entry.BasePath} } } | Select-Object -First 1; if($null -eq $item){exit 4}; $volume=Get-Volume -FilePath $item.BasePath; $report=[pscustomobject]@{Name=$item.Name;Drive=$volume.DriveLetter;Free=[string]$volume.SizeRemaining}; $json=ConvertTo-Json -Compress -InputObject $report; [Console]::WriteLine([Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($json)))`;
+  const run = spawnSync("powershell.exe", ["-NoProfile", "-NonInteractive", "-EncodedCommand", Buffer.from(script, "utf16le").toString("base64")], { encoding: "utf8", timeout: 10000, maxBuffer: 64 * 1024, windowsHide: true });
+  assert.equal(run.status, 0, run.error?.message ?? run.stderr);
+  return JSON.parse(Buffer.from(run.stdout.trim(), "base64").toString("utf8"));
 }
 
 async function holdOpen(path) {
@@ -128,6 +137,69 @@ test("the free-space floor and the summary line", () => {
   const cli = spawnSync(process.execPath, [SCRIPT, "--repo", repo, "--floor", "1000TiB", "--summary"]);
   assert.equal(cli.status, 1);
   assert.equal(spawnSync(process.execPath, [SCRIPT, "--repo", repo, "--floor", "lots"]).status, 2);
+});
+
+test("WSL free space is bounded by the Windows volume containing this distro VHD", { skip: !onWsl && "requires WSL2 and its Windows host" }, () => {
+  const { repo } = fixture();
+  if (!process.env.WSL_DISTRO_NAME) {
+    const unavailable = inspect({ ...base, repo, floor: 0 });
+    assert.equal(unavailable.coverage.complete, false);
+    assert.equal(unavailable.coverage.hostDrive, "unavailable");
+    assert.equal(unavailable.status, "review");
+    return;
+  }
+  const host = registeredHostVolume();
+  assert.equal(host.Name, process.env.WSL_DISTRO_NAME);
+  assert.match(host.Drive, /^[A-Z]$/);
+  const r = inspect({ ...base, repo, floor: 0 });
+  const distroFree = r.freeSpace.entries.find((entry) => entry.path === repo).free;
+  assert.equal(r.freeSpace.free, Math.min(distroFree, Number(host.Free)), JSON.stringify({ distroFree, host }));
+});
+
+test("WSL host-volume lookup fails closed for ambiguous or unavailable registrations", { skip: !onWsl && "requires WSL2 and its Windows host" }, () => {
+  const { repo } = fixture(), dir = mkdtempSync(join(tmpdir(), "footprint-powershell-")), executable = join(dir, "powershell.exe");
+  made.push(dir);
+  writeFileSync(executable, "#!/bin/sh\n");
+  chmodSync(executable, 0o755);
+  const originalPath = process.env.PATH, originalDistro = process.env.WSL_DISTRO_NAME;
+  const name = "fixture distro ; $(touch injected) Ω";
+  process.env.PATH = `${dir}${delimiter}${originalPath ?? ""}`;
+  process.env.WSL_DISTRO_NAME = name;
+  const record = (overrides = {}) => ({ Name: name, BasePath: "R:\\fixture with spaces\\$literal & path", VhdExists: true, Drive: "R", VolumeId: "volume-r", Free: "1234", Total: "9876", ...overrides });
+  const run = (response, exit = 0) => {
+    const encoded = Buffer.from(JSON.stringify(response), "utf8").toString("base64");
+    writeFileSync(executable, `#!/bin/sh\nprintf '%s\\n' '${encoded}'\nexit ${exit}\n`);
+    chmodSync(executable, 0o755);
+    return inspect({ ...base, repo, floor: 0 });
+  };
+  try {
+    const valid = run([record()]);
+    assert.equal(valid.freeSpace.entries.find((entry) => entry.path === "Windows R:").free, 1234);
+    assert.equal(valid.coverage.hostDrive, "registered R: volume for this WSL distro");
+
+    for (const [label, response, exit] of [
+      ["missing registration", [], 0],
+      ["duplicate registration", [record(), record()], 0],
+      ["missing VHD", [record({ VhdExists: false })], 0],
+      ["failed host query", [record()], 1],
+    ]) {
+      const result = run(response, exit);
+      assert.equal(result.coverage.complete, false, label);
+      assert.equal(result.coverage.hostDrive, "unavailable", label);
+      assert.equal(result.status, "review", label);
+      assert.equal(result.freeSpace.entries.some((entry) => entry.path.startsWith("Windows ")), false, label);
+    }
+
+    delete process.env.WSL_DISTRO_NAME;
+    const missingName = inspect({ ...base, repo, floor: 0 });
+    assert.equal(missingName.coverage.complete, false);
+    assert.equal(missingName.coverage.hostDrive, "unavailable");
+    assert.equal(missingName.status, "review");
+    assert.equal(missingName.freeSpace.entries.some((entry) => entry.path.startsWith("Windows ")), false);
+  } finally {
+    process.env.PATH = originalPath;
+    process.env.WSL_DISTRO_NAME = originalDistro;
+  }
 });
 
 test("goes green once the seeded problems are cleaned up", () => {
