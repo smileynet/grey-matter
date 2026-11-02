@@ -85,7 +85,7 @@ Check before you create and prune as you go; the close-out is the second chance.
 
 1. **Measure.** Before a build, test run, simulator, download, clone or copy of tracked
    files, check free space. Under 20 GiB, stop adding data and tell the user; under WSL,
-   use the lower of the distro and its Windows drive. Measure the first attempt: the rules
+   use the lower of the distro and the Windows volume containing its registered VHD. Measure the first attempt: the rules
    below apply past 500 MiB. Commands per OS: [footprint by OS](references/footprint-by-os.md).
 2. **Reference large tracked files** by path, hard link, `git worktree` or shared clone.
    Create test clones and worktrees with `GIT_LFS_SKIP_SMUDGE=1`: worktrees share the LFS
