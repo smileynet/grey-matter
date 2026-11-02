@@ -5,9 +5,13 @@ status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
-  - "Scenario fixtures cover retained ownership and protected unknown state"
-  - "Applicable repository gates pass with explicit coverage limits"
-tags: ["stream:tooling"]
+  - "One existing skill owns the retention rule and other workflow surfaces use concise pointers."
+  - "Worked scenarios cover merged but retained workspace, shared artifact, blocked worker, cross-harness handoff and unknown owner."
+  - "Each scenario preserves ignored originals and useful evidence until classified recovery/disposition is recorded."
+  - "Small reversible tasks require no mandatory registry or archive service."
+  - "Conformance scenarios flag contradictory disposable/retained guidance while preserving project-specific policy."
+  - "Applicable guidance checks and repository gates pass; global text stays within its existing budget."
+tags: ["stream:test-verification"]
 ---
 
 # Preserve artifact ownership across agent handoffs
@@ -42,3 +46,11 @@ Keep small tasks lightweight: a scoped note suffices; a project may use its own 
 ## Out of scope
 
 Project-specific paths, device names, file formats, universal new byte thresholds, cleanup daemons, automatic deletion, and implementing #184. #181 owns the pruning recipe; #182 owns growth/trend inspection.
+
+## Execution pickup 2026-11-02
+
+The user asked this session to proceed after #184. This related retention-verification
+follow-up is now in stream:test-verification; validation fields mirror the existing six
+acceptance criteria. The ownership policy remains in the existing artifact-hygiene owner,
+with a scoped note or project registry sufficient. Work runs in parallel with #182 using
+disjoint file scopes; no new dependency edge or shared cleanup executor is introduced.

@@ -9,7 +9,7 @@ validation_criteria:
   - "Paired snapshot fixtures flag regrowth only when prior cleanup is recorded; ordinary growth is distinguished from regrowth."
   - "Summary fixtures report free-space change and elapsed-time rate from valid same-volume samples; absent or invalid history is explicitly unavailable."
   - "A disposable checkout fixture proves tracked LFS payloads are not materialized or copied by the documented test-checkout pattern."
-tags: ["stream:tooling"]
+tags: ["stream:test-verification"]
 ---
 
 # Detect footprint growth outside repository scratch
@@ -31,8 +31,9 @@ current disposition are in [proposal 16's recovered addendum](../docs/agents/pro
 Read first:
 
 - `skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs`: `inspect`
-  discovers repo families and accepts explicit `--path` roots; `--recheck` currently
-  detects citation changes only. `summary` reports current free space without its rate of change.
+  discovers repo families and accepts explicit `--path` roots. #184 now binds `--recheck`
+  to versioned preservation snapshots as well as citations; reuse that boundary rather
+  than restoring its older citation-only behavior. `summary` still lacks a space trend.
 - `scripts/inspect-footprint.test.mjs`: synthetic families and supplied open-file sets.
 - `skills/meta/repository-artifact-hygiene/SKILL.md`: existing skip-smudge rule and
   24-hour quiet floor for agent state; ownership remains required for cleanup.
@@ -64,3 +65,11 @@ Reopening or changing #110; changing host watch schedules or alert thresholds; d
 agent state, simulator data, worktrees or caches; rerunning a whole-drive inventory.
 Host watch values in the recovered addendum are historical suggestions, not a new
 grey-matter daemon. Existing platform follow-ups #131–133 and #175 retain their scope.
+
+## Execution pickup 2026-11-02
+
+The user asked this session to proceed after #184. This related verification follow-up is
+now in stream:test-verification. Existing dependencies and acceptance scope are unchanged.
+Only explicit bounded external roots and synthetic fixtures are authorized; no live agent-home
+inventory, watch schedule, cleanup or deferred OneDrive/Mac probe is part of this work.
+Worker implementation and independent critic review precede root integration and closure.
