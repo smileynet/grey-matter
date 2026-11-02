@@ -16,6 +16,10 @@ cannot be established. Unknown means protect and review; it never means disposab
 state records that the retention obligation ended; it does not grant new deletion authority.
 Follow existing project and user authorization.
 
+When using the footprint inspector's preservation input, represent an unknown retention owner by
+omitting `owner` and setting `retention.disposition` to `unknown`; do not use the literal word
+`unknown` as an owner identity.
+
 Keep source originals and useful evidence available until their required recovery or disposition
 is recorded. Promote compact conclusions when useful, but a promoted summary does not replace a
 raw original still needed for recovery, failure analysis or release evidence. Git landing, a clean
