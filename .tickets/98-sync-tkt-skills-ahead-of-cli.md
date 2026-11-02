@@ -1,7 +1,7 @@
 ---
 id: "98"
 title: "sync can deploy tkt skills from a dev checkout that are ahead of the installed tkt release CLI"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "A fixture where pack skills use a flag the installed CLI lacks is reported before deploy"
