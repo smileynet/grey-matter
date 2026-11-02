@@ -3,7 +3,7 @@ id: "128"
 title: "Spike: can Kiro Crew run the orchestrate loop? (probes P1-P13 on the fixture)"
 status: done
 blocked_by: ["124"]
-tags: ["stream:tooling", "type:research"]
+tags: ["stream:orchestration", "type:research"]
 ---
 
 # Spike: can Kiro Crew run the orchestrate loop? (probes P1-P13 on the fixture)

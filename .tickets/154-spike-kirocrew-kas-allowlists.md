@@ -3,7 +3,7 @@ id: "154"
 title: "Spike: Kiro Crew workers on KAS allow-lists instead of YOLO (rerun P3 and P13)"
 status: done
 blocked_by: []
-tags: ["stream:tooling", "type:research"]
+tags: ["stream:orchestration", "type:research"]
 validation_criteria:
   - "P3/P13 observations, policy scope and primary-source snippets are recorded with supported outcome classes and selected receipts."
   - "The deletion/escalation question is answered without treating successful containment as unattended pre-authorization."

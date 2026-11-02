@@ -2,8 +2,12 @@
 id: "160"
 title: "Spike: Claude Code --bg sessions and notify_when_idle as the dispatch layer"
 status: open
-blocked_by: []
-tags: ["stream:tooling", "type:research"]
+blocked_by: ["124","125"]
+tags: ["stream:orchestration", "type:research"]
+validation_criteria:
+  - "Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented."
+  - "The question above answered yes or no, or listed under \"couldn't verify\" with what was tried."
+  - "Sandbox folders removed after the run; settings changed for the spike restored or recorded."
 ---
 
 # Spike: Claude Code --bg sessions and notify_when_idle as the dispatch layer
@@ -21,3 +25,7 @@ Source: [harness experimental features](../docs/agents/research/harness-experime
 - [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
 - [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
 - [ ] Sandbox folders removed after the run; settings changed for the spike restored or recorded.
+
+## Reconciliation (2026-11-02)
+
+Use an owned fixture with session-scoped settings. If background sessions require folder trust, record the supported trust boundary and unresolved human-only setup; never broaden persistent trust silently. Correlate idle notifications with a final structured result and independently checked artifacts, since idle by itself is not acceptance.

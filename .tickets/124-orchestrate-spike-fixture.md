@@ -3,7 +3,7 @@ id: "124"
 title: "Spike 0: disposable orchestration fixture repo (five shaped tickets, trunk and PR variants)"
 status: done
 blocked_by: []
-tags: ["stream:tooling", "type:research"]
+tags: ["stream:orchestration", "type:research"]
 ---
 
 # Spike 0: disposable orchestration fixture repo (five shaped tickets, trunk and PR variants)

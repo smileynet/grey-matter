@@ -3,7 +3,11 @@ id: "169"
 title: "Spike: fast models for read-only research and codebase exploration fan-out"
 status: open
 blocked_by: ["174"]
-tags: ["stream:tooling", "type:research"]
+tags: ["stream:orchestration", "type:research"]
+validation_criteria:
+  - "A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note."
+  - "A recommendation for this task class: the cheapest tier that met the bar, or \"keep the default\", folded into the Which model for what table in models-and-usage.md."
+  - "Settings changed for the spike restored or recorded; sandbox folders removed."
 ---
 
 # Spike: fast models for read-only research and codebase exploration fan-out
@@ -21,3 +25,7 @@ Prior art to borrow techniques from (not authority): [eval prior art](../docs/ag
 - [ ] A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note.
 - [ ] A recommendation for this task class: the cheapest tier that met the bar, or "keep the default", folded into the Which model for what table in models-and-usage.md.
 - [ ] Settings changed for the spike restored or recorded; sandbox folders removed.
+
+## Reconciliation (2026-11-02)
+
+Use a fixed caller/citation answer key and score missing callers, invented callers and unsupported citations separately. A readable summary alone is not accuracy evidence. Keep source access identical across compared tiers.

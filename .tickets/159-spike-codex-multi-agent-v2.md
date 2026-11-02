@@ -2,8 +2,12 @@
 id: "159"
 title: "Spike: Codex multi_agent_v2 with the agent message board and wake-on-message"
 status: open
-blocked_by: []
-tags: ["stream:tooling", "type:research"]
+blocked_by: ["124","127"]
+tags: ["stream:orchestration", "type:research"]
+validation_criteria:
+  - "Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented."
+  - "The question above answered yes or no, or listed under \"couldn't verify\" with what was tried."
+  - "Sandbox folders removed after the run; settings changed for the spike restored or recorded."
 ---
 
 # Spike: Codex multi_agent_v2 with the agent message board and wake-on-message
@@ -21,3 +25,7 @@ Source: [harness experimental features](../docs/agents/research/harness-experime
 - [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
 - [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
 - [ ] Sandbox folders removed after the run; settings changed for the spike restored or recorded.
+
+## Reconciliation (2026-11-02)
+
+Treat feature names and the cited version as hypotheses: inspect the installed CLI feature catalog first and run only available switches, process-scoped. Distinguish message delivery, wake behavior, same-worker continuation, concurrency and nesting outcomes. Missing or retired features are unsupported setup, not a failed worker or permission to edit global configuration.

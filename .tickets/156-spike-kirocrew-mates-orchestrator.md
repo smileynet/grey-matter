@@ -2,8 +2,12 @@
 id: "156"
 title: "Spike: a Kiro Crew Mate as the standing orchestrator"
 status: open
-blocked_by: []
-tags: ["stream:tooling", "type:research"]
+blocked_by: ["124","128","154"]
+tags: ["stream:orchestration", "type:research"]
+validation_criteria:
+  - "Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented."
+  - "The question above answered yes or no, or listed under \"couldn't verify\" with what was tried."
+  - "Sandbox folders removed after the run; settings changed for the spike restored or recorded."
 ---
 
 # Spike: a Kiro Crew Mate as the standing orchestrator
@@ -21,3 +25,7 @@ Source: [harness experimental features](../docs/agents/research/harness-experime
 - [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
 - [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
 - [ ] Sandbox folders removed after the run; settings changed for the spike restored or recorded.
+
+## Reconciliation (2026-11-02)
+
+Use the audited #154 approval findings and #155 backend limitation. Test the Mate and its own workers on an explicitly recorded backend; do not assume member_acp_backend splits an ordinary KAS conductor from external workers. Use a known supported auth owner; #186 is needed only if selecting the unresolved Crew-owned relay path. Record worker/session identities, ledger state and the actual post-restart report/wake, not merely the reappearance of a chat.

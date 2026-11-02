@@ -3,7 +3,11 @@ id: "167"
 title: "Spike: cheap vs default models as implementation workers on well-specified tickets"
 status: open
 blocked_by: ["174"]
-tags: ["stream:tooling", "type:research"]
+tags: ["stream:orchestration", "type:research"]
+validation_criteria:
+  - "A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note."
+  - "A recommendation for this task class: the cheapest tier that met the bar, or \"keep the default\", folded into the Which model for what table in models-and-usage.md."
+  - "Settings changed for the spike restored or recorded; sandbox folders removed."
 ---
 
 # Spike: cheap vs default models as implementation workers on well-specified tickets
@@ -21,3 +25,7 @@ Prior art to borrow techniques from (not authority): [eval prior art](../docs/ag
 - [ ] A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note.
 - [ ] A recommendation for this task class: the cheapest tier that met the bar, or "keep the default", folded into the Which model for what table in models-and-usage.md.
 - [ ] Settings changed for the spike restored or recorded; sandbox folders removed.
+
+## Reconciliation (2026-11-02)
+
+Keep ordinary well-specified cases separate from deliberately ambiguous/trap cases. Freeze fixture revision, model identity, effort and grading before each comparison; report requested versus observed model separately. Never expose hidden tests or answer keys to workers, and report unavailable usage counters as unknown.

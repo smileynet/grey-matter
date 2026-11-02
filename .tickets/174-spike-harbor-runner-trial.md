@@ -2,8 +2,12 @@
 id: "174"
 title: "Spike: harbor as the runner for the model-tier and harness spikes, vs a thin runner of our own"
 status: open
-blocked_by: []
-tags: ["stream:tooling", "type:research"]
+blocked_by: ["124"]
+tags: ["stream:orchestration", "type:research"]
+validation_criteria:
+  - "Both fixtures run through at least two harness adapters, with their pass or fail and cost recorded, or the blocking failure recorded verbatim."
+  - "A decision for tickets 167-172 names a runnable selected path with fixture revision, adapter commands, result/usage schema and grading recipe, or explicitly records that execution remains blocked."
+  - "Any Docker or sandbox state the trial created removed or recorded."
 ---
 
 # Spike: harbor as the runner for the model-tier and harness spikes, vs a thin runner of our own
@@ -17,5 +21,9 @@ A one-day trial of [harbor](https://github.com/harbor-framework/harbor), cloned 
 ## Acceptance criteria
 
 - [ ] Both fixtures run through at least two harness adapters, with their pass or fail and cost recorded, or the blocking failure recorded verbatim.
-- [ ] A decision for tickets 167-172 (harbor, or a thin runner of our own), with the reason, added to the eval prior-art note.
+- [ ] A decision for tickets 167-172 names a runnable selected path with fixture revision, adapter commands, result/usage schema and grading recipe in the eval prior-art note, or explicitly records that execution remains blocked and creates the missing prerequisite ticket before closure.
 - [ ] Any Docker or sandbox state the trial created removed or recorded.
+
+## Reconciliation (2026-11-02)
+
+This decision must leave a runnable selected path, not just a framework preference: record the exact fixture revision, adapter commands, result/usage schema and grading recipe, and demonstrate two fixtures through the chosen path. If Harbor fails, a demonstrated thin path can satisfy the choice; if neither path runs, follow-up execution work is required before the dependent model trials can start. Native Windows availability, Docker setup cost and Kiro ACP compatibility are separate observations.

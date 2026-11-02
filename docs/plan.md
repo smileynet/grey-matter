@@ -155,6 +155,118 @@ review acceptance, commit/push and deploy guidance changes before closing with e
 Finish with integrated pre-release verification plus the named platform checks. Promote or
 recycle owned artifacts; leave unresolved external evidence explicit rather than forcing closure.
 
+## Orchestration workstream (reconciled 2026-11-02)
+
+Scope: exactly the 27 tickets in the two tables below, tagged
+`stream:orchestration`: 16 open and 11 done, with no in-progress ticket.
+Other tooling, test-verification, dashboard and release work remains in its
+existing stream. Related parked #06 (skill/version drift evaluations) and #09
+(fresh-process versus subagent guidance) remain deferred outside this active
+spike set. This reconciliation does not authorize release publication or new
+global harness settings.
+
+The remaining-work table is the proposed serial execution order. First finish
+#162's retained transport/recovery thread, then resolve #186's current KAS auth
+question. #162 and #186 have high priority. Run #158 before #157 to inform its
+permission setup; this is a recommendation, not a fabricated blocker. Other
+independent probes may proceed in parallel with disjoint private fixtures and
+bounded usage; their order below keeps the current harness work together before
+the model comparisons.
+
+Hard remaining edges are #162 → #173 and #174 → #167–172. The rest of each
+ticket's blocked_by records completed fixture/baseline prerequisites, retained
+for provenance. #174 must leave a runnable selected recipe. If both runner
+paths fail, create and link the missing execution prerequisite to #167–172
+before closing #174; a framework preference alone does not unblock the trials.
+#156 can use verified CLI-owned auth independently of #186; Crew-owned relay
+auth remains conditional on the result of #186.
+
+| ID | Work | Status |
+| --- | --- | --- |
+| 162 | 1. Finish headless driver comparison, recovery and retained t111 evidence | open |
+| 186 | 2. Verify KAS relay authentication ownership and record a supported recipe | open |
+| 156 | 3. Qualify Mate report/wake recovery across gateway restart | open |
+| 158 | 4. Test narrower agy regex permissions with negative controls | open |
+| 157 | 5. Test agy native workflow dispatch and per-role model selection | open |
+| 159 | 6. Test available Codex multi-agent/message-board/wake features | open |
+| 160 | 7. Test Claude background sessions and idle notification semantics | open |
+| 161 | 8. Test Kiro V3 workflow execution, pause, resume and retry | open |
+| 173 | 9. Compare GUI watch/answer surfaces against #162's stable driver | open |
+| 174 | 10. Select and demonstrate Harbor or a thin runner for the model trials | open |
+| 167 | 11. Compare implementation worker tiers | open |
+| 168 | 12. Compare reviewer tiers with planted defects and false positives | open |
+| 169 | 13. Compare research/exploration tiers against a fixed answer key | open |
+| 170 | 14. Compare documentation, triage and classification tiers | open |
+| 171 | 15. Sweep effort levels while holding each model fixed | open |
+| 172 | 16. Compare Claude fast mode on/off with measured quality and usage | open |
+
+Solid arrows below are hard dependencies; dotted arrows are proposed order only.
+Completed prerequisites are omitted from this graph and remain in the tickets.
+
+```mermaid
+flowchart TD
+  D162["162 Headless drivers"] --> G173["173 GUI watch layer"]
+  D162 -.-> A186["186 KAS auth ownership"]
+  A186 -.-> M156["156 Mate restart/recovery"]
+  P158["158 agy regex permissions"] -.-> W157["157 agy workflows"]
+  subgraph Other["Independent harness probes"]
+    C159["159 Codex messaging"]
+    B160["160 Claude background"]
+    K161["161 Kiro V3 workflows"]
+  end
+  R174["174 Demonstrate selected runner"] --> I167["167 Implementation tiers"]
+  R174 --> V168["168 Reviewer tiers"]
+  R174 --> E169["169 Exploration tiers"]
+  R174 --> T170["170 Text-task tiers"]
+  R174 --> F171["171 Effort sweep"]
+  R174 --> S172["172 Claude fast mode"]
+```
+
+Completed baseline and delivered guidance (historical closure evidence preserved):
+
+| ID | Work | Status |
+| --- | --- | --- |
+| 124 | Shared disposable orchestration fixture | ✅ done |
+| 125 | Claude Code baseline | ✅ done |
+| 126 | kiro-cli baseline | ✅ done |
+| 127 | Codex baseline | ✅ done |
+| 128 | Kiro Crew baseline | ✅ done |
+| 129 | agy baseline | ✅ done |
+| 111 | Authored and exercised orchestrate skill and harness references | ✅ done |
+| 95 | Optional Kiro Crew ticket-state mirroring | ✅ done |
+| 154 | KAS allowlist denial/escalation qualified; unattended approvals not established | ✅ done |
+| 155 | External adapters initialized; ordinary mixed-backend loop remains unverified | ✅ done |
+| 185 | KAS architecture and initialize-only protocol research | ✅ done |
+
+Closed tickets received tag-only metadata corrections; statuses, acceptance
+checkboxes, dependencies and resolution bodies were preserved. Existing unchecked
+historical boxes on #125–129 remain visible warnings, not newly claimed passes.
+All 16 open tickets now have concrete validation fields, current context and
+explicit prerequisites. #155 is not reopened: a new mixed-backend probe requires
+a supported configuration/version or a separately chosen design, not repetition
+of the same unsupported split.
+
+Native tkt 0.4.0 context queries also include untagged tickets. Use the exact
+27-ticket membership above rather than treating every context-query result as
+in scope. The initial scoped frontier is #162, #186, #156–161 and #174;
+#173 awaits #162 and #167–172 await #174. Plan order is advisory among frontier
+members, while declared dependencies remain authoritative.
+
+Retained private t111 evidence belongs to #162; the prepared 98,400-byte t158
+fixture belongs to #158. The managed primary checkout serves this workstream
+until the app permits normal archival; do not bypass its primary-checkout guard.
+No new model run, adapter installation, credential change or fixture cleanup was
+performed by this reconciliation.
+
+Reconciliation checks passed: all 27 stream tags and statuses verified, all 11
+closed bodies preserved with tag-only changes, three validation fields per open
+ticket, exactly one plan row per scoped ticket, and the expected nine-ticket
+frontier. `tkt sync-plan --check --brief` passed with zero findings;
+`tkt validate --brief` passed with the seven existing closed-checkbox warnings.
+Documentation consistency and home-path checks passed. Owned temporary
+reconciliation scripts and snapshot are recycled after these conclusions are
+recorded; the retained fixtures above are outside this cleanup.
+
 ## Open work order (reconciled 2026-10-31)
 
 Order follows the rubric: finish the in-flight threads, earlier ids first, real blockers
@@ -169,8 +281,6 @@ are in the order to take them. Release themes above still say what ships in 0.3.
 | 90 | Wave 3: build the dashboard copy and results critics (after 92) | open |
 | 109 | Wave 3: delivery-dashboard understands tkt's cancelled status (ships with tkt 227) | open |
 | 118 | Wave 4: show a complete visual execution queue with one active ticket in serial mode | open |
-| 111 | Wave 5, owner input first: build the orchestrate skill (proposal 17; three open questions) | ✅ done |
-| 95 | Wave 5: Kiro Crew chat_tag and session_ledger steps (after 111's placement decision) | ✅ done |
 | 87 | Owner decision: setup-repo links shadow handoff and grill-me in Kiro | open |
 | 89 | Owner approval per repo: adopt the dashboard template in three other repos | open |
 | 94 | Low: Kiro hook runs check-repo before an agent push | ✅ done |
@@ -221,29 +331,11 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 148 | Take over another agent's worktrees and branches safely | open |
 | 149 | reconcile-tickets runs a priority review over workstreams, queue and blockers | open |
 | 150 | Add an optional product map (jobs, workflows, feature status) to the delivery dashboard | open |
-| 154 | Spike: Kiro Crew workers on KAS allow-lists instead of YOLO (rerun P3 and P13) | ✅ done |
-| 155 | Spike: Kiro Crew conductor dispatching Claude Code or Codex workers | ✅ done |
-| 156 | Spike: a Kiro Crew Mate as the standing orchestrator | open |
-| 157 | Spike: agy run_workflow and custom agents running the orchestrate loop | open |
-| 158 | Spike: agy command(regex:...) rules narrower than command(*) | open |
-| 159 | Spike: Codex multi_agent_v2 with the agent message board and wake-on-message | open |
-| 160 | Spike: Claude Code --bg sessions and notify_when_idle as the dispatch layer | open |
-| 161 | Spike: kiro-cli V3 workflows expressing the orchestrate loop natively | open |
-| 162 | Spike: compare headless driver surfaces across harnesses | open |
 | 164 | Upgrade path: bring a project up to a new grey-matter release's standards (conformance-audit mode recommended) | open |
 | 166 | Refresh harnesses.md to the installed harness versions (first harness-changelog review) | open |
-| 167 | Spike: cheap vs default models as implementation workers on well-specified tickets | open |
-| 168 | Spike: cheap vs default models as reviewers catching planted defects | open |
-| 169 | Spike: fast models for read-only research and codebase exploration fan-out | open |
-| 170 | Spike: fast models for doc edits, triage and changelog classification | open |
-| 171 | Spike: effort levels (low to max) on one model per provider for diagnosis and design tasks | open |
-| 172 | Spike: Claude Code fast mode speed, quality and credit cost on orchestrate workers | open |
-| 173 | Spike: GUI surfaces as the watch layer over a headless orchestrator | open |
-| 174 | Spike: harbor as the runner for the model-tier and harness spikes, vs a thin runner of our own | open |
 | 179 | Implement inter-harness session messaging and wakeups | open |
 | 180 | Review philippines-trip's worktree rules and audit script for adoption | open |
 | 181 | Add a scratch-prune recipe to repository-artifact-hygiene | open |
 | 182 | Detect footprint growth outside repository scratch | open |
 | 183 | Preserve artifact ownership across agent handoffs | open |
 | 184 | Revalidate preservation state before cleanup recommendations | open |
-| 185 | Research: KAS architecture and its relationship to kiro-cli | ✅ done |

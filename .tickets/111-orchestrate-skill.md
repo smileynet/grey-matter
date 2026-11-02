@@ -3,7 +3,7 @@ id: "111"
 title: "Build the orchestrate skill (proposal 17): conductor over the ticket frontier with reviewer gate and per-harness references"
 status: done
 blocked_by: ["124", "125", "126", "127", "128", "129"]
-tags: ["stream:tooling", "type:enhancement"]
+tags: ["stream:orchestration", "kind:enhancement"]
 priority: high
 validation_criteria: 
   - "Structure and routing pass syntax, invocation, and documentation checks plus independent Standards and Spec reviews."

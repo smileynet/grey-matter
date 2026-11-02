@@ -2,8 +2,12 @@
 id: "158"
 title: "Spike: agy command(regex:...) rules narrower than command(*)"
 status: open
-blocked_by: []
-tags: ["stream:tooling", "type:research"]
+blocked_by: ["124","129"]
+tags: ["stream:orchestration", "type:research"]
+validation_criteria:
+  - "Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented."
+  - "The question above answered yes or no, or listed under \"couldn't verify\" with what was tried."
+  - "Sandbox folders removed after the run; settings changed for the spike restored or recorded."
 ---
 
 # Spike: agy command(regex:...) rules narrower than command(*)
@@ -21,3 +25,7 @@ Source: [harness experimental features](../docs/agents/research/harness-experime
 - [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
 - [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
 - [ ] Sandbox folders removed after the run; settings changed for the spike restored or recorded.
+
+## Reconciliation (2026-11-02)
+
+Preparation in this chat created a 98,400-byte private fixture and its baseline npm test passed 1/1; no regex or write-boundary probe has run. Retain it only through this ticket, then recycle it. Current first-party Windows guidance recommends regex matching; workspace writes may be implicitly allowed, so a successful in-workspace write alone does not prove the write_file rule bounded access. Use harmless negative controls and verify file bytes/command results.

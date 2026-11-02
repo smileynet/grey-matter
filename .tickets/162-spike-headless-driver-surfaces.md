@@ -2,8 +2,13 @@
 id: "162"
 title: "Spike: compare headless driver surfaces across harnesses"
 status: open
-blocked_by: []
-tags: ["stream:tooling", "type:research"]
+blocked_by: ["111","124","125","126","127","128","129"]
+tags: ["stream:orchestration", "type:research"]
+validation_criteria:
+  - "Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented."
+  - "The question above answered yes or no, or listed under \"couldn't verify\" with what was tried."
+  - "Sandbox folders removed after the run; settings changed for the spike restored or recorded."
+priority: high
 ---
 
 # Spike: compare headless driver surfaces across harnesses
@@ -30,3 +35,7 @@ the remaining owned artifacts.
 - [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
 - [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
 - [ ] Sandbox folders removed after the run; settings changed for the spike restored or recorded.
+
+## Reconciliation (2026-11-02)
+
+Finish the retained ticket-111 transport/recovery investigation first. #185 adds an initialize-only V3 handshake and an unresolved auth-owner discrepancy; neither proves model/tool execution. Compare actual driver results, approval channels, follow-up identity and interrupted-process recovery using a common minimal task. The outcome supplies #173 with a named stable headless driver and reproducible signals. This ticket owns selected receipt promotion and recycling of retained t111 evidence; a stopped outer process alone is not settlement.

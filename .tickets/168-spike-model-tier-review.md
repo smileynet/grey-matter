@@ -3,7 +3,11 @@ id: "168"
 title: "Spike: cheap vs default models as reviewers catching planted defects"
 status: open
 blocked_by: ["174"]
-tags: ["stream:tooling", "type:research"]
+tags: ["stream:orchestration", "type:research"]
+validation_criteria:
+  - "A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note."
+  - "A recommendation for this task class: the cheapest tier that met the bar, or \"keep the default\", folded into the Which model for what table in models-and-usage.md."
+  - "Settings changed for the spike restored or recorded; sandbox folders removed."
 ---
 
 # Spike: cheap vs default models as reviewers catching planted defects
@@ -21,3 +25,7 @@ Prior art to borrow techniques from (not authority): [eval prior art](../docs/ag
 - [ ] A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note.
 - [ ] A recommendation for this task class: the cheapest tier that met the bar, or "keep the default", folded into the Which model for what table in models-and-usage.md.
 - [ ] Settings changed for the spike restored or recorded; sandbox folders removed.
+
+## Reconciliation (2026-11-02)
+
+Freeze diffs and answer keys; score defect recall and false positives separately. Keep the reviewer blind to tier labels where supported, and do not let the producer grade its own review. A successful tier result supports a recommendation only for the measured task/defect set.

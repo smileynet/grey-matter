@@ -2,8 +2,12 @@
 id: "173"
 title: "Spike: GUI surfaces as the watch layer over a headless orchestrator"
 status: open
-blocked_by: []
-tags: ["stream:tooling", "type:research"]
+blocked_by: ["124","162"]
+tags: ["stream:orchestration", "type:research"]
+validation_criteria:
+  - "One row per GUI (state shown, approvals answerable, usage shown, question answerable), as a dated section in the experimental features note."
+  - "A recommendation on which GUI to use as the watch layer per harness, folded into the orchestrate skill's references (ticket 111)."
+  - "Sandbox folders removed after the run."
 ---
 
 # Spike: GUI surfaces as the watch layer over a headless orchestrator
@@ -21,3 +25,7 @@ Prior art to borrow techniques from (not authority): [eval prior art](../docs/ag
 - [ ] One row per GUI (state shown, approvals answerable, usage shown, question answerable), as a dated section in the experimental features note.
 - [ ] A recommendation on which GUI to use as the watch layer per harness, folded into the orchestrate skill's references (ticket 111).
 - [ ] Sandbox folders removed after the run.
+
+## Reconciliation (2026-11-02)
+
+Consume #162's named stable headless driver and fixture signals. Compare each GUI against the same worker identities, pending approval and question; distinguish visible state from an action actually answered through the GUI. Unavailable clients remain explicit unsupported coverage, not a reason to install or sign into new services silently.

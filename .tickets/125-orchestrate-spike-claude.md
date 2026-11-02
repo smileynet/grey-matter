@@ -3,7 +3,7 @@ id: "125"
 title: "Spike: can Claude Code (CLI and desktop) run the orchestrate loop? (probes P1-P13 on the fixture)"
 status: done
 blocked_by: ["124"]
-tags: ["stream:tooling", "type:research"]
+tags: ["stream:orchestration", "type:research"]
 ---
 
 # Spike: can Claude Code (CLI and desktop) run the orchestrate loop? (probes P1-P13 on the fixture)

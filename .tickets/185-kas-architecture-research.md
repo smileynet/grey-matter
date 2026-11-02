@@ -3,7 +3,7 @@ id: "185"
 title: "Research: KAS architecture and its relationship to kiro-cli"
 status: done
 blocked_by: []
-tags: ["stream:tooling", "type:research"]
+tags: ["stream:orchestration", "type:research"]
 validation_criteria:
   - "Dated findings explain KAS architecture, CLI relationship, protocol, lifecycle, tools, permissions, auth and version boundaries with primary sources."
   - "An initialize-only observation is separated from advertised or source-traced capabilities, and independent audit finds no unsupported claim."

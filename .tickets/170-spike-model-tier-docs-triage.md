@@ -3,7 +3,11 @@ id: "170"
 title: "Spike: fast models for doc edits, triage and changelog classification"
 status: open
 blocked_by: ["174"]
-tags: ["stream:tooling", "type:research"]
+tags: ["stream:orchestration", "type:research"]
+validation_criteria:
+  - "A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note."
+  - "A recommendation for this task class: the cheapest tier that met the bar, or \"keep the default\", folded into the Which model for what table in models-and-usage.md."
+  - "Settings changed for the spike restored or recorded; sandbox folders removed."
 ---
 
 # Spike: fast models for doc edits, triage and changelog classification
@@ -21,3 +25,7 @@ Prior art to borrow techniques from (not authority): [eval prior art](../docs/ag
 - [ ] A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note.
 - [ ] A recommendation for this task class: the cheapest tier that met the bar, or "keep the default", folded into the Which model for what table in models-and-usage.md.
 - [ ] Settings changed for the spike restored or recorded; sandbox folders removed.
+
+## Reconciliation (2026-11-02)
+
+Freeze input documents/tickets/changelog fragments and the grading rubric before runs. Separate mechanical classification errors from style judgments, and grade without tier labels where supported. Do not mutate real tickets or publish real user messages while scoring fixtures.

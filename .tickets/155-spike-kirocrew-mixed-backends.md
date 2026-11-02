@@ -3,7 +3,7 @@ id: "155"
 title: "Spike: Kiro Crew conductor dispatching Claude Code or Codex workers"
 status: done
 blocked_by: []
-tags: ["stream:tooling", "type:research"]
+tags: ["stream:orchestration", "type:research"]
 validation_criteria:
   - "Installed adapter initialization and actual backend routing are recorded with primary source excerpts and a sanitized receipt."
   - "The requested mixed conductor/worker loop is either verified or explicitly bounded as unverified with the setup limitation."
