@@ -37,3 +37,15 @@ does not authorize publication.
 
 Status remains open. This reconciliation adds no implementation or fresh host-validation claim;
 verify the ticket's premises against current source and run its acceptance checks when picked up.
+
+## Delegated implementation 2026-11-02
+
+Worker commit 38b20e4 added conditional portable-bundle guidance and one meaningful regression through the existing verifyArtifacts public validator. The fixture changes an extracted guide to CRLF bytes, leaves its per-file hash stale, reseals outer archive/release checksums and observes the precise extracted-file hash mismatch; the extra-file fixture remains. Independent critic Spec/Standards review accepted it. Root merged and forced pre-merge 4/4 commands (ticket-graph 0.4 s, syntax fixtures 0.3 s, guidance 1.0 s, release-units 0.3 s), then independently ran artifact tests 32/32 with no skips in 13.461 s. Worker pre-push completed 6/6 selected checks. No global line-ending configuration, repository-wide attributes or publication changed; staged-index and committed exports remain distinct. Retain the owned t113-worker checkout/dependency junction through final stream audit/cleanup; it contains no downloaded dependency copy.
+
+Delivery dashboard: [current status](../docs/status.html). The shared renderer is unchanged;
+strict source/data checks and critic source review pass. Actual laptop/phone visual review
+remains pending because browser policy blocked local-file access; human review was requested.
+[Observation limits](../docs/agents/research/evidence/dashboard-ui-20261102.json) preserve that boundary.
+Root owns merge, deployment and native ticket closure. Worker worktrees are recycled after
+integration; local commit history and this evidence remain in Git. The current deployment
+package is retained until the next deployment.

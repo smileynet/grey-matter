@@ -100,7 +100,7 @@ manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 2
 ## Test optimization and verification
 
 Reconciled 2026-11-02 at the user's request. Scope: `stream:test-verification`.
-10 unfinished tickets (8 open, 2 in progress) and 13 completed tickets. This stream excludes orchestration and dashboard
+10 unfinished tickets (7 open, 3 in progress) and 13 completed tickets. This stream excludes orchestration and dashboard
 feature work; #116 covers only the evidence/current-summary contract. Existing release
 authorization and frozen candidate scope are unchanged.
 
@@ -129,7 +129,7 @@ scripts/snapshot are recycled after their conclusions are recorded here.
 | 117 | 2. Retrospective coverage and repaired-versus-remaining work | ✅ done |
 | 113 | 3. Exact bundle inventory and portable byte hashes | in_progress |
 | 116 | 4. Current summaries derived from scoped evidence | in_progress |
-| 120 | 5. Documented vendor repair and checkout divergence handling | open |
+| 120 | 5. Documented vendor repair and checkout divergence handling | in_progress |
 | 98 | 5. CLI/pack compatibility and identity-bound reuse | open |
 | 121 | 5. Windows critic launch and unsupported-version diagnostics | open |
 | 132 | 6. Windows footprint rows and disposable bin/placeholder probes | open |
