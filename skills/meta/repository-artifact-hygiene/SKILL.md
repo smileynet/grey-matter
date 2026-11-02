@@ -156,6 +156,23 @@ the repo (`~/release-work/…`, a remote host's checkout).
 Keep a bounded history: the latest three attempts of each kind, plus any failed or cited
 attempt that recovery or a release record still needs. Promote before pruning.
 
+### Prune a scratch plan
+
+Use the project's existing cleanup tool and authorization. Inspect its dry-run plan and
+exact targets first. Match citations in all tracked references, including done tickets and
+generated dashboard data. Promote only compact final proof that needs to last; do not
+promote whole run directories, raw `.xcresult` bundles or SQLite snapshots. Repoint ticket
+and dashboard citations to the promoted proof, regenerate generated references, then
+revalidate the plan immediately before applying it with the existing authorized tool.
+
+Keep necessary raw originals privately while they support unresolved failure analysis,
+recovery or release evidence. In the existing registry or a concise handoff, record their
+scope, hashes, retention owner, purpose, `retained`/`unknown` state and end condition; verify
+required recovery or disposition before removing the local copy. Missing
+citations, a closed ticket, elapsed time or a clean worktree are review signals, not proof
+that an unknown artifact is disposable. If ownership or disposition is unknown, preserve
+it as `unknown` and route it for review under [Ownership across handoffs](#ownership-across-handoffs).
+
 Record the outcome in the Resolution: what was promoted where, what was deleted, and
 what was kept, with its scope. Deleting files outside the repo or on another host uses
 the same authorization as any other deletion there. Items marked as relied on by another
