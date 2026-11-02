@@ -179,7 +179,7 @@
     {
       "id": "critic-model-probe",
       "stage": "pre-merge",
-      "catches": "the critic model probe reporting a model it cannot verify; POSIX only, every test skips on Windows",
+      "catches": "the critic model probe's model record, Windows .cmd launch, documented Terra version floor and Sol availability diagnostic",
       "scope": ["scripts/probe-critic-model"],
       "run": ["node", "--test", "--test-timeout=60000", "scripts/probe-critic-model.test.mjs"],
       "timeout_s": 60,

@@ -7,10 +7,11 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { probe } from "./probe-critic-model.mjs";
+import { join, resolve } from "node:path";
+import { spawnSync } from "node:child_process";
+import { CEILINGS, probe } from "./probe-critic-model.mjs";
 
 const unix = process.platform !== "win32";
 // The fake harness binaries are #!/bin/sh scripts, which Windows cannot execute directly.
@@ -34,8 +35,10 @@ ${opts.auth ? `echo '{"is_error":true,"result":"Failed to authenticate: OAuth se
 case "$*" in *no-such-model*) echo '{"is_error":true,"result":"There is an issue with the selected model","modelUsage":{}}'; exit 1;; esac
 echo '{"is_error":false,"result":"OK","modelUsage":${opts.noUsage ? "{}" : `{"${opts.claudeModel ?? "claude-opus-5-5"}":{"inputTokens":2}}`}}'`);
   if (only.includes("codex")) exe(bin, "codex", `
-[ "$1" = "--version" ] && { echo "codex-cli 0.999.0"; exit 0; }
+[ "$1" = "--version" ] && { echo "codex-cli ${opts.codexVersion ?? "0.999.0"}"; printf '%s\\n' "$*" >> "$CODEX_HOME/calls.log"; exit 0; }
+printf '%s\\n' "$*" >> "$CODEX_HOME/calls.log"
 ${opts.auth ? `echo '{"type":"turn.failed","error":{"message":"Your access token could not be refreshed because your refresh token was already used. Please log out and sign in again."}}'; exit 1` : ""}
+${opts.solUnsupported ? `echo '{"type":"error","status":400,"error":{"type":"invalid_request_error","message":"The gpt-6.1-sol model is not supported when using Codex with a ChatGPT account."}}'; exit 1` : ""}
 case "$*" in *no-such-model*) ${opts.accepts ? "" : `echo '{"type":"error","message":"model_not_found"}'; exit 1`};; esac
 case "$*" in *patched.txt*)
   ${opts.noAttempt ? `echo '{"type":"item.completed","item":{"type":"agent_message","text":"I would rather not do that."}}'; exit 0;` : ""}
@@ -64,12 +67,62 @@ echo "> OK"`);
   return { PATH: `${bin}:/usr/bin:/bin`, CODEX_HOME: codexHome };
 }
 
+function windowsCodexShim(t, { version = "0.166.0", solUnsupported = false } = {}) {
+  const root = mkdtempSync(join(tmpdir(), "gm-critic shim & space-"));
+  const bin = join(root, "bin"), codexHome = join(root, "codex"), log = join(root, "arguments.jsonl");
+  mkdirSync(bin); mkdirSync(codexHome);
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const fake = `
+import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+const args = process.argv.slice(2);
+appendFileSync(process.env.CODEX_ARGS_LOG, JSON.stringify(args) + "\\n");
+if (args[0] === "--version") { console.log("codex-cli ${version}"); process.exit(0); }
+if (args.includes("gpt-9-no-such-model")) { console.log(JSON.stringify({ type: "error", message: "model_not_found" })); process.exit(1); }
+if (args.some((arg) => arg.includes("patched.txt"))) {
+  console.log(JSON.stringify({ type: "item.completed", item: { type: "file_change", status: "failed", changes: [{ path: "patched.txt", kind: "add" }] } }));
+  console.log(JSON.stringify({ type: "item.completed", item: { type: "agent_message", text: "patch rejected: writing is blocked by read-only sandbox" } }));
+  process.exit(0);
+}
+${solUnsupported ? `console.log(JSON.stringify({ type: "error", status: 400, error: { type: "invalid_request_error", message: "The gpt-6.1-sol model is not supported when using Codex with a ChatGPT account." } })); process.exit(1);` : ""}
+const tid = "01aaaaaa-bbbb-cccc-dddd-000000000001";
+const dir = join(process.env.CODEX_HOME, "sessions", "2026", "10", "27");
+mkdirSync(dir, { recursive: true });
+writeFileSync(join(dir, "rollout-2026-10-27T00-00-00-" + tid + ".jsonl"), JSON.stringify({ type: "turn_context", payload: { model: "gpt-6.1-sol", effort: "high" } }) + "\\n");
+console.log(JSON.stringify({ type: "thread.started", thread_id: tid }));
+console.log(JSON.stringify({ type: "item.completed", item: { type: "agent_message", text: "OK" } }));
+`;
+  writeFileSync(join(bin, "fake codex.mjs"), fake);
+  const shim = join(bin, "codex.cmd");
+  writeFileSync(shim, `@echo off\r\n"%GM_NODE_EXE%" "%~dp0fake codex.mjs" %*\r\nexit /b %ERRORLEVEL%\r\n`);
+  const appData = join(root, "appdata");
+  mkdirSync(appData);
+  const env = {
+    ...process.env,
+    PATH: bin,
+    CODEX_HOME: codexHome,
+    CODEX_ARGS_LOG: log,
+    GM_NODE_EXE: process.execPath,
+    CODEX_APP_RUNTIME_CLI_PATH: "",
+    OPENAI_API_KEY: "",
+    HOME: root,
+    USERPROFILE: root,
+    APPDATA: appData,
+    LOCALAPPDATA: appData,
+  };
+  const powershell = join(process.env.SystemRoot || "C:\\Windows", "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
+  const resolved = spawnSync(powershell, ["-NoLogo", "-NoProfile", "-NonInteractive", "-Command", "(Get-Command -Name 'codex' -CommandType Application).Source"], { env, encoding: "utf8" });
+  assert.equal(resolved.status, 0, resolved.stderr);
+  assert.equal(resolve(resolved.stdout.trim()), resolve(shim), "PowerShell must resolve only the owned .cmd fixture");
+  return { ...env, log };
+}
+
 async function withEnv(env, fn) {
-  const saved = { PATH: process.env.PATH, CODEX_HOME: process.env.CODEX_HOME };
+  const saved = Object.fromEntries(Object.keys(env).map((key) => [key, process.env[key]]));
   Object.assign(process.env, env);
   try { return fn(); } finally { for (const [k, v] of Object.entries(saved)) v === undefined ? delete process.env[k] : (process.env[k] = v); }
 }
-const probeWith = (env, h) => withEnv(env, () => probe(h, { timeout: 20 }));
+const probeWith = (env, h, options = {}) => withEnv(env, () => probe(h, { timeout: 20, ...options }));
 
 test("each harness records the model it ran on, from its own record", { skip: posixOnly }, async (t) => {
   const env = sandbox(t, { kiroHasOpus55: true });
@@ -99,6 +152,59 @@ test("a model below the ceiling is reported, not hidden", { skip: posixOnly }, a
     assert.equal(r.status, "below-ceiling", h);
     assert.equal(r.level, "below ceiling", h);
   }
+});
+
+test("Codex below the documented GPT-6.1 Terra minimum reports the floor before a model call", { skip: posixOnly }, async (t) => {
+  const env = sandbox(t, { codexVersion: "0.158.9" });
+  const r = await probeWith(env, "codex", { ceilings: { ...CEILINGS, codex: "gpt-6.1-terra" } });
+  assert.equal(r.status, "unsupported-version");
+  assert.match(r.note, /minimum 0\.159\.0/);
+  assert.deepEqual(readFileSync(join(process.env.CODEX_HOME, "calls.log"), "utf8").trim().split(/\r?\n/), ["--version"]);
+});
+
+test("a GPT-6.1 Sol rejection stays an availability diagnostic because no CLI floor is published", { skip: posixOnly }, async (t) => {
+  const env = sandbox(t, { codexVersion: "0.158.9", solUnsupported: true });
+  const r = await probeWith(env, "codex");
+  assert.equal(r.status, "model-unavailable");
+  assert.match(r.note, /no documented CLI minimum/i);
+  assert.match(r.note, /plan, client and workspace/i);
+  assert.doesNotMatch(r.note, /HTTP 400|status\\":400/);
+});
+
+test("Codex reaches a .cmd shim through a path with spaces and metacharacters", { skip: process.platform !== "win32" }, async (t) => {
+  const env = windowsCodexShim(t);
+  const r = await probeWith(env, "codex", { ceilings: CEILINGS });
+  assert.equal(r.status, "ok");
+  assert.match(r.version, /0\.166\.0/);
+  const calls = readFileSync(env.log, "utf8").trim().split(/\r?\n/).map((line) => JSON.parse(line));
+  assert.equal(calls[0][0], "--version");
+  assert.ok(calls.some((args) => args[0] === "exec" && args.includes("gpt-9-no-such-model")));
+});
+
+test("Codex .cmd argument arrays keep metacharacters inside the model argument", { skip: process.platform !== "win32" }, async (t) => {
+  const env = windowsCodexShim(t);
+  const model = "gpt-6.1-sol & echo INJECTED";
+  const r = await probeWith(env, "codex", { ceilings: { ...CEILINGS, codex: model } });
+  assert.equal(r.status, "below-ceiling");
+  const calls = readFileSync(env.log, "utf8").trim().split(/\r?\n/).map((line) => JSON.parse(line));
+  assert.ok(calls.some((args) => args[args.indexOf("-m") + 1] === model));
+});
+
+test("Codex .cmd rejects a below-floor Terra version before invoking a model", { skip: process.platform !== "win32" }, async (t) => {
+  const env = windowsCodexShim(t, { version: "0.158.9" });
+  const r = await probeWith(env, "codex", { ceilings: { ...CEILINGS, codex: "gpt-6.1-terra" } });
+  assert.equal(r.status, "unsupported-version");
+  assert.match(r.note, /minimum 0\.159\.0/);
+  assert.deepEqual(readFileSync(env.log, "utf8").trim().split(/\r?\n/).map((line) => JSON.parse(line)).map((args) => args[0]), ["--version"]);
+});
+
+test("Codex .cmd Sol unsupported response explains the unresolved model availability", { skip: process.platform !== "win32" }, async (t) => {
+  const env = windowsCodexShim(t, { version: "0.158.9", solUnsupported: true });
+  const r = await probeWith(env, "codex");
+  assert.equal(r.status, "model-unavailable");
+  assert.match(r.note, /no documented CLI minimum/i);
+  assert.match(r.note, /plan, client and workspace/i);
+  assert.doesNotMatch(r.note, /HTTP 400|status\\":400/);
 });
 
 test("expired credentials are reported as not-authenticated, not as a missing model", { skip: posixOnly }, async (t) => {
