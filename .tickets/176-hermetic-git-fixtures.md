@@ -1,7 +1,7 @@
 ---
 id: "176"
 title: "Test fixtures isolate Git from the user's global config (signing, hooks, editor)"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "Repository-creating test suites isolate global/system Git config and use a test-owned identity."
@@ -32,11 +32,11 @@ rules in `docs/agents/local-gates.md` forbid ("Cannot prompt"). Prior art in thi
 
 ## Acceptance criteria
 
-- [ ] Every test file that creates a Git repository runs Git with the global and system config
+- [x] Every test file that creates a Git repository runs Git with the global and system config
       isolated (or explicitly overrides signing, hooks and editor), and sets its own identity.
-- [ ] A seeded `tag.forceSignAnnotated=true` with an unreachable signing key in a temporary global
+- [x] A seeded `tag.forceSignAnnotated=true` with an unreachable signing key in a temporary global
       config leaves every such test passing, not hanging.
-- [ ] `node scripts/gate.mjs pre-release` passes.
+- [x] `node scripts/gate.mjs pre-release` passes.
 
 ## Progress 2026-11-02 — implementation present, verification incomplete
 
@@ -70,3 +70,12 @@ The helper replaces that configuration inside repository-creating workers. Exist
 fixtures skip on Windows; macOS/Linux execution remains unverified. No SKIP override was used.
 
 Fresh commands and outcomes are promoted in the evidence file's `latestVerification` section.
+
+## Resolution (2026-11-02)
+
+done: repository fixtures isolate signing, hooks, editor and identity from host configuration. Pre-merge 19 and pre-push 7 commands completed. Promoted full hostile-config evidence in docs/agents/research/evidence/test-optimization-20261102.json; recycled owned scratch and failed temp fixtures/worktrees. Current deployment packages retained until next deploy; others' artifacts preserved and sized in evidence.
+
+### Verification
+1. ✓ Repository-creating test suites isolate global/system Git config and use a test-owned identity. — "14 direct repository-creating suites and the indirect orchestration suite import the test-owned Git environment; Cargo/Python fixtures already isolate config. Shared Fixture identity, no system config and test-owned global config verified."
+2. ✓ A hostile forced-signing config with an unreachable key fails the control but leaves isolated fixtures able to commit and annotate tags without prompting. — "Hostile forced-signing control fails with missing signer/key; isolated subprocess commits and annotates tags without inherited hooks/editor. Regression passes in fresh gate runs."
+3. ✓ node scripts/gate.mjs pre-release passes with the hostile config supplied to the parent process. — "Candidate 67320db: node scripts/gate.mjs pre-release with hostile GIT_CONFIG_GLOBAL completed all 28 commands, including deployer and eight release files. Existing Windows platform skips; macOS/Linux execution unverified."
