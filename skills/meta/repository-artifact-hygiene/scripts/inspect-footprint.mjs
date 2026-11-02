@@ -362,7 +362,7 @@ function wslHostVolume(coverage) {
   const integer = (value) => typeof value === "string" && /^(0|[1-9]\d*)$/.test(value) ? Number(value) : NaN;
   const free = integer(volume?.Free), total = integer(volume?.Total);
   const drive = typeof volume?.Drive === "string" && /^[A-Za-z]$/.test(volume.Drive) ? `${volume.Drive.toUpperCase()}:` : undefined;
-  const stableId = typeof volume?.VolumeId === "string" && /^\\\\\?\\Volume\{[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}\}\\$/.test(volume.VolumeId)
+  const stableId = typeof volume?.VolumeId === "string" && /^\\\\\?\\Volume\{[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}\}\\$/i.test(volume.VolumeId)
     ? volume.VolumeId.toUpperCase() : undefined;
   const displayIdentity = drive ?? stableId;
   if (volumes.length !== 1 || volume?.Name !== distro || typeof volume.BasePath !== "string" || !volume.BasePath.trim()
