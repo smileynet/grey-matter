@@ -39,6 +39,11 @@ Write each harness reference from its spike (124-129).
 
 ## Field report — 2026-11-01
 
+Implementation: `703a64c`. [Live evidence](../docs/agents/research/orchestrate-skill-dry-runs-20261101.md)
+records the two harness runs, independent checks/reviews, deployment and artifact
+retention. Kiro required a resumed session and supplemental question probe; exact
+status protocol compliance remains partial and is input to ticket 162.
+
 Lessons for orchestrate from planning parallel work in philippines-trip:
 
 - Define worker streams by the files they own (content, screens, accounts) and name the shared files that force ordering (one large Android activity file, a shared home screen).

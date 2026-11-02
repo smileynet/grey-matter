@@ -18,6 +18,15 @@ Source: [harness experimental features](../docs/agents/research/harness-experime
 
 ## Acceptance criteria
 
+Input from ticket 111: [authored-skill dry runs](../docs/agents/research/orchestrate-skill-dry-runs-20261101.md)
+show Kiro native summaries omitting DONE, a parent pre-answering T2, and a saved
+session recovered after an outer process interruption. A separate native-summary
+question/answer/redispatch probe passed. Compare actual structured transport with
+orchestrator prose when assessing these surfaces; do not count synthesized status
+or an unverified process exit as completion. Private `t111-*` fixture/log evidence
+is retained until this ticket completes, then promote selected receipts and trash
+the remaining owned artifacts.
+
 - [ ] Results recorded as a dated section in the source research note, each claim marked observed (with the command or transcript excerpt) or documented.
 - [ ] The question above answered yes or no, or listed under "couldn't verify" with what was tried.
 - [ ] Sandbox folders removed after the run; settings changed for the spike restored or recorded.

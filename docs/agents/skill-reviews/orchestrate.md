@@ -46,3 +46,14 @@ this user-invoked role; neither silently starts a fan-out.
 
 None: file ownership, resource leases, checks and observable outcomes apply to
 app and game work. Shared simulators/devices are exclusive resources.
+
+## Validation
+
+Fresh writing-for-agents/review-skill and independent Standards/Spec reviews of
+`703a64c` found no remaining confirmed blocker. The denial/isolation finding was
+fixed before that commit; an alleged missing validator resource was rejected
+after checking its Markdown link and the deployer's transitive resource walk.
+[Live dry-run evidence](../research/orchestrate-skill-dry-runs-20261101.md) records
+the Claude and Kiro runs, failed attempt, resumed work and supplemental question
+probe. Protocol adherence is partial; the note distinguishes it from code/test
+acceptance and leaves the remaining transport questions with ticket 162.
