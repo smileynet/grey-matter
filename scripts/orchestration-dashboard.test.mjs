@@ -5,7 +5,7 @@ import { pathToFileURL } from 'node:url';
 
 const { chromium } = await import(pathToFileURL(path.resolve(process.env.PLAYWRIGHT_MODULE ?? '.scratch/orchestration-browser/node_modules/playwright-core/index.mjs')));
 const browser = await chromium.launch({ executablePath: process.env.CHROME_BIN ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true });
-const evidence = 'docs/agents/research/evidence/orchestration-dashboard';
+const evidence = process.env.DASHBOARD_CAPTURE_DIR ?? 'docs/agents/research/evidence/orchestration-dashboard';
 fs.mkdirSync(evidence, { recursive: true });
 try {
   for (const width of [1280, 390]) {
@@ -14,8 +14,8 @@ try {
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(pathToFileURL(path.resolve('docs/orchestration.html')).href);
     assert.equal(await page.getByRole('tab').count(), 2);
-    assert.equal(await page.locator('#finding-cards article').count(), 6);
-    assert.equal(await page.locator('#possibilities article').count(), 3);
+    assert.equal(await page.locator('#finding-cards article').count(), 7);
+    assert.equal(await page.locator('#possibilities article').count(), 2);
     assert.equal(await page.locator('details[open]').count(), 0);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     await page.screenshot({ path: `${evidence}/findings-${width}.png`, fullPage: true });

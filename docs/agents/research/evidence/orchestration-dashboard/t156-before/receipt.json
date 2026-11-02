@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "249aff8d34adb1ef3b811372e572b93be3354a75a4248b7795ce35ff7c42b3db",
+  "subject": "Mate recovery finding before ticket closure",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 12095,
+      "sha256": "a595cd48ea86f0fcec7b3a507a1508f52c1b4afa1a1fec227800f8512997116e"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 131782,
+      "sha256": "69ddc064c7093c8b5eff0b898804cb56fabc20c390ea25b9acea392ee3c16c99"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4263,
+      "sha256": "468a6099ced8129e9efa1134e864f0188a8f98cbcbc40ee5d084ca763ca8e0ca"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t156-before/findings-1280.png",
+      "bytes": 256360,
+      "sha256": "49c4dc5fac5850ee8319a282afb41a492113aa1fa332bd34b8dd329c29fa439c",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t156-before/tickets-1280.png",
+      "bytes": 242912,
+      "sha256": "feea30b868f2d4f6ae07aa136a967ebaa03cb0e283f058545894715082d5ea70",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t156-before/findings-390.png",
+      "bytes": 243272,
+      "sha256": "5f7f71bfd5aee5a67c7881f1465c2f8b75edd31ac23bf698cedb87b83144854b",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t156-before/tickets-390.png",
+      "bytes": 212994,
+      "sha256": "dc7ee9bb56da20711f0e15a3fdcc799d1c76dbedae5318986afddc0882a47dfb",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "8d1c527d6ae1bf1ac48e68b76ff3ec88be718e205527f1445f027d6492fe0a8a",
+  "id": "6254bdaf5bf05216ce9679fc060c047bbcace31ca8d6af776782ce88c397e5fb",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/dashboard_critic (Codex agent)",
+    "note": "Observer: /root/dashboard_critic (Codex agent); surface: local Chromium file rendering through Playwright; scenario: inspect all four captures at laptop 1280x900 and phone 390x900 and compare the rendered recovery finding and ticket state to the current HTML; outcome: accepted. The seventh card leads with the recovery value, labels the recovery case and planning oversight limit, and folds technical evidence. It has a visible four-step observed sequence. Two unproven possibilities remain distinct. Ticket #156 is in progress in the open group; details remain collapsed. Limits: these captures establish tool-observed rendering at the named viewports, not a human usability study or product screenshots. The diagram is internally scrollable and later nodes require scrolling.",
+    "acceptedAt": "2026-11-02T17:43:27.581Z",
+    "snapshotId": "6254bdaf5bf05216ce9679fc060c047bbcace31ca8d6af776782ce88c397e5fb"
+  }
+}

@@ -1,0 +1,280 @@
+{
+  "date": "2026-11-02",
+  "crew_version": "0.11.1",
+  "cli_version": "2.37.1",
+  "model": "claude-haiku-4.5",
+  "backend": "kas",
+  "auth": {
+    "observed_relay_pid": 508,
+    "observed_parent_gateway_pid": 65196,
+    "argv_subset": [
+      "acp",
+      "--agent-engine",
+      "v3",
+      "--auth-method",
+      "cli"
+    ],
+    "assistant_marker": "T156_AUTH_OK",
+    "account_identity_compared": false,
+    "credential_values_recorded": false
+  },
+  "gateway": {
+    "before_pid": 65196,
+    "after_pid": 44592,
+    "stop": "native owner-verified _request_gateway_shutdown acknowledged; original gateway and relay absent before new start",
+    "scope": "separate process-only Crew and Kiro homes; no login/logout or global settings changes"
+  },
+  "native_gateway_events": [
+    {
+      "source": "crew-log worker session/opened event, seq 1",
+      "time_unix_ms": 1793640766738,
+      "sid": "sess_7e967645-56f6-4eb3-89be-9ee0fff20dfb",
+      "slot": "chat-1-1793640757",
+      "resumed": false,
+      "parent_slot": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6",
+      "parent_sid": "sess_2d5a75da-d45a-44c4-891b-e6c93149e7dc"
+    },
+    {
+      "source": "crew-log worker session/opened event, seq 11",
+      "time_unix_ms": 1793640890645,
+      "sid": "sess_7e967645-56f6-4eb3-89be-9ee0fff20dfb",
+      "slot": "chat-1-1793640757",
+      "resumed": true,
+      "parent_slot": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6"
+    },
+    {
+      "source": "crew-log worker message/sent event, seq 17",
+      "time_unix_ms": 1793640892717,
+      "sid": "sess_7e967645-56f6-4eb3-89be-9ee0fff20dfb",
+      "slot": "chat-1-1793640757",
+      "marker": "T156_POST_RESTART_REPORT T156_CHILD_READY"
+    },
+    {
+      "source": "crew-log Mate message/received worker-report event, seq 75",
+      "time_unix_ms": 1793640900156,
+      "sid": "sess_2d5a75da-d45a-44c4-891b-e6c93149e7dc",
+      "slot": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6",
+      "worker_slot": "chat-1-1793640757",
+      "worker_marker": "T156_POST_RESTART_REPORT"
+    },
+    {
+      "source": "crew-log Mate message/sent event, seq 80",
+      "time_unix_ms": 1793640902636,
+      "sid": "sess_2d5a75da-d45a-44c4-891b-e6c93149e7dc",
+      "slot": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6",
+      "text": "Worker survived gateway restart and is ready. I'll send it fixture ticket 1."
+    }
+  ],
+  "before": [
+    {
+      "key": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6",
+      "agent": "mate",
+      "messages": 22,
+      "turn": 3,
+      "running": false,
+      "last_message": "T156_CHILD_READY confirmed. Worker t156-recovery-worker (chat-1-1793640757) is r…",
+      "created_by": "",
+      "lineage_minted": false,
+      "process": null,
+      "parent": null
+    },
+    {
+      "key": "chat-1-1793640757",
+      "agent": "kirocrew-mate-worker",
+      "messages": 3,
+      "turn": 1,
+      "running": false,
+      "last_message": "T156_CHILD_READY",
+      "created_by": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6",
+      "lineage_minted": true,
+      "process": "live",
+      "parent": {
+        "slot": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6",
+        "key": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6"
+      }
+    }
+  ],
+  "after_restart_before_new_turn": [
+    {
+      "key": "chat-1-1793640757",
+      "agent": "kirocrew-mate-worker",
+      "messages": 2,
+      "turn": 0,
+      "running": false,
+      "last_message": "T156_CHILD_READY",
+      "created_by": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6",
+      "lineage_minted": false,
+      "process": "released",
+      "parent": {
+        "slot": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6",
+        "key": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6"
+      }
+    },
+    {
+      "key": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6",
+      "agent": "mate",
+      "messages": 19,
+      "turn": 0,
+      "running": false,
+      "last_message": "T156_CHILD_READY confirmed. Worker t156-recovery-worker (chat-1-1793640757) is r…",
+      "created_by": "",
+      "lineage_minted": false,
+      "process": null,
+      "parent": null
+    }
+  ],
+  "native_lineage": [
+    {
+      "sid": "sess_2d5a75da-d45a-44c4-891b-e6c93149e7dc",
+      "slot": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6",
+      "parent": null
+    },
+    {
+      "sid": "sess_7e967645-56f6-4eb3-89be-9ee0fff20dfb",
+      "slot": "chat-1-1793640757",
+      "parent": "member-mate.memory-member-mate-859cdb497d1c40a6b12d4e84c39634a6"
+    }
+  ],
+  "native_worker_assistant_markers": [
+    {
+      "sid": "sess_7e967645-56f6-4eb3-89be-9ee0fff20dfb",
+      "timestamp": "2026-11-02T17:32:49.262Z",
+      "type": "assistant",
+      "content": "T156_CHILD_READY"
+    },
+    {
+      "sid": "sess_7e967645-56f6-4eb3-89be-9ee0fff20dfb",
+      "timestamp": "2026-11-02T17:34:52.629Z",
+      "type": "assistant",
+      "content": "T156_POST_RESTART_REPORT T156_CHILD_READY"
+    },
+    {
+      "sid": "sess_7e967645-56f6-4eb3-89be-9ee0fff20dfb",
+      "timestamp": "2026-11-02T17:35:06.851Z",
+      "type": "assistant",
+      "content": "File path: `C:/Users/uosmi/AppData/Local/Temp/gm-t156-fixture-1/test.txt`\n\nFirst line: `T156_FIXTURE_1_DONE`"
+    }
+  ],
+  "excerpts": [
+    {
+      "actor": "mate",
+      "role": "assistant",
+      "ts": "2026-11-02T09:31:44.312346-08:00",
+      "content": "T156_AUTH_OK"
+    },
+    {
+      "actor": "mate",
+      "role": "assistant",
+      "ts": "2026-11-02T09:32:57.678699-08:00",
+      "content": "T156_PRE_RESTART_REPORT: WORKER_SLOT"
+    },
+    {
+      "actor": "mate",
+      "role": "assistant",
+      "ts": "2026-11-02T09:32:59.286781-08:00",
+      "content": "T156_CHILD_READY confirmed. Worker t156-recovery-worker (WORKER_SLOT) is ready and idle. Awaiting your next instruction after gateway restart."
+    },
+    {
+      "actor": "mate",
+      "role": "assistant",
+      "ts": "2026-11-02T09:35:02.610239-08:00",
+      "content": "Worker survived gateway restart and is ready. I'll send it fixture ticket 1."
+    },
+    {
+      "actor": "mate",
+      "role": "assistant",
+      "ts": "2026-11-02T09:35:31.827555-08:00",
+      "content": "Fixture ticket 1 complete. Worker created the file and reported success. File exists at `C:/Users/uosmi/AppData/Local/Temp/gm-t156-fixture-1/test.txt` with content `T156_FIXTURE_1_DONE`."
+    },
+    {
+      "actor": "mate",
+      "role": "assistant",
+      "ts": "2026-11-02T09:35:33.314966-08:00",
+      "content": "T156_FIXTURE_1_DONE. Worker is ready for the next ticket."
+    },
+    {
+      "actor": "mate",
+      "role": "assistant",
+      "ts": "2026-11-02T09:36:25.474688-08:00",
+      "content": "Ticket 1 complete. Worker implemented multiply(a, b) in src/a.js, added both test cases in test/a.test.js, ran npm test (both pass), and committed on the existing branch. Commit hash f284b5f. Tests verified: multiply(3,4)=12 and multiply(-2,5)=-10."
+    },
+    {
+      "actor": "mate",
+      "role": "assistant",
+      "ts": "2026-11-02T09:36:27.310394-08:00",
+      "content": "T156_FIXTURE_1_PASS. Worker implemented multiply correctly, tests verified both cases, commit f284b5f landed on branch."
+    },
+    {
+      "actor": "worker",
+      "role": "assistant",
+      "ts": "2026-11-02T09:32:49.324178-08:00",
+      "content": "T156_CHILD_READY"
+    },
+    {
+      "actor": "worker",
+      "role": "assistant",
+      "ts": "2026-11-02T09:34:52.685349-08:00",
+      "content": "T156_POST_RESTART_REPORT T156_CHILD_READY"
+    },
+    {
+      "actor": "worker",
+      "role": "assistant",
+      "ts": "2026-11-02T09:35:06.90975-08:00",
+      "content": "File path: `C:/Users/uosmi/AppData/Local/Temp/gm-t156-fixture-1/test.txt`\n\nFirst line: `T156_FIXTURE_1_DONE`"
+    }
+  ],
+  "controller_sequence": [
+    "Mate auth-only turn",
+    "Mate creates worker and sends readiness-only prompt",
+    "observe worker readiness and Mate acknowledgement",
+    "owner-verified graceful gateway shutdown",
+    "start a new gateway with same private home",
+    "read restored slots without posting to Mate",
+    "post one no-tools recall prompt to worker only",
+    "observe fresh Mate hidden turn and its session_send",
+    "explicitly correct fabricated fixture ticket",
+    "observe actual T1 implementation in same worker"
+  ],
+  "scope_failure": {
+    "worker_request": "Fixture ticket 1: Create file .../gm-t156-fixture-1/test.txt with content T156_FIXTURE_1_DONE",
+    "actual_ticket": "Add multiply to src/a.js, with cases 3*4=12 and -2*5=-10",
+    "unexpected_file_exists": true,
+    "unexpected_first_line": "T156_FIXTURE_1_DONE",
+    "worker_wrote_outside_its_worktree": true,
+    "human_correction_required": true
+  },
+  "corrected_T1": {
+    "worker_commit": "f284b5f2772f56e208d3c5934a92ce48f6949f8f",
+    "changed_paths": [
+      "src/a.js",
+      "test/a.test.js"
+    ],
+    "working_tree": "",
+    "root_independent_check": "npm test: add and multiply subtests both pass; 2 tests, 0 fail/skip/cancel/todo",
+    "root_merge_performed": false,
+    "mate_independent_review_observed": false
+  },
+  "classifications": {
+    "slot_restoration": "pass",
+    "native_worker_session_reuse": "pass; same native sid in crew-log projection and remembered previous marker",
+    "fresh_post_restart_report_wake": "pass; fresh Mate assistant/tool activity after worker-only request",
+    "completed_report_replay_control": "pass for observation window; zero new turn before fresh worker request",
+    "autonomous_ticket_fidelity": "assertion failure; fabricated task and outside-worktree write",
+    "corrected_worker_T1": "pass after explicit controller correction",
+    "superior_to_builtin_conductor": "unverified; no matched full-loop comparison",
+    "crash_or_inflight_recovery": "unverified; graceful restart between turns only"
+  },
+  "source_sha256": {
+    "dashboard/mate_thread_wakes.py": "3d28987f8fbe48ba73f60b358e4e74aefd9ed0330d9d9bcb4b65ff0ad41c1c47",
+    "dashboard/mate_welcome.py": "06f738d2b67ce037fcb2805accfe1664dca19163d720d0275ba3652813922024",
+    "config/paths.py": "5308e8dbe09b87edc39fe081aba8028b09ba3dd05174ac97a1a0051bf6e50241",
+    "acp/harness/kas.py": "d70294991fd38b035febd95d756a295eaee3af23f948de75e52148d665b2fd4b"
+  },
+  "cleanup": {
+    "probeBytes": 645577177.0,
+    "fixtureBytes": 101974.0,
+    "survivors": 0,
+    "disposition": "Recycle owned private probe and fixture after independent raw-evidence audit; retain only sanitized receipt and source/audit notes",
+    "ownedProcessCount": 31
+  }
+}

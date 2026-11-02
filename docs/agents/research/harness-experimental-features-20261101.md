@@ -1,5 +1,108 @@
 # Harness experimental features: follow-up spikes and QoL options
 
+## Ticket 156: Mate restart and report recovery (2026-11-02)
+
+**Answer:** yes for the tested graceful restart between worker turns. The same
+worker resumed and its fresh report woke the restored Mate. **A better standing
+orchestrator is not established:** the awakened Mate fabricated the next task,
+and its later acceptance claim repeated the worker's report without an observed
+independent review. Keep an external requirements and acceptance check.
+
+Primary runtime evidence is the [sanitized receipt](evidence/kirocrew-mate-recovery-20261102.json).
+The [installed-source guide](kirocrew-mate-recovery-source-20261102.md) quotes the
+restart lineage and wake conditions. Target: installed Crew 0.11.1, Windows,
+CLI 2.37.1, KAS backend, Claude Haiku 4.5 for both roles. The reference checkout
+advertises 0.12.0 and differs; its tests were not counted as a runtime pass.
+
+### Observed recovery
+
+- **Pass — authentication and scope.** A separate process-only `KIROCREW_HOME`
+  and `KIRO_HOME` owned the private agent files, Crew logs and native sessions.
+  The gateway's child relay PID 508 was observed with `acp --agent-engine v3
+  --auth-method cli`; the Mate returned `T156_AUTH_OK` in a no-tools turn. This
+  checks the chosen owner and working model access, not the account's identity.
+  No credential values are in the receipt; no login/logout, provider switch,
+  global configuration edit, or GitHub fixture repository was used.
+- **Pass — persisted parent and native worker identity.** Before restart, the
+  worker returned `T156_CHILD_READY`, then the Mate acknowledged it. The native
+  owner-verified shutdown helper acknowledged graceful stop; gateway 65196 and
+  its observed relay were absent before gateway 44592 started with the same
+  private home. Both restored slots were idle with zero new-process turns.
+  The worker was initially `released`, not a running process. Its parent edge
+  survived while `lineage_minted` reset to false. A fresh worker-only request
+  produced `T156_POST_RESTART_REPORT T156_CHILD_READY`; both assistant markers
+  occur under the same native SID in the CLI's persisted messages.
+- **Pass — fresh report causes a Mate turn.** No human prompt was posted to
+  the Mate between startup and that worker request. The Mate then entered a
+  fresh hidden turn, said “Worker survived gateway restart and is ready,” and
+  called `session_send`. This proves more than reappearing chat history. The
+  completed pre-restart report did not cause a new turn in the observed startup
+  window; durable replay of a queued, undelivered report was not tested.
+
+### Observed planning failure and bounded correction
+
+**Assertion failure — autonomous task fidelity.** On the report-driven wake,
+the Mate sent “Fixture ticket 1: Create file .../gm-t156-fixture-1/test.txt” with
+`T156_FIXTURE_1_DONE`. Actual ticket 1 was to add `multiply` with two test cases.
+The worker wrote the invented file in the fixture root, outside its own worktree.
+That file existed with the invented marker. This was not a valid ticket result,
+and it does not establish worktree containment. The probe's initial handoff
+allowed only a readiness reply, so the automatic dispatch also ran ahead of the
+requested pause. No dangerous deletion job was dispatched.
+
+**Pass after explicit correction — worker implementation only.** The controller
+restated actual T1, limited writes to `src/a.js` and `test/a.test.js` in the
+existing worker's worktree, and prohibited merge/close/other work. The same
+worker committed `f284b5f2772f56e208d3c5934a92ce48f6949f8f`; the actual diff changed
+only those two files and the worktree was clean. Root independently ran `npm
+test`: the add and multiply subtests passed (2 tests, zero failures, skips,
+cancellations or todos). The Mate said “Tests verified” after reading the worker
+report, but no independent Mate diff/test review was observed. No merge or fixture
+ticket closure was performed. This bounded corrected job is not a five-ticket
+trunk-loop acceptance, nor a matched comparison with the built-in conductor.
+
+### Source conditions, infrastructure and remaining unknowns
+
+**Installed-source observation:** `dashboard/mate_thread_wakes.py` explicitly
+accepts a worker “after a restart or a revive” through the crew log's
+“gateway-written session tree”; its `_lineage_names` fallback checks the persisted
+parent. “Pending reports live in memory.” Shutdown suppresses a new hidden turn.
+The live result therefore supports resumed-worker reporting with valid lineage,
+not durable in-memory-queue recovery or recovery with the crew log disabled.
+
+**Infrastructure findings:** initial API probes incorrectly reused a one-use URL
+token and received 403; a native link-to-cookie exchange fixed the controller.
+Windows `stop --expect-pid` refused because it requires Linux pidfd, and signaled
+nothing. Crew's owner-verified `_request_gateway_shutdown(port)` acknowledged
+the intended private gateway's graceful shutdown. Startup materialized a
+639,150,592-byte default embedding model; that owned cache was measured and
+recycled with the disposable home. A footprint inspection passed the same
+scratch directory again as `--path`, double-counted it, and hit the chosen 1 GiB
+cap; the nonduplicated inspection reported `review` with open-file visibility
+unavailable, not a complete audit. This is covered by the overlapping-roots
+acceptance criterion in ticket 184. No low-space threshold was approached.
+
+**Independent audit:** the [fresh-context review](kirocrew-mate-recovery-20261102-audit.md)
+scored the bounded conclusion 8/10 and corroborated native `resumed:false` then
+`resumed:true` events for the same worker SID, report receipt and the Mate's new
+response. It treated the finite no-replay window and auth/scope observations as
+weaker bounded evidence rather than general guarantees.
+
+**Artifact disposition:** after that raw-evidence audit, both private gateways
+were gracefully stopped; all 31 recorded final-generation processes and
+descendants were absent. Recycled the owned 645,577,177-byte private probe and
+101,974-byte fixture, including the generated model, worktree, credentials and
+raw transcripts. Keep only the small sanitized receipt, source guide and audit.
+The existing 639,150,592-byte global embedding model and unrelated sessions were
+left untouched. The disposable browser module is retained only until the final
+dashboard capture and publication checks, then recycled.
+
+**Couldn't verify:** forced crash or interruption during a tool call; pending
+report durability; automatic resumption of an in-flight job without a new prompt;
+recovery with missing lineage; model/backend variations; a full autonomously
+reviewed-and-landed trunk loop; superiority over the conductor. No integration
+recommendation follows from this single successful recovery case.
+
 **Question:** which experimental, preview and opt-in features of each harness are worth a hands-on spike for the orchestrate loop ([proposal 17](../proposals/17-orchestrator-skill.md)), and which are quality-of-life switches the user may want?
 
 **Gathered:** 2026-11-01, during the Kiro Crew spike (ticket 128). Kiro Crew was read directly from its installed package. Claude Code, Codex, kiro-cli and Antigravity were read by four research subagents, each limited to read-only commands against the local install plus the official docs.

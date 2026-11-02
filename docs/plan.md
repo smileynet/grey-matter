@@ -164,8 +164,8 @@ recycle owned artifacts; leave unresolved external evidence explicit rather than
 
 ## Orchestration workstream (reconciled 2026-11-02)
 
-Scope: exactly the 31 tickets in the two tables below, tagged
-`stream:orchestration`; their current statuses are shown in the tables.
+Scope: the 32 tickets tagged `stream:orchestration`, including the dashboard
+ticket #191 in the inventory below; their current statuses are shown in the tables.
 Other tooling, test-verification, dashboard and release work remains in its
 existing stream. Related parked #06 (skill/version drift evaluations) and #09
 (fresh-process versus subagent guidance) remain deferred outside this active
@@ -173,8 +173,10 @@ spike set. This reconciliation does not authorize release publication or new
 global harness settings.
 
 The remaining-work table is the proposed serial execution order. #162's driver
-comparison and #186's auth routing investigation are complete; next run #156
-with the verified CLI-owned auth option. Run #158 before #157 to inform its
+comparison and #186's auth routing investigation are complete. The #156 trial
+confirmed worker report/wake recovery after a graceful restart, but exposed a
+fabricated task and no independent Mate acceptance review. Keep the requirements
+and acceptance gate outside that loop. Next run #158 before #157 to inform its
 permission setup; this is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before
@@ -190,7 +192,7 @@ auth remains conditional on the result of #186.
 
 | ID | Work | Status |
 | --- | --- | --- |
-| 156 | 3. Qualify Mate report/wake recovery across gateway restart | open |
+| 156 | 3. Qualify Mate report/wake recovery across gateway restart | in_progress |
 | 158 | 4. Test narrower agy regex permissions with negative controls | open |
 | 157 | 5. Test agy native workflow dispatch and per-role model selection | open |
 | 159 | 6. Test available Codex multi-agent/message-board/wake features | open |

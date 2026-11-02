@@ -3,6 +3,16 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "mate-recovery", "state": "partial", "label": "Recovery confirmed; planning needs oversight",
+      "title": "Resume a worker after a gateway restart",
+      "value": "A standing teammate reconnected with the same worker after a graceful restart. The worker remembered its earlier reply, and its fresh report woke the teammate.",
+      "diagramLabel": "Observed recovery between turns", "steps": ["Gateway restarts", "Worker resumes", "Fresh report", "Mate responds"],
+      "limit": "The teammate then invented the next task. Keep requirements and acceptance checks outside that loop. Crashes during active work were not tested.",
+      "details": "The private Kiro Crew trial restored the persisted parent link and reused the worker's native session. The old completed report did not replay in the startup observation window. After a controller corrected the invented task, the same worker implemented the actual multiply fixture and its tests passed. No independent Mate review or merge was established, so superiority over the built-in conductor remains unproven.",
+      "tickets": ["156"],
+      "sources": [{"label": "Mate recovery trial and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-156-mate-restart-and-report-recovery-2026-11-02"}]
+    },
+    {
       "id": "separate-jobs", "state": "confirmed", "label": "Confirmed in fixtures",
       "title": "Split work into small jobs, then review before merging",
       "value": "Independent jobs ran in separate work areas. A review step checked the result before accepted changes were brought together.",
@@ -64,7 +74,6 @@
     }
   ],
   "possibilities": [
-    {"title": "Recover a standing teammate after restart", "value": "Test whether reports, workers and pending work reconnect after the gateway restarts.", "tickets": ["156"]},
     {"title": "Watch and answer through a familiar interface", "value": "Compare which interfaces show worker state and let a person answer questions or approvals.", "tickets": ["173"]},
     {"title": "Spend less without losing the quality bar", "value": "Choose a repeatable runner, then compare models, effort and fast mode on fixed tasks.", "tickets": ["174", "167", "168", "169", "170", "171", "172"]}
   ],
@@ -79,7 +88,7 @@
     "129": ["Antigravity baseline", "Establish worker isolation, messaging and permission limitations."],
     "154": ["Stop the tested risky deletion", "Qualify a restrictive policy and its escalation behavior."],
     "155": ["Check mixed-backend setup", "Identify whether the intended conductor/worker backend split can be configured."],
-    "156": ["Recover Mate work after restart", "Find whether a standing teammate can restore workers and react to reports after restart."],
+    "156": ["Recover Mate work after restart", "Resume a worker after a graceful restart; keep task requirements and acceptance under independent oversight."],
     "157": ["Run native Antigravity workflows", "Find whether native workflows can coordinate isolated workers and role-specific models."],
     "158": ["Narrow command permissions", "Find a working grant smaller than allowing every shell command."],
     "159": ["Coordinate messages and wake-ups", "Test available Codex message-board and wake behavior without changing global settings."],
