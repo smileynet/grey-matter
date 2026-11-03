@@ -29,3 +29,7 @@ Fix in the fixtures, not the products: create directory links as `junction` on w
 - [ ] relocate-knowledge, agent-guidance, review-receipt and crew-uninstall checks pass on a Windows host with Developer Mode off (or each symlink case skips with a named reason)
 - [ ] Directory links use junctions on win32; file-symlink cases probe capability once via a shared helper instead of failing
 - [ ] `node scripts/gate.mjs pre-merge --base <pre-change sha>` shows those four checks ok on Windows
+
+## Also affected (2026-11-03)
+
+The pre-release `deployer` check fails 2 tests the same way: "install removes dead links into this pack's checkout, in used and unused roots, and keeps every other link" and "agy: without the CLI, a foreign same-named plugin directory or link is refused and kept" (`scripts/deploy.test.mjs`). Details are on ticket 122.

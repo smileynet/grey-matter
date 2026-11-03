@@ -28,3 +28,7 @@ Related: ticket 122 (deployer flake on Windows). Fix: route fixture/gate/probe t
 - [ ] Fixture and gate temp removal uses rmSync maxRetries/retryDelay (or one shared helper) and a cleanup failure never turns a passing check into an infrastructure error
 - [ ] `probe-critic-model.mjs` reports its result and warns, not crashes, when temp removal hits EPERM
 - [ ] Five consecutive `node scripts/gate.mjs pre-merge --base <sha>` runs on Windows show no cleanup-caused failures
+
+## Also affected (2026-11-03)
+
+`scripts/deploy-validation.test.mjs` "deployment check rejects root context and opt-in catalog warnings" fails deterministically on cleanup `EPERM` of `deploy-validation-*` (seen on both sides of the ticket 122 A/B run).

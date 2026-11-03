@@ -95,3 +95,17 @@ and [plan](../docs/plan.md#independent-verification-follow-ups).
 An uncommitted working-tree change to `scripts/deploy.test.mjs` (owner not identified) makes `dualSandbox` build on `homeSandbox()`. That gives the Claude/Codex dual-install cases an isolated HOME and `CODEX_HOME=<sandbox>/.codex` instead of inheriting the real `process.env` home, and moves the fixture `config.toml` under `.codex/`. It removes one candidate cause listed above: a test reading or racing the live `~/.codex` of a running session.
 
 Unverified: `node --test --test-reporter=tap scripts/deploy.test.mjs` on the working tree did not finish within 15 minutes, after the post-sync `npm ci`. The process still running was `node scripts/deploy.mjs agy install --out <Temp>\gm-home-*`, and it was stopped. Whether the hang comes from that change or the host was not determined. Before committing the change, run `node scripts/gate.mjs pre-merge --include deployer` on it and on clean `HEAD`, and keep both full logs.
+
+## Deployer comparison 2026-11-03
+
+The sandbox change noted above was committed as `dc7c134` after an A/B run on Windows. Each side ran in its own worktree with `node --test --test-reporter=spec --test-timeout=120000 scripts/deploy.test.mjs scripts/deploy-validation.test.mjs`:
+
+- base `2fd6e4e`: 54 tests, 46 pass, 3 fail, 5 skipped (kirocrew fake-CLI cases), 1,286 s.
+- change: 46 pass, the same 3 fail, 1,308 s. The six `dualSandbox` tests were equal or faster (e.g. Codex plugin case 82.1 s -> 78.0 s).
+
+The earlier 15-minute "hang" was the suite's normal runtime on this host, not the change. Slowness is tracked as ticket 230. The three failures appear on both sides, are deterministic and Windows-specific, and are not the intermittent failure this ticket hunts:
+
+- "deployment check rejects root context and opt-in catalog warnings": temp cleanup `EPERM` on `deploy-validation-*` (ticket 216).
+- "install removes dead links into this pack's checkout…" and "agy: without the CLI, a foreign same-named plugin directory or link is refused and kept": `symlinkSync` `EPERM` without Developer Mode (ticket 213).
+
+The gate form `node scripts/gate.mjs pre-merge --base HEAD --include deployer` on base timed out at 604 s (timeout 600). The first criterion stays open.
