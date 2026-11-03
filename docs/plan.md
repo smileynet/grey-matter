@@ -219,7 +219,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 203 | Complete tool-script inventory and owning skill usage guidance | ✅ done |
 | 204 | Dispatch checkout and review-evidence preflight | ✅ done |
 | 208 | Durable session/message foundation and recovery fixture (child of 179) | ✅ done |
-| 210 | Existing-agent Codex notification preparation and bounded native receipt (child of 179) | in_progress |
+| 210 | Existing-agent Codex notification preparation and bounded native receipt (child of 179) | ✅ done |
 | 179 | Shared inter-harness messaging and wakeups (existing owner) | in_progress |
 | 205 | Dashboard publication preflight using existing receipts | ✅ done |
 | 206 | Correct observed operational reference drift | ✅ done |
