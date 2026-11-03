@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "a881bab7f5beac7b0ba4f186dbdc56dea5b3bf787d450e3426c28f40dded3def",
+  "subject": "Accepted Kiro shutdown limitation, current workflow workaround and deferred low-priority follow-up",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 157465,
+      "sha256": "2a1995a6c920fc8022514f4d1230de0294b58e5eda1b815d7e0cff6aad2d7477"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-status-final/tab-0-1280.png",
+      "bytes": 96002,
+      "sha256": "b1693d0e58b8f1c06ec9a1b884b011427df528d0bfca7cdd5a7096de17a22d5f",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-status-final/tab-1-1280.png",
+      "bytes": 316338,
+      "sha256": "8cf2d894176549526a81981591da7f065e77bb29d70a0f70f4663485e7dbc70c",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-status-final/tab-2-1280.png",
+      "bytes": 27275,
+      "sha256": "cb204a0eb57e25862fd409d48e548eb59dba96e53eb688c1e0f482fd6c019d98",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-status-final/tab-3-1280.png",
+      "bytes": 364155,
+      "sha256": "78d2b9a30b92f5d2766ab6981aef7768a80742686726640bf84834ab72aa6a7e",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-status-final/tab-0-390.png",
+      "bytes": 92403,
+      "sha256": "baa9e716843eb56e59e99e4133c671af6bb0d8efee9a92a74e41c25e40e62b30",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-status-final/tab-1-390.png",
+      "bytes": 309872,
+      "sha256": "1004dd4c2b81bb0680c110a8719ddaf5b320c6dc90b286b5bfb91bdd5c6ed4c8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-status-final/tab-2-390.png",
+      "bytes": 22338,
+      "sha256": "db072df39f9c356a2968281d9d6d0f44a4369e9b9b2a0fb4d6c0761dbcfa0549",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-status-final/tab-3-390.png",
+      "bytes": 350144,
+      "sha256": "e021ee8063d6e65f7e8b18f8423c02104527149ee990d5ca1b7fadc4e4245781",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "d73bbd8f20d073497942503a8d71e96e0623f908040e3859ecd761dcb1440457",
+  "id": "f2f8c4383548481e1b112a46099a38f83043775376df866e7f70ab704908a357",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "independent Codex UI critic",
+    "note": "PASS: inspected all eight bound global dashboard captures across four tabs at 1280x900 and 390x900. Overview explicitly shows nothing needs the user; all entries includes 55 entries; Decisions has no pending input; Plan retains the four-tab UI and displays 199 tickets with #201 low-priority backlog, #189 completed, one cancelled, and the expected ready/backlog/done counts. Phone tabs and cards wrap without horizontal clipping; the plan is scrollable and legible. Limits: captures establish static visual rendering, not keyboard/screen-reader behavior or live interactions; machine totals are as recorded by the bound source snapshot.",
+    "acceptedAt": "2026-11-03T15:31:16.540Z",
+    "snapshotId": "f2f8c4383548481e1b112a46099a38f83043775376df866e7f70ab704908a357"
+  }
+}

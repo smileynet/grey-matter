@@ -3,246 +3,781 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
-      "id": "acp-orchestration-fit", "state": "partial", "label": "Protocol documented; no new client trial",
+      "id": "kiro-shutdown-handling",
+      "state": "partial",
+      "label": "Workaround documented; native shutdown unresolved",
+      "title": "Keep completed work when a worker reports a shutdown error",
+      "value": "Kiro workers can complete a task and then report a shutdown error. The workflow now checks the work and cleanup separately, so that error alone does not trigger duplicate work.",
+      "diagramLabel": "Required workflow handling",
+      "steps": [
+        "Verify the task result",
+        "Record the shutdown error",
+        "Check owned processes",
+        "Preserve the session"
+      ],
+      "limit": "Graceful unattended shutdown remains unqualified. Deeper repair research is deferred until higher-priority work is finished.",
+      "details": "The user accepted the known limitation and closed the diagnosis. Only the exact observed five-second EOF error receives the teardown classification; other failures still need diagnosis. Native completion plus independent artifact and critic checks are required for task acceptance. Bounded descendant observation must establish cleanup separately; a live or unobserved process remains unresolved. Session close is not a proven engine shutdown and session deletion is not a remedy. No new native probe ran. Existing raw evidence and four model-bearing sessions remain retained for the low-priority follow-up.",
+      "tickets": [
+        "189",
+        "201"
+      ],
+      "sources": [
+        {
+          "label": "Current workflow workaround",
+          "href": "../skills/engineering/orchestrate/references/harness-kiro.md#v3-acp-shutdown-workaround"
+        },
+        {
+          "label": "Independent closure review",
+          "href": "agents/research/kiro-acp-workflow-closure-20261103-audit.md"
+        },
+        {
+          "label": "Observed shutdown evidence",
+          "href": "agents/research/kiro-acp-shutdown-20261102.md"
+        }
+      ]
+    },
+    {
+      "id": "acp-orchestration-fit",
+      "state": "partial",
+      "label": "Protocol documented; no new client trial",
       "title": "Keep supervision around a standard agent connection",
       "value": "ACP can carry requests, progress and approval questions. A supervisor still needs to choose work, isolate it and decide what to accept.",
-      "diagramLabel": "Documented boundary, compared with earlier probes", "steps": ["Connect to an agent", "Negotiate supported features", "Exchange updates and questions", "Keep acceptance with the supervisor"],
+      "diagramLabel": "Documented boundary, compared with earlier probes",
+      "steps": [
+        "Connect to an agent",
+        "Negotiate supported features",
+        "Exchange updates and questions",
+        "Keep acceptance with the supervisor"
+      ],
       "limit": "The SDK was not installed or measured. Runtime findings come from earlier named driver probes; no portable-client or cost advantage was demonstrated.",
       "details": "The source audit distinguishes the SDK package version from stable ACP v1 and experimental v2 schemas, plus the separate MCP tool-server boundary and Kiro extensions. Earlier Windows probes observed Kiro request, follow-up, approval visibility, cancellation and load behavior. The Kiro EOF shutdown issue remains specific to that implementation. Mixed-backend setup and generic client ownership are separate questions. No additional actionable spike is recommended without a concrete client need; no new native probe, installation or account setting change occurred.",
-      "tickets": ["187"],
-      "sources": [{"label": "ACP findings and bounded recommendation", "href": "agents/research/acp-orchestration-fit-20261103.md"}, {"label": "Independent primary-source audit", "href": "agents/research/acp-orchestration-fit-20261103-audit.md"}]
+      "tickets": [
+        "187"
+      ],
+      "sources": [
+        {
+          "label": "ACP findings and bounded recommendation",
+          "href": "agents/research/acp-orchestration-fit-20261103.md"
+        },
+        {
+          "label": "Independent primary-source audit",
+          "href": "agents/research/acp-orchestration-fit-20261103-audit.md"
+        }
+      ]
     },
     {
-      "id": "effort-trial", "state": "partial", "label": "Effort trial incomplete; defaults retained",
+      "id": "effort-trial",
+      "state": "partial",
+      "label": "Effort trial incomplete; defaults retained",
       "title": "Keep effort defaults until quality can be compared",
       "value": "The trial did not establish a better effort level. Incomplete runs and unusable review evidence prevent a fair quality comparison.",
-      "diagramLabel": "Observed trial and decision", "steps": ["Use one requested model", "Try effort levels", "Check the evidence", "Keep current defaults"],
+      "diagramLabel": "Observed trial and decision",
+      "steps": [
+        "Use one requested model",
+        "Try effort levels",
+        "Check the evidence",
+        "Keep current defaults"
+      ],
       "limit": "Actual effort was not reported, and most review receipts were invalid. The single usable score cannot establish an effort-level advantage.",
       "details": "Thirteen native calls produced eleven complete responses and two timeouts; one additional cell failed setup before a model call. One response had a valid blind pass and ten are unscorable because their review receipts failed validation. These are evidence gaps, not model-quality failures. The passing requested Codex max result lacked served model and actual effort. Kiro and Google cohorts remained held. Unknown costs and timeout usage remain unknown. Twenty authorized empty working directories were recycled and their source paths verified absent; destination identifiers were not recorded. No defaults changed.",
-      "tickets": ["171"],
-      "sources": [{"label": "Effort findings and limits", "href": "agents/research/model-effort-t171-results.md"}, {"label": "Independent final audit", "href": "agents/research/model-effort-t171-independent-audit.md"}, {"label": "Current effort guidance", "href": "agents/harness-surfaces/models-and-usage.md"}]
+      "tickets": [
+        "171"
+      ],
+      "sources": [
+        {
+          "label": "Effort findings and limits",
+          "href": "agents/research/model-effort-t171-results.md"
+        },
+        {
+          "label": "Independent final audit",
+          "href": "agents/research/model-effort-t171-independent-audit.md"
+        },
+        {
+          "label": "Current effort guidance",
+          "href": "agents/harness-surfaces/models-and-usage.md"
+        }
+      ]
     },
     {
-      "id": "text-task-tiers", "state": "partial", "label": "Rewrites passed; triage and classification need care",
+      "id": "text-task-tiers",
+      "state": "partial",
+      "label": "Rewrites passed; triage and classification need care",
       "title": "Keep human checks beside routine text work",
       "value": "All six profiles handled the small rewrite. Triage and changelog classification exposed mistakes, so none qualified to replace the current defaults across these tasks.",
-      "diagramLabel": "Observed task results", "steps": ["Rewrite: six passed", "Triage: one passed", "Classification: none passed", "Keep current defaults"],
+      "diagramLabel": "Observed task results",
+      "steps": [
+        "Rewrite: six passed",
+        "Triage: one passed",
+        "Classification: none passed",
+        "Keep current defaults"
+      ],
       "limit": "One observation per task and profile does not establish reliability. Missing served identities and costs also limit the comparison.",
       "details": "Eighteen native responses received blind reviews: seven passed and eleven failed. No profile passed all three tasks. Claude reported Haiku 5.5 and Opus 5.5; Codex and Kiro omitted served identity and dollar cost. Google remained held without a call. Review provenance is parent-transcribed rather than a platform export; one failed review-file write has no initial semantic bytes for comparison. Six exact Kiro sessions were removed while all 7,600 non-target session/source pairs were preserved. No default or global setting changed.",
-      "tickets": ["170"],
-      "sources": [{"label": "Text-task findings and limitations", "href": "agents/research/model-task-tiers-20261103.md"}, {"label": "Independent final audit", "href": "agents/research/t170-final-review-20261103.md"}, {"label": "Current model guidance", "href": "agents/harness-surfaces/models-and-usage.md"}]
+      "tickets": [
+        "170"
+      ],
+      "sources": [
+        {
+          "label": "Text-task findings and limitations",
+          "href": "agents/research/model-task-tiers-20261103.md"
+        },
+        {
+          "label": "Independent final audit",
+          "href": "agents/research/t170-final-review-20261103.md"
+        },
+        {
+          "label": "Current model guidance",
+          "href": "agents/harness-surfaces/models-and-usage.md"
+        }
+      ]
     },
     {
-      "id": "implementation-tiers", "state": "partial", "label": "Correct code observed; full workflow proof incomplete",
+      "id": "implementation-tiers",
+      "state": "partial",
+      "label": "Correct code observed; full workflow proof incomplete",
       "title": "Keep default coding workers while the full job is unproven",
       "value": "Cheaper workers produced correct code in several tasks. Missing test proof and mistakes on unclear requests kept them from qualifying as replacements for the current defaults.",
-      "diagramLabel": "Observed comparison and resulting guidance", "steps": ["Give the same task", "Check the code", "Check the worker's actions", "Keep current defaults"],
+      "diagramLabel": "Observed comparison and resulting guidance",
+      "steps": [
+        "Give the same task",
+        "Check the code",
+        "Check the worker's actions",
+        "Keep current defaults"
+      ],
       "limit": "One run per task and profile does not establish reliability. Harness and policy interruptions prevented several fair comparisons.",
       "details": "The trial attempted 38 of 48 planned cells. Claude's implementation artifacts passed, but native output did not prove successful agent test execution. Kiro's ordinary tasks passed; the cheaper requested profile guessed a missing style in an ambiguity case. Codex's incomplete launch path failed before a fair comparison. Agy execution remains held after a security stop. Served identity and costs were missing for some providers; Claude costs are list estimates, not billing. No default or global permission changed.",
-      "tickets": ["167"],
-      "sources": [{"label": "Implementation results and limitations", "href": "agents/research/model-tier-implementation-20261102.md"}, {"label": "Independent evidence audit", "href": "agents/research/model-tier-trial-20261103-audit.md"}, {"label": "Current model guidance", "href": "agents/harness-surfaces/models-and-usage.md"}]
+      "tickets": [
+        "167"
+      ],
+      "sources": [
+        {
+          "label": "Implementation results and limitations",
+          "href": "agents/research/model-tier-implementation-20261102.md"
+        },
+        {
+          "label": "Independent evidence audit",
+          "href": "agents/research/model-tier-trial-20261103-audit.md"
+        },
+        {
+          "label": "Current model guidance",
+          "href": "agents/harness-surfaces/models-and-usage.md"
+        }
+      ]
     },
     {
-      "id": "review-tiers", "state": "partial", "label": "Planted defects found; strict review output incomplete",
+      "id": "review-tiers",
+      "state": "partial",
+      "label": "Planted defects found; strict review output incomplete",
       "title": "Check review findings before using them as a gate",
       "value": "Reviewers found the planted problems in these small cases. Unsupported extra claims and output-format failures leave cheaper automated review unqualified.",
-      "diagramLabel": "Observed review checks", "steps": ["Show one proposed change", "Read the findings", "Verify each claim", "Keep current defaults"],
+      "diagramLabel": "Observed review checks",
+      "steps": [
+        "Show one proposed change",
+        "Read the findings",
+        "Verify each claim",
+        "Keep current defaults"
+      ],
       "limit": "Four small cases do not establish production review quality. One requested cheaper alias served a different model.",
       "details": "Fourteen of 23 attempts met the required JSON format. Secondary blind scoring found the seeded defect and changed-line citation in all 22 nonempty responses, with nine unsupported claims and five duplicate findings. One startup failure produced no response. No cheaper profile covered all four strict-format cases. Claude's requested haiku alias served Sonnet 5.5; Codex and Kiro did not report actual identity. The earlier unintended help turn had unknown usage, so total budget compliance remains unverified. Google was held without a call.",
-      "tickets": ["168"],
-      "sources": [{"label": "Review results", "href": "agents/research/model-tier-review-20261103-results.md"}, {"label": "Independent audit", "href": "agents/research/model-tier-review-20261103-audit.md"}]
+      "tickets": [
+        "168"
+      ],
+      "sources": [
+        {
+          "label": "Review results",
+          "href": "agents/research/model-tier-review-20261103-results.md"
+        },
+        {
+          "label": "Independent audit",
+          "href": "agents/research/model-tier-review-20261103-audit.md"
+        }
+      ]
     },
     {
-      "id": "research-tiers", "state": "partial", "label": "Accuracy tested; model choice unchanged",
+      "id": "research-tiers",
+      "state": "partial",
+      "label": "Accuracy tested; model choice unchanged",
       "title": "Keep source checks beside delegated research",
       "value": "Most scored answers met the small research tasks. Missing citations, an oversized summary and gaps in review evidence kept the trial from qualifying a cheaper model.",
-      "diagramLabel": "Observed research checks", "steps": ["Freeze the sources", "Ask one question", "Check the answer and citation", "Keep current defaults"],
+      "diagramLabel": "Observed research checks",
+      "steps": [
+        "Freeze the sources",
+        "Ask one question",
+        "Check the answer and citation",
+        "Keep current defaults"
+      ],
       "limit": "Five of 18 results were unscorable. Some model identities were absent; retained reviewer traces were producer-transcribed rather than platform exports.",
       "details": "Thirteen valid review receipts yielded eleven passes and two failures. A Haiku summary exceeded the word cap and added an unsupported claim; a requested cheap Kiro answer omitted the required citation heading. Three review receipts failed validation, and two earlier passing receipts lacked retained dispatch evidence; neither gap counts as a model failure or verified pass. The requested cheap Codex profile passed all three tasks, but its actual model was unreported. Keep defaults. Exact native sessions and empty work directories were cleaned; private evidence remains retained for the remaining trials.",
-      "tickets": ["169"],
-      "sources": [{"label": "Research results and provenance limits", "href": "agents/research/model-tier-research-20261102.md"}, {"label": "Independent results and cleanup audit", "href": "agents/research/model-tier-research-20261103-audit.md"}]
+      "tickets": [
+        "169"
+      ],
+      "sources": [
+        {
+          "label": "Research results and provenance limits",
+          "href": "agents/research/model-tier-research-20261102.md"
+        },
+        {
+          "label": "Independent results and cleanup audit",
+          "href": "agents/research/model-tier-research-20261103-audit.md"
+        }
+      ]
     },
     {
-      "id": "evaluation-runner", "state": "confirmed", "label": "Shared tasks demonstrated; tier trials underway",
+      "id": "evaluation-runner",
+      "state": "confirmed",
+      "label": "Shared tasks demonstrated; tier trials underway",
       "title": "Compare workers on the same tasks",
       "value": "Two small implementation tasks ran through two assistants with separate workspaces and independent checks. The same approach now supports the next model trials.",
-      "diagramLabel": "Observed evaluation flow", "steps": ["Freeze the task", "Run in a fresh workspace", "Check behavior and scope", "Read usage with its limits"],
+      "diagramLabel": "Observed evaluation flow",
+      "steps": [
+        "Freeze the task",
+        "Run in a fresh workspace",
+        "Check behavior and scope",
+        "Read usage with its limits"
+      ],
       "limit": "These were task demonstrations, not a model ranking. Other task types still need their own fixtures; the host setup did not provide an isolation boundary.",
       "details": "The selected Windows-native runner preserves requested versus observed model identity, native usage and independent grading. Its hardened grader catches staged, untracked and committed changes outside allowed paths and rejects unexpected commits. Claude costs are native list estimates; Codex dollar cost and observed identity were absent. Harbor's local setup was blocked before execution, while remote modes remain untested. Implementation and review trials are now dispatched separately; measured model runs are serialized.",
-      "tickets": ["174", "199", "200"],
-      "sources": [{"label": "Runner demonstration and evidence limits", "href": "agents/research/eval-runner-trial-20261102.md"}, {"label": "Selected recipe", "href": "agents/research/eval-prior-art-20261101.md"}, {"label": "Complete frozen input", "href": "agents/research/eval-frozen-seed-20261102.md"}]
+      "tickets": [
+        "174",
+        "199",
+        "200"
+      ],
+      "sources": [
+        {
+          "label": "Runner demonstration and evidence limits",
+          "href": "agents/research/eval-runner-trial-20261102.md"
+        },
+        {
+          "label": "Selected recipe",
+          "href": "agents/research/eval-prior-art-20261101.md"
+        },
+        {
+          "label": "Complete frozen input",
+          "href": "agents/research/eval-frozen-seed-20261102.md"
+        }
+      ]
     },
     {
-      "id": "gui-candidates", "state": "partial", "label": "Candidates documented; live steering unverified",
+      "id": "gui-candidates",
+      "state": "partial",
+      "label": "Candidates documented; live steering unverified",
       "title": "Compare native views before relying on them",
       "value": "Five interfaces were compared for worker status, approvals, questions and usage. The comparison separates documented features from what could actually be observed here.",
-      "diagramLabel": "Qualification path — not demonstrated", "steps": ["Find native worker ID", "Match visible conversation", "Verify reply or approval"],
+      "diagramLabel": "Qualification path — not demonstrated",
+      "steps": [
+        "Find native worker ID",
+        "Match visible conversation",
+        "Verify reply or approval"
+      ],
       "limit": "No GUI was verified to display or steer the retained headless workers. Launch or capture failed, or automation was unavailable by policy.",
       "details": "Claude Agent View is CLI/TUI and separate from the Desktop sidebar. Codex app-list state labels were unspecified in reviewed docs; Kiro Agent Focus and Crew chat document replies for their own sessions. Antigravity app subagent views differ from CLI approval controls. Crew usage documentation was older than the local install. Keep native worker results and the controller ledger authoritative until exact session mapping and an actual interaction are proven.",
-      "tickets": ["173"],
-      "sources": [{"label": "Five-surface comparison and local limits", "href": "agents/research/gui-watch-layer-20261102.md"}]
+      "tickets": [
+        "173"
+      ],
+      "sources": [
+        {
+          "label": "Five-surface comparison and local limits",
+          "href": "agents/research/gui-watch-layer-20261102.md"
+        }
+      ]
     },
     {
-      "id": "workflow-monitor", "state": "partial", "label": "Recipe launch and retry observed",
+      "id": "workflow-monitor",
+      "state": "partial",
+      "label": "Recipe launch and retry observed",
       "title": "Follow a multi-step run and guide it from a monitor",
       "value": "A recipe started, showed step results, accepted guidance and retried a failed step. The run reached its final step but did not complete.",
-      "diagramLabel": "Observed local control flow", "steps": ["Start recipe", "See step results", "Send guidance", "Retry failed step"],
+      "diagramLabel": "Observed local control flow",
+      "steps": [
+        "Start recipe",
+        "See step results",
+        "Send guidance",
+        "Retry failed step"
+      ],
       "limit": "A safe pause boundary and a complete review-and-merge loop remain unverified. The recipe does not create separate worktrees or guarantee independent review.",
       "details": "Kiro V3 ran a four-step local recipe under private settings. A pause request appeared, but the capture did not establish a completed safe-boundary pause. Read-only fixture tools appeared during ambiguous approval interaction; no policy-bypass conclusion is supported. Inherited global-hook isolation was not established, and no isolated worker commit or landing was observed.",
-      "tickets": ["161"],
-      "sources": [{"label": "Workflow monitor trial and limits", "href": "agents/research/kiro-workflows-20261102.md"}]
+      "tickets": [
+        "161"
+      ],
+      "sources": [
+        {
+          "label": "Workflow monitor trial and limits",
+          "href": "agents/research/kiro-workflows-20261102.md"
+        }
+      ]
     },
     {
-      "id": "complete-runtime", "state": "partial", "label": "One read-only project check confirmed",
+      "id": "complete-runtime",
+      "state": "partial",
+      "label": "One read-only project check confirmed",
       "title": "Use the complete installation to run a project check",
       "value": "A read-only project check ran from the complete installed package. The standalone copy had failed before the check could start.",
-      "diagramLabel": "Observed matched check", "steps": ["Choose complete package", "Start the session", "Run read-only check", "Inspect native result"],
+      "diagramLabel": "Observed matched check",
+      "steps": [
+        "Choose complete package",
+        "Start the session",
+        "Run read-only check",
+        "Inspect native result"
+      ],
       "limit": "This verified one harmless check, not writes or approval behavior. The tested internal package path may change after an update; no durable installation repair was made.",
       "details": "Codex's two stable executable copies had identical version and bytes. The PATH-selected copy lacked its sibling code-mode host; the installed Windows platform package contained the signed companion and executed the exact fixture Git status command. No binary copy, install or global configuration edit was used. Earlier message-board and wake probes remain historically unverified.",
-      "tickets": ["188"],
-      "sources": [{"label": "Companion-host diagnosis and scoped remedy", "href": "agents/research/codex-tool-host-20261102.md"}]
+      "tickets": [
+        "188"
+      ],
+      "sources": [
+        {
+          "label": "Companion-host diagnosis and scoped remedy",
+          "href": "agents/research/codex-tool-host-20261102.md"
+        }
+      ]
     },
     {
-      "id": "background-notice", "state": "partial", "label": "One message and idle notice confirmed",
+      "id": "background-notice",
+      "state": "partial",
+      "label": "One message and idle notice confirmed",
       "title": "Send a background worker a message and hear when its turn ends",
       "value": "A background worker received a message, replied, and sent a separate idle notice. This gives the controller a signal to inspect the result.",
-      "diagramLabel": "Observed local exchange", "steps": ["Send a message", "Worker replies", "Idle notice", "Inspect the result"],
+      "diagramLabel": "Observed local exchange",
+      "steps": [
+        "Send a message",
+        "Worker replies",
+        "Idle notice",
+        "Inspect the result"
+      ],
       "limit": "Idle does not mean the work is accepted. The test project's trust check blocked background dispatch and automatic worktree creation; those paths remain unverified.",
       "details": "Claude Code's native message call and receiver transcript confirmed one same-machine exchange. The preliminary marker session belonged to the isolated worker checkout and was stopped and removed after review. Safe branch pushes and the documented idle reaper were not tested. No persistent project trust was accepted; only after-run settings hashes were captured.",
-      "tickets": ["160"],
-      "sources": [{"label": "Background session trial and limits", "href": "agents/research/claude-background-20261102.md"}]
+      "tickets": [
+        "160"
+      ],
+      "sources": [
+        {
+          "label": "Background session trial and limits",
+          "href": "agents/research/claude-background-20261102.md"
+        }
+      ]
     },
     {
-      "id": "typed-workflows", "state": "partial", "label": "Typed jobs confirmed; model selection unresolved",
+      "id": "typed-workflows",
+      "state": "partial",
+      "label": "Typed jobs confirmed; model selection unresolved",
       "title": "Collect structured results from jobs in separate work areas",
       "value": "Two jobs ran in separate worktrees and returned checked results. One worker asked for a missing name, then continued in the same conversation when given an answer.",
-      "diagramLabel": "Observed fixture workflow", "steps": ["Choose two jobs", "Separate worktrees", "Check result shape", "Inspect and combine"],
+      "diagramLabel": "Observed fixture workflow",
+      "steps": [
+        "Choose two jobs",
+        "Separate worktrees",
+        "Check result shape",
+        "Inspect and combine"
+      ],
       "limit": "The answer and admission choices were scripted. Review and merging were checked outside the workflow; per-role model selection remains unverified.",
       "details": "Native agy parallel and sequential controls completed. An invalid result was rejected before correction. The two ticket commits changed only their assigned files; independent controller inspection, merges and combined tests passed. Earlier attempts stopped on narrow permission denials. No global settings changed. The routing qualification found documented request controls but no verified child-scoped served-model identity. Opaque labels and requested tiers cannot establish cost or capability guarantees.",
-      "tickets": ["157", "194"],
-      "sources": [{"label": "Native workflow trials and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-157-native-agy-workflows-2026-11-02"}, {"label": "Model request and identity boundary", "href": "agents/research/agy-model-routing-20261102.md"}]
+      "tickets": [
+        "157",
+        "194"
+      ],
+      "sources": [
+        {
+          "label": "Native workflow trials and limits",
+          "href": "agents/research/harness-experimental-features-20261101.md#ticket-157-native-agy-workflows-2026-11-02"
+        },
+        {
+          "label": "Model request and identity boundary",
+          "href": "agents/research/agy-model-routing-20261102.md"
+        }
+      ]
     },
     {
-      "id": "narrow-actions", "state": "partial", "label": "Matching confirmed; approval overlap unresolved",
+      "id": "narrow-actions",
+      "state": "partial",
+      "label": "Matching confirmed; approval overlap unresolved",
       "title": "Give a worker access to a smaller set of actions",
       "value": "Selected Git, test and ticket-reading commands ran with narrow grants. A folder grant allowed a nested file while rejecting a nearby sibling path.",
-      "diagramLabel": "Observed positive and negative controls", "steps": ["Grant a named action", "Matching action runs", "Nearby action stops"],
+      "diagramLabel": "Observed positive and negative controls",
+      "steps": [
+        "Grant a named action",
+        "Matching action runs",
+        "Nearby action stops"
+      ],
       "limit": "Fresh controls reproduced the regex approval mismatch; its cause remains unknown. Do not rely on that override. These checks do not establish whole-machine confinement.",
       "details": "The headless Windows agy trial checked native tool results and actual file bytes. Exact literal grants also worked. TEMP writes have a default grant, so the path test moved outside TEMP and the workspace. A fresh matching Deny rule rejected the tested command; use a separately validated blocking rule where blocking is intended. No effective permission list was obtained and no global settings changed. The sanitized upstream issue brief remains local, not submitted.",
-      "tickets": ["158", "193"],
-      "sources": [{"label": "Narrow permission trials and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-158-narrower-agy-permissions-2026-11-02"}, {"label": "Fresh approval controls and mitigation", "href": "agents/research/agy-approval-overlap-20261102.md"}]
+      "tickets": [
+        "158",
+        "193"
+      ],
+      "sources": [
+        {
+          "label": "Narrow permission trials and limits",
+          "href": "agents/research/harness-experimental-features-20261101.md#ticket-158-narrower-agy-permissions-2026-11-02"
+        },
+        {
+          "label": "Fresh approval controls and mitigation",
+          "href": "agents/research/agy-approval-overlap-20261102.md"
+        }
+      ]
     },
     {
-      "id": "mate-recovery", "state": "partial", "label": "Recovery confirmed; planning needs oversight",
+      "id": "mate-recovery",
+      "state": "partial",
+      "label": "Recovery confirmed; planning needs oversight",
       "title": "Resume a worker after a gateway restart",
       "value": "A standing teammate reconnected with the same worker after a graceful restart. The worker remembered its earlier reply, and its fresh report woke the teammate.",
-      "diagramLabel": "Observed recovery between turns", "steps": ["Gateway restarts", "Worker resumes", "Fresh report", "Mate responds"],
+      "diagramLabel": "Observed recovery between turns",
+      "steps": [
+        "Gateway restarts",
+        "Worker resumes",
+        "Fresh report",
+        "Mate responds"
+      ],
       "limit": "The teammate then invented the next task. Keep requirements and acceptance checks outside that loop. Crashes during active work were not tested.",
       "details": "The private Kiro Crew trial restored the persisted parent link and reused the worker's native session. The old completed report did not replay in the startup observation window. After a controller corrected the invented task, the same worker implemented the actual multiply fixture and its tests passed. No independent Mate review or merge was established, so superiority over the built-in conductor remains unproven.",
-      "tickets": ["156"],
-      "sources": [{"label": "Mate recovery trial and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-156-mate-restart-and-report-recovery-2026-11-02"}]
+      "tickets": [
+        "156"
+      ],
+      "sources": [
+        {
+          "label": "Mate recovery trial and limits",
+          "href": "agents/research/harness-experimental-features-20261101.md#ticket-156-mate-restart-and-report-recovery-2026-11-02"
+        }
+      ]
     },
     {
-      "id": "separate-jobs", "state": "confirmed", "label": "Confirmed in fixtures",
+      "id": "separate-jobs",
+      "state": "confirmed",
+      "label": "Confirmed in fixtures",
       "title": "Split work into small jobs, then review before merging",
       "value": "Independent jobs ran in separate work areas. A review step checked the result before accepted changes were brought together.",
-      "diagramLabel": "Observed workflow", "steps": ["Choose jobs", "Separate workers", "Review", "Merge accepted work"],
+      "diagramLabel": "Observed workflow",
+      "steps": [
+        "Choose jobs",
+        "Separate workers",
+        "Review",
+        "Merge accepted work"
+      ],
       "limit": "These were small test projects. A worker's claim of success was never enough on its own.",
       "details": "The authored skill dry runs exercised Claude Code and Kiro CLI. Earlier baseline spikes covered Codex, Kiro Crew and Antigravity with different limitations. Admission held overlapping and dependent jobs; the later dry runs held the risky deletion rather than dispatching it.",
-      "tickets": ["111", "124", "125", "126", "127", "128", "129"],
-      "sources": [{"label": "Live skill trial evidence", "href": "agents/research/orchestrate-skill-dry-runs-20261101.md"}]
+      "tickets": [
+        "111",
+        "124",
+        "125",
+        "126",
+        "127",
+        "128",
+        "129"
+      ],
+      "sources": [
+        {
+          "label": "Live skill trial evidence",
+          "href": "agents/research/orchestrate-skill-dry-runs-20261101.md"
+        }
+      ]
     },
     {
-      "id": "questions", "state": "confirmed", "label": "Confirmed in tested sessions",
+      "id": "questions",
+      "state": "confirmed",
+      "label": "Confirmed in tested sessions",
       "title": "A worker can ask a question and continue with the answer",
       "value": "The tested sessions remembered their context when the controller supplied a missing name. Some continued in one process; others resumed in a fresh process.",
-      "diagramLabel": "Observed exchange", "steps": ["Worker asks", "Controller answers", "Same session continues"],
+      "diagramLabel": "Observed exchange",
+      "steps": [
+        "Worker asks",
+        "Controller answers",
+        "Same session continues"
+      ],
       "limit": "This confirms the captured exchanges, not recovery from every kind of interruption.",
       "details": "Claude and Antigravity carried paired-stream follow-ups. Codex exec/resume and Kiro chat/resume kept the same session identity. Kiro ACP loaded a saved conversation and produced a fresh answer after replayed history; replay was not counted as a new answer.",
-      "tickets": ["162"],
-      "sources": [{"label": "Headless driver comparison", "href": "agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02"}]
+      "tickets": [
+        "162"
+      ],
+      "sources": [
+        {
+          "label": "Headless driver comparison",
+          "href": "agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02"
+        }
+      ]
     },
     {
-      "id": "stop-deletion", "state": "partial", "label": "One safety case confirmed",
+      "id": "stop-deletion",
+      "state": "partial",
+      "label": "One safety case confirmed",
       "title": "The tested deletion can stop for a human decision",
       "value": "A restrictive policy blocked deletion of the project README, and the worker reported that it needed a human ruling.",
-      "diagramLabel": "Observed narrow safety case", "steps": ["Deletion requested", "Policy blocks it", "Worker asks for help"],
+      "diagramLabel": "Observed narrow safety case",
+      "steps": [
+        "Deletion requested",
+        "Policy blocks it",
+        "Worker asks for help"
+      ],
       "limit": "Ordinary allowed commands still asked for approval. Broad containment and unattended operation are not established.",
       "details": "This was an owner-scoped KAS policy with YOLO off. It protects one tested command form, not all deletion routes or arbitrary process access. Earlier broad-trust runs did delete and merge the README, so permission setup materially changes the outcome.",
-      "tickets": ["154", "128"],
-      "sources": [{"label": "Audited policy probe", "href": "agents/research/harness-experimental-features-20261101.md#ticket-154-kas-allowlist-probe-2026-11-01"}]
+      "tickets": [
+        "154",
+        "128"
+      ],
+      "sources": [
+        {
+          "label": "Audited policy probe",
+          "href": "agents/research/harness-experimental-features-20261101.md#ticket-154-kas-allowlist-probe-2026-11-01"
+        }
+      ]
     },
     {
-      "id": "actual-results", "state": "confirmed", "label": "Failure signals observed",
+      "id": "actual-results",
+      "state": "confirmed",
+      "label": "Failure signals observed",
       "title": "Check the work result before calling a run successful",
       "value": "A run can finish cleanly while a command was denied. Native tool results exposed that difference in the comparison.",
-      "diagramLabel": "Two different checks", "steps": ["Run has ended", "Inspect tool result", "Accept or hold the work"],
+      "diagramLabel": "Two different checks",
+      "steps": [
+        "Run has ended",
+        "Inspect tool result",
+        "Accept or hold the work"
+      ],
       "limit": "There is no single exit code or status word that proves accepted work across all of these drivers.",
       "details": "Antigravity returned SUCCESS and exit 0 with an empty response after automatic command denial. Codex completed a text turn while tool execution was blocked by a missing companion host. Kiro's live ACP request/cancel/load worked, but EOF shutdown still exited 1. The follow-up tickets separate these infrastructure limits from transport results.",
-      "tickets": ["162", "159", "188", "189"],
-      "sources": [{"label": "Native outcomes and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02"}, {"label": "Codex dispatch controls and setup limit", "href": "agents/research/codex-dispatch-20261102.md"}, {"label": "Fresh Kiro shutdown blocker", "href": "agents/research/kiro-acp-shutdown-20261102.md"}]
+      "tickets": [
+        "162",
+        "159",
+        "188",
+        "189"
+      ],
+      "sources": [
+        {
+          "label": "Native outcomes and limits",
+          "href": "agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02"
+        },
+        {
+          "label": "Codex dispatch controls and setup limit",
+          "href": "agents/research/codex-dispatch-20261102.md"
+        },
+        {
+          "label": "Fresh Kiro shutdown blocker",
+          "href": "agents/research/kiro-acp-shutdown-20261102.md"
+        }
+      ]
     },
     {
-      "id": "sign-in", "state": "partial", "label": "Callback route tested; real delivery untested",
+      "id": "sign-in",
+      "state": "partial",
+      "label": "Callback route tested; real delivery untested",
       "title": "Choose the sign-in owner explicitly",
       "value": "The bundled engine asked a test host for credentials and returned the expected error when none were supplied. A documented setting selects this route.",
-      "diagramLabel": "Observed routing choices", "steps": ["Select an owner", "CLI handles sign-in", "Or host receives request"],
+      "diagramLabel": "Observed routing choices",
+      "steps": [
+        "Select an owner",
+        "CLI handles sign-in",
+        "Or host receives request"
+      ],
       "limit": "Real Crew credential-vault delivery was not tested. This exercised the bundled engine's callback path, not a full signed-in Crew session.",
       "details": "Crew 0.11.1's Windows relay host-auth builder still omitted the owner flag. Its documented agent.kas_bundle=true route selects bundled KAS with explicit callback authentication. The private KAS 0.66.33 probe received eight credential requests and failed with the expected credential-unavailable error. CLI-owned success is historical evidence from the exact matching CLI 2.37.1 binary. No tokens, account changes or installed product patches were used.",
-      "tickets": ["185", "186", "190"],
-      "sources": [{"label": "Authentication routing evidence", "href": "agents/research/kirocrew-orchestration.md#ticket-186-auth-owner-routing-2026-11-02"}, {"label": "Bundled callback route and limits", "href": "agents/research/crew-client-auth-remedy-20261102.md"}]
+      "tickets": [
+        "185",
+        "186",
+        "190"
+      ],
+      "sources": [
+        {
+          "label": "Authentication routing evidence",
+          "href": "agents/research/kirocrew-orchestration.md#ticket-186-auth-owner-routing-2026-11-02"
+        },
+        {
+          "label": "Bundled callback route and limits",
+          "href": "agents/research/crew-client-auth-remedy-20261102.md"
+        }
+      ]
     },
     {
-      "id": "visible-state", "state": "confirmed", "label": "Optional integration confirmed",
+      "id": "visible-state",
+      "state": "confirmed",
+      "label": "Optional integration confirmed",
       "title": "Keep the ticket and worker state aligned",
       "value": "The optional integration mirrored active, waiting, review and completed states into the worker's native bookkeeping.",
-      "diagramLabel": "Observed state mapping", "steps": ["Ticket changes", "Native state mirrors it", "Owner reads one plan"],
+      "diagramLabel": "Observed state mapping",
+      "steps": [
+        "Ticket changes",
+        "Native state mirrors it",
+        "Owner reads one plan"
+      ],
       "limit": "The ticket tracker stays authoritative. Missing optional tools are skipped; this does not add a requirement to every harness.",
       "details": "The guarded Kiro Crew integration was independently checked against native tags and ledger fields. It provides visibility metadata, not evidence that the implementation or a GUI review passed.",
-      "tickets": ["95"],
-      "sources": [{"label": "Ticket-state mirroring evidence", "href": "agents/research/kirocrew-ticket-state-20261101.md"}]
+      "tickets": [
+        "95"
+      ],
+      "sources": [
+        {
+          "label": "Ticket-state mirroring evidence",
+          "href": "agents/research/kirocrew-ticket-state-20261101.md"
+        }
+      ]
     }
   ],
   "possibilities": [
-    {"title": "Watch and answer through a familiar interface", "value": "Compare which interfaces show worker state and let a person answer questions or approvals.", "tickets": ["173"]},
-    {"title": "Spend less without losing the quality bar", "value": "Haiku and Luna were included in the completed model comparisons. The evidence still supports keeping defaults; the separate paid-fast-mode question was retired after your clarification.", "tickets": ["174", "167", "168", "169", "170"]}
+    {
+      "title": "Watch and answer through a familiar interface",
+      "value": "Compare which interfaces show worker state and let a person answer questions or approvals.",
+      "tickets": [
+        "173"
+      ]
+    },
+    {
+      "title": "Spend less without losing the quality bar",
+      "value": "Haiku and Luna were included in the completed model comparisons. The evidence still supports keeping defaults; the separate paid-fast-mode question was retired after your clarification.",
+      "tickets": [
+        "174",
+        "167",
+        "168",
+        "169",
+        "170"
+      ]
+    }
   ],
   "ticketNotes": {
-    "200": ["Keep the full test workspace stable", "Build the original fixture from frozen files instead of changing host tools or templates."],
-    "199": ["Keep comparison inputs fixed", "Restore the original fixture dashboard and reject any other unexpected seed change."],
-    "95": ["Mirror ticket and worker state", "See native worker bookkeeping follow the authoritative ticket state."],
-    "111": ["Run a controlled ticket-to-review loop", "Delegate separate jobs and review their evidence before accepting changes."],
-    "124": ["Reuse disposable test jobs", "Compare approaches against the same small project and shaped tasks."],
-    "125": ["Claude Code baseline", "Establish which parts of the orchestration loop worked in the baseline trials."],
-    "126": ["Kiro CLI baseline", "Establish the baseline dispatch, question and recovery behavior."],
-    "127": ["Codex baseline", "Establish the baseline worker, review and landing behavior."],
-    "128": ["Kiro Crew baseline", "Understand the conductor loop and where broad trust failed the safety case."],
-    "129": ["Antigravity baseline", "Establish worker isolation, messaging and permission limitations."],
-    "154": ["Stop the tested risky deletion", "Qualify a restrictive policy and its escalation behavior."],
-    "155": ["Check mixed-backend setup", "Identify whether the intended conductor/worker backend split can be configured."],
-    "156": ["Recover Mate work after restart", "Resume a worker after a graceful restart; keep task requirements and acceptance under independent oversight."],
-    "157": ["Run native Antigravity workflows", "Find whether native workflows can coordinate isolated workers and role-specific models."],
-    "158": ["Narrow command permissions", "Allow fixed commands and a selected folder, with tested rejection controls and a separate approval-overlap caveat."],
-    "159": ["Qualify messaging and wake controls", "Process flags work; native dispatch and wake remain unverified behind a missing companion host."],
-    "160": ["Follow a background worker's reply", "One message and idle notice worked; test-project dispatch, automatic worktrees and landing remain unverified."],
-    "161": ["Inspect a native workflow run", "Recipe launch, guidance and a failed-step retry were observed; isolation, safe pause and successful landing remain unverified."],
-    "162": ["Follow headless sessions", "Compare native results, questions, continuation and approval visibility."],
-    "167": ["Keep defaults for implementation", "Correct code did not establish a complete cheaper-worker workflow; unclear requests and missing execution proof limit adoption."],
-    "168": ["Keep defaults for automated review", "Planted bugs were found in small cases; unsupported claims and output format still need checking."],
-    "169": ["Keep defaults for research", "Source and review evidence matter; unscorable results and missing model identities limit comparisons."],
-    "170": ["Compare routine writing and triage", "Find which lighter models handle bounded text tasks without measured quality loss."],
-    "171": ["Find useful effort levels", "Measure when extra reasoning effort stops helping on a fixed model and task."],
-    "172": ["Retired fast-mode misunderstanding", "You meant fast models such as Haiku and Luna. Their comparisons are recorded in the earlier tier trials; no paid-fast-mode comparison or credit confirmation is needed."],
-    "173": ["Watch and answer through the GUI", "Compare visible worker state and real question or approval actions."],
-    "174": ["Choose a repeatable evaluation runner", "Leave a runnable way to compare model trials on the same fixtures."],
-    "185": ["Understand the shared agent runtime", "Explain where the agent loop, tools, protocol and policy boundaries live."],
-    "186": ["Verify sign-in routing", "Find which process actually receives authentication requests."],
-    "187": ["Research Agent Client Protocol", "Assess the standard and propose small spikes only where findings justify them."],
-    "188": ["Run a check from the complete package", "An identical executable beside its signed companion ran one read-only check; stable installation repair remains unverified."],
-    "189": ["Shutdown fix remains blocked", "Fresh completed and canceled turns still fail EOF shutdown after close; retest on a changed runtime or supported method."],
-    "190": ["Select the bundled callback route", "A documented route reached a controlled host and handled unavailable credentials; real vault delivery remains untested."],
-    "191": ["See findings and the ticket flow", "Review this effort through clear findings and an expandable, evidence-linked work log."],
-    "193": ["Qualify the approval mismatch", "Fresh controls reproduce the discrepancy; matching cause is unknown and a tested Deny mitigation is narrowly qualified."],
-    "194": ["Separate model requests from identity", "Documented tier controls do not independently prove which model served a child or guarantee its cost/capability."]
+    "95": [
+      "Mirror ticket and worker state",
+      "See native worker bookkeeping follow the authoritative ticket state."
+    ],
+    "111": [
+      "Run a controlled ticket-to-review loop",
+      "Delegate separate jobs and review their evidence before accepting changes."
+    ],
+    "124": [
+      "Reuse disposable test jobs",
+      "Compare approaches against the same small project and shaped tasks."
+    ],
+    "125": [
+      "Claude Code baseline",
+      "Establish which parts of the orchestration loop worked in the baseline trials."
+    ],
+    "126": [
+      "Kiro CLI baseline",
+      "Establish the baseline dispatch, question and recovery behavior."
+    ],
+    "127": [
+      "Codex baseline",
+      "Establish the baseline worker, review and landing behavior."
+    ],
+    "128": [
+      "Kiro Crew baseline",
+      "Understand the conductor loop and where broad trust failed the safety case."
+    ],
+    "129": [
+      "Antigravity baseline",
+      "Establish worker isolation, messaging and permission limitations."
+    ],
+    "154": [
+      "Stop the tested risky deletion",
+      "Qualify a restrictive policy and its escalation behavior."
+    ],
+    "155": [
+      "Check mixed-backend setup",
+      "Identify whether the intended conductor/worker backend split can be configured."
+    ],
+    "156": [
+      "Recover Mate work after restart",
+      "Resume a worker after a graceful restart; keep task requirements and acceptance under independent oversight."
+    ],
+    "157": [
+      "Run native Antigravity workflows",
+      "Find whether native workflows can coordinate isolated workers and role-specific models."
+    ],
+    "158": [
+      "Narrow command permissions",
+      "Allow fixed commands and a selected folder, with tested rejection controls and a separate approval-overlap caveat."
+    ],
+    "159": [
+      "Qualify messaging and wake controls",
+      "Process flags work; native dispatch and wake remain unverified behind a missing companion host."
+    ],
+    "160": [
+      "Follow a background worker's reply",
+      "One message and idle notice worked; test-project dispatch, automatic worktrees and landing remain unverified."
+    ],
+    "161": [
+      "Inspect a native workflow run",
+      "Recipe launch, guidance and a failed-step retry were observed; isolation, safe pause and successful landing remain unverified."
+    ],
+    "162": [
+      "Follow headless sessions",
+      "Compare native results, questions, continuation and approval visibility."
+    ],
+    "167": [
+      "Keep defaults for implementation",
+      "Correct code did not establish a complete cheaper-worker workflow; unclear requests and missing execution proof limit adoption."
+    ],
+    "168": [
+      "Keep defaults for automated review",
+      "Planted bugs were found in small cases; unsupported claims and output format still need checking."
+    ],
+    "169": [
+      "Keep defaults for research",
+      "Source and review evidence matter; unscorable results and missing model identities limit comparisons."
+    ],
+    "170": [
+      "Compare routine writing and triage",
+      "Find which lighter models handle bounded text tasks without measured quality loss."
+    ],
+    "171": [
+      "Find useful effort levels",
+      "Measure when extra reasoning effort stops helping on a fixed model and task."
+    ],
+    "172": [
+      "Retired fast-mode misunderstanding",
+      "You meant fast models such as Haiku and Luna. Their comparisons are recorded in the earlier tier trials; no paid-fast-mode comparison or credit confirmation is needed."
+    ],
+    "173": [
+      "Watch and answer through the GUI",
+      "Compare visible worker state and real question or approval actions."
+    ],
+    "174": [
+      "Choose a repeatable evaluation runner",
+      "Leave a runnable way to compare model trials on the same fixtures."
+    ],
+    "185": [
+      "Understand the shared agent runtime",
+      "Explain where the agent loop, tools, protocol and policy boundaries live."
+    ],
+    "186": [
+      "Verify sign-in routing",
+      "Find which process actually receives authentication requests."
+    ],
+    "187": [
+      "Research Agent Client Protocol",
+      "Assess the standard and propose small spikes only where findings justify them."
+    ],
+    "188": [
+      "Run a check from the complete package",
+      "An identical executable beside its signed companion ran one read-only check; stable installation repair remains unverified."
+    ],
+    "189": [
+      "Known shutdown limitation accepted",
+      "Workflow handling is documented; native graceful shutdown is unresolved. Deeper repair is deferred to the low-priority follow-up."
+    ],
+    "190": [
+      "Select the bundled callback route",
+      "A documented route reached a controlled host and handled unavailable credentials; real vault delivery remains untested."
+    ],
+    "191": [
+      "See findings and the ticket flow",
+      "Review this effort through clear findings and an expandable, evidence-linked work log."
+    ],
+    "193": [
+      "Qualify the approval mismatch",
+      "Fresh controls reproduce the discrepancy; matching cause is unknown and a tested Deny mitigation is narrowly qualified."
+    ],
+    "194": [
+      "Separate model requests from identity",
+      "Documented tier controls do not independently prove which model served a child or guarantee its cost/capability."
+    ],
+    "199": [
+      "Keep comparison inputs fixed",
+      "Restore the original fixture dashboard and reject any other unexpected seed change."
+    ],
+    "200": [
+      "Keep the full test workspace stable",
+      "Build the original fixture from frozen files instead of changing host tools or templates."
+    ],
+    "201": [
+      "Deferred shutdown research",
+      "Low priority: investigate and qualify a remedy after higher-priority work is finished. Existing evidence and sessions remain protected."
+    ]
   }
 }

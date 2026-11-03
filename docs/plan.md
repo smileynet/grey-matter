@@ -294,6 +294,7 @@ auth remains conditional on the result of #186.
 | 171 | 17. Sweep effort levels while holding each model fixed | ✅ done |
 | 172 | 18. Compare Claude fast mode on/off with measured quality and usage | cancelled (obsolete) |
 | 187 | 19. Research Agent Client Protocol (ACP) and propose evidence-led spikes | ✅ done |
+| 201 | 20. Deferred Kiro ACP shutdown root-cause research after higher-priority work | backlog |
 
 Solid arrows below are hard dependencies; dotted arrows are proposed order only.
 Completed prerequisites remain in the tickets; #162 and #186 are retained below
