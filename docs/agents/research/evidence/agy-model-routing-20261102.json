@@ -104,7 +104,7 @@
       "url": "https://antigravity.google/docs/changelog?tab=cli",
       "surface": "official Antigravity CLI changelog v1.1.5, 2026-07-21",
       "access_date": "2026-11-02",
-      "quote": "Added a `model` option to custom agent frontmatter so an agent runs at a chosen model tier (such as `flash` or `pro`) when invoked as a subagent, defaulting to `inherit` (the parent's model).",
+      "quote": "when invoked as a subagent, defaulting to `inherit`",
       "supports": "documented frontmatter request semantics; not an observation of ticket 157 serving outcome"
     },
     {
@@ -115,9 +115,7 @@
       "sha256": "4A524107CB6173D75A54C2A7DE3ADDEB413D7BDB868C8279682DED74672BEB1E",
       "read_date": "2026-11-02",
       "quotes": [
-        "agent(prompt=None, schema=None, role=None, type_name=\"self\", workspace=\"inherit\", model=None)",
-        "`model`: the agent's model tier: `inherit` (default, your model), `flash_lite`, `flash`, or `pro`.",
-        "Workflow agents are main agents, not subagents."
+        "agent(prompt=None, schema=None, role=None, type_name=\"self\", workspace=\"inherit\", model=None)"
       ],
       "supports": "locally installed workflow request/interface contract"
     },
@@ -125,20 +123,20 @@
       "url": "https://antigravity.google/docs/hooks",
       "surface": "official Antigravity hooks documentation",
       "access_date": "2026-11-02",
-      "quote": "`modelName` | `string` | The name or identifier of the model handling the invocation (for example, `gemini-3.6-flash-medium`).",
+      "quote": "The name or identifier of the model handling the invocation.",
       "supports": "field meaning at a hook invocation; child scope and compatibility with installed 1.4.12 not established"
     },
     {
       "url": "https://antigravity.google/docs/cli/statusline/",
       "surface": "official Antigravity CLI status-line docs",
       "access_date": "2026-11-02",
-      "quote": "`model` | `object` | Contains `id`, `display_name`, and `effort` (`low` through `max`, only for models with several effort levels). `null` until a model is selected.",
+      "quote": "Contains `id`, `display_name`, and `effort`.",
       "supports": "active conversation only; no child mapping specified"
     }
   ],
   "retained_history_ownership": {
     "source": "docs/agents/research/evidence/agy-workflows-20261102.json cleanup.disposition",
-    "ownership": "12 model-control history sets retained through ticket 194 for independent review; exact paths, IDs and sizes remain in source receipt",
+    "ownership": "12 exact model-control history sets retained through ticket 194 for independent review, then disposed after critic and parent clearance.",
     "conversation_ids": [
       "09a36b0d-9223-4bc9-a40f-f81c7ce63a8d",
       "3e22dfc8-d558-4df9-ad42-af27a0744488",
@@ -154,7 +152,14 @@
       "ffaacec9-54dd-4da6-8569-42e3fe86cad9"
     ],
     "this_ticket_accessed_or_changed_histories": false,
-    "disposal": "pending independent review and parent clearance; worker did not delete"
+    "disposal": "All native history paths in the approved 12-set scope were recycled to the OS trash; post-cleanup absence checks passed.",
+    "excluded_runtime_artifact": {
+      "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\be551703-5692-4940-841f-6a57daa1b754\\t157-python-runtime\\python3.exe",
+      "bytes": 91648,
+      "sha256_before": "B20403B111271EDDE227E38E73C55887BBABF0B82E1C2AD2A21F38F04EEDCD98",
+      "sha256_after": "B20403B111271EDDE227E38E73C55887BBABF0B82E1C2AD2A21F38F04EEDCD98",
+      "disposition": "preserved unchanged; parent-owned host-release lifecycle"
+    }
   },
   "probe_scope": {
     "new_native_calls": 0,
@@ -165,5 +170,318 @@
   "unresolved": [
     "Whether the installed agy 1.4.12 runtime exposes a documented per-child served-model identity field.",
     "Whether a custom profile frontmatter model affects workflow agent(type_name=...) when the workflow model argument is omitted or explicit."
-  ]
+  ],
+  "cleanup": {
+    "date": "2026-11-03",
+    "clearance": "Critic and parent cleared exactly the 12 IDs already recorded in retained_history_ownership.conversation_ids.",
+    "receipt_entries": 48,
+    "receipt_total_bytes": 6816238,
+    "recycled_item_count": 56,
+    "recycled_bytes": 6724590,
+    "method": "Windows Microsoft.VisualBasic.FileIO SendToRecycleBin; no refusal bypassed.",
+    "verification": "Every approved operation path was absent after recycle; all 11 non-be551 brain trees and 36 database/sidecar paths were absent. The be551 tree contains only its preserved runtime hardlink.",
+    "operations": [
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\09a36b0d-9223-4bc9-a40f-f81c7ce63a8d.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash in the verified single-file preflight"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\09a36b0d-9223-4bc9-a40f-f81c7ce63a8d",
+        "bytes": 4088,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\09a36b0d-9223-4bc9-a40f-f81c7ce63a8d.db",
+        "bytes": 557056,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\09a36b0d-9223-4bc9-a40f-f81c7ce63a8d.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\3e22dfc8-d558-4df9-ad42-af27a0744488",
+        "bytes": 12783,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\3e22dfc8-d558-4df9-ad42-af27a0744488.db",
+        "bytes": 524288,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\3e22dfc8-d558-4df9-ad42-af27a0744488.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\3e22dfc8-d558-4df9-ad42-af27a0744488.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\46938584-4d02-46f8-b84c-09327bc90ee2",
+        "bytes": 4088,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\46938584-4d02-46f8-b84c-09327bc90ee2.db",
+        "bytes": 524288,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\46938584-4d02-46f8-b84c-09327bc90ee2.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\46938584-4d02-46f8-b84c-09327bc90ee2.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\5310ede0-00de-40c7-8ce0-bd3c827e82cf",
+        "bytes": 3996,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\5310ede0-00de-40c7-8ce0-bd3c827e82cf.db",
+        "bytes": 557056,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\5310ede0-00de-40c7-8ce0-bd3c827e82cf.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\5310ede0-00de-40c7-8ce0-bd3c827e82cf.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\6faca14f-8817-4f78-a90d-9be12a1b09c0",
+        "bytes": 25658,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\6faca14f-8817-4f78-a90d-9be12a1b09c0.db",
+        "bytes": 524288,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\6faca14f-8817-4f78-a90d-9be12a1b09c0.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\6faca14f-8817-4f78-a90d-9be12a1b09c0.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\7ac504e9-725c-4df1-b500-41b96143238d",
+        "bytes": 3544,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\7ac504e9-725c-4df1-b500-41b96143238d.db",
+        "bytes": 491520,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\7ac504e9-725c-4df1-b500-41b96143238d.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\7ac504e9-725c-4df1-b500-41b96143238d.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\7fb7bfe3-3509-4a69-bf6e-5326db1d7c4f",
+        "bytes": 3996,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\7fb7bfe3-3509-4a69-bf6e-5326db1d7c4f.db",
+        "bytes": 524288,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\7fb7bfe3-3509-4a69-bf6e-5326db1d7c4f.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\7fb7bfe3-3509-4a69-bf6e-5326db1d7c4f.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\8147d25d-013c-4c74-8156-2a3c59e5b532",
+        "bytes": 3836,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\8147d25d-013c-4c74-8156-2a3c59e5b532.db",
+        "bytes": 524288,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\8147d25d-013c-4c74-8156-2a3c59e5b532.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\8147d25d-013c-4c74-8156-2a3c59e5b532.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\be551703-5692-4940-841f-6a57daa1b754\\.system_generated\\logs\\transcript_full.jsonl",
+        "bytes": 5786,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\be551703-5692-4940-841f-6a57daa1b754\\.system_generated\\logs\\transcript.jsonl",
+        "bytes": 5806,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\be551703-5692-4940-841f-6a57daa1b754\\.system_generated\\logs\\chunks\\transcript\\00000000.jsonl",
+        "bytes": 5806,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\be551703-5692-4940-841f-6a57daa1b754\\.system_generated\\logs\\chunks\\transcript_full\\00000000.jsonl",
+        "bytes": 5786,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\be551703-5692-4940-841f-6a57daa1b754\\.system_generated\\messages\\e786750c-573b-4a92-affd-362bc42f3cda.json",
+        "bytes": 2079,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\be551703-5692-4940-841f-6a57daa1b754\\.system_generated\\messages\\read.json",
+        "bytes": 45,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\be551703-5692-4940-841f-6a57daa1b754\\.system_generated\\steps\\2\\output.txt",
+        "bytes": 564,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\be551703-5692-4940-841f-6a57daa1b754\\.system_generated\\steps\\6\\output.txt",
+        "bytes": 72,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\be551703-5692-4940-841f-6a57daa1b754\\.system_generated\\tasks\\task-2.log",
+        "bytes": 522,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\be551703-5692-4940-841f-6a57daa1b754.db",
+        "bytes": 524288,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\be551703-5692-4940-841f-6a57daa1b754.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\be551703-5692-4940-841f-6a57daa1b754.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\d1007ac1-9559-46a6-8c13-78b6ca58d2c9",
+        "bytes": 10163,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\d1007ac1-9559-46a6-8c13-78b6ca58d2c9.db",
+        "bytes": 557056,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\d1007ac1-9559-46a6-8c13-78b6ca58d2c9.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\d1007ac1-9559-46a6-8c13-78b6ca58d2c9.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\fc910d0f-baa4-4de6-9294-8fa0e10094aa",
+        "bytes": 3528,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\fc910d0f-baa4-4de6-9294-8fa0e10094aa.db",
+        "bytes": 458752,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\fc910d0f-baa4-4de6-9294-8fa0e10094aa.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\fc910d0f-baa4-4de6-9294-8fa0e10094aa.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\ffaacec9-54dd-4da6-8569-42e3fe86cad9",
+        "bytes": 3308,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\ffaacec9-54dd-4da6-8569-42e3fe86cad9.db",
+        "bytes": 458752,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\ffaacec9-54dd-4da6-8569-42e3fe86cad9.db-shm",
+        "bytes": 32768,
+        "disposition": "recycled to OS trash; absence verified"
+      },
+      {
+        "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\conversations\\ffaacec9-54dd-4da6-8569-42e3fe86cad9.db-wal",
+        "bytes": 0,
+        "disposition": "recycled to OS trash; absence verified"
+      }
+    ],
+    "protected_runtime": {
+      "path": "%USERPROFILE%\\.gemini\\antigravity-cli\\brain\\be551703-5692-4940-841f-6a57daa1b754\\t157-python-runtime\\python3.exe",
+      "bytes": 91648,
+      "sha256_before": "B20403B111271EDDE227E38E73C55887BBABF0B82E1C2AD2A21F38F04EEDCD98",
+      "sha256_after": "B20403B111271EDDE227E38E73C55887BBABF0B82E1C2AD2A21F38F04EEDCD98",
+      "disposition": "preserved unchanged; parent-owned host-release lifecycle"
+    },
+    "scratch_artifacts": [
+      {
+        "path": ".scratch/t194-cleanup.ps1",
+        "disposition": "worker-owned helper; remove after critic metadata review"
+      },
+      {
+        "path": ".scratch/t194-promote-cleanup.ps1",
+        "disposition": "worker-owned helper; remove after critic metadata review"
+      },
+      {
+        "path": ".scratch/t194-cleanup-result.json",
+        "disposition": "metadata-only cleanup receipt; remove after critic metadata review"
+      }
+    ]
+  }
 }

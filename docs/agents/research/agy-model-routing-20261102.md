@@ -8,13 +8,11 @@ Confidence for this section: **high** for documented request semantics; it does 
 
 ### Custom subagents invoked with `invoke_subagent`
 
-The official [Custom subagents documentation](https://antigravity.google/docs/subagents?tab=cli) lists frontmatter `model` as a tier used when invoked, with `inherit`, `flash`, and `pro` values. The CLI changelog's v1.1.5 entry says the field selects a tier when invoked as a subagent and defaults to the parent's model. The supported claim is about the *request/control* for `invoke_subagent`; it is not proof of the effective model returned by a particular request.
+The official [Custom subagents documentation](https://antigravity.google/docs/subagents?tab=cli) lists frontmatter `model` as a tier used when invoked, with `inherit`, `flash`, and `pro` values. The [CLI changelog's v1.1.5 entry](https://antigravity.google/docs/changelog?tab=cli), dated July 21, 2026, also describes tier selection and the inherited-parent default for subagent invocation. The supported claim is about the *request/control* for `invoke_subagent`; it is not proof of the effective model returned by a particular request.
 
 > “`model` | `string` | `inherit` | Model tier used when invoked (`inherit`, `flash`, or `pro`).”
 
-> “Added a `model` option to custom agent frontmatter so an agent runs at a chosen model tier (such as `flash` or `pro`) when invoked as a subagent, defaulting to `inherit` (the parent's model).”
-
-The second quote is from the [official CLI changelog, v1.1.5](https://antigravity.google/docs/changelog?tab=cli), dated July 21, 2026. Public docs are current as accessed 2026-11-02; installed CLI was `agy 1.4.12`. These controls and versioned descriptions should not be conflated with workflow `agent(...)` children.
+Public docs are current as accessed 2026-11-02; installed CLI was `agy 1.4.12`. These controls and versioned descriptions should not be conflated with workflow `agent(...)` children.
 
 ### Workflow-created agents
 
@@ -22,11 +20,7 @@ The installed `%USERPROFILE%/.gemini/antigravity-cli/builtin/skills/run-workflow
 
 > `agent(prompt=None, schema=None, role=None, type_name="self", workspace="inherit", model=None)`
 
-It documents `model` values `inherit`, `flash_lite`, `flash`, and `pro`, with default `inherit` (the current model), and says workflow agents are main agents, not subagents. This is locally installed interface guidance for `run_workflow`, not an identity report. The official SDK changelog also documents Python workflow primitives separately; it does not establish that SDK and CLI model routing are interchangeable.
-
-> “`model`: the agent's model tier: `inherit` (default, your model), `flash_lite`, `flash`, or `pro`.”
-
-> “Workflow agents are main agents, not subagents.”
+It documents `model` values `inherit`, `flash_lite`, `flash`, and `pro`, with default `inherit` (the current model), and describes workflow agents as main agents rather than subagents. This is locally installed interface guidance for `run_workflow`, not an identity report. The official SDK changelog also documents Python workflow primitives separately; it does not establish that SDK and CLI model routing are interchangeable.
 
 The custom subagent docs describe `model` for a subagent invocation. They do **not** specify whether `agent(type_name=<custom profile>)` uses that profile's frontmatter `model` when the workflow call omits its own `model` argument, or how an explicit workflow argument interacts with frontmatter. Treat that interaction as unspecified.
 
@@ -50,15 +44,15 @@ Source: [#157 Antigravity workflows source guide](agy-workflows-source-20261102.
 
 ## Identity evidence: what is and is not sufficient
 
-The current first-party [Hooks documentation](https://antigravity.google/docs/hooks), accessed 2026-11-02, says:
+The current first-party [Hooks documentation](https://antigravity.google/docs/hooks), accessed 2026-11-02, defines `modelName` as:
 
-> “`modelName` | `string` | The name or identifier of the model handling the invocation (for example, `gemini-3.6-flash-medium`).”
+> “The name or identifier of the model handling the invocation”
 
 This is a documented field contract for hook input. However, the documentation does not establish that a hook running in the parent reports a *child* invocation's model, nor that the installed 1.4.12 workflow child surfaces this field in a way tied to its native result. It is therefore a promising future probe target, but not evidence that these tested children ran on a particular model. Confidence: **high** for the documented hook field; **low** for its applicability to child routing in the tested release.
 
-The official [CLI status-line JSON field reference](https://antigravity.google/docs/cli/statusline/), accessed 2026-11-02, says:
+The official [CLI status-line JSON field reference](https://antigravity.google/docs/cli/statusline/), accessed 2026-11-02, defines `model` as:
 
-> “`model` | `object` | Contains `id`, `display_name`, and `effort` (`low` through `max`, only for models with several effort levels). `null` until a model is selected.”
+> “Contains `id`, `display_name`, and `effort`.”
 
 It does not define a per-child value or mapping from a parent status-line record to an `invoke_subagent` or workflow child. Neither this main-session field nor the opaque protobuf label is sufficient for per-role served identity. Confidence: **high** for the active-conversation field contract; **low** as evidence about child identity.
 
@@ -73,6 +67,10 @@ It does not define a per-child value or mapping from a parent status-line record
 
 This adds the routing qualification to the Antigravity/agy arm of the orchestration comparison summarized in [the #157 research report](harness-experimental-features-20261101.md#ticket-157-native-agy-workflows-2026-11-02). It does not constrain other harnesses or block unrelated orchestration work.
 
+## Cleanup disposition (2026-11-03)
+
+After independent review, the critic cleared the exact 12 #157 model-control history sets, excluding the Python hardlink. The parent authorized cleanup of only those sets. The evidence record contains each recycled path and byte count, the pre/post absence checks, and the saved hardlink hash. The 11 other brain trees and the 36 conversation database/sidecar files were recycled; in `be551703-5692-4940-841f-6a57daa1b754`, only the nine approved non-hardlink native files were recycled, leaving the containing folder and Python runtime path in place. All 56 recorded items are absent; 6,724,590 B were sent to the OS trash. The 91,648 B Python hardlink's SHA-256 is unchanged. No unlisted history was changed.
+
 ## Evidence and version notes
 
-Machine-readable request-case identifiers, receipt hashes, source hashes, retained-history ownership reference, and field-contract classification are in [the evidence record](evidence/agy-model-routing-20261102.json). Primary public sources and supporting snippets are above. The official changelog's v1.1.5 feature wording predates the locally observed `agy 1.4.12`; it documents the CLI's intended frontmatter control, while local behavior remains limited to the specific #157 observations.
+Machine-readable request-case identifiers, receipt hashes, source hashes, retained-history ownership, cleanup paths and byte counts, and field-contract classification are in [the evidence record](evidence/agy-model-routing-20261102.json). The [independent audit](agy-model-routing-20261102-audit.md) accepts the research substance at 0.92 and leaves the shared comparison refresh with the parent. Primary public sources and supporting snippets are above. The official changelog's v1.1.5 feature wording predates the locally observed `agy 1.4.12`; it documents the CLI's intended frontmatter control, while local behavior remains limited to the specific #157 observations.
