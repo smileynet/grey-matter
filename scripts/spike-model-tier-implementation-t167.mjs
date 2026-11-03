@@ -31,7 +31,7 @@ if (provider === "agy") {
   const workspace = workDir.replaceAll("\\", "/");
   writeFileSync(settingsPath, `${JSON.stringify({
     permissions: {
-      allow: [`read_file(${workspace})`, `write_file(${workspace})`, "command(npm test)"],
+      allow: [`read_file(${workspace})`, `write_file(${workspace})`, "command(npm test)", "command(npm.cmd test)"],
       deny: ["mcp(*)", "read_url(*)", "execute_url(*)"],
     },
   }, null, 2)}\n`, "utf8");
@@ -199,6 +199,9 @@ if (provider === "claude") {
     availableTools: initialized?.tools ?? null,
     toolCalls,
   };
+  adapter.agentTestDenied = toolCalls.some(call => call.name === "run_command"
+    && /^npm(?:\.cmd)?\s+test(?:\s|$)/i.test(call.command ?? "")
+    && /permission check failed/i.test(call.error ?? ""));
 }
 
 function gitPaths(...gitArgs) {
@@ -311,7 +314,7 @@ const native = {
 };
 const result = {
   schemaVersion: 1,
-  status: child.error?.code === "ETIMEDOUT" ? "timeout" : child.status !== 0 ? "native-error" : embeddedErrors.length > 0 ? "infrastructure-error" : ["kiro", "agy"].includes(provider) && !adapter.completionObserved ? "missing-completion" : adapter.complete === false ? "native-turn-failed" : "native-exit-zero",
+  status: child.error?.code === "ETIMEDOUT" ? "timeout" : child.status !== 0 ? "native-error" : embeddedErrors.length > 0 ? "infrastructure-error" : ["kiro", "agy"].includes(provider) && !adapter.completionObserved ? "missing-completion" : adapter.agentTestDenied ? "agent-test-permission-failure" : adapter.complete === false ? "native-turn-failed" : "native-exit-zero",
   command: [executable, ...commandArgs],
   cell: { caseId, seedCommit: headBefore, seedTree: treeBefore, workDir },
   native,
