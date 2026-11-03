@@ -2,7 +2,7 @@
 id: "167"
 title: "Spike: cheap vs default models as implementation workers on well-specified tickets"
 status: in_progress
-blocked_by: ["174"]
+blocked_by: ["174", "199"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
   - "A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note."

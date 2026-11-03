@@ -2,7 +2,7 @@
 id: "171"
 title: "Spike: effort levels (low to max) on one model per provider for diagnosis and design tasks"
 status: open
-blocked_by: ["174"]
+blocked_by: ["174", "199"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
   - "A results table per available provider with one fixed model, advertised effort level, fixture outcome, time, usage and repeat count."

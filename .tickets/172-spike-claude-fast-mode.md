@@ -2,7 +2,7 @@
 id: "172"
 title: "Spike: Claude Code fast mode speed, quality and credit cost on orchestrate workers"
 status: open
-blocked_by: ["174"]
+blocked_by: ["174", "199"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
   - "A Claude Code fast-mode on/off table holds model, effort and fixtures fixed and records quality, elapsed time, repeat count and measured usage or its explicit absence."
