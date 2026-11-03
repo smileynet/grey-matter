@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "d53ec51c5022a4355338a69e3d59cc8611f9e649c272601bc889217e60b804d3",
+  "subject": "Accepted Kiro shutdown limitation, current workflow workaround and deferred low-priority follow-up",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 38900,
+      "sha256": "6d54543ea4eb8c6a1a9ca34589ac6f1ec2440a637a3c9dc00db74c605e1525ea"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 217218,
+      "sha256": "20f722c288151caf441ba4de3a66b0268e9d72aa20c415c5cffd2355aa826b6b"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14145,
+      "sha256": "fe47a7d9ad8c78c5425925fd712403b013032b7d7f744b0a6d309edf946df76f"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5631,
+      "sha256": "8956a239abb30b4c466d507bd4f84379756e2de7d6da5e7af5538436df9d6529"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-final2/findings-1280.png",
+      "bytes": 666100,
+      "sha256": "9fa5e59ab7eb3d9719cf6c558deb97b7a7fa90a1ea0bc19b0b9ddfb03309b3ed",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-final2/tickets-1280.png",
+      "bytes": 212071,
+      "sha256": "502b4cbcba14c379caa724c55d9e4ca7b57124703adb2f4410ee0309a6cdc671",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-final2/findings-390.png",
+      "bytes": 660392,
+      "sha256": "a807415f167b8f34c630b991c69e8bc166c642d45b9124d6fab24272919ba910",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t189-closure-final2/tickets-390.png",
+      "bytes": 193945,
+      "sha256": "67cc7f510e3c0abf6f6d5bdee16a62f6ab1518f2d959875abbde7e7a132fda7c",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "53ce22e58961ce4bf9af490327a373408929d77129eccb7975cebec836aa7035",
+  "id": "cc9ded4b09ee0478df7dcb24cff72491c640ed75bc5122b280fc6918bd88eafc",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "independent Codex UI critic",
+    "note": "PASS: inspected all four fresh 1280x900 and 390x900 captures and verified current source snapshot. The Kiro finding still states workaround documented/native shutdown unresolved. Ticket view now presents deferred #201 alone in the default dependency view and at the end of the ticket list, where it is backlog; #189 remains done. No visible task status/content regression. Phone cards remain readable in a single-column flow without horizontal clipping. Limit: static captures do not establish live interaction or accessibility behavior.",
+    "acceptedAt": "2026-11-03T15:32:29.369Z",
+    "snapshotId": "cc9ded4b09ee0478df7dcb24cff72491c640ed75bc5122b280fc6918bd88eafc"
+  }
+}
