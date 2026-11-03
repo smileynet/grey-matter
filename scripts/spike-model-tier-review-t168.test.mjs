@@ -80,6 +80,7 @@ test("cheap and native-default invocations follow frozen model and safety flags"
   const codexCheap = buildArgv("codex", "cheap", samplePrompt, dryRunDir);
   const codexDefault = buildArgv("codex", "default", samplePrompt, dryRunDir);
   assert.ok(codexCheap.includes("--ignore-user-config"));
+  assert.ok(codexCheap.includes("--skip-git-repo-check"));
   assert.ok(codexCheap.includes("--sandbox") && codexCheap.includes("read-only"));
   assert.deepEqual(codexCheap.slice(codexCheap.indexOf("--model")), ["--model", "gpt-6-luna", samplePrompt]);
   assert.equal(codexDefault.includes("--model"), false);

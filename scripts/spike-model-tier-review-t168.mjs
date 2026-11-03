@@ -29,7 +29,7 @@ const FIXTURE_SHA256 = Object.freeze({
   f3: "94a10710978c9184c9877d23099a34f292a5f0bd02c47520cbdd34c3a6f9a9eb",
   f4: "757b2d57d664759c1c8e08c0b52af6052a824f93db3e27641d4e567087981e35",
 });
-const PROTOCOL_NOTE_SHA256 = "97ede49648d3e71f5c7294684d1068c424a65f7a4989e7c9d4cd793a18945509";
+const PROTOCOL_NOTE_SHA256 = "8b16e3edee76cf956d0b5fd4699435ad211e0cc9eabbc4549ff5e829ea2c5944";
 const TIMEOUT_MS = 120_000;
 const MAX_BUFFER_BYTES = 8 * 1024 * 1024;
 const MIN_FREE_BYTES = 20 * 1024 ** 3;
@@ -155,7 +155,7 @@ export function buildArgv(provider, tier, prompt, workDir) {
   if (provider === "claude") {
     args.push("--print", "--safe-mode", "--strict-mcp-config", "--mcp-config", '{"mcpServers":{}}', "--tools", "", "--disallowedTools", "mcp__*", "--no-session-persistence", "--output-format", "json", "--permission-mode", "plan", "--max-budget-usd", "0.10");
   } else if (provider === "codex") {
-    args.push("exec", "--ephemeral", "--ignore-user-config", "--cd", workDir, "--sandbox", "read-only", "--json");
+    args.push("exec", "--ephemeral", "--ignore-user-config", "--cd", workDir, "--skip-git-repo-check", "--sandbox", "read-only", "--json");
   } else {
     args.push("chat", "--no-interactive", "--agent-engine", "v2", "--trust-tools=", "--output-format", "stream-json");
   }
