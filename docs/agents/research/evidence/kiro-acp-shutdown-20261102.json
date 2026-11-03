@@ -1,0 +1,50 @@
+{
+  "ticket": 189,
+  "date": "2026-11-02",
+  "installed_cli_version": "kiro-cli 2.37.1",
+  "native_engine_version_from_stderr": "KAS 0.66.70",
+  "primary_reproduction": {
+    "receipt": "headless-drivers-20261102.json",
+    "prompt_stop_reasons": ["end_turn", "end_turn", "cancelled"],
+    "process_exit_code": 1,
+    "timeout": false,
+    "stderr_error": "error: the v3 engine did not exit within 5 seconds after ACP stdin closed",
+    "session_reloaded_in_new_process": true,
+    "marker_recalled": true,
+    "captured_engine_processes_absent_afterward": true,
+    "complete_pid_parent_tree_poll_retained": false,
+    "classification": "native teardown infrastructure error; prompt and session recovery succeeded"
+  },
+  "bounded_probe": {
+    "scope": "One new idle local session; no prompt or model call; no settings changes",
+    "launch": "kiro-cli acp --agent-engine v3 --auth-method cli",
+    "initialize": {
+      "protocolVersion": 1,
+      "advertisedSessionCapabilities": ["list", "close", "delete"],
+      "advertisedTerminateExtension": false
+    },
+    "session_id": "sess_548c0e9c-5c11-4875-81b3-728b9686a2bb",
+    "events": [
+      {"method": "session/new", "result": "created disposable empty session"},
+      {"method": "session/close", "result": {}, "classification": "success"},
+      {"method": "session/list", "session_present_after_close": true, "status": "idle"},
+      {"event": "stdin EOF", "exit_code": 0, "native_shutdown_error": false},
+      {"method": "session/load", "process": "separate CLI process", "session_loaded": true},
+      {"method": "session/delete", "result": {}, "target": "owned disposable session only"},
+      {"method": "session/list", "session_present_after_delete": false},
+      {"event": "stdin EOF", "exit_code": 0, "native_shutdown_error": false}
+    ],
+    "descendant_tree_fully_instrumented": false,
+    "terminal_disposition": "disposable test session deleted and absent from final session list"
+  },
+  "settings_changed": false,
+  "installed_patch": false,
+  "unrelated_processes_terminated": false,
+  "original_162_session_modified": false,
+  "claim_limit": "The idle session close is state-preserving and EOF exited 0. Close after model completion or cancellation, and descendant settlement, remain unverified.",
+  "sources": [
+    "https://kiro.dev/docs/cli/v3/acp-migration/",
+    "https://kiro.dev/docs/acp/",
+    "https://github.com/agentclientprotocol/agent-client-protocol/blob/main/docs/protocol/v2/schema.mdx"
+  ]
+}
