@@ -199,9 +199,9 @@ its four remaining follow-ups. Broader #149/#146/#164 retain their original scop
 | 197 | Dashboard evidence limits without unsolicited review tasks | ✅ done |
 | 198 | Source identity and currency before adopter findings | ✅ done |
 
-## Orchestration workstream (reconciled 2026-11-02)
+## Orchestration workstream (reconciled 2026-11-03)
 
-Scope: the 34 tickets tagged `stream:orchestration`, including the dashboard
+Scope: the 37 tickets tagged `stream:orchestration`, including the dashboard
 ticket #191 in the inventory below; their current statuses are shown in the tables.
 Other tooling, test-verification, dashboard and release work remains in its
 existing stream. Related parked #06 (skill/version drift evaluations) and #09
@@ -221,7 +221,10 @@ account-fact hold became explicit; it recommends no new actionable spike now.
 #172 was cancelled as mis-scoped after the user clarified fast models such as
 Haiku and Luna, not paid fast mode. Existing #167–170 comparisons cover that
 intent with their recorded limits; the account-credit question is obsolete.
-Only #189 remains unfinished. Model comparisons may need serial
+#189 is accepted with its known teardown limitation and required workflow handling.
+Only low-priority #201 remains, deliberately parked until higher-priority work is
+finished; it is not an active dispatch. The former monitor was observed absent on
+2026-11-03; no background watch is scheduled. Model comparisons may need serial
 measurement to avoid shared-load confounding even when their files do not overlap.
 
 The ordered workstream table retains execution history. #162's driver
@@ -240,8 +243,9 @@ host diagnosis also passed separate critic review. Kiro recipe launch, input
 continuation and retry were observed, with isolation/landing and safe pause
 boundaries unverified. Codex ran one read-only command from its complete installed
 package; the internal launcher path is not a stable installation contract.
-#189 remains blocked on the current Kiro/KAS shutdown behavior; its diagnostic
-evidence is accepted but the fix criterion is unmet. #190, #193 and #194 are
+#189's diagnostic evidence is accepted. The user replaced native-fix qualification
+with documented workflow handling and deferred deeper repair to #201. Graceful
+unattended Kiro ACP shutdown remains unqualified. #190, #193 and #194 are
 qualified with their stated limits. #173's qualified recommendations are deployed
 and closed without claiming live GUI steering. #174 selected the runner, and
 #199 pinned its fixture dashboard after preflight detected template drift.
@@ -249,10 +253,10 @@ and closed without claiming live GUI steering. #174 selected the runner, and
 #167–171 are closed with independently audited findings and unchanged defaults;
 their quality, identity, usage and review-evidence limits remain in the reports.
 #172's unused paid-fast-mode preparation is obsolete; no native cell ran, and
-the cancellation is not a successful fast-mode trial. #189 remains upstream-blocked until
-the runtime changes or a newly supported shutdown sequence can be qualified.
-Supervision stays active for that condition; completed batches do not
-end the workstream. These findings do not imply a production-ready orchestrator.
+the cancellation is not a successful fast-mode trial. #201 retains the unresolved
+Kiro shutdown investigation and evidence lifecycle. Its low-priority backlog status
+implements the user's explicit deferral, not a claim that shutdown is fixed.
+These findings do not imply a production-ready orchestrator.
 The #158-before-#157 order is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before
@@ -299,7 +303,8 @@ as completed context for the newly unblocked work.
 flowchart TD
   D162["162 Headless drivers (done)"] --> G173["173 GUI watch layer"]
   D162 --> C188["188 Codex tool-host diagnosis"]
-  D162 --> K189["189 Kiro ACP EOF diagnosis"]
+  D162 --> K189["189 Kiro ACP limitation accepted"]
+  K189 --> K201["201 Deferred shutdown research (backlog)"]
   D162 -.-> A186["186 KAS auth ownership (done)"]
   A186 -.-> M156["156 Mate restart/recovery (done)"]
   A186 --> A190["190 Crew Windows auth integration"]
@@ -361,7 +366,8 @@ last in this queue. The user clarified that ACPa means Agent Client Protocol
 Their place before GUI/runner qualification is recommended order, not a blanket
 blocker on unrelated harnesses. #173 can observe a live ACP session with the EOF
 caveat; #174 can record an unavailable Codex lane. A real tool-executing Codex
-lane requires #188's remedy, and clean ACP EOF settlement requires #189's result.
+lane requires #188's remedy. #189 documents the required Kiro workflow workaround;
+clean graceful ACP EOF shutdown remains unqualified and is deferred to #201.
 
 #186's three-arm routing probe confirmed the Windows omitted-flag mismatch.
 #190 tracks a supported integration correction and depends on the #186 receipt;
