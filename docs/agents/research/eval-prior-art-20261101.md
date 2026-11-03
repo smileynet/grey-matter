@@ -72,7 +72,12 @@ Dropped as stale, archived or off-topic: METR's task-standard and vivaria (archi
 Use Node 22+ and the checked-in T1/T3 manifests under
 <code>scripts/fixtures/model-eval/</code>. Both pin seed Git tree object ID
 `c474646ea61e037fcdbc1be3d2dc6c0833f5e260` (SHA-1). The reviewed hardened
-runner has SHA-256 `92588b2ef6356eeb56b75ddc77f87fd3b73b6b9624d7eb9c38134f561960adea`.
+grader was reviewed at SHA-256 `92588b2ef6356eeb56b75ddc77f87fd3b73b6b9624d7eb9c38134f561960adea`.
+The current runner also pins the fixture dashboard before checking the full tree,
+so later template maintenance cannot silently alter a comparison. Other seed
+drift still blocks execution. See the [seed repair](eval-seed-drift-20261102.md)
+for current source identity and the setup-only regression; historical native
+execution provenance is unchanged.
 From the repository root, use a fresh directory for every fixture/adapter pair:
 
 ~~~~powershell
