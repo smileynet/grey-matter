@@ -1,6 +1,6 @@
 import { after, test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
@@ -34,14 +34,21 @@ test("T1 and T3 pin the same deterministic seed and differ in grader expectation
   assert.equal(t3.forbiddenExport, "add");
 });
 
-test("the pinned dashboard restores the seed while other fixture drift is rejected without a model call", () => {
+test("the full frozen seed is built without host initialization and drift is rejected without a model call", () => {
   const workDir = join(TEST_ROOT, "pinned-seed-work");
   const evidenceDir = join(TEST_ROOT, "pinned-seed-evidence");
   // Node rejects Claude arguments; this exercises fixture setup without calling a model.
-  assert.throws(() => execFileSync(process.execPath, [join(ROOT, "spike-model-eval.mjs"),
+  let failure;
+  try {
+    execFileSync(process.execPath, [join(ROOT, "spike-model-eval.mjs"),
     "--adapter", "claude", "--fixture", "t1", "--model", "fake",
     "--claude-exe", process.execPath, "--work-dir", workDir, "--evidence-dir", evidenceDir,
-  ], { encoding: "utf8", stdio: "pipe" }));
+    ], { encoding: "utf8", stdio: "pipe" });
+  } catch (error) {
+    failure = error;
+  }
+  assert.ok(failure instanceof Error);
+  assert.ok(existsSync(join(evidenceDir, "result.json")), failure.stderr?.toString() ?? "setup did not write a result receipt");
   const result = JSON.parse(readFileSync(join(evidenceDir, "result.json"), "utf8"));
   const task = JSON.parse(readFileSync(join(FIXTURES, "t1.json"), "utf8"));
   assert.equal(result.fixture.seedTree, task.seedTree);
@@ -50,7 +57,7 @@ test("the pinned dashboard restores the seed while other fixture drift is reject
 
   writeFileSync(join(workDir, "unexpected.txt"), "unrelated drift\n");
   execFileSync("git", ["add", "--", "unexpected.txt"], { cwd: workDir });
-  assert.throws(() => freezeFixture(workDir, task.seedTree), /fixture seed changed/);
+  assert.throws(() => freezeFixture(workDir, task.seedTree), /fixture contains unexpected changes/);
 });
 
 test("native adapter arguments keep the prompt as one value and scope Codex", () => {
