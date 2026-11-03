@@ -187,6 +187,18 @@ free on SpaceJam; preserve both project simulators. Resume #192 only when the us
 OneDrive work with an approved fixture already online-only. Do not manufacture that state
 by changing the previously inspected file's availability.
 
+## Retrospective prevention — delivered
+
+The user requested tickets and implementation for the accepted session findings. These
+guidance changes are delivered independently of the completed test-verification core and
+its four remaining follow-ups. Broader #149/#146/#164 retain their original scope.
+
+| ID | Work | Status |
+| --- | --- | --- |
+| 196 | Outcome-first closeout and independent follow-up boundaries | ✅ done |
+| 197 | Dashboard evidence limits without unsolicited review tasks | ✅ done |
+| 198 | Source identity and currency before adopter findings | ✅ done |
+
 ## Orchestration workstream (reconciled 2026-11-02)
 
 Scope: the 34 tickets tagged `stream:orchestration`, including the dashboard

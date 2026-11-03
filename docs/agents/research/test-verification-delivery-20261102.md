@@ -118,3 +118,19 @@ for the independent platform reproduction/regression audit, then may be retired 
 exact inputs are no longer needed. Owner, purpose, sizes and limits remain in the linked
 retention inventory. The 958-byte isolated-index ticket helper is kept through #140's staged
 commit safety fix. Unrelated worktrees, private files and both Mac simulators were untouched.
+
+## Accepted retrospective prevention — 2026-11-02
+
+The user subsequently requested tickets and implementation for the remaining prevention
+findings. #196 adds outcome-first closeout to reconciliation, #197 distinguishes dashboard
+evidence limits from unsolicited review tasks, and #198 establishes source identity/currency
+before current adopter findings. All three were closed through tkt after independent critic
+Spec/Standards acceptance, manual positive/negative scenario review, syntax fixtures 10/10,
+pre-merge 3/3 and push 5/5. Source `6bb7283` was pushed and deployed to 50 local skills.
+Manual scenario review is not runtime agent-compliance or rendered validation. Broader
+#149/#146/#164 remain open; the completed core and four independent follow-ups are unchanged.
+
+After publication, twelve owned ticket helpers/indexes totaling 1,010,523 file bytes were
+sent to the OS trash and their original paths were absent. Host Bin contents were not
+inspected. No new worker checkout, reference clone, dependency copy or raw evidence bundle
+was created. Earlier retained and unowned artifacts keep their recorded sizes and lifecycle.
