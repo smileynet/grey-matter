@@ -55,7 +55,7 @@ protocol docs, or one shared note they link to):
 done: spike harnesses removed; rerun recipe in docs/agents/research/model-tier-spikes-rerun.md
 
 ### Verification
-1. ✓ No t168-t171 spike harness, test, fixture or gate remains in scripts/ or scripts/gates.json. — "PR merged; gate pre-release 30/30; links pinned to e35d8a8"
-2. ✓ Every research doc link to a removed file points at a pinned commit that still has it; the docs consistency check passes. — "(no evidence)"
-3. ✓ A 'How to rerun' recipe names the commit, host, CLI versions, commands and authorization step for each spike. — "(no evidence)"
-4. ✓ node scripts/gate.mjs pre-release passes on Linux with no Windows-only wrapper for these checks. — "(no evidence)"
+1. ✓ No t168-t171 spike harness, test, fixture or gate remains in scripts/ or scripts/gates.json. — "PR #4 (eda6fac) deletes 13 spike scripts, scripts/windows-only.mjs and fixtures model-review/research/tasks/effort-t171; on main 8813f19, ls scripts and scripts/fixtures find no t168-t171 file, and gates.json has no model-review/research/text/effort-fixtures gate or windows-only reference."
+2. ✓ Every research doc link to a removed file points at a pinned commit that still has it; the docs consistency check passes. — "All 6 distinct blob/tree links under docs/ point at e35d8a8cd117 and git cat-file -e resolves each there; no doc links any removed path unpinned; doc-links and agent-guidance gates ok on main 8813f19."
+3. ✓ A 'How to rerun' recipe names the commit, host, CLI versions, commands and authorization step for each spike. — "docs/agents/research/model-tier-spikes-rerun.md: §1 git worktree add at e35d8a8; §2 Windows host with pinned Claude Code 2.1.316, Codex 0.166.0, kiro-cli 2.37.1 paths; §4 per-spike commands for 168-171 with --execute --authorization; §5 grading."
+4. ✓ node scripts/gate.mjs pre-release passes on Linux with no Windows-only wrapper for these checks. — "node scripts/gate.mjs pre-release on Linux, main 8813f19: exit 0, 30 of 30 ok; scripts/gates.json has 0 windows-only references."
