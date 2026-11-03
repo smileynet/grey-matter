@@ -12,9 +12,9 @@ is available while signed in as its owner. Published through Sites on 2026-11-03
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `9ab975f07973af84f487963a145d75d2b2078bc2`.
-- Deployment: `appgdep_6ae9d291be108191b1cb1f0ed84ea781`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_dc6a453a9fac8191b3c03c75fcd2e02c`.
+- Pushed Site source: `310902e89c98695031fffb05dfe470399a5ba983`.
+- Deployment: `appgdep_6ae9d51238188191852e7011de63ca47`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_e6435ee54b888191862f4659924337bf`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -28,9 +28,38 @@ Windows System32 first on the child process PATH succeeded. No plugin code chang
 
 ## Maintain it
 
+### Current blocker snapshot (2026-11-03)
+
+The latest publication includes the reconciled plan and durable fast-mode hold
+in ticket #172. Its expanded dashboard description now states that credits
+must already be enabled and no fast-mode model calls have run. Completed
+writing, effort and ACP work is no longer described as upcoming. Counts remain
+20 findings, 36 scoped tickets, 34 done and two unfinished; the delivery page
+retains 51 entries and one account-fact question.
+
+Both pages passed fresh Chrome checks at 1280×900 and 390×900, including the
+visible #172 hold. An independent critic inspected all ten current captures
+and accepted dedicated receipt
+`90846fd34a87c1b2b75639c2778c81261d22b0db8c59e7528b233ecb1868b0c0`
+in `evidence/orchestration-dashboard/t187-current-blockers-final/` and delivery
+receipt `af5f180959e361ed336afd33a0eec28579dfaf31c3ee3c46a178c6b2e9089fee`
+in `evidence/orchestration-dashboard/t187-blockers-status-final/`. The first
+new assertion incorrectly expected full ticket prose in the compact view;
+the existing summary data was updated and the visible hold check then passed.
+The superseded capture was recycled. No renderer or style changed.
+
+Plan/ticket notes were pushed as `99871c7`; reviewed UI and captures as
+`28cb01c`. The three explicit UI pre-merge checks and all three applicable
+pre-push checks passed. Ticket validation passed with 16 existing warnings
+outside these edits; they were not silently repaired. The packaged payload,
+all 36 ticket links and the durable hold were checked. Native publication
+succeeded at 12:35:37 UTC with no failure message and owner-private access
+preserved. Production browser interaction was not checked. Supervision remains
+active for the user account fact and the upstream Kiro shutdown condition.
+
 ### ACP findings (#187, 2026-11-03)
 
-The latest publication has 20 findings and 36 scoped tickets: 34 done and two
+That publication had 20 findings and 36 scoped tickets: 34 done and two
 unfinished. It explains ACP's documented communication boundary while keeping
 scheduling, isolation and acceptance with the supervisor. The source audit
 rechecked official protocol, SDK and MCP sources; no new actionable spike was
