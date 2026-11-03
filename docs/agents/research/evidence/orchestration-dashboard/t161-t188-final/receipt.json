@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "fb6312abe4e586c51899b836bf85ae42e60dfc77919168293dce5b5c82ab49e0",
+  "subject": "Kiro monitor and Codex tool-host findings after closure",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 18888,
+      "sha256": "5b4aa40a13b47719dea4ce6e583fd076cfba102d878b121cfc256e76d74a1817"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 156883,
+      "sha256": "c199ea7f545984c3f53fcfd86838cfbc01a49bbd8c40a89600b93d45b132a86b"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4264,
+      "sha256": "19e71da46907d33a2e8e4eae9249044d05fe86c8f075d0dbef6d5fd902ad17b5"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t161-t188-final/findings-1280.png",
+      "bytes": 386474,
+      "sha256": "1f3268f93ffe5a0321a71d4b4593fd0527f630c36ab2dcc1514475fb35b9692d",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t161-t188-final/tickets-1280.png",
+      "bytes": 258264,
+      "sha256": "dd8745bf127d5b342d0682e810e82b27345c94d2f77b038224bd9582eb8db076",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t161-t188-final/findings-390.png",
+      "bytes": 385885,
+      "sha256": "be136196396925a9b13a43bb5371a39c06f8585ce4147bcca4cb98c87965cd19",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t161-t188-final/tickets-390.png",
+      "bytes": 216483,
+      "sha256": "312da744b3ed8d43bb45f8965b23ff54d23f96d10ce5061d356acf11b6062675",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "c091e00f3ee4386fc333abcd609a809a6e5c1d981cff547d5d377c9147c9d3bb",
+  "id": "a1495fabd2a6abb6675ea1fd67dd43625a1ea2598c82c523ba4961cebd834883",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic-dashboard",
+    "note": "Reviewed exact final sources and four phone/laptop captures. Twelve findings preserve Kiro monitor pause/retry and complete-package check scope and unresolved limits. Thirteen open,21 other tickets; graph first, queue separate, collapsed details.",
+    "acceptedAt": "2026-11-03T02:17:34.541Z",
+    "snapshotId": "a1495fabd2a6abb6675ea1fd67dd43625a1ea2598c82c523ba4961cebd834883"
+  }
+}

@@ -3,6 +3,26 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "workflow-monitor", "state": "partial", "label": "Recipe launch and retry observed",
+      "title": "Follow a multi-step run and guide it from a monitor",
+      "value": "A recipe started, showed step results, accepted guidance and retried a failed step. The run reached its final step but did not complete.",
+      "diagramLabel": "Observed local control flow", "steps": ["Start recipe", "See step results", "Send guidance", "Retry failed step"],
+      "limit": "A safe pause boundary and a complete review-and-merge loop remain unverified. The recipe does not create separate worktrees or guarantee independent review.",
+      "details": "Kiro V3 ran a four-step local recipe under private settings. A pause request appeared, but the capture did not establish a completed safe-boundary pause. Read-only fixture tools appeared during ambiguous approval interaction; no policy-bypass conclusion is supported. Inherited global-hook isolation was not established, and no isolated worker commit or landing was observed.",
+      "tickets": ["161"],
+      "sources": [{"label": "Workflow monitor trial and limits", "href": "agents/research/kiro-workflows-20261102.md"}]
+    },
+    {
+      "id": "complete-runtime", "state": "partial", "label": "One read-only project check confirmed",
+      "title": "Use the complete installation to run a project check",
+      "value": "A read-only project check ran from the complete installed package. The standalone copy had failed before the check could start.",
+      "diagramLabel": "Observed matched check", "steps": ["Choose complete package", "Start the session", "Run read-only check", "Inspect native result"],
+      "limit": "This verified one harmless check, not writes or approval behavior. The tested internal package path may change after an update; no durable installation repair was made.",
+      "details": "Codex's two stable executable copies had identical version and bytes. The PATH-selected copy lacked its sibling code-mode host; the installed Windows platform package contained the signed companion and executed the exact fixture Git status command. No binary copy, install or global configuration edit was used. Earlier message-board and wake probes remain historically unverified.",
+      "tickets": ["188"],
+      "sources": [{"label": "Companion-host diagnosis and scoped remedy", "href": "agents/research/codex-tool-host-20261102.md"}]
+    },
+    {
       "id": "background-notice", "state": "partial", "label": "One message and idle notice confirmed",
       "title": "Send a background worker a message and hear when its turn ends",
       "value": "A background worker received a message, replied, and sent a separate idle notice. This gives the controller a signal to inspect the result.",
@@ -123,7 +143,7 @@
     "158": ["Narrow command permissions", "Allow fixed commands and a selected folder, with tested rejection controls and a separate approval-overlap caveat."],
     "159": ["Qualify messaging and wake controls", "Process flags work; native dispatch and wake remain unverified behind a missing companion host."],
     "160": ["Follow a background worker's reply", "One message and idle notice worked; test-project dispatch, automatic worktrees and landing remain unverified."],
-    "161": ["Run native Kiro workflows", "Test dispatch, review, pause, resume and retry through a workflow recipe."],
+    "161": ["Inspect a native workflow run", "Recipe launch, guidance and a failed-step retry were observed; isolation, safe pause and successful landing remain unverified."],
     "162": ["Follow headless sessions", "Compare native results, questions, continuation and approval visibility."],
     "167": ["Compare implementation workers", "Find which cheaper workers meet the measured quality bar on fixed coding tasks."],
     "168": ["Compare reviewer quality", "Measure planted-defect recall and false positives before trusting a cheaper reviewer."],
@@ -136,7 +156,7 @@
     "185": ["Understand the shared agent runtime", "Explain where the agent loop, tools, protocol and policy boundaries live."],
     "186": ["Verify sign-in routing", "Find which process actually receives authentication requests."],
     "187": ["Research Agent Client Protocol", "Assess the standard and propose small spikes only where findings justify them."],
-    "188": ["Restore Codex tool execution", "Diagnose the missing companion host before claiming a tool-capable lane."],
+    "188": ["Run a check from the complete package", "An identical executable beside its signed companion ran one read-only check; stable installation repair remains unverified."],
     "189": ["Qualify clean agent shutdown", "Separate successful turns from process settlement and find a supported shutdown path."],
     "190": ["Correct host-owned sign-in routing", "Find a supported integration remedy before relying on Crew-owned relay identity."],
     "191": ["See findings and the ticket flow", "Review this effort through clear findings and an expandable, evidence-linked work log."],

@@ -207,7 +207,13 @@ The #157 probe confirms native typed workflow controls and registered worktrees;
 dispatched #159 and #160 reports passed independent critic review and were
 integrated by the parent. #159's runtime behavior remains unverified behind the
 missing companion host; #160 confirmed one message/reply/idle exchange, with
-fixture dispatch still trust-blocked. Next in the proposed queue is #161.
+fixture dispatch still trust-blocked. The #161 monitor trial and #188 companion
+host diagnosis also passed separate critic review. Kiro recipe launch, input
+continuation and retry were observed, with isolation/landing and safe pause
+boundaries unverified. Codex ran one read-only command from its complete installed
+package; the internal launcher path is not a stable installation contract.
+Next in the proposed queue is #189. These completed dispatches do not imply a
+production-ready orchestrator.
 The #158-before-#157 order is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before
@@ -228,8 +234,8 @@ auth remains conditional on the result of #186.
 | 157 | 5. Test agy native workflow dispatch and per-role model selection | ✅ done |
 | 159 | 6. Test available Codex multi-agent/message-board/wake features | ✅ done |
 | 160 | 7. Test Claude background sessions and idle notification semantics | ✅ done |
-| 161 | 8. Test Kiro V3 workflow execution, pause, resume and retry | open |
-| 188 | 9. Diagnose Codex's missing code-mode tool host before claiming tool execution | open |
+| 161 | 8. Test Kiro V3 workflow execution, pause, resume and retry | ✅ done |
+| 188 | 9. Diagnose Codex's missing code-mode tool host before claiming tool execution | ✅ done |
 | 189 | 10. Qualify Kiro V3 ACP EOF shutdown and descendant settlement | open |
 | 190 | Resolve Crew Windows host-auth integration before relying on Crew-owned identity | open |
 | 193 | Diagnose overlapping regex approval rules before relying on that override | open |

@@ -1,5 +1,40 @@
 # Harness experimental features: follow-up spikes and QoL options
 
+## Ticket 161: Kiro V3 workflow monitor (2026-11-02)
+
+**Recipe launch and limited monitor controls observed; full ticket loop unverified.**
+Kiro CLI 2.37.1 V3 launched the four-step recipe and progressed to the land step.
+An input pause accepted a response and continued; a keyboard pause request showed
+`pausing...` before a return to running, without a captured safe-boundary paused
+state. Retrying restarted the errored land step, but no successful completion,
+worker worktree, commit or landing was observed.
+
+The [report](kiro-workflows-20261102.md), [receipt](evidence/kiro-workflows-20261102.json)
+and [independent audit](kiro-workflows-20261102-audit.md) separate installed schema,
+documented controls and native observations. Empty tool trust exposed approval
+prompts; local read results appeared during ambiguous approval interaction.
+This is not proof of an approval bypass. Workspace integrations were inventoried
+and a private profile was used, but inherited global-hook isolation remains
+unknown. No persistent trust or global workflow setting was installed. Recipe
+order itself does not guarantee Git isolation or independent acceptance review.
+
+## Ticket 188: Codex companion-host layout (2026-11-02)
+
+**A same-version session-scoped invocation ran one harmless command.** The
+PATH-selected Codex 0.166.0 executable reported its missing sibling code-mode
+host. Identical executable bytes in the installed optional Windows platform
+package, beside the signed companion, ran the read-only fixture Git status
+command with native shell exit 0 and empty output. No binary was installed,
+copied or replaced, and global configuration was not edited.
+
+The [report](codex-tool-host-20261102.md), [native receipt](evidence/codex-tool-host-20261102.json)
+and [independent audit](codex-tool-host-20261102-audit.md) preserve package
+ownership, hashes, matched attempts and exact cleanup. This isolates the
+observed launch-layout difference without relying on the app's separate alpha
+build. The internal vendor path is not a documented stable launcher contract;
+durable installation repair, write/approval behavior and broader tool coverage
+remain unverified. This does not retroactively verify #159's message/wake tests.
+
 ## Ticket 160: Claude background messaging (2026-11-02)
 
 **One native cross-session message/reply/idle exchange confirmed.** Claude Code
