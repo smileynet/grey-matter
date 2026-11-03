@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "manifestDigest": "a2ccdbe457d22e9838eaab5899184c413df6c27f1fcec9b0997a274222781982",
+  "subject": "Closed model-trial findings and visible phone diagram pan cue; all three remaining spike preparations claimed",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 140339,
+      "sha256": "ec215e563af7c7f06d87cc3526abf769a30dd1b0d0982e0c93ace9a63deec301"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 58862,
+      "sha256": "28b7d65a7d5fb070f964523754265ab0956e310de3878db40314f22ca94136fe"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 49648,
+      "sha256": "b511ad983694959ca8f925c3b508da62e1a6c9289d533325ae630e6cbcdc59a4"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-0-1280.png",
+      "bytes": 76569,
+      "sha256": "eab8f27f607e369cf117c2331cb72ac9491860259de15f5a5d8241a6413e8b93",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-1-1280.png",
+      "bytes": 277183,
+      "sha256": "adb53b3aede034efa54d197f465dff7f5b87a9374743f0d988618348931e7e39",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-2-1280.png",
+      "bytes": 386881,
+      "sha256": "8d9f40d3e25669043d3c6f02027fb2601b03d41d5d159906a78891375c3d3f4b",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-0-390.png",
+      "bytes": 72635,
+      "sha256": "af30dabbb52142f2d8934a697e8c74f3ba0bea32a736d0c4bbaa1170812f03c6",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-1-390.png",
+      "bytes": 271767,
+      "sha256": "8823b9a05c5df635b38d64bca9243e10d74bf5860d8ca7ee6912af9daf7b49c8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-2-390.png",
+      "bytes": 373232,
+      "sha256": "7bddfe926a03af10131d8a890882e8892fe771ff1aa4f95f7244a3649031644b",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/plan-panned-390.png",
+      "bytes": 364871,
+      "sha256": "cfbe2d88452e74ebe5198272dc76e9b3b7221ebbc46607a2096bd3f480fb3036",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "d8a2122f21030695af47653a1919e08b6618887fedeb07baf5e55b1060b2ab7d",
+  "id": "3f2eda3b2fd9b9176f9a36a596ccd497fe8cf1bc776af3da61d3a55401d57a07",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/critic_dashboard167_169",
+    "note": "Inspected all seven declared captures: overview and entries at 1280x900/390x900, Plan at both widths and the panned phone diagram. #172 appears In progress in the flow and status totals are 147 done, four in progress, 30 ready, 17 backlog. The sideways-scroll cue is visible before the diagram and the panned view exposes the right-side ticket; text hierarchy and research evidence limits remain legible.",
+    "acceptedAt": "2026-11-03T10:13:16.979Z",
+    "snapshotId": "3f2eda3b2fd9b9176f9a36a596ccd497fe8cf1bc776af3da61d3a55401d57a07"
+  }
+}

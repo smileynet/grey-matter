@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "subject": "Closed model-trial findings and visible phone diagram pan cue; all three remaining spike preparations claimed",
+  "sources": [
+    "docs/status.html",
+    "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+    "skills/productivity/delivery-dashboard/assets/dashboard-example.html"
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-0-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-1-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-2-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-0-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-1-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/tab-2-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-queue-final/plan-panned-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ]
+}

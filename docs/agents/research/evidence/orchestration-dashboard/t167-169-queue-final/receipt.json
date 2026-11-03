@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "84db56cb77983b9e3bf3782ebe4cb306154053d238461db3ae06f73b22ea2aae",
+  "subject": "Audited implementation, review and research findings; closed tickets167–169; all three remaining spike preparations claimed",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 27947,
+      "sha256": "dcb032e35b5a5d49cd19b34c895ef02b82ec04269a2fce7590357fc128415d58"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 192588,
+      "sha256": "d5bf79feea69def86bf374da3aafa5a461e1eb4c4c5c2658eb1c16764385ed4d"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4441,
+      "sha256": "40f1c61335268f992ce9efbd5b8ac997063aa9ffd520c36ab2f868f29b72213c"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-queue-final/findings-1280.png",
+      "bytes": 545335,
+      "sha256": "97a143402577e7b826624345849c092285527405b613c71d25cf539e12fcd417",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-queue-final/tickets-1280.png",
+      "bytes": 226029,
+      "sha256": "9f782a5209cea8786a9aeb17a0ca1255378ed659b3ebdec44aa604f99aa22e11",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-queue-final/findings-390.png",
+      "bytes": 538838,
+      "sha256": "7f1ba146ea7887cab2ca7bbea0f1edff8b874b0a1b3fbbe7bff610a2b7106172",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-queue-final/tickets-390.png",
+      "bytes": 205859,
+      "sha256": "4b04bbc6af23cadc55f7af87f53caf8397e40762f422339627dc457bd173fcf4",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "c3004a4d562142a46086e1b34854d48150814b1f23f478df1d8fcea6130e96a8",
+  "id": "f7eb46d2b020e094ec5efdd1877e404f9346a969a2ded146c2fc69e108687372",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/critic_dashboard167_169",
+    "note": "Visually inspected all four declared captures: findings and ticket log at 1280x900 and 390x900. Counts show 17 findings, five remaining tickets, and 31 completed; #172 is visibly In progress in the flow and open-ticket list. Flow appears above open tickets, then completed tickets; details remain collapsed. Text and evidence limitations are legible at phone width.",
+    "acceptedAt": "2026-11-03T10:13:16.382Z",
+    "snapshotId": "f7eb46d2b020e094ec5efdd1877e404f9346a969a2ded146c2fc69e108687372"
+  }
+}
