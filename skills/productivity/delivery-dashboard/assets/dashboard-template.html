@@ -82,6 +82,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 @media (prefers-reduced-motion:no-preference){.card,details.row{transition:border-color .15s}}
 @media (max-width:560px){.card{padding:16px}details.row .when{min-width:0}}
 #ticket-flow{margin-top:0}.flow-options>summary,.flow-readable>summary{cursor:pointer;min-height:44px;padding:8px 0}.flow-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:8px 0}.flow-controls label{display:flex;align-items:center;gap:8px;min-height:44px;max-width:100%;min-width:0}.flow-controls select{font:inherit;padding:10px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;min-width:0;max-width:100%}.flow-counts,.flow-notice{font-size:14px;color:var(--muted)}.flow-notice{border-left:3px solid var(--blue);padding:10px}.flow-scroll{max-height:820px;overflow:auto;border:1px solid var(--line);padding:16px;margin:16px 0}.flow-canvas{position:relative;width:max-content;min-width:100%;padding:12px 24px}.flow-layers{display:flex;flex-direction:column;gap:42px;position:relative;z-index:1}.flow-layer{display:grid;grid-template-columns:repeat(3,240px);gap:16px}.flow-layer h3{grid-column:1/-1;font-size:14px;margin:0;color:var(--muted)}.flow-node{font:14px/1.45 system-ui;text-align:left;white-space:normal;overflow-wrap:anywhere;background:var(--panel);color:var(--text);border:2px solid var(--line);border-radius:8px;padding:12px;min-height:110px;cursor:pointer}.flow-node strong,.flow-node span,.flow-node small{display:block}.flow-node span,.flow-node small{margin-top:7px}.flow-node small{color:var(--muted);font-size:12px}.flow-node[data-state=ready]{border-color:var(--ok)}.flow-node[data-state=in_progress]{border-color:var(--cyan)}.flow-node[data-state=backlog]{border-style:dashed}.flow-node[data-state=blocked]{border-color:var(--bad)}.flow-node[data-related=unrelated]{opacity:.55}.flow-node[data-related=before],.flow-node[data-related=after]{border-color:var(--blue)}.flow-node[aria-pressed=true]{outline:3px solid var(--ask);outline-offset:3px}.flow-links{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:visible}.flow-links path{fill:none;stroke:var(--muted);stroke-width:2}.flow-links .flow-arrow{fill:var(--muted);stroke:none}.flow-links path[data-satisfied=true]{stroke-dasharray:5 5}.flow-links path[data-related=true]{stroke:var(--blue);stroke-width:3}.flow-detail{border-left:3px solid var(--blue);padding:12px 16px;background:var(--panel);margin:16px 0}.flow-detail h3{margin:0 0 8px}.flow-detail p{margin:8px 0}.flow-readable li{margin:8px 0}@media(max-width:560px){.flow-scroll{max-height:620px;padding:10px}.flow-canvas{padding:10px 16px}}
+.flow-node[data-gate=decision],.flow-node[data-gate=evidence]{border-color:var(--ask)}
 </style>
 </head>
 <body>
@@ -190,6 +191,8 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   // A blocker missing from the snapshot counts as unfinished, so a broken edge never hides work.
   function waitingOn(t, idx) { return (t.blocked_by || []).filter(function (b) { return !idx[b] || idx[b].status !== "done"; }); }
   function ticketState(t, idx) { return t.status === "open" ? (waitingOn(t, idx).length ? "blocked" : "ready") : t.status; }
+  function planningGate(t) { return t.status === "done" ? null : t.gate || null; }
+  function flowState(t, idx) { var state = ticketState(t, idx), gate = planningGate(t); return state === "ready" && gate ? gate.kind : state; }
   function byId(a, b) { return String(a.id).localeCompare(String(b.id), undefined, { numeric: true }); }
   function planGroups(snap) {
     var idx = ticketIndex(snap), g = {}, f = snap.frontier || [];
@@ -257,7 +260,14 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       upstream(id); downstream(id);
       return { before: before, after: after, waiting: waitingOn(idx[id], idx) };
     }
-    return { index: idx, visible: visible, layers: layers, edges: edges, counts: counts, scope: scope, fallback: fallback, elsewhere: all.filter(function (t) { return t.status !== "done" && !ids[t.id]; }).length, relations: relations };
+    var readiness = { ready: 0, in_progress: 0, blocked: 0, decision: 0, evidence: 0, backlog: 0, done: 0 };
+    visible.forEach(function (t) { readiness[flowState(t, idx)]++; });
+    var groups = scopes.map(function (s) { return { label: s.label, tickets: [] }; }), other = { label: "Other work", tickets: [] };
+    visible.forEach(function (t) { var at = scopes.findIndex(function (s) { return s.tags.some(function (tag) { return (t.tags || []).indexOf(tag) >= 0; }); }); (at < 0 ? other : groups[at]).tickets.push(t); });
+    groups.push(other); groups = groups.filter(function (g) { return g.tickets.length; });
+    var rank = { in_progress: 0, ready: 1, decision: 2, evidence: 3, blocked: 4, backlog: 5, done: 6 };
+    groups.forEach(function (g) { g.tickets.sort(function (a, b) { var state = rank[flowState(a, idx)] - rank[flowState(b, idx)]; if (state) return state; var f = snap.frontier || [], ai = f.indexOf(a.id), bi = f.indexOf(b.id); return (ai < 0 ? f.length : ai) - (bi < 0 ? f.length : bi) || byId(a, b); }); });
+    return { index: idx, visible: visible, layers: layers, groups: groups, edges: edges, counts: counts, readiness: readiness, scope: scope, fallback: fallback, elsewhere: all.filter(function (t) { return t.status !== "done" && !ids[t.id]; }).length, relations: relations };
   }
 
   function ticketMatches(t, f, idx) {
@@ -266,7 +276,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     return !q || q.split(/\s+/).every(function (w) { return hay.indexOf(w) >= 0; });
   }
 
-  var api = { sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref, planGroups: planGroups, planLanes: planLanes, ticketMatches: ticketMatches, ticketFlow: ticketFlow };
+  var api = { sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref, planGroups: planGroups, planLanes: planLanes, ticketMatches: ticketMatches, ticketFlow: ticketFlow, flowState: flowState };
   if (typeof window !== "undefined") window.GMDashboard = api;
   if (typeof document === "undefined" || !document.getElementById("gm-entries")) return;
 
@@ -477,20 +487,29 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     (settings.scopes || []).forEach(function (s) { scope.appendChild(el("option", { value: s.id, text: s.label })); });
     scope.value = settings.defaultScope || "all";
     form.appendChild(el("label", { text: "Work stream " }, [scope]));
+    var arrangement = el("select", { "aria-label": "Arrange ticket graph" });
+    arrangement.appendChild(el("option", { value: "dependencies", text: "Dependency depth" }));
+    arrangement.appendChild(el("option", { value: "workstreams", text: "Work streams" }));
+    arrangement.value = settings.groupBy || "dependencies";
+    form.appendChild(el("label", { text: "Arrange by " }, [arrangement]));
     var completed = el("input", { type: "checkbox", id: "flow-completed" }), deferred = el("input", { type: "checkbox", id: "flow-deferred" }); deferred.checked = true;
     form.appendChild(el("label", {}, [completed, document.createTextNode("Include completed context")]));
     form.appendChild(el("label", {}, [deferred, document.createTextNode("Include deferred work")]));
     controls.appendChild(form); root.appendChild(controls);
-    root.appendChild(el("p", { class: "meta", text: "Arrows connect prerequisites to dependent work. Prerequisites met describes ticket dependencies, not device, access or participant readiness." }));
+    root.appendChild(el("p", { class: "meta", text: "Arrows show ticket prerequisites. Decision and evidence gates come from ticket planning notes. Unblocked means these recorded gates are clear; machine and access eligibility remain separate. Deferred work stays deferred." }));
     var notice = el("p", { class: "flow-notice", role: "status" }), summary = el("p", { class: "flow-counts" }), scroll = el("div", { class: "flow-scroll", tabindex: "0", role: "region", "aria-label": "Ticket dependency flow; scroll to follow branches" });
     var canvas = el("div", { class: "flow-canvas" }), layers = el("div", { class: "flow-layers" }), svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "flow-links"); svg.setAttribute("aria-hidden", "true");
     canvas.appendChild(svg); canvas.appendChild(layers); scroll.appendChild(canvas);
     var detail = el("div", { class: "flow-detail", "aria-live": "polite" }), readable = el("details", { class: "flow-readable" }, [el("summary", { text: "Read the visible prerequisite list" })]), list = el("ul"); readable.appendChild(list);
     root.appendChild(notice); root.appendChild(summary); root.appendChild(scroll); root.appendChild(detail); root.appendChild(readable);
-    var model, selected = null, buttons = Object.create(null), words = { ready: "Prerequisites met", in_progress: "In progress", blocked: "Waiting", backlog: "Deferred", done: "Done" };
+    var model, selected = null, buttons = Object.create(null), words = { ready: "Unblocked", in_progress: "In progress", blocked: "Waiting on tickets", decision: "Decision needed", evidence: "Evidence needed", backlog: "Deferred", done: "Done" };
     function choose(id) {
       selected = id; var t = model.index[id], r = model.relations(id), deps = t.blocked_by || [];
       detail.textContent = ""; detail.appendChild(el("h3", { text: id + " · " + t.title }));
+      var gate = planningGate(t);
+      if (gate) detail.appendChild(el("p", { class: "flow-notice", text: words[gate.kind] + ": " + gate.reason }));
+      var upstreamGates = r.before.filter(function (id) { return model.index[id] && model.index[id].status !== "done" && planningGate(model.index[id]); });
+      if (upstreamGates.length) detail.appendChild(el("p", { text: "Upstream planning gates: " + upstreamGates.map(function (id) { var gate = planningGate(model.index[id]); return id + " — " + words[gate.kind] + ": " + gate.reason; }).join("; ") }));
       detail.appendChild(el("p", { text: "Prerequisites: " + (deps.map(function (id) { return id + " (" + (model.index[id] ? model.index[id].status : "missing from snapshot") + ")"; }).join(", ") || "none") }));
       detail.appendChild(el("p", { text: "Still waiting on: " + (r.waiting.join(", ") || "none") }));
       detail.appendChild(el("p", { text: "Downstream work: " + (r.after.join(", ") || "none") }));
@@ -517,31 +536,36 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       scope.value = model.scope;
       notice.textContent = model.fallback ? "That stream has no visible remaining work; showing all remaining work." : model.elsewhere ? model.elsewhere + " unfinished tickets are outside this view. Choose All remaining work to see them." : "";
       notice.hidden = !notice.textContent;
-      summary.textContent = ORDER.map(function (state) { return model.counts[state] + " " + words[state].toLowerCase(); }).join(" · ") + " · " + model.visible.length + " shown. Select a ticket to inspect its dependency path.";
+      summary.textContent = ["ready", "in_progress", "blocked", "decision", "evidence", "backlog", "done"].map(function (state) { return model.readiness[state] + " " + words[state].toLowerCase(); }).join(" · ") + " · " + model.visible.length + " shown. Select a ticket to inspect its dependency path.";
       layers.textContent = ""; list.textContent = ""; buttons = Object.create(null);
-      model.layers.forEach(function (items, depth) {
-        var layer = el("div", { class: "flow-layer" }, [el("h3", { text: depth ? "Dependency depth " + depth : "No visible ticket prerequisites" })]);
+      var columns = arrangement.value === "workstreams" ? model.groups : model.layers.map(function (items, depth) { return { label: depth ? "Dependency depth " + depth : "No visible ticket prerequisites", tickets: items }; });
+      columns.forEach(function (column) {
+        var layer = el("div", { class: "flow-layer" }, [el("h3", { text: column.label + " · " + column.tickets.length })]);
+        var items = column.tickets;
         items.forEach(function (t) {
-          var state = ticketState(t, model.index), button = el("button", { type: "button", class: "flow-node", "aria-pressed": "false" }, [el("strong", { text: t.id + " · " + t.title }), el("span", { text: SGLYPH[state] + " " + words[state] })]); button.dataset.ticket = t.id; button.dataset.state = state;
+          var state = ticketState(t, model.index), readiness = flowState(t, model.index), gate = planningGate(t), button = el("button", { type: "button", class: "flow-node", "aria-pressed": "false" }, [el("strong", { text: t.id + " · " + t.title }), el("span", { text: SGLYPH[state] + " " + words[readiness] })]); button.dataset.ticket = t.id; button.dataset.state = state;
+          if (gate) { button.dataset.gate = gate.kind; button.appendChild(el("small", { class: "flow-notice", text: words[gate.kind] + ": " + gate.reason })); }
           var deps = t.blocked_by || [], done = deps.filter(function (id) { return model.index[id] && model.index[id].status === "done"; }), waiting = waitingOn(t, model.index);
           if (waiting.length) button.appendChild(el("small", { text: "Needs: " + waiting.join(", ") }));
           if (done.length) button.appendChild(el("small", { text: "Completed: " + done.join(", ") }));
           if (!deps.length) button.appendChild(el("small", { text: "No ticket prerequisites" }));
           button.addEventListener("click", function () { choose(t.id); }); buttons[t.id] = button; layer.appendChild(button);
-          list.appendChild(el("li", { text: t.id + " · " + t.title + " — " + (deps.length ? "prerequisites " + deps.join(", ") : "no prerequisites") + " · " + words[state] }));
+          list.appendChild(el("li", { text: t.id + " · " + t.title + " — " + (deps.length ? "prerequisites " + deps.join(", ") : "no prerequisites") + " · " + words[readiness] + (gate ? " · " + words[gate.kind] + ": " + gate.reason : "") }));
         }); layers.appendChild(layer);
       });
       if (selected && buttons[selected]) choose(selected); else { selected = null; detail.textContent = "Select a ticket above. Its prerequisites and downstream work will be highlighted."; }
       if (!model.visible.length) layers.appendChild(el("p", { class: "none", text: "No tickets in this view." }));
       requestAnimationFrame(draw);
     }
-    [scope, completed, deferred].forEach(function (control) { control.addEventListener("change", render); });
+    [scope, completed, deferred, arrangement].forEach(function (control) { control.addEventListener("change", render); });
     new ResizeObserver(draw).observe(canvas); render();
   }
 
   function ticketRow(t) {
     var st = ticketState(t, tidx);
     var s = el("summary", {}, [el("span", { class: "when tid", text: t.id }), el("span", { class: "ttl", text: t.title }), el("span", { class: "chip" + (st === "blocked" ? " blocked" : ""), text: SGLYPH[st] + " " + STATES[st] })]);
+    var gate = planningGate(t);
+    if (gate) s.appendChild(el("span", { class: "chip needs", text: gate.kind === "decision" ? "Decision needed" : "Evidence needed" }));
     if (t.priority) s.appendChild(el("span", { class: "tid", text: t.priority }));
     var b = el("div", { class: "body" }), w = waitingOn(t, tidx);
     var blocks = (snap.tickets || []).filter(function (o) { return (o.blocked_by || []).indexOf(t.id) >= 0; }).map(function (o) { return o.id; });

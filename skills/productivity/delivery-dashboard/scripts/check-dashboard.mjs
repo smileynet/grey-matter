@@ -49,6 +49,7 @@ export function check(path, { strict = false } = {}) {
     if (!flow || typeof flow !== "object" || Array.isArray(flow)) err("ticketFlow must be false or a configuration object");
     else {
       if (flow.enabled !== undefined && typeof flow.enabled !== "boolean") err("ticketFlow.enabled must be boolean");
+      if (flow.groupBy !== undefined && !["dependencies", "workstreams"].includes(flow.groupBy)) err("ticketFlow.groupBy must be dependencies or workstreams");
       const scopes = flow.scopes === undefined ? [] : flow.scopes;
       if (!Array.isArray(scopes)) err("ticketFlow.scopes must be a list");
       else {
@@ -136,6 +137,7 @@ export function check(path, { strict = false } = {}) {
         if (!STATUSES.includes(t.status)) err(`${at}: status must be one of ${STATUSES.join(", ")}`);
         if (t.priority !== undefined && !PRIORITIES.includes(t.priority)) err(`${at}: priority must be one of ${PRIORITIES.join(", ")}`);
         if (t.tags !== undefined && !(Array.isArray(t.tags) && t.tags.every((tag) => typeof tag === "string"))) err(`${at}: tags must be a list of strings`);
+        if (t.gate !== undefined && (!t.gate || !["decision", "evidence"].includes(t.gate.kind) || typeof t.gate.reason !== "string" || !t.gate.reason.trim())) err(`${at}: gate needs decision or evidence kind and a nonempty reason`);
         if (t.blocked_by !== undefined && !(Array.isArray(t.blocked_by) && t.blocked_by.every((b) => typeof b === "string"))) err(`${at}: blocked_by must be a list of ids`);
       });
       list.forEach((t) => (t && Array.isArray(t.blocked_by) ? t.blocked_by : []).forEach((b) => tids.has(b) || warn(`ticket ${t.id}: blocker ${b} is not in the snapshot`)));
@@ -177,10 +179,12 @@ export function check(path, { strict = false } = {}) {
         logic.plan = grouped;
         if (grouped !== snap.tickets.length) err(`plan grouping broken: ${grouped} of ${snap.tickets.length} tickets shown`);
         if (api.ticketFlow && cfg && cfg.ticketFlow !== false && !(cfg.ticketFlow && cfg.ticketFlow.enabled === false)) {
-          const flow = api.ticketFlow(snap);
+          const flow = api.ticketFlow(snap, { scopes: cfg.ticketFlow && cfg.ticketFlow.scopes });
           const remaining = snap.tickets.filter((ticket) => ticket.status !== "done");
           if (flow.visible.length !== remaining.length || remaining.some((ticket) => !flow.visible.some((visible) => visible.id === ticket.id))) err("default ticket flow hides remaining work");
           if (Object.values(flow.counts).reduce((total, count) => total + count, 0) !== flow.visible.length) err("ticket flow status counts omit visible work");
+          if (flow.readiness && Object.values(flow.readiness).reduce((total, count) => total + count, 0) !== flow.visible.length) err("ticket flow planning counts omit visible work");
+          if (flow.groups && new Set(flow.groups.flatMap((group) => group.tickets.map((ticket) => ticket.id))).size !== remaining.length) err("workstream grouping omits remaining work");
         }
       }
     } catch (e) { err(`page script failed to load: ${e.message}`); }

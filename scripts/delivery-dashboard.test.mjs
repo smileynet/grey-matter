@@ -286,7 +286,7 @@ function flowDashboard(t, entries, edit = (html) => html) {
 }
 
 test("checker rejects malformed flow configuration and malformed tags", (t) => {
-  for (const config of [{ scopes: [{ id: "all", label: "Duplicate", tags: ["x"] }] }, { scopes: [{ id: "build", label: "Build", tags: [] }] }, { defaultScope: "missing" }]) {
+  for (const config of [{ scopes: [{ id: "all", label: "Duplicate", tags: ["x"] }] }, { scopes: [{ id: "build", label: "Build", tags: [] }] }, { defaultScope: "missing" }, { groupBy: "invented" }]) {
     const d = flowDashboard(t, [], (html) => html.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/, "$1" + JSON.stringify({ project: "Fixture", ticketFlow: config }) + "$2"));
     assert.equal(check(d.file).ok, false);
   }
@@ -302,6 +302,49 @@ test("snapshot retains real ticket tags when the CLI omits them", (t) => {
   const run = (cmd, args) => args[0] === "query" ? [tk("one", "open"), tk("two", "backlog")].map((ticket) => JSON.stringify(ticket)).join("\n") : JSON.stringify({ id: "one" });
   snapshot(d.file, { repo: d.dir, run }); const snap = JSON.parse(readFileSync(d.file, "utf8").match(TICKETS)[2]);
   assert.deepEqual(snap.tickets.map((ticket) => ticket.tags), [["build", "review"], ["design", "later"]]);
+});
+
+test("planning gates stay separate from lifecycle, dependencies and deferred work", () => {
+  const gate = { kind: "decision", reason: "Choose computed progress or stored status" };
+  const snap = { frontier: ["next", "decide"], tickets: [
+    { ...tk("decide", "open"), tags: ["relations"], gate },
+    { ...tk("child", "open", ["decide"]), tags: ["docs"] },
+    { ...tk("probe", "open"), gate: { kind: "evidence", reason: "Reproduce the cache request" } },
+    { ...tk("later", "backlog"), gate },
+    { ...tk("past", "done"), gate },
+    { ...tk("next", "open"), tags: ["docs", "relations"] }
+  ] };
+  const flow = api().ticketFlow(snap, { scopes: [{ id: "docs", label: "Guidance", tags: ["docs"] }, { id: "rel", label: "Relations", tags: ["relations"] }] });
+  assert.deepEqual(JSON.parse(JSON.stringify(flow.readiness)), { ready: 1, in_progress: 0, blocked: 1, decision: 1, evidence: 1, backlog: 1, done: 0 });
+  assert.deepEqual(Array.from(flow.groups, (g) => [g.label, Array.from(g.tickets, (t) => t.id)]), [["Guidance", ["next", "child"]], ["Relations", ["decide"]], ["Other work", ["probe", "later"]]]);
+  assert.ok(flow.edges.some((edge) => edge.from === "decide" && edge.to === "child"));
+  assert.deepEqual(Array.from(flow.relations("child").before), ["decide"]);
+  assert.equal(api().flowState(snap.tickets.find((t) => t.id === "past"), flow.index), "done");
+  assert.equal(snap.tickets[0].status, "open");
+});
+
+test("snapshot derives planning gates from ticket notes and rejects ambiguous gates before writing", (t) => {
+  const d = flowDashboard(t, []); mkdirSync(join(d.dir, ".tickets"));
+  const ticket = join(d.dir, ".tickets/one-a.md");
+  writeFileSync(ticket, '---\nid: "one"\ntags: ["build", "gate:decision"]\n---\n\n## Planning gate\n\nChoose the close policy.\n');
+  const run = (cmd, args) => args[0] === "query" ? JSON.stringify(tk("one", "open")) : JSON.stringify({ id: "one" });
+  snapshot(d.file, { repo: d.dir, run });
+  const snap = JSON.parse(readFileSync(d.file, "utf8").match(TICKETS)[2]);
+  assert.deepEqual(snap.tickets[0].gate, { kind: "decision", reason: "Choose the close policy." });
+  const before = readFileSync(d.file, "utf8");
+  writeFileSync(ticket, '---\nid: "one"\ntags: ["gate:decision", "gate:evidence"]\n---\n');
+  assert.throws(() => snapshot(d.file, { repo: d.dir, run }), /conflicting planning gates/);
+  assert.equal(readFileSync(d.file, "utf8"), before);
+  writeFileSync(ticket, '---\nid: "one"\ntags: ["gate:decision"]\n---\n');
+  assert.throws(() => snapshot(d.file, { repo: d.dir, run }), /needs a ## Planning gate/);
+  assert.equal(readFileSync(d.file, "utf8"), before);
+});
+
+test("checker rejects malformed planning-gate data", (t) => {
+  for (const gate of [null, { kind: "decision", reason: "" }, { kind: "unknown", reason: "test" }]) {
+    const d = flowDashboard(t, [], withTickets({ generated: null, frontier: [], tickets: [{ ...tk("one", "open"), gate }] }));
+    assert.match(check(d.file).errors.join(";"), /gate needs decision or evidence/);
+  }
 });
 
 // Ticket 134: on Windows the CLI entry guards compared against URL.pathname (/D:/...), never

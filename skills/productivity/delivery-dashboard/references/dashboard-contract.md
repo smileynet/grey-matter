@@ -69,6 +69,7 @@ availability; keep those project facts outside the shared renderer.
 {
   "enabled": true,
   "defaultScope": "all",
+  "groupBy": "workstreams",
   "scopes": [
     {"id": "build", "label": "Build work", "tags": ["build", "verification"]}
   ]
@@ -81,6 +82,23 @@ to all remaining work with a notice. A narrowed view always reports unfinished t
 so completed context cannot silently imply the project is finished. Deferred work is included
 initially and has its own toggle; completed context is opt-in. The complete searchable ticket list
 remains below regardless of graph scope or whether the flow is enabled.
+
+`groupBy` is `dependencies` (default) or `workstreams`. Workstream lanes follow
+the configured scope order; a ticket matching several scopes belongs to the first,
+and unmatched tickets remain in Other work. Cross-stream dependency edges remain
+visible. The arrangement control can switch back to dependency depth. These are
+display choices, not ticket sorting or scheduling overrides.
+
+For an unresolved planning gate, add one `gate:decision` or `gate:evidence` tag to
+the ticket and explain the specific missing decision or observation under
+`## Planning gate` in its body. The snapshot derives `{kind, reason}` from that
+source; never infer decision gates from a generic needs-info tag or from backlog.
+The graph shows gates separately from lifecycle and ticket dependencies. An open
+ticket with no unfinished dependency but a gate is not counted as Unblocked.
+Dependency-blocked tickets retain their gate badge; selecting downstream work
+lists upstream planning gates. Backlog stays Deferred even if a gate is resolved.
+Remove the gate tag and explanation when it is resolved, then refresh the snapshot.
+Gates record work constraints; they are not dashboard-feedback requests.
 
 Selecting a ticket highlights its transitive prerequisites and dependents, lists unfinished and
 completed prerequisites (including missing snapshot references), and links to its ticket row.
@@ -95,7 +113,8 @@ tools are test prerequisites, not dashboard runtime resources; no CDN or network
 
 `gm-tickets` holds `{generated, frontier, tickets}`: the snapshot time, the ids `tkt ready`
 returns in order, and each ticket's `id`, `title`, `status`, `priority`, `blocked_by` and `tags`
-from `tkt query`. Current tkt versions omit tags in query output; the snapshot helper fills missing
+from `tkt query`, plus optional `gate: {kind, reason}` derived from ticket tags/body.
+Current tkt versions omit tags in query output; the snapshot helper fills missing
 tags from the same ticket files' inline/block tag lists without changing CLI-provided tags. Regenerate it after every ticket change rather than editing it; the page stays
 offline, so it shows the board as of `generated`. A blocker missing from the snapshot counts as
 unfinished, so a broken edge never hides work.
