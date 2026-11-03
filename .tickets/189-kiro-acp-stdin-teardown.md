@@ -40,6 +40,27 @@ on observing a running session.
 
 ## Acceptance criteria
 
+## Blocked qualification (2026-11-02)
+
+Fresh current-build probes and [independent review](../docs/agents/research/kiro-acp-shutdown-20261102-audit.md)
+confirm AC1, but AC2 remains unmet. Kiro CLI 2.37.1 / KAS 0.66.70 still emits the
+native five-second EOF shutdown error and exits 1 after both a completed model
+turn and a canceled permission wait, even when advertised `session/close`
+succeeds first. Reload preserved the marker, and captured owned descendant trees
+were absent at final polling. This is not a verified shutdown remedy.
+
+The [report](../docs/agents/research/kiro-acp-shutdown-20261102.md) and
+[receipt](../docs/agents/research/evidence/kiro-acp-shutdown-20261102.json) record
+the completed diagnostic evidence, retained raw files and four owned session IDs.
+Keep those artifacts through the next qualifying retest/resolution; parent owns
+disposal. The original #162 session remains untouched. Do not repeat identical
+model probes on each check-in. Resume fix qualification when the Kiro/KAS version
+changes or a newly supported shutdown method is identified. The ticket remains
+in progress with an explicit upstream/runtime blocker, not resolved. Independent
+GUI/auth/runner/model work continues without treating this as a blanket blocker.
+
+## Remaining acceptance criteria
+
 - [ ] The EOF teardown failure is reproduced or marked obsolete, separating successful prompt/cancel/load responses from process settlement.
 - [ ] A supported shutdown sequence, fixed version or bounded workaround is verified without discarding sessions or treating a live descendant as settled.
 - [ ] Owned processes, sessions and fixtures have recorded disposition; required checks pass and the driver guidance states the remaining limit.
