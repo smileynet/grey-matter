@@ -35,3 +35,7 @@ A data hook (for example `window.deliveryDashboard` or a JSON file the page decl
 - [ ] The checker passes on the template and on a fixture custom page exposing the hook, and fails each contract rule on a seeded fixture.
 - [ ] The skill documents the hook and the migration choice.
 - [ ] `node scripts/gate.mjs pre-merge` passes.
+
+## Outcome-driven orchestration coordination
+
+Proposal 19 approved. Retain custom-dashboard contract ownership; #205 publication preflight should accept existing supported receipt inputs without forcing custom pages into the shipped renderer.

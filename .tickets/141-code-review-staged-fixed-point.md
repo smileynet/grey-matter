@@ -21,3 +21,7 @@ Field report from philippines-trip, 2026-11-01. The review target was staged, un
 - [ ] The skill documents reviewing staged and working-tree changes (`git diff --cached`, `git diff`) as well as commit ranges, and step 1 validates the chosen diff is nonempty.
 - [ ] Step 5 tells the reviewer how to file tickets without committing the staged work under review (until 140 is fixed).
 - [ ] One review of staged work runs end to end with the updated skill.
+
+## Outcome-driven orchestration coordination
+
+Proposal 19 approved. Retain staged/working-tree review-target ownership; #204 handles dispatch and candidate/evidence binding without claiming every review target must be a commit.

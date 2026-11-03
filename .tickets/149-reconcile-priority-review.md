@@ -25,3 +25,7 @@ A prioritization review needed the same ad-hoc script three times to group ticke
 - [ ] reconcile-tickets gains a priority-review step that reports: priority/queue inversions, tickets queued before their prerequisites, open tickets stuck behind backlog ones, missing priorities, and open tickets whose criteria are all ticked.
 - [ ] The step quotes tool output (tkt query, or a project script such as philippines-trip #204) rather than hand-read ticket facts.
 - [ ] Related: #118.
+
+## Outcome-driven orchestration coordination
+
+Proposal 19 approved. Retain priority/queue review ownership. Respect the new explicit outcome contract and scope revisions; planned order is separate from structural dependencies, and #201 remains deferred.

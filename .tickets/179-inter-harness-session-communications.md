@@ -62,3 +62,7 @@ Contract and deterministic fixture first; then graduate the proved Codex/Antigra
 ## Filing verification
 
 Ticket brief and evidence-boundary review: PASS; seven acceptance criteria and no findings on this ticket. The strict tracker check retains seven pre-existing unchecked-AC warnings on closed tickets. On macOS the pre-push home-path check also reports 225 locations across 18 unchanged historical files; every offending blob matches origin/main 9074ced. The new ticket passes the actual home-path scanner in isolation. Following docs/agents/local-gates.md, filing uses the named SKIP=home-path baseline exception plus the ticket-graph check; this is not a claim that the full baseline gate passes. No historical receipts are rewritten here.
+
+## Outcome-driven orchestration coordination
+
+Proposal 19 implementation approved 2026-11-03. Retain this ticket as shared message/session interface owner; coordinate #202 outcome contracts and #204 dispatch bindings. Durable spool/fixtures may proceed independently; no native Agy action, real user conversation or global configuration change is authorized by this note. Unsupported/unqualified adapters stay explicit; deterministic delivery does not prove native wakeup.

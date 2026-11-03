@@ -199,9 +199,46 @@ its four remaining follow-ups. Broader #149/#146/#164 retain their original scop
 | 197 | Dashboard evidence limits without unsolicited review tasks | ✅ done |
 | 198 | Source identity and currency before adopter findings | ✅ done |
 
+## Outcome-driven orchestration delivery (authorized 2026-11-03)
+
+User approved [proposal 19](agents/proposals/19-outcome-driven-orchestration.md), including implementation, ticket reconciliation and agent skill guidance for all tool scripts. This is a new delivery cycle after the bounded spike outcome; #201 stays low-priority backlog until higher-priority work is finished. Completed/cancelled probes are not restarted.
+
+**Outcome:** a user or authorized agent can start one targeted orchestrated session, keep scoped work advancing through review/integration and recover from explicit interruptions. Every tracked operator tool has reachable, task-specific skill guidance; tests, modules and fixtures are classified rather than presented as operator commands.
+
+**Proof:** exact-source independent critic acceptance, invocation/syntax/docs checks, meaningful deterministic dispatch/review/publication/recovery fixtures, script-guidance inventory coverage and current repository stages. Native goals, remote delivery and unsupported/security-held adapters are not proved by deterministic fixtures; retain exact limits and any genuine native qualification blocker.
+
+**Authority/resources:** parent owns tickets/plan, serial integration, required gates, push, closure, dashboards and existing private Site publication. Workers own only assigned worktrees/paths. Four total agent slots; at most two implementation workers while reserving a critic slot. Shared measurement/accounts/devices are serialized separately from file overlap. No global harness setting changes, Agy execution, provider fallback or unrequested native model benchmark. No new background monitor is currently scheduled; do not claim one exists.
+
+**Completion/stops:** integrate and independently verify the new delivery tickets, deploy skill guidance with Agy excluded, reconcile both dashboards, and preserve artifact ownership. Continue beyond batches. If all authorized progress is exhausted without outcome proof, report incomplete with exact blocker/checkpoint, not achieved. At usage exhaustion stop and report limit/reset; fallback remains off. Newly discovered prerequisites need explicit ticket/dependency evidence. Routine priority preferences are not hard blockers.
+
+Existing #179 retains shared communication ownership in stream:tooling; #145/#148/#141 retain concurrency/takeover/staged-review scope, #118/#139 dashboard behavior, #149 priority review and #166 harness-overview refresh. The new tickets integrate with those owners without declaring their unrelated full scopes complete.
+
+| ID | Work | Status |
+| --- | --- | --- |
+| 202 | Outcome-driven orchestrate contract and role guidance | open |
+| 203 | Complete tool-script inventory and owning skill usage guidance | open |
+| 204 | Dispatch checkout and review-evidence preflight | open |
+| 179 | Shared inter-harness messaging and wakeups (existing owner) | open |
+| 205 | Dashboard publication preflight using existing receipts | open |
+| 206 | Correct observed operational reference drift | open |
+| 207 | Outcome-coordinator failure and continuation fixtures | open |
+
+```mermaid
+flowchart LR
+  A202[202 Outcome contract] --> A204[204 Dispatch and evidence preflight]
+  A202 --> A207[207 Coordinator scenarios]
+  A204 --> A207
+  A205[205 Publication preflight] --> A207
+  A203[203 Tool usage guidance]
+  A179[179 Existing messaging implementation]
+  A206[206 Reference corrections]
+```
+
+Rows are proposed execution order; only solid graph/ticket edges are prerequisites. #203's inventory must be refreshed for every subsequently added script before final delivery, without manufacturing dependencies on unrelated work.
+
 ## Orchestration workstream (reconciled 2026-11-03)
 
-Scope: the 37 tickets tagged `stream:orchestration`, including the dashboard
+Historical spike scope: 37 tickets tagged `stream:orchestration`, including the dashboard
 ticket #191 in the inventory below; their current statuses are shown in the tables.
 Other tooling, test-verification, dashboard and release work remains in its
 existing stream. Related parked #06 (skill/version drift evaluations) and #09

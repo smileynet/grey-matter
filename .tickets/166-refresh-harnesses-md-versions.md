@@ -25,3 +25,7 @@ Each claim changed is re-probed on this machine, not copied from the review.
 - [ ] Every version and binary path in harnesses.md matches versions.json, or says why it differs.
 - [ ] Each changed test command was run once and its output read.
 - [ ] `node scripts/gate.mjs pre-push` passes.
+
+## Outcome-driven orchestration coordination
+
+Proposal 19 approved. This ticket retains harness-overview version refresh; #206 handles bounded observed reference contradictions. Preserve the Agy execution hold; do not run a broad harness probe to refresh this note.
