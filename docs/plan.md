@@ -220,7 +220,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 204 | Dispatch checkout and review-evidence preflight | ✅ done |
 | 208 | Durable session/message foundation and recovery fixture (child of 179) | in_progress |
 | 179 | Shared inter-harness messaging and wakeups (existing owner) | open |
-| 205 | Dashboard publication preflight using existing receipts | in_progress |
+| 205 | Dashboard publication preflight using existing receipts | ✅ done |
 | 206 | Correct observed operational reference drift | ✅ done |
 | 207 | Outcome-coordinator failure and continuation fixtures | open |
 
