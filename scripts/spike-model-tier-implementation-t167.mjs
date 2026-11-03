@@ -108,9 +108,9 @@ if (provider === "claude") {
   if (model) commandArgs.push("--model", model);
   commandArgs.push(prompt);
 } else {
-  commandArgs = ["--print", "--mode", "accept-edits", "--sandbox", "--settings", settingsPath, "--output-format", "stream-json"];
+  commandArgs = ["--mode", "accept-edits", "--sandbox", "--settings", settingsPath, "--output-format", "stream-json"];
   if (model) commandArgs.push("--model", model);
-  commandArgs.push(prompt);
+  commandArgs.push(`--print=${prompt}`);
 }
 
 const agentStarted = Date.now();
