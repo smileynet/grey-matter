@@ -175,9 +175,12 @@ An independent critic checked the helper and its two offline tests; both tests
 passed. The [private artifact index](model-tier-private-artifact-index-20261103.json)
 records paths and hashes without exposing the payloads, provider crosswalk,
 review IDs, or session IDs. Private response and review evidence, the answer
-key, and native Kiro sessions remain retained through the #169–#172 handoff.
-After the independent audit, cleanup of six captured Kiro V2 sessions and 18
-verified-empty controller working directories awaits parent authorization.
+key, and session receipts remain retained through the #169–#172 handoff. After
+independent audit, the parent authorized deletion of six captured Kiro V2 sessions
+and recycling of 18 verified-empty controller working directories. A full
+all-workspace listing confirmed all six targets absent and all 7,599 other session
+ID/source pairs unchanged. The before/after listings were hashed and then recycled
+because they included unrelated session metadata.
 
 ## Verification and cleanup status
 
@@ -188,5 +191,7 @@ SHA-256 is
 `7db36c67ceca1c8eaaf20d7bfd103684fb7319b91447d9ed653931df79a6c88c`. Their
 exact hashes and the source/task hashes are bound in the continuation protocol.
 No model response is semantically scored by the producing session. The study
-and its review are complete; private evidence cleanup has not been authorized or
-performed.
+and its review are complete. Authorized cleanup removed six captured Kiro V2
+sessions and recycled 18 empty controller directories. The full unfiltered session
+listing showed 7,599 non-target ID/source pairs unchanged; its hashes and
+per-target deletion receipts remain in private evidence.
