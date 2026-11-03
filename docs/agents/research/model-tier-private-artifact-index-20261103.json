@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "ticket": 169,
-  "status": "Private evidence retained through the 169–172 handoff; cleanup awaits parent authorization after independent audit.",
+  "status": "Private response, review, and protocol evidence retained through the 169–172 handoff; authorized session and empty-directory cleanup completed.",
   "privacy": {
     "indexBodyIncludesRawText": false,
     "indexBodyIncludesSessionIdentifiers": false,
@@ -95,6 +95,21 @@
       "path": ".scratch/t169/cleanup-plan.json",
       "bytes": 16340,
       "sha256": "05b777a8dd7fc31dc5d4103150c7cfbe22ce8777158c8ecca89e5681c5e5184a",
+      "contentsIncluded": false
+    },
+    {
+      "label": "Cleanup execution record (private identifiers withheld)",
+      "path": ".scratch/t169/cleanup-execution.json",
+      "bytes": 11318,
+      "sha256": "2c1e91a9faeabc6ab8d44cf7ff9a55ae7d402dfae6994d3ef8287b63a64a61e7",
+      "contentsIncluded": false
+    },
+    {
+      "label": "Native cleanup receipts (private session metadata)",
+      "path": ".scratch/t169/cleanup-run-20261103/",
+      "fileCount": 19,
+      "bytes": 372,
+      "treeSha256": "68e2efd3ff7caa64ea5c015eadaa6bafb49e2d8e38481248906204bf77dca723",
       "contentsIncluded": false
     }
   ]

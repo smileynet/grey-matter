@@ -31,6 +31,19 @@ Two valid scores fail: one summary exceeds the 90-word limit and includes an uns
 
 The evidence supports no adoption recommendation. Claude has reported served identities, but several Claude cells are unscorable or fail. Codex and Kiro identities remain unreported, so their passing requested-profile results do not establish a model-level comparison. The fixture set contains only three tasks with one run per profile; it does not establish production reliability. The report appropriately says to keep the configured defaults unless a complete profile meets the frozen bar. Google/Agy was held without a call, and no provider was substituted.
 
-The report and index contain no literal scratch citations, raw response text, answer-key payload, native session IDs, blind IDs or reviewer IDs. The public index points to exact private evidence roots/files and binds file or tree hashes. I parsed the index and recomputed its entries. The native Kiro sessions and 18 verified-empty temporary working directories remain in the private cleanup plan and have not been removed; cleanup is explicitly pending parent action after audit. No settings change is recorded. Ticket acceptance criterion 3 therefore remains pending until the parent records the cleanup or an explicit retention disposition.
+The report and index contain no literal scratch citations, raw response text, answer-key payload, native session IDs, blind IDs or reviewer IDs. The public index points to exact private evidence roots/files and binds file or tree hashes. I parsed the index and recomputed its entries.
 
-The research note supports an evidence-bounded “keep the configured default” recommendation. The repository's shared `models-and-usage` table still needs the parent to fold in that #169 result before ticket closure. That is an integration item, not a defect in the measured results.
+## Authorized cleanup review
+
+**Reviewed cleanup commit:** `b29ac73970bce87ce2c15e79342ac71c6da2f6e6`
+
+**Cleanup execution record SHA-256:** `2c1e91a9faeabc6ab8d44cf7ff9a55ae7d402dfae6994d3ef8287b63a64a61e7`
+
+**Updated report SHA-256:** `43bf846aaa437f4c8652e0361b6c908b5860758d54801bb09c4777546750b67c`
+**Updated private index SHA-256:** `bc1abf53bcf12211767d99c62faf300942c87b6657e2f751c5ca18883ada65bb`
+
+The cleanup record binds the parent-authorized plan hash and pinned Kiro executable hash. I independently recovered all eight before/after listing artifacts from the OS Recycle Bin using their original-path metadata. Each payload's bytes and SHA-256 matched the cleanup record. A bounded in-memory comparison verified six V2 targets present before and absent after, with all 7,599 remaining session ID/source tuples identical. The six captured delete acknowledgments matched their retained receipt hashes. All 18 exact captured temporary paths were absent at source and present as empty directories in the Recycle Bin; their cleanup-plan entries recorded zero bytes and zero entries before recycling. The corrected verifier did not copy or print listing contents.
+
+During this audit, an initial local verifier failed to strip a UTF-8 BOM and its error output echoed a truncated serialized before/after session listing into the private tool trace. That output included unrelated session metadata. It was not added to a repository artifact or sent to an external service. The listing was not repeated in the corrected verifier; the incident is recorded here without reproducing the metadata. The earlier tool trace itself should be treated as having exposed the unrelated listing contents to this model context.
+
+No settings change or new native provider invocation was made. The authorized cleanup is independently evidenced; the report's cleanup statements are supported. The research note supports an evidence-bounded “keep the configured default” recommendation. The repository's shared `models-and-usage` table still needs the parent to fold in that #169 result before ticket closure. That is an integration item, not a defect in the measured results.
