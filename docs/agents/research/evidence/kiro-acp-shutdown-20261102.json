@@ -16,32 +16,86 @@
     "classification": "native teardown infrastructure error; prompt and session recovery succeeded"
   },
   "bounded_probe": {
-    "scope": "One new idle local session; no prompt or model call; no settings changes",
+    "scope": "Fresh idle, completed-model-turn, reload, and canceled-permission sessions using normal installed Kiro CLI; no CLI/global settings changes",
     "launch": "kiro-cli acp --agent-engine v3 --auth-method cli",
     "initialize": {
       "protocolVersion": 1,
       "advertisedSessionCapabilities": ["list", "close", "delete"],
       "advertisedTerminateExtension": false
     },
-    "session_id": "sess_548c0e9c-5c11-4875-81b3-728b9686a2bb",
-    "events": [
-      {"method": "session/new", "result": "created disposable empty session"},
-      {"method": "session/close", "result": {}, "classification": "success"},
+    "idle_close_session_id": "sess_548c0e9c-5c11-4875-81b3-728b9686a2bb",
+    "idle_close_events": [
+      {"method": "session/new", "result": "created empty session"},
+      {"method": "session/close", "result": {}},
       {"method": "session/list", "session_present_after_close": true, "status": "idle"},
       {"event": "stdin EOF", "exit_code": 0, "native_shutdown_error": false},
       {"method": "session/load", "process": "separate CLI process", "session_loaded": true},
-      {"method": "session/delete", "result": {}, "target": "owned disposable session only"},
+      {"method": "session/delete", "result": {}, "target": "owned empty session after load verification"},
       {"method": "session/list", "session_present_after_delete": false},
       {"event": "stdin EOF", "exit_code": 0, "native_shutdown_error": false}
     ],
-    "descendant_tree_fully_instrumented": false,
-    "terminal_disposition": "disposable test session deleted and absent from final session list"
+    "completed_turn_baseline": {
+      "raw": ".scratch/t189-baseline.json",
+      "session_id": "sess_ac66abe4-a0c8-4b89-9de8-657d36165bb6",
+      "prompt_stop_reason": "end_turn",
+      "marker": "T189-amber-604",
+      "stdin_eof_error": "error: the v3 engine did not exit within 5 seconds after ACP stdin closed",
+      "cli_exit_code": 1,
+      "process_tree_observed_live": ["kiro-cli.exe PID 32436", "node.exe PID 23272", "conhost.exe PID 95408"],
+      "process_tree_at_final_poll": [{"pid": 32436, "absent": true}]
+    },
+    "completed_turn_with_close": {
+      "raw": ".scratch/t189-close.json",
+      "session_id": "sess_1e07309c-94c8-49cd-b99f-681c356f58c7",
+      "prompt_stop_reason": "end_turn",
+      "close_response": {},
+      "stdin_eof_error": "error: the v3 engine did not exit within 5 seconds after ACP stdin closed",
+      "cli_exit_code": 1,
+      "process_tree_observed_live": ["kiro-cli.exe PID 94064", "node.exe PID 93148", "conhost.exe PID 41536"],
+      "process_tree_at_final_poll": [{"pid": 94064, "absent": true}]
+    },
+    "completed_turn_reload": {
+      "raw": ".scratch/t189-reload-close.json",
+      "session_id": "sess_1e07309c-94c8-49cd-b99f-681c356f58c7",
+      "prompt_stop_reason": "end_turn",
+      "recalled_marker": "T189-amber-604",
+      "close_response": {},
+      "cli_exit_code": 1,
+      "process_tree_at_final_poll": [{"pid": 56432, "absent": true}]
+    },
+    "cancelled_permission_with_close": {
+      "raw": ".scratch/t189-cancel-close-write.json",
+      "session_id": "sess_d12b7099-e47f-41da-81e9-30689a24603c",
+      "session_autopilot_option": "off (session-scoped advertised config option)",
+      "permission_method": "session/request_permission",
+      "permission_options": ["allow_once", "allow_always", "reject_once", "reject_always"],
+      "tool_call_title": "Write File",
+      "permission_answer": "none",
+      "client_notification": "session/cancel",
+      "prompt_stop_reason": "cancelled",
+      "close_response": {},
+      "stdin_eof_error": "error: the v3 engine did not exit within 5 seconds after ACP stdin closed",
+      "cli_exit_code": 1,
+      "sentinel_created": false,
+      "process_tree_at_final_poll": [{"pid": 93024, "absent": true}]
+    },
+    "supervised_read_control": {
+      "raw": ".scratch/t189-cancel-close.json",
+      "session_id": "sess_10cfb02d-fb98-4c55-aecd-eb3928f84474",
+      "session_autopilot_option": "off",
+      "requested_action": "git status --short",
+      "permission_request_count": 0,
+      "prompt_stop_reason": "end_turn",
+      "note": "This control was not counted as a permission cancellation; a scratch write fixture was used to elicit and cancel a genuine permission request."
+    },
+    "descendant_poll": "Every 500ms while alive and once after exit, enumerate Win32_Process PID/parent PID/name; live CLI process had node.exe KAS and conhost.exe children, final tree had no descendants.",
+    "terminal_disposition": "Idle fixture was deleted after reload proof; completed-turn and canceled-permission sessions retained and not deleted; original #162 session untouched"
   },
   "settings_changed": false,
   "installed_patch": false,
   "unrelated_processes_terminated": false,
   "original_162_session_modified": false,
-  "claim_limit": "The idle session close is state-preserving and EOF exited 0. Close after model completion or cancellation, and descendant settlement, remain unverified.",
+  "claim_limit": "Idle session close preserves state and exits 0. After a model-bearing end_turn and after a canceled permission wait, session/close preserves state but EOF still causes the native shutdown error and exit 1. No bounded model-bearing shutdown fix was verified.",
   "sources": [
     "https://kiro.dev/docs/cli/v3/acp-migration/",
     "https://kiro.dev/docs/acp/",
