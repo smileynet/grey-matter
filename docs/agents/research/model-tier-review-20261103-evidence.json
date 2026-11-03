@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 1,
+  "ticket": 168,
+  "status": "semantic scores joined and cross-checked; no model configuration changed",
+  "sourceHashes": {
+    "protocolNote": "ceafefc39d7c5a0e29af9fef16d945cee204e5da915f9594878488609ffd4ea1",
+    "reviewManifest": "f6c3b5e9761d78d0e44fa8c8c09cd137757d96b8799a52d74479ea8b442cc9d8",
+    "blindedPacket": "a8a311517ffbb18b5794d9ba3c9c8c89e802143f3ece85ab3dfa0d7f3df0bea4",
+    "answerKey": "4dbce5b90665405e3a7f047eaaaa4c7eb6055ae01101b7c7db2a317f983f6371",
+    "rubricSection": "8ae28cb00089697eaa0bef5c28f5bb26e21f05abc74fc86721f1c7c6a8f0422b",
+    "semanticScores": "44d12c4d653f1dc31abe0d676368aff0943c98a665415a8b3cac1519abbff71e",
+    "scorerAudit": "2e0b80ec52089e4be9847d5e182c64c596079ca3c9ba6363be5f787e6d69b5e1",
+    "executionLedger": "3fa510a13a359f8c52ac6958ca37598d81d69a032d56ff42e4f7d7a3ad9b20f5",
+    "integrityAudit": "2d3e27bf335df5eb6d996701b98ddf21bec89c3bffbf44dfa5f739756297cdf3",
+    "derivedJoin": "61d6b6c80e2baab4f00b5d00dae9f94e3ddf1891a0aa563051b3caeb41299315"
+  },
+  "attemptCounts": {
+    "total": 23,
+    "byProviderTier": [
+      {
+        "provider": "claude",
+        "tier": "cheap",
+        "attempts": 3,
+        "strictJsonValid": 3,
+        "semanticScored": 3,
+        "targetHits": 3,
+        "falsePositives": 3,
+        "duplicates": 0,
+        "reportedListCostUsd": 0.0584121,
+        "servedModelNote": "Requested Haiku; served Sonnet 5.5 in all observed calls"
+      },
+      {
+        "provider": "claude",
+        "tier": "default",
+        "attempts": 4,
+        "strictJsonValid": 1,
+        "semanticScored": 4,
+        "targetHits": 4,
+        "falsePositives": 2,
+        "duplicates": 1,
+        "reportedListCostUsd": 0.1618632,
+        "servedModelNote": "Native default served Opus 5.5"
+      },
+      {
+        "provider": "codex",
+        "tier": "cheap",
+        "attempts": 4,
+        "strictJsonValid": 3,
+        "semanticScored": 3,
+        "targetHits": 3,
+        "falsePositives": 1,
+        "duplicates": 0,
+        "reportedListCostUsd": null,
+        "servedModelNote": "Requested gpt-6-luna; served identity not reported"
+      },
+      {
+        "provider": "codex",
+        "tier": "default",
+        "attempts": 4,
+        "strictJsonValid": 4,
+        "semanticScored": 4,
+        "targetHits": 4,
+        "falsePositives": 0,
+        "duplicates": 0,
+        "reportedListCostUsd": null,
+        "servedModelNote": "Native default identity not reported"
+      },
+      {
+        "provider": "kiro",
+        "tier": "cheap",
+        "attempts": 4,
+        "strictJsonValid": 0,
+        "semanticScored": 4,
+        "targetHits": 4,
+        "falsePositives": 2,
+        "duplicates": 2,
+        "reportedListCostUsd": null,
+        "servedModelNote": "Requested qwen3-coder-next; served identity not reported"
+      },
+      {
+        "provider": "kiro",
+        "tier": "default",
+        "attempts": 4,
+        "strictJsonValid": 3,
+        "semanticScored": 4,
+        "targetHits": 4,
+        "falsePositives": 1,
+        "duplicates": 2,
+        "reportedListCostUsd": null,
+        "servedModelNote": "Native default identity not reported"
+      }
+    ],
+    "blockedGoogleCells": 8,
+    "omittedClaudeCheapF1": 1,
+    "modelAttemptsPlusBlockedPlusOmitted": 32
+  },
+  "primaryStrictJson": {
+    "totalAttempts": 23,
+    "validJsonResponses": 14,
+    "invalidJsonTextResponses": 8,
+    "emptyResponses": 1,
+    "statusCounts": {
+      "completed-review": 14,
+      "invalid-review-output": 7,
+      "infrastructure-error": 1,
+      "provider-process-failure": 1
+    }
+  },
+  "secondarySemantic": {
+    "scoredNonemptyResponses": 22,
+    "unavailableEmptyResponses": 1,
+    "targetHits": 22,
+    "recall": "22/22",
+    "severityWeightedRecall": 1,
+    "exactChangedLineCitations": 22,
+    "exactCitationRate": "22/22",
+    "falsePositives": 9,
+    "falsePositivesPerScoredReview": 0.4090909090909091,
+    "duplicateReports": 5,
+    "byFixture": [
+      {
+        "fixtureId": "f1",
+        "severity": 2,
+        "scored": 4,
+        "targetHits": 4,
+        "unavailable": 1,
+        "recall": "4/4",
+        "severityWeightedRecall": 1
+      },
+      {
+        "fixtureId": "f2",
+        "severity": 2,
+        "scored": 6,
+        "targetHits": 6,
+        "unavailable": 0,
+        "recall": "6/6",
+        "severityWeightedRecall": 1
+      },
+      {
+        "fixtureId": "f3",
+        "severity": 3,
+        "scored": 6,
+        "targetHits": 6,
+        "unavailable": 0,
+        "recall": "6/6",
+        "severityWeightedRecall": 1
+      },
+      {
+        "fixtureId": "f4",
+        "severity": 1,
+        "scored": 6,
+        "targetHits": 6,
+        "unavailable": 0,
+        "recall": "6/6",
+        "severityWeightedRecall": 1
+      }
+    ],
+    "byProviderTier": [
+      {
+        "provider": "codex",
+        "tier": "cheap",
+        "attempts": 4,
+        "validJson": 3,
+        "scored": 3,
+        "targetHits": 3,
+        "falsePositives": 1,
+        "duplicates": 0,
+        "exactCitations": 3,
+        "unavailable": 1,
+        "targetRecall": "3/3",
+        "exactCitationRate": "3/3",
+        "falsePositivesPerScoredReview": 0.3333333333333333
+      },
+      {
+        "provider": "claude",
+        "tier": "default",
+        "attempts": 4,
+        "validJson": 1,
+        "scored": 4,
+        "targetHits": 4,
+        "falsePositives": 2,
+        "duplicates": 1,
+        "exactCitations": 4,
+        "unavailable": 0,
+        "targetRecall": "4/4",
+        "exactCitationRate": "4/4",
+        "falsePositivesPerScoredReview": 0.5
+      },
+      {
+        "provider": "codex",
+        "tier": "default",
+        "attempts": 4,
+        "validJson": 4,
+        "scored": 4,
+        "targetHits": 4,
+        "falsePositives": 0,
+        "duplicates": 0,
+        "exactCitations": 4,
+        "unavailable": 0,
+        "targetRecall": "4/4",
+        "exactCitationRate": "4/4",
+        "falsePositivesPerScoredReview": 0
+      },
+      {
+        "provider": "kiro",
+        "tier": "default",
+        "attempts": 4,
+        "validJson": 3,
+        "scored": 4,
+        "targetHits": 4,
+        "falsePositives": 1,
+        "duplicates": 2,
+        "exactCitations": 4,
+        "unavailable": 0,
+        "targetRecall": "4/4",
+        "exactCitationRate": "4/4",
+        "falsePositivesPerScoredReview": 0.25
+      },
+      {
+        "provider": "kiro",
+        "tier": "cheap",
+        "attempts": 4,
+        "validJson": 0,
+        "scored": 4,
+        "targetHits": 4,
+        "falsePositives": 2,
+        "duplicates": 2,
+        "exactCitations": 4,
+        "unavailable": 0,
+        "targetRecall": "4/4",
+        "exactCitationRate": "4/4",
+        "falsePositivesPerScoredReview": 0.5
+      },
+      {
+        "provider": "claude",
+        "tier": "cheap",
+        "attempts": 3,
+        "validJson": 3,
+        "scored": 3,
+        "targetHits": 3,
+        "falsePositives": 3,
+        "duplicates": 0,
+        "exactCitations": 3,
+        "unavailable": 0,
+        "targetRecall": "3/3",
+        "exactCitationRate": "3/3",
+        "falsePositivesPerScoredReview": 1
+      }
+    ]
+  },
+  "selection": {
+    "retainExistingDefaults": true,
+    "modelConfigurationChanged": false,
+    "rationale": "No cheap tier has complete strict-format coverage across all four cases; Claude's requested cheap alias served Sonnet rather than Haiku."
+  },
+  "limits": [
+    "22 non-empty responses scored; one empty response unavailable and not retried.",
+    "Four-case toy set is not a general reliability estimate.",
+    "All seven format-invalid responses and the Kiro denied-tool final text remain in secondary semantic scoring; primary format failures are unchanged.",
+    "Claude's reported list-cost sum excludes one prior turn of unknown usage; USD 0.80 aggregate cap compliance is unverified.",
+    "The scorer's f3 hash transcription was corrected after independently verifying all eight inputs and the rubric; semantic grades are unchanged.",
+    "The pre-resume-transition ledger hash was not captured; the transition receipt records the limitation.",
+    "R14 evidence path was corrected within private scratch; receipt and stream hashes match and the path correction is audited."
+  ]
+}
