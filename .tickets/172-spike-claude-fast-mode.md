@@ -1,13 +1,14 @@
 ---
 id: "172"
 title: "Spike: Claude Code fast mode speed, quality and credit cost on orchestrate workers"
-status: open
+status: in_progress
 blocked_by: ["174", "199"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
   - "A Claude Code fast-mode on/off table holds model, effort and fixtures fixed and records quality, elapsed time, repeat count and measured usage or its explicit absence."
   - "A measured recommendation on fast mode for this worker task is recorded in models-and-usage.md; unsupported entitlement or missing cost attribution remains explicit."
   - "Settings changed for the spike restored or recorded; sandbox folders removed."
+assignee: "codex"
 ---
 
 # Spike: Claude Code fast mode speed, quality and credit cost on orchestrate workers

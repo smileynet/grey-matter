@@ -279,7 +279,7 @@ auth remains conditional on the result of #186.
 | 169 | 15. Compare research/exploration tiers against a fixed answer key | ✅ done |
 | 170 | 16. Compare documentation, triage and classification tiers | in_progress |
 | 171 | 17. Sweep effort levels while holding each model fixed | in_progress |
-| 172 | 18. Compare Claude fast mode on/off with measured quality and usage | open |
+| 172 | 18. Compare Claude fast mode on/off with measured quality and usage | in_progress |
 | 187 | 19. Research Agent Client Protocol (ACP) and propose evidence-led spikes | open |
 
 Solid arrows below are hard dependencies; dotted arrows are proposed order only.
