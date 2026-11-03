@@ -96,7 +96,11 @@ refusal.
    filled [worker brief](references/worker-brief.md). Name the role, model/effort,
    scoped tool grants and approval context explicitly. Require proof of the
    worker's Git worktree root and base SHA before its first source edit; a plain
-   directory is not isolation. Gate secret, spend and
+   directory is not isolation. Before acceptance, run the read-only
+   [dispatch preflight](references/dispatch-preflight.md) against a packet bound
+   to the registered checkout, candidate, owner, declared paths and evidence hashes;
+   pass the expected base separately from the dispatch record.
+   Gate secret, spend and
    destructive operations by the project's existing authorization. If a worker
    or harness handoff leaves artifacts retained, carry their retention owner,
    purpose and end condition using [artifact hygiene's lifecycle rule](../../meta/repository-artifact-hygiene/references/retention-lifecycle.md).

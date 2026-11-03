@@ -12,6 +12,9 @@ ticket and project standards before opening the diff. Run the model-invoked
 fixed revisions and read-only constraints.
 
 Review only the candidate SHA. A gate on different bytes is not evidence.
+Before review, confirm the parent ran the
+[dispatch packet preflight](dispatch-preflight.md) on this exact candidate; the helper
+checks checkout/base/scope and evidence bytes but does not authenticate reviewer identity.
 Drop duplicate findings mechanically owned by a freshly green gate on this SHA;
 check whether the gate actually selected that coverage. A blocking finding names
 a concrete trigger and observable wrong outcome tied to acceptance or material risk.
