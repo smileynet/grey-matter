@@ -13,3 +13,12 @@ node docs/agents/research/evidence/model-tier-implementation-t167/rehydrate.mjs 
 Replace `t1` with `t2` through `t6` to select another frozen task. The script verifies each byte length and SHA-256 before copying. The fixture manifest intentionally omits private oracle values. See [`grading-rubric.md`](grading-rubric.md) for the public scoring rules and [`private-oracle-lifecycle.md`](private-oracle-lifecycle.md) for the private-key owner, hash, and retention condition.
 
 The `T4` seed includes the exact prerequisite `multiply` implementation and test. `T5` and `T6` add only their visible ticket/test files. The hidden wrong-reason vectors remain outside these task trees.
+
+The manifest's file hashes describe the exact working-file bytes seen by the
+workers; its Git tree IDs describe the original LF-normalized index. Rehydration
+writes files only. To reproduce those Git IDs, initialize a new throwaway Git
+repository in the destination and set `core.autocrlf=true` **in that repository
+only** before staging. Do not change global configuration or check out the files
+again before verifying their working-byte hashes. Parent verification restored
+all six cases, reproduced every recorded index tree, and rechecked all 94 file
+hashes after staging; see [verification](rehydration-check.json).

@@ -1,0 +1,17 @@
+{
+  "fixtureManifestSha256": "55bee1660b23851d9ad6c0bdf770de6733c430e58bd3a6b2c957cc50a1af3806",
+  "method": "Rehydrate to fresh directories, initialize Git, locally set core.autocrlf=true, stage with empty per-command global excludes/attributes files, compare original index trees, recheck all working-file sizes and SHA-256 values.",
+  "globalConfigurationChanged": false,
+  "modelCalls": 0,
+  "workingFilesVerified": 94,
+  "workingBytesVerified": 316733,
+  "cases": [
+    {"id":"t1","tree":"c474646ea61e037fcdbc1be3d2dc6c0833f5e260","filesVerified":15,"rawBytesMatch":true},
+    {"id":"t2","tree":"c474646ea61e037fcdbc1be3d2dc6c0833f5e260","filesVerified":15,"rawBytesMatch":true},
+    {"id":"t3","tree":"c474646ea61e037fcdbc1be3d2dc6c0833f5e260","filesVerified":15,"rawBytesMatch":true},
+    {"id":"t4","tree":"2f8267d3ebba09b70fe1973af073c9c4c613bbab","filesVerified":16,"rawBytesMatch":true},
+    {"id":"t5","tree":"dc4e1c3c9eca609b1701e3980191fd3e58cdc358","filesVerified":16,"rawBytesMatch":true},
+    {"id":"t6","tree":"fc47e39056b336cb99226056ab3801ba020f908d","filesVerified":17,"rawBytesMatch":true}
+  ],
+  "limits": ["This verifies fixture recovery, not a new model execution.", "An earlier helper attempt with raw Git check-in and core.autocrlf=false correctly produced a different index tree; working bytes and index normalization are distinct checks."]
+}
