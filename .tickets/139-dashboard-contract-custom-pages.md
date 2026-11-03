@@ -8,6 +8,7 @@ validation_criteria:
   - "check-dashboard.mjs validates the contract against a custom page through a documented data hook, not only the shipped template."
   - "The contract checks: Needs you first, at most five recent entries open, older entries in a searchable history, a plan tab of unfinished work, and completed tickets only in history."
   - "A migration note explains how a custom dashboard either adopts the template or exposes the data hook."
+  - "Post-closure checks compare the complete authoritative board with maintained current-looking plan and dashboard projections before publication"
 ---
 
 # Validate the delivery-dashboard contract on custom dashboard pages
@@ -39,3 +40,33 @@ A data hook (for example `window.deliveryDashboard` or a JSON file the page decl
 ## Outcome-driven orchestration coordination
 
 Proposal 19 approved. Retain custom-dashboard contract ownership; #205 publication preflight should accept existing supported receipt inputs without forcing custom pages into the shipped renderer.
+
+## Accepted post-closure consistency follow-up — 2026-11-03
+
+Sam requested filing the Tagalog Helper retrospective follow-ups. Extend this existing
+dashboard data-hook/contract scope: source ticket 213 closed successfully while its
+maintained Markdown plan retained an earlier status until explicit repair. Source ticket
+92 subsequently added a read-only comparison across the full board, maintained plan and
+generated dashboard. Independent review also caught authored presentation data overriding
+ticket facts and scoped tracker queries omitting work; the source implementation now
+rejects both. This context is self-contained and needs no private project data.
+
+After closure and explicit refresh, compare the complete authoritative board with all
+maintained current-looking projections before publication. Reuse existing tracker and
+project comparison commands, or a small documented custom-page adapter. Check status and
+coverage plus stale generated data/body identities. Keep authoring fields from overriding
+authoritative ticket facts. Reject active tracker contexts without silently clearing the
+owner's context; the existing snapshot helper already owns that full-board boundary.
+
+Preserve authored execution order, notes, separately namespaced historical branch views
+and the project's choice to retain or retire a Markdown plan. Keep the close → explicit
+sync → refresh → publication sequence possible: do not install a blanket hook requiring
+the future dashboard refresh inside the tracker's earlier closure commit. A successful
+refresh or valid review receipt alone does not establish ticket-projection freshness.
+Closed #116 supplies current-build/readiness identity and #205 supplies publication
+source/receipt integrity; this addition covers the remaining ticket/plan projection gap.
+
+- [ ] Seeded closed-ticket/stale-plan, missing-row and stale-generated-data scenarios fail; explicitly refreshed template and supported custom projections pass.
+- [ ] Authored ticket-fact overrides and scoped board queries cannot produce a passing full-board verdict.
+- [ ] Checks preserve authored ordering and historical namespaces, report drift without automatic repair, and support the tracker's close-before-refresh workflow.
+- [ ] Delivery/reconciliation guidance points to the maintained comparison owner and names coverage limits; applicable fixtures and repository gates pass.
