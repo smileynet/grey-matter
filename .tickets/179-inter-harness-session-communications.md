@@ -1,7 +1,7 @@
 ---
 id: "179"
 title: "Implement inter-harness session messaging and wakeups"
-status: open
+status: in_progress
 blocked_by: ["208"]
 priority: high
 validation_criteria:
@@ -13,6 +13,7 @@ validation_criteria:
   - "Orchestrate and harness references use the shared interface"
   - "Portable documented fixture and required repository gates pass"
 tags: ["stream:tooling", "kind:enhancement"]
+assignee: "codex"
 ---
 
 # Implement inter-harness session messaging and wakeups
