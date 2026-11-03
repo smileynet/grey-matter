@@ -27,7 +27,7 @@ Everything else (evidence, files, commits, test output, process) is reachable bu
 | Latest | The newest entry in full: headline, summary, up to 3 changes, one visual, a try link. |
 | Earlier | The next four entries as collapsed rows (date, headline, type, "Needs you" marker). |
 | All entries tab | Every entry as a collapsed row, with search, type and area filters, "Needs you" filter, expand and collapse all, and a live count. |
-| Plan tab | The optional remaining-ticket flow comes first, followed by every ticket from the snapshot. Progress (done of total, a bar by state with a legend), "What comes next" (open and in-progress work in layers: a ticket sits one layer after its deepest unfinished blocker), then all tickets grouped Ready (frontier order), In progress, Blocked, Backlog and Done (collapsed), with search and state filters. A ticket row shows what it waits on, what it unblocks and the entries that delivered it. |
+| Plan tab | The optional remaining-ticket flow comes first, followed by every ticket from the snapshot. Progress (done of total, a bar by state with a legend), "What comes next" (open and in-progress work in layers: a ticket sits one layer after its deepest unfinished blocker), then all tickets grouped Ready (frontier order), In progress, Blocked, Backlog, Done and Cancelled (terminal groups collapsed), with search and state filters. A ticket row shows what it waits on, what it unblocks and the entries that delivered it. |
 
 The overview never grows past five entries (`recentCount`). Older entries are not deleted: they
 drop out of the overview and stay in the history tab, so the at-a-glance view stays short and the
@@ -58,7 +58,10 @@ One entry per closed ticket, plus any other finished work worth surfacing, newes
 ## Remaining ticket flow
 
 The shared template keeps an offline, interactive dependency flow in the Plan tab. By default it
-shows every non-done ticket, including backlog, and every edge between those visible tickets.
+shows every non-terminal ticket, including backlog, and every edge between those visible tickets.
+Cancelled tickets are terminal but are not done: the full list keeps a distinct
+Cancelled group and state filter. Done/cancelled context is opt-in in the flow;
+cancelled prerequisites remain unsatisfied. Counts and legend distinguish both.
 Counts account for prerequisite eligibility, active work, waiting work, deferred work and completed
 context separately. "Prerequisites met" describes the graph, not game/device access or participant
 availability; keep those project facts outside the shared renderer.

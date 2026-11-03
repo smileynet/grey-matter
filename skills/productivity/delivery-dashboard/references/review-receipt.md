@@ -70,6 +70,8 @@ Paths are relative to one explicit repository root. Files and directories are su
 The two fixed metadata projections are deliberately narrow:
 
 - `ticket-lifecycle` is restricted to `.tickets/*.md`. It normalizes the frontmatter status, acceptance-criteria checkbox marks and the conventionally headed final Resolution section. Requirement text, dependencies, titles and other sections remain reviewed source.
+  Cancelled is a known status, but Cancellation prose remains reviewed source;
+  appending or changing it requires a new receipt rather than a broader exclusion.
 - `ticket-snapshot` supports a JSON ticket snapshot or exactly one HTML `gm-tickets` JSON script block. It normalizes generated time, frontier and ticket statuses. Ticket IDs, membership, titles, dependencies and the rest of the HTML remain reviewed source. It never excludes embedded JavaScript, CSS or the `gm-entries` delivery content.
 
 Each projection needs an explicit path and reason inside the declared source scope. The manifest's own bytes are bound to the receipt: adding or expanding a projection invalidates previous acceptance. There is no arbitrary exclude-file, exclude-directory or replacement-regex option.
