@@ -1,7 +1,7 @@
 ---
 id: "190"
 title: "Resolve: Kiro Crew Windows host-auth relay must select client ownership explicitly"
-status: open
+status: in_progress
 blocked_by: ["186"]
 validation_criteria:
   - "The Windows omitted-flag routing mismatch is reproduced or marked fixed on the selected Crew/CLI versions, with credential-free callback evidence."
