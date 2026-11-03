@@ -174,6 +174,10 @@ test("runCell executes the cwd and argv in its exact authorized plan through a h
   try {
     const release = JSON.parse(readFileSync(authorization, "utf8"));
     assert.equal(release.allowedCells[0].planSha256, sha(planBytes));
+    const unverifiedRelease = join(root, "unverified-authorization.json");
+    writeFileSync(unverifiedRelease, JSON.stringify({ ...release, answerKeyVerified: false }));
+    assert.throws(() => main(["--execute", "--plan", planPath, "--authorization", unverifiedRelease], { spawn: fakeSpawn, ledgerPath: join(root, "unverified-ledger.json") }), /Parent must verify/);
+    assert.equal(existsSync(observedPath), false);
     const result = JSON.parse(main(["--execute", "--plan", planPath, "--authorization", authorization], { spawn: fakeSpawn, ledgerPath }));
     assert.equal(result.status, "completed");
     const observed = JSON.parse(readFileSync(observedPath, "utf8"));
