@@ -23,7 +23,11 @@ The checker is deliberately on-demand and read-only; it is not registered as a b
 
 ## Operator usage guidance
 
-### Publication identity
+### Local coordination and publication
+
+| Entrypoint | Owning guidance | Safe use and limits |
+|---|---|---|
+| `skills/engineering/orchestrate/scripts/session-messages.mjs` | [session-message contract](session-messages.md), [orchestrate](../SKILL.md) | `node skills/engineering/orchestrate/scripts/session-messages.mjs init\|register\|send\|accept\|poll\|receive\|handle\|reply\|done\|ack\|replay\|status --root PRIVATE_DIR [--json INPUT.json]` requires a caller-owned private task root and accurate complete target including harnessVersion/generation. Init/register/send/transitions write atomic spool records; poll/status/replay are read-only. JSON queued/duplicate/lifecycle results are local state, not native delivery or task acceptance; errors and ambiguous locks must not trigger blind retries. Read the linked schema for each command, retain records through the task's recovery/review window, and never treat a message as permission or a native adapter. |
 
 | Entrypoint | Owning guidance | Safe use and limits |
 |---|---|---|
@@ -287,4 +291,6 @@ Rows below are generated inventory entries with one explicit reason each. Operat
 | `skills/engineering/orchestrate/scripts/preflight-dispatch.test.mjs` | test | Isolated Git-fixture regressions for wrong identities, scope, evidence and input boundaries; no supported operator CLI. | |
 | `skills/productivity/delivery-dashboard/scripts/preflight-publication.mjs` | operator | Read-only current-receipt, check-attestation and materialized package/source binding before separately authorized publication. | [publication preflight](../../../productivity/delivery-dashboard/references/publication-preflight.md) |
 | `skills/productivity/delivery-dashboard/scripts/preflight-publication.test.mjs` | test | Isolated static-package/review fixtures reject stale or failed inputs and incorrect transformations; no supported operator CLI. | |
+| `skills/engineering/orchestrate/scripts/session-messages.mjs` | operator | Local versioned manual spool and exact existing-target lifecycle, with no native session notification. | [session-message contract](session-messages.md) |
+| `skills/engineering/orchestrate/scripts/session-messages.test.mjs` | test | Isolated temporary-root lifecycle, identity, restart and permissions regressions; no supported operator CLI. | |
 <!-- tool-script-inventory:end -->

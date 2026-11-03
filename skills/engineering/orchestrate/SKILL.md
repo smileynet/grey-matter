@@ -44,6 +44,11 @@ When adding an operator there, update its inventory and owning guidance, then ru
 coverage check from that checkout. In another project, follow its tool guidance and
 document new operator commands through its conventions. Script presence grants no authority.
 
+When a scoped task needs a durable local handoff, use the
+[session-message contract](references/session-messages.md) with the exact recorded target
+and generation. Its manual spool does not wake a native session; load the active harness
+reference and confirm supported notification separately. Queued is not delivered.
+
 ## Orient and admit
 
 1. Read project guidance, glossary, ADRs, `tkt ready` and in-progress tickets.
