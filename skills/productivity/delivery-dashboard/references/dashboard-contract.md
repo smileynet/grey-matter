@@ -158,6 +158,11 @@ dependencies, not preferred order. Never add a `blocked_by` edge solely to force
 
 ## Asks
 
+Use asks for decisions or inputs needed to advance the user's work. Do not solicit
+dashboard reviews, screen-size checks, appearance approval or feedback. The user
+provides dashboard feedback when needed. Record unavailable visual checks under
+Details without turning them into a user task.
+
 Each open ask is answerable in one line and carries a recommendation, so the person can approve
 in a word. Fields: `question` (140 characters at most), `recommendation` (one of the `options`),
 `impact` (what it unblocks or decides), two or more `options`. The page offers a button per option

@@ -23,7 +23,9 @@ stays out of the way, under folds and links.
    page shows it under Details only. Then, in this order of importance:
    - **Asks.** Anything you need from them becomes an `asks` item with a recommendation, an
      impact and options, so they can answer in a word. Mark answered asks `answered`; never
-     delete them.
+     delete them. Do not ask the user to review the dashboard, test screen sizes, confirm
+     its appearance or provide feedback. The user gives dashboard feedback when needed.
+     Unavailable visual checks belong in `details` as limitations, not in `asks`.
    - **One visual, required on a ticket entry.** Show the feature: a live screenshot of shipped
      work, a mock of partial work, a wireframe of planned work. A ticket with nothing the person
      can see (tooling, tests, release work) gets a `steps` visual of where it moved the plan. See
