@@ -15,11 +15,20 @@
       "--v3: Launch the next generation Kiro agent"
     ],
     "settings": {
-      "workspace_key": "chat.enableWorkflows",
-      "workspace_value": true,
-      "global_write": false,
-      "original_workspace_setting": "absent",
-      "cleanup": "removed from research worktree and disposable fixture after capture"
+      "feature_key": "chat.enableWorkflows",
+      "feature_value": true,
+      "feature_scope": "isolated temporary KIRO_HOME profile",
+      "workspace_setting_keys": [],
+      "global_settings_sha_unchanged": true,
+      "cleanup": "private profile and fixture retained for critic; recycle after critique"
+    },
+    "inherited_integrations": {
+      "global_agent_files": 30,
+      "global_hook_files": 8,
+      "global_workflow_files": 0,
+      "global_mcp_server_entries": 0,
+      "workspace_hooks_agents_mcp_before_launch": [0, 0, 0],
+      "global_hook_loading": "unknown: official KIRO_HOME docs omit hooks from redirected scopes; hook contents were not inspected"
     },
     "fixture": {
       "variant": "trunk",
@@ -49,16 +58,39 @@
     "Workflow authoring documentation describes recipe files and node types."
   ],
   "not_verified": [
-    "Kiro-native recipe validation",
-    "Actual claim-worker-reviewer-land execution",
+    "Successful validate_workflow output",
+    "Full claim-worker-reviewer-land completion",
     "Worktree isolation or creation",
-    "Pause, resume, retry runtime behavior",
+    "Retry through a successfully completed workflow",
+    "Pause and resume across CLI restarts",
     "Current account/workspace feature availability"
   ],
   "draft_recipe": {
     "scratch_path": ".scratch/t161-orchestrate.workflow.json",
-    "steps": ["claim (wf-planner)", "worker (wf-coder)", "review (semantic_reviewer)", "land (wf-coder)"],
-    "runtime_validation": "not run; workspace trust boundary prohibited by dispatch"
+    "steps": ["claim (wf-planner)", "worker (wf-coder)", "review (semantic_reviewer)", "land (wf-planner)"],
+    "runtime_validation": "accepted by workflow runner and started; validate_workflow command not separately run"
+  },
+  "runtime": {
+    "transcript": ".scratch/t161-runtime-evidence.txt",
+    "launch_command": "kiro-cli chat --v3 --trust-workspace --trust-tools= --tui",
+    "recipe_command": "/workflow run orchestrate-loop --task \"bounded fixture demonstration\"",
+    "observations": [
+      "Workflow started and monitor reported running 0/4; reached 3/4.",
+      "Claim step requested tkt ready; permission UI led to a user-input pause.",
+      "p requested pause (pausing...); r resumed to running 1/4, then run advanced to 2/4 and 3/4.",
+      "Land step errored after local inspection; monitor offered r retry. Retry restarted the land step at 3/4.",
+      "A local test command request was reported rejected with exit code -1. UI navigation during other local reads was ambiguous; tool approvals cannot be reconstructed exactly.",
+      "No full completion, worktree creation, commit, or remote operation observed."
+    ],
+    "fixture_git_status": "?? .kiro/ only; no tracked changes",
+    "tool_boundary": "--trust-tools= exposed approval prompts; one or more local fixture reads appeared in UI output and approval state is ambiguous",
+    "settlement": {
+      "v3_cli_pids_stopped": [10748, 78300],
+      "owned_backend_pids_stopped": [19268, 70148, 75788, 34428],
+      "profile_files": 37,
+      "profile_bytes": 202148,
+      "fixture_and_profile_retained_for_critic": true
+    }
   },
   "sources": [
     "https://kiro.dev/docs/workflows/authoring/",

@@ -2,22 +2,19 @@
 
 ## Result
 
-**Could not verify** whether a workflow recipe can execute the full claim → worker in
-worktree → independent review → land loop, or how pause, resume, and retry behave at
-runtime. The installed CLI exposes recipe and workflow control schemas, but the fixture
-recipe is workspace-trust gated. Running it with `--trust-workspace` would load workspace
-hooks, agents, MCP servers, and workflows. The dispatch prohibited trust broadening, so I
-did not launch it. This is a bounded setup skip, not evidence that workflows lack these
-capabilities.
+**Partly demonstrated:** a recipe launched in Kiro CLI V3 and advanced through claim,
+worker, and review to the land step. The monitor demonstrated pause and resume, and the
+retry control restarted the errored land step. The run did not complete. The recipe expresses
+an ordered agent handoff, but does not itself create a worker worktree or enforce review
+independence. No isolated worktree, commit, or land operation was observed.
 
 The recipe structure can describe sequences, repeats, parallel branches, and watches.
 However, recipe structure alone does not establish worktree isolation or an actual
-independent reviewer. I drafted a four-step fixture recipe in
-`.scratch/t161-orchestrate.workflow.json` using documented `wf-planner`, `wf-coder`, and
-`semantic_reviewer` agents. Its ordered prompts express claim → worker → reviewer → land,
-but the recipe schema does not declare a worktree or guarantee separate credentials,
-branch isolation, or independence. This draft was not passed through Kiro's
-`validate_workflow` because that would require loading the trust-gated workspace recipe.
+independent reviewer. The four-step recipe in `.scratch/t161-orchestrate.workflow.json`
+uses `wf-planner`, `wf-coder`, and `semantic_reviewer`; the runtime monitor showed agent
+steps and output handoffs. The schema has no worktree node or isolation property, and the
+worker step did not create a worktree. The workflow also did not complete a successful
+land step. See the runtime event transcript in `.scratch/t161-runtime-evidence.txt`.
 
 ## What was observed
 
@@ -39,19 +36,35 @@ branch isolation, or independence. This draft was not passed through Kiro's
 - **Observed:** the same installed bundle registers `_kiro/workflow/inspect`,
   `_kiro/workflow/pause`, `_kiro/workflow/resume`, `_kiro/workflow/retry`, and
   `_kiro/workflow/cancel`. This proves methods exist in the installed client bundle; it
-  does not prove they are available to this account/engine or work against a live run.
-- **Observed:** a fixture-local `chat.enableWorkflows=true` setting was written in
-  `.kiro/settings/cli.json`; no global setting was written. It was removed after capture.
-  The workspace setting in this research worktree was also accidentally written during
-  setup and removed. Its original state was absent (the setting lookup returned “No value
-  associated” before writing). The fixture itself was the 15-file, 50,837-byte trunk
-  fixture with tree hash `7fd72339921451e85440698acda748c0bde512bb`.
-- **Observed, limited:** headless V3 launch with `--trust-tools=` returned an assistant
-  response saying `/workflow` was unavailable in that context. This was not an actual
-  TUI slash-command invocation and cannot establish the feature is unavailable. See the
-  JSON receipt for the command and sanitized result.
+- **Observed:** the fixture had no workspace hooks, agents, or MCP servers before this
+  spike. The user profile had 30 agent files and 8 hook files. I used documented
+  `KIRO_HOME` redirection to a temporary profile. The only setting value written there
+  was `chat.enableWorkflows=true`; it also accumulated generated session state. Official
+  `KIRO_HOME` documentation lists agents, prompts, skills, steering, settings, and
+  sessions, but not hooks; Kiro's V3 docs say global `~/.kiro/hooks/` run in every
+  workspace. I did not inspect those hook files, so whether any inherited hook ran is
+  unknown. The fixture workspace setting file had no keys; global CLI settings SHA-256
+  was unchanged after the run.
+- **Observed:** V3 TUI launched with `--trust-workspace --trust-tools=` and accepted
+  `/workflow run orchestrate-loop --task "bounded fixture demonstration"`. The monitor
+  advanced from `running 0/4` to `3/4`. A claim step requesting `tkt ready` reached a
+  permission prompt; the UI then reported a request for user input and paused. Sending a
+  no-tools response resumed the run. Pressing `p` showed `pausing...`; pressing `r`
+  resumed it to `running 1/4`, after which it reached `2/4` and `3/4`.
+- **Observed:** the land step errored after a local inspection request, and the monitor
+  exposed `r retry`. Pressing it returned the run to `running 3/4` and restarted that
+  step. Subsequent UI output included reads of fixture ticket files. Approval navigation
+  during the shell/read requests was ambiguous; I cannot establish which actions were
+  explicitly approved or denied. The transcript shows only fixture-local reads and a
+  later `npm test` request that the UI reported as rejected with exit code -1. No
+  successful land, commit, or remote operation occurred.
+- **Observed:** final fixture Git status contained only `?? .kiro/`, the spike's own
+  recipes/settings. No tracked fixture files changed. The fixture had no remote.
+- **Observed, limited:** an earlier headless V3 prompt reported `/workflow` unavailable
+  in that context. This was not a TUI slash-command invocation and does not establish
+  workflow unavailability.
 
-## Documented, not exercised
+## Documented, not fully exercised
 
 Kiro's [workflow authoring docs](https://kiro.dev/docs/workflows/authoring/) describe
 recipes in `.kiro/workflows/` and the supported node types. The
@@ -59,13 +72,17 @@ recipes in `.kiro/workflows/` and the supported node types. The
 pausing, persisted run state, resume, and retry of failed/aborted nodes while completed
 siblings remain completed. These are vendor claims, not observations from this installed
 CLI/account. Kiro's [V3 docs](https://kiro.dev/docs/cli/v3/) describe V3 as opt-in through
-`--v3`; settings docs describe workflow enablement as an experimental feature.
+`--v3`; settings docs describe workflow enablement as an experimental feature. This run
+observed pause/resume and retry controls, but did not observe retry succeeding to a
+completed workflow or pause on a recipe iteration limit.
 
 ## Could not verify / next safe experiment
 
-Not verified: recipe validation by Kiro, agent availability, actual claim/worker/reviewer/
-land execution, worktree creation, pause/resume state, node retry behavior, cloud/account
-availability, and cleanup after a successful workflow run. A follow-up must first define a
-fixture trust boundary that permits the intended workspace content, then run a harmless
-recipe with no GitHub remote and `--trust-tools=`; keep the feature setting workspace-local.
-Until then, the answer to the spike question is **not established**.
+Not verified: a successful `validate_workflow` result, full workflow completion, actual
+worktree creation, independent review isolation, retry through successful completion,
+pause/resume across CLI restarts, cloud/account availability, and cleanup after a
+successful land. `--trust-tools=` did not prevent approval requests; approval UI state
+was ambiguous during one local inspection sequence, so treat it as an empty trust
+allowlist, not as a hard prohibition on tool use. Global hook loading also remains
+unknown. A follow-up would need a stricter interaction harness before authorizing real
+repository reads or writes.
