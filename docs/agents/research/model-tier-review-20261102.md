@@ -137,7 +137,7 @@ Raw outputs remain private through the independent audit.
 The three permitted launchers are Claude with built-in tools disabled, custom
 MCP servers and plugins excluded, all MCP tools denied, and no session
 persistence; Codex with user MCP configuration ignored and a read-only sandbox;
-and Kiro with its documented empty trusted-tool list. Claude documents
+and Kiro with no tools pre-approved. Claude documents
 `--safe-mode` as skipping user/project customizations, including plugins and MCP
 servers, and `--strict-mcp-config` with an empty inline `--mcp-config` as using
 only the explicitly empty server list. The additional
@@ -167,7 +167,13 @@ eight cells are safety-blocked.
 Use each eligible CLI's scoped tool restrictions: Claude's empty `--tools` list,
 `--safe-mode`, `--strict-mcp-config` with `--mcp-config {"mcpServers":{}}`,
 and `--disallowedTools "mcp__*"`; Codex's `--ignore-user-config` plus
-read-only sandbox; and Kiro's empty `--trust-tools` list. Workstream policy
+read-only sandbox; and Kiro's `--no-interactive` plus empty `--trust-tools=`
+list. The pinned Kiro CLI 2.37.1 help says that trusts no tools; official docs
+describe `--trust-tools` as pre-approval, not removal of tool schemas
+([CLI reference](https://kiro.dev/docs/cli/reference/cli-commands/)). The
+current read-only V2 MCP settings file contains no server entries, but global
+V2 tool-catalog and permission behavior remain unverified. Do not claim tool
+schemas are absent or that no tool can execute. Workstream policy
 blocks every Google/Agy command and all eight Google
 cells after ticket 167's pre-tool security hook stop. This is a safety block,
 not a model availability result; there will be no Agy preflight or fallback.
@@ -180,7 +186,7 @@ Proposed matrix, pending exact controller acceptance; the parent has released th
 |---|---|---|---|
 | Anthropic / Claude Code | `haiku` | native CLI default | model-specific native effort default | Model alias from current guide; verify response model |
 | OpenAI / Codex | `gpt-6-luna` | native CLI default | model-specific native effort default | Cheap model visible in catalog; default invocation omits model and effort |
-| Amazon / Kiro | `qwen3-coder-next` | native CLI default | model-specific native effort default | Cheap model visible in catalog; default invocation omits model and effort |
+| Amazon / Kiro | `qwen3-coder-next` | native CLI default | model-specific native effort default | Cheap model visible in catalog; no tools pre-approved; V2 tool/catalog behavior remains unverified |
 | Google / Antigravity | `gemini-3.8-flash-medium` | native CLI default | model-specific native effort default | Cheap model confirmed in full catalog; default identity must appear in native output to verify comparison |
 
 The three eligible argument vectors below are frozen, but may not be launched
