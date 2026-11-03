@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "manifestDigest": "b1a3f54b9018df227bc5aba116632fd7134cd04cd7902d4ff5ca239e373b5deb",
+  "subject": "Audited ACP findings; ticket187 closed; account-fact and upstream blockers remain",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 145154,
+      "sha256": "bc5c077dddc105f5ed84635148d292c98d3959d658a2a2aea8383d69cb0cfbd1"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 58862,
+      "sha256": "28b7d65a7d5fb070f964523754265ab0956e310de3878db40314f22ca94136fe"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 49648,
+      "sha256": "b511ad983694959ca8f925c3b508da62e1a6c9289d533325ae630e6cbcdc59a4"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-status-final/tab-0-1280.png",
+      "bytes": 93550,
+      "sha256": "a708e7e04b8b3fd643bf5538bb750f684976d31430bd7c0a2490eb7b54ebbe9d",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-status-final/tab-1-1280.png",
+      "bytes": 295173,
+      "sha256": "287d5884b3523672c46b087fe2f39f2fa5af3d781b605a22590ff74b240b7dd5",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-status-final/tab-2-1280.png",
+      "bytes": 369443,
+      "sha256": "deb3dde1a11fa1c0ba5e3f7c2783e250f913c7470a244b2637d4c8f9d38c77a2",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-status-final/tab-0-390.png",
+      "bytes": 88590,
+      "sha256": "f91ac324bd2bd155d51c904293defdbcad1e7872f8ea59168c064febbf938cbc",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-status-final/tab-1-390.png",
+      "bytes": 287745,
+      "sha256": "fc852888078b5607bfc5f34d2d5f7b468e5a99fb487e0da2473b3329025ebb02",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-status-final/tab-2-390.png",
+      "bytes": 355529,
+      "sha256": "647376be685f15a94bd4da75e64647c1f1b72a1526691e070fea0b79245004d4",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "c12504fe0c19adea446ffefcb063bd56017174570bd15c47799f940c72074748",
+  "id": "cabc50ed1dd54bdcaf94a452f772cf4324909a283495c0629413cb105388c8f5",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "independent visual review",
+    "note": "Viewed all six frozen captures (Overview, All entries and Plan at 1280x900 and 390x900). The 51-entry overview presents the open fast-mode account-fact question prominently without implying activation or billing approval; the latest ACP entry is clear. Plan shows 198 tickets with 172 and 189 in progress and does not characterize the entire queue as blocked. Mobile tabs, cards, lists and expanded detail affordances remain usable in the full captures.",
+    "acceptedAt": "2026-11-03T12:23:11.533Z",
+    "snapshotId": "cabc50ed1dd54bdcaf94a452f772cf4324909a283495c0629413cb105388c8f5"
+  }
+}

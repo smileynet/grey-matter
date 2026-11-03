@@ -3,6 +3,16 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "acp-orchestration-fit", "state": "partial", "label": "Protocol documented; no new client trial",
+      "title": "Keep supervision around a standard agent connection",
+      "value": "ACP can carry requests, progress and approval questions. A supervisor still needs to choose work, isolate it and decide what to accept.",
+      "diagramLabel": "Documented boundary, compared with earlier probes", "steps": ["Connect to an agent", "Negotiate supported features", "Exchange updates and questions", "Keep acceptance with the supervisor"],
+      "limit": "The SDK was not installed or measured. Runtime findings come from earlier named driver probes; no portable-client or cost advantage was demonstrated.",
+      "details": "The source audit distinguishes the SDK package version from stable ACP v1 and experimental v2 schemas, plus the separate MCP tool-server boundary and Kiro extensions. Earlier Windows probes observed Kiro request, follow-up, approval visibility, cancellation and load behavior. The Kiro EOF shutdown issue remains specific to that implementation. Mixed-backend setup and generic client ownership are separate questions. No additional actionable spike is recommended without a concrete client need; no new native probe, installation or account setting change occurred.",
+      "tickets": ["187"],
+      "sources": [{"label": "ACP findings and bounded recommendation", "href": "agents/research/acp-orchestration-fit-20261103.md"}, {"label": "Independent primary-source audit", "href": "agents/research/acp-orchestration-fit-20261103-audit.md"}]
+    },
+    {
       "id": "effort-trial", "state": "partial", "label": "Effort trial incomplete; defaults retained",
       "title": "Keep effort defaults until quality can be compared",
       "value": "The trial did not establish a better effort level. Incomplete runs and unusable review evidence prevent a fair quality comparison.",

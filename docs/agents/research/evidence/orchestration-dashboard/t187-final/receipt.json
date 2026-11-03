@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "8c0862c2b8e58abcc26c6847b9058d14bedf8348959655785f82ced600e3628b",
+  "subject": "Audited ACP findings; ticket187 closed; account-fact and upstream blockers remain",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 32737,
+      "sha256": "c261be9364e0332ae5f15475beb0d3d38ca9b81b812122a60b8203f04b2e9c6e"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 204181,
+      "sha256": "223e6037fbeb5b21bef533c3be526f66b671f17a30c009a38c9af170cd4ed2a0"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4441,
+      "sha256": "ce8a0a08e3deacba7547078b3426ea784dd34d6fb0d602afe78e76f51f26bdc8"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-final/findings-1280.png",
+      "bytes": 620396,
+      "sha256": "dd2e013fa99b9c8a945d44e63fa37933fad7ac847ac03dd1d384a8c5ed7dbe0d",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-final/tickets-1280.png",
+      "bytes": 211723,
+      "sha256": "124ff36e90d983b675d691c14aa3bcc9b7d066de21716ed384b0cf52a2c9d10a",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-final/findings-390.png",
+      "bytes": 625151,
+      "sha256": "678be9926d68ba3c46b533c9a511594ecb5192e6a07942036c5a82ab636555cf",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-final/tickets-390.png",
+      "bytes": 192755,
+      "sha256": "4c2d425f5432dc3c113c1d8d412f6928478474aef20e273a9b945790c79c17ff",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "76147c2bcfaf4d9c62ed5c819cea5b18546c3c45132882d71e0e3eceae405efb",
+  "id": "b785207c78dc94459c7511376f6c2ccdc795d98bc48251810511657ea37d6d0c",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "independent visual review",
+    "note": "Viewed all four frozen captures (findings and ticket log at 1280x900 and 390x900). Dashboard accurately distinguishes 20 findings and 2 open tickets, shows all 34 completed tickets, and presents ticket 172 and Kiro teardown ticket 189 as the remaining work. Wording keeps ACP's protocol capabilities separate from supervisor responsibilities and implementation-specific Kiro teardown; the no-spike conclusion is bounded to the absence of a selected backend/workflow. Mobile cards remain readable in the full captures; ticket rows default collapsed and first-open details flow is clear.",
+    "acceptedAt": "2026-11-03T12:23:11.074Z",
+    "snapshotId": "b785207c78dc94459c7511376f6c2ccdc795d98bc48251810511657ea37d6d0c"
+  }
+}
