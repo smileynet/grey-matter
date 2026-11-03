@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-02",
+  "host": "Windows",
+  "agy_version": "1.4.12",
+  "agy_sha256": "b4bbcc9f65d355bc84523d4f43e1ead34992890baf60c24e4ccbf605e2da6858",
+  "probe": {
+    "toolPermission": "request-review",
+    "agentMode": "accept-edits",
+    "allowNonWorkspaceAccess": false,
+    "settings_scope": "session-only JSON via --settings; no sandbox or skip-permissions flag",
+    "command": "git --version",
+    "native_subject": "run_command; permission error labels target unsandboxed \"git --version\"",
+    "cases": [
+      {
+        "name": "allow-regex-and-identical-ask-regex",
+        "conversation_id": "5d1c4cd3-434c-40af-b52a-94c0ae5222c3",
+        "allow": ["command(regex:^git --version$)"],
+        "ask": ["command(regex:^git --version$)"],
+        "deny": [],
+        "native_tool_state": "DONE",
+        "native_tool_output": "Command exited with code 0.\n\nCommand output:\ngit version 2.53.0.windows.2\n",
+        "classification": "assertion failure: Ask did not prevent command allowed by identical regex"
+      },
+      {
+        "name": "allow-regex-and-literal-ask",
+        "conversation_id": "d7807a6c-dbfa-471d-9208-de3fb59386d0",
+        "allow": ["command(regex:^git --version$)"],
+        "ask": ["command(git --version)"],
+        "deny": [],
+        "native_tool_state": "ERROR",
+        "native_tool_error": "permission check failed for unsandboxed \"git --version\": user denied permission to run command: git --version. Headless CLI reports command permission auto-denied because it cannot prompt.",
+        "classification": "pass: native command did not execute; headless Ask cannot distinguish review from denial"
+      },
+      {
+        "name": "allow-regex-and-broad-ask",
+        "conversation_id": "29556271-336e-4e20-b6ee-3a203b821bd2",
+        "allow": ["command(regex:^git --version$)"],
+        "ask": ["command(*)"],
+        "deny": [],
+        "native_tool_state": "ERROR",
+        "native_tool_error": "permission check failed for unsandboxed \"git --version\": user denied permission to run command: git --version. Headless CLI reports command permission auto-denied because it cannot prompt.",
+        "classification": "pass: native command did not execute; broad Ask control"
+      },
+      {
+        "name": "allow-regex-and-identical-deny-regex",
+        "conversation_id": "6f786482-2212-4ca9-ae16-8519ddd2e4da",
+        "allow": ["command(regex:^git --version$)"],
+        "ask": [],
+        "deny": ["command(regex:^git --version$)"],
+        "native_tool_state": "ERROR",
+        "native_tool_error": "permission check failed for unsandboxed \"git --version\": Permission denied for unsandboxed(git --version). Matches user-configured deny rule.",
+        "classification": "pass: native command did not execute; configured Deny matched"
+      }
+    ],
+    "permission_enumeration": {
+      "init_event_lists_list_permissions": true,
+      "model_invocation_result": "model said list_permissions unavailable; no native permission enumeration event occurred",
+      "classification": "no effective permission listing obtained"
+    }
+  },
+  "provenance": {
+    "prior_ticket": 158,
+    "prior_receipt": "docs/agents/research/evidence/agy-permissions-20261102.json",
+    "prior_source_guide": "docs/agents/research/agy-permissions-source-20261102.md",
+    "prior_reported_settings_hashes_unchanged": true,
+    "prior_scope_limit": "inherited project/shared scopes incompletely enumerated",
+    "six_retained_native_histories": [
+      {"case": "ask-literal-over-allow", "conversation_id": "2b3a4fe4-f200-4f9c-985d-2f01715d87e1", "bytes": 464064},
+      {"case": "ask-over-allow", "conversation_id": "76c6b1cf-8f84-4eca-a415-9ac9a47857f7", "bytes": 466274},
+      {"case": "regex-exact", "conversation_id": "ab9d43a6-b1b7-4bb6-9321-e3019ac73c63", "bytes": 466274},
+      {"case": "deny-over-allow", "conversation_id": "b3635221-d0fa-4d13-bade-6616a00b6d5b", "bytes": 466960},
+      {"case": "ask-regex-repeat", "conversation_id": "d420b06c-95c6-4fb5-8ace-fbb836ce8b78", "bytes": 466246},
+      {"case": "ask-broad-over-allow", "conversation_id": "f8f668b1-1908-48e3-8db8-6f6a4870ecd9", "bytes": 467580}
+    ],
+    "retained_histories_total_bytes": 2797398,
+    "retention": "not accessed or changed by ticket 193 worker; hold until critic clearance, then parent coordinates disposition"
+  },
+  "limitations": [
+    "One Windows host, installed CLI build, model/account context",
+    "No installed implementation source inspected and no upstream issue filed",
+    "No native effective permission/scope enumeration obtained",
+    "The unsandboxed permission error label does not prove account tier or OS sandbox state",
+    "Headless Ask rejection is not proof of a matched Ask rule; successful native command in overlap case is direct evidence it was not blocked",
+    "No general shell confinement claim"
+  ]
+}
