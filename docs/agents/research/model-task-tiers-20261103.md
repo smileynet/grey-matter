@@ -70,12 +70,15 @@ process. Before launch, the controller verifies the path still names the same
 ordinary, non-reparse, empty directory. A native call also requires an
 authorization receipt bound to the plan file hash, controller and protocol
 hashes, independent critic acceptance, and the parent's release of the serial
-native lease. The controller reserves each provider/task/profile cell before
-launch; duplicate cells cannot be retried. It captures stdout, stderr, native
-completion or failure, elapsed time, requested/served identity, usage fields
-when present, and raw stream hashes. Unused plan directories must be removed by
-their exact path after the plan is abandoned; execution removes the used
-directory.
+native lease. Before writing that receipt, the parent reads the private answer
+key and verifies its actual bytes against the frozen answer-key SHA-256 in the
+plan. The controller requires `answerKeyVerified: true` and the matching key
+hash in the receipt; it never opens or sends the key. The controller reserves
+each provider/task/profile cell before launch; duplicate cells cannot be
+retried. It captures stdout, stderr, native completion or failure, elapsed
+time, requested/served identity, usage fields when present, and raw stream
+hashes. Unused plan directories must be removed by their exact path after the
+plan is abandoned; execution removes the used directory.
 
 Claude runs with built-in tools disabled, MCP tools denied, and session
 persistence off. Codex runs with user configuration ignored, the local `0.166.0`
@@ -124,6 +127,12 @@ withheld. The scorer returns exactly this JSON shape:
 For an explicitly unscorable response, `scores` is `null`, `issues` is empty,
 and `summary` gives the reason; the envelope validates that state without
 filling scores or inferring a failure.
+
+Before dispatching any scorer, the parent reads the private answer-key bytes
+again and verifies them against the frozen SHA-256. A mismatch halts scoring;
+the grader does not receive unverified key bytes. Keep this verification
+separate from model execution: the key is held out of all native prompts and
+provider receipts.
 
 The exact dimension IDs and definitions come from that fixture. Every score is
 an integer from 0 to 2. Any issue evidence for a present claim must be an exact

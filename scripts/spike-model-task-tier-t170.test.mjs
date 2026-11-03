@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 import {
   BLOCKED_GOOGLE_CELLS, CALL_TIMEOUT_MS, FIXTURE_HASHES, PROVIDERS,
   TASKS, TIERS, buildArgv, buildCellPlan, buildPrompt, extractResult,
-  readFixture, runCell,
+  main, readFixture,
 } from "./spike-model-task-tier-t170.mjs";
 import { bindReview, validateReviewBody } from "./t170-review-envelope.mjs";
 
@@ -22,6 +22,7 @@ function authorize(plan, planBytes, root) {
     schemaVersion: 1, ticket: 170, protocolSha256: plan.protocolSha256,
     controllerSha256: plan.controllerSha256, criticAccepted: true,
     criticCommit: "offline-fake-only", parentLeaseReleased: true,
+    answerKeyVerified: true, answerKeySha256: plan.answerKeySha256,
     allowedCells: [{ cellId: plan.cellId, provider: plan.provider, fixtureId: plan.fixtureId,
       tier: plan.tier, planSha256: sha(planBytes) }],
   };
@@ -173,7 +174,7 @@ test("runCell executes the cwd and argv in its exact authorized plan through a h
   try {
     const release = JSON.parse(readFileSync(authorization, "utf8"));
     assert.equal(release.allowedCells[0].planSha256, sha(planBytes));
-    const result = runCell(plan, authorization, { planBytes, spawn: fakeSpawn, ledgerPath });
+    const result = JSON.parse(main(["--execute", "--plan", planPath, "--authorization", authorization], { spawn: fakeSpawn, ledgerPath }));
     assert.equal(result.status, "completed");
     const observed = JSON.parse(readFileSync(observedPath, "utf8"));
     assert.equal(observed.executable, plan.executable);
@@ -193,18 +194,19 @@ test("runCell refuses a changed path, a nonempty plan directory, and a reparse d
     const planBytes = Buffer.from(`${JSON.stringify(builtPlan, null, 2)}\n`);
     writeFileSync(planPath, planBytes);
     const plan = JSON.parse(readFileSync(planPath, "utf8"));
-    return { plan, planBytes, authorization: authorize(plan, planBytes, join(root, cellId)), ledgerPath: join(root, cellId, "ledger.json") };
+    return { plan, planBytes, planPath, authorization: authorize(plan, planBytes, join(root, cellId)), ledgerPath: join(root, cellId, "ledger.json") };
   };
   const changed = make("T170-EXEC-02");
   const changedPlan = { ...changed.plan, cwd: `${changed.plan.cwd}-other` };
   changedPlan.argv = buildArgv(changedPlan.provider, changedPlan.tier, buildPrompt(readFixture(changedPlan.fixtureId).fixture), changedPlan.cwd);
   const changedBytes = Buffer.from(JSON.stringify(changedPlan));
-  assert.throws(() => runCell(changedPlan, changed.authorization, { planBytes: changedBytes }), /exact plan file/);
+  writeFileSync(changed.planPath, changedBytes);
+  assert.throws(() => main(["--execute", "--plan", changed.planPath, "--authorization", changed.authorization], { ledgerPath: changed.ledgerPath }), /exact plan file/);
   rmSync(changed.plan.cwd, { recursive: true, force: true });
 
   const nonempty = make("T170-EXEC-03");
   writeFileSync(join(nonempty.plan.cwd, "unexpected.txt"), "occupied");
-  assert.throws(() => runCell(nonempty.plan, nonempty.authorization, { planBytes: nonempty.planBytes }), /not empty/);
+  assert.throws(() => main(["--execute", "--plan", nonempty.planPath, "--authorization", nonempty.authorization], { ledgerPath: nonempty.ledgerPath }), /not empty/);
   rmSync(nonempty.plan.cwd, { recursive: true, force: true });
 
   const reparse = make("T170-EXEC-04");
@@ -214,7 +216,7 @@ test("runCell refuses a changed path, a nonempty plan directory, and a reparse d
   try {
     symlinkSync(target, reparse.plan.cwd, "junction");
     assert.equal(lstatSync(reparse.plan.cwd).isSymbolicLink(), true);
-    assert.throws(() => runCell(reparse.plan, reparse.authorization, { planBytes: reparse.planBytes }), /ordinary directory/);
+    assert.throws(() => main(["--execute", "--plan", reparse.planPath, "--authorization", reparse.authorization], { ledgerPath: reparse.ledgerPath }), /ordinary directory/);
   } finally {
     rmSync(reparse.plan.cwd, { recursive: true, force: true });
     renameSync(displaced, reparse.plan.cwd);

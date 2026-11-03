@@ -28,7 +28,7 @@ export const FIXTURE_HASHES = Object.freeze({
 });
 export const ANSWER_KEY_SHA256 = "975DDA95E186A4735915D4647FC331D068DCE6DDF9F25F019FCAB9ED9DFD6634";
 // Rebound after the protocol is frozen; the controller source is hashed at runtime.
-export const PROTOCOL_SHA256 = "64AB145A70702B7E3B0F3EFA5B031FA7A88B8AC2ADC26E95021BC0AD57BDAA40";
+export const PROTOCOL_SHA256 = "D49E8C8C9B3BFE4E6CB246F94A12BAA22856EC9D0B65DE5225C4C2A3067DAA19";
 
 const models = Object.freeze({
   claude: Object.freeze({ cheap: "claude-haiku-5-5", default: null }),
@@ -146,8 +146,6 @@ function verifyPlannedCwd(plan) {
 
 function verifyProtocol() {
   if (PROTOCOL_SHA256 === "PENDING" || hashFile(NOTE) !== PROTOCOL_SHA256) fail("Protocol hash is not bound to the frozen note");
-  const keyPath = join(REPO, ".scratch", "t170", "preparation", "answer-key.json");
-  if (hashFile(keyPath) !== ANSWER_KEY_SHA256) fail("Private answer-key hash changed or is unavailable");
 }
 
 function validatePlan(plan) {
@@ -266,6 +264,7 @@ function readAuthorization(path, plan, planSha256) {
   const auth = JSON.parse(readFileSync(path, "utf8"));
   if (auth.schemaVersion !== 1 || auth.ticket !== TICKET || auth.protocolSha256 !== PROTOCOL_SHA256 || auth.controllerSha256 !== plan.controllerSha256) fail("Authorization receipt is not bound to the frozen protocol and controller");
   if (auth.criticAccepted !== true || typeof auth.criticCommit !== "string" || auth.parentLeaseReleased !== true) fail("Independent critic acceptance and parent lease release are required");
+  if (auth.answerKeyVerified !== true || auth.answerKeySha256 !== ANSWER_KEY_SHA256) fail("Parent must verify the held-out answer-key bytes before releasing a native cell");
   if (!Array.isArray(auth.allowedCells) || !auth.allowedCells.some((cell) => cell.cellId === plan.cellId && cell.provider === plan.provider && cell.fixtureId === plan.fixtureId && cell.tier === plan.tier && cell.planSha256 === planSha256)) fail("This exact plan file is not released by the parent");
 }
 
@@ -286,7 +285,8 @@ function reserve(ledgerPath, plan) {
   } catch (error) { closeSync(lockFd); rmSync(lockPath, { force: true }); throw error; }
 }
 
-export function runCell(plan, authPath, { planBytes, spawn = spawnSync, ledgerPath = join(REPO, ".scratch", "t170", "measurement-ledger.json") } = {}) {
+function runCell(plan, authPath, { planBytes, spawn = spawnSync, ledgerPath = join(REPO, ".scratch", "t170", "measurement-ledger.json") } = {}) {
+  verifyProtocol();
   if (!Buffer.isBuffer(planBytes) || JSON.stringify(JSON.parse(planBytes.toString("utf8"))) !== JSON.stringify(plan)) fail("Execution must consume the exact persisted plan bytes");
   validatePlan(plan);
   readAuthorization(authPath, plan, hash(planBytes));
@@ -345,13 +345,13 @@ export function runCell(plan, authPath, { planBytes, spawn = spawnSync, ledgerPa
   }
 }
 
-function main(argv) {
+export function main(argv, { spawn = spawnSync, ledgerPath } = {}) {
   const opts = parseOptions(argv);
   if (opts.help) return "node scripts/spike-model-task-tier-t170.mjs --fixture <task> --provider <claude|codex|kiro> --tier <cheap|default> --cell-id <opaque-id> [--execute --plan <absolute-json> --authorization <absolute-json>]";
   if (opts.plan) {
     if (opts.fixture || opts.provider || opts.tier || opts["cell-id"] || opts["evidence-dir"]) fail("Use either --plan or plan selectors, not both");
     const loaded = loadPlanFile(opts.plan);
-    if (opts.execute) return JSON.stringify(runCell(loaded.plan, opts.authorization, { planBytes: loaded.bytes }), null, 2);
+    if (opts.execute) return JSON.stringify(runCell(loaded.plan, opts.authorization, { planBytes: loaded.bytes, spawn, ledgerPath }), null, 2);
     if (opts.authorization) fail("--authorization requires --execute");
     return JSON.stringify(loaded.plan, null, 2);
   }
