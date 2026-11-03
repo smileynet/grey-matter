@@ -2,7 +2,9 @@
 
 Date: 2026-11-03
 Ticket: [170](../../../.tickets/170-spike-model-tier-docs-triage.md)
-Status: frozen preparation protocol; no native task calls have run.
+Status: native calls and one recorded blind review per cell are complete; results and evidence limits follow below.
+
+Human-readable summary: [Fast text-task model results](../../model-tier-spike-results-2026-11-03.md).
 
 ## Question and scope
 
@@ -181,6 +183,62 @@ bounded task class. Even 18 successful cells do not establish broad reliability;
 one observation per task/profile cannot estimate repeatability. No conclusions
 may pool task classes, infer missing identity, treat missing usage as zero, or
 count a blocked Google cell as a provider failure.
+
+## Results (2026-11-03)
+
+All 18 authorized Claude, Codex, and Kiro runs completed. The native receipts
+record no errors or tool events. Each of the three synthetic tasks was run once
+for each requested profile. The frozen pass bar is all four scores at 2 with
+no issue; 7 cells passed and 11 failed.
+
+| Provider and requested profile | Rewrite | Triage | Changelog classification | Passed | Total wall time |
+|---|---|---|---|---:|---:|
+| Claude Code, `claude-haiku-5-5` | Pass | Fail | Fail | 1/3 | 23.0 s |
+| Claude Code, default | Pass | Fail | Fail | 1/3 | 17.9 s |
+| Codex CLI, `gpt-6-luna` | Pass | Pass | Fail | 2/3 | 14.4 s |
+| Codex CLI, default | Pass | Fail | Fail | 1/3 | 19.3 s |
+| Kiro CLI, `qwen3-coder-next` | Pass | Fail | Fail | 1/3 | 27.3 s |
+| Kiro CLI, default | Pass | Fail | Fail | 1/3 | 25.7 s |
+
+No profile passed all three tasks. The documentation rewrite passed in all six
+profiles. Changelog classification failed in all six, and triage passed only
+for the Codex lower-cost profile.
+
+| Provider and profile | Native usage reported across three runs | Native cost reported | Served identity |
+|---|---|---:|---|
+| Claude Code, `claude-haiku-5-5` | 6 `input_tokens`, 14,368 cached input tokens, 2,045 output tokens | $0.00289217 | `claude-haiku-5-5` |
+| Claude Code, default | 6 `input_tokens`, 12,044 cached input tokens, 1,232 output tokens | $0.0914774 | `claude-opus-5-5` |
+| Codex CLI, `gpt-6-luna` | 52,107 input, 21,760 cached input, 267 output tokens | Not reported | Not reported |
+| Codex CLI, default | 53,257 input, 34,944 cached input, 241 output tokens | Not reported | Not reported |
+| Kiro CLI, `qwen3-coder-next` | Context usage rose to 7.31% | Not reported | Not reported |
+| Kiro CLI, default | Context usage rose to 2.77% | Not reported | Not reported |
+
+The token and context values above are only the fields each CLI emitted. Cost
+and served identity are unknown where the native output did not report them.
+The Claude lower-cost profile was cheaper in this sample, but it passed only
+one task. Codex lower-cost passed two tasks but did not report its served model
+or cost. No lower-cost profile clears the all-task bar, and Codex and Kiro
+identity evidence is incomplete. **Recommendation: keep the current defaults
+for these task classes.** This sample does not establish that defaults pass
+reliably or that any profile has no quality loss.
+
+The six Google/Agy cells were not run under the workstream hold; they are not
+provider failures. The 18 native calls produced no reported tool events,
+native errors, or usage-limit stops. One observation per task/profile cannot
+show repeatability or broad reliability.
+
+An independent integrity audit checked the frozen packet, response, review,
+and trace hash bindings and confirmed the 7-pass/11-fail tally. It did not
+regrade the responses or authenticate collaboration records as a platform
+export. Reviewer dispatch and completion evidence is a parent transcription;
+no platform UUID claim is made. For review 09, the initial file write failed
+and a same-reviewer recovery was recorded. The unchanged decision is recorded,
+but it cannot be byte-compared with the absent first file.
+
+Per-cell native usage, timing, cost, outcomes, and evidence hashes are retained
+in [`t170-results-evidence-20261103.json`](./t170-results-evidence-20261103.json).
+Private source and recovery artifacts are listed in the companion
+[`t170-private-artifact-index.json`](./t170-private-artifact-index.json).
 
 ## Source basis
 

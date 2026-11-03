@@ -1,0 +1,893 @@
+{
+  "schemaVersion": 1,
+  "ticket": 170,
+  "date": "2026-11-03",
+  "result": {
+    "nativeCompletedCells": 18,
+    "nativeFailedCells": 0,
+    "reviewerPasses": 7,
+    "reviewerFailures": 11,
+    "blockedGoogleCells": 6,
+    "blockedGoogleConclusion": "Not attempted due workstream security stop; not treated as provider failures",
+    "noProfileMeetsFrozenAdoptionBar": true,
+    "recommendation": "Keep current defaults for these synthetic task classes; no lower-cost profile passed all three tasks or had sufficient served-identity evidence.",
+    "generalizationLimit": "One synthetic observation per provider/task/tier cannot establish repeatability, broad reliability, or no quality loss."
+  },
+  "profileSummaries": [
+    {
+      "provider": "claude",
+      "tier": "cheap",
+      "denominator": 3,
+      "passCount": 1,
+      "outcomesByTask": {
+        "changelog-classification": "fail",
+        "doc-rewrite": "pass",
+        "triage": "fail"
+      },
+      "wallTimeTotalMs": 22982.3419,
+      "reportedCostUsd": 0.00289217,
+      "usage": {
+        "inputTokensReported": 6,
+        "outputTokensReported": 2045,
+        "cachedInputTokensReported": 14368
+      },
+      "servedIdentity": [
+        "claude-haiku-5-5"
+      ],
+      "qualifiesForAdoption": false
+    },
+    {
+      "provider": "claude",
+      "tier": "default",
+      "denominator": 3,
+      "passCount": 1,
+      "outcomesByTask": {
+        "changelog-classification": "fail",
+        "doc-rewrite": "pass",
+        "triage": "fail"
+      },
+      "wallTimeTotalMs": 17903.2032,
+      "reportedCostUsd": 0.0914774,
+      "usage": {
+        "inputTokensReported": 6,
+        "outputTokensReported": 1232,
+        "cachedInputTokensReported": 12044
+      },
+      "servedIdentity": [
+        "claude-opus-5-5"
+      ],
+      "qualifiesForAdoption": false
+    },
+    {
+      "provider": "codex",
+      "tier": "cheap",
+      "denominator": 3,
+      "passCount": 2,
+      "outcomesByTask": {
+        "changelog-classification": "fail",
+        "doc-rewrite": "pass",
+        "triage": "pass"
+      },
+      "wallTimeTotalMs": 14424.5759,
+      "reportedCostUsd": null,
+      "usage": {
+        "inputTokensReported": 52107,
+        "outputTokensReported": 267,
+        "cachedInputTokensReported": 21760
+      },
+      "servedIdentity": "not reported; unknown",
+      "qualifiesForAdoption": false
+    },
+    {
+      "provider": "codex",
+      "tier": "default",
+      "denominator": 3,
+      "passCount": 1,
+      "outcomesByTask": {
+        "changelog-classification": "fail",
+        "doc-rewrite": "pass",
+        "triage": "fail"
+      },
+      "wallTimeTotalMs": 19331.310699999998,
+      "reportedCostUsd": null,
+      "usage": {
+        "inputTokensReported": 53257,
+        "outputTokensReported": 241,
+        "cachedInputTokensReported": 34944
+      },
+      "servedIdentity": "not reported; unknown",
+      "qualifiesForAdoption": false
+    },
+    {
+      "provider": "kiro",
+      "tier": "cheap",
+      "denominator": 3,
+      "passCount": 1,
+      "outcomesByTask": {
+        "changelog-classification": "fail",
+        "doc-rewrite": "pass",
+        "triage": "fail"
+      },
+      "wallTimeTotalMs": 27329.6359,
+      "reportedCostUsd": null,
+      "usage": {
+        "maxReportedContextUsagePercentage": 7.301953315734863,
+        "costOrCreditsReported": false
+      },
+      "servedIdentity": "not reported; unknown",
+      "qualifiesForAdoption": false
+    },
+    {
+      "provider": "kiro",
+      "tier": "default",
+      "denominator": 3,
+      "passCount": 1,
+      "outcomesByTask": {
+        "changelog-classification": "fail",
+        "doc-rewrite": "pass",
+        "triage": "fail"
+      },
+      "wallTimeTotalMs": 25686.1302,
+      "reportedCostUsd": null,
+      "usage": {
+        "maxReportedContextUsagePercentage": 2.7674999237060547,
+        "costOrCreditsReported": false
+      },
+      "servedIdentity": "not reported; unknown",
+      "qualifiesForAdoption": false
+    }
+  ],
+  "cells": [
+    {
+      "cellId": "T170-C01",
+      "provider": "claude",
+      "tier": "cheap",
+      "task": "doc-rewrite",
+      "requestedModel": "claude-haiku-5-5",
+      "actualServedModel": "claude-haiku-5-5",
+      "servedIdentityStatus": "reported by native output",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 5509.9555,
+      "costUsd": 0.00100709,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4037,
+        "cache_read_input_tokens": 649,
+        "output_tokens": 386
+      },
+      "outcome": "pass",
+      "scoreBarPassed": true,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "B8CD3690474E05019618136ADD7EE35B56CE66A72DBDA8653E98B860DD341CCD",
+        "receiptSha256": "29A313777A97A86CBA7074515B2D7EABEC65DBAEE6ACCF60BB42F8E3CFE69CB5",
+        "stdoutSha256": "A3895D88D752B96E01AD71D248A5763E26138E46E85B150B7C063C46B29675F6",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "A0B5820F60C13DAF897C32E60DAE06F62AD331D7FE83B7C367C00B5D8897B2C6",
+        "rawReviewSha256": "FE3156C65BB5BAF94B01BF9E7A9932A064A0115F8BF63962F8070D2B77E7543F",
+        "semanticBodyFileSha256": "FE3156C65BB5BAF94B01BF9E7A9932A064A0115F8BF63962F8070D2B77E7543F",
+        "reviewerTraceSha256": "8A94A01401256BFC628E9D77E81FE484FBD02C751CD5FEC8A386C89A58962B1E",
+        "reviewerTraceFileSha256": "8A94A01401256BFC628E9D77E81FE484FBD02C751CD5FEC8A386C89A58962B1E",
+        "boundReviewFileSha256": "8EFFE773FF9214BBD5A36BAB61CE88BC3C7FAD51C620E465BB81C00B4827828F"
+      }
+    },
+    {
+      "cellId": "T170-C02",
+      "provider": "claude",
+      "tier": "cheap",
+      "task": "triage",
+      "requestedModel": "claude-haiku-5-5",
+      "actualServedModel": "claude-haiku-5-5",
+      "servedIdentityStatus": "reported by native output",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 10470.3991,
+      "costUsd": 0.0009350900000000001,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2551,
+        "cache_read_input_tokens": 2319,
+        "output_tokens": 803
+      },
+      "outcome": "fail",
+      "scoreBarPassed": false,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "E592053CAEAF7CB5EBBFE18245F1F4B0D2990736BAA27EC0F1668F1FE49118E2",
+        "receiptSha256": "6F8AC581B7DC830B574FFD7EFCB798C538D544DE0C572CFDC442C75E8E87FF4A",
+        "stdoutSha256": "948B5002A1BE4EDD6ACDD26D900077B1AAA5ADFCF2499D8ABDD06A5FBE7F84B1",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "E87EB1E63FDE35A5FAD28B03670172485662CF6AA269E0E8DF24C6F0CD677979",
+        "rawReviewSha256": "F65683A297C1009EB36FA08F4ACE9BB0AC5ABE4C2D27BF90C3B71D3070B66480",
+        "semanticBodyFileSha256": "F65683A297C1009EB36FA08F4ACE9BB0AC5ABE4C2D27BF90C3B71D3070B66480",
+        "reviewerTraceSha256": "4DC1EB4E29B4BA956CE6882B8614CC49D0E898F847E9BF76044DDC96D5927DE1",
+        "reviewerTraceFileSha256": "4DC1EB4E29B4BA956CE6882B8614CC49D0E898F847E9BF76044DDC96D5927DE1",
+        "boundReviewFileSha256": "675F54711907DF4F6F534B049A931D5D0E7161830272517CA2C4DBEBAD2F5D22"
+      }
+    },
+    {
+      "cellId": "T170-C03",
+      "provider": "claude",
+      "tier": "cheap",
+      "task": "changelog-classification",
+      "requestedModel": "claude-haiku-5-5",
+      "actualServedModel": "claude-haiku-5-5",
+      "servedIdentityStatus": "reported by native output",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 7001.9873,
+      "costUsd": 0.00094999,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2493,
+        "cache_read_input_tokens": 2319,
+        "output_tokens": 856
+      },
+      "outcome": "fail",
+      "scoreBarPassed": false,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "3DC362E1F4FE2A7D217AE8484EDA8869726282470FDAAE21658BEE790FBCDE47",
+        "receiptSha256": "7C3A7AB21A7BF7E7CEEE030202FD232DA246AF291875C03D5D97E6C039AB7B5F",
+        "stdoutSha256": "2C04117F619D330D75B89089B3B5595FE45B69A8EE6889D7BC0DF7ACC09D4335",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "33976665128B2B5C54A3C668B5CA839622E2CDE8D067D41907999F8231938757",
+        "rawReviewSha256": "5BD141F2C0BC0E3B62EA1910F1B04A5B3CC2E46DD0466002168023D4296215A2",
+        "semanticBodyFileSha256": "5BD141F2C0BC0E3B62EA1910F1B04A5B3CC2E46DD0466002168023D4296215A2",
+        "reviewerTraceSha256": "4B69F2EE21D52758F89AD2722282B82BD2FD7288519B7C61C842F21D77487F75",
+        "reviewerTraceFileSha256": "4B69F2EE21D52758F89AD2722282B82BD2FD7288519B7C61C842F21D77487F75",
+        "boundReviewFileSha256": "26C48A0B7312EBA677BB842569DB8EEB32276A0368B9C2DFFA08720FA2B17AFA"
+      }
+    },
+    {
+      "cellId": "T170-C04",
+      "provider": "claude",
+      "tier": "default",
+      "task": "doc-rewrite",
+      "requestedModel": null,
+      "actualServedModel": "claude-opus-5-5",
+      "servedIdentityStatus": "reported by native output",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 4209.7587,
+      "costUsd": 0.029781799999999997,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3263,
+        "cache_read_input_tokens": 649,
+        "output_tokens": 177
+      },
+      "outcome": "pass",
+      "scoreBarPassed": true,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "C5B3DB5375F8958A80227CDFB9BD996973B15B7F8B6F7A54883DBD27C9E79090",
+        "receiptSha256": "F550545EAAB884C902FA62D4A258451B5C8B8E72BA584F8D911F8CF528C2182A",
+        "stdoutSha256": "BD7958A1D625C5907FAC495B88C7C6E92A4EDBEA78D9FC4D66000604662E7082",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "5DFF2D2E13D8CCDEF286061A4BD1901EFB549029EB69DF140976852517566BC2",
+        "rawReviewSha256": "65FAB0C62F77396F75A46C4249EFC9BF4F51CD017096548E931177ABDEF6F296",
+        "semanticBodyFileSha256": "65FAB0C62F77396F75A46C4249EFC9BF4F51CD017096548E931177ABDEF6F296",
+        "reviewerTraceSha256": "BBB1539C4C853E9B400D23A0BE6068F4F4CAEF98EC1CB71EE3F4C6B5C5A9876E",
+        "reviewerTraceFileSha256": "BBB1539C4C853E9B400D23A0BE6068F4F4CAEF98EC1CB71EE3F4C6B5C5A9876E",
+        "boundReviewFileSha256": "994FFFA520AB8A5FF8958CA1EB5B93715D63F06C8CA3FDCF5339DABD58632ABF"
+      }
+    },
+    {
+      "cellId": "T170-C05",
+      "provider": "claude",
+      "tier": "default",
+      "task": "triage",
+      "requestedModel": null,
+      "actualServedModel": "claude-opus-5-5",
+      "servedIdentityStatus": "reported by native output",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 6806.7613,
+      "costUsd": 0.0312578,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2527,
+        "cache_read_input_tokens": 1569,
+        "output_tokens": 536
+      },
+      "outcome": "fail",
+      "scoreBarPassed": false,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "11CE2FE1A456040A750F07F52DCFCF2B4EE84B1993B438E12745A9937C138773",
+        "receiptSha256": "83B80D03C30AEFE7F864E8A227C7AA21E593A31702C3091551365665950BE826",
+        "stdoutSha256": "237ADE5A8160701FFB82695F15FE323AD58580B74A96F5C06DB9009B349E67B0",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "60C88506A153760FB77EBC12CA032412457FCB8A186304E63EF1AAD4FDC5B5BC",
+        "rawReviewSha256": "ABF2B94F28E8EF437E9FF034D86B6ECD969BCA3AC1180EED6BE257C76DF61D2E",
+        "semanticBodyFileSha256": "ABF2B94F28E8EF437E9FF034D86B6ECD969BCA3AC1180EED6BE257C76DF61D2E",
+        "reviewerTraceSha256": "FBEE974DEA9DB08E82F152651C356C3344296A77CCC81AE300D958714A8F6C21",
+        "reviewerTraceFileSha256": "FBEE974DEA9DB08E82F152651C356C3344296A77CCC81AE300D958714A8F6C21",
+        "boundReviewFileSha256": "BC0238D48F1227F67E93C94D8E2364AC484DB2B5894DE25E82128F042801791E"
+      }
+    },
+    {
+      "cellId": "T170-C06",
+      "provider": "claude",
+      "tier": "default",
+      "task": "changelog-classification",
+      "requestedModel": null,
+      "actualServedModel": "claude-opus-5-5",
+      "servedIdentityStatus": "reported by native output",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 6886.6832,
+      "costUsd": 0.0304378,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2467,
+        "cache_read_input_tokens": 1569,
+        "output_tokens": 519
+      },
+      "outcome": "fail",
+      "scoreBarPassed": false,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "5783CDCCC91A8D7A58B7AB94BF57740E9F4D241C0AA691B21D266A510CDE7787",
+        "receiptSha256": "3D5B05CF2AD199A14CAE60D4AAD75EC69A6770A0C4214E8C4CF0F360FCE56A07",
+        "stdoutSha256": "EE977AE43626C5A8F1C05D68EB3B867EB7CBBC52DAE232D36944F2D8AD305383",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "B79073DEADC7CD574220B475EC8CF637BF623BEDEC9C1744D421EA51DD4B5463",
+        "rawReviewSha256": "DD3A111522B530C078E729C99DF1B1CA66CFFF59B6A9C1F4B388922D918D7910",
+        "semanticBodyFileSha256": "DD3A111522B530C078E729C99DF1B1CA66CFFF59B6A9C1F4B388922D918D7910",
+        "reviewerTraceSha256": "9AADB880B9291C47727D0BEEF217D098DB777548D2EAE6D5BF06E83819DD0D8A",
+        "reviewerTraceFileSha256": "9AADB880B9291C47727D0BEEF217D098DB777548D2EAE6D5BF06E83819DD0D8A",
+        "boundReviewFileSha256": "EBEDBC1A7DCBDCBA975F963D718AC536A0AF62E912E3F6665CFEF7D32938B687"
+      }
+    },
+    {
+      "cellId": "T170-C07",
+      "provider": "codex",
+      "tier": "cheap",
+      "task": "doc-rewrite",
+      "requestedModel": "gpt-6-luna",
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 4923.1718,
+      "costUsd": null,
+      "usage": {
+        "input_tokens": 17307,
+        "cached_input_tokens": 10880,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 30,
+        "reasoning_output_tokens": 0
+      },
+      "outcome": "pass",
+      "scoreBarPassed": true,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "EA17949A21FA5990264FE6EE8B08A066F288680E8E87A82F73D415890686E2C1",
+        "receiptSha256": "F73AE5C9B6A43C33C92F3E682891D77905596950F63397EFA13A60FA1DC5D941",
+        "stdoutSha256": "94EF02DD51304010C109604D15610E865C44DDA4B262E37D36E146F1A0859605",
+        "stderrSha256": "E0A7AA03CFEA6756C33845DF34A0B057A0C04A33E8488CA0FB8CD39E656E4185",
+        "packetSha256": "5A12518F8C757B998ECEB8A8C6BBB544CA72DCCACF1C072F70AE4121F062109D",
+        "rawReviewSha256": "88553A24D37C2B1B355EF40586A6E037F4770365FA4C7575520CEDCCE8C4C344",
+        "semanticBodyFileSha256": "88553A24D37C2B1B355EF40586A6E037F4770365FA4C7575520CEDCCE8C4C344",
+        "reviewerTraceSha256": "5ADB61792A8579EE586CC1399526EB9BE9692F0228083E9FFBB5FAEC4B5665AD",
+        "reviewerTraceFileSha256": "5ADB61792A8579EE586CC1399526EB9BE9692F0228083E9FFBB5FAEC4B5665AD",
+        "boundReviewFileSha256": "68ECC6B8A7C42E8BB87F4567398CA4D04E9EA20364CAB1127E491DD3823C2497"
+      }
+    },
+    {
+      "cellId": "T170-C08",
+      "provider": "codex",
+      "tier": "cheap",
+      "task": "triage",
+      "requestedModel": "gpt-6-luna",
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 4471.9041,
+      "costUsd": null,
+      "usage": {
+        "input_tokens": 17419,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 66,
+        "reasoning_output_tokens": 0
+      },
+      "outcome": "pass",
+      "scoreBarPassed": true,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "595A5C70F9F72E28F54A6C293771A79B97AA000FD99BB41DB5C51F5C654093A0",
+        "receiptSha256": "53B15EAFF8979B5B6890675A92DD4F32FD769CCD46FD2D34E960D0F1A89E87DE",
+        "stdoutSha256": "F372343A67C8CB5E53C16BE6BCB2A228684FC20680BDCBC4F712D151B3603F44",
+        "stderrSha256": "BF47CA62780CF0D84506C15D0D7AF2A8847F392E5930F3F8BF4A88CBE5850C67",
+        "packetSha256": "E90D1CF1B28657873F022C18E700AECD017EB46BDB7FF298AEA9A53B8033CA75",
+        "rawReviewSha256": "4267509D2052139D8FA06582182E81A9D533C2ACE84226A191D16F03BA5FFD0F",
+        "semanticBodyFileSha256": "4267509D2052139D8FA06582182E81A9D533C2ACE84226A191D16F03BA5FFD0F",
+        "reviewerTraceSha256": "90F3784CB287FCBB60B3C76BA599C715836A9B5565000B9C8CE2D3ABF518D4CF",
+        "reviewerTraceFileSha256": "90F3784CB287FCBB60B3C76BA599C715836A9B5565000B9C8CE2D3ABF518D4CF",
+        "boundReviewFileSha256": "4C187D7835EF1F41C9B3E2CB478137034EA101847C280556210929B7C33656FF"
+      }
+    },
+    {
+      "cellId": "T170-C09",
+      "provider": "codex",
+      "tier": "cheap",
+      "task": "changelog-classification",
+      "requestedModel": "gpt-6-luna",
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 5029.5,
+      "costUsd": null,
+      "usage": {
+        "input_tokens": 17381,
+        "cached_input_tokens": 10880,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 171,
+        "reasoning_output_tokens": 0
+      },
+      "outcome": "fail",
+      "scoreBarPassed": false,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "ACF76E06669F882F2A123F77686ED1D547980D04C1A531C4320FD142D3B03EC7",
+        "receiptSha256": "0FE096C1A547145211AF1B943D4AB1772EBCE2E60DB253CFEEAA17CB2643B449",
+        "stdoutSha256": "7A1DD1F0C6B1E082634478D713ED05D90ECC7B707AB9E9185D50878F93058080",
+        "stderrSha256": "5190B1B06B3FD9CA29DA32E2872B4A58C795A926D1A4303F09E70313C281E998",
+        "packetSha256": "DD6C0CF85AEAF8D59B9C7F4E985CE39D082AADB6E693955967DF1825A08E6206",
+        "rawReviewSha256": "272AD4CCCD636B9D22961E5EE851C2B125041BDFEC26A627140F7831CB77F038",
+        "semanticBodyFileSha256": "272AD4CCCD636B9D22961E5EE851C2B125041BDFEC26A627140F7831CB77F038",
+        "reviewerTraceSha256": "6455DEFB03F6C41B5D13BD1EA50E2822A0D9FABB7810F81F28B150C998462AA2",
+        "reviewerTraceFileSha256": "6455DEFB03F6C41B5D13BD1EA50E2822A0D9FABB7810F81F28B150C998462AA2",
+        "boundReviewFileSha256": "76D87944756BC08ECC52A8E7587F10E2F0C2292BA48DD69DEB711D84A9DB22A6"
+      }
+    },
+    {
+      "cellId": "T170-C10",
+      "provider": "codex",
+      "tier": "default",
+      "task": "doc-rewrite",
+      "requestedModel": null,
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 6428.9976,
+      "costUsd": null,
+      "usage": {
+        "input_tokens": 18003,
+        "cached_input_tokens": 11648,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 33,
+        "reasoning_output_tokens": 0
+      },
+      "outcome": "pass",
+      "scoreBarPassed": true,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "2EA1BE75883102DB99F891745A5FC282157F6022F5750A7B56B7F5865DA6CD67",
+        "receiptSha256": "029BB5376906365A6C60BDD3F379141C9E8ED8E05508AFB86F3CEE47A48EB9B3",
+        "stdoutSha256": "46B9CFACD996C7D09219147E4B40BBACD3DBA71351B7E3D0A233582FED605AFD",
+        "stderrSha256": "DEE71C7A8C98F48C7F7673E93695C59AB2C9C2BFBF730CDD0BFE1A7B158D8F50",
+        "packetSha256": "7C669A048696996DB844D0A6A53B921E2B5FF73D0006135E140F44B6C946A7A7",
+        "rawReviewSha256": "3D205125D3B707C41853E5FD0B1FDD9F4A3F70EEAE8FBD204663F9644F90D875",
+        "semanticBodyFileSha256": "3D205125D3B707C41853E5FD0B1FDD9F4A3F70EEAE8FBD204663F9644F90D875",
+        "reviewerTraceSha256": "A1A51FA71D9495EA99AF501537F88220B96F81FA02D4389FA5BE053667E5A402",
+        "reviewerTraceFileSha256": "A1A51FA71D9495EA99AF501537F88220B96F81FA02D4389FA5BE053667E5A402",
+        "boundReviewFileSha256": "11D961D04DC91162903D641638D7B93C297059AFD3EB8A5D1505891542B7F5A9"
+      }
+    },
+    {
+      "cellId": "T170-C11",
+      "provider": "codex",
+      "tier": "default",
+      "task": "triage",
+      "requestedModel": null,
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 6485.2535,
+      "costUsd": null,
+      "usage": {
+        "input_tokens": 18111,
+        "cached_input_tokens": 11648,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 96,
+        "reasoning_output_tokens": 0
+      },
+      "outcome": "fail",
+      "scoreBarPassed": false,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "0D1952499B3BCA86DD42F9EE866B79A45FADABEB6C8933EB65F24E9A9507F245",
+        "receiptSha256": "53BDFBBE323D9D9796F9F579A745DF0D7893C3457B21E43EBEE4058A8C9752B2",
+        "stdoutSha256": "0E150D3ACEE97032CC8200B79FD109BA245C25A7813B8FE2E21A2EC145E61C68",
+        "stderrSha256": "D6C2A584F96BDB92E21289B7F90A4407A5C87138145621BE442C9B6C09888AED",
+        "packetSha256": "9016A1C2904DC6C600581C3D2B54BDE92288F2C0FDC6A7FC0500D870847AB24D",
+        "rawReviewSha256": "B7F2F074C055C93AFC79347FE09304FA06D9C2B23C5949AA7543F0419365F4D6",
+        "semanticBodyFileSha256": "B7F2F074C055C93AFC79347FE09304FA06D9C2B23C5949AA7543F0419365F4D6",
+        "reviewerTraceSha256": "8CC1CA10E29612587A2FE3F5837B5394D61E398735FCE16EE855BBB8477E422A",
+        "reviewerTraceFileSha256": "8CC1CA10E29612587A2FE3F5837B5394D61E398735FCE16EE855BBB8477E422A",
+        "boundReviewFileSha256": "6F54F65068AF56C9C7CC9F0BB17A6BFAA8ADDB154BE6A2076E5A5F2AE2B1D972"
+      }
+    },
+    {
+      "cellId": "T170-C12",
+      "provider": "codex",
+      "tier": "default",
+      "task": "changelog-classification",
+      "requestedModel": null,
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 6417.0596,
+      "costUsd": null,
+      "usage": {
+        "input_tokens": 17143,
+        "cached_input_tokens": 11648,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 112,
+        "reasoning_output_tokens": 0
+      },
+      "outcome": "fail",
+      "scoreBarPassed": false,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "DA0AC51835BC1E28B7B531315FBF7C4CEAA328E6F8F7536D4C9BF8583BC4D7BC",
+        "receiptSha256": "EC87DBA5233E26E8126C2FED130C1FDB82F5149E87DE467F9D7CDA8C1157A506",
+        "stdoutSha256": "2B811CFC9D7FB05547D2E438E74AC6F8D9B4320087BAA99E53F7843F486AC1EA",
+        "stderrSha256": "A744A5D8E428CAFF91746B35BC5F7D8C0E8CD3DB2F7FC7DC60A4326778DFBC4C",
+        "packetSha256": "5A6DA87F11394D41BD0E850F76217361FDE5EAF2E39BE09739C134797A6B1179",
+        "rawReviewSha256": "D03730CE1282061F9D98A043DB729C4EF33238DD802CAF8946FFCF7AE8CBDB89",
+        "semanticBodyFileSha256": "D03730CE1282061F9D98A043DB729C4EF33238DD802CAF8946FFCF7AE8CBDB89",
+        "reviewerTraceSha256": "60602A1107D0F921020DC81AE7C4733B8406A1D2B8FA6C90DD0FBAB93FF5D906",
+        "reviewerTraceFileSha256": "60602A1107D0F921020DC81AE7C4733B8406A1D2B8FA6C90DD0FBAB93FF5D906",
+        "boundReviewFileSha256": "393B12AAF5D8EEBB379492806B76CC507D65B8B99B5CA274E84A59BE8727BE55"
+      }
+    },
+    {
+      "cellId": "T170-C13",
+      "provider": "kiro",
+      "tier": "cheap",
+      "task": "doc-rewrite",
+      "requestedModel": "qwen3-coder-next",
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 5277.419,
+      "costUsd": null,
+      "usage": {
+        "contextUsagePercentageObservations": [
+          1.3209999799728394,
+          5.16015625,
+          7.23671817779541,
+          7.23671817779541
+        ],
+        "maxReportedContextUsagePercentage": 7.23671817779541,
+        "turnDurationMsObservations": [
+          1296
+        ],
+        "costOrCreditsReported": false
+      },
+      "outcome": "pass",
+      "scoreBarPassed": true,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "FA3A7121A79E9916F0A00E5C2CC3116A3BBB325138ACC4A06F0DF73EBEFDF546",
+        "receiptSha256": "7FADBFE0086005AFB9714F11A86C1B44E5CC74FF4B38BACB58D821426CD85EAA",
+        "stdoutSha256": "5A1F4FC63CD27475CF8FF2DD8A7272AEAE21BE329B0017BF2F8C2C08345A5598",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "0DB1AD7919004A8D7A5072C1726B87886724E90875F8A868E8CDF534A4CB96B5",
+        "rawReviewSha256": "BE0581552183A3846CB499C2CBB8C93BD470158AFE229A0655122A7210F7004C",
+        "semanticBodyFileSha256": "BE0581552183A3846CB499C2CBB8C93BD470158AFE229A0655122A7210F7004C",
+        "reviewerTraceSha256": "7921024C45213381EB97DADD63D6AD9EC5CE5351F8B2CFE3D6D25ACCB8693045",
+        "reviewerTraceFileSha256": "7921024C45213381EB97DADD63D6AD9EC5CE5351F8B2CFE3D6D25ACCB8693045",
+        "boundReviewFileSha256": "20DFE3B0843E386944636B0DB8F238CDF244684F6D856FFCFEEFBE4E58849290"
+      }
+    },
+    {
+      "cellId": "T170-C14",
+      "provider": "kiro",
+      "tier": "cheap",
+      "task": "triage",
+      "requestedModel": "qwen3-coder-next",
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 6589.045,
+      "costUsd": null,
+      "usage": {
+        "contextUsagePercentageObservations": [
+          1.3209999799728394,
+          5.16015625,
+          7.301953315734863,
+          7.301953315734863
+        ],
+        "maxReportedContextUsagePercentage": 7.301953315734863,
+        "turnDurationMsObservations": [
+          3445
+        ],
+        "costOrCreditsReported": false
+      },
+      "outcome": "fail",
+      "scoreBarPassed": false,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "B55F967C4D4F1FA04FF44BFC85CA07BA4EF01CD968D5FB1043645365311DA299",
+        "receiptSha256": "890B6EF9FBCBDB37AA11A8BF4213B82CB117531E3F9C5FD7534038EA8EC060A4",
+        "stdoutSha256": "1AEB1D9FE8AE6FFF5D7C3EF2B575A23A0ED040CA5810802FCB175CAE58EACF02",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "B54674926BAFC096D51091D6EE581010021718DDB763B3137A342EAAEF28583B",
+        "rawReviewSha256": "A22D11B6AC422674981A108B51087C5E361743E59B51C6162965B6BCDF6B7F0B",
+        "semanticBodyFileSha256": "A22D11B6AC422674981A108B51087C5E361743E59B51C6162965B6BCDF6B7F0B",
+        "reviewerTraceSha256": "026EBCEBDDBD8E18A03DBF4FC75FA29553D72C69492908EB97A855E89DA928CD",
+        "reviewerTraceFileSha256": "026EBCEBDDBD8E18A03DBF4FC75FA29553D72C69492908EB97A855E89DA928CD",
+        "boundReviewFileSha256": "3BB76B30E312142CE326D641BF86D849B8D500C4E967A51DC5F0C36BDD7AE1F4"
+      }
+    },
+    {
+      "cellId": "T170-C15",
+      "provider": "kiro",
+      "tier": "cheap",
+      "task": "changelog-classification",
+      "requestedModel": "qwen3-coder-next",
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 15463.1719,
+      "costUsd": null,
+      "usage": {
+        "contextUsagePercentageObservations": [
+          1.3209999799728394,
+          5.16015625,
+          7.293359279632568,
+          7.293359279632568
+        ],
+        "maxReportedContextUsagePercentage": 7.293359279632568,
+        "turnDurationMsObservations": [
+          11510
+        ],
+        "costOrCreditsReported": false
+      },
+      "outcome": "fail",
+      "scoreBarPassed": false,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "E3C3CD19D8874FFB6DF9C884CD7E1239DAC0428388D38BA379E2A44BA3F4BE29",
+        "receiptSha256": "43E95F1A952E5B8984FDE9C88CA3F1E35575E81AE1D724982EB32E228D72507E",
+        "stdoutSha256": "32A2723AB1F43D969E555D12146D1BDD7424D05A0748015B1F03558135B56035",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "D0725DB00639BC9B1745C1385F9BBDF37F6CB7AE7B0D5CEBDD5C62E0819C9687",
+        "rawReviewSha256": "752D47E5893AD7DAEDA10F3025724A6ADEF2E2A973DA4548CB314CA7576424DF",
+        "semanticBodyFileSha256": "752D47E5893AD7DAEDA10F3025724A6ADEF2E2A973DA4548CB314CA7576424DF",
+        "reviewerTraceSha256": "318DEB05F1840E55F418BD92887904BB0AF4E5FB4BEFDF2F678388DB79A4231E",
+        "reviewerTraceFileSha256": "318DEB05F1840E55F418BD92887904BB0AF4E5FB4BEFDF2F678388DB79A4231E",
+        "boundReviewFileSha256": "DC8E0E5005927633D1FFFDDCA529BF1807489C33B506D3D53C59B7C84203A0ED"
+      }
+    },
+    {
+      "cellId": "T170-C16",
+      "provider": "kiro",
+      "tier": "default",
+      "task": "doc-rewrite",
+      "requestedModel": null,
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 5121.4968,
+      "costUsd": null,
+      "usage": {
+        "contextUsagePercentageObservations": [
+          1.3209999799728394,
+          2.709699869155884,
+          2.709699869155884
+        ],
+        "maxReportedContextUsagePercentage": 2.709699869155884,
+        "turnDurationMsObservations": [
+          2029
+        ],
+        "costOrCreditsReported": false
+      },
+      "outcome": "pass",
+      "scoreBarPassed": true,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "BB8D9AA435E463F0DA0EA722463E62D9414A8A12A562641E7DDD49FED2D9937D",
+        "receiptSha256": "D8C9F1FA922915194F8EF2FE42C8119EC781AA7A8CF512501A0D0FC631234438",
+        "stdoutSha256": "6C45E0C30422C7520F2D7F4BB956F962524A6F9E999E1FBA0DDF9EEDAD98BD12",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "4E77EA5D94AFF0D96541DBB0F3914F1FF6F827839FCDDB62B2224BEE2CF5B02B",
+        "rawReviewSha256": "892EA50EFBCE7BE76E109D5227CD853206F4533B8A96520154E0038FAD6C2429",
+        "semanticBodyFileSha256": "892EA50EFBCE7BE76E109D5227CD853206F4533B8A96520154E0038FAD6C2429",
+        "reviewerTraceSha256": "FED5BF864E65D8A53C2866ECA90924E618D74FAF34D49701136DECAB1BA6F2B8",
+        "reviewerTraceFileSha256": "FED5BF864E65D8A53C2866ECA90924E618D74FAF34D49701136DECAB1BA6F2B8",
+        "boundReviewFileSha256": "CC2AD026243EEC377C1BF322525ACA6C9EFB3578C6F1628E311B4976BD2BAD71"
+      }
+    },
+    {
+      "cellId": "T170-C17",
+      "provider": "kiro",
+      "tier": "default",
+      "task": "triage",
+      "requestedModel": null,
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 11241.5868,
+      "costUsd": null,
+      "usage": {
+        "contextUsagePercentageObservations": [
+          1.3209999799728394,
+          2.7674999237060547,
+          2.7674999237060547
+        ],
+        "maxReportedContextUsagePercentage": 2.7674999237060547,
+        "turnDurationMsObservations": [
+          7203
+        ],
+        "costOrCreditsReported": false
+      },
+      "outcome": "fail",
+      "scoreBarPassed": false,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "5AD9BC01343A88F175A54F8B516E9164537AD3085AABF139F25A4E5B5B6F9980",
+        "receiptSha256": "A512F1EBF832AC850CD61702A2EB88CDE81FDACE7008D2251F81564D25A83328",
+        "stdoutSha256": "A57D0C43B360C7C6E654C5475E288DB51BC07EDC89469C86FA3EB90272805CF3",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "62421BE74F26B32DBC6C986E246AC336FA95879985F998C845561584CC1BA2A3",
+        "rawReviewSha256": "A8A8461EE74243F61575A1E0C2BCD352C4F3BCA3F733CC266859616259B1718B",
+        "semanticBodyFileSha256": "A8A8461EE74243F61575A1E0C2BCD352C4F3BCA3F733CC266859616259B1718B",
+        "reviewerTraceSha256": "E7579C8C10F92AE956E067BEFD0C5C11EB092FFB5D2092575DDFD5F6C253C368",
+        "reviewerTraceFileSha256": "E7579C8C10F92AE956E067BEFD0C5C11EB092FFB5D2092575DDFD5F6C253C368",
+        "boundReviewFileSha256": "E1C096B2AE9AD41D262CAFF9D9814CB613B65CFA0DFC3663A0057652A1F2FEEA"
+      }
+    },
+    {
+      "cellId": "T170-C18",
+      "provider": "kiro",
+      "tier": "default",
+      "task": "changelog-classification",
+      "requestedModel": null,
+      "actualServedModel": null,
+      "servedIdentityStatus": "not reported; unknown",
+      "nativeStatus": "completed",
+      "terminal": true,
+      "nativeErrorCount": 0,
+      "toolEventCount": 0,
+      "durationMs": 9323.0466,
+      "costUsd": null,
+      "usage": {
+        "contextUsagePercentageObservations": [
+          1.3209999799728394,
+          2.751699924468994,
+          2.751699924468994
+        ],
+        "maxReportedContextUsagePercentage": 2.751699924468994,
+        "turnDurationMsObservations": [
+          5826
+        ],
+        "costOrCreditsReported": false
+      },
+      "outcome": "fail",
+      "scoreBarPassed": false,
+      "schemaValid": true,
+      "provenance": "Parent transcription of actual collaborator messages and followup; not a platform export",
+      "hashes": {
+        "planSha256": "4AD9C626815BE333DC18FDE4EA83657F96439D28D1148CA5EF4FE5927DBD0BE2",
+        "receiptSha256": "20D9D797BE76865812C8B71E762B9540791E64F8F2263FFC62765AF0AE7048B9",
+        "stdoutSha256": "E7DFD9863BBDE2F8F73905C01F0B34AD5145C64233F570034B07A62394E06D84",
+        "stderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "packetSha256": "DC5AD9EDD5CCA3098575B0EF54E3E7EEDD4EB37FA273966C98A3DC1B8066E9E3",
+        "rawReviewSha256": "AAF35B8805B74C163B97ECAFD1D448E7D6535E823ACF270DE213137AED120E1E",
+        "semanticBodyFileSha256": "AAF35B8805B74C163B97ECAFD1D448E7D6535E823ACF270DE213137AED120E1E",
+        "reviewerTraceSha256": "2C3BC5FB30D9212E5A0C1048E3851F44958740DEE1275AAC91A0F8D03CB1CEA9",
+        "reviewerTraceFileSha256": "2C3BC5FB30D9212E5A0C1048E3851F44958740DEE1275AAC91A0F8D03CB1CEA9",
+        "boundReviewFileSha256": "F42DC457A8F947C8124D99BC5AF8FF27C782D55FB4D29B79F2BFDC67A61B2BEB"
+      }
+    }
+  ],
+  "provenance": {
+    "reviewDispatchAndCompletionRecords": "Parent transcriptions of actual collaborator messages and followup, not platform-exported logs.",
+    "platformUuidClaimed": false,
+    "independentIntegrityAudit": "Verified frozen packet/native/review hash bindings and the 11-fail/7-pass tally; did not semantically regrade.",
+    "judge09Recovery": {
+      "companionSha256": "4F5A7D3CED0A7CD0450EFA960B4369EFAC5EF43FAA25AB4367E8992B04D3C693",
+      "initialWriteFailed": true,
+      "sameReviewerRecovery": true,
+      "replacementJudge": false,
+      "semanticDecisionUnchanged": true,
+      "byteIdentityToAbsentFirstWriteProven": false
+    }
+  },
+  "sourceBindings": {
+    "sourceCommit": "75c2263eba5cb9fc2ae0e4e944eaa58402e31bf4",
+    "controllerSha256": "0B57B14603D72E650B5A61782EFA83E422959FF5E256BBF7CECF05A57D305469",
+    "protocolSha256": "D49E8C8C9B3BFE4E6CB246F94A12BAA22856EC9D0B65DE5225C4C2A3067DAA19",
+    "answerKeySha256": "975DDA95E186A4735915D4647FC331D068DCE6DDF9F25F019FCAB9ED9DFD6634",
+    "fixtureSha256": {
+      "changelog-classification": "A7719B052FCB1390657D598A1C23D0B06474C4B25CE2ECB2624FBB494009C91F",
+      "doc-rewrite": "24EA54EAA73ECF773199A7A4232AB807F94F5F72BBBD478E591B46F4D34CC5F0",
+      "triage": "913BDE4F8434EDB55ADE019E70263A6FE991AE6C6BE72434B77B22CA76BC51BE"
+    },
+    "graderInstructionsSha256": "96D505CF1E586EE8C36481A63D4BF79712A890F5A55F672B6E3DBDF256487960",
+    "reviewBodyTemplateSha256ByFixture": {
+      "changelog-classification": "8C72CA3E2DCCDF6DE1D40FE0E671CC8125FCE34069C3CB1F74BD04FAE9C0CE30",
+      "doc-rewrite": "20CAE478487D0CA385A8C031B08E87E90D3EB8EFD385E5F01F4CB24DF92F55D7",
+      "triage": "BF739EDE31D9832555F9B473AFABC8D8F8AD9A400904BCBC47F3C37842C2B052"
+    },
+    "parentAuthorizationSha256": "1B0D9E67A4CC8D07A8D83CCE39F625300CB0C78E52823D91601A0628E32D1945",
+    "planProposalSha256": "E8C21C883ED9A6424BB4D70803D2DF30CFCC8B12CCAED08A45E76A9C22C9A0ED",
+    "nativeWaveManifestSha256": "A514606E9AC8D078C1433186AA2406FFC3809BDD70523364FAA2F76DC89F59A4",
+    "measurementLedgerSha256": "47BEDB2D1868E59371DCBDB27D7F1E33BFFD4249CE5146B7582A304D8063376A",
+    "blindPacketManifestSha256": "58BC8F9CF7EAEE8E05289DF82873E47C6A8F89893284DDBAC739BDAFD1B2A5F0",
+    "blindPacketCrosswalkSha256": "39A405E914FF18D915308BB73F0EC27BC6ED9945911060FD67225F940B5CFBE0",
+    "parentGradingLedgerSha256": "13EC7F7E07B788D9B747CC1D9AB6E9E45FDFFA82C873910A1976AB77C55368AA",
+    "independentAuditSha256": "FA2708345CA2647ACB34A42094F3C59AB08098F446840EBE7001F774C1DAA102",
+    "kiroCleanupPlanSha256": "05C1DF2047A9A1144A703E90C1C1A8FE88957A83CD3640BEAC2DE1FDC51E8B9E"
+  },
+  "outcomeDefinition": "Pass requires every fixture score to equal 2 and no issues; otherwise fail. A profile qualifies only if all three tasks pass and served identity is known and matches the requested profile or documented native default."
+}
