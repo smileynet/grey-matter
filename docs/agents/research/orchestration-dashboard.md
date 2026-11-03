@@ -12,9 +12,9 @@ is available while signed in as its owner. Published through Sites on 2026-11-03
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `9a80da3be3af9ba7b251a1f8c0d5eaa191aca621`.
-- Deployment: `appgdep_6ae9ba61cb808191ba92e9b831ed0c5b`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_8adf423e34f08191b6dd149a5255242c`.
+- Pushed Site source: `d14c99425a788296958cb1d52a42d4b53275414d`.
+- Deployment: `appgdep_6ae9c95c708c81918d902549a086a30e`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_ca0d5b3817bc8191b816109bf83a2bac`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -28,9 +28,35 @@ Windows System32 first on the child process PATH succeeded. No plugin code chang
 
 ## Maintain it
 
+### Text-task findings (#170, 2026-11-03)
+
+The latest publication has 18 findings and 36 scoped tickets: 32 done and four
+unfinished. It explains why current defaults remain: every profile passed the
+rewrite, one passed triage and none passed classification. No profile passed
+all three tasks. The delivery page has 49 entries; all 48 earlier entries were
+preserved exactly. Writing-trial evidence, costs and review-provenance limits
+remain under details and source links.
+
+Both pages passed Chrome checks at 1280×900 and 390×900. An independent critic
+inspected all ten current captures and accepted dedicated receipt
+`5c8fc37e7c368647f8b3d180c2ccf2eac174abc11eb127ce34ffef6880b76751`
+in `evidence/orchestration-dashboard/t170-final/` and delivery receipt
+`c4c6f93eddd4f53690c41ccb9499ae891dac7a86a88a2f3d8ea27e137f591298`
+in `evidence/orchestration-dashboard/t170-status-final/`. Source and captures
+were pushed as `71b06f0`; three explicitly selected pre-merge checks and all
+three applicable pre-push checks passed. The model integration at `7ea5758`
+passed 22 pre-merge checks with the same two documented baseline exceptions,
+and seven pre-push checks. Ticket closure is `d6407c9`.
+
+The packaged page's 18 findings, 32 done tickets and all 36 repository-root
+ticket links were checked. Native publication succeeded at 11:45:39 UTC with
+no failure message and the owner-private audience preserved. Production browser
+interaction was not checked. The reusable Site checkout and trial-private
+evidence remain retained through the remaining workstream.
+
 ### Model-tier findings (#167–169, 2026-11-03)
 
-The latest publication has 17 findings and 36 scoped tickets: 31 done and five
+That publication had 17 findings and 36 scoped tickets: 31 done and five
 unfinished. Implementation, review and research findings retain configured
 defaults; none qualifies a cheaper model for adoption. Writing, effort and fast
 mode are in progress; the Kiro shutdown issue remains blocked and ACP research
