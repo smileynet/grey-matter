@@ -259,6 +259,15 @@
       "measured": { "s": 2.1, "date": "2026-11-02", "host": "win" }
     },
     {
+      "id": "model-review-fixtures",
+      "stage": "pre-merge",
+      "catches": "a review spike launching with broken argv or tool restrictions, accepting incomplete native output, or consuming duplicate cells",
+      "scope": ["scripts/spike-model-tier-review-t168", "scripts/fixtures/model-review/t168/"],
+      "run": ["node", "--test", "scripts/spike-model-tier-review-t168.test.mjs"],
+      "timeout_s": 10,
+      "measured": { "s": 0.8, "date": "2026-11-03", "host": "win" }
+    },
+    {
       "id": "deployer",
       "stage": "pre-release",
       "catches": "deploy.mjs writing outside the skill roots it owns, duplicating roots, or refreshing a plugin wrongly",
