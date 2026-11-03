@@ -1,7 +1,7 @@
 ---
 id: "209"
 title: "Decommission the model-tier spike harnesses (168-171) and keep a retest recipe"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "No t168-t171 spike harness, test, fixture or gate remains in scripts/ or scripts/gates.json."
