@@ -1,7 +1,9 @@
 # ACP orchestration fit research audit (2026-11-03)
 
-**Audited commit:** `c7b2828332cfa022ada9956bbd5b892f7ffd82f4`  
-**Findings SHA-256:** `5FF5E71AB224C84EE1C5062DC99A7FD9A41CD5AF3E8513C4832C589F01A64FBD`  
+**Audited commit:** `c7b2828332cfa022ada9956bbd5b892f7ffd82f4`
+
+**Findings SHA-256:** `56C9DAF88AD9F70CFBC6E11F751B14147A29903790D7D4C15B97D656334C811B`
+
 **Scope:** the findings note and its cited official ACP/MCP sources, plus cited local research and tickets. No native/provider/model probe, SDK install, settings change, or raw answer-key/session-listing inspection was performed.
 
 **Overall verdict:** supported, trust **0.91 / high**. The revised note separates ACP wire protocol versions from the SDK package line, traces lifecycle and permissions to normative v1 sources, and compares both the Kiro driver work and the limited Claude/Codex adapter setup. Its no-spike conclusion is appropriately conditional on there being no selected backend/workflow to decide; #189 is not used as a blanket blocker. The main limit is that exact v1/v2 schema versions are inferred from SDK release notes rather than independently confirmed from a versioned ACP protocol release/tag, so that provenance should remain described as point-in-time release-record evidence.
@@ -18,6 +20,10 @@
 | #162 observed Kiro V3 prompt, follow-up, approval visibility, cancellation and session/load recovery; #189 separately records EOF teardown failure. | **Supported** | The cited #162 section states the specific Windows builds and captured flow, explicitly says no approval answer was scripted, and separates completed prompt/load results from exit-1 teardown. #189 independently records reproduced EOF failure and durable reload. Scope is limited to those builds and runs. |
 | #155 established Claude/Codex adapter initialize-only success, ~849 MB allocated footprint, and no ordinary mixed-worker routing in installed Crew; it did not establish full prompt/tool behavior. | **Supported** | Re-read the local [#155 setup section](harness-experimental-features-20261101.md#ticket-155-mixed-backend-setup-probe-2026-11-02): it records 124 packages, 838,019,117 logical bytes / 849,527,296 allocated, and explicitly limits the probe to initialization. The note correctly describes these as incomplete setup evidence, not an end-to-end result. |
 | Windows SDK-backed behavior, comparative implementation effort, performance, and billing/usage impact remain unknown; no additional spike is warranted absent a selected backend/workflow. | **Supported (judgment)** | The unknowns match the lack of an SDK install/build or runtime probe. The no-spike rationale considers the already-installed adapters, large setup footprint, Crew routing gap, lack of a selected backend/owner, and the fact that #189 only blocks reuse of Kiro relay. The candidate spike specifies a concrete deciding question and acceptance evidence for when a backend is selected. This is a bounded prioritization judgment, not a claim that all ACP questions are answered. |
+
+## Link-only follow-up
+
+The parent corrected the #189 ticket link to `../../../.tickets/189-kiro-acp-stdin-teardown.md`. From this document the relative path resolves to the existing ticket. The change is citation-only; the audited technical findings and their accepted verdicts are unchanged. `node scripts/check-docs-consistency.mjs` passed: all real relative links in docs/ and skills/ resolve, with no new .scratch citations.
 
 ## Findings and limits
 
