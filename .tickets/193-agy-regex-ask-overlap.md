@@ -1,7 +1,7 @@
 ---
 id: "193"
 title: "Diagnose: agy regex Ask rule does not override identical Allow rule"
-status: in_progress
+status: done
 blocked_by: ["158"]
 validation_criteria:
   - "Reproduce the exact Ask/Allow overlap and literal/broad Ask controls against the recorded native command and current CLI build."
@@ -50,6 +50,15 @@ controls are retained only until this diagnosis closes, as listed in the receipt
 
 ## Acceptance criteria
 
-- [ ] Reproduce the exact Ask/Allow overlap and literal/broad Ask controls against the recorded native command and current CLI build.
-- [ ] Explain the effective rule matching or document an upstream issue with sanitized evidence and a qualified supported mitigation.
-- [ ] No global permission edits; disposable files recycled and applicable checks evidenced.
+- [x] Reproduce the exact Ask/Allow overlap and literal/broad Ask controls against the recorded native command and current CLI build.
+- [x] Explain the effective rule matching or document an upstream issue with sanitized evidence and a qualified supported mitigation.
+- [x] No global permission edits; disposable files recycled and applicable checks evidenced.
+
+## Resolution (2026-11-03)
+
+done: reproduced regex Ask overlap discrepancy, recorded unresolved matching cause and sanitized issue brief, qualified tested Deny mitigation, completed coordinated native-history cleanup
+
+### Verification
+1. ✓ Reproduce the exact Ask/Allow overlap and literal/broad Ask controls against the recorded native command and current CLI build. — "Fresh current agy1.4.12 native receipt reproduced identical regex Ask/Allow command execution; literal/broad Ask permission errors and regex Deny matching-rule error recorded. Independent critic accepted bounded research and verified 4new+6legacy inventory."
+2. ✓ Explain the effective rule matching or document an upstream issue with sanitized evidence and a qualified supported mitigation. — "Cause leftunknown: no parsed effective-list proof. Locally prepared sanitized upstream issue brief (not submitted) records expected/actual/exact controls, supported narrow mitigation explicitmatchingDeny validatedforgitversion, no general confinement claim. Audit distinguishes primarydocs expectations fromruntime."
+3. ✓ No global permission edits; disposable files recycled and applicable checks evidenced. — "Exact10brain+10DB paths4792060B and4settings792B OSrecycled aftercriticclearance; absencesverified. 3globalhashesmatch158baseline,194modelhistoriesuntouched. Parent pre-merge syntax-fixtures and pre-push doc-links/home-path passed; scope diffchecked."

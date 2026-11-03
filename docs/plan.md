@@ -249,7 +249,7 @@ auth remains conditional on the result of #186.
 | 188 | 9. Diagnose Codex's missing code-mode tool host before claiming tool execution | ✅ done |
 | 189 | 10. Qualify Kiro V3 ACP EOF shutdown and descendant settlement | in_progress |
 | 190 | Resolve Crew Windows host-auth integration before relying on Crew-owned identity | in_progress |
-| 193 | Diagnose overlapping regex approval rules before relying on that override | in_progress |
+| 193 | Diagnose overlapping regex approval rules before relying on that override | ✅ done |
 | 194 | Qualify agy child model routing before relying on per-role tiers | open |
 | 173 | 11. Compare GUI watch/answer surfaces against #162's qualified live driver | open |
 | 174 | 12. Select and demonstrate Harbor or a thin runner for the model trials | open |
