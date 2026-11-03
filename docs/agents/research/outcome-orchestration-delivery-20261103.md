@@ -329,3 +329,24 @@ those sources forward. [Settlement/current-check retention](evidence/orchestrati
 records exact hashes and boundaries. Private raw evidence and the small owned native
 runtime remain retained for the #179 qualification audit or explicit owner
 disposition; no unrelated historical sessions or private draft ancestry were removed.
+
+## Published snapshot and cleanup boundary
+
+The reviewed effort and delivery dashboards were pushed in owner commit
+`f990f625545d81b5ae9d7166754d4924efc9ba80`. Their twelve desktop/phone captures
+received independent acceptance. The real publication preflight passed immediately
+before publishing, binding that owner candidate, accepted effort receipt, current
+check attestations and the fixed link-transformed payload. The native Site helper
+then supplied source `407f5fdbcb454c620539b6d4f8cf7b4dcf5f7934` and its archive;
+Sites returned terminal **succeeded** at 2026-11-03T21:09:29Z. Owner-private access
+was preserved. This does not add production browser or cross-harness qualification.
+
+[Publication and disposition evidence](evidence/orchestration-delivery-publication-20261103.json)
+records the native result, current guard output and archive hash. The verified
+73,942-byte archive went to the OS Recycle Bin after success. All ignored worker
+scratch was copied and hash-verified before attempted managed archival. The app
+refused removal of all three worktrees because of active-task/primary-checkout
+protection; they remain kept with explicit release conditions, without a deletion
+fallback. Their measured total logical footprint was 205,430,852 bytes. Historical
+sessions, unrelated worktrees, the private unpublished draft and shared dashboard
+tooling remain protected. No background monitor is represented as active.

@@ -12,9 +12,9 @@ is available while signed in as its owner. Published through Sites on 2026-11-03
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `947a0c35279a49863e84f1c3b33f832b4a07522c`.
-- Deployment: `appgdep_6aea3502bd548191b408a926b1aaa930`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_16acd60ce15c8191a34526150284cc92`.
+- Pushed Site source: `407f5fdbcb454c620539b6d4f8cf7b4dcf5f7934`.
+- Deployment: `appgdep_6aea4d8141a88191b9536689674ae809`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_53b61b0310648191aa46e4dae0449599`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -28,6 +28,41 @@ Windows System32 first on the child process PATH succeeded. No plugin code chang
 
 ## Maintain it
 
+### Outcome delivery and bounded native handoff (2026-11-03)
+
+The latest snapshot has **24 findings and 46 effort tickets**: 43 done, one
+cancelled, one deferred and the broader messaging parent #179 still in progress.
+The new delivery tickets #202–#208 and bounded child #210 are closed with evidence.
+The page distinguishes the delivered outcome/role guidance and local safeguards
+from the one observed idle-agent native receipt; other harnesses, busy sessions,
+crash recovery and native goal persistence remain unqualified. #201 stays deferred.
+Global delivery retains four tabs, 63 entries, 209 tickets and zero open asks.
+
+An independent critic viewed all twelve desktop/phone captures and accepted the
+[effort receipt](evidence/orchestration-dashboard/t203-205-208-final/review.json)
+and [delivery receipt](evidence/orchestration-dashboard/t203-205-208-status-final/review.json).
+Interaction checks passed at 1280 and 390 pixels; the dashboard checker reported
+no errors or warnings. On owner source `f990f625545d81b5ae9d7166754d4924efc9ba80`,
+the publication preflight passed the exact review/check bindings and the known
+link-transformed Site payload before native publication. It does not prove archive
+or remote bytes; the supported Site helper separately committed/pushed/packaged
+source `407f5fdbcb454c620539b6d4f8cf7b4dcf5f7934`.
+
+Sites returned terminal `succeeded` at **2026-11-03T21:09:29Z** for the deployment
+listed above. The confirmed owner-only custom audience was preserved, without
+groups or visitors. Opening the deployed URL in the Codex panel was queued;
+this is not a claim of production browser verification. The published archive
+(73,942 bytes) was hash-verified and recycled after success. Existing shared
+browser/Site tooling is kept for later dashboard updates. Three task-created
+managed worktrees are kept because native archival guards report active-task or
+primary-checkout protection; no filesystem removal or override was attempted.
+All their ignored scratch was copied and hash-verified first (11 files, 57,318
+bytes); recovery evidence and explicit retention conditions are in the
+[publication/disposition index](evidence/orchestration-delivery-publication-20261103.json).
+
+Earlier dated sections below describe their historical snapshots, not this latest
+ticket count or delivery state.
+
 ### Fast-model scope clarified (2026-11-03)
 
 The user meant fast models such as Claude Haiku 5.5 and GPT Luna, rather than
@@ -38,7 +73,7 @@ was cancelled as obsolete, not completed; none of its twelve paid-fast-mode
 cells ran. Its credit question is answered by the scope correction and retained
 in history, without inferring anything about account entitlement.
 
-The latest page has 20 findings and 36 scoped tickets: 34 done, one cancelled
+At that scope-clarification snapshot, the page had 20 findings and 36 scoped tickets: 34 done, one cancelled
 and only #189 unfinished. Cancelled work has an explicit label/filter/count
 and is absent from the default active diagram. The delivery page has 54 entries,
 zero open asks and the existing four-tab decision interface preserved. All 53

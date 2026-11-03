@@ -243,7 +243,7 @@ Rows are proposed execution order; only solid graph/ticket edges are prerequisit
 #208 is the deterministic contract/spool slice of #179. It may proceed without
 native calls; #179 retains the end-to-end qualification and explicitly unsupported
 adapter results. Security-held lanes are not reopened by creating this child.
-#210 qualifies only the current existing-agent Codex collaboration path. Its bounded
+#210 records one bounded receipt on the current existing-agent Codex collaboration path. Its bounded
 receipt does not close #179's broader cross-harness, busy-session, crash-recovery or
 installation/cleanup criteria. Unsupported and security-held lanes remain explicit.
 
@@ -524,3 +524,9 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 184 | Revalidate preservation state before cleanup recommendations | ✅ done |
 | 191 | Dashboard: orchestration findings and expandable ticket flow in two tabs | ✅ done |
 | 209 | Decommission historical model-tier spikes and retain retest recipes (separate tooling owner) | ✅ done |
+
+## Unplanned tickets
+
+| ID | Work | Status |
+|---:|---|---|
+| 211 | Ship only what skills need in the Kiro Crew app and agy plugin (65 MB today) | open |

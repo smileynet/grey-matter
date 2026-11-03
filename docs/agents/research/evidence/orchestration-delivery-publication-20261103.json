@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "owner": "parent orchestration integration",
+  "state": "retained",
+  "endCondition": "179 qualification audit or explicit owner disposition",
+  "ownerCandidate": "f990f625545d81b5ae9d7166754d4924efc9ba80",
+  "siteSource": "407f5fdbcb454c620539b6d4f8cf7b4dcf5f7934",
+  "publication": {
+    "id": "appgdep_6aea4d8141a88191b9536689674ae809",
+    "project_id": "appgprj_6ae8c6a5462481918dbcf580c7fa764e",
+    "title": "Orchestration findings and ticket flow",
+    "version_id": "appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_53b61b0310648191aa46e4dae0449599",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://orchestration-findings.sambiggins.chatgpt.site",
+    "has_mcp": false,
+    "screenshot_asset_pointer": null,
+    "provider_deployment_id": "site---6ae8c6a5462481918dbcf580c7fa764e",
+    "failure_message": null,
+    "env_set_revision": 0,
+    "updated_at": "2026-11-03T21:09:29.955168+00:00"
+  },
+  "receiptIds": {
+    "effort": "62b4c83fb70e9961d1647d4c20979ac17234ffb64dc32a918485377ff52ebd50",
+    "status": "351a5d162945a84bea0eaceb3b0c6d40b281bd66c4e41ae767ac371414a85282"
+  },
+  "package": {
+    "files": [
+      {
+        "source": "docs/orchestration.html",
+        "path": "index.html",
+        "bytes": 270834,
+        "sourceSha256": "05e3cf6e7a36a3ba47478509e0cbaf26b7f9322db6a6d3ee7c42b48a03f7ead3",
+        "sha256": "7899c51c473c96ba53feb6d21014cda3ac192ffa21ab9bcd79e68961f9f1f09a"
+      }
+    ],
+    "digest": "0d76a1f6fcbc9a72b555eee2d2a5cb4d313daabec39dfee0ce77ac06370a58bd"
+  },
+  "archiveDisposition": {
+    "bytes": 73942,
+    "sha256": "1A0FB2D36ED4D2A6EDF7FED7729059335F5A5337BDC043FAFCFCB629F799F98A",
+    "disposition": "OS Recycle Bin",
+    "sourceAbsent": true,
+    "siteSource": "407f5fdbcb454c620539b6d4f8cf7b4dcf5f7934",
+    "deployment": "appgdep_6aea4d8141a88191b9536689674ae809"
+  },
+  "worktreeDisposition": {
+    "state": "kept",
+    "reason": "Native archive guards report other active tasks for202/203 and primary checkout for205. No override or filesystem deletion attempted.",
+    "endCondition": "Native active-task/primary protections released, then recoverable managed archival",
+    "inventory": [
+      {
+        "root": "D:/.codex/worktrees/outcome-orchestrate-202/grey-matter",
+        "logicalBytesBeforeArchive": 67235595,
+        "dependenciesBytes": 3934154,
+        "dependencies": "Recreatable from retained package-lock; not evidence",
+        "ignoredEvidenceCopy": null
+      },
+      {
+        "root": "D:/.codex/worktrees/tool-guidance-203/grey-matter",
+        "logicalBytesBeforeArchive": 67098049,
+        "dependenciesBytes": 0,
+        "dependencies": "Recreatable from retained package-lock; not evidence",
+        "ignoredEvidenceCopy": "D:/code/grey-matter/.scratch/proposal19-worker-archive-evidence/tool-guidance-203"
+      },
+      {
+        "root": "D:/.codex/worktrees/publication-preflight-205/grey-matter",
+        "logicalBytesBeforeArchive": 71097208,
+        "dependenciesBytes": 3934154,
+        "dependencies": "Recreatable from retained package-lock; not evidence",
+        "ignoredEvidenceCopy": "D:/code/grey-matter/.scratch/proposal19-worker-archive-evidence/publication-preflight-205"
+      }
+    ],
+    "copiedIgnoredFiles": 11,
+    "copiedIgnoredBytes": 57318
+  },
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-final-site-publication.json",
+      "bytes": 1174,
+      "sha256": "f099ac32f491cd6d5a5ed236b60e04df123a68884d60cfbfaca6652b6c01b2b6"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-final-publication-expected.json",
+      "bytes": 456,
+      "sha256": "e686ce4ec27668ddd5c96385ec120ebc6c9f8d53db5e591e7410e7c7288cc38c"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-final-publication-packet.json",
+      "bytes": 709,
+      "sha256": "2f9221717330096df6ad0ed644060e3d1862adc2b5af5fa677f81a226db2fa4b"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-final-publication-checks.json",
+      "bytes": 1029,
+      "sha256": "36f2aea1c826542c6b798957ca4bd84489819c156f8995bbd84a6fe6388db790"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-final-publication-preflight-result.json",
+      "bytes": 1458,
+      "sha256": "f2be06f03da66a096ddc1afddcf228b6d172130bda728543f216d0c9df233acc"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-dashboard-final-premerge.log",
+      "bytes": 105,
+      "sha256": "0100e2ad0bd744727eb6fb92e542fcc9fbc8f3fe36c3d2c7deebd3e44c116ef5"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-dashboard-final-prepush.log",
+      "bytes": 180,
+      "sha256": "700363d58a0ddc240ab01d9e61df50322c990da9b6c26e52cd2ffee44ca54ed2"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-dashboard-final-check.log",
+      "bytes": 265,
+      "sha256": "3702624616301c316116a29e029dc6b4085947ad3777375f88a5b2a4e689c162"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-final-effort-browser.log",
+      "bytes": 411,
+      "sha256": "a389879a6454b5bb385d827213fab275507c845a54a2dd90be7792d35d7902a1"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-final-status-browser.log",
+      "bytes": 165,
+      "sha256": "7425e5af49664f572f4d08c4771bba90a6dd4492bd6648a8453b12d33b041da1"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-final-site-archive-disposition.json",
+      "bytes": 288,
+      "sha256": "4a5640340d06337df080996ea16d94ff0161e5815addd77105e2206003acc2ab"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-worker-archive-preservation.json",
+      "bytes": 5546,
+      "sha256": "4a3bd067b9ec3e1e2aec19a64b779791708886fd0d52240a5882ab75c1e1a292"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-managed-archive-results.json",
+      "bytes": 1322,
+      "sha256": "c644b944531807d8fd57924d27b4008fb3a1bf2305e41aba33e804c7befd8837"
+    }
+  ]
+}
