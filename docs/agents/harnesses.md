@@ -161,6 +161,13 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **Shell**: unverified (closed source; nothing conclusive in the binary). Run the live shell
   probe in [proposal 11](proposals/11-agent-shell-baseline.md) before assuming either way.
 
+### Kiro Crew (ancillary, app)
+
+- Skills reach Kiro Crew agents only through an enabled app's `skill://` entries. `deploy.mjs`
+  builds and installs the `grey-matter` app; details in
+  [distribution maintenance](distribution-maintenance.md#kiro-crew-app).
+- Test: `kirocrew app info grey-matter`, then in a dashboard chat `skill_search` for `compass`.
+
 ### Crush (ancillary, Charm)
 
 - Binary `crush`. Native skills, **no config needed**. Default roots: `.agents/skills`,

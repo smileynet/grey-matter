@@ -12,7 +12,7 @@ Skills deploy with `node scripts/deploy.mjs` (proposal 08). It reads the pack fr
 and how to tell whether its plugin is installed). From that table it picks roots so each
 harness on this machine sees each skill exactly once, counting an installed plugin as the copy.
 It copies there, takes back copies it left elsewhere, and packages the Antigravity (`agy`)
-plugin when `~/.gemini` exists. It is manifest-tracked and idempotent, refuses foreign dirs,
+plugin when `~/.gemini` exists, and the Kiro Crew app when `~/.kiro/crew` exists (see below). It is manifest-tracked and idempotent, refuses foreign dirs,
 and takes `--dry-run`/`list`/`uninstall`/`--root`/`--project`. It also has `check` (the
 manifests match disk and tags; native manifest/content warnings fail via `--strict`) and `audit` (unowned dirs, and skills a harness sees twice).
 `install-skills.mjs` and `build-agy-plugin.mjs` forward to it.
@@ -35,6 +35,18 @@ tkt's marketplace, so add both: `/plugin marketplace add smileynet/tkt`,
 `/plugin marketplace add smileynet/grey-matter`, then `/plugin install grey-matter@grey-matter`
 (tkt installs with it). The design is in
 [`docs/agents/proposals/07-claude-code-plugin.md`](./proposals/07-claude-code-plugin.md).
+
+### Kiro Crew app
+
+Kiro Crew agents load a skill only through a `skill://` entry an enabled app registers; they
+do not scan `~/.kiro/skills`. So `deploy.mjs` builds `dist/kirocrew-app/` (an `app.json` listing
+every skill, plus the same self-contained resources as the agy plugin), then runs
+`kirocrew app install` and `kirocrew app enable` (uninstalling first on a rerun; app data is
+kept). `node scripts/deploy.mjs kirocrew [build|install] [--out DIR]` runs only this step;
+`--no-kirocrew` skips it. The gateway installs apps only for its verified local owner, so from
+an agent sandbox the install is refused: deploy prints the exact command to run in your own
+terminal and does not fail. The app carries no backend, MCP server or hooks; the Claude push
+hook has no Kiro Crew equivalent (`kirocrew app import` reports it as unmappable).
 
 ### Self-contained copy-mode installs
 

@@ -102,8 +102,10 @@ for (const strategy of ["tree", "parent"]) test(`timeout descendant probe: ${str
   const writer = join(dirname(mark), "writer.js");
   writeFileSync(writer, `process.chdir(${JSON.stringify(dirname(mark))}); require('fs').writeFileSync(${JSON.stringify(mark)}, String(process.pid)); setInterval(() => { if (require('fs').existsSync(${JSON.stringify(stop)})) process.exit(0); }, 20); setTimeout(() => process.exit(0), 30000);`);
   // A Node parent on Windows takes its own children down when killed, so the intermediate is a
-  // shell, as when a real check launches a tool through cmd, bash or PowerShell.
-  const run = process.platform === "win32" ? ["cmd", "/c", process.execPath, writer] : ["sh", "-c", `"${process.execPath}" "${writer}"`];
+  // shell, as when a real check launches a tool through cmd, bash or PowerShell. The trailing
+  // command stops bash and dash from exec'ing a lone `-c` command in place of the shell, which
+  // would leave no intermediate and let a parent-only kill reach the writer itself.
+  const run = process.platform === "win32" ? ["cmd", "/c", process.execPath, writer] : ["sh", "-c", `"${process.execPath}" "${writer}"; exit $?`];
   const hung = check("hung", ["a/"], "setInterval(() => {}, 1000)", { timeout_s: 1 });
   const blocked = { ...check("blocked", ["a/"]), run, timeout_s: 3 };
   // Observe after termination returns, while gate.mjs is alive: exiting Node can hide a leak.
