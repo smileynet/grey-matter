@@ -32,11 +32,16 @@ The private protocol packet is
 ## Scoring, fixed before calls
 
 - Caller discovery: exact path precision and recall. Report missing and invented
-  callers separately. File mentions without a call do not count.
-- Module summary: check five discrete facts; separately count unsupported claims.
-- Cited answer: check the semantic answer and whether the named document section
-  supports it. A wrong or unsupported citation fails citation accuracy even if
-  the prose answer is readable.
+  callers separately. Pass only all three expected paths and no invented paths.
+  File mentions without a call do not count.
+- Module summary: check five discrete facts; pass at least four and make no
+  unsupported material claims.
+- Cited answer: pass only if semantically correct and cited to the supporting
+  heading. A wrong or unsupported citation fails even if the prose is readable.
+
+A profile meets this fixture bar only if it passes all three one-shot tasks.
+Otherwise the recommendation is “keep default.” With one attempt per cell, these
+results are directional and do not establish population reliability.
 
 Freeze these rubrics with the packet. The independent grader receives response
 text and the private key only after the model session ends; the target sees no
