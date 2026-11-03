@@ -39,6 +39,10 @@ resume, state dimensions and role boundaries. Use the existing
 invoke restricted implement entry points or reproduce their procedures to bypass a
 refusal.
 
+Before invoking a repository tool, read its [script usage contract](references/tool-scripts.md).
+When adding or changing an operator script, update that inventory and its owning skill
+guidance, then run the documented coverage check. A script's presence grants no authority.
+
 ## Orient and admit
 
 1. Read project guidance, glossary, ADRs, `tkt ready` and in-progress tickets.

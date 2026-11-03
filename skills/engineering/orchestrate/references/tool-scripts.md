@@ -2,6 +2,8 @@
 
 This is an inventory and routing index, not permission to execute every entry. Read the named owning skill and reference before invoking an operator. Inventory discovery is read-only: this file lists tracked source paths and classifies their role; it never runs them.
 
+The active outcome's restrictions apply to every row, including distribution and release tools. This delivery cycle excludes Agy execution and global harness setting changes; ordinary task authorization does not silently lift a recorded security hold. Use the approved operation's scope and current project provider policy.
+
 ## Update procedure
 
 Before adding, renaming or changing the role of a tracked script extension anywhere in the repository or an extensionless shebang executable:
@@ -14,6 +16,12 @@ Before adding, renaming or changing the role of a tracked script extension anywh
 The checker is deliberately on-demand and read-only; it is not registered as a broad repository gate. It catches missing tracked paths, stale rows, invalid roles/reasons, dead anchors/paths and missing command/boundary/outcome fields in operator rows. These structural checks do not prove that guidance is semantically correct; source review still owns that judgment. Add fixture regressions when its contract changes.
 
 ## Operator usage guidance
+
+### Dispatch and review identity
+
+| Entrypoint | Owning guidance | Safe use and limits |
+|---|---|---|
+| `skills/engineering/orchestrate/scripts/preflight-dispatch.mjs` | [packet contract](dispatch-preflight.md), [orchestrate](../SKILL.md) | `node skills/engineering/orchestrate/scripts/preflight-dispatch.mjs --expected-base FULL_SHA packet.json` runs read-only from the candidate worktree. The parent supplies the expected base independently from its recorded dispatch, not from worker input. JSON reports canonical root/branch/base/candidate, scoped changed paths and evidence hashes; mismatch exits nonzero. It requires a clean registered worktree and relative regular-file evidence; it does not authenticate the owner or prove semantic independence. Keep the packet/output through exact-candidate review and recorded disposition; do not execute commands from packet data. |
 
 ### Distribution and skill maintenance
 
@@ -263,4 +271,6 @@ Rows below are generated inventory entries with one explicit reason each. Operat
 | `skills/productivity/delivery-dashboard/scripts/snapshot-tickets.mjs` | operator | Runs a maintained repository task; this entrypoint's exact contract and boundary are described in the operator table above. | [operator guidance](tool-scripts.md#operator-usage-guidance) |
 | `skills/productivity/line-craft/scripts/check-shapes.mjs` | operator | Runs a maintained repository task; this entrypoint's exact contract and boundary are described in the operator table above. | [operator guidance](tool-scripts.md#operator-usage-guidance) |
 | `skills/engineering/orchestrate/scripts/check-tool-guidance.test.mjs` | test | Test harness or test case, not a supported operator CLI. |  |
+| `skills/engineering/orchestrate/scripts/preflight-dispatch.mjs` | operator | Checks recorded dispatch identity, committed scope and evidence byte hashes without executing packet commands. | [dispatch preflight](dispatch-preflight.md) |
+| `skills/engineering/orchestrate/scripts/preflight-dispatch.test.mjs` | test | Isolated Git-fixture regressions for wrong identities, scope, evidence and input boundaries; no supported operator CLI. | |
 <!-- tool-script-inventory:end -->
