@@ -26,6 +26,16 @@ const cellDir = join(root, ".scratch", "t167", "cells", provider, tier, caseId);
 assert(!existsSync(cellDir), `Cell already exists; no retries are allowed: ${cellDir}`);
 mkdirSync(cellDir, { recursive: true });
 const workDir = join(cellDir, "task-root");
+const settingsPath = join(cellDir, "agy-settings.json");
+if (provider === "agy") {
+  const workspace = workDir.replaceAll("\\", "/");
+  writeFileSync(settingsPath, `${JSON.stringify({
+    permissions: {
+      allow: [`read_file(${workspace})`, `write_file(${workspace})`, "command(npm.cmd test)"],
+      deny: ["mcp(*)", "read_url(*)", "execute_url(*)"],
+    },
+  }, null, 2)}\n`, "utf8");
+}
 const clone = spawnSync("git", ["-c", "core.autocrlf=false", "clone", "--local", "--no-hardlinks", baseDir, workDir], { encoding: "utf8" });
 if (clone.status !== 0) throw new Error(`Fixture clone failed: ${clone.stderr}`);
 for (const file of task.files) copyFileSync(join(baseDir, file.path), join(workDir, file.path));
@@ -98,7 +108,7 @@ if (provider === "claude") {
   if (model) commandArgs.push("--model", model);
   commandArgs.push(prompt);
 } else {
-  commandArgs = ["--print", "--mode", "accept-edits", "--output-format", "stream-json"];
+  commandArgs = ["--print", "--mode", "accept-edits", "--sandbox", "--settings", settingsPath, "--output-format", "stream-json"];
   if (model) commandArgs.push("--model", model);
   commandArgs.push(prompt);
 }
@@ -152,12 +162,33 @@ if (provider === "claude") {
   const sessionIds = [...new Set(events.map(event => event.data?.sessionId).filter(Boolean))];
   assert(sessionIds.length <= 1, "Kiro stream contained conflicting session IDs");
   const finished = [...events].reverse().find(event => event.type === "runFinished")?.data;
+  const metadata = [...events].reverse().find(event => event.type === "metadata")?.data;
   adapter = {
     ...adapter,
     sessionId: sessionIds[0] ?? finished?.sessionId ?? null,
-    complete: finished?.status === "success",
+    complete: finished != null && finished.status === "success",
+    completionObserved: finished != null,
+    terminalStatus: finished?.status ?? null,
     stopReason: finished?.stopReason ?? null,
+    actualModel: metadata?.model ?? metadata?.modelId ?? null,
     contextUsagePercentage: [...events].reverse().find(event => event.data?.contextUsagePercentage != null)?.data.contextUsagePercentage ?? null,
+  };
+} else if (provider === "agy") {
+  const events = stdout.toString("utf8").split(/\r?\n/).filter(Boolean).flatMap(line => {
+    try { return [JSON.parse(line)]; } catch { return []; }
+  });
+  const initialized = events.find(event => event.event === "init")?.init;
+  const terminal = [...events].reverse().find(event => event.event === "result")?.result;
+  adapter = {
+    ...adapter,
+    sessionId: terminal?.conversation_id ?? initialized?.conversation_id ?? null,
+    actualModel: initialized?.model ?? terminal?.model ?? null,
+    usage: terminal?.usage ?? null,
+    complete: terminal != null && terminal.status === "SUCCESS",
+    completionObserved: terminal != null,
+    terminalStatus: terminal?.status ?? null,
+    terminalError: terminal?.error ?? null,
+    permissionMode: initialized?.permission_mode ?? null,
   };
 }
 
@@ -248,6 +279,14 @@ const native = {
   error: child.error?.message ?? null,
   durationMs,
   complete: adapter.complete,
+  completionObserved: adapter.completionObserved ?? null,
+  terminalStatus: adapter.terminalStatus ?? null,
+  terminalError: adapter.terminalError ?? null,
+  permissionMode: adapter.permissionMode ?? null,
+  scopedSettings: provider === "agy" ? {
+    path: "agy-settings.json",
+    sha256: createHash("sha256").update(readFileSync(settingsPath)).digest("hex"),
+  } : null,
   stopReason: adapter.stopReason ?? null,
   contextUsagePercentage: adapter.contextUsagePercentage ?? null,
   embeddedErrors,
@@ -261,7 +300,7 @@ const native = {
 };
 const result = {
   schemaVersion: 1,
-  status: child.error?.code === "ETIMEDOUT" ? "timeout" : child.status !== 0 ? "native-error" : embeddedErrors.length > 0 ? "infrastructure-error" : adapter.complete === false ? "native-turn-failed" : "native-exit-zero",
+  status: child.error?.code === "ETIMEDOUT" ? "timeout" : child.status !== 0 ? "native-error" : embeddedErrors.length > 0 ? "infrastructure-error" : ["kiro", "agy"].includes(provider) && !adapter.completionObserved ? "missing-completion" : adapter.complete === false ? "native-turn-failed" : "native-exit-zero",
   command: [executable, ...commandArgs],
   cell: { caseId, seedCommit: headBefore, seedTree: treeBefore, workDir },
   native,
