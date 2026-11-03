@@ -70,6 +70,18 @@
     "steps": ["claim (wf-planner)", "worker (wf-coder)", "review (semantic_reviewer)", "land (wf-planner)"],
     "runtime_validation": "accepted by workflow runner and started; validate_workflow command not separately run"
   },
+  "runtime_recipe": {
+    "fixture_path": "%TEMP%/gm-t161-fixture/.kiro/workflows/orchestrate-loop.workflow.json",
+    "name": "orchestrate-loop",
+    "description": "Model a local ticket claim, worker, independent review, and integration handoff; no remote operations.",
+    "inputs": {"task": "prompt"},
+    "steps": [
+      {"type": "step", "id": "claim", "agent": "wf-planner", "prompt": "For {{task}}, identify the ticket and acceptance criteria. Do not edit files or use tools."},
+      {"type": "step", "id": "worker", "agent": "wf-coder", "prompt": "Describe a proposed implementation for {{task}} in an isolated worktree. This test has tools disabled: do not execute commands or claim files changed.\n\nClaim output:\n{{claim.output}}"},
+      {"type": "step", "id": "review", "agent": "semantic_reviewer", "prompt": "Independently assess the proposed implementation for {{task}} against the criteria. Do not edit files or use tools.\n\nWorker proposal:\n{{worker.output}}"},
+      {"type": "step", "id": "land", "agent": "wf-planner", "prompt": "Summarize the local verification and integration handoff for {{task}}. Do not push or close anything.\n\nReview output:\n{{review.output}}"}
+    ]
+  },
   "runtime": {
     "transcript": ".scratch/t161-runtime-evidence.txt",
     "launch_command": "kiro-cli chat --v3 --trust-workspace --trust-tools= --tui",
@@ -77,7 +89,7 @@
     "observations": [
       "Workflow started and monitor reported running 0/4; reached 3/4.",
       "Claim step requested tkt ready; permission UI led to a user-input pause.",
-      "p requested pause (pausing...); r resumed to running 1/4, then run advanced to 2/4 and 3/4.",
+      "send_message request produced a paused workflow at 0/4; sending a response resumed it. Later, p showed pausing... and r returned to running 1/4, then 2/4 and 3/4; no explicit paused status was captured between that keyboard pause request and r.",
       "Land step errored after local inspection; monitor offered r retry. Retry restarted the land step at 3/4.",
       "A local test command request was reported rejected with exit code -1. UI navigation during other local reads was ambiguous; tool approvals cannot be reconstructed exactly.",
       "No full completion, worktree creation, commit, or remote operation observed."
@@ -86,12 +98,26 @@
     "tool_boundary": "--trust-tools= exposed approval prompts; one or more local fixture reads appeared in UI output and approval state is ambiguous",
     "settlement": {
       "v3_cli_pids_stopped": [10748, 78300],
-      "owned_backend_pids_stopped": [19268, 70148, 75788, 34428],
+      "process_tree_parent_map": {
+        "10748_v3_cli": {"parent": 12888, "children": {"70148_bun": {"children": ["19268_kiro_kas"]}}},
+        "78300_v3_cli": {"parent": 78676, "children": {"34428_bun": {"children": ["75788_kiro_kas"]}}}
+      },
+      "all_six_owned_pids_stopped_and_absent": true,
       "profile_files": 37,
-      "profile_bytes": 202148,
-      "fixture_and_profile_retained_for_critic": true
+      "profile_bytes": 502689,
+      "fixture_files": 65,
+      "fixture_bytes": 100555
     }
   },
+  "raw_artifacts": [
+    {"path": ".scratch/t161-native-evidence.txt", "bytes": 2656, "lifecycle": "retain through critic review, then recycle exact file"},
+    {"path": ".scratch/t161-orchestrate.workflow.json", "bytes": 1285, "lifecycle": "retain through critic review, then recycle exact file; recipe contents are promoted above"},
+    {"path": ".scratch/t161-runtime-evidence.txt", "bytes": 5729, "lifecycle": "retain through critic review, then recycle exact file"},
+    {"path": "%TEMP%/gm-t161-fixture", "files": 65, "bytes": 100555, "lifecycle": "retain through critic review, then recycle exact fixture tree"},
+    {"path": "%TEMP%/gm-t161-kiro-home", "files": 37, "bytes": 502689, "lifecycle": "retain through critic review, then recycle exact profile tree; contains generated session state"},
+    {"path": "%TEMP%/gm-t161-fixture/.kiro/workflows/lifecycle-pause.workflow.json", "bytes": 511, "lifecycle": "not run; recycle with fixture after critic"},
+    {"path": "%TEMP%/gm-t161-fixture/.kiro/workflows/lifecycle-retry.workflow.json", "bytes": 402, "lifecycle": "not run; recycle with fixture after critic"}
+  ],
   "sources": [
     "https://kiro.dev/docs/workflows/authoring/",
     "https://kiro.dev/docs/workflows/manage/",

@@ -10,11 +10,11 @@ independence. No isolated worktree, commit, or land operation was observed.
 
 The recipe structure can describe sequences, repeats, parallel branches, and watches.
 However, recipe structure alone does not establish worktree isolation or an actual
-independent reviewer. The four-step recipe in `.scratch/t161-orchestrate.workflow.json`
-uses `wf-planner`, `wf-coder`, and `semantic_reviewer`; the runtime monitor showed agent
-steps and output handoffs. The schema has no worktree node or isolation property, and the
-worker step did not create a worktree. The workflow also did not complete a successful
-land step. See the runtime event transcript in `.scratch/t161-runtime-evidence.txt`.
+independent reviewer. The four-step recipe uses `wf-planner`, `wf-coder`, and
+`semantic_reviewer`; the runtime monitor showed agent steps and output handoffs. The
+schema has no worktree node or isolation property, and the worker step did not create a
+worktree. The workflow also did not complete a successful land step. See the
+[evidence receipt](evidence/kiro-workflows-20261102.json).
 
 ## What was observed
 
@@ -35,7 +35,8 @@ land step. See the runtime event transcript in `.scratch/t161-runtime-evidence.t
   Stop conditions accept `containsText`, `fileCheck`, or `completionSignal`.
 - **Observed:** the same installed bundle registers `_kiro/workflow/inspect`,
   `_kiro/workflow/pause`, `_kiro/workflow/resume`, `_kiro/workflow/retry`, and
-  `_kiro/workflow/cancel`. This proves methods exist in the installed client bundle; it
+  `_kiro/workflow/cancel`. The live TUI exposed pause, resume, and retry controls; inspect
+  and cancel were not exercised.
 - **Observed:** the fixture had no workspace hooks, agents, or MCP servers before this
   spike. The user profile had 30 agent files and 8 hook files. I used documented
   `KIRO_HOME` redirection to a temporary profile. The only setting value written there
@@ -48,14 +49,15 @@ land step. See the runtime event transcript in `.scratch/t161-runtime-evidence.t
 - **Observed:** V3 TUI launched with `--trust-workspace --trust-tools=` and accepted
   `/workflow run orchestrate-loop --task "bounded fixture demonstration"`. The monitor
   advanced from `running 0/4` to `3/4`. A claim step requesting `tkt ready` reached a
-  permission prompt; the UI then reported a request for user input and paused. Sending a
-  no-tools response resumed the run. Pressing `p` showed `pausing...`; pressing `r`
-  resumed it to `running 1/4`, after which it reached `2/4` and `3/4`.
+  permission prompt; separately, the UI reported that the step requested user input and
+  the workflow was paused. Sending a no-tools response resumed the run. Later, pressing
+  `p` showed `pausing...`; pressing `r` returned the run to `running 1/4`. No explicit
+  paused status was captured between that keyboard pause request and resume.
 - **Observed:** the land step errored after a local inspection request, and the monitor
   exposed `r retry`. Pressing it returned the run to `running 3/4` and restarted that
   step. Subsequent UI output included reads of fixture ticket files. Approval navigation
   during the shell/read requests was ambiguous; I cannot establish which actions were
-  explicitly approved or denied. The transcript shows only fixture-local reads and a
+  explicitly approved or denied. The UI showed fixture-local reads and a
   later `npm test` request that the UI reported as rejected with exit code -1. No
   successful land, commit, or remote operation occurred.
 - **Observed:** final fixture Git status contained only `?? .kiro/`, the spike's own
