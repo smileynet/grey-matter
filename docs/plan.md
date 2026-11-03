@@ -275,7 +275,7 @@ auth remains conditional on the result of #186.
 | 199 | Pin the evaluation dashboard seed after observed template drift | ✅ done |
 | 200 | Freeze the complete evaluation seed independently of host tooling | ✅ done |
 | 167 | 13. Compare implementation worker tiers | ✅ done |
-| 168 | 14. Compare reviewer tiers with planted defects and false positives | in_progress |
+| 168 | 14. Compare reviewer tiers with planted defects and false positives | ✅ done |
 | 169 | 15. Compare research/exploration tiers against a fixed answer key | in_progress |
 | 170 | 16. Compare documentation, triage and classification tiers | in_progress |
 | 171 | 17. Sweep effort levels while holding each model fixed | in_progress |

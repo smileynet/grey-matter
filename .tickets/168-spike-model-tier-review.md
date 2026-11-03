@@ -1,7 +1,7 @@
 ---
 id: "168"
 title: "Spike: cheap vs default models as reviewers catching planted defects"
-status: in_progress
+status: done
 blocked_by: ["174", "199"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
@@ -38,10 +38,19 @@ preserves the earlier failures, baseline proof and current outcomes.
 
 ## Acceptance criteria
 
-- [ ] A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note.
-- [ ] A recommendation for this task class: the cheapest tier that met the bar, or "keep the default", folded into the Which model for what table in models-and-usage.md.
-- [ ] Settings changed for the spike restored or recorded; sandbox folders removed.
+- [x] A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note.
+- [x] A recommendation for this task class: the cheapest tier that met the bar, or "keep the default", folded into the Which model for what table in models-and-usage.md.
+- [x] Settings changed for the spike restored or recorded; sandbox folders removed.
 
 ## Reconciliation (2026-11-02)
 
 Freeze diffs and answer keys; score defect recall and false positives separately. Keep the reviewer blind to tier labels where supported, and do not let the producer grade its own review. A successful tier result supports a recommendation only for the measured task/defect set.
+
+## Resolution (2026-11-03)
+
+done: published the bounded reviewer-tier comparison, blind-score summary and independent audit; keep current defaults for automated reviews. Semantic recall on four toy cases does not establish production reliability. Verification:21 pre-merge passes and2 baseline-supported skips, all pre-push checks passed. Exact native sessions and temporary workdirs removed; private evidence retained through169-172. No Google call, provider fallback or settings change.
+
+### Verification
+1. ✓ A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note. — "Final report model-tier-review-20261103-results.md and sanitized evidence cover23 attempts:14 strict JSON,22 nonempty responses with seeded defect and changed-line citation in secondary blind scoring,9 unsupported claims and5 duplicates. Independent auditd45c9d39 accepted sourcec632aafd and cleanup1f68547; original raw and blind-score hashes preserved. Eight Google cells blocked and one Claude cheap cell omitted; prior unintended-turn usage unknown, not a verified aggregate budget."
+2. ✓ A recommendation for this task class: the cheapest tier that met the bar, or "keep the default", folded into the Which model for what table in models-and-usage.md. — "The Which model for what table and dated review section retain configured defaults. No cheaper profile completed all4 strict cases; requested Claude haiku served Sonnet5.5, Codex/Kiro actual identities unknown. Root shared guidance independently accepted3b2cb932/64ee3dfe. Final code pre-mergec917c8b:21 pass,2 explicit unchanged-origin baseline skips(gate-runner/artifact-hygiene); tkt compatibility passed. Pre-push7/7 and scoped metadata gates passed; accepted source pushed."
+3. ✓ Settings changed for the spike restored or recorded; sandbox folders removed. — "No global model, effort or permission configuration changed. All8 captured Kiro V2 sessions deleted and absent,7599 non-target sessions preserved. All23 recursively verified empty temp CWDs recycled and absent. Cleanup receipts independently audited; private raw/scoring/key/ledger148 files7219659B retained through169-172 handoff. No raw responses, map or session IDs promoted."
