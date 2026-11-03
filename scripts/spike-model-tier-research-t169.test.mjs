@@ -128,6 +128,20 @@ test("valid negated claims stay pending for manual semantics; unsupported claims
   assert.equal(finalizeReview(unsupportedCandidate, unsupportedReview, unsupportedText).status, "fail");
 });
 
+test("missing summary facts need no fabricated quotes and obey the frozen four-of-five threshold", () => {
+  const fourText = summaryText.replace(", but locked records cannot be deleted", "");
+  const fourCandidate = analyzeResponse("module-summary", fourText, "1020304050607080");
+  const fourFacts = summaryFacts.map((fact, index) => index === 4 ? { id: fact.id, supported: false } : fact);
+  const fourReview = bindReview(fourCandidate, "module-summary", { moduleSummary: { facts: fourFacts, unsupportedMaterialClaims: [], wordLimitReviewed: true } });
+  assert.equal(finalizeReview(fourCandidate, fourReview, fourText).status, "pass");
+
+  const threeText = fourText.replace(" and other workspaces to 30 days", "");
+  const threeCandidate = analyzeResponse("module-summary", threeText, "2030405060708090");
+  const threeFacts = summaryFacts.map((fact, index) => [2, 4].includes(index) ? { id: fact.id, supported: false } : fact);
+  const threeReview = bindReview(threeCandidate, "module-summary", { moduleSummary: { facts: threeFacts, unsupportedMaterialClaims: [], wordLimitReviewed: true } });
+  assert.equal(finalizeReview(threeCandidate, threeReview, threeText).status, "fail");
+});
+
 test("citation relation is manually checked in full; incomplete 12-day wording cannot pass", () => {
   const incomplete = "The explicit setting is 12 days; see docs/policy.md, Record retention.";
   const candidate = analyzeResponse("cited-answer", incomplete, "2233445566778899");

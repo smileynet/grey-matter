@@ -5,7 +5,7 @@ three read-only research tasks under each available harness's low-cost profile
 and native default. Calls are gated on independent review of the frozen packet,
 controller and blinded-review procedure, followed by the parent releasing the
 serial measurement lease. Frozen protocol SHA-256 is
-`ffabc869e55124dab6c5e604e6c525a737fbaf6bf4b5fe2ad5c7450ad5ade4c8`.
+`e086dfb13a8ac3b16de4712d1e82707be6cad663b18eb98c0d2d40d60f62ec8c`.
 
 ## What the planned comparison measures
 
@@ -104,7 +104,7 @@ The [controller](../../../scripts/spike-model-tier-research-t169.mjs) SHA-256 is
 `7f1e53e42f952c155bf313a3081720ee66f1f700f49c475e5a978d671d7ef921`; the
 [separate held-out grader](../../../scripts/grade-model-tier-research-t169.mjs)
 SHA-256 is
-`ef648aa36545a622504df5ec2aa474d3edf906e84bee812a707d42b4e4cfe673`. Their
+`7db36c67ceca1c8eaaf20d7bfd103684fb7319b91447d9ed653931df79a6c88c`. Their
 exact hashes, the source packet and prompt hashes are bound in the private
 protocol. No live provider command or measurement call has been run for #169.
 After critic acceptance, the parent must issue an authorization receipt

@@ -108,10 +108,12 @@ function validateReview(task, candidate, review, response, packet, key) {
     const factIds = ["explicitOverrideIncludingZero", "managedDefault90", "otherDefault30", "ownerRequired", "lockedCannotDelete"];
     if (!Array.isArray(facts) || facts.length !== factIds.length || facts.some((fact, index) => typeof fact.supported !== "boolean" || fact.id !== factIds[index])) throw new Error("Manual review must score each of the five frozen summary facts in rubric order");
     for (const fact of facts) {
-      requireQuote(response, fact.responseQuote, "the response");
       if (fact.supported) {
+        requireQuote(response, fact.responseQuote, "the response");
         const file = packet.source.files[fact.sourcePath];
         requireSourceQuote({ [fact.sourcePath]: file }, fact.sourcePath, fact.sourceQuote);
+      } else if (fact.responseQuote) {
+        requireQuote(response, fact.responseQuote, "the response");
       }
     }
     if (!Array.isArray(unsupportedMaterialClaims)) throw new Error("List unsupported material claims explicitly, or use an empty array");
