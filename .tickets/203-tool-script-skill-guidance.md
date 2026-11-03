@@ -1,7 +1,7 @@
 ---
 id: "203"
 title: "Give every tracked tool script task-specific agent skill usage guidance"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
@@ -9,6 +9,7 @@ validation_criteria:
   - "All operator scripts have reachable task-specific skill guidance with invocation, authorization, result interpretation and lifecycle; held spike tools remain held."
   - "Coverage checker rejects missing/stale guidance and new unclassified scripts in meaningful fixtures; independent critic and relevant repository checks pass."
 tags: ["stream:orchestration", "type:chore"]
+assignee: "codex"
 ---
 # Give every tracked tool script task-specific agent skill usage guidance
 
