@@ -2,7 +2,7 @@ import "./test-git-env.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
@@ -12,7 +12,9 @@ import {
   buildArgv,
   buildPrompt,
   childEnvironment,
+  directoryIdentity,
   hashPreparedPlan,
+  hasSameDirectoryIdentity,
   makePlan,
   profileList,
   readNativeOutput,
@@ -66,6 +68,8 @@ test("argv builders freeze exact per-provider effort and keep all task content p
 
 test("child environment is minimized and Claude's higher-priority effort agrees with argv", () => {
   const before = process.env.CLAUDE_CODE_EFFORT_LEVEL;
+  const hadOpenAiKey = Object.hasOwn(process.env, "OPENAI_API_KEY");
+  const beforeOpenAiKey = process.env.OPENAI_API_KEY;
   process.env.CLAUDE_CODE_EFFORT_LEVEL = "max";
   process.env.OPENAI_API_KEY = "test-secret";
   try {
@@ -76,18 +80,27 @@ test("child environment is minimized and Claude's higher-priority effort agrees 
   } finally {
     if (before === undefined) delete process.env.CLAUDE_CODE_EFFORT_LEVEL;
     else process.env.CLAUDE_CODE_EFFORT_LEVEL = before;
-    delete process.env.OPENAI_API_KEY;
+    if (hadOpenAiKey) process.env.OPENAI_API_KEY = beforeOpenAiKey;
+    else delete process.env.OPENAI_API_KEY;
   }
+  assert.equal(process.env.CLAUDE_CODE_EFFORT_LEVEL, before);
+  assert.equal(Object.hasOwn(process.env, "OPENAI_API_KEY"), hadOpenAiKey);
+  assert.equal(process.env.OPENAI_API_KEY, beforeOpenAiKey);
 });
 
 test("the actual run function passes exactly the hash-bound argv and empty cwd to fake spawn", () => {
   const privateRoot = tempRoot("t171-private-");
   const evidenceRoot = join(privateRoot, "evidence");
   const temp = tempRoot("t171-work-");
-  const plan = makePlan({ privateRoot, tempRoot: temp, tasks: ["diagnosis"], providers: ["claude"], efforts: ["low"] });
+  const generatedPlan = makePlan({ privateRoot, tempRoot: temp, tasks: ["diagnosis"], providers: ["claude"], efforts: ["low"] });
+  const planPath = join(privateRoot, "prepared-plan.json");
+  writeFileSync(planPath, `${JSON.stringify(generatedPlan)}\n`, { flag: "wx" });
+  const plan = JSON.parse(readFileSync(planPath, "utf8"));
   assert.equal(hashPreparedPlan(plan), plan.planSha256);
   const cell = plan.cells[0];
   assert.equal(readdirSync(cell.cwd).length, 0);
+  assert.ok(cell.cwdIdentity.fileId);
+  assert.ok(cell.cwdIdentity.device);
   const authorization = {
     schemaVersion: 1,
     nativeLeaseReleased: true,
@@ -142,7 +155,32 @@ test("non-empty authorized cwd is rejected before executable hashing or spawn", 
     leaseId: "test-lease",
   };
   writeFileSync(join(cell.cwd, "unexpected.txt"), "stop");
-  assert.throws(() => runPreparedCell({ plan, cellId: cell.cellId, authorization, spawn() { assert.fail("spawn must not run"); } }), /directory changed or is no longer empty/);
+  assert.throws(() => runPreparedCell({ plan, cellId: cell.cellId, authorization, spawn() { assert.fail("spawn must not run"); } }), /directory changed identity or is no longer empty/);
+});
+
+test("replacing the authorized path with another empty directory fails by stable identity before spawn", () => {
+  const privateRoot = tempRoot("t171-private-");
+  const temp = tempRoot("t171-work-");
+  const plan = makePlan({ privateRoot, tempRoot: temp, tasks: ["diagnosis"], providers: ["claude"], efforts: ["low"] });
+  const cell = plan.cells[0];
+  const replacement = mkdtempSync(join(temp, "replacement-"));
+  const movedOriginal = join(temp, "original-moved-aside");
+  renameSync(cell.cwd, movedOriginal);
+  renameSync(replacement, cell.cwd);
+  assert.equal(readdirSync(cell.cwd).length, 0);
+  assert.notDeepEqual(directoryIdentity(cell.cwd, temp), cell.cwdIdentity);
+  assert.equal(hasSameDirectoryIdentity(cell.cwd, temp, cell.cwdIdentity), false);
+  const authorization = {
+    schemaVersion: 1,
+    nativeLeaseReleased: true,
+    protocolSha256: plan.protocolSha256,
+    controllerSha256: plan.controllerSha256,
+    planSha256: plan.planSha256,
+    cells: [cell.cellId],
+    criticCommit: "c".repeat(40),
+    leaseId: "test-lease",
+  };
+  assert.throws(() => runPreparedCell({ plan, cellId: cell.cellId, authorization, spawn() { assert.fail("spawn must not run"); } }), /changed identity or is no longer empty/);
 });
 
 test("native output errors, limits, missing completion, and effort uncertainty stay distinct", () => {

@@ -25,7 +25,7 @@ const TASK_HASHES = Object.freeze({
   diagnosis: "5d0e9c2d6b33c98e4a563182878303048c79bc65cb6a2ae2a2ee777ed2c5fdaa",
   design: "c0899593028456328b791f6fb40ec3498b0d39faae1fdbb0394c8e910e489b20",
 });
-const PROTOCOL_SHA256 = "d1a32f062a606188c1c8025ff7ab380956a4435fcbc32ee6770125e823fdf4bc";
+const PROTOCOL_SHA256 = "835285b373d0db92d78fe58c1f331a06b1ed54c3877fad893f03f399a021fe7c";
 const TASK_IDS = Object.freeze(["diagnosis", "design"]);
 const EFFORTS = Object.freeze(["low", "medium", "high", "xhigh", "max"]);
 const PROVIDERS = Object.freeze(["claude", "codex", "kiro"]);
@@ -113,6 +113,29 @@ function isEmptyRealDirectory(path, allowedRoot) {
   return readdirSync(path).length === 0;
 }
 
+function directoryIdentity(path, allowedRoot) {
+  const rootReal = realpathSync(allowedRoot);
+  const targetReal = realpathSync(path);
+  const stat = lstatSync(path, { bigint: true });
+  if (!stat.isDirectory() || stat.isSymbolicLink()) throw new Error("Cell cwd is not a real directory");
+  if (targetReal !== rootReal && !targetReal.startsWith(`${rootReal}${sep}`)) throw new Error("Cell cwd escaped its temporary root");
+  if (stat.ino === 0n || stat.birthtimeNs === 0n) throw new Error("Filesystem does not expose a stable cell directory identity");
+  return {
+    realPath: targetReal,
+    device: stat.dev.toString(),
+    fileId: stat.ino.toString(),
+    birthtimeNs: stat.birthtimeNs.toString(),
+  };
+}
+
+function hasSameDirectoryIdentity(path, allowedRoot, expected) {
+  try {
+    return JSON.stringify(directoryIdentity(path, allowedRoot)) === JSON.stringify(expected);
+  } catch {
+    return false;
+  }
+}
+
 function profileList() {
   return [
     ...RUNNABLE_PROVIDERS.flatMap((provider) => TASK_IDS.flatMap((taskId) => EFFORTS.map((effort) => ({
@@ -171,6 +194,7 @@ function makePlan({ privateRoot: privateRootArg, tempRoot: tempRootArg, tasks = 
         const cellId = `T171-${provider}-${taskId}-${effort}`;
         const cwd = mkdtempSync(join(tempRoot, `cell-${randomUUID()}-`));
         if (!isEmptyRealDirectory(cwd, tempRoot)) throw new Error(`Cell cwd failed emptiness/bounds check: ${cellId}`);
+        const cwdIdentity = directoryIdentity(cwd, tempRoot);
         const executable = EXECUTABLES[provider]();
         rows.push({
           cellId,
@@ -183,6 +207,7 @@ function makePlan({ privateRoot: privateRootArg, tempRoot: tempRootArg, tasks = 
           executable,
           executableSha256: PINNED[provider],
           cwd,
+          cwdIdentity,
           argv: buildArgv(provider, effort, prompt, cwd),
           timeoutMs: TIMEOUT_MS,
           maxBufferBytes: MAX_OUTPUT_BYTES,
@@ -282,7 +307,7 @@ function runPreparedCell({ plan, cellId, authorization, spawn = spawnSync }) {
   const cell = plan.cells.find((item) => item.cellId === cellId);
   if (!cell) throw new Error(`Cell not found in prepared plan: ${cellId}`);
   validateParentAuthorization(plan, cell, authorization);
-  if (!isEmptyRealDirectory(cell.cwd, plan.tempRoot)) throw new Error("The authorized working directory changed or is no longer empty");
+  if (!isEmptyRealDirectory(cell.cwd, plan.tempRoot) || !hasSameDirectoryIdentity(cell.cwd, plan.tempRoot, cell.cwdIdentity)) throw new Error("The authorized working directory changed identity or is no longer empty");
   if (!existsSync(cell.executable) || hashFile(cell.executable) !== cell.executableSha256) throw new Error("Pinned provider executable changed since protocol review");
   if (cell.provider === "codex") {
     const sibling = join(dirname(cell.executable), "codex-code-mode-host.exe");
@@ -304,6 +329,7 @@ function runPreparedCell({ plan, cellId, authorization, spawn = spawnSync }) {
     closeSync(reservationFd);
     const childEnv = childEnvironment(cell.provider, cell.effort);
     const startedAt = Date.now();
+    if (!isEmptyRealDirectory(cell.cwd, plan.tempRoot) || !hasSameDirectoryIdentity(cell.cwd, plan.tempRoot, cell.cwdIdentity)) throw new Error("The authorized working directory changed identity or is no longer empty");
     const result = spawn(cell.executable, cell.argv, {
       cwd: cell.cwd,
       env: childEnv,
@@ -360,7 +386,7 @@ function prepare(options = {}) {
   const outputPath = join(options.manifestDir ?? PRIVATE_DIR, "prepared-plan.json");
   mkdirSync(dirname(outputPath), { recursive: true });
   writeFileSync(outputPath, canonical(plan), { flag: "wx" });
-  return { planPath: outputPath, planSha256: plan.planSha256, controllerSha256: plan.controllerSha256, protocolSha256: plan.protocolSha256, cells: plan.cellCount, blockedGoogle: plan.blocked.length };
+  return { planPath: outputPath, planSha256: plan.planSha256, controllerSha256: plan.controllerSha256, protocolSha256: plan.protocolSha256, cells: plan.cellCount, heldKiro: plan.held.length, blockedGoogle: plan.blocked.length };
 }
 
 function cli(argv) {
@@ -397,6 +423,8 @@ export {
   buildArgv,
   buildPrompt,
   childEnvironment,
+  directoryIdentity,
+  hasSameDirectoryIdentity,
   hashPreparedPlan,
   makePlan,
   profileList,
