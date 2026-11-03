@@ -189,6 +189,7 @@ if (provider === "claude") {
     terminalStatus: terminal?.status ?? null,
     terminalError: terminal?.error ?? null,
     permissionMode: initialized?.permission_mode ?? null,
+    availableTools: initialized?.tools ?? null,
   };
 }
 
@@ -283,6 +284,7 @@ const native = {
   terminalStatus: adapter.terminalStatus ?? null,
   terminalError: adapter.terminalError ?? null,
   permissionMode: adapter.permissionMode ?? null,
+  availableTools: adapter.availableTools ?? null,
   scopedSettings: provider === "agy" ? {
     path: "agy-settings.json",
     sha256: createHash("sha256").update(readFileSync(settingsPath)).digest("hex"),
