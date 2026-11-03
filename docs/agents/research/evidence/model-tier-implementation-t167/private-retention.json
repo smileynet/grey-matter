@@ -1,0 +1,10 @@
+{
+  "owner": "/root",
+  "location": "worker worktree",
+  "artifacts": [
+    {"path":".scratch/t167/oracle-key.json","bytes":1110,"sha256":"6795adb3bda09aadfd0853ae1256bc7022fe89ecef27d2a4b2ad83ff9dc6e676"},
+    {"path":".scratch/t167/protocol-v1.md","bytes":11321,"sha256":"fd0424119e3d87765c8b1fce7b8935cfc19f093560924121f74f8c826a034c18"}
+  ],
+  "backupVerified": false,
+  "retainUntil": "Independent audit and parent integration decision; then parent must retain and hash-verify private bytes or explicitly release exact hidden-vector recovery."
+}

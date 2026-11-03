@@ -31,4 +31,4 @@ The private grading key is separate from this document and from all task roots. 
 - **Infrastructure error:** native execution failed before a fair task result; it consumes its one attempt but is not a model-quality result.
 - **Blocked / not attempted:** no native request was started.
 
-The full hidden oracle remains private at `.scratch/t167/oracle-key.json`. Its owner, provenance hash, retention condition, and recovery handoff are recorded in [`private-oracle-lifecycle.md`](private-oracle-lifecycle.md).
+The full hidden oracle remains private as `oracle-key.json`. Its owner, provenance hash, retention condition, and recovery handoff are recorded in [`private-oracle-lifecycle.md`](private-oracle-lifecycle.md).

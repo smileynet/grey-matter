@@ -63,7 +63,7 @@ grey-matter's working defaults, until the model-tier spikes (tickets 167-172) re
 | Task class | Tier | Why |
 |---|---|---|
 | Orchestration, planning, hard diagnosis, architecture | Strongest default (Opus 5.5, `gpt-6.1-sol`/Astra, Kiro `auto`, Argon) | Judgement errors here cost the most |
-| Implementation of a well-specified ticket | Mid or cheap tier (Sonnet/Haiku 5.5, `gpt-6-luna`, `claude-haiku-4.5`, `flash`) | Ticket 124-129 workers on cheap tiers landed T1-T4 in every harness |
+| Implementation of a well-specified ticket | Keep the configured provider default; validate any cheaper profile with independent checks | The dated #167 trial below separates correct artifacts from unverified agent actions and harness failures; it does not justify changing defaults |
 | Review and spec check | Mid tier or stronger, in a separate context | The reviewer must catch what the worker missed; ticket 168 tests a cheap reviewer |
 | Read-only research and exploration fan-out | Fast tier | High volume, low risk; ticket 169 |
 | Doc edits, triage, classification | Fast or mid tier | Ticket 170 |
@@ -71,6 +71,24 @@ grey-matter's working defaults, until the model-tier spikes (tickets 167-172) re
 Rules that hold now:
 - **Escalation and destructive steps are never left to a cheap model alone.** In ticket 126 a Haiku worker tried to delete the README, and in ticket 128 one did.
 - **Within one provider**, a cheaper model may be chosen per task class. Switching to another provider follows [provider switching](../provider-switching.md).
+
+### Implementation evidence (2026-11-02)
+
+The [implementation trial](../research/model-tier-implementation-20261102.md)
+and its [independent audit](../research/model-tier-trial-20261103-audit.md)
+cover one run per fixture/profile. Ambiguity probes were scored separately from
+ordinary implementation tasks; these results do not establish general reliability.
+
+| Provider | Verified observation | Recommendation for this task class |
+|---|---|---|
+| Anthropic | Haiku 5.5 and Opus 5.5 artifacts passed all implementation behavior checks. Native JSON omitted successful agent test transcripts; four cells contain test-permission denials and the other four lack positive execution proof. Independent controller tests passed separately. | Keep current defaults. Neither profile demonstrated the full agent workflow bar; cheaper list-cost estimates alone do not qualify a replacement. |
+| Kiro | Both requested profiles passed ordinary implementation and held-out behavior checks. The cheap profile guessed a missing count style and violated clarification instructions; served identity and usage were absent. | Keep native default when ambiguity handling matters. This is a profile observation, not a recommendation about an unreported served model. |
+| OpenAI | Four attempts failed because the controller used an incomplete executable installation; eight cells were unattempted. | Keep current defaults; no model-quality comparison is available from this batch. |
+| Google | Ten attempts mixed correct artifacts with setup, tool-policy and sandbox test failures; two cells remained unattempted after a security hook stopped tools. | Keep current defaults; no fair tier recommendation. Further Agy execution remains on hold while the stop directive's scope is unresolved. |
+
+Reported Claude costs are native list-price estimates, not billed amounts.
+Missing identity, usage and cost remain unknown. No model or effort setting was
+changed by this recommendation, and no missing cell was moved to another provider.
 
 ## Effort
 
