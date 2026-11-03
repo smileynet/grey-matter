@@ -100,6 +100,12 @@ stays out of the way, under folds and links.
    give a direct link. Finish when the page reflects the closed ticket, any ask is visible in
    "Needs you", the Plan tab matches the board, and the checker passes.
 
+Before an authorized Site publication, use the read-only
+[publication preflight](references/publication-preflight.md). The parent supplies the
+expected identity separately from the worker packet. A failed or stale preflight stops
+publication; this helper neither authorizes nor performs it. Confirm delivery from actual
+deployment output.
+
 The full field list, writing rules, accessibility and size limits are in the
 [dashboard contract](references/dashboard-contract.md). Use this for the evolving status view;
 use changelog for release history and the implementation workflows for building the work.
