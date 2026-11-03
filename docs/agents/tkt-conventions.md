@@ -47,21 +47,26 @@ Physical layout:
   evidence is dropped. So pass `--vc "..."` (repeatable, one per acceptance criterion) at
   `tkt new` time for any ticket you'll close with evidence. (Config only *warns* on missing
   evidence, so this is a convention, not a gate — but the warning means lost evidence.)
-- **Closing is terminal.** tkt 0.4.0 refuses *every* mutation of a remote-closed ticket —
-  no reopen (`edit --status`), no AC re-check (`close --force --check-all`, `edit --ac`),
-  and `validate --fix` won't touch it. So **always `--check-all` at close time**: if you
-  close without checking the ACs, the `unchecked-acs-on-done` warning is permanent (you
-  cannot fix it afterward without a forbidden hand-edit). The upstream gap is tracked by
-  ticket 33.
+- **Done and cancelled are different terminal outcomes.** Use `tkt close` only for
+  verified delivery, with `--check-all` and evidence for each validation criterion.
+  Never hand-edit status or claim a later checkbox edit as proof of an earlier run.
+  Retire abandoned work through `tkt cancel`, not successful closure. On installed
+  tkt 0.4.0 (`898ceb5`, help checked 2026-11-03), `tkt reopen ID` returns a
+  **cancelled** ticket to open and preserves its history; this does not establish
+  support for reopening a done ticket. Inspect current `close`, `cancel` and
+  `reopen` help before relying on lifecycle behavior from an older version.
 - Use `--status backlog` only for deliberately parked work.
 - grey-matter's `.tickets/config.toml` has push enabled, so `new`/`claim`/`close`
   commit and push. Await each Git push or tkt mutation through its final result
   before starting another write in this repository. After a push error, fetch
   and compare `HEAD` with its upstream before retrying; a concurrent push may
   already have published the commit.
-- **`tkt capabilities -o json` is partial** — it under-reports flags (e.g. `--tags`,
-  `--vc`, and `edit --ac` vs `--vc`) and commands. Confirm any flag against
-  `tkt <cmd> --help`, not the manifest alone; see `verify-tkt-usage`.
+- **Discover against the installed CLI.** Use `tkt capabilities -o json` for the
+  structured command/flag inventory, then `tkt <cmd> --help` for the invocation you
+  need. The installed 0.4.0 manifest includes `new`'s `tags` and `vc` flags; the
+  earlier blanket claim that they are missing is obsolete. Parse only the needed
+  command/fields rather than dumping the entire manifest into context. Use
+  `verify-tkt-usage` to check a workflow pack against its exact CLI version.
 
 ## Tag vocabulary (namespaced)
 

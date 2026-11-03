@@ -12,13 +12,22 @@ Under Kiro Crew, read [ticket-state mirroring](../../../docs/agents/kirocrew-tic
 and apply its optional updates after claim/resume, when waiting on the human and
 after a successful close. Other harnesses skip this reference.
 
-Call the Skill tool with "tdd" to build it, at the pre-agreed seams. (tdd re-points the seam for a game; you don't need to.)
+For behavior changes, call the Skill tool with "tdd" at the pre-agreed seams when
+test-first implementation fits the work. For research or reversible prose changes,
+verify the actual acceptance evidence and applicable project checks; do not invent
+implementation-mirroring tests. TDD re-points the seam for a game when needed.
 
 Plan verification by assertion with the [test-environment ladder](../../../docs/agents/test-environment-ladder.md#select-by-assertion):
 choose the lowest faithful environment, separate cost from criticality, and name the lifecycle gate
 and evidence reuse limits before running commands. Its worked routes cover native/provider boundaries.
 
-After each slice, typecheck and run the slice's tests at the leftmost tier that observes them. Before the push that carries the ticket's code, run the pre-merge check the project's `AGENTS.md` names (its `check` command in the speed phase) and cite its output at close: up to tier 2 of the [test-environment ladder](../../../docs/agents/test-environment-ladder.md) for the changed areas. Run tier 3 and above only when the ticket's outcome lives there, and report each tier you did not run as "not run".
+After each slice, run the applicable typecheck/tests at the leftmost tier that
+observes its behavior. Before the push that carries the ticket's code, run the
+pre-merge check the project's `AGENTS.md` names (its `check` command in the speed
+phase) and cite its output at close: up to tier 2 of the
+[test-environment ladder](../../../docs/agents/test-environment-ladder.md) for the
+changed areas. Run tier 3 and above only when the ticket's outcome lives there,
+and report each tier you did not run as "not run".
 
 When the ticket's acceptance criteria are met, review the work at the depth its risk calls for (see [Review depth](#review-depth) below). Code-review, when it runs, files its findings as tickets; a spec check reports its unmet items. Fix only the findings that block *this* ticket's acceptance criteria before committing; the rest stay as follow-up tickets, don't balloon this ticket into fixing everything review surfaces.
 

@@ -92,9 +92,11 @@ these are per-harness/per-distribution concerns, not spec guarantees.
 grey-matter nests every skill under a category (`skills/engineering/<name>/`,
 `skills/productivity/<name>/`). This is portable **only when discovery is explicit**:
 
-- A **manifest that enumerates paths** (a Claude Code plugin's `plugin.json` `skills:`
-  array listing `./skills/engineering/<name>`, at any depth) finds nested skills fine.
-  This is how upstream ships, and the layout we inherited.
+- A **plugin manifest with skill roots** can supply discovery explicitly.
+  grey-matter's current `.claude-plugin/plugin.json` lists bucket directories
+  (`./skills/engineering`, `./skills/productivity`, `./skills/meta`), rather than
+  enumerating every nested skill. The plugin-manifest checker verifies that
+  layout; see [distribution maintenance](distribution-maintenance.md).
 - A **flat one-level auto-scan** (treating each immediate child of a skills root as a
   skill) does **not** recurse into category folders: it would see `engineering/`, find no
   `SKILL.md`, and skip the real skill one level deeper.
@@ -102,10 +104,12 @@ grey-matter nests every skill under a category (`skills/engineering/<name>/`,
   `name: implement`), regardless of nesting depth. Nesting never breaks the name rule; it
   only risks discovery.
 
-Consequence: if grey-matter is distributed as a plugin, its manifest must list every
-skill's nested path and stay in sync (a stale manifest = a silently unloaded skill). If a
-target harness only flat-scans, the layout must be flattened or projected by a build step.
-Distribution is an open decision (see the tracking ticket).
+Consequence: preserve the supported discovery mechanism of each distribution.
+Adding a bucket requires its manifest root; adding a skill to an existing bucket
+does not require an individual manifest entry. Bare copy-mode installs project
+skills into the selected flat roots and rewrite resource links; deployment
+validates ownership and duplicate discovery. Do not infer recursive discovery
+for another harness from Claude's bucket-root behavior.
 
 ### Reference files must be additive, not load-bearing
 
