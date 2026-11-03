@@ -472,16 +472,25 @@
     "scratch_artifacts": [
       {
         "path": ".scratch/t194-cleanup.ps1",
-        "disposition": "worker-owned helper; remove after critic metadata review"
+        "bytes": 6650,
+        "disposition": "recycled to OS trash after critic review; absence verified"
       },
       {
         "path": ".scratch/t194-promote-cleanup.ps1",
-        "disposition": "worker-owned helper; remove after critic metadata review"
+        "bytes": 3820,
+        "disposition": "recycled to OS trash after critic review; absence verified"
       },
       {
         "path": ".scratch/t194-cleanup-result.json",
-        "disposition": "metadata-only cleanup receipt; remove after critic metadata review"
+        "bytes": 13223,
+        "disposition": "metadata promoted to receipt, then recycled to OS trash after critic review; absence verified"
+      },
+      {
+        "path": ".scratch",
+        "bytes": 0,
+        "disposition": "empty worker-created directory recycled to OS trash; absence verified"
       }
-    ]
+    ],
+    "scratch_bytes_recycled": 23693
   }
 }
