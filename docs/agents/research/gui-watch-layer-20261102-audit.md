@@ -1,7 +1,7 @@
 # Independent audit: GUI watch layer comparison (ticket 173)
 
-**Audited revision:** `003faa5009b275ec4129e33861c2a1376c7a9f63` (report and receipt)
-**Reviewed:** 2026-11-03
+**Audited revision:** `85729cd4cb65bf7522f46fa9ecd8c6bef32aceff` (report and receipt)
+**Reviewed:** 2026-11-02 (client local date)
 **Overall trust:** 8/10 — first-party sources substantiate the documented product capabilities; local GUI visibility and cross-harness attachment were not established.
 
 ## Claim review
@@ -15,6 +15,8 @@
 | Kiro Crew | **Supported, with one weak version-specific claim** | [Session docs](https://kiro.dev/docs/crew/chat/sessions/) confirm thinking/waiting/idle status and per-session approval state; [security docs](https://kiro.dev/docs/crew/security/) describe interactive approval; the session docs support continuing a session in chat. The [0.9.0 changelog](https://kiro.dev/changelog/crew/) documents a Usage tab estimating tokens and credit runway, but the local record says Crew 0.11.1. The report labels that version mismatch and does not present the old changelog as exact-build verification. |
 
 The report’s central limitation is correctly scoped: no inspected product documentation proves that these native interfaces adopt arbitrary workers launched by a separate headless orchestrator. This is an unverified integration claim, not proof that adoption is impossible. The recommendation to keep the orchestrator ledger authoritative follows from that evidence boundary.
+
+The final worker delta records the Kiro Crew process snapshot with its timestamp, process and parent IDs, and explicitly says the evidence cannot distinguish a newly started process from activation of a pre-existing one. That qualification is appropriate. The evidence JSON now substitutes `%LOCALAPPDATA%` for the Windows user-profile prefix in launch, inventory, and screenshot-error strings; this retains the executable location while removing the profile name. The report uses `%USERPROFILE%` for the same normalized screenshot-error path. The checked date is consistently labeled as the client-local date; the Codex Help page’s displayed update date remains separately recorded as 2026-11-03.
 
 ## Local evidence and limits
 
