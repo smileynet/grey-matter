@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import {
   EFFORTS,
   MODELS,
+  PINNED_CODEX_HOST_SHA256,
   RUNNABLE_PROVIDERS,
   buildArgv,
   buildPrompt,
@@ -21,6 +22,7 @@ import {
   makePlan,
   profileList,
   readNativeOutput,
+  verifyHashPinnedFile,
 } from "./spike-model-effort-t171.mjs";
 
 const hash = (value) => createHash("sha256").update(value).digest("hex");
@@ -107,6 +109,17 @@ test("argv builders freeze effort and keep task content as one positional argume
     }
   }
   assert.throws(() => buildArgv("google", "low", "x", "C:/empty"), /not enabled/);
+});
+
+test("pinned-file verifier accepts matching fake bytes and rejects changed bytes", () => {
+  const directory = tempRoot("t171-pinned-file-");
+  const hostPath = join(directory, "codex-code-mode-host.exe");
+  const pinnedFixture = Buffer.from("synthetic codex host bytes v1");
+  writeFileSync(hostPath, pinnedFixture);
+  assert.equal(PINNED_CODEX_HOST_SHA256, "977c1f01c9efac0bfe1b9032717c95f92e1c965c8441a8dacbfe824c5c79a527");
+  assert.doesNotThrow(() => verifyHashPinnedFile(hostPath, hash(pinnedFixture), "Pinned Codex host"));
+  writeFileSync(hostPath, Buffer.from("synthetic codex host bytes changed"));
+  assert.throws(() => verifyHashPinnedFile(hostPath, hash(pinnedFixture), "Pinned Codex host"), /changed since protocol review/);
 });
 
 test("child environment is minimized and restores original environment exactly", () => {

@@ -26,7 +26,7 @@ const TASK_HASHES = Object.freeze({
   diagnosis: "5d0e9c2d6b33c98e4a563182878303048c79bc65cb6a2ae2a2ee777ed2c5fdaa",
   design: "c0899593028456328b791f6fb40ec3498b0d39faae1fdbb0394c8e910e489b20",
 });
-const PROTOCOL_SHA256 = "1077b9eed81ca2317e73b4b9991f5172449d005055672e6c195c26bd095f7486";
+const PROTOCOL_SHA256 = "65260b7b6466dab98a0496619d8b1734bcb7f2e52bcf0364943f1382200d34c0";
 const TASK_IDS = Object.freeze(["diagnosis", "design"]);
 const EFFORTS = Object.freeze(["low", "medium", "high", "xhigh", "max"]);
 const PROVIDERS = Object.freeze(["claude", "codex", "kiro"]);
@@ -58,6 +58,7 @@ const PINNED = Object.freeze({
   codex: "9d563ee4e0441ff9d59d612013e0460ddf8e5709735c2d9f6b98b7ef8ca4eb42",
   kiro: "f4a6c31a88822b7b67d5c795df87f1465b34c6a4acbba01e9a0158ab0ff4c66c",
 });
+const PINNED_CODEX_HOST_SHA256 = "977c1f01c9efac0bfe1b9032717c95f92e1c965c8441a8dacbfe824c5c79a527";
 
 function readTask(taskId) {
   if (!TASK_IDS.includes(taskId)) throw new Error(`Unknown fixture ${taskId}`);
@@ -332,12 +333,15 @@ function validateParentAuthorization(plan, cell, authorization, planBytesSha256)
   if (typeof authorization.leaseId !== "string" || !authorization.leaseId) throw new Error("Missing measurement lease ID");
 }
 
+function verifyHashPinnedFile(path, expectedHash, label) {
+  if (!existsSync(path) || hashFile(path) !== expectedHash) throw new Error(`${label} changed since protocol review`);
+}
+
 function verifyPinnedExecutable(cell) {
-  if (!existsSync(cell.executable) || hashFile(cell.executable) !== PINNED[cell.provider]) throw new Error("Pinned provider executable changed since protocol review");
+  verifyHashPinnedFile(cell.executable, PINNED[cell.provider], "Pinned provider executable");
   if (cell.provider === "codex") {
     const sibling = join(dirname(cell.executable), "codex-code-mode-host.exe");
-    const expected = "977c1f01c9efac0bfe1b9032717c95f92e1c965c8441a8dacfbe824c5c79a527";
-    if (!existsSync(sibling) || hashFile(sibling) !== expected) throw new Error("Pinned Codex host changed since protocol review");
+    verifyHashPinnedFile(sibling, PINNED_CODEX_HOST_SHA256, "Pinned Codex host");
   }
 }
 
@@ -527,6 +531,7 @@ export {
   EFFORTS,
   MAX_OUTPUT_BYTES,
   MODELS,
+  PINNED_CODEX_HOST_SHA256,
   RUNNABLE_PROVIDERS,
   PROTOCOL_SHA256,
   TASK_HASHES,
@@ -545,4 +550,5 @@ export {
   profileList,
   readNativeOutput,
   readTask,
+  verifyHashPinnedFile,
 };
