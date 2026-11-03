@@ -28,26 +28,25 @@ Prior art to borrow techniques from (not authority): [eval prior art](../docs/ag
 
 ## Reconciliation (2026-11-02)
 
+Keep ordinary well-specified cases separate from deliberately ambiguous/trap cases. Freeze fixture revision, model identity, effort and grading before each comparison; report requested versus observed model separately. Never expose hidden tests or answer keys to workers, and report unavailable usage counters as unknown.
+
 ## Integration status (2026-11-03)
 
 The results, independent audit, exact-session cleanup and public frozen fixtures
-are integrated. The model guidance retains current defaults. Closure is waiting
-for repository verification, not another model run: the full pre-merge run timed
-out in artifact hygiene and its runner fixtures. Independent isolated artifact
-suites passed their assertions (20 pass/3 Windows skips in 102.576s; footprint
-23 pass/2 WSL skips in 262.246s), exceeding the combined 120s gate budget.
-No timeout is counted as a pass. Parent is retaining evidence, continuing
-independent work, and withholding push/closure until required gates settle.
+are integrated and pushed. The model guidance retains current defaults. The final
+pre-merge run at `c917c8b` passed 21 checks and used two documented baseline skips:
+gate-runner and artifact-hygiene reproduced timeouts on unchanged `origin/main`
+`0604d8d`. Ticket compatibility passed without a skip. Pre-push passed all seven
+checks; the push hook also passed seven. Skipped assertions remain unverified.
+The [verification receipt](../docs/agents/research/evidence/orchestration-gate-baseline-20261103.json)
+records the baseline, exact scope, failed attempts and current outcomes.
 
-Latest committed-source checks: pre-merge at `d5d5484` selected 22 checks;
+Earlier checks at `d5d5484` selected 22 checks;
 19 passed and 3 timed out (gate-runner 123.9s, artifact-hygiene 124.9s,
 tkt-usage-compatibility 32.9s). Model-eval passed in 28.2s after its measured
-budget update. Pre-push at `e3a9e0c` passed all 7 selected checks. Required
-pre-merge evidence remains incomplete; neither run authorizes closure.
+budget update. These earlier timeouts are historical evidence, not passes.
 
-Keep ordinary well-specified cases separate from deliberately ambiguous/trap cases. Freeze fixture revision, model identity, effort and grading before each comparison; report requested versus observed model separately. Never expose hidden tests or answer keys to workers, and report unavailable usage counters as unknown.
-
-## Measurement check-in (2026-11-02)
+## Historical measurement check-in (2026-11-02; superseded by final results)
 
 Claude's twelve planned cells completed; final independent grading is pending.
 The first four Codex cells are infrastructure failures, excluded from model

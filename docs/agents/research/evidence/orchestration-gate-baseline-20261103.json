@@ -86,5 +86,138 @@
     "nativeExit": null,
     "limitation": "PowerShell location wrapper did not preserve native exit. Classification uses completed per-check output; outer exit 0 is not a pass. Future wrappers must explicitly preserve LASTEXITCODE."
   },
-  "scopeLimit": "Two pre-existing timeouts only. No override for tkt compatibility, study tests, or later failures. Skipped assertions remain unverified under current host timing."
+  "scopeLimit": "Two pre-existing timeouts only. No override for tkt compatibility, study tests, or later failures. Skipped assertions remain unverified under current host timing.",
+  "candidateVerification": {
+    "sourceCommit": "c917c8b",
+    "nativeExit": 0,
+    "command": "SKIP=gate-runner,artifact-hygiene node scripts/gate.mjs pre-merge --base f44f32a --include skill-syntax-fixtures",
+    "outcome": "21 passed; 2 documented baseline skips",
+    "checks": [
+      {
+        "id": "gate-runner",
+        "outcome": "skip"
+      },
+      {
+        "id": "artifact-hygiene",
+        "outcome": "skip"
+      },
+      {
+        "id": "git-fixture-isolation",
+        "outcome": "pass",
+        "seconds": 4.5
+      },
+      {
+        "id": "ticket-graph",
+        "outcome": "pass",
+        "seconds": 3
+      },
+      {
+        "id": "skill-syntax-fixtures",
+        "outcome": "pass",
+        "seconds": 1.5
+      },
+      {
+        "id": "knowledge-relocation",
+        "outcome": "pass",
+        "seconds": 11
+      },
+      {
+        "id": "agent-guidance",
+        "outcome": "pass",
+        "seconds": 9
+      },
+      {
+        "id": "crew-uninstall",
+        "outcome": "pass",
+        "seconds": 3.6
+      },
+      {
+        "id": "repo-survey",
+        "outcome": "pass",
+        "seconds": 8.8
+      },
+      {
+        "id": "agent-shell-probe",
+        "outcome": "pass",
+        "seconds": 0.9
+      },
+      {
+        "id": "dashboard-contract",
+        "outcome": "pass",
+        "seconds": 3
+      },
+      {
+        "id": "review-receipt",
+        "outcome": "pass",
+        "seconds": 1.4
+      },
+      {
+        "id": "critic-model-probe",
+        "outcome": "pass",
+        "seconds": 21.2
+      },
+      {
+        "id": "orchestrate-spike-fixture",
+        "outcome": "pass",
+        "seconds": 18.2
+      },
+      {
+        "id": "harness-versions",
+        "outcome": "pass",
+        "seconds": 15
+      },
+      {
+        "id": "static-check-fixtures",
+        "outcome": "pass",
+        "seconds": 13.4
+      },
+      {
+        "id": "home-path-fixtures",
+        "outcome": "pass",
+        "seconds": 4.9
+      },
+      {
+        "id": "provider-fallback-fixtures",
+        "outcome": "pass",
+        "seconds": 1
+      },
+      {
+        "id": "release-units",
+        "outcome": "pass",
+        "seconds": 4
+      },
+      {
+        "id": "tkt-usage-compatibility",
+        "outcome": "pass",
+        "seconds": 25.7
+      },
+      {
+        "id": "model-eval-fixtures",
+        "outcome": "pass",
+        "seconds": 18
+      },
+      {
+        "id": "model-review-fixtures",
+        "outcome": "pass",
+        "seconds": 3.7
+      },
+      {
+        "id": "model-research-fixtures",
+        "outcome": "pass",
+        "seconds": 1.8
+      }
+    ],
+    "logSha256": "02f3c3d6c8ab734d4b4f0ed40ace182ebe8a4cc5eb728d101b031ab7c638ee64",
+    "limit": "Skipped assertions remain unverified; the baseline exception policy permits this scoped integration, not a claim that every test passed."
+  },
+  "followupVerification": {
+    "ticketMetadataCommit": "60165df",
+    "preMergeCommand": "node scripts/gate.mjs pre-merge --base c917c8b",
+    "preMerge": "ticket-graph passed, 2.6 seconds",
+    "prePushCommand": "node scripts/gate.mjs pre-push --base f44f32a",
+    "prePush": "7 of 7 passed, no skips",
+    "push": "origin/main advanced from 0604d8d to 60165df; pre-push hook passed all 7 checks",
+    "deployCommand": "node scripts/deploy.mjs --no-agy",
+    "deploy": "50 skills installed; exit 0; Agy excluded"
+  }
 }

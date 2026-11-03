@@ -26,15 +26,15 @@ Results and independent audit are integrated: 14/23 attempts met strict JSON;
 secondary blind scoring found the seeded defect in all 22 nonempty responses,
 with nine unsupported claims and five duplicates. Current defaults are retained.
 Exact Kiro sessions and empty working directories were removed; private evidence
-is retained for the remaining trials. Closure awaits repository gates: artifact
-hygiene exceeded its 120s budget despite isolated assertion passes, and a fresh
-full run also timed out in runner fixtures. Parent is continuing independent
-work and withholding push/closure; no timeout is treated as a pass.
+is retained for the remaining trials. Accepted source is integrated and pushed.
 
-Latest committed-source checks: pre-merge at `d5d5484` passed 19/22 checks;
-gate-runner, artifact-hygiene and tkt-usage-compatibility timed out. The review
-controller fixtures passed in 8.4s. Pre-push at `e3a9e0c` passed all 7 selected
-checks. Required pre-merge evidence remains incomplete.
+Final pre-merge at `c917c8b`: 21 checks passed, with two documented baseline
+skips (gate-runner and artifact-hygiene timed out on unchanged `origin/main`
+`0604d8d`). Ticket compatibility passed without an override; review fixtures
+passed in 3.7s. Pre-push and the push hook each passed all seven checks.
+Skipped assertions remain unverified. The
+[verification receipt](../docs/agents/research/evidence/orchestration-gate-baseline-20261103.json)
+preserves the earlier failures, baseline proof and current outcomes.
 
 ## Acceptance criteria
 
