@@ -234,3 +234,78 @@ unrelated Crew app adoption/trust is excluded from this delivery. No global
 harness setting or model default was changed by these operations. Parent retains
 the evidence, isolated worktrees and owned runtime inputs through this cycle's
 integration/final audit, then records reuse or managed archival/disposition.
+
+## Existing-agent notification slice (#210, child of #179)
+
+Independent source acceptance covers exact worker candidate
+`a4110cc2937868713b3903b5fde068fc04f86d0a`. Parent and critic each ran the focused
+notification fixture: **PASS, 8/8**, zero skipped or failed. Review first blocked
+ignored trailing CLI arguments and an undocumented supported lane. The revised
+helper rejects extra arguments before creating an intent and supports only the
+explicit Codex desktop preparation path. It persists a once-only intent before
+returning a fixed tool action; it never calls the native tool itself. The actual
+dispatch preflight passed against the clean assigned checkout, independently
+recorded base, exact final candidate and retained critic output.
+
+The parent then selected its existing idle worker from the live roster and invoked
+the prepared `collaboration.followup_task` action once. That worker received and
+handled the persisted request, queued a correlated completion and reported its
+marker and hashes through the native parent channel. Parent acknowledged the
+completion. Replay left two records unchanged; duplicate preparation was refused.
+Independent evidence review accepted this **one idle existing-agent case** after
+matching all five retained platform records to their original log lines. The
+native call's empty output alone was not treated as receipt.
+
+Native message arguments are encrypted in the platform log and were retained
+opaque, without decryption or a plaintext-byte comparison. The observable native
+target/control records, received report and correlated record hashes support this
+bounded receipt. `harnessVersion: not-reported` and generation `1` remain local
+registry metadata, not native version/lifecycle attestation. Busy delivery, crash
+recovery, other harnesses and background persistence remain unqualified. The first
+canary-inspection assertion expected the wrong rejection diagnostic: the already
+acknowledged request was rejected before the prior-intent check. Correcting that
+assertion required no native resend or new message.
+
+[Retained evidence and limits](evidence/orchestration-delivery-210-20261103.json)
+index the small owned runtime and exact raw review/platform excerpts. No whole
+transcript, credential, global setting or unrelated conversation was copied or
+changed. **#179 remains partial**; this bounded child does not satisfy its broader
+cross-interface, busy-session, crash, timeout or native installation criteria.
+
+## Outcome trace consistency audit (#207)
+
+Independent acceptance covers exact final worker candidate
+`1c318f0baecae4e464d9a68f5371d4a3adc8b156`. The critic's pinned counterexamples
+first showed that cancellation could leave stale approval valid and that a later
+BLOCK verdict could leave an earlier integration accepted. The revised fixture
+rejects both. Parent and independent critic each observed **PASS, 14/14** scenario
+tests; the integrated parent run also passed all eight notification tests
+(**22/22 total**, no skips or failures).
+
+The audit binds current checkout, candidate, independently supplied trace hash and
+actual evidence bytes. It requires the complete current scope in the frontier,
+invalidates approval when scope or review changes, counts the coordinator and
+reserved reviewers, and refuses failed verification or publication as delivered.
+Its restart fixture uses the actual spool across a fresh process. It is a passive
+consistency check, not a second coordinator or proof of native goal persistence.
+All supplied event claims remain attestations; a byte hash does not make them true.
+
+The parent ran the real dispatch preflight on the clean final worker checkout and
+retained critic output. [Raw checks and counterexamples](evidence/orchestration-delivery-207-20261103.json)
+are retained for the delivery audit. One critic run overlapped the requested worker
+revision; that mutable run was discarded. Fixed historical evidence was then read
+from immutable Git snapshots, and the renewed review used the frozen final commit.
+
+At integration `cae90bb`, the source inventory covered **150 scripts**: 62 operators, 16 modules,
+55 tests and 17 fixtures/templates. Both new operator commands have dedicated
+usage contracts, owning-skill pointers and catalog entries. Poll/status/replay
+documentation now distinguishes unchanged records from their transient lock writes.
+
+A concurrent owner then completed #209, removing retired model-spike entry points
+and their temporary test wrapper. Parent preserved that upstream work and rebased
+only its unpublished integration. The catalog conflict was limited to the removed
+wrapper row beside the four new entries; the wrapper stayed removed and the new
+entries stayed classified. The current inventory check passes **136/136** paths:
+55 operators, 14 modules, 50 tests and 17 fixtures/templates. The accepted new helper
+implementations remain unchanged. Historical `cae90bb` and its point-in-time audit
+evidence are retained separately; that earlier count is not the current inventory.

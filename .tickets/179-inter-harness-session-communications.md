@@ -72,4 +72,12 @@ native adapter qualification, exact existing-session delivery and final integrat
 criteria. Fake/manual-polling receipts do not prove native wakeups. The Agy hold
 remains in force; no real user conversation is used as a canary by implication.
 
+Bounded child #210 owns Codex desktop preparation and one existing owned-agent
+receipt/completion canary. This parent remains partial: other native interfaces,
+busy-session behavior, crash injection, timeout/dead-letter behavior and native
+installation/cleanup qualification are not delivered by that child. Its local
+generation and unknown harness-version metadata do not establish native lifecycle
+identity. Continue those criteria through separately scoped work; do not close
+this parent from a child receipt.
+
 Proposal 19 implementation approved 2026-11-03. Retain this ticket as shared message/session interface owner; coordinate #202 outcome contracts and #204 dispatch bindings. Durable spool/fixtures may proceed independently; no native Agy action, real user conversation or global configuration change is authorized by this note. Unsupported/unqualified adapters stay explicit; deterministic delivery does not prove native wakeup.

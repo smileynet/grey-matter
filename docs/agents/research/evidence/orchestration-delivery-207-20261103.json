@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "candidate": "1c318f0baecae4e464d9a68f5371d4a3adc8b156",
+  "retentionOwner": "parent orchestration integration",
+  "state": "retained",
+  "endCondition": "Outcome-delivery verification audit and explicit disposition",
+  "limits": "Passive consistency audit; event assertions are attestations, not native behavior or reviewer independence.",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-207-final-results.log",
+      "bytes": 12430,
+      "sha256": "5d2cb70c59b2d526a4bf4cc427dd0995696d99a30d7c8329627015c0ddfc34cf"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-207-criticfix-results.log",
+      "bytes": 12888,
+      "sha256": "d2267f4e4c135658b55f503fe51c5e98ccb8d6fddebd4f32c287119998eb96bc"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-critic207-1c318-final.log",
+      "bytes": 3413,
+      "sha256": "dfc6de3e6aeef7ddfe3298332f11e40e224a35ca126614000aebb8d646e989ce"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-critic207-c5f-pinned.log",
+      "bytes": 2958,
+      "sha256": "03d92fb6641460ce62161b461976b917fa9e9781f22a81717e8834de8d77a250"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-critic207-c5f-counterexamples-pinned.log",
+      "bytes": 2289,
+      "sha256": "7c46db528af5eb8de083f28386aca1d9512a5847bc3c2c0aa05caf6784a1e48b"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-207-dispatch-result.json",
+      "bytes": 728,
+      "sha256": "c91da3d0bfafe3d2a523e59d3428a595d7a6ed8e091771fa1610d9ac620ae1d8"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-207210-parent-final.log",
+      "bytes": 5093,
+      "sha256": "14db736ead17a447f1462969ed62537c151d810df5dcd6fca98374d76597cded"
+    }
+  ]
+}

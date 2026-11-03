@@ -23,3 +23,8 @@ Return PASS or BLOCK plus evidence and remaining unknowns. Send nonblocking
 findings to the parent as proposed follow-up tickets. In a read-only review,
 the parent files tickets on the reviewer's behalf; do not mutate source, tracker,
 Git state or external services to satisfy code-review's ticket-filing step.
+
+For message-delivery evidence, use the [shared interface](session-messages.md) and
+[notification boundary](native-notification.md). Verify the exact routed target,
+correlation and actual native receipt separately from local spool/intent states;
+unsupported or security-held lanes cannot inherit another interface's pass.

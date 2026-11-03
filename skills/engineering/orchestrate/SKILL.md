@@ -48,6 +48,15 @@ When a scoped task needs a durable local handoff, use the
 [session-message contract](references/session-messages.md) with the exact recorded target
 and generation. Its manual spool does not wake a native session; load the active harness
 reference and confirm supported notification separately. Queued is not delivered.
+For an existing Codex desktop collaboration agent, load the
+[notification preparation contract](references/native-notification.md). It persists
+one intent and prepares a fixed action; the parent still verifies the live target,
+invokes the native tool and observes its receipt. Unsupported lanes use explicit
+manual reporting rather than a replacement session or blind retry.
+
+Before settlement, use the [scenario audit](references/scenario-audit.md) when an
+evidence-backed outcome trace is available. Its consistency result checks recorded
+claims and file hashes; it is not native persistence or execution proof.
 
 ## Orient and admit
 

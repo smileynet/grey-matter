@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "candidate": "a4110cc2937868713b3903b5fde068fc04f86d0a",
+  "ticket": "210",
+  "parent": "179",
+  "retentionOwner": "parent orchestration integration",
+  "state": "retained",
+  "endCondition": "Retain private native evidence through cross-harness179 qualification audit or explicit owner disposition; no whole transcript copied.",
+  "observed": "One owned idle Codex desktop agent followup, received/handled request, native marker-bearing report and correlated completion acknowledged by parent; two-record replay unchanged and duplicate preparation refused.",
+  "limits": [
+    "Native message arguments remain encrypted/opaque in platform records; no decryption or plaintext-byte comparison.",
+    "Unknown version and generation1 are local routing metadata, not native lifecycle proof.",
+    "No busy-session, power-loss/crash, cross-harness or background-monitor qualification.",
+    "Initial canary inspection assertion expected the wrong rejection diagnostic; corrected against existing acknowledged records without native resend.",
+    "Broad parent179 remains partial."
+  ],
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-179-review-a4110cc.txt",
+      "bytes": 1796,
+      "sha256": "c673a4e76a58ea94648749ea82fba78b625e2ebe309fc7bf273f2d5553fe3f8a"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-210-native-review-final.txt",
+      "bytes": 1162,
+      "sha256": "2f12cb95db65748b9f9073b4e2a86fe38c85ef1c974b557b26c415f5168f89c4"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-210-parent-focused.log",
+      "bytes": 1799,
+      "sha256": "ab1e3dbf4879d2cd38fe2ae781e9e0e59b2956d73e314b617349d17ceed41e1c"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-210-dispatch-result.json",
+      "bytes": 728,
+      "sha256": "a1687bcc6a4504326c01f064d266e3497bf95edab65806a4631f2dfc0cfff05c"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-210-native-platform-records.json",
+      "bytes": 11205,
+      "sha256": "f12ecbdf09da7ba6a038129431e7e4b222d201d44df21c294f07f12bec0ae050"
+    },
+    {
+      "path": "D:/.codex/orchestration-probes/proposal19-native210-20261103/canary-bindings.json",
+      "bytes": 959,
+      "sha256": "ffa8bcead6e9be0e37d4303c1577f6af5d19c17b5560f0c14aafd982a8aa36c0"
+    },
+    {
+      "path": "D:/.codex/orchestration-probes/proposal19-native210-20261103/prepared-action.json",
+      "bytes": 1607,
+      "sha256": "3becc985dc2f84e8325c7e763c2e75142cd0786097cdfe82317a5c1629e6e029"
+    },
+    {
+      "path": "D:/.codex/orchestration-probes/proposal19-native210-20261103/receiver-result.json",
+      "bytes": 402,
+      "sha256": "1b20762dc38a029a172d6ad3fdd66fd03676322ab7f9c317ccb9bdcade98427a"
+    },
+    {
+      "path": "D:/.codex/orchestration-probes/proposal19-native210-20261103/parent-result.json",
+      "bytes": 461,
+      "sha256": "30c2278894351c7534d2b520b92add61e2637475d6452fea6595f25eac54867b"
+    },
+    {
+      "path": "D:/.codex/orchestration-probes/proposal19-native210-20261103/registry.json",
+      "bytes": 1003,
+      "sha256": "380db51d030c8c845db6c32b77f8a3052bf72a14ed62cc3685c3ee4c2df02848"
+    },
+    {
+      "path": "D:/.codex/orchestration-probes/proposal19-native210-20261103/notification-intents/proposal19-native210-20261103-request.json",
+      "bytes": 759,
+      "sha256": "162ff4d3b562af98cd740150bfac44c61fd7bb7218bd4f7e2975cd150fac8aef"
+    },
+    {
+      "path": "D:/.codex/orchestration-probes/proposal19-native210-20261103/messages/proposal19-native210-20261103-request.json",
+      "bytes": 1733,
+      "sha256": "531600c9faaca905479ff91fdaa5ec830e30346bcfa493dea8af6560cb62192a"
+    },
+    {
+      "path": "D:/.codex/orchestration-probes/proposal19-native210-20261103/messages/proposal19-native210-20261103-done.json",
+      "bytes": 1330,
+      "sha256": "971fb060894fde460eb0f5583852c0b2fc8fe712693c22cb3592fce2279383ae"
+    }
+  ]
+}

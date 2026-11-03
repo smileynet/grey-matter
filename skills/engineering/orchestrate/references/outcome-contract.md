@@ -18,6 +18,12 @@ native goal. It covers ordinary review and integration only within its stated sc
 route. It does not grant extra delegation, spend, publication, settings changes, or
 permission to invoke a restricted skill.
 
+If the user explicitly requests a native goal, bind it to this same outcome and proof
+using the active harness's supported goal interface. Otherwise skill invocation starts
+the in-session coordination loop; it does not create a persistent goal or background
+job. Record which mechanism actually exists, and never infer persistence from the
+word “goal.”
+
 ## Continuing and stopping
 
 After each batch, reread task state and bindings, classify the frontier, and continue with

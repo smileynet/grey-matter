@@ -219,6 +219,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 203 | Complete tool-script inventory and owning skill usage guidance | ✅ done |
 | 204 | Dispatch checkout and review-evidence preflight | ✅ done |
 | 208 | Durable session/message foundation and recovery fixture (child of 179) | ✅ done |
+| 210 | Existing-agent Codex notification preparation and bounded native receipt (child of 179) | in_progress |
 | 179 | Shared inter-harness messaging and wakeups (existing owner) | in_progress |
 | 205 | Dashboard publication preflight using existing receipts | ✅ done |
 | 206 | Correct observed operational reference drift | ✅ done |
@@ -231,6 +232,7 @@ flowchart LR
   A204 --> A207
   A205[205 Publication preflight] --> A207
   A208[208 Durable session/message foundation] --> A179[179 Existing messaging implementation]
+  A208 --> A210[210 Existing-agent Codex notification]
   A208 --> A207
   A203[203 Tool usage guidance]
   A206[206 Reference corrections]
@@ -241,6 +243,9 @@ Rows are proposed execution order; only solid graph/ticket edges are prerequisit
 #208 is the deterministic contract/spool slice of #179. It may proceed without
 native calls; #179 retains the end-to-end qualification and explicitly unsupported
 adapter results. Security-held lanes are not reopened by creating this child.
+#210 qualifies only the current existing-agent Codex collaboration path. Its bounded
+receipt does not close #179's broader cross-harness, busy-session, crash-recovery or
+installation/cleanup criteria. Unsupported and security-held lanes remain explicit.
 
 ## Orchestration workstream (reconciled 2026-11-03)
 

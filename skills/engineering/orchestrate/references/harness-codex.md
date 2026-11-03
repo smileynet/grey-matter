@@ -6,6 +6,17 @@ Verify exact worker/session mapping; app history does not prove live steering.
 Source: [ticket 127 results](../../../../docs/agents/research/harness-orchestration-primitives.md#spike-results-codex-2026-10-31),
 observed 2026-10-31 on CLI 0.166. Use the current exposed schema over old examples.
 
+For a durable message to an existing collaboration agent, use the
+[local message contract](session-messages.md) and
+[desktop notification preparation](native-notification.md). Prepare only after
+independently selecting the exact live agent and checking the exposed tool schema;
+invoke the returned fixed action separately. A local acceptance/intent is not native
+receipt. The observed bounded case is one idle owned agent on the current desktop
+tool surface; CLI, busy-session and crash behavior remain unqualified. Registry
+generation and an explicitly unknown version are local metadata, not native identity
+attestation. Completion must return through the existing native parent channel with
+the correlated record; a spool alone cannot wake the parent.
+
 - Dispatch `spawn_agent` with the worker contract. Current app collaboration
   tools share the parent's filesystem: explicitly assign one worktree per worker.
   Use the app's worktree tool when available; otherwise manual git worktree
