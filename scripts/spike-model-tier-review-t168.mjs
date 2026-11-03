@@ -29,7 +29,7 @@ const FIXTURE_SHA256 = Object.freeze({
   f3: "94a10710978c9184c9877d23099a34f292a5f0bd02c47520cbdd34c3a6f9a9eb",
   f4: "757b2d57d664759c1c8e08c0b52af6052a824f93db3e27641d4e567087981e35",
 });
-const PROTOCOL_NOTE_SHA256 = "b7bb16fc4d20f8582d29b68f874157e9ded370395abdeb83574ca458b57f15bc";
+const PROTOCOL_NOTE_SHA256 = "0eaaae9bb3ea73b02b766dd8d51813410b7fa6ed60bfc16aaa97e16b59ce7ab6";
 const TIMEOUT_MS = 120_000;
 const MAX_BUFFER_BYTES = 8 * 1024 * 1024;
 const MIN_FREE_BYTES = 20 * 1024 ** 3;
@@ -153,7 +153,7 @@ export function buildArgv(provider, tier, prompt, workDir) {
   if (!Object.hasOwn(MODELS[provider], tier)) fail(`Unsupported tier: ${tier}`);
   const args = [];
   if (provider === "claude") {
-    args.push("--print", "--tools", "", "--no-session-persistence", "--output-format", "json", "--permission-mode", "plan", "--max-budget-usd", "0.10");
+    args.push("--print", "--safe-mode", "--strict-mcp-config", "--mcp-config", '{"mcpServers":{}}', "--tools", "", "--disallowedTools", "mcp__*", "--no-session-persistence", "--output-format", "json", "--permission-mode", "plan", "--max-budget-usd", "0.10");
   } else if (provider === "codex") {
     args.push("exec", "--ephemeral", "--ignore-user-config", "--cd", workDir, "--sandbox", "read-only", "--json");
   } else {

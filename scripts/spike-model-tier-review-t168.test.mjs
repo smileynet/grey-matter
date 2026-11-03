@@ -70,7 +70,11 @@ test("cheap and native-default invocations follow frozen model and safety flags"
   const claudeDefault = buildArgv("claude", "default", samplePrompt, dryRunDir);
   assert.deepEqual(claudeCheap.slice(claudeCheap.indexOf("--model")), ["--model", "haiku", samplePrompt]);
   assert.equal(claudeDefault.includes("--model"), false);
+  assert.ok(claudeCheap.includes("--safe-mode"));
+  assert.ok(claudeCheap.includes("--strict-mcp-config"));
+  assert.deepEqual(claudeCheap.slice(claudeCheap.indexOf("--mcp-config"), claudeCheap.indexOf("--mcp-config") + 2), ["--mcp-config", '{"mcpServers":{}}']);
   assert.equal(claudeCheap[claudeCheap.indexOf("--tools") + 1], "");
+  assert.deepEqual(claudeCheap.slice(claudeCheap.indexOf("--disallowedTools"), claudeCheap.indexOf("--disallowedTools") + 2), ["--disallowedTools", "mcp__*"]);
   assert.ok(claudeCheap.includes("--no-session-persistence"));
 
   const codexCheap = buildArgv("codex", "cheap", samplePrompt, dryRunDir);
