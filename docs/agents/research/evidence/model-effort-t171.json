@@ -45,7 +45,7 @@
     "hermeticBinderWrapperSha256": "f8c5c3a9d6b7598eb35bee109e97568cb86357214584cb6f17bbadd5934f7aef",
     "hermeticBinderCoreSha256": "7a066012a3587e163573e34f8478b120a9cf9c614446139e4ee0807d8ab18a6b",
     "hermeticBinderTestSha256": "6cb8caa17d82f6517d9247f4ae0f15a3a4ed16b5899747e112dc55d431795f45",
-    "finalResultsReportSha256": "5a7f1bb8d7a6a7396ea7fbdd8df37c05b9ab1602045c61b02739439e3cb641a5",
+    "finalResultsReportSha256": "edfc7529fa05db11533c9e7a0fcb26626f3cfe5342d1ddb02d9a118b4a3ee11a",
     "parentOnlyCwdCleanupPlanSha256": "5333bceadd6cf58418e0cad673baa843ae525af0f8b59b158b5277e6a657bc8e"
   },
   "provenanceLimits": [
@@ -1743,5 +1743,14 @@
       "empty": false
     }
   },
-  "resultLimit": "One valid pass is the Codex diagnosis cell with requested max; actual Codex model and effort remain unreported. Ten other completed responses have invalid reviewer evidence and are unscorable. The study does not support an effort recommendation; retain the existing defaults."
+  "resultLimit": "One valid pass is the Codex diagnosis cell with requested max; actual Codex model and effort remain unreported. Ten other completed responses have invalid reviewer evidence and are unscorable. The study does not support an effort recommendation; retain the existing defaults.",
+  "cleanup": {
+    "sanitizedReceiptPath": "evidence/model-effort-t171-cleanup.json",
+    "sanitizedReceiptSha256": "4b41b3cd5538d8d8c749a1adce0334d0e6c7ea361e74f14bb67a32d4a230063e",
+    "privateReceiptSha256": "827adcbff6f6a87b84667700e0b162344c78ae42da6bad5a0a60fa836d12fcd5",
+    "authorizedPlanSha256": "5333bceadd6cf58418e0cad673baa843ae525af0f8b59b158b5277e6a657bc8e",
+    "recycledCount": 20,
+    "verifiedAbsentCount": 20,
+    "rawPathsPublished": false
+  }
 }
