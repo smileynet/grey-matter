@@ -144,7 +144,11 @@ only the explicitly empty server list. The additional
 `--disallowedTools "mcp__*"` denies every MCP tool; `--tools ""` disables
 built-ins ([CLI reference](https://code.claude.com/docs/en/cli-usage)). Managed
 settings may still apply, but managed MCP servers do not load in safe mode.
-Codex's complete sibling host is hash-checked. The script does not define or invoke an agy launcher:
+Codex's complete sibling host is hash-checked. Its pinned 0.166.0 CLI help
+documents `--skip-git-repo-check` as allowing execution outside a Git repository;
+the retained private capture is `.scratch/t168/controller-preflight/codex-help.txt`
+(SHA-256 `FF5A00D7F3926A45D9B58EC703A45D6972B1664C0FA465156C48577BB4CEEAF4`).
+The script does not define or invoke an agy launcher:
 workstream safety policy blocks all eight Google cells, independently of the
 catalog's available models. Claude's earlier accidental turn counts against
 its eight-session ceiling, leaving seven planned cells; cheap fixture f1 is
@@ -167,7 +171,7 @@ eight cells are safety-blocked.
 Use each eligible CLI's scoped tool restrictions: Claude's empty `--tools` list,
 `--safe-mode`, `--strict-mcp-config` with `--mcp-config {"mcpServers":{}}`,
 and `--disallowedTools "mcp__*"`; Codex's `--ignore-user-config` plus
-read-only sandbox; and Kiro's `--no-interactive` plus empty `--trust-tools=`
+read-only sandbox and `--skip-git-repo-check` for the empty temp cwd; and Kiro's `--no-interactive` plus empty `--trust-tools=`
 list. The pinned Kiro CLI 2.37.1 help says that trusts no tools; official docs
 describe `--trust-tools` as pre-approval, not removal of tool schemas
 ([CLI reference](https://kiro.dev/docs/cli/reference/cli-commands/)). The
@@ -198,7 +202,7 @@ calls serially:
 
 ~~~~text
 <absolute-claude.exe> --print --safe-mode --strict-mcp-config --mcp-config '{"mcpServers":{}}' --tools "" --disallowedTools "mcp__*" --no-session-persistence --output-format json --permission-mode plan --max-budget-usd 0.10 <prompt> [--model haiku]
-<absolute-codex.exe> exec --ephemeral --ignore-user-config --cd <empty-temp-dir> --sandbox read-only --json <prompt> [--model gpt-6-luna]
+<absolute-codex.exe> exec --ephemeral --ignore-user-config --cd <empty-temp-dir> --skip-git-repo-check --sandbox read-only --json <prompt> [--model gpt-6-luna]
 <absolute-kiro-cli.exe> chat --no-interactive --agent-engine v2 --trust-tools= --output-format stream-json <prompt> [--model qwen3-coder-next]
 ~~~~
 
