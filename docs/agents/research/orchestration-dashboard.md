@@ -12,9 +12,9 @@ is available while signed in as its owner. Published through Sites on 2026-11-02
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `a287371957ffcfc15d9b5d5c3fb607e374ced0fb`.
-- Deployment: `appgdep_6ae944cbb3f48191911da6934154f483`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_b21816b5ecc081918d1528bb54041032`.
+- Pushed Site source: `1613d7a8df47af3696b0ddafd7d2aa0434f647d9`.
+- Deployment: `appgdep_6ae96cb3b85c8191865bdeaa3306a6bf`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_18754ccc9d048191a1cfab1e90c95f4d`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -27,6 +27,30 @@ GNU tar interpreted the Windows drive prefix as a remote host; rerunning with
 Windows System32 first on the child process PATH succeeded. No plugin code changed.
 
 ## Maintain it
+
+### Follow-up findings (#173, #189, #190, #193, #194, 2026-11-02)
+
+The current snapshot has 13 findings and 34 tickets: 25 done and nine remaining.
+It distinguishes documented GUI candidates from verified GUI steering, the
+bundled KAS callback route from untested vault delivery, and requested models
+from served model identity. #189 remains blocked by the observed Kiro shutdown
+error; the dashboard does not present its diagnostic work as a fix.
+
+Both widths passed interaction and overflow checks. An independent critic
+inspected all ten captures and accepted the effort receipt
+`edc42d76dc8db94a5cc438a8a5e6b2b3a14490d5da738a3fe47a9a197036df69`
+in `evidence/orchestration-dashboard/t193-t190-t194-final/` and the delivery receipt
+`f97fa2e9481513370d7e3e9591e627c3fd98e064219fc6d6985754484a27cdfe`
+in `evidence/orchestration-dashboard/t193-t190-t194-status-final/`.
+Selected pre-merge and pre-push gates passed before source commit `a0322c4`.
+Sites returned `succeeded` for the deployment recorded above; production browser
+interaction was not checked. The Site remains owner-private.
+
+The 46,032-byte publication archive is disposable after successful publication.
+Keep the browser module, administration helper and Site checkout through this
+workstream so later closures can reuse them. Accepted source/capture receipts
+are durable evidence. The generated 24,451,674-byte deployment bundle remains
+until the next skill deployment.
 
 The historical #156 update had seven findings, two unproven
 possibilities, 17 open and 15 completed tickets. Native Sites publication returned
