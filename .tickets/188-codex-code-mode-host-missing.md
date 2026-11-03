@@ -1,7 +1,7 @@
 ---
 id: "188"
 title: "Diagnose: Codex CLI tool execution fails because code-mode host is missing"
-status: in_progress
+status: done
 blocked_by: ["162"]
 validation_criteria:
   - "The missing-host failure is reproduced or marked obsolete on the installed CLI, with executable identity and exact failing path sanitized."
@@ -43,6 +43,15 @@ relevant evidence, but a copied executable is not yet a proven cause here.
 
 ## Acceptance criteria
 
-- [ ] The missing-host failure is reproduced or marked obsolete on the installed CLI, with executable identity and exact failing path sanitized.
-- [ ] A supported install or session-scoped configuration remedy is verified with one harmless shell command, or the unsupported scope is recorded without silently bypassing the failure.
-- [ ] Fixtures and changed settings have recorded disposition and required checks pass.
+- [x] The missing-host failure is reproduced or marked obsolete on the installed CLI, with executable identity and exact failing path sanitized.
+- [x] A supported install or session-scoped configuration remedy is verified with one harmless shell command, or the unsupported scope is recorded without silently bypassing the failure.
+- [x] Fixtures and changed settings have recorded disposition and required checks pass.
+
+## Resolution (2026-11-03)
+
+done: isolated missing sibling host to PATH-selected layout and verified same-version full-package invocation for one harmless command; recorded supported-scope limits and cleanup
+
+### Verification
+1. ✓ The missing-host failure is reproduced or marked obsolete on the installed CLI, with executable identity and exact failing path sanitized. — "PATH Bun Codex0.166hash9D563...EB42 reproduced missing sibling host; identical installed optional-platform package executable bytes had sibling signedhost. Exact native controlled transcripts and package ownership in report/receipt; independentcritic0.92high accepted."
+2. ✓ A supported install or session-scoped configuration remedy is verified with one harmless shell command, or the unsupported scope is recorded without silently bypassing the failure. — "Session-scoped absolute invocation of same-version package-owned executable ran exact read-only fixture Git status with native shell exit0/emptyoutput. No copy/install/globalconfig change. Internal vendor path is not documented stablelauncher; durable repair, broader tools, writes/approvals unverified. Appalpha case separated."
+3. ✓ Fixtures and changed settings have recorded disposition and required checks pass. — "Raw5JSONLs9606B/ownedfixture98400B recycled andabsent; installedbinaries/settings untouched. Parent pre-merge syntax fixtures and pre-push doc-links/home-path pass after correcting private-artifact citation. Diff scope only report/receipt/audit."
