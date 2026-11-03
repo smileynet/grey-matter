@@ -1,3 +1,4 @@
+import "./test-git-env.mjs";
 import { after, test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync, existsSync } from "node:fs";

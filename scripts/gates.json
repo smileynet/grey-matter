@@ -255,8 +255,8 @@
       "catches": "a model evaluation that accepts staged or committed out-of-scope edits, zero tests, malformed output or a failed native turn",
       "scope": ["scripts/spike-model-eval", "scripts/fixtures/model-eval/", "scripts/spike-orchestrate-fixture.mjs"],
       "run": ["node", "--test", "scripts/spike-model-eval.test.mjs"],
-      "timeout_s": 10,
-      "measured": { "s": 2.1, "date": "2026-11-02", "host": "win" }
+      "timeout_s": 40,
+      "measured": { "s": 26.6, "date": "2026-11-03", "host": "win" }
     },
     {
       "id": "model-review-fixtures",

@@ -64,7 +64,7 @@ grey-matter's working defaults, until the model-tier spikes (tickets 167-172) re
 |---|---|---|
 | Orchestration, planning, hard diagnosis, architecture | Strongest default (Opus 5.5, `gpt-6.1-sol`/Astra, Kiro `auto`, Argon) | Judgement errors here cost the most |
 | Implementation of a well-specified ticket | Keep the configured provider default; validate any cheaper profile with independent checks | The dated #167 trial below separates correct artifacts from unverified agent actions and harness failures; it does not justify changing defaults |
-| Review and spec check | Mid tier or stronger, in a separate context | The reviewer must catch what the worker missed; ticket 168 tests a cheap reviewer |
+| Review and spec check | Keep the configured provider default, in a separate context | The #168 trial found defects but did not qualify a cheaper profile across all four strict-output cases |
 | Read-only research and exploration fan-out | Fast tier | High volume, low risk; ticket 169 |
 | Doc edits, triage, classification | Fast or mid tier | Ticket 170 |
 
@@ -89,6 +89,25 @@ ordinary implementation tasks; these results do not establish general reliabilit
 Reported Claude costs are native list-price estimates, not billed amounts.
 Missing identity, usage and cost remain unknown. No model or effort setting was
 changed by this recommendation, and no missing cell was moved to another provider.
+
+### Review evidence (2026-11-03)
+
+The [review trial](../research/model-tier-review-20261103-results.md) and
+[independent audit](../research/model-tier-review-20261103-audit.md) cover 23
+attempts on four small fixtures. Fourteen responses met the frozen JSON format.
+All 22 nonempty responses identified the planted defect with a changed-line
+citation in secondary blind scoring, including responses that failed the format
+bar. That scoring also found nine unsupported claims and five duplicate findings.
+Finding a known defect in these small cases does not establish review reliability.
+
+Keep current defaults for automated review. No cheaper profile completed all four
+cases with valid required output. Claude's requested `haiku` alias served Sonnet
+5.5 in this trial; Codex and Kiro did not report served model identities. Google
+was held without a call. Native Claude list-price estimates cover planned cells,
+but the earlier unintended preflight turn's unknown usage prevents verification
+of the aggregate budget. Other missing cost and identity fields remain unknown.
+Human review may use the extra prose as advisory input, with unsupported findings
+checked independently; it does not satisfy the strict automation bar.
 
 ## Effort
 
