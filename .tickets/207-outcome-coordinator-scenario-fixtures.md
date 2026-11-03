@@ -2,7 +2,7 @@
 id: "207"
 title: "Exercise outcome coordinator continuation and failure recovery scenarios"
 status: open
-blocked_by: ["202", "204", "205"]
+blocked_by: ["202", "204", "205", "208"]
 priority: medium
 validation_criteria:
   - "Meaningful injected coordinator errors are rejected and successful continuation/recovery scenarios produce explicit evidence."
