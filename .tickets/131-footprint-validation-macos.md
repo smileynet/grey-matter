@@ -81,3 +81,13 @@ inspector fixtures and the Mac pre-merge gate have not been validated.
 User decision: preserve both simulator data trees and deliberately defer testing until other
 projects wrap up and leave adequate free space. Parked in backlog; no cleanup authorized.
 Resume with a fresh free-space check, then the remaining Mac acceptance observations.
+
+## Independent follow-up after core delivery — 2026-11-02
+
+The user accepted the test-verification core as delivered and separated this ticket from
+its completion gate. This remains an independent unfinished follow-up with its existing
+status, acceptance criteria and activation conditions preserved; the stream tag records
+lineage rather than a blocker on adoption. No Mac/OneDrive deferral is revoked, no missing
+failure is explained by a green rerun, and no new platform pass or cleanup is claimed.
+See the [delivery/adoption record](../docs/agents/research/test-verification-delivery-20261102.md)
+and [plan](../docs/plan.md#independent-verification-follow-ups).

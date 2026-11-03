@@ -79,3 +79,13 @@ The combined pre-release gate at 8e6396b also passed all 29 checks; its deployer
 completed in 95.7 s. This is another non-reproduction, not proof of the intermittent
 failure's cause. No additional stress loop was run and the next-failure capture requirement
 is unchanged.
+
+## Independent follow-up after core delivery — 2026-11-02
+
+The user accepted the test-verification core as delivered and separated this ticket from
+its completion gate. This remains an independent unfinished follow-up with its existing
+status, acceptance criteria and activation conditions preserved; the stream tag records
+lineage rather than a blocker on adoption. No Mac/OneDrive deferral is revoked, no missing
+failure is explained by a green rerun, and no new platform pass or cleanup is claimed.
+See the [delivery/adoption record](../docs/agents/research/test-verification-delivery-20261102.md)
+and [plan](../docs/plan.md#independent-verification-follow-ups).

@@ -70,3 +70,26 @@ Extend `conformance-audit` with a release-aware upgrade mode rather than adding 
 - [ ] Running it twice in a row makes no further change.
 - [ ] Mechanical steps apply only behind the approval gate; judgement calls are reported.
 - [ ] `node scripts/gate.mjs pre-push` passes.
+
+## Pinned adopter evidence after core delivery — 2026-11-02
+
+The user accepted the test-verification core delivery and requested adoption review rather
+than waiting on Mac/OneDrive and an unreproduced deployer failure. The bounded two-worker
+[adoption audit](../docs/agents/research/test-verification-delivery-20261102.md#current-source-observations)
+is input to this existing upgrade task, not another prerequisite for the delivered core.
+
+Current GitHub source was read at Tagalog Helper `583f4b8cb56271959f34828eeaf6768487cc6926`
+and Philippines Trip `233b84d9e578bc210d780f120e78ffd6f0cc5fb6`. Both already implement
+scoped selection and retention, so do not scaffold those again based on the stale local
+Windows checkouts. Tagalog Helper retains blocking scoped pre-commit checks. Philippines
+Trip documents a Mac Claude push hook and custom edit/commit/merge/release stages; its
+older test-strategy introduction still calls implemented selection a proposal. Neither
+pinned AGENTS.md declares `Verification phase:`. These are concrete reconciliation inputs,
+not proof of installed hook state, fresh runtimes or a reason to force stability.
+
+Preserve project-specific fidelity, private-data and recovery rules. Obtain an explicit
+owner phase decision before changing cadence/enforcement; no native app, release or
+custom stage name implies that decision. Check whether current source has advanced before
+any edit. The audit ran no consumer test/build, clone update, model, simulator, cloud-file
+or provider operation, and granted no cleanup authority. Existing acceptance criteria and
+the overlap/upgrade-mode decision remain open.

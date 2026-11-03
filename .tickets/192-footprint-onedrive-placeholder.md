@@ -78,3 +78,13 @@ The user instructed: move on to other work and leave OneDrive pending. Parked in
 no further fixture request, file inspection or availability change is planned until the user
 resumes this work. The supplied file's local-only observation remains valid within its recorded
 scope; online-only placeholder acceptance is still unmet.
+
+## Independent follow-up after core delivery — 2026-11-02
+
+The user accepted the test-verification core as delivered and separated this ticket from
+its completion gate. This remains an independent unfinished follow-up with its existing
+status, acceptance criteria and activation conditions preserved; the stream tag records
+lineage rather than a blocker on adoption. No Mac/OneDrive deferral is revoked, no missing
+failure is explained by a green rerun, and no new platform pass or cleanup is claimed.
+See the [delivery/adoption record](../docs/agents/research/test-verification-delivery-20261102.md)
+and [plan](../docs/plan.md#independent-verification-follow-ups).

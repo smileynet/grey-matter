@@ -102,15 +102,17 @@ manifest, and land grey 82 before 88 (same installer). grey 109 ships with tkt 2
 
 ## Test optimization and verification
 
-Reconciled 2026-11-02 at the user's request. Scope: `stream:test-verification`.
-4 unfinished tickets (1 open, 0 in progress, 3 deferred) and 25 completed tickets. This stream excludes orchestration and dashboard
+**Core delivered**, accepted 2026-11-02 at the user's request. Scope: `stream:test-verification`.
+The 25 completed tickets deliver the core work. Four independent follow-ups retain the same
+stream tag for lineage; they do not block adoption or keep the core delivery open. This stream excludes orchestration and dashboard
 feature work; #116 covers only the evidence/current-summary contract. Existing release
 authorization and frozen candidate scope are unchanged.
 
 The order below is the session's chosen execution policy, not new dependency edges. All
-existing blocked_by values are preserved. In progress: none; remaining stream work is deferred or awaiting evidence. Pursue #122 only when a useful
-failure is captured. macOS work needs a Mac; WSL and destructive footprint probes need a
-suitable owned environment. No host-only criterion is satisfied by a Windows fixture pass.
+existing blocked_by values are preserved. In progress: none. The delivered changes are merged,
+pushed and deployed: scoped lifecycle gates, cheaper faithful test environments, isolated and
+reused fixture setup, bounded artifact retention, and explicit evidence limits. See the
+[delivery and adoption record](agents/research/test-verification-delivery-20261102.md).
 
 On the installed tkt 0.4.0, tag-context queries also include untagged tickets. Exact stream
 membership is the 29 rows below; an untagged result does not add a ticket to this plan.
@@ -126,12 +128,11 @@ with their lifecycle recorded in ticket resolutions and the
 [measured retention inventory](agents/research/evidence/test-verification-retention-20261102.json);
 none of this establishes rendered UI acceptance.
 
-No actionable stream implementation remains unassigned. Resume #175/#131 only after the
-user revisits Mac testing and SpaceJam has at least 20 GiB free; preserve both simulators.
-Resume #192 only when the user resumes OneDrive work with an approved online-only fixture.
-Keep #122 open for the next actual matching deployer failure, retaining its full output and
-host/process context before retrying; another blind green stress loop would not identify
-the original failure's cause. Laptop/phone dashboard review is still pending separately.
+The bounded adoption audit is complete against pinned current source of the originating
+projects. Both already use scoped checks and retention; remaining phase/hook/documentation
+reconciliation is input to existing #164. No project policy or runtime was changed. A stale
+local checkout cannot establish a current adopter gap. Laptop/phone dashboard review remains
+pending separately; no rendered acceptance is claimed.
 
 | ID | Work | Status |
 | --- | --- | --- |
@@ -147,16 +148,12 @@ the original failure's cause. Laptop/phone dashboard review is still pending sep
 | 98 | 5. CLI/pack compatibility and identity-bound reuse | ✅ done |
 | 121 | 5. Windows critic launch and unsupported-version diagnostics | ✅ done |
 | 132 | 6. Windows footprint rows and disposable bin/placeholder probes | ✅ done |
-| 192 | 6. OneDrive placeholder allocation; needs an approved online-only fixture | backlog |
 | 133 | 7. WSL 2 backing-volume and reclaim validation | ✅ done |
 | 184 | 8. Revalidate preservation state before cleanup recommendations | ✅ done |
 | 182 | 9. Bounded external footprint growth, regrowth and free-space trends | ✅ done |
 | 183 | 9. Retention ownership across handoffs and policy conflicts | ✅ done |
 | 181 | 9. Preservation-first scratch-prune recipe | ✅ done |
 | 195 | 10. Distinguish CLI slash arguments from missing-skill references | ✅ done |
-| 175 | 8. macOS inspector/lsof hang diagnosis | backlog |
-| 131 | 8. macOS/APFS footprint validation | backlog |
-| 122 | Throughout: diagnose a captured deployer failure; 20-run criterion already met | open |
 
 Completed in this chat, with their original closure evidence preserved:
 
@@ -170,10 +167,24 @@ Completed in this chat, with their original closure evidence preserved:
 | 177 | gate.mjs --record writes measured timings into gates.json | ✅ done |
 | 178 | Warn when grey-matter's own clone has no core.hooksPath, so pushes skip the pre-push stage | ✅ done |
 
-For each remaining ticket: verify premises, implement its scoped change, run applicable checks,
-review acceptance, commit/push and deploy guidance changes before closing with evidence.
-Finish with integrated pre-release verification plus the named platform checks. Promote or
-recycle owned artifacts; leave unresolved external evidence explicit rather than forcing closure.
+### Independent verification follow-ups
+
+These four tickets remain unfinished with their original acceptance criteria. No new dependency,
+platform pass, cleanup permission or release authorization follows from the core delivery.
+
+| ID | Work | Status |
+| --- | --- | --- |
+| 122 | Diagnose the next captured deployer failure; 20-run criterion already met | open |
+| 175 | macOS inspector/lsof hang diagnosis; user-deferred until Mac space is available | backlog |
+| 131 | macOS/APFS footprint validation; user-deferred until Mac space is available | backlog |
+| 192 | OneDrive placeholder allocation; user-deferred and needs an approved online-only fixture | backlog |
+
+For #122, preserve the next actual matching failure's full output and host/process context
+before retrying; another blind green stress loop cannot explain the lost original failure.
+Resume #175/#131 only after the user revisits testing and a fresh check shows at least 20 GiB
+free on SpaceJam; preserve both project simulators. Resume #192 only when the user resumes
+OneDrive work with an approved fixture already online-only. Do not manufacture that state
+by changing the previously inspected file's availability.
 
 ## Orchestration workstream (reconciled 2026-11-02)
 
