@@ -218,6 +218,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 202 | Outcome-driven orchestrate contract and role guidance | ✅ done |
 | 203 | Complete tool-script inventory and owning skill usage guidance | in_progress |
 | 204 | Dispatch checkout and review-evidence preflight | in_progress |
+| 208 | Durable session/message foundation and recovery fixture (child of 179) | open |
 | 179 | Shared inter-harness messaging and wakeups (existing owner) | open |
 | 205 | Dashboard publication preflight using existing receipts | in_progress |
 | 206 | Correct observed operational reference drift | ✅ done |
@@ -229,12 +230,17 @@ flowchart LR
   A202 --> A207[207 Coordinator scenarios]
   A204 --> A207
   A205[205 Publication preflight] --> A207
+  A208[208 Durable session/message foundation] --> A179[179 Existing messaging implementation]
+  A208 --> A207
   A203[203 Tool usage guidance]
-  A179[179 Existing messaging implementation]
   A206[206 Reference corrections]
 ```
 
 Rows are proposed execution order; only solid graph/ticket edges are prerequisites. #203's inventory must be refreshed for every subsequently added script before final delivery, without manufacturing dependencies on unrelated work.
+
+#208 is the deterministic contract/spool slice of #179. It may proceed without
+native calls; #179 retains the end-to-end qualification and explicitly unsupported
+adapter results. Security-held lanes are not reopened by creating this child.
 
 ## Orchestration workstream (reconciled 2026-11-03)
 

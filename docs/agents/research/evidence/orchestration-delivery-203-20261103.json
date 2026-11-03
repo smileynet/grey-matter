@@ -1,0 +1,15 @@
+{
+  "candidate": "f0c37cbce52772c346d6454a0c37ea8285aabc82",
+  "acceptedIntegrated": "62b168b08b9fed67ffd2028d24e69f4284f8ef29",
+  "retentionOwner": "parent orchestration integration",
+  "state": "retained",
+  "purpose": "independent review and final outcome-delivery audit",
+  "endCondition": "authorized delivery-cycle verification and explicit disposition",
+  "raw": [
+    {"path": "D:\\code\\grey-matter\\.scratch\\proposal19-203-critic-final.txt", "sha256": "0c14308d59250ea2efa388964ad2f0d1d63b8e6c9245038d144ffa46d02d86ce", "tests": 4},
+    {"path": "D:\\code\\grey-matter\\.scratch\\proposal19-203-final-review-addendum.txt", "sha256": "248450724c309fabc9c77095dec0228d6842806b6520bf7f5e29f70683dc3e0c"},
+    {"path": "D:\\code\\grey-matter\\.scratch\\proposal19-integrated-premerge-203204.log", "sha256": "b8d6c39241c72982fef1ce0b8e2955dd90b7e91bac2c8e5b8bc18c2ac66cc64b", "selectedChecks": 4, "outcome": "pass"}
+  ],
+  "inventoryAtAcceptance": {"paths": 141, "operator": 57, "module": 16, "test": 51, "fixtureTemplate": 17},
+  "limits": ["structural coverage does not prove semantic guidance accuracy", "future added scripts require registration and fresh coverage"]
+}

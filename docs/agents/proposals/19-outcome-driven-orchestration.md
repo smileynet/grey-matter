@@ -1,6 +1,6 @@
 # Proposal 19: orchestrate toward an outcome
 
-**Status:** approved for implementation by the user, 2026-11-03. Delivery is tracked in tickets #202–207 and existing #179; the current outcome contract and execution order are in [the plan](../../plan.md#outcome-driven-orchestration-delivery-authorized-2026-11-03). Approval does not remove security holds, change model defaults or resume deferred #201. The original reviewed design follows; proposed examples become operational only when their owning tickets are verified.
+**Status:** approved for implementation by the user, 2026-11-03. Delivery is tracked in tickets #202–207 and existing #179 (with foundation child #208); the current outcome contract and execution order are in [the plan](../../plan.md#outcome-driven-orchestration-delivery-authorized-2026-11-03). Approval does not remove security holds, change model defaults or resume deferred #201. The original reviewed design follows; proposed examples become operational only when their owning tickets are verified.
 
 **Recommendation:** evolve the existing `orchestrate` skill into an outcome-driven session entry point, callable by the user and by an agent acting within existing authorization. Keep one conductor, the current role briefs, and tkt as the work ledger. Add an explicit outcome contract, recovery protocol and evidence-bound acceptance. Do not build another orchestration framework first.
 

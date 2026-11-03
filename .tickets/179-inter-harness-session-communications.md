@@ -65,4 +65,10 @@ Ticket brief and evidence-boundary review: PASS; seven acceptance criteria and n
 
 ## Outcome-driven orchestration coordination
 
+Foundation child #208 delivers the versioned registry/spool and deterministic
+recovery fixture. This parent depends on that code and retains its remaining
+native adapter qualification, exact existing-session delivery and final integration
+criteria. Fake/manual-polling receipts do not prove native wakeups. The Agy hold
+remains in force; no real user conversation is used as a canary by implication.
+
 Proposal 19 implementation approved 2026-11-03. Retain this ticket as shared message/session interface owner; coordinate #202 outcome contracts and #204 dispatch bindings. Durable spool/fixtures may proceed independently; no native Agy action, real user conversation or global configuration change is authorized by this note. Unsupported/unqualified adapters stay explicit; deterministic delivery does not prove native wakeup.

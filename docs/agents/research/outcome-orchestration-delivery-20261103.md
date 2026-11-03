@@ -86,8 +86,9 @@ This is not a recommended dependent-command sequence.
 The [private raw evidence index](evidence/orchestration-delivery-204-20261103.json)
 records hashes and retention ownership. Earlier failed-review evidence is kept
 with the final result for this cycle's audit. Catalog registration and deployment
-remain part of final ticket closure; this paragraph does not claim that later
-bookkeeping or live dispatch integration has already run.
+completed on integrated `62b168b` with 141 classified script candidates and
+`installed 50 skills.` Final bookkeeping and live dispatch integration are
+reported separately.
 
 ## Published 202/206 dashboard snapshot
 
@@ -108,3 +109,42 @@ checks verified current 202/206 completion, remaining/deferred states and all
 `947a0c35279a49863e84f1c3b33f832b4a07522c`, deployment
 `appgdep_6aea3502bd548191b408a926b1aaa930`; owner-only access was confirmed
 and preserved. No production-browser or native-goal proof is implied.
+
+## Complete script usage guidance (203)
+
+The initial catalog candidate was blocked because it misdescribed the active
+dashboard builder and fixture generator, omitted exact held-tool invocation
+contracts, and included mutating/weakly checked inventory modes. The revised
+candidate `f0c37cbce52772c346d6454a0c37ea8285aabc82` was independently accepted
+after source-based corrections, including explicit PR-fixture repository
+requirements and destructive `--force` semantics. Parent integrated it and
+registered the accepted 204 helper/test with a direct owning-skill pointer at
+`62b168b08b9fed67ffd2028d24e69f4284f8ef29`; the critic renewed acceptance of
+that exact integrated tree.
+
+The on-demand checker discovers common script extensions throughout the tracked
+repository, indexed executable modes and two-byte shebang candidates, plus
+nonignored untracked candidates. All 141 current paths are classified: 57
+operators, 16 modules, 51 tests and 17 fixtures/templates. Operator rows link to
+owning skill guidance and state command/input, mutation/authorization, output
+and evidence limits. The checker validates structural coverage/links/fields;
+source review still owns semantic accuracy. It never invokes inventoried tools,
+and import has no inventory side effects. Future 205/207/208 tools must be
+registered when integrated; this baseline count is not a promise about new files.
+
+**Pass, parent-observed:** inventory 141/141; four negative/positive inventory
+fixtures; syntax (50 skills/37 sidecars), invocation (50 skills/19 user-only),
+docs consistency and diff checks. The worker's missing-`yaml` syntax attempt was
+an infrastructure error, resolved for verification by the dependency-equipped
+parent, not silently reported as passed. A fully captured parent pre-merge run
+on `62b168b` relative to `bd83fcd` passed 4/4 selected checks: syntax fixtures,
+dashboard contract, harness versions and tkt usage compatibility. Manual
+pre-push passed 5/5; deployment completed `installed 50 skills.` with Agy
+excluded, and push succeeded. No model, native probe or global setting change
+was used for inventory discovery or qualification.
+
+Private review output and addendum remain parent-owned for this cycle's final
+audit; the compact [retention index](evidence/orchestration-delivery-203-20261103.json)
+records their exact identities. The 203 worktree/dependencies are retained only
+through integration/closure and reuse or managed archival, preserving unrelated
+worktrees and historical native evidence.
