@@ -90,7 +90,7 @@ if (provider === "claude") {
   commandArgs = ["--print", prompt, "--no-session-persistence", "--output-format", "json", "--permission-mode", "acceptEdits", "--max-budget-usd", "0.25", "--allowedTools", "Read", "Edit", "Write", "Bash(npm test)"];
   if (model) commandArgs.push("--model", model);
 } else if (provider === "codex") {
-  commandArgs = ["exec", "--ephemeral", "--cd", workDir, "--sandbox", "workspace-write", "--json"];
+  commandArgs = ["exec", "--ephemeral", "--ignore-user-config", "--cd", workDir, "--sandbox", "workspace-write", "--json"];
   if (model) commandArgs.push("--model", model);
   commandArgs.push(prompt);
 } else if (provider === "kiro") {
