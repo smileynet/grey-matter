@@ -32,8 +32,20 @@ source scope so the receipt digest covers it. Retain limits even when another ch
 resolves the user's immediate question.
 
 If no permitted capture exists, record the blocked or unavailable check in the ticket or
-report and leave critic acceptance pending. Do not create a receipt with fabricated
+report and leave explicitly required critic acceptance pending. Do not create a receipt with fabricated
 captures or treat a human report as the missing tool observation.
+
+## Evidence limits and required acceptance
+
+An unavailable observation limits the claim; it does not by itself create an owner task or
+approval gate. Required acceptance comes from the project or ticket contract. Preserve
+those requirements when evidence is missing, and keep ordinary feedback preferences separate.
+
+| Scenario | Disposition |
+| --- | --- |
+| A routine board/content refresh keeps the renderer unchanged; browser access is blocked and the owner gives feedback during use. | Run applicable source/data checks, record the rendering limit and preserve the preference. No unsolicited owner-review ask or new completion gate. No rendered pass is claimed. |
+| A UI ticket explicitly requires phone captures and critic acceptance, but the permitted capture surface is unavailable. | Keep that acceptance unresolved on its owner; record the missing evidence. Do not waive the criterion, fabricate a receipt or turn a human report into tool observation. |
+| A dashboard review ask has been answered with feedback during normal use, then entries are regenerated. | Preserve the answered state and answer; keep it out of pending asks. The unknown rendering result stays a limitation, not a reopened task. |
 
 ## Declare the scope
 

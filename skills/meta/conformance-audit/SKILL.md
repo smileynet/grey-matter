@@ -26,6 +26,17 @@ The skill runs **audit**, then a **gate**, then **fix**. The split is load-beari
 classified report must exist and be approved *before* any fix is applied, so the assessment is never
 rushed by fixing-as-you-find.
 
+Before reporting current nonconformance, record the target repository identity (remote or supplied
+path), inspected ref or commit, any supplied comparison/cited implementation revision, its relation
+to the inspected revision when locally verifiable, and available upstream evidence. Qualify findings
+to the inspected snapshot when it predates a cited change or currency cannot be established; absence
+from that snapshot is not evidence of a current product defect. A pinned source read establishes
+only what that source says, not runtime behavior. Use an already-authorized current source when
+available; otherwise report the missing access or revision. This preflight does not itself authorize
+a fetch or clone. Preserve the
+target's declared verification phase and policy; neither a release nor a missing phase authorizes a
+phase change.
+
 ### Phase 1 — Audit (assess and classify; no edits)
 
 Walk the four artifact classes (below) and, for each nonconformance, write a finding tagged

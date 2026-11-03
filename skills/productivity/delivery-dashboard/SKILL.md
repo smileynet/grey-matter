@@ -69,8 +69,12 @@ stays out of the way, under folds and links.
    leave them unverified. Do not try another route to bypass a blocked protocol. Before
    closing UI work, inspect the actual laptop/phone rendering when a permitted surface
    is available and bind required critic acceptance to its source and captures. If a
-   required capture or review is unavailable, leave acceptance pending; a human report
-   may be recorded separately but does not substitute for tool-observed rendering.
+   capture or review required by the project or ticket is unavailable, leave that
+   acceptance pending; a human report may be recorded separately but does not substitute
+   for tool-observed rendering. A routine status/content update does not create a new
+   owner-review gate. Record unavailable checks as evidence limits in `details`; keep
+   feedback-during-use preferences and answered asks intact. See the receipt's
+   [scope examples](references/review-receipt.md#evidence-limits-and-required-acceptance).
    When recording acceptance, use [review receipts](references/review-receipt.md); a
    rendering-input change requires affected checks, new captures and renewed acceptance.
    Closure-only metadata may change only through the receipt's explicit projections. Run

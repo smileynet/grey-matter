@@ -109,6 +109,16 @@ current structural frontier. If an adopted queue differs, report its order separ
 preserve it; do not replace it with the raw frontier sort. Present tickets created or updated,
 the adopted queue when present, and what the frontier shows about eligibility and blockers.
 
+Before counting residual tickets as delivery blockers, compare the requested outcome and its
+required acceptance with observed behavior and evidence. Keep unmet or unverified required
+acceptance on its owning ticket; never relabel it as a follow-up, weaken its criteria, or close
+the ticket to clear the frontier. Independent follow-ups keep their own criteria, status and
+activation conditions, but do not block a delivered outcome without a real prerequisite.
+Report delivered behavior, required acceptance still unmet or unverified, and independent
+follow-ups separately. **Scenario:** optional Mac validation remains unrun after the core
+acceptance is evidenced, so report it as an independent follow-up; if the original acceptance
+requires that validation, keep it unmet or unverified on the core ticket.
+
 ## Does not
 
 - Pick the single next ticket to execute (that's just working the frontier, `tkt ready`).
