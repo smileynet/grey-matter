@@ -89,3 +89,9 @@ lineage rather than a blocker on adoption. No Mac/OneDrive deferral is revoked, 
 failure is explained by a green rerun, and no new platform pass or cleanup is claimed.
 See the [delivery/adoption record](../docs/agents/research/test-verification-delivery-20261102.md)
 and [plan](../docs/plan.md#independent-verification-follow-ups).
+
+## Sync observation 2026-11-03
+
+An uncommitted working-tree change to `scripts/deploy.test.mjs` (owner not identified) makes `dualSandbox` build on `homeSandbox()`. That gives the Claude/Codex dual-install cases an isolated HOME and `CODEX_HOME=<sandbox>/.codex` instead of inheriting the real `process.env` home, and moves the fixture `config.toml` under `.codex/`. It removes one candidate cause listed above: a test reading or racing the live `~/.codex` of a running session.
+
+Unverified: `node --test --test-reporter=tap scripts/deploy.test.mjs` on the working tree did not finish within 15 minutes, after the post-sync `npm ci`. The process still running was `node scripts/deploy.mjs agy install --out <Temp>\gm-home-*`, and it was stopped. Whether the hang comes from that change or the host was not determined. Before committing the change, run `node scripts/gate.mjs pre-merge --include deployer` on it and on clean `HEAD`, and keep both full logs.
