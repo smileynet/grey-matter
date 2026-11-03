@@ -8,13 +8,13 @@ the suggested queue follows the first matching row in `docs/plan.md`.
 ## Remote access
 
 The [private hosted dashboard](https://orchestration-findings.sambiggins.chatgpt.site)
-is available while signed in as its owner. Published through Sites on 2026-11-02;
+is available while signed in as its owner. Published through Sites on 2026-11-03;
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `c9bcf0d023ba0d2f8e15f0ffacd26c8fe8fab38a`.
-- Deployment: `appgdep_6ae9801122708191952447fe92fb63c6`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_c1fe9d3832b48191bfd3e6094b6afeba`.
+- Pushed Site source: `9a80da3be3af9ba7b251a1f8c0d5eaa191aca621`.
+- Deployment: `appgdep_6ae9ba61cb808191ba92e9b831ed0c5b`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_8adf423e34f08191b6dd149a5255242c`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -28,12 +28,45 @@ Windows System32 first on the child process PATH succeeded. No plugin code chang
 
 ## Maintain it
 
+### Model-tier findings (#167–169, 2026-11-03)
+
+The latest publication has 17 findings and 36 scoped tickets: 31 done and five
+unfinished. Implementation, review and research findings retain configured
+defaults; none qualifies a cheaper model for adoption. Writing, effort and fast
+mode are in progress; the Kiro shutdown issue remains blocked and ACP research
+stays last. The ticket snapshot includes all three newly claimed trial tickets.
+
+Both pages passed actual Chrome interaction and overflow checks at 1280×900 and
+390×900. The delivery checker reported 48 entries, 198 tickets, no open asks,
+and no errors or warnings. All 45 earlier delivery entries were preserved.
+The shared plan renderer now visibly explains sideways scrolling; a phone check
+moved the diagram 448 pixels without document overflow. An independent critic
+inspected all eleven final captures and accepted receipt
+`f7eb46d2b020e094ec5efdd1877e404f9346a969a2ded146c2fc69e108687372`
+in `evidence/orchestration-dashboard/t167-169-queue-final/` and receipt
+`3f2eda3b2fd9b9176f9a36a596ccd497fe8cf1bc776af3da61d3a55401d57a07`
+in `evidence/orchestration-dashboard/t167-169-status-queue-final/`.
+Source and final queue captures were pushed as `3507ba5`; its scoped pre-merge
+checks passed 3/3 and pre-push passed 6/6, with no skips. The earlier model-code
+integration used 21 passing checks and two documented unchanged-origin baseline
+exceptions; their unknown coverage is retained in the
+[verification receipt](evidence/orchestration-gate-baseline-20261103.json).
+
+The Site's ticket links now resolve from the repository root; all 36 targets and
+the 17-card/31-done payload were checked in the packaged output. The native
+deployment returned `succeeded` at 10:41:45 UTC, preserving the owner-private
+audience. Production browser interaction was not checked. The 53,755-byte
+publication archive was recycled after success and verified absent. The superseded phone review
+captures (1,458,070 bytes) were recycled; reviewed earlier snapshots remain in
+Git. Keep the reusable browser, Site checkout and trial-private evidence through
+the remaining workstream.
+
 ### Complete frozen setup (#200, 2026-11-02)
 
-The latest publication has 14 findings and 36 scoped tickets: 28 done and eight
+That publication had 14 findings and 36 scoped tickets: 28 done and eight
 remaining. The evaluation now assembles all fifteen seed files without live
 tooling or templates. This is setup verification; the ongoing model trials have
-not yet produced accepted recommendations.
+not yet produced accepted recommendations at that point.
 
 Both pages passed interaction and overflow checks at laptop and phone widths.
 The static delivery check reported 44 entries, 198 tickets and no issues. An
