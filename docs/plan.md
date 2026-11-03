@@ -216,10 +216,12 @@ does not require another proceed and does not end supervision. Keep the periodic
 check-in job active until the whole authorized queue is settled or the user stops
 it; record real blockers and continue independent work. Runtime routing stays in
 the session-local ledger; durable ticket state stays here and in `.tickets/`.
-ACP research #187 remains last. Model comparisons may need serial
+ACP research #187 completed as the last independent queue item after #172's
+account-fact hold became explicit; it recommends no new actionable spike now.
+Only #172 and #189 remain unfinished. Model comparisons may need serial
 measurement to avoid shared-load confounding even when their files do not overlap.
 
-The remaining-work table is the proposed execution order. #162's driver
+The ordered workstream table retains execution history. #162's driver
 comparison and #186's auth routing investigation are complete. The #156 trial
 confirmed worker report/wake recovery after a graceful restart, but exposed a
 fabricated task and no independent Mate acceptance review. Keep the requirements
@@ -241,9 +243,14 @@ qualified with their stated limits. #173's qualified recommendations are deploye
 and closed without claiming live GUI steering. #174 selected the runner, and
 #199 pinned its fixture dashboard after preflight detected template drift.
 #200 freezes the complete seed after a host tooling update changed guidance.
-#167 and #168 are dispatched with independent protocol review and serialized
-model measurements. The supervisor keeps advancing independent frontier work; these results
-do not imply a production-ready orchestrator.
+#167–171 are closed with independently audited findings and unchanged defaults;
+their quality, identity, usage and review-evidence limits remain in the reports.
+#172 has completed offline preparation but awaits the user's factual confirmation
+that fast-mode usage credits are already enabled. No fast-mode model cell has
+run, and no credit setting will be changed. #189 remains upstream-blocked until
+the runtime changes or a newly supported shutdown sequence can be qualified.
+Supervision stays active for these two conditions; completed batches do not
+end the workstream. These findings do not imply a production-ready orchestrator.
 The #158-before-#157 order is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before

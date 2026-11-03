@@ -38,3 +38,25 @@ wall time or assuming an earlier billing rule remains current.
 ## Reconciliation (2026-11-02)
 
 This spike is Claude Code fast-mode on/off only, using the same supported model, effort and fixtures; it is not the cross-provider cheap/default matrix copied into the original brief. Confirm entitlement and current billing/usage signals before spending, use no provider fallback, and report missing credit attribution as unknown.
+
+## Current execution hold (2026-11-03)
+
+Offline preparation and independent review are complete. The read-only Claude
+Code 2.1.316 version/help/auth checks succeeded, but the CLI does not report
+whether fast-mode usage credits are already enabled. The account usage page
+required sign-in; no account setting was changed. All twelve planned model
+cells remain unattempted, and no native execution authorization has been issued.
+
+The pending user question is: **are fast-mode usage credits already enabled for
+the Claude.ai account used by this CLI?** Silence or general access permission
+does not answer that factual question. Do not enable credits, change global
+settings, or substitute a provider. If the fact is supplied, revalidate the exact
+prepared source, binaries, private inputs, explicit modes and bounded plan before
+the parent authorizes native calls. Requested spend limits are not proof of an
+invoice cap; missing mode or cost attribution remains unknown.
+
+Private preflight evidence and the isolated preparation checkout are retained
+through this ticket's execution and independent audit. Completed runner
+prerequisites remain in `blocked_by` for provenance. ACP research #187 is now
+complete; it does not block this trial. The other unfinished workstream item,
+#189, has its own upstream shutdown blocker.
