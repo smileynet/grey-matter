@@ -1,6 +1,6 @@
 # GUI watch layer comparison: ticket 173
 
-**Checked:** 2026-11-03. **Evidence type:** official product documentation plus a bounded Windows app inventory and launch/capture attempt. No candidate GUI yielded a view of the five retained #162 test sessions, so documented capability and local GUI observation are kept separate.
+**Checked:** 2026-11-02 (client local date). **Evidence type:** official product documentation plus a bounded Windows app inventory and launch/capture attempt. No candidate GUI yielded a view of the five retained #162 test sessions, so documented capability and local GUI observation are kept separate.
 
 ## Finding
 
@@ -29,7 +29,7 @@ For ticket 111, keep the orchestrator ledger authoritative across harnesses. Lin
 
 The retained #162 receipt at [`headless-drivers-20261102.json`](evidence/headless-drivers-20261102.json) names five owned native sessions: agy, Claude Code, Codex, Kiro CLI ACP, and Kiro chat. Their fixture results include question/follow-up turns; the Codex tool attempt had a missing companion-host error, and the Kiro ACP history includes a pending permission request that was cancelled, not answered. Those results are CLI/ACP evidence, not proof of what a GUI displayed.
 
-On 2026-11-03 the CUA app inventory showed the ChatGPT/Codex app running, Claude installed but not running, and did not list Kiro IDE, Antigravity, or Kiro Crew. Targeted read-only install checks then found Kiro IDE 1.3.11, Antigravity 2.28.2.0, and the existing Kiro Crew installation. The dated raw outcomes are in [`gui-watch-layer-20261102.json`](evidence/gui-watch-layer-20261102.json).
+On 2026-11-02 (client local date) the CUA app inventory showed the ChatGPT/Codex app running, Claude installed but not running, and did not list Kiro IDE, Antigravity, or Kiro Crew. Targeted read-only install checks then found Kiro IDE 1.3.11, Antigravity 2.28.2.0, and the existing Kiro Crew installation. The dated raw outcomes are in [`gui-watch-layer-20261102.json`](evidence/gui-watch-layer-20261102.json).
 
 | Candidate | Local CUA attempt | Result |
 |---|---|---|
@@ -37,7 +37,7 @@ On 2026-11-03 the CUA app inventory showed the ChatGPT/Codex app running, Claude
 | Codex app | Inventory only. | The computer-use policy forbids automating the ChatGPT/Codex desktop UI. No GUI controls or private history were read. |
 | Kiro IDE | Launched the installed executable path; refreshed `listApps`. | Launch timed out. Refreshed inventory showed no Kiro window. |
 | Antigravity | Launched the installed executable path; refreshed `listApps`. | CUA returned `system cursor manager did not become ready`; refreshed inventory showed no Antigravity window. |
-| Kiro Crew | Launched the existing installed executable; refreshed `listApps`, then tried the returned window ID with CUA. | The launch call timed out but inventory showed window `270586`. `getApp` returned `Accessibility state unavailable for window 270586`; `getScreenshot` returned `no screenshot targets found for process: C:\Users\uosmi\AppData\Local\Programs\KiroCrew\KiroCrew.exe`. No screenshot or session transcript was captured. The app remains open because the supported API did not yield a safe controllable view. |
+| Kiro Crew | Launched the existing installed executable; refreshed `listApps`, then tried the returned window ID with CUA. | The launch call timed out but inventory showed window `270586`. `getApp` returned `Accessibility state unavailable for window 270586`; `getScreenshot` returned `no screenshot targets found for process: %USERPROFILE%\AppData\Local\Programs\KiroCrew\KiroCrew.exe`. No screenshot or session transcript was captured. The app remains open because the supported API did not yield a safe controllable view. |
 
 After the launch attempt, a read-only process snapshot found the Crew root process PID `106148`, created 2026-11-02 20:30:10 Pacific, with parent PID `56968`. The initial CUA inventory had not listed a Crew window. This is consistent with the launch call starting a new process, but no pre-launch process snapshot exists to rule out activation of an already-running process. The window remains open; no close or process-control action was taken because CUA provided no safe control surface.
 
@@ -49,19 +49,19 @@ The initial browser inventory returned unrelated personal tab metadata; no tab w
 
 ## Sources and quoted evidence
 
-Sources were opened on 2026-11-03. Quotes are kept short; product documentation is evidence of documented capability, not local UI observation.
+Sources were opened on 2026-11-02 (client local date). Quotes are kept short; product documentation is evidence of documented capability, not local UI observation.
 
 | Source, release/date | Supporting excerpt | Supports |
 |---|---|---|
 | [Anthropic, “Agent view in Claude Code”](https://claude.com/resources/articles/agent-view-in-claude-code), 2026-05-11, Research Preview | “Agent view improves visualizing and interacting with your Claude Code sessions in the CLI.” | Agent View is CLI/TUI, distinct from Desktop. The article also describes state rows and inline replies. |
 | [Anthropic, “Redesigning Claude Code on desktop for parallel agents”](https://claude.com/resources/articles/claude-code-desktop-redesign), 2026-04-14 | “A new usage button shows both your context window and session usage at a glance.” | Desktop session sidebar and usage button are separate documented capabilities. |
 | [OpenAI, “Introducing the Codex app”](https://openai.com/index/introducing-the-codex-app/), 2026-02-02; Windows update 2026-03-04 | “The app picks up your session history and configuration from the Codex CLI and IDE extension.” | Native CLI/IDE history continuity, not proof of a specific #162 GUI view. |
-| [OpenAI Help, “Using Codex with your ChatGPT plan”](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan), updated 2026-11-03 | “Open the approvals menu in the ChatGPT desktop app’s composer and select Approve for me.” | App-side approval control; it does not establish that the headless #162 approval was presented there. |
-| [OpenAI Help, “Reviewing Work and Codex usage”](https://help.openai.com/en/articles/20001478-reviewing-work-and-codex-usage-and-using-personal-analytics-in-chatgpt-desktop), updated 2026-10 (accessed 2026-11-03); full feature requires desktop 26.812.10818 and eligible Enterprise/Edu | “Lifetime credits used by the Work or Codex chat.” “Sub-agents and separate tasks may not be included.” | Per-chat usage and its completeness caveat. Account eligibility was not inspected. |
-| [Kiro, “Agent Focus Mode” docs](https://kiro.dev/docs/ide/experimental/focus-mode/), current docs accessed 2026-11-03; release version not stated on page | “Each card names the session and its project, shows the question and the exact command or path involved, and presents the agent’s options as buttons.” | In-place handling of questions and command approvals in Agent Focus. |
-| [Google Antigravity, “Feature overview”](https://antigravity.google/docs/features), current App/CLI docs accessed 2026-11-03; no version on page | “In the side panel’s Overview, open Subagents and select a subagent to follow its conversation.” | App can follow subagent conversations. The same page separates the app and CLI feature sections; `/agents` approval controls and `/usage` are documented under CLI. |
-| [Kiro Crew, “Sessions” docs](https://kiro.dev/docs/crew/chat/sessions/), current docs accessed 2026-11-03; no version on page | “Each tab shows whether its session is thinking, waiting, or idle.” | Per-tab state indicators for Crew-owned sessions. |
-| [Kiro Crew, “Security” docs](https://kiro.dev/docs/crew/security/), current docs accessed 2026-11-03; no version on page | “Interactive: Tool calls ask for approval on a surface that can present the prompt.” | Interactive approval capability; exact local card layout was unavailable. |
+| [OpenAI Help, “Using Codex with your ChatGPT plan”](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan), source page displayed updated 2026-11-03; accessed 2026-11-02 local | “Open the approvals menu in the ChatGPT desktop app’s composer and select Approve for me.” | App-side approval control; it does not establish that the headless #162 approval was presented there. |
+| [OpenAI Help, “Reviewing Work and Codex usage”](https://help.openai.com/en/articles/20001478-reviewing-work-and-codex-usage-and-using-personal-analytics-in-chatgpt-desktop), updated 2026-10 (accessed 2026-11-02 local); full feature requires desktop 26.812.10818 and eligible Enterprise/Edu | “Lifetime credits used by the Work or Codex chat.” “Sub-agents and separate tasks may not be included.” | Per-chat usage and its completeness caveat. Account eligibility was not inspected. |
+| [Kiro, “Agent Focus Mode” docs](https://kiro.dev/docs/ide/experimental/focus-mode/), current docs accessed 2026-11-02 local; release version not stated on page | “Each card names the session and its project, shows the question and the exact command or path involved, and presents the agent’s options as buttons.” | In-place handling of questions and command approvals in Agent Focus. |
+| [Google Antigravity, “Feature overview”](https://antigravity.google/docs/features), current App/CLI docs accessed 2026-11-02 local; no version on page | “In the side panel’s Overview, open Subagents and select a subagent to follow its conversation.” | App can follow subagent conversations. The same page separates the app and CLI feature sections; `/agents` approval controls and `/usage` are documented under CLI. |
+| [Kiro Crew, “Sessions” docs](https://kiro.dev/docs/crew/chat/sessions/), current docs accessed 2026-11-02 local; no version on page | “Each tab shows whether its session is thinking, waiting, or idle.” | Per-tab state indicators for Crew-owned sessions. |
+| [Kiro Crew, “Security” docs](https://kiro.dev/docs/crew/security/), current docs accessed 2026-11-02 local; no version on page | “Interactive: Tool calls ask for approval on a surface that can present the prompt.” | Interactive approval capability; exact local card layout was unavailable. |
 | [Kiro Crew changelog, 0.9.0](https://kiro.dev/changelog/crew/), 2026-10-16 | “The Usage tab estimates token use and projects when your credits may run out.” | Crew usage estimate. The documented changelog version 0.9.0 predates the locally recorded 0.11.1 install; treat as a product-family note, not an exact-build verification. |
 
 ## Limits
@@ -75,7 +75,7 @@ Sources were opened on 2026-11-03. Quotes are kept short; product documentation 
 
 Use this header and summary when integrating the findings into the shared note:
 
-> ### GUI watch surfaces: ticket 173 (2026-11-03)
+> ### GUI watch surfaces: ticket 173 (2026-11-02)
 >
 > The [full comparison](gui-watch-layer-20261102.md) records documented capabilities separately from local observation. The products describe native-session monitoring and steering; no tested surface was verified to expose the retained cross-harness headless workers. The table below summarizes those five surfaces; “documented” does not mean the retained worker was visible or answerable.
 

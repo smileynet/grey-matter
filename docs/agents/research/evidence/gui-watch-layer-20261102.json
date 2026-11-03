@@ -1,6 +1,6 @@
 {
   "ticket": 173,
-  "checked_at": "2026-11-03",
+  "checked_at": "2026-11-02 (client local date)",
   "scope": "Documented capability review plus bounded Windows CUA inventory/launch/capture attempts for the five requested watch surfaces.",
   "method": {
     "ui_automation": "mcp__cua_repl only",
@@ -86,7 +86,7 @@
       "process_lifecycle": {
         "initial_cua_inventory_listed_crew_window": false,
         "attempted_action": "CUA launch_app for the installed executable; request timed out, then refreshed inventory exposed the window.",
-        "read_only_process_snapshot_at": "2026-11-03",
+        "read_only_process_snapshot_at": "2026-11-02 (client local date)",
         "root_pid": 106148,
         "root_creation_time_local": "2026-11-02 20:30:10 America/Los_Angeles",
         "root_parent_pid": 56968,
@@ -117,7 +117,7 @@
       "title": "Agent view in Claude Code",
       "url": "https://claude.com/resources/articles/agent-view-in-claude-code",
       "published": "2026-05-11; Research Preview",
-      "accessed": "2026-11-03",
+      "accessed": "2026-11-02 (client local date)",
       "quote": "Agent view improves visualizing and interacting with your Claude Code sessions in the CLI.",
       "supports": "Corrects the candidate name/surface; agent view is CLI/TUI. Article describes state rows and inline responses to decisions.",
       "confidence": "high for product statement; no local UI proof"
@@ -127,7 +127,7 @@
       "title": "Redesigning Claude Code on desktop for parallel agents",
       "url": "https://claude.com/resources/articles/claude-code-desktop-redesign",
       "published": "2026-04-14",
-      "accessed": "2026-11-03",
+      "accessed": "2026-11-02 (client local date)",
       "quote": "A new usage button shows both your context window and session usage at a glance.",
       "supports": "Desktop session sidebar and session usage are documented independently from CLI Agent View.",
       "confidence": "high for announced feature; local app not inspected"
@@ -137,7 +137,7 @@
       "title": "Introducing the Codex app",
       "url": "https://openai.com/index/introducing-the-codex-app/",
       "published": "2026-02-02; Windows availability update 2026-03-04",
-      "accessed": "2026-11-03",
+      "accessed": "2026-11-02 (client local date)",
       "quote": "The app picks up your session history and configuration from the Codex CLI and IDE extension.",
       "supports": "Documented native CLI/IDE history continuity; does not prove the particular #162 thread was visible or answerable in this app instance.",
       "confidence": "high for statement; local UI unobserved"
@@ -147,7 +147,7 @@
       "title": "Using Codex with your ChatGPT plan",
       "url": "https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan",
       "updated": "2026-11-03 (page said updated 4 hours before retrieval)",
-      "accessed": "2026-11-03",
+      "accessed": "2026-11-02 (client local date)",
       "quote": "Open the approvals menu in the ChatGPT desktop app’s composer and select Approve for me.",
       "supports": "App-side approval control when Auto-review is available; does not establish that the #162 pending headless approval was presented there.",
       "confidence": "high for documented control; local GUI unobserved"
@@ -157,7 +157,7 @@
       "title": "Reviewing Work and Codex usage and using Personal Analytics in ChatGPT Desktop",
       "url": "https://help.openai.com/en/articles/20001478-reviewing-work-and-codex-usage-and-using-personal-analytics-in-chatgpt-desktop",
       "updated": "2026-10 (page says updated 12 days before retrieval)",
-      "accessed": "2026-11-03",
+      "accessed": "2026-11-02 (client local date)",
       "version_condition": "Full article feature set requires ChatGPT Desktop 26.812.10818 or later; feature availability is eligible Enterprise/Edu workspace dependent.",
       "quotes": [
         "Lifetime credits used by the Work or Codex chat.",
@@ -170,8 +170,8 @@
       "id": "kiro-agent-focus",
       "title": "Agent Focus Mode — Kiro IDE docs",
       "url": "https://kiro.dev/docs/ide/experimental/focus-mode/",
-      "published": "Current docs retrieved 2026-11-03; page does not identify a release version",
-      "accessed": "2026-11-03",
+      "published": "Current docs retrieved 2026-11-02 local; page does not identify a release version",
+      "accessed": "2026-11-02 (client local date)",
       "quote": "Each card names the session and its project, shows the question and the exact command or path involved, and presents the agent's options as buttons.",
       "supports": "Agent Focus offers in-place response to a question or command approval for sessions shown in its panel.",
       "confidence": "high for documented behavior; local UI unavailable"
@@ -180,8 +180,8 @@
       "id": "antigravity-features",
       "title": "Feature overview — Google Antigravity Docs",
       "url": "https://antigravity.google/docs/features",
-      "published": "Current App/CLI documentation retrieved 2026-11-03; no exact app version stated",
-      "accessed": "2026-11-03",
+      "published": "Current App/CLI documentation retrieved 2026-11-02 local; no exact app version stated",
+      "accessed": "2026-11-02 (client local date)",
       "quote": "In the side panel’s Overview, open Subagents and select a subagent to follow its conversation.",
       "supports": "App can follow a subagent conversation. The same page assigns `/agents` approval controls and `/usage` to CLI feature sections.",
       "confidence": "high for page-defined surface split; app UI unavailable"
@@ -190,8 +190,8 @@
       "id": "kiro-crew-sessions",
       "title": "Sessions — Kiro Crew docs",
       "url": "https://kiro.dev/docs/crew/chat/sessions/",
-      "published": "Current docs retrieved 2026-11-03; page does not identify a release version",
-      "accessed": "2026-11-03",
+      "published": "Current docs retrieved 2026-11-02 local; page does not identify a release version",
+      "accessed": "2026-11-02 (client local date)",
       "quote": "Each tab shows whether its session is thinking, waiting, or idle.",
       "supports": "Per-tab state in Crew sessions.",
       "confidence": "high for documented behavior; local GUI capture failed"
@@ -200,8 +200,8 @@
       "id": "kiro-crew-security",
       "title": "Security — Kiro Crew docs",
       "url": "https://kiro.dev/docs/crew/security/",
-      "published": "Current docs retrieved 2026-11-03; page does not identify a release version",
-      "accessed": "2026-11-03",
+      "published": "Current docs retrieved 2026-11-02 local; page does not identify a release version",
+      "accessed": "2026-11-02 (client local date)",
       "quote": "Interactive: Tool calls ask for approval on a surface that can present the prompt.",
       "supports": "Approval capability in an interactive Crew surface; exact local prompt layout was not captured.",
       "confidence": "high for documented behavior; local GUI capture failed"
@@ -211,7 +211,7 @@
       "title": "Crew changelog, version 0.9.0",
       "url": "https://kiro.dev/changelog/crew/",
       "published": "2026-10-16; Crew 0.9.0 entry",
-      "accessed": "2026-11-03",
+      "accessed": "2026-11-02 (client local date)",
       "version_mismatch": "Local install previously recorded as 0.11.1; this quote is for 0.9.0 and is not an exact-build validation.",
       "quote": "The Usage tab estimates token use and projects when your credits may run out.",
       "supports": "A Crew usage estimate exists in the documented product family; exact 0.11.1 UI not observed.",
