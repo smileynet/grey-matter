@@ -278,7 +278,7 @@ auth remains conditional on the result of #186.
 | 168 | 14. Compare reviewer tiers with planted defects and false positives | ✅ done |
 | 169 | 15. Compare research/exploration tiers against a fixed answer key | ✅ done |
 | 170 | 16. Compare documentation, triage and classification tiers | ✅ done |
-| 171 | 17. Sweep effort levels while holding each model fixed | in_progress |
+| 171 | 17. Sweep effort levels while holding each model fixed | ✅ done |
 | 172 | 18. Compare Claude fast mode on/off with measured quality and usage | in_progress |
 | 187 | 19. Research Agent Client Protocol (ACP) and propose evidence-led spikes | open |
 
