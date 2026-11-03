@@ -3,6 +3,16 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "gui-candidates", "state": "partial", "label": "Candidates documented; live steering unverified",
+      "title": "Compare native views before relying on them",
+      "value": "Five interfaces were compared for worker status, approvals, questions and usage. The comparison separates documented features from what could actually be observed here.",
+      "diagramLabel": "Qualification path — not demonstrated", "steps": ["Find native worker ID", "Match visible conversation", "Verify reply or approval"],
+      "limit": "No GUI was verified to display or steer the retained headless workers. Launch or capture failed, or automation was unavailable by policy.",
+      "details": "Claude Agent View is CLI/TUI and separate from the Desktop sidebar. Codex app-list state labels were unspecified in reviewed docs; Kiro Agent Focus and Crew chat document replies for their own sessions. Antigravity app subagent views differ from CLI approval controls. Crew usage documentation was older than the local install. Keep native worker results and the controller ledger authoritative until exact session mapping and an actual interaction are proven.",
+      "tickets": ["173"],
+      "sources": [{"label": "Five-surface comparison and local limits", "href": "agents/research/gui-watch-layer-20261102.md"}]
+    },
+    {
       "id": "workflow-monitor", "state": "partial", "label": "Recipe launch and retry observed",
       "title": "Follow a multi-step run and guide it from a monitor",
       "value": "A recipe started, showed step results, accepted guidance and retried a failed step. The run reached its final step but did not complete.",
@@ -38,19 +48,19 @@
       "value": "Two jobs ran in separate worktrees and returned checked results. One worker asked for a missing name, then continued in the same conversation when given an answer.",
       "diagramLabel": "Observed fixture workflow", "steps": ["Choose two jobs", "Separate worktrees", "Check result shape", "Inspect and combine"],
       "limit": "The answer and admission choices were scripted. Review and merging were checked outside the workflow; per-role model selection remains unverified.",
-      "details": "Native agy parallel and sequential controls completed. An invalid result was rejected before correction. The two ticket commits changed only their assigned files; independent controller inspection, merges and combined tests passed. Earlier attempts stopped on narrow permission denials. No global settings changed. Model requests and opaque route labels are recorded separately, with routing qualification queued before relying on tier pins.",
+      "details": "Native agy parallel and sequential controls completed. An invalid result was rejected before correction. The two ticket commits changed only their assigned files; independent controller inspection, merges and combined tests passed. Earlier attempts stopped on narrow permission denials. No global settings changed. The routing qualification found documented request controls but no verified child-scoped served-model identity. Opaque labels and requested tiers cannot establish cost or capability guarantees.",
       "tickets": ["157", "194"],
-      "sources": [{"label": "Native workflow trials and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-157-native-agy-workflows-2026-11-02"}]
+      "sources": [{"label": "Native workflow trials and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-157-native-agy-workflows-2026-11-02"}, {"label": "Model request and identity boundary", "href": "agents/research/agy-model-routing-20261102.md"}]
     },
     {
       "id": "narrow-actions", "state": "partial", "label": "Matching confirmed; approval overlap unresolved",
       "title": "Give a worker access to a smaller set of actions",
       "value": "Selected Git, test and ticket-reading commands ran with narrow grants. A folder grant allowed a nested file while rejecting a nearby sibling path.",
       "diagramLabel": "Observed positive and negative controls", "steps": ["Grant a named action", "Matching action runs", "Nearby action stops"],
-      "limit": "A regex approval rule did not pause an action already allowed by the same regex. That needs investigation. These checks do not establish whole-machine confinement.",
-      "details": "The headless Windows agy trial checked native tool results and actual file bytes. Exact literal grants also worked. TEMP writes have a default grant, so the path test moved outside TEMP and the workspace. Explicit denial worked. No global settings changed; inherited permission scopes were not fully enumerated. The approval-overlap follow-up is separate from the working narrow matching cases.",
+      "limit": "Fresh controls reproduced the regex approval mismatch; its cause remains unknown. Do not rely on that override. These checks do not establish whole-machine confinement.",
+      "details": "The headless Windows agy trial checked native tool results and actual file bytes. Exact literal grants also worked. TEMP writes have a default grant, so the path test moved outside TEMP and the workspace. A fresh matching Deny rule rejected the tested command; use a separately validated blocking rule where blocking is intended. No effective permission list was obtained and no global settings changed. The sanitized upstream issue brief remains local, not submitted.",
       "tickets": ["158", "193"],
-      "sources": [{"label": "Narrow permission trials and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-158-narrower-agy-permissions-2026-11-02"}]
+      "sources": [{"label": "Narrow permission trials and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-158-narrower-agy-permissions-2026-11-02"}, {"label": "Fresh approval controls and mitigation", "href": "agents/research/agy-approval-overlap-20261102.md"}]
     },
     {
       "id": "mate-recovery", "state": "partial", "label": "Recovery confirmed; planning needs oversight",
@@ -100,17 +110,17 @@
       "limit": "There is no single exit code or status word that proves accepted work across all of these drivers.",
       "details": "Antigravity returned SUCCESS and exit 0 with an empty response after automatic command denial. Codex completed a text turn while tool execution was blocked by a missing companion host. Kiro's live ACP request/cancel/load worked, but EOF shutdown still exited 1. The follow-up tickets separate these infrastructure limits from transport results.",
       "tickets": ["162", "159", "188", "189"],
-      "sources": [{"label": "Native outcomes and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02"}, {"label": "Codex dispatch controls and setup limit", "href": "agents/research/codex-dispatch-20261102.md"}]
+      "sources": [{"label": "Native outcomes and limits", "href": "agents/research/harness-experimental-features-20261101.md#ticket-162-headless-driver-probes-2026-11-02"}, {"label": "Codex dispatch controls and setup limit", "href": "agents/research/codex-dispatch-20261102.md"}, {"label": "Fresh Kiro shutdown blocker", "href": "agents/research/kiro-acp-shutdown-20261102.md"}]
     },
     {
-      "id": "sign-in", "state": "partial", "label": "Routing confirmed; delivery untested",
+      "id": "sign-in", "state": "partial", "label": "Callback route tested; real delivery untested",
       "title": "Choose the sign-in owner explicitly",
-      "value": "The Windows relay default followed command-line sign-in. Selecting client ownership explicitly exposed the host's token-request channel.",
+      "value": "The bundled engine asked a test host for credentials and returned the expected error when none were supplied. A documented setting selects this route.",
       "diagramLabel": "Observed routing choices", "steps": ["Select an owner", "CLI handles sign-in", "Or host receives request"],
-      "limit": "Real host-vault token delivery was not tested. The current Crew integration needs a supported correction for that route.",
-      "details": "Crew 0.11.1's Windows host-auth builder omitted the owner flag. On CLI 2.37.1 that command behaved like explicit CLI ownership. Explicit client mode reached the controller, which returned only a controlled credential-unavailable error. No tokens or account identity were recorded.",
+      "limit": "Real Crew credential-vault delivery was not tested. This exercised the bundled engine's callback path, not a full signed-in Crew session.",
+      "details": "Crew 0.11.1's Windows relay host-auth builder still omitted the owner flag. Its documented agent.kas_bundle=true route selects bundled KAS with explicit callback authentication. The private KAS 0.66.33 probe received eight credential requests and failed with the expected credential-unavailable error. CLI-owned success is historical evidence from the exact matching CLI 2.37.1 binary. No tokens, account changes or installed product patches were used.",
       "tickets": ["185", "186", "190"],
-      "sources": [{"label": "Authentication routing evidence", "href": "agents/research/kirocrew-orchestration.md#ticket-186-auth-owner-routing-2026-11-02"}]
+      "sources": [{"label": "Authentication routing evidence", "href": "agents/research/kirocrew-orchestration.md#ticket-186-auth-owner-routing-2026-11-02"}, {"label": "Bundled callback route and limits", "href": "agents/research/crew-client-auth-remedy-20261102.md"}]
     },
     {
       "id": "visible-state", "state": "confirmed", "label": "Optional integration confirmed",
@@ -157,9 +167,10 @@
     "186": ["Verify sign-in routing", "Find which process actually receives authentication requests."],
     "187": ["Research Agent Client Protocol", "Assess the standard and propose small spikes only where findings justify them."],
     "188": ["Run a check from the complete package", "An identical executable beside its signed companion ran one read-only check; stable installation repair remains unverified."],
-    "189": ["Qualify clean agent shutdown", "Separate successful turns from process settlement and find a supported shutdown path."],
-    "190": ["Correct host-owned sign-in routing", "Find a supported integration remedy before relying on Crew-owned relay identity."],
+    "189": ["Shutdown fix remains blocked", "Fresh completed and canceled turns still fail EOF shutdown after close; retest on a changed runtime or supported method."],
+    "190": ["Select the bundled callback route", "A documented route reached a controlled host and handled unavailable credentials; real vault delivery remains untested."],
     "191": ["See findings and the ticket flow", "Review this effort through clear findings and an expandable, evidence-linked work log."],
-    "193": ["Check overlapping approval rules", "Explain why a regex approval rule did not pause a command already allowed by the same regex."]
+    "193": ["Qualify the approval mismatch", "Fresh controls reproduce the discrepancy; matching cause is unknown and a tested Deny mitigation is narrowly qualified."],
+    "194": ["Separate model requests from identity", "Documented tier controls do not independently prove which model served a child or guarantee its cost/capability."]
   }
 }

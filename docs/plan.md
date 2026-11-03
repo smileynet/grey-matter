@@ -223,8 +223,12 @@ host diagnosis also passed separate critic review. Kiro recipe launch, input
 continuation and retry were observed, with isolation/landing and safe pause
 boundaries unverified. Codex ran one read-only command from its complete installed
 package; the internal launcher path is not a stable installation contract.
-Next in the proposed queue is #189. These completed dispatches do not imply a
-production-ready orchestrator.
+#189 remains blocked on the current Kiro/KAS shutdown behavior; its diagnostic
+evidence is accepted but the fix criterion is unmet. #190, #193 and #194 are
+qualified with their stated limits. #173's recommendations are integrated with
+deployment pending, and #174 is demonstrating the runner before #167–172 can
+start. The supervisor keeps advancing independent frontier work; these results
+do not imply a production-ready orchestrator.
 The #158-before-#157 order is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before

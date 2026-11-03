@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "92847c8af030c0276c45f151c1bf3e5b74a7b1247c12d5bf2bdf6724603c127e",
+  "subject": "Qualified routing and approval findings with active GUI and runner work",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 21265,
+      "sha256": "a09570b90824ed58ad5393d2fbc6d4452726de98d85af1fe896950f57efb2aba"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 164766,
+      "sha256": "1dff8b2d5b787696758ba052b77cddeb8484df5e4bb3dfab7e90808f73b4b238"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4264,
+      "sha256": "75a5724c582f211ee44e7aadb002d5fbf7b3c38da2ad258bbe5739a27529bad9"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-progress/findings-1280.png",
+      "bytes": 424977,
+      "sha256": "9e4dc861eb7827566df75ea7ea254ae9a18c3ff22bfeef60329375ea54485b88",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-progress/tickets-1280.png",
+      "bytes": 238824,
+      "sha256": "a35d0b51a409d0c6f3a8cd140cba6435c8518b28d2d8590b3965290317a8000e",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-progress/findings-390.png",
+      "bytes": 415190,
+      "sha256": "5242ebe390cf7a0f6dc5203c284c0b371f3f3b1519d37d5eb061810437565966",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-progress/tickets-390.png",
+      "bytes": 203674,
+      "sha256": "e22f64cff879ba06fe9eb1c909b637a7923ee55805f879492e3d96bb5d4d857f",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "3c7fc3d9349a58a2ab1e7e5d7a086b5a290b29b1531068b9380356bdc9be99ec",
+  "id": "586affc88614052d8ac26a13310503d89ceceff4e1fa40c73e071fe4f2f59fd5",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic-dashboard",
+    "note": "Reviewed 4 laptop/phone captures and 5 bound source files. All 13 findings distinguish observation from documented candidate; approval and model identity limits are clear; 173/174 remain active,189 blocked diagnosis remains in progress. 10 open,24 other tickets collapsed with flow graph above and separate suggested queue.",
+    "acceptedAt": "2026-11-03T04:53:21.676Z",
+    "snapshotId": "586affc88614052d8ac26a13310503d89ceceff4e1fa40c73e071fe4f2f59fd5"
+  }
+}

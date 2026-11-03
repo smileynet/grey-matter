@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "subject": "Qualified routing and approval findings with active GUI and runner work",
+  "sources": ["docs/orchestration.html", "docs/orchestration-findings.json", "scripts/assets/orchestration-dashboard.html", "scripts/build-orchestration-dashboard.mjs", "scripts/orchestration-dashboard.test.mjs"],
+  "captures": [
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-progress/findings-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-progress/tickets-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-progress/findings-390.png","viewport":{"width":390,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-progress/tickets-390.png","viewport":{"width":390,"height":900}}
+  ]
+}

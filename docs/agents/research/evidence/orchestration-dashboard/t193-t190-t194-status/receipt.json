@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "manifestDigest": "5ef95c79a8b4d4fcbd55479711e65610af79be48924384fd528d5e808c567e79",
+  "subject": "Global delivery entries for qualified routing, approval and shutdown blocker",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 122733,
+      "sha256": "dff2ef8e01fb4b2960ff4c26116a188ecaf6d2af3b33cbe071cec50c129e2bfd"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status/tab-0-1280.png",
+      "bytes": 81112,
+      "sha256": "1029fdcc25b83c688ff6553bacf576a814860089bddc940b12b4a2786ab92167",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status/tab-1-1280.png",
+      "bytes": 225050,
+      "sha256": "1f08a17ec8b26cbcb4757e264b8b4764d5934e324838b057f67eccf054bbce20",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status/tab-2-1280.png",
+      "bytes": 412182,
+      "sha256": "7fd92c1b36581d40d0335f0797df8ed1d714119788e1fa5e52e426d779b4ff0e",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status/tab-0-390.png",
+      "bytes": 76679,
+      "sha256": "ee4d040d81d58db710c6239778acc8441ebe8d2919ef9cc300f3ed76b4a48218",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status/tab-1-390.png",
+      "bytes": 220642,
+      "sha256": "7c15b058c95b26ec7ed3c365f42fdb002015ac15c714738d9fc69ae745ef6965",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status/tab-2-390.png",
+      "bytes": 399883,
+      "sha256": "86667c67037d97ec5c2babb004fa4471cbe9440c5fb8921c2a5512b4f197ce85",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "6988b7774e9c8407d7b788b238a12f776c3587caeb1b711122cdf05306b4a7ab",
+  "id": "1525e8d4d896891a606713b85715448953170efb38a352619ec20afadcc2ce53",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic-dashboard",
+    "note": "Reviewed all 6 laptop/phone captures of Overview, All entries and Plan; new entries accurately describe approval mismatch cause unknown and tested mitigation, bundled callback negative path not real vault, model request versus identity, unverified GUI steering, and blocked 189 without claiming shutdown fix. 38 entries and 193-ticket complete plan retained.",
+    "acceptedAt": "2026-11-03T04:53:22.342Z",
+    "snapshotId": "1525e8d4d896891a606713b85715448953170efb38a352619ec20afadcc2ce53"
+  }
+}
