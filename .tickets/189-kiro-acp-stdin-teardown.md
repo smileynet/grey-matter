@@ -1,7 +1,7 @@
 ---
 id: "189"
 title: "Diagnose: Kiro V3 ACP relay times out after stdin closes"
-status: open
+status: in_progress
 blocked_by: ["162"]
 validation_criteria:
   - "The EOF teardown failure is reproduced or marked obsolete, separating successful prompt/cancel/load responses from process settlement."
