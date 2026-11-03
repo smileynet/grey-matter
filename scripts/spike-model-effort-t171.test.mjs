@@ -2,9 +2,11 @@ import "./test-git-env.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   EFFORTS,
   MODELS,
@@ -13,36 +15,77 @@ import {
   buildPrompt,
   childEnvironment,
   directoryIdentity,
+  dispatchCli,
   hashPreparedPlan,
   hasSameDirectoryIdentity,
   makePlan,
   profileList,
   readNativeOutput,
-  runPreparedCell,
-  validateParentAuthorization,
 } from "./spike-model-effort-t171.mjs";
 
 const hash = (value) => createHash("sha256").update(value).digest("hex");
+const syntheticPrivateInputHashes = Object.freeze({
+  answerKeySha256: hash("public synthetic answer key fixture for ticket 171 tests"),
+  rubricSha256: hash("public synthetic grading rubric fixture for ticket 171 tests"),
+});
 const tempRoots = [];
 function tempRoot(prefix) {
   const path = mkdtempSync(join(tmpdir(), prefix));
   tempRoots.push(path);
   return path;
 }
+function makeTestPlan() {
+  return makePlan({
+    privateRoot: tempRoot("t171-private-"),
+    tempRoot: tempRoot("t171-work-"),
+    privateInputHashes: syntheticPrivateInputHashes,
+  });
+}
+function canonical(value) {
+  return `${JSON.stringify(value)}\n`;
+}
+function persistPlanAndAuthorization(plan, { authorizationOverrides = {} } = {}) {
+  const planPath = join(plan.privateRoot, "prepared-plan.json");
+  const authorizationPath = join(plan.privateRoot, "authorization.json");
+  const planBytes = Buffer.from(canonical(plan), "utf8");
+  writeFileSync(planPath, planBytes, { flag: "wx" });
+  const authorization = {
+    schemaVersion: 1,
+    nativeLeaseReleased: true,
+    protocolSha256: plan.protocolSha256,
+    controllerSha256: plan.controllerSha256,
+    planSha256: plan.planSha256,
+    planBytesSha256: hash(planBytes),
+    answerKeySha256: plan.privateInputHashes.answerKeySha256,
+    rubricSha256: plan.privateInputHashes.rubricSha256,
+    limits: plan.limits,
+    cells: [plan.cells[0].cellId],
+    criticCommit: "a".repeat(40),
+    leaseId: "test-lease",
+    ...authorizationOverrides,
+  };
+  writeFileSync(authorizationPath, canonical(authorization), { flag: "wx" });
+  return { planPath, authorizationPath, authorization };
+}
+const testDependencies = {
+  readPrivateInputs: () => syntheticPrivateInputHashes,
+  verifyExecutable: () => {},
+};
 test.after(() => {
   for (const path of tempRoots) rmSync(path, { recursive: true, force: true });
 });
 
-test("the frozen matrix has supported runnable cells and explicit held/blocked rows", () => {
+test("the frozen matrix lists runnable, held, and blocked cells separately", () => {
   assert.deepEqual(RUNNABLE_PROVIDERS, ["claude", "codex"]);
   assert.equal(profileList().filter((row) => row.state === "planned").length, 20);
   assert.equal(profileList().filter((row) => row.state === "held-model-effort-unverified").length, 10);
   assert.equal(profileList().filter((row) => row.state === "security-blocked-no-command").length, 10);
   assert.ok(profileList().filter((row) => row.provider === "google").every((row) => !("executable" in row)));
-  assert.throws(() => makePlan({ providers: ["kiro"], privateRoot: tempRoot("t171-private-"), tempRoot: tempRoot("t171-cells-") }), /not cleared/);
+  assert.throws(() => makePlan({ privateRoot: tempRoot("t171-private-"), tempRoot: tempRoot("t171-work-"), privateInputHashes: syntheticPrivateInputHashes, providers: ["kiro"] }), /not cleared/);
+  assert.throws(() => makePlan({ privateRoot: tempRoot("t171-private-"), tempRoot: tempRoot("t171-work-"), providers: ["claude"] }), /must be explicitly supplied/);
 });
 
-test("prompt packets contain task source but no provider, model, effort, or private grading key", async () => {
+test("prompt packets contain fixture source without provider labels or private grading text", () => {
   for (const taskId of ["diagnosis", "design"]) {
     const fixture = JSON.parse(readFileSync(new URL(`./fixtures/model-effort-t171/${taskId}.json`, import.meta.url), "utf8"));
     const packet = buildPrompt(fixture);
@@ -53,7 +96,7 @@ test("prompt packets contain task source but no provider, model, effort, or priv
   }
 });
 
-test("argv builders freeze exact per-provider effort and keep all task content positional", () => {
+test("argv builders freeze effort and keep task content as one positional argument", () => {
   for (const provider of RUNNABLE_PROVIDERS) {
     for (const effort of EFFORTS) {
       const argv = buildArgv(provider, effort, "synthetic task prompt", "C:/empty/cell");
@@ -66,7 +109,7 @@ test("argv builders freeze exact per-provider effort and keep all task content p
   assert.throws(() => buildArgv("google", "low", "x", "C:/empty"), /not enabled/);
 });
 
-test("child environment is minimized and Claude's higher-priority effort agrees with argv", () => {
+test("child environment is minimized and restores original environment exactly", () => {
   const before = process.env.CLAUDE_CODE_EFFORT_LEVEL;
   const hadOpenAiKey = Object.hasOwn(process.env, "OPENAI_API_KEY");
   const beforeOpenAiKey = process.env.OPENAI_API_KEY;
@@ -88,40 +131,31 @@ test("child environment is minimized and Claude's higher-priority effort agrees 
   assert.equal(process.env.OPENAI_API_KEY, beforeOpenAiKey);
 });
 
-test("the actual run function passes exactly the hash-bound argv and empty cwd to fake spawn", () => {
-  const privateRoot = tempRoot("t171-private-");
-  const evidenceRoot = join(privateRoot, "evidence");
-  const temp = tempRoot("t171-work-");
-  const generatedPlan = makePlan({ privateRoot, tempRoot: temp, tasks: ["diagnosis"], providers: ["claude"], efforts: ["low"] });
-  const planPath = join(privateRoot, "prepared-plan.json");
-  writeFileSync(planPath, `${JSON.stringify(generatedPlan)}\n`, { flag: "wx" });
-  const plan = JSON.parse(readFileSync(planPath, "utf8"));
-  assert.equal(hashPreparedPlan(plan), plan.planSha256);
+test("the persisted execution entrypoint validates bytes and uses exact prepared argv/cwd", () => {
+  const plan = makeTestPlan();
+  const { planPath, authorizationPath } = persistPlanAndAuthorization(plan);
   const cell = plan.cells[0];
+  assert.equal(hashPreparedPlan(JSON.parse(readFileSync(planPath, "utf8"))), plan.planSha256);
   assert.equal(readdirSync(cell.cwd).length, 0);
-  assert.ok(cell.cwdIdentity.fileId);
-  assert.ok(cell.cwdIdentity.device);
-  const authorization = {
-    schemaVersion: 1,
-    nativeLeaseReleased: true,
-    protocolSha256: plan.protocolSha256,
-    controllerSha256: plan.controllerSha256,
-    planSha256: plan.planSha256,
-    cells: [cell.cellId],
-    criticCommit: "a".repeat(40),
-    leaseId: "test-lease",
-  };
-  validateParentAuthorization(plan, cell, authorization);
+  const fakeNode = join(dirname(planPath), "fake-provider.mjs");
+  writeFileSync(fakeNode, `process.stdout.write(JSON.stringify({type:"result",subtype:"success",result:"{}"}));\n`, { flag: "wx" });
   let observed;
-  const receipt = runPreparedCell({
-    plan,
-    cellId: cell.cellId,
-    authorization,
+  const receipt = JSON.parse(dispatchCli(["--execute", "--plan", planPath, "--authorization", authorizationPath, "--cell", cell.cellId], {
+    privateRoot: plan.privateRoot,
+    ...testDependencies,
     spawn(command, argv, options) {
       observed = { command, argv, cwd: options.cwd, env: options.env, shell: options.shell, maxBuffer: options.maxBuffer };
-      return { status: 0, error: null, stdout: Buffer.from(JSON.stringify({ type: "result", subtype: "success", result: "{}" })), stderr: Buffer.alloc(0) };
+      return spawnSync(process.execPath, [fakeNode], {
+        cwd: options.cwd,
+        env: options.env,
+        encoding: null,
+        timeout: options.timeout,
+        maxBuffer: options.maxBuffer,
+        windowsHide: true,
+        shell: false,
+      });
     },
-  });
+  }));
   assert.equal(observed.command, cell.executable);
   assert.deepEqual(observed.argv, cell.argv);
   assert.equal(observed.cwd, cell.cwd);
@@ -133,54 +167,87 @@ test("the actual run function passes exactly the hash-bound argv and empty cwd t
   assert.equal(receipt.nativeStatus, "complete");
   assert.equal("quality" in receipt, false);
   assert.equal(readdirSync(cell.cwd).length, 0);
-  assert.throws(() => runPreparedCell({ plan, cellId: cell.cellId, authorization, spawn() { throw new Error("must not spawn twice"); } }), /changed or is no longer empty|already exists/);
-  const changed = { ...plan, cells: [{ ...cell, cwd: temp }] };
-  assert.throws(() => runPreparedCell({ plan: changed, cellId: cell.cellId, authorization, spawn() {} }), /plan changed/);
-  assert.equal(readdirSync(evidenceRoot).includes(cell.cellId), true);
+  assert.throws(() => dispatchCli(["--execute", "--plan", planPath, "--authorization", authorizationPath, "--cell", cell.cellId], { privateRoot: plan.privateRoot, ...testDependencies, spawn() { assert.fail("one-shot cell must not spawn twice"); } }), /already exists/);
 });
 
-test("non-empty authorized cwd is rejected before executable hashing or spawn", () => {
-  const privateRoot = tempRoot("t171-private-");
-  const temp = tempRoot("t171-work-");
-  const plan = makePlan({ privateRoot, tempRoot: temp, tasks: ["diagnosis"], providers: ["claude"], efforts: ["low"] });
+test("persisted untrusted plan and authorization mutations fail before spawn", () => {
+  const plan = makeTestPlan();
+  const { planPath, authorizationPath } = persistPlanAndAuthorization(plan);
   const cell = plan.cells[0];
-  const authorization = {
-    schemaVersion: 1,
-    nativeLeaseReleased: true,
-    protocolSha256: plan.protocolSha256,
-    controllerSha256: plan.controllerSha256,
-    planSha256: plan.planSha256,
-    cells: [cell.cellId],
-    criticCommit: "b".repeat(40),
-    leaseId: "test-lease",
-  };
-  writeFileSync(join(cell.cwd, "unexpected.txt"), "stop");
-  assert.throws(() => runPreparedCell({ plan, cellId: cell.cellId, authorization, spawn() { assert.fail("spawn must not run"); } }), /directory changed identity or is no longer empty/);
+  let spawnCount = 0;
+  const options = ["--execute", "--plan", planPath, "--authorization", authorizationPath, "--cell", cell.cellId];
+  const dependencies = { privateRoot: plan.privateRoot, ...testDependencies, spawn() { spawnCount++; } };
+  const originalPlan = readFileSync(planPath, "utf8");
+  const tamperedPlan = JSON.parse(originalPlan);
+  tamperedPlan.cells[0].argv[tamperedPlan.cells[0].argv.length - 1] = "changed prompt";
+  writeFileSync(planPath, canonical(tamperedPlan));
+  assert.throws(() => dispatchCli(options, dependencies), /digest or identity is invalid/);
+  writeFileSync(planPath, originalPlan);
+  const originalAuthorization = readFileSync(authorizationPath, "utf8");
+  const tamperedAuthorization = JSON.parse(originalAuthorization);
+  tamperedAuthorization.limits.timeoutMs += 1;
+  writeFileSync(authorizationPath, canonical(tamperedAuthorization));
+  assert.throws(() => dispatchCli(options, dependencies), /execution caps/);
+  writeFileSync(authorizationPath, originalAuthorization);
+  const wrongKeyAuthorization = JSON.parse(originalAuthorization);
+  wrongKeyAuthorization.answerKeySha256 = hash("different key");
+  writeFileSync(authorizationPath, canonical(wrongKeyAuthorization));
+  assert.throws(() => dispatchCli(options, dependencies), /does not bind the private grading inputs/);
+  writeFileSync(authorizationPath, originalAuthorization);
+  const wrongPlanBytesAuthorization = JSON.parse(originalAuthorization);
+  wrongPlanBytesAuthorization.planBytesSha256 = hash("different plan bytes");
+  writeFileSync(authorizationPath, canonical(wrongPlanBytesAuthorization));
+  assert.throws(() => dispatchCli(options, dependencies), /does not bind these exact source and plan bytes/);
+  writeFileSync(authorizationPath, originalAuthorization);
+  assert.throws(() => dispatchCli(options, {
+    ...dependencies,
+    readPrivateInputs: () => ({ ...syntheticPrivateInputHashes, answerKeySha256: hash("changed private key") }),
+  }), /Private answer-key or grading rubric changed/);
+  writeFileSync(authorizationPath, originalAuthorization.replace("\n", " \n"));
+  assert.throws(() => dispatchCli(options, dependencies), /not canonical JSON/);
+  assert.equal(spawnCount, 0);
 });
 
-test("replacing the authorized path with another empty directory fails by stable identity before spawn", () => {
-  const privateRoot = tempRoot("t171-private-");
-  const temp = tempRoot("t171-work-");
-  const plan = makePlan({ privateRoot, tempRoot: temp, tasks: ["diagnosis"], providers: ["claude"], efforts: ["low"] });
+test("the CLI execute switch parses its real trust-boundary invocation without spawning on invalid paths", () => {
+  const script = fileURLToPath(new URL("./spike-model-effort-t171.mjs", import.meta.url));
+  const result = spawnSync(process.execPath, [script, "--execute", "--plan", "relative-plan.json", "--authorization", "relative-auth.json", "--cell", "T171-claude-diagnosis-low"], {
+    cwd: tempRoot("t171-cli-").replace(/[\\/]$/, ""),
+    encoding: "utf8",
+    windowsHide: true,
+    shell: false,
+  });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /path must be absolute/);
+  assert.equal(result.signal, null);
+});
+
+test("a different empty directory at the authorized path fails before fake Node spawn", () => {
+  const plan = makeTestPlan();
+  const { planPath, authorizationPath } = persistPlanAndAuthorization(plan);
   const cell = plan.cells[0];
-  const replacement = mkdtempSync(join(temp, "replacement-"));
-  const movedOriginal = join(temp, "original-moved-aside");
+  const replacement = mkdtempSync(join(plan.tempRoot, "replacement-"));
+  const movedOriginal = join(plan.tempRoot, "original-moved-aside");
   renameSync(cell.cwd, movedOriginal);
   renameSync(replacement, cell.cwd);
   assert.equal(readdirSync(cell.cwd).length, 0);
-  assert.notDeepEqual(directoryIdentity(cell.cwd, temp), cell.cwdIdentity);
-  assert.equal(hasSameDirectoryIdentity(cell.cwd, temp, cell.cwdIdentity), false);
-  const authorization = {
-    schemaVersion: 1,
-    nativeLeaseReleased: true,
-    protocolSha256: plan.protocolSha256,
-    controllerSha256: plan.controllerSha256,
-    planSha256: plan.planSha256,
-    cells: [cell.cellId],
-    criticCommit: "c".repeat(40),
-    leaseId: "test-lease",
-  };
-  assert.throws(() => runPreparedCell({ plan, cellId: cell.cellId, authorization, spawn() { assert.fail("spawn must not run"); } }), /changed identity or is no longer empty/);
+  assert.notDeepEqual(directoryIdentity(cell.cwd, plan.tempRoot), cell.cwdIdentity);
+  assert.equal(hasSameDirectoryIdentity(cell.cwd, plan.tempRoot, cell.cwdIdentity), false);
+  assert.throws(() => dispatchCli(["--execute", "--plan", planPath, "--authorization", authorizationPath, "--cell", cell.cellId], { privateRoot: plan.privateRoot, ...testDependencies, spawn() { assert.fail("replacement must be rejected before spawn"); } }), /changed identity or is no longer empty/);
+});
+
+test("non-empty authorized cwd is rejected before executable verification or spawn", () => {
+  const plan = makeTestPlan();
+  const { planPath, authorizationPath } = persistPlanAndAuthorization(plan);
+  const cell = plan.cells[0];
+  writeFileSync(join(cell.cwd, "unexpected.txt"), "stop");
+  let verified = false;
+  assert.throws(() => dispatchCli(["--execute", "--plan", planPath, "--authorization", authorizationPath, "--cell", cell.cellId], {
+    privateRoot: plan.privateRoot,
+    readPrivateInputs: testDependencies.readPrivateInputs,
+    verifyExecutable() { verified = true; },
+    spawn() { assert.fail("spawn must not run"); },
+  }), /changed identity or is no longer empty/);
+  assert.equal(verified, false);
 });
 
 test("native output errors, limits, missing completion, and effort uncertainty stay distinct", () => {

@@ -3,6 +3,7 @@ import { spawnSync } from "node:child_process";
 import {
   closeSync,
   existsSync,
+  fstatSync,
   lstatSync,
   mkdirSync,
   mkdtempSync,
@@ -25,7 +26,7 @@ const TASK_HASHES = Object.freeze({
   diagnosis: "5d0e9c2d6b33c98e4a563182878303048c79bc65cb6a2ae2a2ee777ed2c5fdaa",
   design: "c0899593028456328b791f6fb40ec3498b0d39faae1fdbb0394c8e910e489b20",
 });
-const PROTOCOL_SHA256 = "835285b373d0db92d78fe58c1f331a06b1ed54c3877fad893f03f399a021fe7c";
+const PROTOCOL_SHA256 = "1077b9eed81ca2317e73b4b9991f5172449d005055672e6c195c26bd095f7486";
 const TASK_IDS = Object.freeze(["diagnosis", "design"]);
 const EFFORTS = Object.freeze(["low", "medium", "high", "xhigh", "max"]);
 const PROVIDERS = Object.freeze(["claude", "codex", "kiro"]);
@@ -33,6 +34,7 @@ const RUNNABLE_PROVIDERS = Object.freeze(["claude", "codex"]);
 const BLOCKED_PROVIDER = "google";
 const TIMEOUT_MS = 120_000;
 const MAX_OUTPUT_BYTES = 8 * 1024 * 1024;
+const MAX_PLAN_BYTES = 16 * 1024 * 1024;
 const CLAUDE_CALL_CEILING_USD = "0.10";
 
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -168,7 +170,19 @@ function profileList() {
   ];
 }
 
-function makePlan({ privateRoot: privateRootArg, tempRoot: tempRootArg, tasks = TASK_IDS, providers = RUNNABLE_PROVIDERS, efforts = EFFORTS } = {}) {
+function validatePrivateInputHashes(privateInputHashes) {
+  if (!privateInputHashes || !/^[a-f0-9]{64}$/.test(privateInputHashes.answerKeySha256 ?? "") || !/^[a-f0-9]{64}$/.test(privateInputHashes.rubricSha256 ?? "")) throw new Error("Private answer-key and rubric hashes must be explicitly supplied");
+  return { answerKeySha256: privateInputHashes.answerKeySha256, rubricSha256: privateInputHashes.rubricSha256 };
+}
+
+function hashPrivateInputFiles() {
+  return {
+    answerKeySha256: hashFile(join(PRIVATE_DIR, "answer-key.json")),
+    rubricSha256: hashFile(join(PRIVATE_DIR, "grading-rubric.json")),
+  };
+}
+
+function makePlan({ privateRoot: privateRootArg, tempRoot: tempRootArg, privateInputHashes, tasks = TASK_IDS, providers = RUNNABLE_PROVIDERS, efforts = EFFORTS } = {}) {
   if (!Array.isArray(tasks) || tasks.some((task) => !TASK_IDS.includes(task)) || new Set(tasks).size !== tasks.length) throw new Error("Task set must contain unique frozen fixture IDs");
   if (!Array.isArray(providers) || new Set(providers).size !== providers.length) throw new Error("Provider set must be unique");
   if (!Array.isArray(efforts) || efforts.some((effort) => !EFFORTS.includes(effort)) || new Set(efforts).size !== efforts.length) throw new Error("Effort set must contain unique advertised levels");
@@ -176,6 +190,7 @@ function makePlan({ privateRoot: privateRootArg, tempRoot: tempRootArg, tasks = 
   mkdirSync(privateRoot, { recursive: true });
   const privateRootStat = lstatSync(privateRoot);
   if (!privateRootStat.isDirectory() || privateRootStat.isSymbolicLink()) throw new Error("Private evidence root is not a real directory");
+  const privateInputs = validatePrivateInputHashes(privateInputHashes);
   const tempRoot = resolve(tempRootArg ?? mkdtempSync(join(tmpdir(), "gm-effort-t171-")));
   const tempStat = lstatSync(tempRoot);
   if (!tempStat.isDirectory() || tempStat.isSymbolicLink()) throw new Error("Temporary work root is not a real directory");
@@ -225,10 +240,7 @@ function makePlan({ privateRoot: privateRootArg, tempRoot: tempRootArg, tasks = 
     tempRoot,
     cellCount: rows.length,
     cells: rows,
-    privateInputHashes: {
-      answerKeySha256: hashFile(join(PRIVATE_DIR, "answer-key.json")),
-      rubricSha256: hashFile(join(PRIVATE_DIR, "grading-rubric.json")),
-    },
+    privateInputHashes: privateInputs,
     held: profileList().filter((cell) => cell.state === "held-model-effort-unverified"),
     blocked: profileList().filter((cell) => cell.provider === BLOCKED_PROVIDER),
     limits: { timeoutMs: TIMEOUT_MS, claudePerCallUsd: CLAUDE_CALL_CEILING_USD, claudeAggregateUsd: "1.00", retries: 0 },
@@ -236,17 +248,97 @@ function makePlan({ privateRoot: privateRootArg, tempRoot: tempRootArg, tasks = 
   return { ...body, planSha256: sha256(Buffer.from(canonical(body), "utf8")) };
 }
 
-function validateParentAuthorization(plan, cell, authorization) {
-  if (!authorization || authorization.schemaVersion !== 1 || authorization.nativeLeaseReleased !== true) throw new Error("Missing explicit parent native-lease release");
-  if (authorization.protocolSha256 !== plan.protocolSha256 || authorization.controllerSha256 !== plan.controllerSha256 || authorization.planSha256 !== plan.planSha256) throw new Error("Parent authorization does not bind this exact protocol, controller and prepared plan");
-  if (!Array.isArray(authorization.cells) || !authorization.cells.includes(cell.cellId)) throw new Error("Cell not included in parent authorization");
+function hashPreparedPlan(plan) {
+  const { planSha256: _, ...body } = plan;
+  return sha256(Buffer.from(canonical(body), "utf8"));
+}
+
+function assertKeys(value, keys, label) {
+  if (!value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).sort().join("\n") !== [...keys].sort().join("\n")) throw new Error(`${label} has an invalid shape`);
+}
+
+function readCanonicalJsonFile(path, allowedRoot, label) {
+  if (!isAbsolute(path)) throw new Error(`${label} path must be absolute`);
+  const rootStat = lstatSync(allowedRoot);
+  const fileStat = lstatSync(path, { bigint: true });
+  if (!rootStat.isDirectory() || rootStat.isSymbolicLink() || !fileStat.isFile() || fileStat.isSymbolicLink()) throw new Error(`${label} must be a regular file under a real private directory`);
+  const rootReal = realpathSync(allowedRoot);
+  const fileReal = realpathSync(path);
+  if (!fileReal.startsWith(`${rootReal}${sep}`)) throw new Error(`${label} escapes its private root`);
+  if (fileStat.size > BigInt(MAX_PLAN_BYTES)) throw new Error(`${label} exceeds the byte limit`);
+  const fd = openSync(path, "r");
+  let bytes;
+  try {
+    const openedStat = fstatSync(fd, { bigint: true });
+    if (openedStat.dev !== fileStat.dev || openedStat.ino !== fileStat.ino || openedStat.birthtimeNs !== fileStat.birthtimeNs) throw new Error(`${label} changed while opening`);
+    bytes = readFileSync(fd);
+    const currentStat = lstatSync(path, { bigint: true });
+    if (currentStat.dev !== openedStat.dev || currentStat.ino !== openedStat.ino || currentStat.birthtimeNs !== openedStat.birthtimeNs) throw new Error(`${label} changed while reading`);
+  } finally {
+    closeSync(fd);
+  }
+  if (bytes.length > MAX_PLAN_BYTES) throw new Error(`${label} exceeds the byte limit`);
+  const text = bytes.toString("utf8");
+  const value = JSON.parse(text);
+  if (canonical(value) !== text) throw new Error(`${label} is not canonical JSON`);
+  return { bytes, value };
+}
+
+function validatePreparedPlan(plan, privateRoot) {
+  assertKeys(plan, ["schemaVersion", "ticket", "protocolSha256", "controllerSha256", "privateRoot", "tempRoot", "cellCount", "cells", "privateInputHashes", "held", "blocked", "limits", "planSha256"], "Prepared plan");
+  if (plan.schemaVersion !== 1 || plan.ticket !== 171 || plan.planSha256 !== hashPreparedPlan(plan)) throw new Error("Prepared plan digest or identity is invalid");
+  if (plan.protocolSha256 !== PROTOCOL_SHA256 || hashFile(PROTOCOL) !== plan.protocolSha256 || plan.controllerSha256 !== hashFile(fileURLToPath(import.meta.url))) throw new Error("Prepared plan source hashes are stale");
+  validatePrivateInputHashes(plan.privateInputHashes);
+  if (realpathSync(plan.privateRoot) !== realpathSync(privateRoot)) throw new Error("Prepared plan does not bind the authorization directory");
+  const tempRoot = realpathSync(plan.tempRoot);
+  const tempBase = realpathSync(tmpdir());
+  const tempStat = lstatSync(plan.tempRoot);
+  if (!tempStat.isDirectory() || tempStat.isSymbolicLink() || !tempRoot.startsWith(`${tempBase}${sep}`)) throw new Error("Prepared plan temporary root is not a real directory under the operating system temp directory");
+  if (!Array.isArray(plan.cells) || plan.cellCount !== plan.cells.length || plan.cells.length !== RUNNABLE_PROVIDERS.length * TASK_IDS.length * EFFORTS.length) throw new Error("Prepared plan cell count is invalid");
+  const expectedProfiles = profileList().filter((row) => row.state === "planned");
+  const seenIdentities = new Set();
+  const seenPaths = new Set();
+  for (const [index, cell] of plan.cells.entries()) {
+    const profile = expectedProfiles[index];
+    assertKeys(cell, ["cellId", "provider", "taskId", "effort", "requestedModel", "taskSha256", "promptSha256", "executable", "executableSha256", "cwd", "cwdIdentity", "argv", "timeoutMs", "maxBufferBytes", "repeat"], "Prepared cell");
+    if (cell.cellId !== profile.cellId || cell.provider !== profile.provider || cell.taskId !== profile.taskId || cell.effort !== profile.effort || cell.requestedModel !== profile.model || cell.repeat !== 1) throw new Error("Prepared cell differs from the frozen matrix");
+    const task = readTask(cell.taskId);
+    const prompt = buildPrompt(task);
+    if (cell.taskSha256 !== task.sha256 || cell.promptSha256 !== sha256(Buffer.from(prompt, "utf8")) || cell.executable !== EXECUTABLES[cell.provider]() || cell.executableSha256 !== PINNED[cell.provider] || JSON.stringify(cell.argv) !== JSON.stringify(buildArgv(cell.provider, cell.effort, prompt, cell.cwd))) throw new Error("Prepared cell inputs or argv differ from the frozen protocol");
+    if (!isAbsolute(cell.cwd) || cell.timeoutMs !== TIMEOUT_MS || cell.maxBufferBytes !== MAX_OUTPUT_BYTES) throw new Error("Prepared cell path or execution caps are invalid");
+    assertKeys(cell.cwdIdentity, ["realPath", "device", "fileId", "birthtimeNs"], "Prepared cwd identity");
+    const cwdReal = realpathSync(cell.cwd);
+    const cwdStat = lstatSync(cell.cwd);
+    if (!cwdStat.isDirectory() || cwdStat.isSymbolicLink() || (cwdReal !== tempRoot && !cwdReal.startsWith(`${tempRoot}${sep}`)) || cell.cwdIdentity.realPath !== cwdReal || !cell.cwdIdentity.device || !cell.cwdIdentity.fileId || cell.cwdIdentity.fileId === "0" || !cell.cwdIdentity.birthtimeNs || cell.cwdIdentity.birthtimeNs === "0") throw new Error("Prepared cwd identity or containment is invalid");
+    const identityKey = `${cell.cwdIdentity.device}:${cell.cwdIdentity.fileId}:${cell.cwdIdentity.birthtimeNs}`;
+    if (seenPaths.has(cell.cwd) || seenIdentities.has(identityKey)) throw new Error("Prepared working directories must have unique identities");
+    seenPaths.add(cell.cwd);
+    seenIdentities.add(identityKey);
+  }
+  if (JSON.stringify(plan.held) !== JSON.stringify(profileList().filter((row) => row.state === "held-model-effort-unverified")) || JSON.stringify(plan.blocked) !== JSON.stringify(profileList().filter((row) => row.state === "security-blocked-no-command"))) throw new Error("Prepared held or blocked matrix changed");
+  const expectedLimits = { timeoutMs: TIMEOUT_MS, claudePerCallUsd: CLAUDE_CALL_CEILING_USD, claudeAggregateUsd: "1.00", retries: 0 };
+  if (JSON.stringify(plan.limits) !== JSON.stringify(expectedLimits)) throw new Error("Prepared execution caps changed");
+}
+
+function validateParentAuthorization(plan, cell, authorization, planBytesSha256) {
+  assertKeys(authorization, ["schemaVersion", "nativeLeaseReleased", "protocolSha256", "controllerSha256", "planSha256", "planBytesSha256", "answerKeySha256", "rubricSha256", "limits", "cells", "criticCommit", "leaseId"], "Parent authorization");
+  if (authorization.schemaVersion !== 1 || authorization.nativeLeaseReleased !== true) throw new Error("Missing explicit parent native-lease release");
+  if (authorization.protocolSha256 !== plan.protocolSha256 || authorization.controllerSha256 !== plan.controllerSha256 || authorization.planSha256 !== plan.planSha256 || authorization.planBytesSha256 !== planBytesSha256) throw new Error("Parent authorization does not bind these exact source and plan bytes");
+  if (authorization.answerKeySha256 !== plan.privateInputHashes.answerKeySha256 || authorization.rubricSha256 !== plan.privateInputHashes.rubricSha256) throw new Error("Parent authorization does not bind the private grading inputs");
+  if (JSON.stringify(authorization.limits) !== JSON.stringify(plan.limits)) throw new Error("Parent authorization does not bind the frozen execution caps");
+  const plannedCellIds = plan.cells.map((row) => row.cellId);
+  if (!Array.isArray(authorization.cells) || new Set(authorization.cells).size !== authorization.cells.length || authorization.cells.some((id) => !plannedCellIds.includes(id)) || !authorization.cells.includes(cell.cellId)) throw new Error("Cell not included in parent authorization");
   if (typeof authorization.criticCommit !== "string" || !/^[a-f0-9]{40,64}$/i.test(authorization.criticCommit)) throw new Error("Missing accepted critic commit");
   if (typeof authorization.leaseId !== "string" || !authorization.leaseId) throw new Error("Missing measurement lease ID");
 }
 
-function hashPreparedPlan(plan) {
-  const { planSha256: _, ...body } = plan;
-  return sha256(Buffer.from(canonical(body), "utf8"));
+function verifyPinnedExecutable(cell) {
+  if (!existsSync(cell.executable) || hashFile(cell.executable) !== PINNED[cell.provider]) throw new Error("Pinned provider executable changed since protocol review");
+  if (cell.provider === "codex") {
+    const sibling = join(dirname(cell.executable), "codex-code-mode-host.exe");
+    const expected = "977c1f01c9efac0bfe1b9032717c95f92e1c965c8441a8dacfbe824c5c79a527";
+    if (!existsSync(sibling) || hashFile(sibling) !== expected) throw new Error("Pinned Codex host changed since protocol review");
+  }
 }
 
 function childEnvironment(provider, effort) {
@@ -300,20 +392,15 @@ function readNativeOutput(provider, stdout, exitCode, error) {
   return { status, complete: status === "complete", finalText, actualModel, actualEffort, usage, cost, terminalError, parseFailures, usageLimit };
 }
 
-function runPreparedCell({ plan, cellId, authorization, spawn = spawnSync }) {
+function runPreparedCell({ plan, cellId, authorization, planBytesSha256, spawn = spawnSync, verifyExecutable = verifyPinnedExecutable }) {
+  validatePreparedPlan(plan, plan.privateRoot);
   if (hashPreparedPlan(plan) !== plan.planSha256) throw new Error("Prepared plan changed after authorization");
   if (plan.controllerSha256 !== hashFile(fileURLToPath(import.meta.url)) || plan.protocolSha256 !== PROTOCOL_SHA256) throw new Error("Controller or protocol changed after authorization");
-  if (plan.privateInputHashes.answerKeySha256 !== hashFile(join(PRIVATE_DIR, "answer-key.json")) || plan.privateInputHashes.rubricSha256 !== hashFile(join(PRIVATE_DIR, "grading-rubric.json"))) throw new Error("Private grading inputs changed after authorization");
   const cell = plan.cells.find((item) => item.cellId === cellId);
   if (!cell) throw new Error(`Cell not found in prepared plan: ${cellId}`);
-  validateParentAuthorization(plan, cell, authorization);
+  validateParentAuthorization(plan, cell, authorization, planBytesSha256);
   if (!isEmptyRealDirectory(cell.cwd, plan.tempRoot) || !hasSameDirectoryIdentity(cell.cwd, plan.tempRoot, cell.cwdIdentity)) throw new Error("The authorized working directory changed identity or is no longer empty");
-  if (!existsSync(cell.executable) || hashFile(cell.executable) !== cell.executableSha256) throw new Error("Pinned provider executable changed since protocol review");
-  if (cell.provider === "codex") {
-    const sibling = join(dirname(cell.executable), "codex-code-mode-host.exe");
-    const expected = "977c1f01c9efac0bfe1b9032717c95f92e1c965c8441a8dacfbe824c5c79a527";
-    if (!existsSync(sibling) || hashFile(sibling) !== expected) throw new Error("Pinned Codex host changed since protocol review");
-  }
+  verifyExecutable(cell);
   const privateEvidenceRoot = join(plan.privateRoot, "evidence");
   mkdirSync(privateEvidenceRoot, { recursive: true });
   const lockPath = join(privateEvidenceRoot, "native-lease.lock");
@@ -381,28 +468,53 @@ function runPreparedCell({ plan, cellId, authorization, spawn = spawnSync }) {
   }
 }
 
+function executePersistedPlan({ planPath, authorizationPath, cellId, privateRoot = PRIVATE_DIR, spawn = spawnSync, readPrivateInputs = hashPrivateInputFiles, verifyExecutable = verifyPinnedExecutable }) {
+  const { bytes: planBytes, value: plan } = readCanonicalJsonFile(planPath, privateRoot, "Prepared plan");
+  const { value: authorization } = readCanonicalJsonFile(authorizationPath, privateRoot, "Parent authorization");
+  validatePreparedPlan(plan, privateRoot);
+  const actualPrivateInputs = validatePrivateInputHashes(readPrivateInputs());
+  if (JSON.stringify(actualPrivateInputs) !== JSON.stringify(plan.privateInputHashes)) throw new Error("Private answer-key or grading rubric changed after plan preparation");
+  const cell = plan.cells.find((item) => item.cellId === cellId);
+  if (!cell) throw new Error(`Cell not found in persisted plan: ${cellId}`);
+  const planBytesSha256 = sha256(planBytes);
+  validateParentAuthorization(plan, cell, authorization, planBytesSha256);
+  return runPreparedCell({ plan, cellId, authorization, planBytesSha256, spawn, verifyExecutable });
+}
+
 function prepare(options = {}) {
-  const plan = makePlan(options);
-  const outputPath = join(options.manifestDir ?? PRIVATE_DIR, "prepared-plan.json");
+  const plan = makePlan({ ...options, privateInputHashes: hashPrivateInputFiles() });
+  const outputPath = options.manifestPath ?? join(options.manifestDir ?? PRIVATE_DIR, `prepared-plan-${plan.controllerSha256.slice(0, 12)}.json`);
   mkdirSync(dirname(outputPath), { recursive: true });
   writeFileSync(outputPath, canonical(plan), { flag: "wx" });
   return { planPath: outputPath, planSha256: plan.planSha256, controllerSha256: plan.controllerSha256, protocolSha256: plan.protocolSha256, cells: plan.cellCount, heldKiro: plan.held.length, blockedGoogle: plan.blocked.length };
 }
 
-function cli(argv) {
+function dispatchCli(argv, executionDependencies = {}) {
   if (argv[0] === "plan") {
-    process.stdout.write(`${JSON.stringify({ protocolSha256: hashFile(PROTOCOL), controllerSha256: hashFile(fileURLToPath(import.meta.url)), cells: profileList() }, null, 2)}\n`);
-    return;
+    return `${JSON.stringify({ protocolSha256: hashFile(PROTOCOL), controllerSha256: hashFile(fileURLToPath(import.meta.url)), cells: profileList() }, null, 2)}\n`;
   }
   if (argv[0] === "prepare") {
     const result = prepare();
-    process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
-    return;
+    return `${JSON.stringify(result, null, 2)}\n`;
   }
-  if (argv[0] === "run") {
-    throw new Error("Run authorization is disabled until the parent installs a reviewed authorization receipt and explicitly releases the native lease");
+  if (argv[0] === "--execute") {
+    const parsed = {};
+    const keys = new Map([["--plan", "planPath"], ["--authorization", "authorizationPath"], ["--cell", "cellId"]]);
+    for (let index = 1; index < argv.length; index += 2) {
+      const name = argv[index];
+      const value = argv[index + 1];
+      const key = keys.get(name);
+      if (!key || !value || value.startsWith("--") || Object.hasOwn(parsed, key)) throw new Error("Usage: node scripts/spike-model-effort-t171.mjs --execute --plan <path> --authorization <path> --cell <cellId>");
+      parsed[key] = value;
+    }
+    if (Object.keys(parsed).length !== keys.size) throw new Error("Usage: node scripts/spike-model-effort-t171.mjs --execute --plan <path> --authorization <path> --cell <cellId>");
+    return canonical(executePersistedPlan({ ...executionDependencies, ...parsed }));
   }
-  throw new Error("Usage: node scripts/spike-model-effort-t171.mjs plan|prepare|run");
+  throw new Error("Usage: node scripts/spike-model-effort-t171.mjs plan|prepare|--execute --plan <path> --authorization <path> --cell <cellId>");
+}
+
+function cli(argv) {
+  process.stdout.write(dispatchCli(argv));
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -424,12 +536,13 @@ export {
   buildPrompt,
   childEnvironment,
   directoryIdentity,
+  dispatchCli,
+  executePersistedPlan,
+  hashPrivateInputFiles,
   hasSameDirectoryIdentity,
   hashPreparedPlan,
   makePlan,
   profileList,
   readNativeOutput,
   readTask,
-  runPreparedCell,
-  validateParentAuthorization,
 };
