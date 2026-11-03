@@ -1,7 +1,7 @@
 ---
 id: "188"
 title: "Diagnose: Codex CLI tool execution fails because code-mode host is missing"
-status: open
+status: in_progress
 blocked_by: ["162"]
 validation_criteria:
   - "The missing-host failure is reproduced or marked obsolete on the installed CLI, with executable identity and exact failing path sanitized."
