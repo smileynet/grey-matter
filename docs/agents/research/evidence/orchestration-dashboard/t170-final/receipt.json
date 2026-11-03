@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "2c901574967c3a23c42198f24e0486ec06246272b80af99cb30e2714584a5f88",
+  "subject": "Accepted text-task tier findings; ticket170 closed; remaining trial queue",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 29523,
+      "sha256": "1306d7e45e8e43fdbb078bdda34e79bbe60a5b81581bf15624c5662053aa8595"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 196233,
+      "sha256": "c2304df137c015f55df725c1c7ac7c097dfbd1fa3f2d478b82adefe86b178c7d"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4441,
+      "sha256": "bf380bdc3e54e40c61d6bb7250690b16247e5712b289e9c7dc1201e2e1c2f6cd"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t170-final/findings-1280.png",
+      "bytes": 558555,
+      "sha256": "00737d4cb7ef1a5e10d30eb40e59dd66d6dd46d8d4941c78705e552389a2dbfa",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t170-final/tickets-1280.png",
+      "bytes": 220580,
+      "sha256": "591dc574d13f5355299ecd7e48c5b0422501cbb9c5613e72d25d8fce9903f6d9",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t170-final/findings-390.png",
+      "bytes": 566716,
+      "sha256": "42fa7e5405f3db280f141dccc2a5c47292f0e39d04e9643723842b175c47f63a",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t170-final/tickets-390.png",
+      "bytes": 200850,
+      "sha256": "2733e6ff844c46775bd5a9209665d3fec786759ec5852efbd155a8ccabddecea",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "333e1c6a694114dcde29f6c1f72f75503410d6a89f14cf14e7f1d17e9d241ba5",
+  "id": "5c8fc37e7c368647f8b3d180c2ccf2eac174abc11eb127ce34ffef6880b76751",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "independent-dashboard-critic",
+    "note": "Accepted after tool-observed inspection of all four laptop/phone PNG captures. Findings are clear and useful across all 18, with evidence scope collapsed; ticket log preserves readable open-first flow and concise list cards, four open plus 32 completed. No issue found in accuracy, readability, or navigation.",
+    "acceptedAt": "2026-11-03T11:44:00.258Z",
+    "snapshotId": "5c8fc37e7c368647f8b3d180c2ccf2eac174abc11eb127ce34ffef6880b76751"
+  }
+}

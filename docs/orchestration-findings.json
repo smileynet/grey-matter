@@ -3,6 +3,16 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "text-task-tiers", "state": "partial", "label": "Rewrites passed; triage and classification need care",
+      "title": "Keep human checks beside routine text work",
+      "value": "All six profiles handled the small rewrite. Triage and changelog classification exposed mistakes, so none qualified to replace the current defaults across these tasks.",
+      "diagramLabel": "Observed task results", "steps": ["Rewrite: six passed", "Triage: one passed", "Classification: none passed", "Keep current defaults"],
+      "limit": "One observation per task and profile does not establish reliability. Missing served identities and costs also limit the comparison.",
+      "details": "Eighteen native responses received blind reviews: seven passed and eleven failed. No profile passed all three tasks. Claude reported Haiku 5.5 and Opus 5.5; Codex and Kiro omitted served identity and dollar cost. Google remained held without a call. Review provenance is parent-transcribed rather than a platform export; one failed review-file write has no initial semantic bytes for comparison. Six exact Kiro sessions were removed while all 7,600 non-target session/source pairs were preserved. No default or global setting changed.",
+      "tickets": ["170"],
+      "sources": [{"label": "Text-task findings and limitations", "href": "agents/research/model-task-tiers-20261103.md"}, {"label": "Independent final audit", "href": "agents/research/t170-final-review-20261103.md"}, {"label": "Current model guidance", "href": "agents/harness-surfaces/models-and-usage.md"}]
+    },
+    {
       "id": "implementation-tiers", "state": "partial", "label": "Correct code observed; full workflow proof incomplete",
       "title": "Keep default coding workers while the full job is unproven",
       "value": "Cheaper workers produced correct code in several tasks. Missing test proof and mistakes on unclear requests kept them from qualifying as replacements for the current defaults.",

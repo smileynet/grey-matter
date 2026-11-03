@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "manifestDigest": "473a9795999e9dbb861be550169d5efa13a62c9a451560bf46f9e177d1131e57",
+  "subject": "Accepted text-task tier findings; ticket170 closed; remaining trial queue",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 141846,
+      "sha256": "ffa422d15b00aab456a5e54f78a2c7e5bac4a430f500cfb80b94dd3fe5c4f3e4"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 58862,
+      "sha256": "28b7d65a7d5fb070f964523754265ab0956e310de3878db40314f22ca94136fe"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 49648,
+      "sha256": "b511ad983694959ca8f925c3b508da62e1a6c9289d533325ae630e6cbcdc59a4"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t170-status-final/tab-0-1280.png",
+      "bytes": 76280,
+      "sha256": "46abe6cbddfb1dbf7e004cc1c79f5507375c38da2e55d16db6bcc0a2cd8b5fde",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t170-status-final/tab-1-1280.png",
+      "bytes": 282687,
+      "sha256": "3ef8a0c2f854a7a93ec2bc1da63ff7c76ffdbd8e9cb4cd367ac6925f9e4ad025",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t170-status-final/tab-2-1280.png",
+      "bytes": 381441,
+      "sha256": "92453b53a596bd23f484107567e9f9d45e214ac677846240e8c56d618b6a3b87",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t170-status-final/tab-0-390.png",
+      "bytes": 72248,
+      "sha256": "e46bd27fed892f360c90a2ca184dcb19e02daf0fa705241ce2448c364a1f78b9",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t170-status-final/tab-1-390.png",
+      "bytes": 276473,
+      "sha256": "88fb6946fc69cd38a011ec5ddd70004f203e864bb1d585678e3760bc79f6b627",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t170-status-final/tab-2-390.png",
+      "bytes": 367925,
+      "sha256": "ed30768c8e66b65b2ae989f9f4a6882af9231756debba77a482586be01e730d2",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "70b8981c19ca2f5b397ca4822856fd851362176cf78c0aac446790bf406a795a",
+  "id": "c4c6f93eddd4f53690c41ccb9499ae891dac7a86a88a2f3d8ea27e137f591298",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "independent-dashboard-critic",
+    "note": "Accepted after tool-observed inspection of all six laptop/phone dashboard captures. The phone view remains readable; tabs and collapsed entry details and complete Plan list are usable without horizontal overflow. All 48 prior entries remain exactly preserved; only the new ticket-170 entry was added.",
+    "acceptedAt": "2026-11-03T11:44:05.070Z",
+    "snapshotId": "c4c6f93eddd4f53690c41ccb9499ae891dac7a86a88a2f3d8ea27e137f591298"
+  }
+}
