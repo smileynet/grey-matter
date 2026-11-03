@@ -66,7 +66,7 @@ grey-matter's working defaults, until the model-tier spikes (tickets 167-172) re
 | Implementation of a well-specified ticket | Keep the configured provider default; validate any cheaper profile with independent checks | The dated #167 trial below separates correct artifacts from unverified agent actions and harness failures; it does not justify changing defaults |
 | Review and spec check | Keep the configured provider default, in a separate context | The #168 trial found defects but did not qualify a cheaper profile across all four strict-output cases |
 | Read-only research and exploration fan-out | Keep the configured provider default | The #169 trial leaves model identity and five review outcomes unverified; no cheaper model is qualified for adoption |
-| Doc edits, triage, classification | Fast or mid tier | Ticket 170 |
+| Doc edits, triage, classification | Keep the configured provider default | The #170 trial qualified no cheaper profile across all three tasks |
 
 Rules that hold now:
 - **Escalation and destructive steps are never left to a cheap model alone.** In ticket 126 a Haiku worker tried to delete the README, and in ticket 128 one did.
@@ -128,6 +128,19 @@ with an unsupported claim and a requested cheap Kiro answer missing the required
 citation heading. Claude reported Haiku 5.5 and Opus 5.5; its six native list-price
 estimates total about $0.108260. Codex reported tokens without cost, while Kiro
 reported context-use metadata without tokens or credits. No setting changed.
+
+### Text-task evidence (2026-11-03)
+
+The [text-task trial](../research/model-task-tiers-20261103.md) captured 18
+one-shot responses: seven passed and eleven failed. All six profiles passed the
+rewrite, one passed triage, and none passed changelog classification. No profile
+passed all three tasks, so keep current defaults. The requested lower-cost Codex
+profile passed two tasks, but its served identity and cost were unreported.
+Kiro also omitted served identity and dollar cost. Claude reported Haiku 5.5 and
+Opus 5.5. Google remained
+held without a call. These small synthetic observations do not establish
+repeatability. Review provenance is parent-transcribed; one failed initial
+review-file write has no retained semantic bytes for comparison with recovery.
 
 ## Effort
 

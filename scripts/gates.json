@@ -277,7 +277,16 @@
       "measured": { "s": 2.0, "date": "2026-11-03", "host": "win" }
     },
     {
-      "id": "deployer",
+        "id": "model-text-fixtures",
+        "stage": "pre-merge",
+        "catches": "text-task trials that execute a different plan from the authorized bytes or accept unbound semantic reviews",
+        "scope": ["scripts/spike-model-task-tier-t170", "scripts/t170-review-envelope", "scripts/fixtures/model-tasks/t170/", "docs/agents/research/model-task-tiers-20261103", "docs/agents/research/model-task-tiers-protocol-20261103.md"],
+        "run": ["node", "--test", "scripts/spike-model-task-tier-t170.test.mjs"],
+        "timeout_s": 10,
+        "measured": { "s": 2.0, "date": "2026-11-03", "host": "win" }
+      },
+      {
+        "id": "deployer",
       "stage": "pre-release",
       "catches": "deploy.mjs writing outside the skill roots it owns, duplicating roots, or refreshing a plugin wrongly",
       "scope": ["scripts/deploy"],
