@@ -94,7 +94,7 @@ The critic confirmed that the raw native streams match the sanitized receipt and
 that the package path is not documented as a stable launcher contract.
 
 After review, the owned raw captures and fixture were sent to the Windows
-Recycle Bin. Before cleanup, `.scratch/t188-evidence/` contained five JSONL files
+Recycle Bin. Before cleanup, the private capture directory contained five JSONL files
 totaling 9,606 bytes; `%TEMP%\\gm-t188-fixture` contained 60 files totaling
 98,400 bytes. The exact two directories were moved to the OS trash and their
 paths were checked absent afterward. The sanitized receipt and independent audit
