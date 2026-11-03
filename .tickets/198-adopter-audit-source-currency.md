@@ -1,7 +1,7 @@
 ---
 id: "198"
 title: "Establish source identity before diagnosing adopter gaps"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
