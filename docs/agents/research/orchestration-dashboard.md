@@ -12,9 +12,9 @@ is available while signed in as its owner. Published through Sites on 2026-11-02
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `1613d7a8df47af3696b0ddafd7d2aa0434f647d9`.
-- Deployment: `appgdep_6ae96cb3b85c8191865bdeaa3306a6bf`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_18754ccc9d048191a1cfab1e90c95f4d`.
+- Pushed Site source: `16e94154ee8622967e0e059950390968459b9f19`.
+- Deployment: `appgdep_6ae974d05ff08191952708953639128c`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_f33b52d3dbf48191a4a34ba18a04bd09`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -27,6 +27,33 @@ GNU tar interpreted the Windows drive prefix as a remote host; rerunning with
 Windows System32 first on the child process PATH succeeded. No plugin code changed.
 
 ## Maintain it
+
+### Reproducible evaluations (#174 and #199, 2026-11-02)
+
+The latest publication has 14 findings and 35 scoped tickets: 27 done and eight
+remaining. The selected runner demonstrated two implementation tasks; its
+fixture dashboard is now frozen after preflight detected drift from unrelated
+template maintenance. Historical native runs retain their original provenance.
+Implementation and review trials are dispatched in separate worktrees, with
+independent protocol reviews and serialized model measurements. #189 remains
+blocked; ACP research stays last.
+
+Both pages passed actual interaction/overflow checks at 1280×900 and 390×900.
+The delivery checker reported 43 entries, 197 tickets and no issues. The critic
+inspected all ten final captures and accepted the effort receipt
+`49ae91a3f9cad705a4ad09eca65606199e1b4cd8b50b409104ec1326a0af8dcc`
+in `evidence/orchestration-dashboard/t199-final/` and delivery receipt
+`a2fd2cec280f4fa140d60d7b0b74b7f489e488716c7550a35c6d6dccc73c3fce`
+in `evidence/orchestration-dashboard/t199-status-final/`.
+Source/captures were committed and pushed as `f4cc882`; selected pre-merge and
+pre-push gates passed. Sites returned `succeeded` for the current deployment
+above; production browser interaction remains unverified. Audience is unchanged.
+
+Intermediate unpublished captures/receipts (2,744,423 bytes) were recycled after
+the final set passed independent review. The successful publication archive
+(48,256 bytes) is disposable; keep the reusable browser/helper/Site checkout
+through the workstream. The 45,998-byte frozen seed is durable benchmark input,
+not a current dashboard template.
 
 ### Follow-up findings (#173, #189, #190, #193, #194, 2026-11-02)
 
