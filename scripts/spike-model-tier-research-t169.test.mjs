@@ -3,7 +3,8 @@ import { spawnSync } from "node:child_process";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { buildArgv, buildPrompt, classify, parseClaude, parseCodex, parseKiro, readPacket, LAUNCHERS, BLOCKED_GOOGLE_CELLS } from "./spike-model-tier-research-t169.mjs";
-import { gradeResponse } from "./grade-model-tier-research-t169.mjs";
+import { analyzeResponse, finalizeReview } from "./grade-model-tier-research-t169.mjs";
+import { createHash } from "node:crypto";
 
 const controller = fileURLToPath(new URL("./spike-model-tier-research-t169.mjs", import.meta.url));
 const cwd = "D:\\Temp\\gm-t169-test-empty";
@@ -71,15 +72,79 @@ test("usage limit signals and process failures are never classified as completed
   assert.equal(classify({ error: { code: "ETIMEDOUT" } }, timeout, null), "timeout");
 });
 
-test("grader requires caller evidence and checks summary and citation facts", () => {
-  assert.equal(gradeResponse("callers", "Files include src/pages/history.js, src/jobs/retention.js, and src/plugins/archive.mjs.").pass, false);
-  const callers = [
-    "src/pages/history.js calls the imported function.",
-    "src/jobs/retention.js calls the function through an alias import.",
-    "src/plugins/archive.mjs calls it through a dynamic import.",
-  ].join("\n");
-  assert.equal(gradeResponse("callers", callers).pass, true);
-  const summary = "An explicit retentionDays value, including 0, takes precedence. Managed workspaces default to 90 days and other workspaces to 30 days. Owners may delete records, but locked records cannot be deleted.";
-  assert.equal(gradeResponse("module-summary", summary).pass, true);
-  assert.equal(gradeResponse("cited-answer", "It is 12 days when retentionDays is explicit; see docs/policy.md, Record retention.").pass, true);
+const hash = value => createHash("sha256").update(value).digest("hex");
+const bindReview = (candidate, task, extra) => ({ schemaVersion: 1, task, blindId: candidate.blindId, candidateSha256: hash(`${JSON.stringify(candidate)}\n`), reviewerId: "independent-reviewer", ...extra });
+const summaryText = "An explicit retentionDays value, including 0, takes precedence. Managed workspaces default to 90 days and other workspaces to 30 days. Owners may delete records, but locked records cannot be deleted.";
+const summaryFacts = [
+  { id: "explicitOverrideIncludingZero", supported: true, responseQuote: "An explicit retentionDays value, including 0, takes precedence.", sourcePath: "src/access-policy.js", sourceQuote: "if (settings.retentionDays !== undefined) return settings.retentionDays;" },
+  { id: "managedDefault90", supported: true, responseQuote: "Managed workspaces default to 90 days", sourcePath: "src/access-policy.js", sourceQuote: "if (settings.workspaceTier === 'managed') return 90;" },
+  { id: "otherDefault30", supported: true, responseQuote: "other workspaces to 30 days", sourcePath: "src/access-policy.js", sourceQuote: "return 30;" },
+  { id: "ownerRequired", supported: true, responseQuote: "Owners may delete records", sourcePath: "src/access-policy.js", sourceQuote: "return actor.role === 'owner' && record.locked !== true;" },
+  { id: "lockedCannotDelete", supported: true, responseQuote: "locked records cannot be deleted", sourcePath: "docs/policy.md", sourceQuote: "locked records cannot be deleted through the standard policy." },
+];
+
+test("grader emits only blinded candidate evidence until a bound manual review finalizes it", () => {
+  const response = "Files include src/pages/history.js, src/jobs/retention.js, and src/plugins/archive.mjs.";
+  const candidate = analyzeResponse("callers", response, "a1b2c3d4e5f60718");
+  assert.equal(candidate.status, "semantic-grade-pending");
+  assert.deepEqual(candidate.candidateEvidence.paths.missingExpectedPaths, []);
+  assert.equal(Object.hasOwn(candidate.candidateEvidence, "pass"), false);
+  const reviewed = bindReview(candidate, "callers", {
+    callers: {
+      claimedCallerPaths: candidate.candidateEvidence.paths.expectedPaths,
+      actualCallerPaths: candidate.candidateEvidence.paths.expectedPaths,
+      evidence: candidate.candidateEvidence.paths.expectedPaths.map(path => ({ path, responseQuote: response.slice(response.indexOf(path), response.indexOf(path) + path.length), sourceQuote: "" })),
+    },
+  });
+  assert.throws(() => finalizeReview(candidate, reviewed, response), /quote is absent/);
+});
+
+test("caller miss can be finalized as a failure after the blind reviewer verifies actual source callers", () => {
+  const response = "Callers are src/pages/history.js and src/jobs/retention.js.";
+  const candidate = analyzeResponse("callers", response, "aabbccddeeff0011");
+  const sources = source.source.files;
+  const evidence = [
+    { path: "src/pages/history.js", sourceQuote: "return annotateRecord(row, 'history viewed');", responseQuote: "src/pages/history.js" },
+    { path: "src/jobs/retention.js", sourceQuote: "return addNote(record, 'expired');", responseQuote: "src/jobs/retention.js" },
+    { path: "src/plugins/archive.mjs", sourceQuote: "return annotateRecord(record, 'archived');" },
+  ];
+  assert.ok(sources["src/plugins/archive.mjs"].includes(evidence[2].sourceQuote));
+  const review = bindReview(candidate, "callers", { callers: { claimedCallerPaths: evidence.slice(0, 2).map(item => item.path), actualCallerPaths: candidate.candidateEvidence.paths.expectedPaths, evidence } });
+  const score = finalizeReview(candidate, review, response);
+  assert.equal(score.status, "fail");
+  assert.deepEqual(score.manual.missing, ["src/plugins/archive.mjs"]);
+});
+
+test("valid negated claims stay pending for manual semantics; unsupported claims fail the manual rubric", () => {
+  const candidate = analyzeResponse("module-summary", summaryText, "1122334455667788");
+  assert.equal(candidate.status, "semantic-grade-pending");
+  assert.equal(candidate.candidateEvidence.interpretation.includes("No keyword matcher"), true);
+  const review = bindReview(candidate, "module-summary", { moduleSummary: { facts: summaryFacts, unsupportedMaterialClaims: [], wordLimitReviewed: true } });
+  assert.equal(finalizeReview(candidate, review, summaryText).status, "pass");
+  const unsupportedText = `${summaryText} Admins may delete archived records.`;
+  const unsupportedCandidate = analyzeResponse("module-summary", unsupportedText, "8877665544332211");
+  const unsupportedFacts = summaryFacts.map(fact => ({ ...fact, responseQuote: unsupportedText.slice(0, fact.responseQuote.length) }));
+  const unsupportedReview = bindReview(unsupportedCandidate, "module-summary", { moduleSummary: { facts: unsupportedFacts, unsupportedMaterialClaims: [{ claim: "admins may delete", responseQuote: "Admins may delete archived records." }], wordLimitReviewed: true } });
+  assert.equal(finalizeReview(unsupportedCandidate, unsupportedReview, unsupportedText).status, "fail");
+});
+
+test("citation relation is manually checked in full; incomplete 12-day wording cannot pass", () => {
+  const incomplete = "The explicit setting is 12 days; see docs/policy.md, Record retention.";
+  const candidate = analyzeResponse("cited-answer", incomplete, "2233445566778899");
+  assert.equal(candidate.status, "semantic-grade-pending");
+  const incompleteReview = bindReview(candidate, "cited-answer", { citedAnswer: { oneSentence: true, managedDefault90: false, explicit12Days: true, explainsOverride: false, citationPathSupported: true, citationHeadingSupported: true, responseQuote: incomplete, sourcePath: "docs/policy.md", heading: "Record retention", sourceQuote: "Managed workspaces retain records for 90 days by default." } });
+  assert.equal(finalizeReview(candidate, incompleteReview, incomplete).status, "fail");
+  const full = "Managed workspaces default to 90 days, but an explicit retentionDays setting of 12 overrides that default; see docs/policy.md, Record retention.";
+  const fullCandidate = analyzeResponse("cited-answer", full, "33445566778899aa");
+  const fullReview = bindReview(fullCandidate, "cited-answer", { citedAnswer: { oneSentence: true, managedDefault90: true, explicit12Days: true, explainsOverride: true, citationPathSupported: true, citationHeadingSupported: true, responseQuote: full, sourcePath: "docs/policy.md", heading: "Record retention", sourceQuote: "Managed workspaces retain records for 90 days by default. Other workspaces retain records for 30 days by default. An explicit `retentionDays` setting takes precedence over either default." } });
+  assert.equal(finalizeReview(fullCandidate, fullReview, full).status, "pass");
+});
+
+test("whitespace-token word limits are deterministic candidate evidence and gate final score", () => {
+  const long = `${summaryText} ${Array.from({ length: 91 }, (_, index) => `word${index}`).join(" ")}`;
+  const candidate = analyzeResponse("module-summary", long, "445566778899aabb");
+  assert.equal(candidate.candidateEvidence.wordLimit.withinLimit, false);
+  const facts = summaryFacts.map(fact => ({ ...fact, responseQuote: summaryText.slice(0, fact.responseQuote.length) }));
+  const review = bindReview(candidate, "module-summary", { moduleSummary: { facts, unsupportedMaterialClaims: [], wordLimitReviewed: true } });
+  assert.equal(finalizeReview(candidate, review, long).status, "fail");
 });

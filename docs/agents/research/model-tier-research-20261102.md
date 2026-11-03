@@ -2,32 +2,34 @@
 
 **Status: no model calls made and no quality findings yet.** Ticket #169 compares
 three read-only research tasks under each available harness's low-cost profile
-and native default. Calls are gated on an independent review of the frozen
-packet and controller, followed by the parent releasing the serial measurement
-lease. The protocol is `.scratch/t169/protocol.json` (SHA-256
-`62e0c1e69998df5a3a09bf86f1f46ced55eaefa785a0b21a32f1a508f5d82c0a`).
+and native default. Calls are gated on independent review of the frozen packet,
+controller and blinded-review procedure, followed by the parent releasing the
+serial measurement lease. Frozen protocol SHA-256 is
+`ffabc869e55124dab6c5e604e6c525a737fbaf6bf4b5fe2ad5c7450ad5ade4c8`.
 
 ## What the planned comparison measures
 
 The same eight-file synthetic source packet supports three tasks: discover all
 callers of an exported function (including alias and dynamic imports), summarize
-a small policy module, and answer a question from a cited document. Exact
-prompts, sources and hashes are listed in the protocol and in
-[`scripts/fixtures/model-research/t169/tasks.json`](../../../scripts/fixtures/model-research/t169/tasks.json)
-and
-[`scripts/fixtures/model-research/t169/source-files.json`](../../../scripts/fixtures/model-research/t169/source-files.json).
+a policy module, and answer a question from a cited document. Exact prompts and
+inputs are in the [task manifest](../../../scripts/fixtures/model-research/t169/tasks.json)
+and [source packet](../../../scripts/fixtures/model-research/t169/source-files.json).
 The held-out answer key is private at `.scratch/t169/answer-key.json`; only its
-hash is recorded in receipts. Each session will receive one prompt and all eight
-sources. The grader independently checks the response text, including caller
-precision/recall, keyed summary facts and citation correctness. Mentioning a
-path alone does not establish that it is a caller.
+hash is recorded in receipts. Each session will receive one prompt and the same
+eight sources.
+
+The grader records deterministic candidate evidence only: mentioned paths,
+citation path/heading presence, and a whitespace-token word count. These checks
+do not award semantic passes. A fresh independent reviewer manually checks each
+response against the source packet and held-out rubric in a blinded context.
+Mentioning a path alone does not establish that it is a caller.
 
 A profile passes this small fixture bar only if all three one-shot task scores
-pass. Otherwise the recommendation is to keep the native default. These are
-directional examples, not a reliability or broad coding benchmark. The native
-default can differ in both model identity and reasoning effort, so any
-difference will be reported as an invocation-profile result, not attributed to
-model identity alone.
+pass both native execution checks and independent manual review. Otherwise the
+recommendation is to keep the native default. These are directional examples,
+not a reliability or broad coding benchmark. The native default can differ in
+both model identity and reasoning effort, so any difference will be reported as
+an invocation-profile result, not attributed to model identity alone.
 
 ## Candidate profiles and prior evidence
 
@@ -35,24 +37,20 @@ The candidates are Claude `claude-haiku-5-5`, Codex `gpt-6-luna`, and Kiro
 `qwen3-coder-next`. In each default profile, the runner omits both model and
 effort overrides. A prior #168 observation requested Claude's `haiku` alias,
 but the native response reported Claude Sonnet 5.5. This protocol therefore
-uses the documented canonical Haiku ID and requires the native response to
-report the served identity; a mismatch or missing identity is not a quality
-pass.
+uses the documented canonical Haiku ID and requires native output to report the
+served identity; a mismatch or missing identity is not a quality pass.
 
 The #167 adapter inventory captured the current harness versions and selected
 help output on 2026-11-03 at 05:43 UTC. Its raw inventory SHA-256 is
-`4163dd66914448a75a99baf6eecdf0d6870cb256e46c1b5f036ca1a1511b0a57`. The
-selected help hashes are Claude `ad08d3ae28285ca6751211aebf9b70cf63a13351aa0e229274d73ab60f887079`,
-Codex `031e67c790835206fc786b24793207dd57ced5a169afa6f6320e85a46d50c5a3`,
-and Kiro `f58673b80b3c6c004ce55f5791c2e9a7f7c65de688a3d0e48786d55f70ddb5b6`.
-These are retained in the #167 worktree, not copied into this branch. The
-controller's exact argv construction and captured empty-argument behavior are
-covered by its local recorder tests.
+`4163dd66914448a75a99baf6eecdf0d6870cb256e46c1b5f036ca1a1511b0a57`. Selected
+help hashes, model candidates and exact argv are bound in the private protocol.
+The controller's argv recording test preserves empty safety arguments and
+ensures the prompt remains one argument.
 
 All six Google/Agy cells are security-blocked by the workstream decision; no
 replacement provider will be tried. Two prior Google model catalogs disagreed
-on the Flash effort suffix, which remains unresolved and is not needed to
-execute the three permitted providers.
+on the Flash effort suffix. That conflict remains unresolved and is not needed
+to execute the three permitted providers.
 
 ## Safety, limits and classification
 
@@ -75,15 +73,40 @@ failures consume their planned cell. Captured raw output is private scratch
 evidence and will not be promoted; private model reasoning is not collected as a
 finding.
 
+## Blinded scoring after capture
+
+Each output gets a cryptographically random opaque ID. The parent keeps the
+ID-to-cell mapping separately. A fresh independent reviewer context receives
+one response at a time, in randomized order, with its candidate-evidence JSON,
+the exact source packet and held-out rubric. The reviewer does not receive
+provider, model, tier, invocation receipt, usage data or other responses. The
+rubric and review receipt shape are frozen in the protocol before any calls.
+
+For caller discovery, the reviewer distinguishes incidental path mentions from
+caller claims, verifies the claimed and actual caller sets against source, and
+cites response and source excerpts for every caller. For the module summary,
+the reviewer records each of five named facts, quotes evidence, and lists every
+unsupported material claim; negation and context are judged semantically. The
+grader only counts whitespace-delimited tokens toward the 90-word cap. For the
+cited answer, the reviewer confirms it is one sentence, states the managed
+90-day default, says an explicit value of 12 means 12 days, explains that the
+explicit value overrides the default, and cites the exact supporting document
+and heading. Keyword or citation-presence checks never decide semantic pass.
+
+The candidate command records deterministic evidence only. The `finalize`
+command requires a blinded manual receipt bound to the candidate and response
+hashes before it can emit a pass or fail. Until then, the semantic grade stays
+`pending`.
+
 ## Verification before measurement
 
-The controller is
-[`scripts/spike-model-tier-research-t169.mjs`](../../../scripts/spike-model-tier-research-t169.mjs)
-(SHA-256 `8aaca73abfcbc4d552a6207209fd35b7cca4cee4f446134004ead37d1ba50307`);
-the separate held-out grader is
-[`scripts/grade-model-tier-research-t169.mjs`](../../../scripts/grade-model-tier-research-t169.mjs)
-(SHA-256 `a52ab3441de064f86addfdecfb90cb85e64072d9d7e1108ba82d46944697476d`).
-Both and the exact prompts are bound in the protocol. No live provider command
-or measurement call has been run for #169. After critic acceptance, the parent
-must issue an authorization receipt matching the exact controller, protocol
-and this report before the runner can execute.
+The [controller](../../../scripts/spike-model-tier-research-t169.mjs) SHA-256 is
+`7f1e53e42f952c155bf313a3081720ee66f1f700f49c475e5a978d671d7ef921`; the
+[separate held-out grader](../../../scripts/grade-model-tier-research-t169.mjs)
+SHA-256 is
+`ef648aa36545a622504df5ec2aa474d3edf906e84bee812a707d42b4e4cfe673`. Their
+exact hashes, the source packet and prompt hashes are bound in the private
+protocol. No live provider command or measurement call has been run for #169.
+After critic acceptance, the parent must issue an authorization receipt
+matching the exact controller, protocol and this report before the runner can
+execute.
