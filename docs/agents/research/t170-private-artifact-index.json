@@ -3,6 +3,11 @@
   "ticket": 170,
   "items": [
     {
+      "name": "offline-evidence-hermetic.json",
+      "privatePath": ".scratch/t170/preparation/offline-evidence-hermetic.json",
+      "purpose": "Fresh detached source checkout (without the held-out answer key) shows the real CLI main path and fake-process integration passing 7/7, plus syntax and diff checks; no provider invocation."
+    },
+    {
       "name": "offline-evidence-revision.json",
       "privatePath": ".scratch/t170/preparation/offline-evidence-revision.json",
       "purpose": "Retained fake-process execution-boundary evidence, syntax checks, and dry-run plan; contains no provider call output."
