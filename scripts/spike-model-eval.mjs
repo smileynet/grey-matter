@@ -188,6 +188,8 @@ function parseCodexOutput(stdout) {
   }
   const completed = events.some((event) => event.type === "turn.completed");
   const failed = events.some((event) => event.type === "turn.failed" || event.type === "error");
+  const infrastructureErrors = events.filter((event) => event.type === "item.completed" && event.item?.type === "error")
+    .map((event) => event.item.message ?? "Codex tool error");
   const usage = [...events].reverse().find((event) => event.type === "turn.completed")?.usage ?? null;
   const toolCommands = events.filter((event) => event.type.startsWith("item.") && event.item?.type === "command_execution")
     .map((event) => ({
@@ -205,6 +207,7 @@ function parseCodexOutput(stdout) {
     toolCommands,
     testRuns: toolCommands.filter((command) => /npm(?:\.cmd)?["']?\s+test\b/i.test(command.command ?? "")),
     turnFailed: events.some((event) => event.type === "turn.failed"),
+    infrastructureErrors,
     malformedLines: malformed,
   };
 }
@@ -298,6 +301,7 @@ function classifyResult({ agent, adapterResult, fileGrade, seedUnchanged, test, 
   if (agent.error) return "infrastructure-error";
   if (agent.status !== 0) return "agent-process-failure";
   if (adapterResult.parseError || adapterResult.malformedLines?.length) return "malformed-output";
+  if (adapterResult.infrastructureErrors?.length) return "infrastructure-error";
   if (adapterResult.turnFailed) return "turn-failed";
   if (!adapterResult.complete) return "missing-completion";
   if (fileGrade.outOfScope.length > 0) return "out-of-scope-change";
