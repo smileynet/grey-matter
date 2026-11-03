@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-02",
+  "cli": {
+    "version_command": "kiro-cli --version",
+    "version_output": "kiro-cli 2.37.1",
+    "executable": "%LOCALAPPDATA%/Kiro-Cli/kiro-cli.exe",
+    "sha256": "F4A6C31A88822B7B67D5C795DF87F1465B34C6A4ACBBA01E9A0158AB0FF4C66C"
+  },
+  "observed": {
+    "help_command": "kiro-cli chat --help",
+    "help_excerpt": [
+      "--trust-tools <TOOL_NAMES>: trust only this set of tools; --trust-tools= trusts no tools",
+      "--trust-workspace: skip Trust this workspace? for this launch only (V3 only); hooks, agents, MCP servers and workflows load; decision is not saved",
+      "--agent-engine <ENGINE>: v1, v2 (default), v3",
+      "--v3: Launch the next generation Kiro agent"
+    ],
+    "settings": {
+      "workspace_key": "chat.enableWorkflows",
+      "workspace_value": true,
+      "global_write": false,
+      "original_workspace_setting": "absent",
+      "cleanup": "removed from research worktree and disposable fixture after capture"
+    },
+    "fixture": {
+      "variant": "trunk",
+      "tree_hash": "7fd72339921451e85440698acda748c0bde512bb",
+      "files": 15,
+      "bytes": 50837,
+      "github_remote": false
+    },
+    "native_bundle_schema_excerpt": {
+      "source": "%LOCALAPPDATA%/Kiro-Cli/tui.js",
+      "recipe": "name, optional description/inputs, steps",
+      "step": "type=step; required id,agent,prompt",
+      "node_types": ["step", "sequence", "repeat", "parallel", "watch"],
+      "repeat": "positive maxIterations <= 1000; stopCondition or stopWhen; onMaxIterations abort|continue|pause",
+      "parallel": "joinPolicy all|allSettled|any",
+      "stopCondition": ["containsText", "fileCheck", "completionSignal"],
+      "workflow_methods": ["_kiro/workflow/inspect", "_kiro/workflow/pause", "_kiro/workflow/resume", "_kiro/workflow/retry", "_kiro/workflow/cancel"]
+    }
+  },
+  "limited_observation": {
+    "command": "kiro-cli chat --v3 --no-interactive --trust-tools= --output-format stream-json \"Run /workflow list. Do not use any file or shell tools; report only exact built-in workflow listing or the explicit unavailable/disabled error.\"",
+    "result": "Exit 0; V3 run started. CLI logged workflow recipe directory reads. Assistant answered that /workflow was unavailable in its headless context.",
+    "limitation": "Headless prompt was not a TUI slash-command invocation; workspace recipe trust was not bypassed. This does not demonstrate workflow unavailability."
+  },
+  "documented_not_observed": [
+    "Workflow management documentation describes pause at boundaries, persisted state on resume, and retry of failed/aborted nodes while completed siblings remain completed.",
+    "Workflow authoring documentation describes recipe files and node types."
+  ],
+  "not_verified": [
+    "Kiro-native recipe validation",
+    "Actual claim-worker-reviewer-land execution",
+    "Worktree isolation or creation",
+    "Pause, resume, retry runtime behavior",
+    "Current account/workspace feature availability"
+  ],
+  "draft_recipe": {
+    "scratch_path": ".scratch/t161-orchestrate.workflow.json",
+    "steps": ["claim (wf-planner)", "worker (wf-coder)", "review (semantic_reviewer)", "land (wf-coder)"],
+    "runtime_validation": "not run; workspace trust boundary prohibited by dispatch"
+  },
+  "sources": [
+    "https://kiro.dev/docs/workflows/authoring/",
+    "https://kiro.dev/docs/workflows/manage/",
+    "https://kiro.dev/docs/cli/v3/",
+    "https://kiro.dev/docs/cli/reference/settings/"
+  ]
+}
