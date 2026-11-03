@@ -1,7 +1,7 @@
 ---
 id: "210"
 title: "Qualify existing-agent Codex notification preparation"
-status: open
+status: in_progress
 blocked_by: ["208"]
 priority: medium
 validation_criteria:
@@ -10,6 +10,7 @@ validation_criteria:
   - "Skill guidance inventory gates deployment and artifact disposition verified"
 tags: ["stream:orchestration", "type:chore"]
 parent: "179"
+assignee: "codex"
 ---
 # Qualify existing-agent Codex notification preparation
 
