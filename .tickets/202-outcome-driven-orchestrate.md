@@ -1,7 +1,7 @@
 ---
 id: "202"
 title: "Evolve orchestrate into an authorized outcome-driven session skill"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
@@ -9,6 +9,7 @@ validation_criteria:
   - "Claude/Codex invocation policy, skill index and role briefs agree; independent review accepts exact final source."
   - "Relevant syntax/invocation/docs checks and repository stages have classified outcomes; guidance is deployed with Agy excluded."
 tags: ["stream:orchestration", "type:chore"]
+assignee: "codex"
 ---
 # Evolve orchestrate into an authorized outcome-driven session skill
 
