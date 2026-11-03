@@ -134,11 +134,16 @@ keep provider/tier, executable identity, exact argv, native completion,
 session/model/usage fields when emitted, and separate stdout/stderr hashes.
 Raw outputs remain private through the independent audit.
 
-The three permitted launchers are Claude with built-in tools disabled, all MCP
-tools denied, and no session persistence; Codex with user MCP configuration
-ignored and a read-only sandbox; and Kiro with its documented empty trusted-tool
-list. Claude documents `--disallowedTools "mcp__*"` as denying every MCP tool;
-`--tools ""` alone only controls built-in tools ([CLI reference](https://code.claude.com/docs/en/cli-usage)).
+The three permitted launchers are Claude with built-in tools disabled, custom
+MCP servers and plugins excluded, all MCP tools denied, and no session
+persistence; Codex with user MCP configuration ignored and a read-only sandbox;
+and Kiro with its documented empty trusted-tool list. Claude documents
+`--safe-mode` as skipping user/project customizations, including plugins and MCP
+servers, and `--strict-mcp-config` with an empty inline `--mcp-config` as using
+only the explicitly empty server list. The additional
+`--disallowedTools "mcp__*"` denies every MCP tool; `--tools ""` disables
+built-ins ([CLI reference](https://code.claude.com/docs/en/cli-usage)). Managed
+settings may still apply, but managed MCP servers do not load in safe mode.
 Codex's complete sibling host is hash-checked. The script does not define or invoke an agy launcher:
 workstream safety policy blocks all eight Google cells, independently of the
 catalog's available models. Claude's earlier accidental turn counts against
@@ -159,9 +164,10 @@ V2 CLI can delete an exact captured session; Claude and Codex support
 non-persistent sessions. No Agy invocation or command is defined because its
 eight cells are safety-blocked.
 
-Use each eligible CLI's scoped tool restrictions: Claude's empty `--tools` list
-plus `--disallowedTools "mcp__*"`, Codex's `--ignore-user-config` plus
-read-only sandbox, and Kiro's empty `--trust-tools` list. Workstream policy
+Use each eligible CLI's scoped tool restrictions: Claude's empty `--tools` list,
+`--safe-mode`, `--strict-mcp-config` with `--mcp-config {"mcpServers":{}}`,
+and `--disallowedTools "mcp__*"`; Codex's `--ignore-user-config` plus
+read-only sandbox; and Kiro's empty `--trust-tools` list. Workstream policy
 blocks every Google/Agy command and all eight Google
 cells after ticket 167's pre-tool security hook stop. This is a safety block,
 not a model availability result; there will be no Agy preflight or fallback.
@@ -185,7 +191,7 @@ Substitute only the fixture prompt and listed model; create a new empty
 calls serially:
 
 ~~~~text
-<absolute-claude.exe> --print --tools "" --disallowedTools "mcp__*" --no-session-persistence --output-format json --permission-mode plan --max-budget-usd 0.10 <prompt> [--model haiku]
+<absolute-claude.exe> --print --safe-mode --strict-mcp-config --mcp-config '{"mcpServers":{}}' --tools "" --disallowedTools "mcp__*" --no-session-persistence --output-format json --permission-mode plan --max-budget-usd 0.10 <prompt> [--model haiku]
 <absolute-codex.exe> exec --ephemeral --ignore-user-config --cd <empty-temp-dir> --sandbox read-only --json <prompt> [--model gpt-6-luna]
 <absolute-kiro-cli.exe> chat --no-interactive --agent-engine v2 --trust-tools= --output-format stream-json <prompt> [--model qwen3-coder-next]
 ~~~~
