@@ -2,6 +2,12 @@
 
 This is an inventory and routing index, not permission to execute every entry. Read the named owning skill and reference before invoking an operator. Inventory discovery is read-only: this file lists tracked source paths and classifies their role; it never runs them.
 
+**Scope:** this catalog describes the grey-matter source checkout. Commands naming
+`scripts/` or `skills/` paths run from that identified checkout; run the coverage
+checker from its source path there, not an installed copy with a different directory
+layout. Installed copies of this reference provide routing for maintaining grey-matter,
+not an inventory of another project's tools. For other projects, use their own guidance.
+
 The active outcome's restrictions apply to every row, including distribution and release tools. This delivery cycle excludes Agy execution and global harness setting changes; ordinary task authorization does not silently lift a recorded security hold. Use the approved operation's scope and current project provider policy.
 
 ## Update procedure

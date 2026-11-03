@@ -39,9 +39,10 @@ resume, state dimensions and role boundaries. Use the existing
 invoke restricted implement entry points or reproduce their procedures to bypass a
 refusal.
 
-Before invoking a repository tool, read its [script usage contract](references/tool-scripts.md).
-When adding or changing an operator script, update that inventory and its owning skill
-guidance, then run the documented coverage check. A script's presence grants no authority.
+For grey-matter source-checkout tools, read the [script usage contract](references/tool-scripts.md).
+When adding an operator there, update its inventory and owning guidance, then run the
+coverage check from that checkout. In another project, follow its tool guidance and
+document new operator commands through its conventions. Script presence grants no authority.
 
 ## Orient and admit
 
