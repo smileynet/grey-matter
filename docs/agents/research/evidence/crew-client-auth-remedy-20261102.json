@@ -63,7 +63,7 @@
     "callback_count": 8,
     "callback_method": "_kiro/auth/getAccessToken",
     "session_prompt": "error -32000 after client denied credential",
-    "tool_events": 0,
+    "tool_events": "not measured",
     "process_exit_code": 0,
     "stderr_bytes_count_only": 720,
     "classification": "pass for client-owned routing and expected negative-auth handling",
