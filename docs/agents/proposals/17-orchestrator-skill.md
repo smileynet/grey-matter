@@ -1,6 +1,6 @@
 # Proposal 17: an `orchestrate` skill
 
-**Status:** proposed 2026-10-31; open questions decided the same day. Validation spikes come before the build.
+**Status:** implemented as the initial skill on 2026-10-31; its user-only invocation and batch-oriented outcome handling were superseded by approved proposal 19 (2026-11-03). Retained as historical design and evidence, not current operating guidance.
 
 **Scope:**
 - A new skill, `skills/engineering/orchestrate/`: `SKILL.md`, role briefs, and one reference per harness.

@@ -94,7 +94,7 @@ Reach for `compass` only when the pick genuinely isn't a straight build:
 | An external request not yet groomed into a ticket | `triage` |
 | A foggy effort too big for one session | `wayfinder` |
 | Something broken: a resistant bug, a flake, a regression | `diagnosing-bugs` |
-| User asks to orchestrate independent frontier tickets | Recommend user-invoked `orchestrate`; start only with that authorization |
+| User has authorized an outcome across independent frontier tickets | `orchestrate`; agents may select it only within that existing authorization |
 | A whole spec landing together on one integration branch | `implement-spec` |
 
 Call `compass` (don't guess from the table) when the pick matches no row cleanly, more than

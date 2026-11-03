@@ -1,13 +1,43 @@
 ---
 name: orchestrate
-description: "Run a session over the ticket frontier: dispatch disjoint workers, review and land each ticket, resolve questions, and report each close with a dashboard and chat visual."
-disable-model-invocation: true
+description: "Coordinate an authorized outcome through scoped tickets, isolated workers, independent review and parent-owned integration. Use when asked to orchestrate a workstream or continue an agreed orchestrated session."
 ---
 
 # Orchestrate
 
-Run only when the user asks for session orchestration. tkt is the work ledger.
-Own admission, decisions, review, landing and reporting; dispatched workers own implementation.
+Coordinate a user-authorized outcome until its proof condition is met or no authorized
+progress remains. An agent may select this skill only within authorization already given
+by the user; invocation never authorizes delegation, spend, publication, settings changes
+or a broader outcome. If that authorization is absent, continue work already in scope and
+ask before orchestrating. tkt is the work ledger. Own admission, review, integration and
+reporting; workers own only their assigned implementation.
+
+## Outcome contract and loop
+
+Recover one durable contract from the existing spec or plan: outcome and proof, included
+and excluded scope, existing authority and restrictions, resources (including critic
+slots and exclusive devices), completion/stops, and the latest user revision. Do not make
+a second board or invent a budget. Treat a resume pointer as recovery data, not task truth.
+Resolve routine choices from repository sources; ask only when a missing fact changes the
+outcome or authorization.
+
+Follow this loop through every batch: reconcile the live tracker and dispatch bindings;
+admit only scoped, unclaimed work with verifiable acceptance and safe write/resource
+separation; verify worktree, branch and base before edits; reserve reviewer capacity;
+inspect candidate bytes and evidence; independently review when required; integrate
+serially and verify the integrated result; then repeat until the outcome is proved or
+stopped. Count reviewers in the live resource cap. One useful ticket or unavailable
+isolation means sequential execution. A clarified scope supersedes prior assumptions;
+update the contract and affected admission before continuing. Existing user authorization
+continues through ordinary review and integration in its stated scope.
+
+Read [the outcome and recovery protocol](references/outcome-contract.md) for stop,
+resume, state dimensions and role boundaries. Use the existing
+[worker](references/worker-brief.md), [reviewer](references/reviewer-brief.md),
+[escalation](references/escalation.md) and only the active
+[harness reference](references/harness-codex.md) (or its sibling) for details. Do not
+invoke restricted implement entry points or reproduce their procedures to bypass a
+refusal.
 
 ## Orient and admit
 
@@ -20,7 +50,7 @@ Own admission, decisions, review, landing and reporting; dispatched workers own 
    [the policy validator](../../../scripts/check-provider-fallback.mjs):
    `node <validator-path> <project>/AGENTS.md --json`.
    Absent or invalid policy means no fallback. At exhaustion checkpoint and report
-   the limit/reset; [provider switching](../../../docs/agents/provider-switching.md)
+   the exact limit/reset; [provider switching](../../../docs/agents/provider-switching.md)
    governs any move.
 2. Load only the running harness's reference:
    [Claude](references/harness-claude.md), [Codex](references/harness-codex.md),
@@ -32,15 +62,16 @@ Own admission, decisions, review, landing and reporting; dispatched workers own 
    PR merges and active authors, otherwise trunk. Trunk workers use a branch per
    worktree; land by serial local merge. In PR mode, use PRs for code **and**
    bookkeeping where protection requires them; resolve tkt auto-push compatibility
-   before claiming. A whole spec that must land together belongs to
-   [implement-spec](../implement-spec/SKILL.md); recommend it to the user.
+   before claiming. A whole spec that must land together is outside this mode. Do not
+   call restricted [implement-spec](../implement-spec/SKILL.md) or reproduce its
+   procedure to bypass a refusal; ask the user to authorize that separate workflow.
 4. Recheck each candidate immediately before claim against the tracker, branches,
    worktrees and open PRs. Admit only open, unblocked, unclaimed tickets with
    assertable acceptance criteria and disjoint expected file sets. Name shared
    schema/generated-file ownership and exclusive devices; uncertain overlap runs
    sequentially. Existing peer work stays with its owner.
-   Cap in-flight work at the lowest of three, the live harness cap, the user's
-   budget and the number of disjoint tickets. Count reviewers in resource limits.
+   Cap in-flight work at the lowest of three, the live harness cap, any explicitly
+   supplied budget and the number of disjoint tickets. Count reviewers in resource limits.
    With fewer than two admissible tickets, implement the one ticket in-session
    using the worker contract below; say that the round is sequential.
 5. State the round's tickets, ownership, landing mode, provider policy and
@@ -119,6 +150,19 @@ Own admission, decisions, review, landing and reporting; dispatched workers own 
     worktrees only after checking their contents against the landed result;
     preserve dirty worktrees and workers waiting on the human. Follow artifact
     hygiene to promote, keep with lifecycle scope, or trash owned scratch output.
-    End with accepted/blocked/in-flight counts and recommend the user-invoked
-    `wrap-session` bookend. Leave the resume pointer current until all bindings
-    are settled.
+    End with outcome status, separate work/verification/cleanup/delivery counts and exact
+    blockers. Leave the resume pointer current until every binding is settled.
+
+## Continue and stop
+
+After each batch, reconcile the live tracker and bindings, then continue while authorized
+scoped work remains. An empty frontier is not proof of completion: classify it as
+complete, dependency-blocked or intentionally deferred, and inspect for other scoped work.
+When no authorized progress remains, report incomplete/blocked, the exact condition,
+retained evidence and the next event that permits resumption. A user pause stops dispatch
+and mutation and preserves a resumable checkpoint; cancellation ends the authorized
+outcome. Usage exhaustion is a hard stop: checkpoint and report the exact limit/reset;
+never retry, infer a reset, raise limits or switch providers when policy is off. Record
+monitor state only after native confirmation, investigate missing monitors, and do not
+recreate a possibly user-removed job. Stop owned monitors only when their purpose is
+settled, obsolete or the user stops them.
