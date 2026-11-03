@@ -4,7 +4,7 @@
   "date": "2026-11-02",
   "protocolSha256": "fd0424119e3d87765c8b1fce7b8935cfc19f093560924121f74f8c826a034c18",
   "fixtureManifestSha256": "aa02eaec908f619ee0d325742a2cb1b5be8a2166a0ffc4e138b9a228fc912628",
-  "privateRawManifestSha256": "bf2d4fe9cdfa8954fb55196567243f3ecae6821f184730e76b49a6a5c85a9bf6",
+  "privateRawManifestSha256": "8972a75dd0a9b96a5b06dde16d89f4a4f0119bbc8f404194c944b75e93cf3ce9",
   "privateRows": 38,
   "providerCounts": {
     "claude": {
@@ -52,6 +52,25 @@
     "nonTargetSetSha256Before": "e2afd3c6c4929177e2e621e6438b5fd9410906b455ccaa5aecca1fcd1311dea5",
     "nonTargetSetSha256After": "e2afd3c6c4929177e2e621e6438b5fd9410906b455ccaa5aecca1fcd1311dea5",
     "privateReceiptSha256": "e23eb89f6cadd1d45e9f5ce3928b69c67d318cf25a550772e193b8b587105401"
+  },
+  "taskRootCleanup": {
+    "rootsSentToRecycleBin": 39,
+    "rootSourcePathsAbsent": 39,
+    "matchingRecycleMetadataAndPayloads": 39,
+    "filesMoved": 2615,
+    "bytesMoved": 4626864,
+    "compactPrivateSnapshot": {
+      "bytes": 11745,
+      "sha256": "4993d8f1334239d2eaedb5231947b0dd8932be01fcfa57f4b6cb2afbe133b83a",
+      "changedOutputFiles": 39,
+      "changedOutputBytes": 5811,
+      "verifiedArchiveEntries": 40,
+      "allFileHashesVerified": true
+    },
+    "receiptReconstructedByReadOnlyVerification": true,
+    "permanentDeletion": false,
+    "reclaimedSpaceClaimed": false,
+    "privateReceiptSha256": "4f8b4ec505cbe1fbd97b7ff8cd69e922641bdbe7cb593057f538af0c3f68849d"
   },
   "plannedCases": [
     {
@@ -2047,6 +2066,6 @@
     "Codex's four sessions produced infrastructure errors; treat them as consumed sessions with invalid task-quality results, not zero usage or model-quality failures.",
     "Agy T6 cheap/default were blocked and not launched after independent review of a stop-all-tools pre-tool denial in default T4.",
     "Usage is the native output where emitted; costs are list estimates only when explicitly marked. Missing usage, identity, or cost is null, not zero.",
-    "Raw model outputs, session identifiers, task roots, settings, and hidden grading keys remain in private ignored scratch for audit."
+    "Raw model outputs, session identifiers, per-cell settings, hidden grading keys, and the compact task-output snapshot remain private for tickets 169–172 and parent integration review. The 39 task-root working copies were moved to the Recycle Bin; this was not a permanent purge."
   ]
 }
