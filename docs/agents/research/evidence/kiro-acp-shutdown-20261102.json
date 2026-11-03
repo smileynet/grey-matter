@@ -96,6 +96,33 @@
   "unrelated_processes_terminated": false,
   "original_162_session_modified": false,
   "claim_limit": "Idle session close preserves state and exits 0. After a model-bearing end_turn and after a canceled permission wait, session/close preserves state but EOF still causes the native shutdown error and exit 1. No bounded model-bearing shutdown fix was verified.",
+  "ticket_state": {
+    "diagnosis": "AC1 met; AC2 unmet; native Kiro CLI 2.37.1 / KAS 0.66.70 issue remains unresolved",
+    "blocked_condition": "No supported model-bearing shutdown sequence or fixed upstream version verified",
+    "next_trigger": "A Kiro CLI or KAS version change, or a newly advertised/documented supported V3 engine shutdown method",
+    "retest": "After trigger, rerun completed-turn and canceled-permission close cases; independently verify prompt/cancel response, EOF/exit classification, process-tree settlement, and durable marker reload",
+    "no_rerun_before_trigger": true
+  },
+  "retained_sessions": [
+    {"id": "sess_ac66abe4-a0c8-4b89-9de8-657d36165bb6", "arm": "completed-turn EOF baseline", "record_size_bytes": "unknown; no storage-size query"},
+    {"id": "sess_1e07309c-94c8-49cd-b99f-681c356f58c7", "arm": "completed turn then close; marker reloaded", "record_size_bytes": "unknown; no storage-size query"},
+    {"id": "sess_10cfb02d-fb98-4c55-aecd-eb3928f84474", "arm": "supervised read control", "record_size_bytes": "unknown; no storage-size query"},
+    {"id": "sess_d12b7099-e47f-41da-81e9-30689a24603c", "arm": "permission cancellation then close", "record_size_bytes": "unknown; no storage-size query"}
+  ],
+  "retention_lifecycle": "Keep four listed API sessions and .scratch/t189-* raw artifacts through the next qualifying upstream retest or ticket resolution; parent owns later disposal. Original #162 session remains untouched.",
+  "retained_artifacts": [
+    {"path": ".scratch/t189-baseline.json", "size_bytes": 190966},
+    {"path": ".scratch/t189-cancel-arm.mjs", "size_bytes": 5844},
+    {"path": ".scratch/t189-cancel-close-write.json", "size_bytes": 28071},
+    {"path": ".scratch/t189-cancel-close.json", "size_bytes": 28656},
+    {"path": ".scratch/t189-capabilities.mjs", "size_bytes": 2218},
+    {"path": ".scratch/t189-close.json", "size_bytes": 7715},
+    {"path": ".scratch/t189-model-arm.mjs", "size_bytes": 6182},
+    {"path": ".scratch/t189-native-observations.json", "size_bytes": 1462},
+    {"path": ".scratch/t189-reload-close.json", "size_bytes": 8086},
+    {"path": ".scratch/t189-reload-delete.mjs", "size_bytes": 2243}
+  ],
+  "independent_audit": "kiro-acp-shutdown-20261102-audit.md",
   "sources": [
     "https://kiro.dev/docs/cli/v3/acp-migration/",
     "https://kiro.dev/docs/acp/",

@@ -36,8 +36,30 @@ Checked 2026-11-02. Documentation was checked against observed capabilities from
 ## Disposition and remaining limit
 
 - The empty idle-session probe was loaded, explicitly deleted, and absent from the final list; its processes exited 0. The completed-turn baseline, completed-turn close, reload, and canceled-permission close probes each exited 1 after reproducing the KAS EOF error. Their owned process trees were observed present while active and absent after exit.
-- Model-bearing sessions `sess_ac66abe4-a0c8-4b89-9de8-657d36165bb6` (EOF baseline), `sess_1e07309c-94c8-49cd-b99f-681c356f58c7` (closed after completed turn and reloaded with marker), `sess_10cfb02d-fb98-4c55-aecd-eb3928f84474` (supervised read control), and `sess_d12b7099-e47f-41da-81e9-30689a24603c` (permission canceled, then closed) remain preserved and were not deleted. The original #162 session `sess_ad6e7317-8444-4745-b044-a4a5146d0c3f` was not closed, deleted, or modified.
-- The original #162 session `sess_ad6e7317-8444-4745-b044-a4a5146d0c3f` was not closed, deleted, or modified; its retained evidence says it can be loaded and the marker recovered.
+- Model-bearing sessions `sess_ac66abe4-a0c8-4b89-9de8-657d36165bb6` (EOF baseline), `sess_1e07309c-94c8-49cd-b99f-681c356f58c7` (closed after completed turn and reloaded with marker), `sess_10cfb02d-fb98-4c55-aecd-eb3928f84474` (supervised read control), and `sess_d12b7099-e47f-41da-81e9-30689a24603c` (permission canceled, then closed) remain preserved and were not deleted. The original #162 session `sess_ad6e7317-8444-4745-b044-a4a5146d0c3f` was not closed, deleted, or modified; its retained evidence says it can be loaded and the marker recovered.
 - No installed patch, global setting change, provider switch, or unrelated process termination occurred. Existing user Kiro configuration was used only for the native CLI's normal authentication/state.
 - No supported fix or bounded workaround for model-bearing EOF teardown was verified. The advertised close method preserves state but still fails to settle both a completed turn and a canceled permission wait. Ticket acceptance must retain this unresolved criterion and communicate that callers can receive successful prompt/cancel results while ACP process shutdown still fails. No provider fallback or unrelated process termination occurred.
+
+## Blocker and retained artifacts
+
+The remaining blocker is a current Kiro CLI 2.37.1 / KAS 0.66.70 native shutdown failure after model use. No supported shutdown method or fixed upstream version has been established. Do not rerun against this unchanged pair. Reopen the qualification after a Kiro or KAS version change, or when Kiro advertises/documents a supported V3 engine shutdown method; then repeat completed-turn and canceled-permission arms and verify prompt/cancel outcome, exit classification, descendant settlement, and session reload independently.
+
+Retain the four model-bearing API session IDs above through the next upstream retest or ticket resolution; the parent owns their eventual disposal. Their individual on-disk record sizes are **unknown** because no session storage-size query was made. The original #162 session remains outside this inventory and untouched.
+
+Owned raw artifacts retained in this worktree (byte sizes at handoff):
+
+| Path | Bytes |
+|---|---:|
+| `.scratch/t189-baseline.json` | 190,966 |
+| `.scratch/t189-cancel-arm.mjs` | 5,844 |
+| `.scratch/t189-cancel-close-write.json` | 28,071 |
+| `.scratch/t189-cancel-close.json` | 28,656 |
+| `.scratch/t189-capabilities.mjs` | 2,218 |
+| `.scratch/t189-close.json` | 7,715 |
+| `.scratch/t189-model-arm.mjs` | 6,182 |
+| `.scratch/t189-native-observations.json` | 1,462 |
+| `.scratch/t189-reload-close.json` | 8,086 |
+| `.scratch/t189-reload-delete.mjs` | 2,243 |
+
+These scratch artifacts and four API session records are retained until the next qualifying upstream retest or resolution; parent integration owns cleanup after that lifecycle point. The independent critic audit is promoted as [kiro-acp-shutdown-20261102-audit.md](kiro-acp-shutdown-20261102-audit.md).
 
