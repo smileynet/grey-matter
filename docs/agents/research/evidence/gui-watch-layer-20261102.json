@@ -50,7 +50,7 @@
     {
       "surface": "Kiro IDE Agent Focus",
       "inventory": "Known local executable present; file metadata product version 1.3.11.",
-      "action": "cua.computer.launch_app with C:\\Users\\uosmi\\AppData\\Local\\Programs\\Kiro\\Kiro.exe.",
+      "action": "cua.computer.launch_app with %LOCALAPPDATA%\\Programs\\Kiro\\Kiro.exe.",
       "result": "computer-use request timed out: launch_app",
       "refresh": "cua.listApps({emit:false}) returned no Kiro window.",
       "observed_gui": false,
@@ -59,7 +59,7 @@
     {
       "surface": "Antigravity app / Agent Manager",
       "inventory": "Known local executable present; file metadata product version 2.28.2.0.",
-      "action": "cua.computer.launch_app with C:\\Users\\uosmi\\AppData\\Local\\Programs\\Antigravity\\Antigravity.exe.",
+      "action": "cua.computer.launch_app with %LOCALAPPDATA%\\Programs\\Antigravity\\Antigravity.exe.",
       "result": "system cursor manager did not become ready",
       "refresh": "cua.listApps({emit:false}) returned no Antigravity window.",
       "observed_gui": false,
@@ -68,9 +68,9 @@
     {
       "surface": "Kiro Crew session grid",
       "inventory": "Known local executable present under %LOCALAPPDATA%\\Programs\\KiroCrew.",
-      "action": "cua.computer.launch_app with C:\\Users\\uosmi\\AppData\\Local\\Programs\\KiroCrew\\KiroCrew.exe.",
+      "action": "cua.computer.launch_app with %LOCALAPPDATA%\\Programs\\KiroCrew\\KiroCrew.exe.",
       "launch_result": "computer-use request timed out: launch_app",
-      "refresh": "cua.listApps({emit:false}) showed KiroCrew isRunning=true, process path C:\\Users\\uosmi\\AppData\\Local\\Programs\\KiroCrew\\KiroCrew.exe, window ID 270586, title Kiro Crew.",
+      "refresh": "cua.listApps({emit:false}) showed KiroCrew isRunning=true, process path %LOCALAPPDATA%\\Programs\\KiroCrew\\KiroCrew.exe, window ID 270586, title Kiro Crew.",
       "capture_attempts": [
         {
           "api": "cua.getApp({windowId:270586})",
@@ -78,7 +78,7 @@
         },
         {
           "api": "app.getScreenshot()",
-          "result": "no screenshot targets found for process:C:\\Users\\uosmi\\AppData\\Local\\Programs\\KiroCrew\\KiroCrew.exe"
+          "result": "no screenshot targets found for process:%LOCALAPPDATA%\\Programs\\KiroCrew\\KiroCrew.exe"
         }
       ],
       "observed_gui": false,
