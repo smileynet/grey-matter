@@ -1,7 +1,7 @@
 ---
 id: "204"
 title: "Validate dispatch checkout and review evidence bindings before acceptance"
-status: open
+status: in_progress
 blocked_by: ["202"]
 priority: high
 validation_criteria:
@@ -9,6 +9,7 @@ validation_criteria:
   - "Orchestration guidance names commands, packet inputs and output limits without claiming semantic overlap or reviewer independence is mechanically proved."
   - "Regression fixtures, independent exact-candidate review and relevant repository checks pass with artifact disposition."
 tags: ["stream:orchestration", "type:chore"]
+assignee: "codex"
 ---
 # Validate dispatch checkout and review evidence bindings before acceptance
 
