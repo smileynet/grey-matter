@@ -279,7 +279,7 @@ auth remains conditional on the result of #186.
 | 160 | 7. Test Claude background sessions and idle notification semantics | ✅ done |
 | 161 | 8. Test Kiro V3 workflow execution, pause, resume and retry | ✅ done |
 | 188 | 9. Diagnose Codex's missing code-mode tool host before claiming tool execution | ✅ done |
-| 189 | 10. Qualify Kiro V3 ACP EOF shutdown and descendant settlement | in_progress |
+| 189 | 10. Qualify Kiro V3 ACP EOF shutdown and descendant settlement | ✅ done |
 | 190 | Resolve Crew Windows host-auth integration before relying on Crew-owned identity | ✅ done |
 | 193 | Diagnose overlapping regex approval rules before relying on that override | ✅ done |
 | 194 | Qualify agy child model routing before relying on per-role tiers | ✅ done |

@@ -1,7 +1,7 @@
 ---
 id: "189"
 title: "Diagnose: Kiro V3 ACP relay times out after stdin closes"
-status: in_progress
+status: done
 blocked_by: ["162"]
 validation_criteria:
   - "The EOF teardown failure is reproduced or marked obsolete, separating successful prompt/cancel/load responses from process settlement."
@@ -83,6 +83,15 @@ found no qualifying public candidate; no new native/model probe ran.
 
 ## Acceptance criteria
 
-- [ ] The EOF teardown failure is reproduced or marked obsolete, separating successful prompt/cancel/load responses from process settlement.
-- [ ] The user-approved workflow handling documents separate task/teardown acceptance, bounded owned-process observation, no duplicate retry and preserved sessions; unresolved native repair is deferred to #201.
-- [ ] Owned processes, sessions and fixtures have recorded disposition; required checks pass and the driver guidance states the remaining limit.
+- [x] The EOF teardown failure is reproduced or marked obsolete, separating successful prompt/cancel/load responses from process settlement.
+- [x] The user-approved workflow handling documents separate task/teardown acceptance, bounded owned-process observation, no duplicate retry and preserved sessions; unresolved native repair is deferred to #201.
+- [x] Owned processes, sessions and fixtures have recorded disposition; required checks pass and the driver guidance states the remaining limit.
+
+## Resolution (2026-11-03)
+
+Accepted known limitation at user request: documented and deployed bounded Kiro ACP workflow handling, independently reviewed; native graceful shutdown remains unqualified. Deeper research deferred to low-priority backlog #201 after higher-priority work. Promoted procedure and audit; retained indexed raw/session evidence for #201, no destructive cleanup or new model calls.
+
+### Verification
+1. ✓ The EOF teardown failure is reproduced or marked obsolete, separating successful prompt/cancel/load responses from process settlement. — "PASS: retained 2026-11-02 raw receipt and independent audit reproduce completed/cancelled responses followed by the exact native EOF shutdown error; final owned trees were absent for those runs. No new runtime test or native repair is claimed."
+2. ✓ The user-approved workflow handling documents separate task/teardown acceptance, bounded owned-process observation, no duplicate retry and preserved sessions; unresolved native repair is deferred to #201. — "PASS: independent critic accepted exact commit 4bc0c2224f5def6ef6590b1113ec29034871c5b0; current Kiro procedure separates task/teardown acceptance, requires bounded descendant observation, rejects duplicate retries and preserves state. User explicitly accepted this closure scope; low-priority backlog #201 owns deferred repair."
+3. ✓ Owned processes, sessions and fixtures have recorded disposition; required checks pass and the driver guidance states the remaining limit. — "PASS: node scripts/gate.mjs pre-merge selected ticket-graph 1/1; pre-push passed plugin-manifest, skill-syntax, invocation-policy, doc-links and home-path 5/5; deploy --no-agy installed 50 skills. Four model-bearing sessions/indexed raw files and private review provenance remain retained by parent for #201 until qualifying comparison and explicit disposition; original #162 session and unrelated artifacts untouched."
