@@ -67,7 +67,7 @@
   ],
   "draft_recipe": {
     "scratch_path": ".scratch/t161-orchestrate.workflow.json",
-    "steps": ["claim (wf-planner)", "worker (wf-coder)", "review (semantic_reviewer)", "land (wf-planner)"],
+    "steps": ["claim (wf-planner)", "worker (wf-coder)", "review (semantic_reviewer)", "land (wf-coder)"],
     "runtime_validation": "accepted by workflow runner and started; validate_workflow command not separately run"
   },
   "runtime_recipe": {
