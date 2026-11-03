@@ -2,7 +2,7 @@
 id: "204"
 title: "Validate dispatch checkout and review evidence bindings before acceptance"
 status: open
-blocked_by: []
+blocked_by: ["202"]
 priority: high
 validation_criteria:
   - "Actual wrong root/base/candidate and missing ownership/evidence bindings are rejected by read-only preflight."
