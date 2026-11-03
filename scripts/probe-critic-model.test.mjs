@@ -159,7 +159,7 @@ test("Codex below the documented GPT-6.1 Terra minimum reports the floor before 
   const r = await probeWith(env, "codex", { ceilings: { ...CEILINGS, codex: "gpt-6.1-terra" } });
   assert.equal(r.status, "unsupported-version");
   assert.match(r.note, /minimum 0\.159\.0/);
-  assert.deepEqual(readFileSync(join(process.env.CODEX_HOME, "calls.log"), "utf8").trim().split(/\r?\n/), ["--version"]);
+  assert.deepEqual(readFileSync(join(env.CODEX_HOME, "calls.log"), "utf8").trim().split(/\r?\n/), ["--version"]);
 });
 
 test("a GPT-6.1 Sol rejection stays an availability diagnostic because no CLI floor is published", { skip: posixOnly }, async (t) => {

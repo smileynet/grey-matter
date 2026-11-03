@@ -125,6 +125,9 @@ function walk(root, seen = new Set(), stat = lstatSync, maxEntries = Infinity) {
 
 const CONFIGURED_ROOT_LIMIT = 256;
 const CONFIGURED_FAMILY_ENTRY_LIMIT = 10000;
+// Names read before choosing the CONFIGURED_ROOT_LIMIT families: directory order is
+// filesystem-defined (hash order on ext4/xfs), so sort a bounded superset for a stable choice.
+const CONFIGURED_ROOT_SCAN_LIMIT = CONFIGURED_ROOT_LIMIT * 64;
 
 function configuredRoots(entries, coverage) {
   const containers = [], families = [];
@@ -157,7 +160,7 @@ function configuredRoots(entries, coverage) {
 
       const names = [];
       try {
-        for (let i = 0; i <= CONFIGURED_ROOT_LIMIT; i++) {
+        for (let i = 0; i < CONFIGURED_ROOT_SCAN_LIMIT; i++) {
           const entry = directory.readSync();
           if (!entry) break;
           names.push(entry.name);
@@ -167,6 +170,7 @@ function configuredRoots(entries, coverage) {
         coverage.inventoryComplete = false;
         coverage.scopeIssues.push({ kind: "unreadable-root", path: abs, reason: error.message });
       } finally { directory.closeSync(); }
+      names.sort();
       const overflow = names.length > CONFIGURED_ROOT_LIMIT;
       if (overflow) {
         names.length = CONFIGURED_ROOT_LIMIT;
@@ -174,7 +178,7 @@ function configuredRoots(entries, coverage) {
         coverage.inventoryComplete = false;
         coverage.scopeIssues.push({ kind: "configured-family-limit", path: abs, limit: CONFIGURED_ROOT_LIMIT });
       }
-      for (const name of names.sort()) {
+      for (const name of names) {
         const child = join(abs, name);
         let st;
         try { st = lstatSync(child); } catch (error) {

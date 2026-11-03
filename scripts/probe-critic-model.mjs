@@ -143,7 +143,7 @@ function kiroPick(ctx) {
 
 export function probe(harness, { ceilings = CEILINGS, timeout = 60 } = {}) {
   const cmd = harness === "kiro" ? "kiro-cli" : harness;
-  const requested = ceilings[harness];
+  let requested = ceilings[harness];
   if (harness === "codex" && (typeof requested !== "string" || !SAFE_CODEX_MODEL_ID.test(requested))) return {
     harness, status: "invalid-model-id",
     note: "Codex model ID must start with an ASCII letter or digit and contain only letters, digits, dot, underscore, slash or hyphen.",

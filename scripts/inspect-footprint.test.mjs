@@ -4,7 +4,7 @@ import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { chmodSync, existsSync, linkSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, statfsSync, symlinkSync, utimesSync, writeFileSync, appendFileSync } from "node:fs";
+import { chmodSync, existsSync, linkSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, statfsSync, symlinkSync, utimesSync, writeFileSync, appendFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { delimiter, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -23,10 +23,13 @@ const family = (r, path) => r.families.find((f) => f.path === path);
 const MiB = Buffer.alloc(1024 ** 2, 1);
 
 const made = [];
+// Canonical temp root: a symlinked TMPDIR (macOS /var -> /private/var, a symlinked home) would
+// otherwise make fixture paths differ from the canonical paths git and the inspector report.
+const tmpRoot = realpathSync(tmpdir());
 test.after(() => { for (const dir of made) rmSync(dir, { recursive: true, force: true }); });
 
 function fixture() {
-  const base = mkdtempSync(join(tmpdir(), "footprint-")), repo = join(base, "repo");
+  const base = mkdtempSync(join(tmpRoot, "footprint-")), repo = join(base, "repo");
   made.push(base);
   mkdirSync(repo);
   git(repo, "init", "-q", "-b", "main");
@@ -405,7 +408,7 @@ test("WSL free space is bounded by the Windows volume containing this distro VHD
 });
 
 test("WSL host-volume lookup fails closed for ambiguous or unavailable registrations", { skip: !onWsl && "requires WSL2 and its Windows host" }, () => {
-  const { base: fixtureBase, repo } = fixture(), dir = mkdtempSync(join(tmpdir(), "footprint-powershell-")), executable = join(dir, "powershell.exe");
+  const { base: fixtureBase, repo } = fixture(), dir = mkdtempSync(join(tmpRoot, "footprint-powershell-")), executable = join(dir, "powershell.exe");
   made.push(dir);
   writeFileSync(executable, "#!/bin/sh\n");
   chmodSync(executable, 0o755);
@@ -764,7 +767,7 @@ test("only an explicit whole-family cleanup record turns later bytes into regrow
 
 const hasGitLfs = spawnSync("git", ["lfs", "version"], { encoding: "utf8" }).status === 0;
 test("skip-smudge worktree checkout keeps a tracked LFS pointer while ordinary checkout materializes it", { skip: !hasGitLfs && "git-lfs is unavailable" }, () => {
-  const baseDir = mkdtempSync(join(tmpdir(), "footprint-lfs-")), source = join(baseDir, "source");
+  const baseDir = mkdtempSync(join(tmpRoot, "footprint-lfs-")), source = join(baseDir, "source");
   const skipped = join(baseDir, "skip-smudge"), materialized = join(baseDir, "ordinary-checkout");
   made.push(baseDir);
   mkdirSync(source);
