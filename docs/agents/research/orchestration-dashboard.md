@@ -12,9 +12,9 @@ is available while signed in as its owner. Published through Sites on 2026-11-03
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `56e94782e6ddc0b36fd5a240881ad069d2c6f4ee`.
-- Deployment: `appgdep_6ae9ceda10b481918d103fcdb4fc17a0`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_4a854be031248191bb4a1c487540917d`.
+- Pushed Site source: `9ab975f07973af84f487963a145d75d2b2078bc2`.
+- Deployment: `appgdep_6ae9d291be108191b1cb1f0ed84ea781`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_dc6a453a9fac8191b3c03c75fcd2e02c`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -28,9 +28,35 @@ Windows System32 first on the child process PATH succeeded. No plugin code chang
 
 ## Maintain it
 
+### ACP findings (#187, 2026-11-03)
+
+The latest publication has 20 findings and 36 scoped tickets: 34 done and two
+unfinished. It explains ACP's documented communication boundary while keeping
+scheduling, isolation and acceptance with the supervisor. The source audit
+rechecked official protocol, SDK and MCP sources; no new actionable spike was
+recommended. No new native runtime or cost advantage is claimed.
+
+Both pages passed Chrome checks at 1280×900 and 390×900. The delivery checker
+reported 51 entries, 198 tickets, one open account-fact question and no errors
+or warnings; all 50 earlier entries were preserved exactly. An independent
+critic inspected all ten captures and accepted dedicated receipt
+`b785207c78dc94459c7511376f6c2ccdc795d98bc48251810511657ea37d6d0c`
+in `evidence/orchestration-dashboard/t187-final/` and delivery receipt
+`cabc50ed1dd54bdcaf94a452f772cf4324909a283495c0629413cb105388c8f5`
+in `evidence/orchestration-dashboard/t187-status-final/`. Source and captures
+were pushed as `3b7ee93`; three explicit pre-merge checks and all three
+applicable pre-push checks passed. Research document checks passed after the
+reviewed local citation fix; closure is `aa46d7c`.
+
+The packaged page's 20 findings, 34 done tickets and all 36 repository-root
+ticket links were checked. Native publication succeeded at 12:24:56 UTC with
+no failure message and the owner-private audience preserved. Production
+browser interaction was not checked. Only the fast-mode account fact and the
+upstream Kiro shutdown issue remain; supervision stays active for those blockers.
+
 ### Effort findings (#171, 2026-11-03)
 
-The latest publication has 19 findings and 36 scoped tickets: 33 done and three
+That publication had 19 findings and 36 scoped tickets: 33 done and three
 unfinished. It retains effort defaults because one valid review and ten
 unscorable reviews cannot establish an effort-level advantage. The delivery
 page has 50 entries and one open account-fact question for the fast-mode trial;
