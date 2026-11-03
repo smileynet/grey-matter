@@ -197,7 +197,17 @@ existing stream. Related parked #06 (skill/version drift evaluations) and #09
 spike set. This reconciliation does not authorize release publication or new
 global harness settings.
 
-The remaining-work table is the proposed serial execution order. #162's driver
+The user authorized ongoing dispatch through the remaining workstream: choose
+non-overlapping frontier work in separate worktrees, require independent critic
+review, and let the parent integrate, verify, push and close. Completing a pair
+does not require another proceed and does not end supervision. Keep the periodic
+check-in job active until the whole authorized queue is settled or the user stops
+it; record real blockers and continue independent work. The runtime routing ledger
+is `.scratch/orchestration-workstream-supervision.md`; ticket state stays here and
+in `.tickets/`. ACP research #187 remains last. Model comparisons may need serial
+measurement to avoid shared-load confounding even when their files do not overlap.
+
+The remaining-work table is the proposed execution order. #162's driver
 comparison and #186's auth routing investigation are complete. The #156 trial
 confirmed worker report/wake recovery after a graceful restart, but exposed a
 fabricated task and no independent Mate acceptance review. Keep the requirements
@@ -237,9 +247,9 @@ auth remains conditional on the result of #186.
 | 160 | 7. Test Claude background sessions and idle notification semantics | ✅ done |
 | 161 | 8. Test Kiro V3 workflow execution, pause, resume and retry | ✅ done |
 | 188 | 9. Diagnose Codex's missing code-mode tool host before claiming tool execution | ✅ done |
-| 189 | 10. Qualify Kiro V3 ACP EOF shutdown and descendant settlement | open |
+| 189 | 10. Qualify Kiro V3 ACP EOF shutdown and descendant settlement | in_progress |
 | 190 | Resolve Crew Windows host-auth integration before relying on Crew-owned identity | open |
-| 193 | Diagnose overlapping regex approval rules before relying on that override | open |
+| 193 | Diagnose overlapping regex approval rules before relying on that override | in_progress |
 | 194 | Qualify agy child model routing before relying on per-role tiers | open |
 | 173 | 11. Compare GUI watch/answer surfaces against #162's qualified live driver | open |
 | 174 | 12. Select and demonstrate Harbor or a thin runner for the model trials | open |
