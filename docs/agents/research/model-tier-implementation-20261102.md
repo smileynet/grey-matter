@@ -1,5 +1,7 @@
 # Cheap and default models as implementation workers
 
+> The spike harness this doc cites was removed from `scripts/` (ticket 209). Paths below are as of commit `e35d8a8`; see [rerunning the model-tier spikes](model-tier-spikes-rerun.md).
+
 Date: 2026-11-02
 
 Ticket: [167](../../../.tickets/167-spike-model-tier-implementation.md)

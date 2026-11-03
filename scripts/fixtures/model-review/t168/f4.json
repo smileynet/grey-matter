@@ -1,6 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "f4",
-  "ticket": "Use metadata.location when supplied, otherwise preserve the current default location. Add tests for both the supplied and omitted metadata cases.",
-  "diff": "diff --git a/src/report-config.js b/src/report-config.js\n+export function reportLocation(metadata) {\n+  return metadata?.location ?? 'reports';\n+}\ndiff --git a/test/report-config.test.js b/test/report-config.test.js\n+test('uses a supplied location', () => {\n+  assert.equal(reportLocation({location: 'artifacts'}), 'artifacts');\n+});"
-}

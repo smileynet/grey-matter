@@ -1,5 +1,7 @@
 # Ticket 170 final evidence review
 
+> The spike harness this doc cites was removed from `scripts/` (ticket 209). Paths below are as of commit `e35d8a8`; see [rerunning the model-tier spikes](model-tier-spikes-rerun.md).
+
 Reviewed worker commit `a9de155c5d35e9ba721a16c356088abc5a0662d8` against the retained native evidence and the frozen blind-review record.
 
 ## Findings

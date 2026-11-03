@@ -1,6 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "f1",
-  "ticket": "Add newest(items, limit), which returns the newest limit rows in their original order. A limit of zero returns an empty list. A limit larger than the input returns every row.",
-  "diff": "diff --git a/src/newest.js b/src/newest.js\n+export function newest(items, limit) {\n+  if (limit < 0) throw new RangeError('limit must be non-negative');\n+  return items.slice(-(limit + 1));\n+}\ndiff --git a/test/newest.test.js b/test/newest.test.js\n+test('returns the newest two in original order', () => {\n+  assert.deepEqual(newest(['a', 'b', 'c', 'd'], 2), ['c', 'd']);\n+});"
-}

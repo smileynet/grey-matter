@@ -1,5 +1,7 @@
 # Ticket 170 preparation audit
 
+> The spike harness this doc cites was removed from `scripts/` (ticket 209). Paths below are as of commit `e35d8a8`; see [rerunning the model-tier spikes](model-tier-spikes-rerun.md).
+
 **Scope:** preparation commit `2e607a7e1767d55791cccce9046dfacc4655bc8b`.
 
 **Initial finding:** commit `2e607a7` needed revision before a native call. The
@@ -13,7 +15,7 @@ the preparation evidence. No provider executable was invoked for this audit.
 ## Required revision: authorize the executed working directory and arguments
 
 The parent authorization binds the complete plan hash at
-[`spike-model-task-tier-t170.mjs`](../../../scripts/spike-model-task-tier-t170.mjs),
+[`spike-model-task-tier-t170.mjs`](https://github.com/smileynet/grey-matter/blob/e35d8a8cd117eec6bb0519c2fb8ba9f28a192b0f/scripts/spike-model-task-tier-t170.mjs),
 where `buildCellPlan` chooses a predictable cell-specific path and builds
 `plan.argv` with it. During execution, `runCell` instead creates a different
 random `mkdtemp` directory and builds a new argv array containing that new path.

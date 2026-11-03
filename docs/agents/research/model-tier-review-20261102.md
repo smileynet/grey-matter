@@ -1,5 +1,7 @@
 # Ticket 168: cheap versus default model reviewers
 
+> The spike harness this doc cites was removed from `scripts/` (ticket 209). Paths below are as of commit `e35d8a8`; see [rerunning the model-tier spikes](model-tier-spikes-rerun.md).
+
 **Status at protocol freeze (2026-11-03): no fixture review had run.** Ticket 167 owns the
 shared native measurement lease. A controller revalidation produced one Claude
 assistant-style response to an attempted help command; an independent critic

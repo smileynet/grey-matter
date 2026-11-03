@@ -7,6 +7,7 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 ## [Unreleased]
 
 ### Removed
+- The model-tier spike harnesses for tickets 168-171 (13 scripts, their fixtures and four Windows-only gates) and the `windows-only.mjs` stopgap. The findings stay in `docs/agents/research/`; `model-tier-spikes-rerun.md` pins the last commit with the code and says how to rerun each spike.
 - The commit and push gates. The Claude plugin no longer installs a push hook (it ran in every project that installed grey-matter), and the Git pre-commit and pre-push hooks and their installer are gone. Proposal 18 rebuilds verification as three stages: pre-push, pre-merge and pre-release.
 - `check-repo.mjs`. `scripts/gates.json` declares every check with its stage, and `node scripts/gate.mjs <pre-push|pre-merge|pre-release>` runs them; `pre-release` runs every check, and the release product gate and platform workflow call it. A `gates-coverage` check fails when a check or test script runs in no stage.
 

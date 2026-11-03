@@ -1,5 +1,7 @@
 # Ticket 171: fixed-model effort sweep
 
+> The spike harness this doc cites was removed from `scripts/` (ticket 209). Paths below are as of commit `e35d8a8`; see [rerunning the model-tier spikes](model-tier-spikes-rerun.md).
+
 **Partial native wave; grading is held.** Four Claude diagnosis cells completed; their raw JSON reports canonical model `claude-opus-5-5`, while actual effort was not reported. Claude diagnosis `max` timed out and is consumed; it must not be retried. The first Codex diagnosis `low` attempt failed the pre-spawn pinned-host guard and is also consumed, but no Codex model process was launched. Remaining Claude design cells stay held. The other nine originally planned Codex cells remain held until independent review of the corrected host pin and amended plan, followed by a new parent authorization. Google/Agy remains blocked by the workstream security decision and has no launch plan. Preserve the first wave's plan, authorizations, receipts and raw output as history; the corrected controller and amended plan apply only to later authorized Codex cells. No grading or cleanup has been authorized.
 
 ## Question

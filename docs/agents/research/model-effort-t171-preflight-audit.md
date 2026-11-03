@@ -1,5 +1,7 @@
 # Ticket 171 host-pin correction audit
 
+> The spike harness this doc cites was removed from `scripts/` (ticket 209). Paths below are as of commit `e35d8a8`; see [rerunning the model-tier spikes](model-tier-spikes-rerun.md).
+
 **Reviewed source commit:** `1a71074c8b09a45b4bd4d97346fa21002d2b5bae`
 **Amended plan digest:** `8b887b09f7d1eb8ce2667967a4741dbf2d61927718a96b70f4a2bb2f23d366cd`
 **Amended plan bytes:** `1b5a645ac309ca0cf6967437b91258096be4e844befdcba721d605c664a64aaf`
