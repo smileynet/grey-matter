@@ -16,11 +16,11 @@ the cheap and default tier of each provider. Open a separate ephemeral session
 per fixture and model.
 
 The prepared cases are `scripts/fixtures/model-review/t168/f1.json` through
-`f4.json`. Their SHA-256 identities and a private answer key will be frozen in the
-evidence receipt before the first call. The key will stay in ticket scratch and
-will not be copied into a reviewer directory or prompt. This is a non-adversarial
-host evaluation: as the runner trial documents, host execution alone is not an OS
-security boundary. No secret or production data belongs in the fixture.
+`f4.json`. The common prompt and each case have SHA-256 identities recorded below;
+the hidden answer key has its own private SHA-256 receipt in ticket scratch. The
+key will not be copied into a reviewer directory or prompt. This is a
+non-adversarial host evaluation: host execution alone is not an OS security
+boundary. No secret or production data belongs in a fixture.
 
 ## Scoring protocol for critic preflight
 
@@ -30,7 +30,9 @@ output for every call. A separate scorer, who did not author or run the measured
 reviews, compares responses with the hidden key.
 
 - A true positive names the seeded defect, points to the changed line, and
-  explains the ticket impact. Count each seeded defect at most once.
+  explains the ticket impact. Count each seeded defect at most once. Multiple
+  reports for one defect count once as a true positive; record extra duplicates
+  separately without counting them as additional false positives.
 - A seeded defect omitted or mislabeled is a false negative.
 - An actionable claim with no seeded defect is a false positive. Record it even
   when other findings are correct; do not reward verbosity.
@@ -41,19 +43,26 @@ reviews, compares responses with the hidden key.
 - Treat an unusable/failed model response as a failed cell, not as a missed
   defect. Do not replace it with a call to another provider or tier.
 
-The protocol does not presume a cutoff that makes a tier safe to approve
-production changes. Any recommendation will be limited to this four-case set.
+The parent scores pseudonymized responses without the provider/tier mapping. The
+producer and protocol critic do not make measured model calls. The protocol does
+not presume a cutoff that makes a tier safe to approve production changes. Any
+recommendation is limited to this four-case set.
 
 ## Local inventory (2026-11-02)
 
-Read-only version/catalog commands succeeded on this Windows host: Claude Code
-2.1.316, Codex CLI 0.166.0, kiro-cli 2.37.1 and agy 1.4.12. Kiro's
-`kiro-cli chat --list-models -f json` listed `qwen3-coder-next` at 0.05 credits
-and `auto` as the default model. `agy models` listed Gemini 3.8 Flash low and
-Gemini 4 Argon medium, but the listing did not identify which is configured as
-the account's actual default. Resolve the Google default from its current local
-configuration/catalog before fixing the matrix; do not infer a served model from
-the `agy models` listing.
+Read-only version/auth/catalog commands succeeded on this Windows host: Claude
+Code 2.1.316, Codex CLI 0.166.0, kiro-cli 2.37.1 and agy 1.4.12. Claude auth
+status reports a logged-in Claude.ai Max account; its CLI has no safe model-list
+command, so `haiku` and `opus` remain documentation-backed aliases to verify in
+the call response. Codex login status is true; its bundled catalog lists both
+`gpt-6-luna` and `gpt-6.1-sol`, with `low` effort supported by both. Kiro's list
+shows `qwen3-coder-next` at 0.05 credits and `auto` as its default. Agy's list
+returns Gemini 3.8 Flash medium and Gemini 4 Argon medium, but not the configured
+default. The known local `.gemini/settings.json` has no explicit model entry.
+Invoke the Google default cell with `--model` omitted and record it as the
+configured CLI default. If output does not expose the served model, the
+comparison remains unverified; do not label it Argon. These checks establish
+authentication/catalog availability, not account quota or remaining balance.
 
 The existing shared models-and-usage note names Claude Haiku as a cheap tier and
 Opus 5.5 as the default, Codex Luna as a cheap tier and `gpt-6.1-sol` as the
@@ -61,41 +70,48 @@ machine default, and Google Flash as a cheap tier. These are candidate selection
 not fresh invocation results. Recheck current advertised tiers and usage limits
 before measurement. #167 holds the model-call lease while this preparation runs.
 
-Current CLI help advertises headless modes for all four families: Claude
-`--print`, Codex `exec --json`, Kiro `chat --no-interactive`, and agy `--print`.
-Only Claude and Codex have a reusable implementation runner at the selected
-fixture revision. Kiro and agy command adaptation, native output/identity fields,
-and whether their listed tiers can be pinned through headless calls remain to be
-verified before any spend. The ticket's validation table must include a reason
-for each unsupported or unavailable cell.
+Current CLI help confirms the candidate invocations below. Kiro's V2 CLI can
+delete an exact captured session; Claude and Codex support non-persistent
+sessions. Agy lacks a no-persistence or session-deletion option in the inspected
+help, so its local history lifecycle must be recorded and reviewed after calls.
 
 ## Planned usage and isolation
 
 Proposed pair, pending preflight and live catalog confirmation:
 
-| Provider | Cheaper tier candidate | Default candidate | Native receipt to inspect |
+| Provider | Cheaper tier | Default tier | Effort | Status |
 |---|---|---|---|
-| Anthropic / Claude Code | Haiku 5.5 (`haiku`) | Opus 5.5 (`opus`) | JSON result model usage, elapsed time, CLI list-cost estimate; provider usage check where available |
-| OpenAI / Codex | `gpt-6-luna` | `gpt-6.1-sol` | JSONL token counts and elapsed time; observed model and dollar cost may be unavailable |
-| Amazon / Kiro | `qwen3-coder-next` | `auto` | Native turn output, requested and observed identity separately, credit usage if emitted and account usage check |
-| Google / Antigravity | `gemini-3.8-flash-low` | configured/default Argon tier, to verify | Native JSON usage/identity fields and account usage check; missing attribution stays unknown |
+| Anthropic / Claude Code | `haiku` | `opus` | `medium` both | Alias/model calls may fail if no longer available; record, do not substitute |
+| OpenAI / Codex | `gpt-6-luna` | `gpt-6.1-sol` | `low` both | Both visible in current bundled catalog; Sol machine default per shared guide |
+| Amazon / Kiro | `qwen3-coder-next` | `auto` | `low` both | Current catalog; `auto` marked account default |
+| Google / Antigravity | `gemini-3.8-flash-medium` | configured CLI default (omit `--model`) | `medium` both | Flash and Argon are available; only a returned identity can identify the configured default |
 
-Each prompt will include only the fixture ticket/diff and the fixed review-output
-request. Put it in a new empty temp working directory, disable persistence/continuation
-where the CLI supports that mode, and supply no repository checkout. Use read-only
-or tool-free execution if the harness exposes it; otherwise record the actual
-permission mode. Record requested tier, CLI version, elapsed time, session ID,
-observed tier, tokens, provider credits and dollars only when native output
-actually supplies them. Do not infer cost from model names or timing. The harness's
-native user/plan limit check is required before its calls; checks and their resets
-must be recorded for each provider. A usage limit ends that provider's measurements
-until its reset and does not authorize substitution.
+The candidate invocation is frozen below. Substitute only the fixture prompt and
+listed model; create a new empty `%TEMP%\gm-review-168-*` working directory with
+no repository checkout, and run calls serially:
 
-Per-call timeout and any spend cap will be fixed with the critic after checking
-each native CLI's supported limit options. The Claude CLI natively accepts a
-`--max-budget-usd` flag; the other subscription CLIs may not expose comparable
-per-turn dollar caps. No global setting, account plan, default model, provider
-configuration, or trust list is to be changed.
+~~~~text
+claude --print --tools "" --no-session-persistence --output-format json --permission-mode plan --model <haiku|opus> --effort medium --max-budget-usd 0.10 <prompt>
+codex -c model_reasoning_effort="low" exec --ephemeral --cd <empty-temp-dir> --sandbox read-only --model <gpt-6-luna|gpt-6.1-sol> --json <prompt>
+kiro-cli chat --no-interactive --agent-engine v2 --model <qwen3-coder-next|auto> --effort low --trust-tools= --output-format stream-json <prompt>
+agy --print --mode plan --disable-slash-commands --print-timeout 120 --effort medium [--model gemini-3.8-flash-medium] <prompt>
+~~~~
+
+All four providers have a fixed 120-second per-call timeout. A timeout is a
+failed cell and will not be retried. The parent authorized exactly eight calls
+per provider (four fixtures, two tiers); no retries or extra usage-check calls.
+Claude's native per-call cap is USD 0.10 and aggregate cap USD 0.80. Codex, Kiro
+and agy do not expose comparable dollar caps in checked help; report native
+costs/usage if emitted, otherwise unknown. Do not infer cost from model names or
+time. A missing quota counter remains unknown, not model unavailability. Stop a
+provider on a reported usage limit; never substitute another provider or tier for
+a failed cell.
+
+No global settings, account plan, default model, provider configuration, or trust
+list will change. Capture the Kiro V2 session ID and delete only that exact
+session afterward using `--delete-session ID --session-source v2`. Claude and
+Codex do not persist sessions. Record agy session retention as a limitation; its
+inspected help has no no-persistence or session-deletion option.
 
 ## Retention and unresolved protocol items
 
@@ -107,9 +123,13 @@ retain any specific file with a documented lifecycle reason. Temporary review
 directories are outside the repository and must be disposed at close. The hidden
 key stays private through scoring.
 
-Before calls, resolve: fixture/key hashes; current catalog and Google default;
-supported command and session-isolation switches for each CLI; API/account
-availability and reset; per-call cap/timeout; receipt fields; and independent
-critic acceptance. If an installation, account, entitlement or command cannot
-support a cell, record the observed block with its exact evidence. No measurement
-or tier recommendation is made in this preparation note.
+Frozen inputs: f1 `9d5bc51d86603ee367f14a678812eddcd4255cff00d261afcc29606d120f1ef7`;
+f2 `97b66442410ada20b57e91a01025d20a6f31689d33a17009e0825c8871369108`;
+f3 `94a10710978c9184c9877d23099a34f292a5f0bd02c47520cbdd34c3a6f9a9eb`;
+f4 `757b2d57d664759c1c8e08c0b52af6052a824f93db3e27641d4e567087981e35`;
+prompt `4a69932852c61207346ed7d62be9f3f6755bfcd86190e1818fd734dfd6229dd6`.
+The answer key hash and requested model-to-blind-ID mapping are recorded in the
+private evidence receipt, not the prompt. The parent owns blind scoring without
+the tier map; the producer and protocol critic do not grade. These identities
+and invocations require independent critic acceptance and parent release of the
+#167 lease before calls. No measurement or tier recommendation is in this note.
