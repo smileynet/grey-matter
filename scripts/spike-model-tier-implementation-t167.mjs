@@ -31,7 +31,7 @@ if (provider === "agy") {
   const workspace = workDir.replaceAll("\\", "/");
   writeFileSync(settingsPath, `${JSON.stringify({
     permissions: {
-      allow: [`read_file(${workspace})`, `write_file(${workspace})`, "command(npm.cmd test)"],
+      allow: [`read_file(${workspace})`, `write_file(${workspace})`, "command(npm test)"],
       deny: ["mcp(*)", "read_url(*)", "execute_url(*)"],
     },
   }, null, 2)}\n`, "utf8");
@@ -179,6 +179,13 @@ if (provider === "claude") {
   });
   const initialized = events.find(event => event.event === "init")?.init;
   const terminal = [...events].reverse().find(event => event.event === "result")?.result;
+  const toolCalls = events.filter(event => event.event === "step_update" && event.step_update?.step_type === "tool")
+    .map(event => ({
+      name: event.step_update.tool_name ?? null,
+      state: event.step_update.state ?? null,
+      command: event.step_update.tool_info?.parameters?.CommandLine ?? null,
+      error: event.step_update.tool_info?.error?.message ?? null,
+    }));
   adapter = {
     ...adapter,
     sessionId: terminal?.conversation_id ?? initialized?.conversation_id ?? null,
@@ -190,6 +197,7 @@ if (provider === "claude") {
     terminalError: terminal?.error ?? null,
     permissionMode: initialized?.permission_mode ?? null,
     availableTools: initialized?.tools ?? null,
+    toolCalls,
   };
 }
 
@@ -285,6 +293,7 @@ const native = {
   terminalError: adapter.terminalError ?? null,
   permissionMode: adapter.permissionMode ?? null,
   availableTools: adapter.availableTools ?? null,
+  toolCalls: adapter.toolCalls ?? null,
   scopedSettings: provider === "agy" ? {
     path: "agy-settings.json",
     sha256: createHash("sha256").update(readFileSync(settingsPath)).digest("hex"),
