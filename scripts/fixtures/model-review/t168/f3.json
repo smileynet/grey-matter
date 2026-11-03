@@ -1,6 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "f3",
-  "ticket": "Before publishing, write output to a temporary staging folder. Preserve existing published reports until the new report is complete, then replace only the target report. Remove only temporary files created by this invocation.",
-  "diff": "diff --git a/scripts/publish-report.js b/scripts/publish-report.js\n+import { mkdirSync, rmSync } from 'node:fs';\n+\n+export function prepareOutput(outputDir) {\n+  rmSync(outputDir, { recursive: true, force: true });\n+  mkdirSync(outputDir, { recursive: true });\n+}\ndiff --git a/test/publish-report.test.js b/test/publish-report.test.js\n+test('creates the output directory', () => {\n+  prepareOutput(outputDir);\n+  assert.equal(existsSync(outputDir), true);\n+});"
-}

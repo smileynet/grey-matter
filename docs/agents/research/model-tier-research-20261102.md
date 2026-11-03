@@ -1,5 +1,7 @@
 # Model tier research results
 
+> The spike harness this doc cites was removed from `scripts/` (ticket 209). Paths below are as of commit `e35d8a8`; see [rerunning the model-tier spikes](model-tier-spikes-rerun.md).
+
 **Status: all 18 calls captured; 13 have valid blind scores (11 pass, 2 fail), and 5 are unscorable.** Two earlier pass receipts lack retained reviewer dispatch/completion provenance; three more receipts failed validation. Ticket #169 compares
 three read-only research tasks under each harness's low-cost profile and native
 default. All cells completed without retry; all six Claude outputs report model
@@ -16,8 +18,8 @@ protocol SHA-256 is
 The same eight-file synthetic source packet supports three tasks: discover all
 callers of an exported function (including alias and dynamic imports), summarize
 a policy module, and answer a question from a cited document. Exact prompts and
-inputs are in the [task manifest](../../../scripts/fixtures/model-research/t169/tasks.json)
-and [source packet](../../../scripts/fixtures/model-research/t169/source-files.json).
+inputs are in the [task manifest](https://github.com/smileynet/grey-matter/blob/e35d8a8cd117eec6bb0519c2fb8ba9f28a192b0f/scripts/fixtures/model-research/t169/tasks.json)
+and [source packet](https://github.com/smileynet/grey-matter/blob/e35d8a8cd117eec6bb0519c2fb8ba9f28a192b0f/scripts/fixtures/model-research/t169/source-files.json).
 The held-out answer key remains private; receipts bind its hash without
 including its contents. Each session received one prompt and the same eight
 sources.
@@ -184,9 +186,9 @@ because they included unrelated session metadata.
 
 ## Verification and cleanup status
 
-The [controller](../../../scripts/spike-model-tier-research-t169.mjs) SHA-256 is
+The [controller](https://github.com/smileynet/grey-matter/blob/e35d8a8cd117eec6bb0519c2fb8ba9f28a192b0f/scripts/spike-model-tier-research-t169.mjs) SHA-256 is
 `a499ef5bf3f45195062ec167c08f0248c26cede0401f91d53110c31f347e9cc1`; the
-[separate held-out grader](../../../scripts/grade-model-tier-research-t169.mjs)
+[separate held-out grader](https://github.com/smileynet/grey-matter/blob/e35d8a8cd117eec6bb0519c2fb8ba9f28a192b0f/scripts/grade-model-tier-research-t169.mjs)
 SHA-256 is
 `7db36c67ceca1c8eaaf20d7bfd103684fb7319b91447d9ed653931df79a6c88c`. Their
 exact hashes and the source/task hashes are bound in the continuation protocol.

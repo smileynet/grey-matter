@@ -1,5 +1,7 @@
 # Fast tiers for routine text tasks
 
+> The spike harness this doc cites was removed from `scripts/` (ticket 209). Paths below are as of commit `e35d8a8`; see [rerunning the model-tier spikes](model-tier-spikes-rerun.md).
+
 Date: 2026-11-03
 Ticket: [170](../../../.tickets/170-spike-model-tier-docs-triage.md)
 Status: frozen preparation protocol; no native task calls have run.

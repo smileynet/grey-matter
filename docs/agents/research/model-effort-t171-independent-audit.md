@@ -1,5 +1,7 @@
 # Ticket 171 results: independent evidence audit
 
+> The spike harness this doc cites was removed from `scripts/` (ticket 209). Paths below are as of commit `e35d8a8`; see [rerunning the model-tier spikes](model-tier-spikes-rerun.md).
+
 Audit of the final sanitized result artifacts at source commit `7c7a4c6983d455c15df3a6a6dd8c514aac5d8e93`, following independent review of the native evidence, blind packets, grading ledger, binder commits, and parent-authorized cleanup receipt. No native calls, grading changes, rebinding, retries, cleanup actions, or crosswalk disclosure were performed by this audit.
 
 ## Final artifact identities

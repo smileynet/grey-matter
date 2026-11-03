@@ -1,5 +1,7 @@
 # Independent audit: ticket 169 model-tier research
 
+> The spike harness this doc cites was removed from `scripts/` (ticket 209). Paths below are as of commit `e35d8a8`; see [rerunning the model-tier spikes](model-tier-spikes-rerun.md).
+
 **Reviewed commit:** `8b67c3ee84173d2893e33ad757e57fef401fc6eb`  
 **Results note SHA-256:** `3cf5a573f57751568369c8ee8280a26331406e3d7e7048eb9cbe4897ea46c611`  
 **Private artifact index SHA-256:** `fd3510cb651342da3706f4584db209ba3931779a7c7861e6fd769c179cace768`
