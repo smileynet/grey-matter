@@ -22,6 +22,13 @@ path and SHA-256 go in the evidence receipt, not in the model prompt. Each model
 session receives one task and identical source text, in a fresh context. The key
 never reaches the runner or target models until grading.
 
+Frozen artifact SHA-256 values: source packet
+`a43525e265ddc6d7cc832cbee0ca9b0ed4a6090a614a0dbb747eb24bc4be572c`, task/prompt
+manifest `2872f907bc1616af68ef081933394a2873b97fab8e4bcdd4a3cfff9ebd105f653`,
+private answer key `429bf76172338d0f52963d3ac2c14fba3f701defae42e444997a1096c04efae`.
+The private protocol packet is
+`adc403c0c525f231563967315c6d8eee69224251c3ced6d332a4f221b50d127d`.
+
 ## Scoring, fixed before calls
 
 - Caller discovery: exact path precision and recall. Report missing and invented
@@ -44,8 +51,12 @@ and invocation evidence before any calls. The comparison profile uses each
 harness's native default by omitting both model and effort overrides. If the
 served identity is absent, report it as unknown and do not claim an identity-
 specific comparison. The Google candidate is the currently listed medium Flash
-variant; the configured native default is not known, so the comparison remains
-unverified unless the output names the served model.
+variant; two same-host inventories three minutes apart disagree on its effort
+suffix (`medium` versus `low`), so Google calls are specifically blocked until
+the critic resolves that catalog conflict. The configured native default is
+not known, so a comparison remains unverified unless output names the served
+model. The #168 list hash is `697b857ddb101c351a5a773ba51b8637d1161ae2b97227756e496fcbf3febff4`;
+the later #167 list hash is `00f1c26360e3dbbf92d47e27bf0a1a5f55d00d2a7375175478252a0c9b6084eb`.
 
 Ticket-local plan: three tasks × two profiles = six sessions per provider, one
 attempt per cell, at most 120 seconds per session. Claude's native list estimate
