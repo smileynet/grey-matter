@@ -1,7 +1,7 @@
 ---
 id: "199"
 title: "Freeze evaluation seed inputs so host tooling and dashboard edits cannot change the benchmark"
-status: in_progress
+status: done
 blocked_by: ["174"]
 priority: high
 tags: ["stream:orchestration", "type:fix"]
@@ -32,6 +32,15 @@ general orchestration generator's default dashboard or global host settings.
 
 ## Acceptance criteria
 
-- [ ] Current checkout reproduces the pinned evaluation seed and still rejects other seed drift before model calls.
-- [ ] Focused regression/current gates and independent exact-source review pass.
-- [ ] Recipe/provenance/artifact disposition are updated without relabeling historical runs.
+- [x] Current checkout reproduces the pinned evaluation seed and still rejects other seed drift before model calls.
+- [x] Focused regression/current gates and independent exact-source review pass.
+- [x] Recipe/provenance/artifact disposition are updated without relabeling historical runs.
+
+## Resolution (2026-11-03)
+
+done: pinned original evaluation dashboard input and preserved full-tree drift rejection, restoring reproducible fixture setup without changing historical benchmark evidence
+
+### Verification
+1. ✓ Current checkout reproduces the pinned evaluation seed despite the changed delivery-dashboard template, and unexpected remaining seed drift still fails before a model call. — "Independent critic reproduced d1ae7bc current generator versus c474646 pin, verified only dashboard differed, and matched original45998B snapshotSHA f2c67d3e. Repair afcc706 restores that file then checks entire seed before native invocation. Fake-Node integration reaches agent-process-failure with seedmatches; added unrelated file still rejected; no model call."
+2. ✓ Focused regression and current repository gates pass; an independent critic accepts exact final source and evidence. — "Root13/13 regressions passed3.52s; critic independently13/13 passed3.42s. Selected premerge model-eval and syntax passed, ordering ticketgraph passed, prepush doc-links/home-path/gates-coverage passed; independent exact-source audit9650a26 integrated239638b and pushed, diff check clean."
+3. ✓ Recipe, provenance and artifact lifecycle describe the repaired path without relabeling historical native runs. — "eval-seed-drift-20261102.md and shared selected recipe record repaired sourceSHA f6a5a3bb, original snapshot provenance and setup-only verification. Original174 native execution hashes unchanged. Keep45998B snapshot as frozen Git fixture; existing test lifecycle removes temporary roots, no global settings/model history created."
