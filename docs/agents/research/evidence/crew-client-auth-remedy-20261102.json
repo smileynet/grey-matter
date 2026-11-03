@@ -1,0 +1,101 @@
+{
+  "ticket": 190,
+  "date": "2026-11-02",
+  "platform": "Windows x64",
+  "selected_crew_executable": "KiroCrew.exe",
+  "crew_version": "0.11.1",
+  "crew_backend_build": "20261026",
+  "selected_cli_executable": "%LOCALAPPDATA%/Kiro-Cli/kiro-cli.exe",
+  "cli_version": "2.37.1",
+  "cli_sha256": "f4a6c31a88822b7b67d5c795df87f1465b34c6a4acbba01e9a0158ab0ff4c66c",
+  "cli_hash_matches_ticket_186": true,
+  "cli_help": {
+    "command": "kiro-cli acp --help",
+    "observed_default_auth_method": "cli",
+    "client_auth_method": "forwards access-token requests to the ACP client"
+  },
+  "resolver_and_builder": {
+    "selected_binary_matches_get_command": true,
+    "host_owned_relay_argv": [
+      "kiro-cli.exe",
+      "acp",
+      "--agent-engine",
+      "v3"
+    ],
+    "cli_owned_relay_argv": [
+      "kiro-cli.exe",
+      "acp",
+      "--agent-engine",
+      "v3",
+      "--auth-method",
+      "cli"
+    ],
+    "crew_bundle_argv": [
+      "node.exe",
+      "--experimental-wasm-modules",
+      "acp-server.js",
+      "--transport=stdio",
+      "--auth=acp-callback"
+    ],
+    "supported_integration_setting": "agent.kas_bundle=true",
+    "configuration_sequence_documented_by_crew": "kirocrew config set agent.kas_bundle true && kirocrew restart"
+  },
+  "crew_bundle": {
+    "package": "@kiro/agent",
+    "version": "0.66.33",
+    "node_version": "22.23.3",
+    "node_sha256": "429c2e7709f4bc2b7beacf36c280bd9f71084ada9efacff237d80524cee78f8e",
+    "acp_server_sha256": "ca0672e74c07a925cbeee0558e5e14bb77561deb2ffa0dc2d40ed4a72b441eba"
+  },
+  "installed_source_sha256": {
+    "acp/kas_transport.py": "238e91a280d43fc599825c0bd4977d772d37565491fccfaa7fae62d1f182e06b",
+    "acp/harness/kas.py": "d70294991fd38b035febd95d756a295eaee3af23f948de75e52148d665b2fd4b",
+    "acp/client_spawn_env.py": "7b6e213178953333c5c3d6f6ebe607464e47c0ea69d3f7c835fcf66a4d2f85e2",
+    "acp/kas_bundle.py": "79360acc6b91ef95a5f81beddde8465c32fd538e4947bd53eb13199ffcc29712",
+    "acp/kas_pin.py": "5a9e6da3b8b2e23ba642f1b6e942379b0e6cde497e754cc699858c7fadab62c7"
+  },
+  "bundle_negative_probe": {
+    "command": "py .scratch/t190-kas-bundle-probe.py <installed-node.exe> <installed-acp-server.js> <new-private-TEMP-root>",
+    "profile": "private process-only HOME, USERPROFILE, APPDATA, LOCALAPPDATA, TEMP, TMP, and KIRO_HOME; empty workspace",
+    "auth_reply": "fixed JSON-RPC -32000 credential-unavailable error; no credential values supplied or captured",
+    "initialize": "result",
+    "session_new": "result",
+    "callback_count": 8,
+    "callback_method": "_kiro/auth/getAccessToken",
+    "session_prompt": "error -32000 after client denied credential",
+    "tool_events": 0,
+    "process_exit_code": 0,
+    "stderr_bytes_count_only": 720,
+    "classification": "pass for client-owned routing and expected negative-auth handling",
+    "limits": [
+      "Direct staged KAS engine process only; no Crew gateway/session was started",
+      "Crew vault callback implementation and real-token delivery/refresh were not exercised"
+    ]
+  },
+  "separate_cli_owned_runtime_evidence": {
+    "source": "docs/agents/research/evidence/kas-auth-ownership-20261102.json",
+    "binary_hash_matches_current_selected_cli": true,
+    "explicit_cli_owner_callback_count": 0,
+    "prompt_result": "end_turn",
+    "assistant_marker": "AUTH_OK",
+    "assistant_bytes": 7,
+    "classification": "pass for CLI-owned route on exact same CLI executable",
+    "account_identity_compared": false
+  },
+  "cleanup": {
+    "private_profile_bytes": 12456,
+    "method": "Windows Recycle Bin",
+    "original_path_absent_after": true,
+    "process_exit_observed_before_cleanup": true,
+    "scratch_runner_scripts": "retained under .scratch/t190-* until independent review"
+  },
+  "global_credential_changes": false,
+  "shared_crew_gateway_touched": false,
+  "tokens_or_account_identifiers_recorded": false,
+  "official_cli_auth_contract": {
+    "url": "https://kiro.dev/docs/cli/v3/acp-migration/",
+    "page_updated": "2026-10-09",
+    "observed": "2026-11-02",
+    "finding": "CLI V3 defaults access-token handling to CLI login; --auth-method=client makes the ACP client answer _kiro/auth/getAccessToken"
+  }
+}
