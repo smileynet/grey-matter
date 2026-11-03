@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "seedId": "t169-research-fixture-v1",
+  "sourceFile": "scripts/fixtures/model-research/t169/source-files.json",
+  "tasks": [
+    {"id":"callers","prompt":"From the supplied source files, find every source-code file that calls the exported function annotateRecord. Return only a sorted JSON array of repository-relative paths. A call includes an alias import and a dynamic import; mentioning the name in docs or tests without calling it does not count. Do not guess callers outside these files."},
+    {"id":"module-summary","prompt":"Summarize src/access-policy.js for a maintainer in at most 90 words. State the exact precedence for effectiveRetention, its two defaults, and both conditions for mayDelete. Separate code facts from anything the file does not establish."},
+    {"id":"cited-answer","prompt":"According to the supplied documentation, what retention period applies to a managed workspace with no explicit setting, and what changes if retentionDays is explicitly set to 12? Answer in one sentence and cite the exact document path and heading."}
+  ]
+}
