@@ -12,9 +12,9 @@ is available while signed in as its owner. Published through Sites on 2026-11-03
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `d14c99425a788296958cb1d52a42d4b53275414d`.
-- Deployment: `appgdep_6ae9c95c708c81918d902549a086a30e`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_ca0d5b3817bc8191b816109bf83a2bac`.
+- Pushed Site source: `56e94782e6ddc0b36fd5a240881ad069d2c6f4ee`.
+- Deployment: `appgdep_6ae9ceda10b481918d103fcdb4fc17a0`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_4a854be031248191bb4a1c487540917d`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -28,9 +28,36 @@ Windows System32 first on the child process PATH succeeded. No plugin code chang
 
 ## Maintain it
 
+### Effort findings (#171, 2026-11-03)
+
+The latest publication has 19 findings and 36 scoped tickets: 33 done and three
+unfinished. It retains effort defaults because one valid review and ten
+unscorable reviews cannot establish an effort-level advantage. The delivery
+page has 50 entries and one open account-fact question for the fast-mode trial;
+all 49 earlier entries were preserved exactly. Answering does not enable credits.
+
+Both pages passed Chrome checks at 1280×900 and 390×900. An independent critic
+inspected all ten current captures and accepted dedicated receipt
+`93cd16ce679423df25c1530c37a6af675e1dfa73d0aa0ad2fdc57011e97175fc`
+in `evidence/orchestration-dashboard/t171-final/` and delivery receipt
+`12b3d87582094cabaf7a1a59ba7c4a7ba2ace487198b00326a78376f38f2650f`
+in `evidence/orchestration-dashboard/t171-status-final-valid/`. The checker
+reported no errors or warnings after the question's missing ID was corrected;
+superseded captures were recycled. Reviewed source and captures were pushed
+as `3d14b17`, with three explicit pre-merge checks and all three applicable
+pre-push checks passing. Model integration at `1ec7cb8` passed 23 pre-merge
+checks with the same two documented baseline exceptions and seven pre-push
+checks. Final cleanup metadata is `258b1d8`; ticket closure is `df11d6a`.
+
+All 36 hosted ticket links and the packaged 19-finding/33-done payload were
+checked. Native publication succeeded at 12:09:03 UTC with no failure message;
+the owner-private audience was preserved. Production browser interaction was
+not checked. Fast mode still awaits the account fact, the Kiro shutdown issue
+remains upstream-blocked, and ACP research stays last. Supervision remains active.
+
 ### Text-task findings (#170, 2026-11-03)
 
-The latest publication has 18 findings and 36 scoped tickets: 32 done and four
+That publication had 18 findings and 36 scoped tickets: 32 done and four
 unfinished. It explains why current defaults remain: every profile passed the
 rewrite, one passed triage and none passed classification. No profile passed
 all three tasks. The delivery page has 49 entries; all 48 earlier entries were
