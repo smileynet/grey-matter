@@ -65,15 +65,74 @@
     "prior_reported_settings_hashes_unchanged": true,
     "prior_scope_limit": "inherited project/shared scopes incompletely enumerated",
     "six_retained_native_histories": [
-      {"case": "ask-literal-over-allow", "conversation_id": "2b3a4fe4-f200-4f9c-985d-2f01715d87e1", "bytes": 464064},
-      {"case": "ask-over-allow", "conversation_id": "76c6b1cf-8f84-4eca-a415-9ac9a47857f7", "bytes": 466274},
-      {"case": "regex-exact", "conversation_id": "ab9d43a6-b1b7-4bb6-9321-e3019ac73c63", "bytes": 466274},
-      {"case": "deny-over-allow", "conversation_id": "b3635221-d0fa-4d13-bade-6616a00b6d5b", "bytes": 466960},
-      {"case": "ask-regex-repeat", "conversation_id": "d420b06c-95c6-4fb5-8ace-fbb836ce8b78", "bytes": 466246},
-      {"case": "ask-broad-over-allow", "conversation_id": "f8f668b1-1908-48e3-8db8-6f6a4870ecd9", "bytes": 467580}
+      {"case": "ask-literal-over-allow", "conversation_id": "2b3a4fe4-f200-4f9c-985d-2f01715d87e1", "bytes": 464064, "disposition": "recycled to OS trash after critic verification; paths absent"},
+      {"case": "ask-over-allow", "conversation_id": "76c6b1cf-8f84-4eca-a415-9ac9a47857f7", "bytes": 466274, "disposition": "recycled to OS trash after critic verification; paths absent"},
+      {"case": "regex-exact", "conversation_id": "ab9d43a6-b1b7-4bb6-9321-e3019ac73c63", "bytes": 466274, "disposition": "recycled to OS trash after critic verification; paths absent"},
+      {"case": "deny-over-allow", "conversation_id": "b3635221-d0fa-4d13-bade-6616a00b6d5b", "bytes": 466960, "disposition": "recycled to OS trash after critic verification; paths absent"},
+      {"case": "ask-regex-repeat", "conversation_id": "d420b06c-95c6-4fb5-8ace-fbb836ce8b78", "bytes": 466246, "disposition": "recycled to OS trash after critic verification; paths absent"},
+      {"case": "ask-broad-over-allow", "conversation_id": "f8f668b1-1908-48e3-8db8-6f6a4870ecd9", "bytes": 467580, "disposition": "recycled to OS trash after critic verification; paths absent"}
     ],
     "retained_histories_total_bytes": 2797398,
-    "retention": "not accessed or changed by ticket 193 worker; hold until critic clearance, then parent coordinates disposition"
+    "disposition": "all six exact brain directories and conversation DBs recycled to OS trash after independent critic verification and parent coordination; all inventoried paths checked absent"
+  },
+  "ticket_193_owned_native_histories": [
+    {
+      "conversation_id": "5d1c4cd3-434c-40af-b52a-94c0ae5222c3",
+      "case": "allow-regex-and-identical-ask-regex",
+      "identity_evidence": "native transcript shows run_command with CommandLine git --version, state DONE, actual output git version 2.53.0.windows.2",
+      "brain_directory": "%USERPROFILE%/.gemini/antigravity-cli/brain/5d1c4cd3-434c-40af-b52a-94c0ae5222c3",
+      "brain_files_bytes": {"transcript_full.jsonl": 1478, "transcript.jsonl": 1488, "chunks/transcript/00000000.jsonl": 1488, "chunks/transcript_full/00000000.jsonl": 1478, "steps/2/output.txt": 74},
+      "brain_total_bytes": 6006,
+      "conversation_files": [{"path": "%USERPROFILE%/.gemini/antigravity-cli/conversations/5d1c4cd3-434c-40af-b52a-94c0ae5222c3.db", "bytes": 491520}],
+      "total_bytes": 497526,
+      "disposition": "recycled to OS trash after independent critic clearance and parent coordination; brain directory and conversation DB checked absent"
+    },
+    {
+      "conversation_id": "d7807a6c-dbfa-471d-9208-de3fb59386d0",
+      "case": "allow-regex-and-literal-ask",
+      "identity_evidence": "native transcript shows run_command with CommandLine git --version, state ERROR, permission check failure; no command output",
+      "brain_directory": "%USERPROFILE%/.gemini/antigravity-cli/brain/d7807a6c-dbfa-471d-9208-de3fb59386d0",
+      "brain_files_bytes": {"transcript_full.jsonl": 1842, "transcript.jsonl": 1852, "chunks/transcript/00000000.jsonl": 1852, "chunks/transcript_full/00000000.jsonl": 1842},
+      "brain_total_bytes": 7388,
+      "conversation_files": [{"path": "%USERPROFILE%/.gemini/antigravity-cli/conversations/d7807a6c-dbfa-471d-9208-de3fb59386d0.db", "bytes": 491520}],
+      "total_bytes": 498908,
+      "disposition": "recycled to OS trash after independent critic clearance and parent coordination; brain directory and conversation DB checked absent"
+    },
+    {
+      "conversation_id": "29556271-336e-4e20-b6ee-3a203b821bd2",
+      "case": "allow-regex-and-broad-ask",
+      "identity_evidence": "native transcript shows run_command with CommandLine git --version, state ERROR, permission check failure; no command output",
+      "brain_directory": "%USERPROFILE%/.gemini/antigravity-cli/brain/29556271-336e-4e20-b6ee-3a203b821bd2",
+      "brain_files_bytes": {"transcript_full.jsonl": 1842, "transcript.jsonl": 1852, "chunks/transcript/00000000.jsonl": 1852, "chunks/transcript_full/00000000.jsonl": 1842},
+      "brain_total_bytes": 7388,
+      "conversation_files": [{"path": "%USERPROFILE%/.gemini/antigravity-cli/conversations/29556271-336e-4e20-b6ee-3a203b821bd2.db", "bytes": 491520}],
+      "total_bytes": 498908,
+      "disposition": "recycled to OS trash after independent critic clearance and parent coordination; brain directory and conversation DB checked absent"
+    },
+    {
+      "conversation_id": "6f786482-2212-4ca9-ae16-8519ddd2e4da",
+      "case": "allow-regex-and-identical-deny-regex",
+      "identity_evidence": "native transcript shows run_command with CommandLine git --version, state ERROR, permission check failure explicitly says Matches user-configured deny rule; no command output",
+      "brain_directory": "%USERPROFILE%/.gemini/antigravity-cli/brain/6f786482-2212-4ca9-ae16-8519ddd2e4da",
+      "brain_files_bytes": {"transcript_full.jsonl": 1945, "transcript.jsonl": 1955, "chunks/transcript/00000000.jsonl": 1955, "chunks/transcript_full/00000000.jsonl": 1945},
+      "brain_total_bytes": 7800,
+      "conversation_files": [{"path": "%USERPROFILE%/.gemini/antigravity-cli/conversations/6f786482-2212-4ca9-ae16-8519ddd2e4da.db", "bytes": 491520}],
+      "total_bytes": 499320,
+      "disposition": "recycled to OS trash after independent critic clearance and parent coordination; brain directory and conversation DB checked absent"
+    }
+  ],
+  "ticket_193_owned_native_histories_total_bytes": 1994662,
+  "ticket_193_histories_disposition": "all four brain directories and conversation DBs recycled to OS trash after critic clearance; all ten ticket 193/158 history paths confirmed absent; no ticket 194 histories touched",
+  "cleanup": {
+    "performed_at": "2026-11-02",
+    "critic": "critic_t193 granted explicit cleanup clearance after independently verifying the four new native histories; parent authorized coordinated disposal after clearance",
+    "exact_history_sets_recycled": 10,
+    "history_bytes_recycled": 4792060,
+    "method": "Windows OS recycle bin for the exact inventoried brain directories and conversation DB files",
+    "verification": "all 10 brain directories and all 10 conversation DB files checked absent after recycling; no unexpected conversation DB sidecars were present",
+    "private_session_settings_recycled_bytes": 792,
+    "private_session_settings_paths": [".scratch/t193-settings-overlap.json", ".scratch/t193-settings-literal.json", ".scratch/t193-settings-broad.json", ".scratch/t193-settings-deny.json"],
+    "ticket_194_or_other_histories": "not accessed or changed"
   },
   "limitations": [
     "One Windows host, installed CLI build, model/account context",
