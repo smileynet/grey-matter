@@ -1,7 +1,7 @@
 ---
 id: "172"
 title: "Spike: Claude Code fast mode speed, quality and credit cost on orchestrate workers"
-status: in_progress
+status: cancelled
 blocked_by: ["174", "199"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
@@ -60,3 +60,9 @@ through this ticket's execution and independent audit. Completed runner
 prerequisites remain in `blocked_by` for provenance. ACP research #187 is now
 complete; it does not block this trial. The other unfinished workstream item,
 #189, has its own upstream shutdown blocker.
+
+## Cancellation
+
+- Reason: obsolete
+- Note: User clarified fast models (Haiku5.5 and GPT Luna), not paid fast mode. Accepted167-170 tier trials already cover this intent with explicit quality/identity/cost limitations; independent scope audit found no new uncovered goal. This fast-mode on/off brief and account-credit question were a misinterpretation; zero native cells ran and obsolete plans must never execute. This is cancellation, not completed fast-mode evidence or confirmation of enabled credits.
+- Date: 2026-11-03
