@@ -39,7 +39,24 @@ wall time or assuming an earlier billing rule remains current.
 
 This spike is Claude Code fast-mode on/off only, using the same supported model, effort and fixtures; it is not the cross-provider cheap/default matrix copied into the original brief. Confirm entitlement and current billing/usage signals before spending, use no provider fallback, and report missing credit attribution as unknown.
 
-## Current execution hold (2026-11-03)
+## User clarification (2026-11-03)
+
+The user meant **fast models**, such as Claude Haiku 5.5 and GPT Luna, rather
+than paid fast mode. This ticket's on/off experiment was mis-scoped and is
+cancelled as obsolete, not completed. No account-credit answer is needed, and
+the clarification is not evidence that credits are enabled. All unused fast-mode
+plans are obsolete and must not execute.
+
+The intended comparisons are already recorded in [implementation results](../docs/agents/research/model-tier-implementation-20261102.md),
+[research results](../docs/agents/research/model-tier-research-20261102.md) and
+[text-task results](../docs/agents/research/model-task-tiers-20261103.md).
+Haiku was observed in those trials; Luna results remain requested-profile
+observations where served identity was unreported. Quality, infrastructure and
+grading failures remain distinct. The evidence supports keeping current defaults,
+not a blanket speed, cost or reliability claim. No new comparison goal was added
+by this clarification.
+
+## Historical execution hold — superseded by clarification
 
 Offline preparation and independent review are complete. The read-only Claude
 Code 2.1.316 version/help/auth checks succeeded, but the CLI does not report

@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "2ea03a26893db604d4700afe592fcc9c7eb01fcc56ed3176dee31945a06edb79",
+  "subject": "Fast models clarified; wrong fast-mode experiment cancelled, no credit question",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 32896,
+      "sha256": "3c9496745e969bdc9e4c677e72cc6c9f189adb2c4caccc310b95eb45040de519"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 207525,
+      "sha256": "c44bca91e93daf867019870246f268e93828a4552f3a6eb0f81e055b5dc0f314"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14033,
+      "sha256": "710e93ee5dd2200289599f14fa2f428a0246179813e0b5ff4a9463b31c2e364e"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5042,
+      "sha256": "e28962adc4fffb4b11522b8d855f4af8ebcc4b6df79a759784f84261bdd3cb51"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-final/findings-1280.png",
+      "bytes": 623858,
+      "sha256": "70fb88e81e72de6a46e707d63af5fd84105d08abdfc1043b72da262540ffd625",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-final/tickets-1280.png",
+      "bytes": 208315,
+      "sha256": "b73731a72f664b7840cd5b84223f61b5eafa89f7b58f44e5a1ca7ef024ae1036",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-final/findings-390.png",
+      "bytes": 629765,
+      "sha256": "903ee46608337e0d2e4197cc01ae4f6016d0f9e26a55a2dd7887dcf75ce055f6",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-final/tickets-390.png",
+      "bytes": 190639,
+      "sha256": "036be1e0df4de23351e1e07d71473bb1dd7bedc33dfca10fee53189a3c03a312",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "6221ea7985da370f755cc84750d3715bd2ecae508604d67c437d08eb568d73ed",
+  "id": "70a068dbf1fcc7cd3379d72477143554cebba81862d3988cd7613f49babd2509",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "Codex independent critic",
+    "note": "Accepted after inspecting all four actual captures at laptop/phone widths. Tool observed: findings view clearly identifies #172 as cancelled obsolete paid-fast-mode experiment; says Haiku/Luna were included in completed model comparisons and correctly states evidence supports keeping defaults, with paid-fast-mode question retired after clarification. Ticket log shows cancelled label/status and counts (1 cancelled, 34 done, 1 open); no misleading completion claim. Scope wording aligns with user correction. No material layout/clipping issue observed. Limit: screenshots evidence only the captured viewports and states.",
+    "acceptedAt": "2026-11-03T14:44:32.376Z",
+    "snapshotId": "70a068dbf1fcc7cd3379d72477143554cebba81862d3988cd7613f49babd2509"
+  }
+}

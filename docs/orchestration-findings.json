@@ -205,7 +205,7 @@
   ],
   "possibilities": [
     {"title": "Watch and answer through a familiar interface", "value": "Compare which interfaces show worker state and let a person answer questions or approvals.", "tickets": ["173"]},
-    {"title": "Spend less without losing the quality bar", "value": "The completed trials support keeping defaults. Fast mode still awaits an account detail; cheaper or faster settings have not been qualified.", "tickets": ["174", "167", "168", "169", "170", "171", "172"]}
+    {"title": "Spend less without losing the quality bar", "value": "Haiku and Luna were included in the completed model comparisons. The evidence still supports keeping defaults; the separate paid-fast-mode question was retired after your clarification.", "tickets": ["174", "167", "168", "169", "170"]}
   ],
   "ticketNotes": {
     "200": ["Keep the full test workspace stable", "Build the original fixture from frozen files instead of changing host tools or templates."],
@@ -232,7 +232,7 @@
     "169": ["Keep defaults for research", "Source and review evidence matter; unscorable results and missing model identities limit comparisons."],
     "170": ["Compare routine writing and triage", "Find which lighter models handle bounded text tasks without measured quality loss."],
     "171": ["Find useful effort levels", "Measure when extra reasoning effort stops helping on a fixed model and task."],
-    "172": ["Measure fast mode", "Compare speed, quality and usage. The trial awaits confirmation that fast-mode credits are already enabled; no fast-mode model calls have run."],
+    "172": ["Retired fast-mode misunderstanding", "You meant fast models such as Haiku and Luna. Their comparisons are recorded in the earlier tier trials; no paid-fast-mode comparison or credit confirmation is needed."],
     "173": ["Watch and answer through the GUI", "Compare visible worker state and real question or approval actions."],
     "174": ["Choose a repeatable evaluation runner", "Leave a runnable way to compare model trials on the same fixtures."],
     "185": ["Understand the shared agent runtime", "Explain where the agent loop, tools, protocol and policy boundaries live."],

@@ -218,7 +218,10 @@ it; record real blockers and continue independent work. Runtime routing stays in
 the session-local ledger; durable ticket state stays here and in `.tickets/`.
 ACP research #187 completed as the last independent queue item after #172's
 account-fact hold became explicit; it recommends no new actionable spike now.
-Only #172 and #189 remain unfinished. Model comparisons may need serial
+#172 was cancelled as mis-scoped after the user clarified fast models such as
+Haiku and Luna, not paid fast mode. Existing #167–170 comparisons cover that
+intent with their recorded limits; the account-credit question is obsolete.
+Only #189 remains unfinished. Model comparisons may need serial
 measurement to avoid shared-load confounding even when their files do not overlap.
 
 The ordered workstream table retains execution history. #162's driver
@@ -245,11 +248,10 @@ and closed without claiming live GUI steering. #174 selected the runner, and
 #200 freezes the complete seed after a host tooling update changed guidance.
 #167–171 are closed with independently audited findings and unchanged defaults;
 their quality, identity, usage and review-evidence limits remain in the reports.
-#172 has completed offline preparation but awaits the user's factual confirmation
-that fast-mode usage credits are already enabled. No fast-mode model cell has
-run, and no credit setting will be changed. #189 remains upstream-blocked until
+#172's unused paid-fast-mode preparation is obsolete; no native cell ran, and
+the cancellation is not a successful fast-mode trial. #189 remains upstream-blocked until
 the runtime changes or a newly supported shutdown sequence can be qualified.
-Supervision stays active for these two conditions; completed batches do not
+Supervision stays active for that condition; completed batches do not
 end the workstream. These findings do not imply a production-ready orchestrator.
 The #158-before-#157 order is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and

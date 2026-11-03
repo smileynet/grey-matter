@@ -36,6 +36,14 @@ try {
     await page.getByLabel('Filter ticket status').selectOption('done');
     assert.equal(await page.locator('.ticket:visible').count(), data.tickets.filter(t => t.status === 'done').length);
     await page.getByLabel('Filter ticket status').selectOption('all');
+    assert.equal(await page.locator('[data-node="172"]').count(), 0);
+    await page.getByLabel('Filter ticket status').selectOption('cancelled');
+    assert.equal(await page.locator('.ticket:visible').count(), 1);
+    assert.match(await page.locator('#ticket-172 > summary').innerText(), /Cancelled/);
+    await page.locator('#ticket-172 > summary').click();
+    assert.match(await page.locator('#ticket-172').innerText(), /You meant fast models such as Haiku and Luna/);
+    await page.locator('#ticket-172 > summary').click();
+    await page.getByLabel('Filter ticket status').selectOption('all');
     await page.getByLabel('Include completed work').check();
     assert.equal(await page.locator('.node').count(), data.tickets.length);
     await page.getByLabel('Include completed work').uncheck();
@@ -44,7 +52,6 @@ try {
     await page.locator(`[data-node="${selectedTicket.id}"]`).click();
     await page.getByRole('button', { name: 'Open ticket details', exact: true }).click();
     assert.equal(await page.locator(`#ticket-${selectedTicket.id}`).getAttribute('open'), '');
-    if (selectedTicket.id === '172') assert.match(await page.locator('#ticket-172').innerText(), /no fast-mode model calls have run/);
     await page.locator(`#ticket-${selectedTicket.id} > summary`).click();
     await page.locator('#flow-selection').evaluate(n => n.textContent = 'Pick any ticket in the diagram.');
     await page.locator('#open-selected').evaluate(n => n.hidden = true);

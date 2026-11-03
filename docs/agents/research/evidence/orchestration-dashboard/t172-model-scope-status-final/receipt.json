@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "7efda3d0fd44e6ca3ad422d39fec78e4d8848c2c4b628e6863f098707bd9b75f",
+  "subject": "Fast models clarified; wrong fast-mode experiment cancelled, no credit question",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 155542,
+      "sha256": "13c6526ab9498ca5123bb6226f767d6adad14c59cdf377051e60cbcd970b164f"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-status-final/tab-0-1280.png",
+      "bytes": 78201,
+      "sha256": "41ffa602aa77088e50c07a48175682543633bd10ce9ddf8586a26668a425f827",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-status-final/tab-1-1280.png",
+      "bytes": 310236,
+      "sha256": "c6d0135d8318b59d006f5cdf74a04c7c46089beb3440e9cdae6e331a1adfda28",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-status-final/tab-2-1280.png",
+      "bytes": 26893,
+      "sha256": "9296b63a48b55fe987a94b144be9fd3c3a182fd17c2087cf917f4817389f542b",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-status-final/tab-3-1280.png",
+      "bytes": 366487,
+      "sha256": "d4c40862f2529a66d1adcbb31646420571513777d7200eaec88f6e4013a55a6f",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-status-final/tab-0-390.png",
+      "bytes": 74316,
+      "sha256": "c9280a55c4fc2b95e48621f0fed50d8511eb924d41f5f90481296bae2906b22f",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-status-final/tab-1-390.png",
+      "bytes": 303586,
+      "sha256": "b0c0d21ad10f3e334b73d4e30b2da3f8932d3c8d4130b84c8d06e79755873a55",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-status-final/tab-2-390.png",
+      "bytes": 21888,
+      "sha256": "41bd89e2a53e1ed109c0a26ad285122b9e0ba51484fece2f9d348c94054b3f5a",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t172-model-scope-status-final/tab-3-390.png",
+      "bytes": 352657,
+      "sha256": "3cf43dd439d8882c88c8e7fb7efb09aeca1d7ae37ed767842d2b5151b849baee",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "6d6da9a2d5dcc33a49dea8f1e43b303246225d008abd47c188f849170aed5de9",
+  "id": "7dafecc21d6c07a7f93d2474d4a162ffc3e4c04cbdaa19460d1b4c92933d0b4a",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "Codex independent critic",
+    "note": "Accepted after inspecting all eight actual captures: Overview, All entries, Decisions and Plan at laptop/phone widths. Tool observed: 54 entries, no pending asks; clarification ask retained as answered; newest entry says Haiku/Luna and defaults accurately. All four tabs remain legible at phone width; Plan shows all 198 tickets with Cancelled count/filter, and cancelled #172 is separately represented from done work. No material layout/clipping issue observed. Limit: captures establish only the displayed states/viewports.",
+    "acceptedAt": "2026-11-03T14:44:32.549Z",
+    "snapshotId": "7dafecc21d6c07a7f93d2474d4a162ffc3e4c04cbdaa19460d1b4c92933d0b4a"
+  }
+}
