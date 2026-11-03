@@ -98,7 +98,8 @@ refusal.
    worker's Git worktree root and base SHA before its first source edit; a plain
    directory is not isolation. Before acceptance, run the read-only
    [dispatch preflight](references/dispatch-preflight.md) against a packet bound
-   to the registered checkout, candidate, owner, declared paths and evidence hashes.
+   to the registered checkout, candidate, owner, declared paths and evidence hashes;
+   pass the expected base separately from the dispatch record.
    Gate secret, spend and
    destructive operations by the project's existing authorization. If a worker
    or harness handoff leaves artifacts retained, carry their retention owner,

@@ -25,6 +25,10 @@ function fixture() {
   writeFileSync(join(root, 'evidence/review.txt'), 'reviewed candidate details\n');
   run(root, 'add', '.');
   run(root, 'commit', '-m', 'fixture base');
+  const earlier = run(root, 'rev-parse', 'HEAD');
+  writeFileSync(join(root, 'src/assigned.txt'), 'dispatch base marker\n');
+  run(root, 'add', 'src/assigned.txt');
+  run(root, 'commit', '-m', 'recorded dispatch base');
   const base = run(root, 'rev-parse', 'HEAD');
   writeFileSync(join(root, 'src/change.txt'), 'after\n');
   run(root, 'add', 'src/change.txt');
@@ -45,12 +49,12 @@ function fixture() {
   packets.push(packetPath);
   const save = () => writeFileSync(packetPath, JSON.stringify(packet));
   save();
-  return { root, base, head, packet, packetPath, save };
+  return { root, earlier, base, head, packet, packetPath, save };
 }
 
 test('accepts a registered clean worktree with a scoped commit and exact evidence hash', () => {
   const f = fixture();
-  const result = preflight(f.packetPath, f.root);
+  const result = preflight(f.packetPath, { cwd: f.root, expectedBase: f.base });
   assert.equal(result.status, 'pass');
   assert.equal(result.root, realpathSync(f.root));
   assert.equal(result.candidate, f.head);
@@ -62,55 +66,68 @@ test('accepts the explicit scoped branch-diff candidate form', () => {
   const f = fixture();
   f.packet.candidate = { kind: 'branch-diff', head: f.head };
   f.save();
-  assert.equal(preflight(f.packetPath, f.root).candidate, f.head);
+  assert.equal(preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }).candidate, f.head);
 });
 
 test('rejects a packet for a different checkout root', () => {
   const f = fixture();
   f.packet.root = tmpdir();
   f.save();
-  assert.throws(() => preflight(f.packetPath, f.root), /root does not match/);
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }), /root does not match/);
+});
+
+test('requires the trusted dispatch base as a separate input', () => {
+  const f = fixture();
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root }), /Supply the recorded expected base/);
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.earlier }), /recorded dispatch base/);
 });
 
 test('rejects stale base, candidate, branch, owner and evidence bindings', () => {
   const f = fixture();
   const original = structuredClone(f.packet);
-  f.packet.base = f.head;
+  f.packet.base = f.earlier;
   f.save();
-  assert.throws(() => preflight(f.packetPath, f.root), /Base is not an ancestor|Candidate has no committed changes/);
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }), /recorded dispatch base/);
   Object.assign(f.packet, original, { candidate: { kind: 'commit', sha: f.base } });
   f.save();
-  assert.throws(() => preflight(f.packetPath, f.root), /Candidate SHA does not match/);
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }), /Candidate SHA does not match/);
   Object.assign(f.packet, original, { branch: 'worker/stale' });
   f.save();
-  assert.throws(() => preflight(f.packetPath, f.root), /Branch mismatch/);
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }), /Branch mismatch/);
   Object.assign(f.packet, original, { owner: '  ' });
   f.save();
-  assert.throws(() => preflight(f.packetPath, f.root), /needs an owner/);
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }), /needs an owner/);
   Object.assign(f.packet, original, { evidence: [] });
   f.save();
-  assert.throws(() => preflight(f.packetPath, f.root), /evidence bindings/);
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }), /evidence bindings/);
   Object.assign(f.packet, original, { evidence: [{ ...original.evidence[0], sha256: '0'.repeat(64) }] });
   f.save();
-  assert.throws(() => preflight(f.packetPath, f.root), /Evidence hash mismatch/);
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }), /Evidence hash mismatch/);
 });
 
 test('rejects changed paths outside the declared scope and dirty checkouts', () => {
   const f = fixture();
   f.packet.scope = ['other/'];
   f.save();
-  assert.throws(() => preflight(f.packetPath, f.root), /outside declared scope/);
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }), /outside declared scope/);
   f.packet.scope = ['src/'];
   f.save();
   writeFileSync(join(f.root, 'extra.txt'), 'untracked\n');
-  assert.throws(() => preflight(f.packetPath, f.root), /uncommitted or untracked/);
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }), /uncommitted or untracked/);
+});
+
+test('rejects directories as evidence before reading bytes', () => {
+  const f = fixture();
+  f.packet.evidence = [{ path: 'evidence', sha256: '0'.repeat(64) }];
+  f.save();
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }), /regular file/);
 });
 
 test('rejects arbitrary command fields in the packet', () => {
   const f = fixture();
   f.packet.commands = ['Remove-Item -Recurse'];
   f.save();
-  assert.throws(() => preflight(f.packetPath, f.root), /unsupported fields/);
+  assert.throws(() => preflight(f.packetPath, { cwd: f.root, expectedBase: f.base }), /unsupported fields/);
 });
 
 test.after(() => {

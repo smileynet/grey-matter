@@ -66,11 +66,15 @@ function validatePacket(packet) {
   return candidateSha;
 }
 
-export function preflight(packetPath, cwd = process.cwd()) {
+export function preflight(packetPath, { cwd = process.cwd(), expectedBase } = {}) {
   const root = realpathSync(git(cwd, ['rev-parse', '--show-toplevel']));
   const packetFile = realpathSync(packetPath);
   const packet = JSON.parse(readFileSync(packetFile, 'utf8'));
   const candidateSha = validatePacket(packet);
+  demand(typeof expectedBase === 'string' && /^[0-9a-f]{40,64}$/i.test(expectedBase),
+    'Supply the recorded expected base as a full commit SHA');
+  demand(packet.base.toLowerCase() === expectedBase.toLowerCase(),
+    'Packet base does not match the recorded dispatch base');
   demand(realpathSync(packet.root) === root, 'Packet root does not match current checkout root');
 
   const worktrees = git(root, ['worktree', 'list', '--porcelain']).split(/\r?\n\r?\n/);
@@ -107,6 +111,7 @@ export function preflight(packetPath, cwd = process.cwd()) {
 
   const evidence = packet.evidence.map(({ path, sha256 }) => {
     const file = safeRelative(root, path, 'Evidence path');
+    demand(lstatSync(file.full).isFile(), `Evidence must be a regular file: ${file.name}`);
     const bytes = readFileSync(file.full);
     const actual = createHash('sha256').update(bytes).digest('hex');
     demand(actual === sha256.toLowerCase(), `Evidence hash mismatch: ${file.name}`);
@@ -117,8 +122,9 @@ export function preflight(packetPath, cwd = process.cwd()) {
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
-    demand(process.argv.length === 3, 'Usage: node preflight-dispatch.mjs PACKET.json');
-    console.log(JSON.stringify(preflight(process.argv[2]), null, 2));
+    demand(process.argv.length === 5 && process.argv[2] === '--expected-base',
+      'Usage: node preflight-dispatch.mjs --expected-base SHA PACKET.json');
+    console.log(JSON.stringify(preflight(process.argv[4], { expectedBase: process.argv[3] }), null, 2));
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;

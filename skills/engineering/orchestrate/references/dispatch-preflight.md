@@ -4,8 +4,13 @@ Run the read-only packet check from the candidate's registered Git worktree befo
 acceptance:
 
 ```text
-node skills/engineering/orchestrate/scripts/preflight-dispatch.mjs <packet.json>
+node skills/engineering/orchestrate/scripts/preflight-dispatch.mjs --expected-base <recorded-base-sha> <packet.json>
 ```
+
+The orchestrator supplies `--expected-base` from its recorded dispatch contract. It is a
+separate trust input and must not be copied from the worker packet. The helper compares
+the packet's base with this expected full SHA before checking Git ancestry. Git only shows
+that one commit is an ancestor; it cannot establish which ancestor was the dispatch base.
 
 The packet is JSON with exactly these fields:
 
@@ -36,11 +41,11 @@ owner, changed paths, and each evidence path/hash/byte length. Invalid input or 
 mismatch exits nonzero with an error on stderr. The packet cannot supply commands: Git
 calls use fixed argument arrays, and unknown packet fields are rejected.
 
-This check proves only the observed Git root/registration, branch/base/HEAD relationship,
-clean committed scope and supplied file hashes at check time. It does not authenticate
-the owner string, establish that declared scope is semantically complete or disjoint,
-prove evidence is relevant, or prove reviewer independence from a name. Keep review
-receipts as the separate check for their declared source/capture bindings. This helper
-does not claim or update tickets, modify files, create a ledger, or replace independent
-review. Regression fixtures:
+This check proves only the observed Git root/registration, externally expected base,
+branch/base/HEAD relationship, clean committed scope and supplied file hashes at check
+time. It does not authenticate the owner string, establish that declared scope is
+semantically complete or disjoint, prove evidence is relevant, or prove reviewer
+independence from a name. Keep review receipts as the separate check for their declared
+source/capture bindings. This helper does not claim or update tickets, modify files, create
+a ledger, or replace independent review. Regression fixtures:
 `node --test skills/engineering/orchestrate/scripts/preflight-dispatch.test.mjs`.
