@@ -2,7 +2,7 @@
 id: "179"
 title: "Implement inter-harness session messaging and wakeups"
 status: open
-blocked_by: []
+blocked_by: ["208"]
 priority: high
 validation_criteria:
   - "Versioned message and session contracts are implemented"
