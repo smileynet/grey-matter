@@ -1,7 +1,7 @@
 ---
 id: "208"
 title: "Deliver durable session messaging contracts and recovery fixtures"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
@@ -10,6 +10,7 @@ validation_criteria:
   - "Skill usage guidance, script inventory, independent review, current checks and artifact disposition are complete."
 tags: ["stream:tooling", "kind:enhancement"]
 parent: "179"
+assignee: "codex"
 ---
 # Deliver the durable session/message contract and recovery fixture
 
