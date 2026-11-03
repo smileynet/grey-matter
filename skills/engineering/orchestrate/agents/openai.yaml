@@ -1,5 +1,3 @@
 interface:
   display_name: "Orchestrate"
-  short_description: "Coordinate disjoint tickets through review, landing and reporting"
-policy:
-  allow_implicit_invocation: false
+  short_description: "Coordinate an authorized outcome through review and integration"

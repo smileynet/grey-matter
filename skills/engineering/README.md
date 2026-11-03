@@ -13,12 +13,13 @@ sync by [`curate-docs`](../meta/curate-docs/SKILL.md).
 - [to-spec](./to-spec/SKILL.md): synthesise a grilled thread into a spec (no re-interview).
 - [to-tickets](./to-tickets/SKILL.md): slice a spec into tracer-bullet tkt tickets with blocking edges.
 - [implement](./implement/SKILL.md): build one ticket, driving tdd and code-review.
-- [orchestrate](./orchestrate/SKILL.md): coordinate disjoint frontier tickets with review, contextual landing and per-ticket visuals.
 - [implement-spec](./implement-spec/SKILL.md): build a whole spec across the frontier on one integration branch.
 - [wayfinder](./wayfinder/SKILL.md): chart a too-big effort as a map of decision tickets.
 - [improve-codebase-architecture](./improve-codebase-architecture/SKILL.md): survey deepening opportunities as a visual report, then grill one.
 
 ## Model-invoked
+
+- [orchestrate](./orchestrate/SKILL.md): coordinate an already-authorized outcome through scoped tickets, independent review, serial integration and recovery.
 
 - [grilling](../productivity/grilling/SKILL.md): the interview primitive (lives in productivity; listed here for reach).
 - [tdd](./tdd/SKILL.md): the red-green agent feedback loop.
