@@ -104,6 +104,39 @@ test("Codex JSONL reports usage but no dollar amount or observed model", () => {
   assert.equal(result.cost, null);
   assert.deepEqual(result.usage, { input_tokens: 91, cached_input_tokens: 80, output_tokens: 12 });
   assert.deepEqual(result.testRuns, [{ status: "completed", command: "& 'C:\\tools\\node\\npm.cmd' test", exitCode: 0 }]);
+  assert.deepEqual(result.infrastructureErrors, []);
+});
+
+test("Codex nested execution-host error stays an infrastructure failure after turn completion", () => {
+  const result = parseCodexOutput([
+    JSON.stringify({ type: "thread.started", thread_id: "fixture-thread" }),
+    JSON.stringify({ type: "item.completed", item: { type: "error", message: "host executable missing" } }),
+    JSON.stringify({ type: "turn.completed", usage: { input_tokens: 10, output_tokens: 2 } }),
+  ].join("\n"));
+
+  assert.equal(result.complete, true);
+  assert.equal(result.turnFailed, false);
+  assert.deepEqual(result.infrastructureErrors, ["host executable missing"]);
+  assert.equal(classifyResult({
+    agent: { status: 0, error: null, errorCode: null },
+    adapterResult: result,
+    fileGrade: { outOfScope: [], sourceAndTestChecksPass: false },
+    seedUnchanged: true,
+    test: { status: 0 },
+    testCounts: { tests: 1, pass: 1, fail: 0, skipped: 0, cancelled: 0 },
+    behavior: { status: 1 },
+  }), "infrastructure-error");
+});
+
+test("Codex ordinary nonzero command completion is not an infrastructure error", () => {
+  const result = parseCodexOutput([
+    JSON.stringify({ type: "item.completed", item: { type: "command_execution", command: "node missing.js", exit_code: 1, status: "completed" } }),
+    JSON.stringify({ type: "turn.completed", usage: { input_tokens: 10, output_tokens: 2 } }),
+  ].join("\n"));
+
+  assert.equal(result.complete, true);
+  assert.deepEqual(result.infrastructureErrors, []);
+  assert.deepEqual(result.toolCommands, [{ status: "completed", command: "node missing.js", exitCode: 1 }]);
 });
 
 test("test output parser distinguishes failures and no reported counts", () => {
