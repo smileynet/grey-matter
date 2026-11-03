@@ -149,12 +149,12 @@ test("an unrelated foreign dir (no name collision) is never touched (AC2 corolla
 // Each case uses its own temp tree: a fake plugins dir (CLAUDE_CODE_PLUGIN_CACHE_DIR)
 // holding installed_plugins.json, and temp roots named like real harness roots.
 function dualSandbox({ plugin }) {
-  const base = mkdtempSync(join(tmpdir(), "gm-dual-"));
+  const { home: base, env } = homeSandbox();
   const plugins = join(base, "plugins");
   mkdirSync(plugins, { recursive: true });
   const ids = plugin ? { [plugin]: [{ scope: "user", version: PACK_VERSION }] } : {};
   writeFileSync(join(plugins, "installed_plugins.json"), JSON.stringify({ version: 2, plugins: ids }));
-  return { base, env: { ...process.env, CLAUDE_CODE_PLUGIN_CACHE_DIR: plugins, CODEX_HOME: base } };
+  return { base, env: { ...env, CLAUDE_CODE_PLUGIN_CACHE_DIR: plugins, CODEX_HOME: join(base, ".codex") } };
 }
 
 function runWithEnv(args, env) {
@@ -220,7 +220,7 @@ test("Codex plugin removes owned copies, preserves foreign skills, and honors di
   const { base, env } = dualSandbox({ plugin: null });
   try {
     const root = join(base, ".codex", "skills");
-    const config = join(base, "config.toml");
+    const config = join(base, ".codex", "config.toml");
     assert.equal(runWithEnv(["--root", root], env).status, 0);
     mkdirSync(join(root, "foreign"));
     writeFileSync(config, '[plugins."grey-matter@grey-matter"]\nenabled = true\n');
