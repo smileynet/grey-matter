@@ -277,7 +277,7 @@ auth remains conditional on the result of #186.
 | 167 | 13. Compare implementation worker tiers | in_progress |
 | 168 | 14. Compare reviewer tiers with planted defects and false positives | in_progress |
 | 169 | 15. Compare research/exploration tiers against a fixed answer key | in_progress |
-| 170 | 16. Compare documentation, triage and classification tiers | open |
+| 170 | 16. Compare documentation, triage and classification tiers | in_progress |
 | 171 | 17. Sweep effort levels while holding each model fixed | open |
 | 172 | 18. Compare Claude fast mode on/off with measured quality and usage | open |
 | 187 | 19. Research Agent Client Protocol (ACP) and propose evidence-led spikes | open |

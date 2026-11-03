@@ -1,13 +1,14 @@
 ---
 id: "170"
 title: "Spike: fast models for doc edits, triage and changelog classification"
-status: open
+status: in_progress
 blocked_by: ["174", "199"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
   - "A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note."
   - "A recommendation for this task class: the cheapest tier that met the bar, or \"keep the default\", folded into the Which model for what table in models-and-usage.md."
   - "Settings changed for the spike restored or recorded; sandbox folders removed."
+assignee: "codex"
 ---
 
 # Spike: fast models for doc edits, triage and changelog classification
