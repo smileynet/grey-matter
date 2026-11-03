@@ -61,3 +61,50 @@ managed worktree tool. Task bodies/plan-preparation helper remain parent-owned
 temporary reconciliation inputs until this delivery cycle settles. The active
 203 worktree and all unrelated historical worktrees, raw evidence and private
 draft ancestry are preserved; their ownership is not released by these closes.
+
+## Dispatch and evidence preflight (204, code integrated)
+
+Initial candidate `9c5afcf9636ac5ea30a669ae0894cdac67591b0c` was blocked by
+independent review: ancestry alone did not establish the assigned base, and
+evidence paths lacked a final regular-file check. Revised exact candidate
+`4fdac4a153e49c83f4722b4130bcb919053d3d68` was independently accepted after
+both fixes. Parent integrated it as `b5f164246aff6a7c593a8339146f2122d4230dc5`.
+
+The helper requires the expected base as a separate parent-owned input, compares
+it to the packet, then verifies actual worktree/branch/HEAD, ancestry, clean
+state, scoped changed paths and exact evidence hashes. It does not authenticate
+an owner string, prove evidence relevance, semantic non-overlap or reviewer
+independence. Regular-file rejection is present; a FIFO was not exercised on
+Windows. It is a point-in-time check, not a lock against subsequent edits.
+
+**Pass:** independent critic and parent each ran all eight preflight fixtures.
+Parent integrated pre-merge syntax-fixtures passed 1/1; manual pre-push and push
+hook each passed their five selected checks. The manual gate process and push
+hook overlapped in this run; both terminal results were read before acceptance.
+This is not a recommended dependent-command sequence.
+
+The [private raw evidence index](evidence/orchestration-delivery-204-20261103.json)
+records hashes and retention ownership. Earlier failed-review evidence is kept
+with the final result for this cycle's audit. Catalog registration and deployment
+remain part of final ticket closure; this paragraph does not claim that later
+bookkeeping or live dispatch integration has already run.
+
+## Published 202/206 dashboard snapshot
+
+Independent visual review accepted the four dedicated and eight global phone/
+laptop captures in `t202-206-final` and `t202-206-status-final`. Both receipt
+currency checks passed immediately before commit. Dedicated scope explicitly
+includes the existing #179 tooling dependency without retagging it: 44 tickets,
+22 findings, 37 done, one cancelled, one deferred and five open/in-progress.
+Global status has 57 entries, 205 tickets, four tabs and no current user asks.
+Interaction tests passed at 1280/390 pixels; the global checker reported no
+errors or warnings. The plan diagram intentionally scrolls horizontally on phones.
+
+Dashboard-only pre-merge selected zero checks (**skip**, not a test pass);
+pre-push and hook passed doc-links, home-path and gates-coverage. Packaged
+checks verified current 202/206 completion, remaining/deferred states and all
+44 source-ticket links at the repository root. Sites returned terminal
+`succeeded` at `2026-11-03T19:24:58Z` for source
+`947a0c35279a49863e84f1c3b33f832b4a07522c`, deployment
+`appgdep_6aea3502bd548191b408a926b1aaa930`; owner-only access was confirmed
+and preserved. No production-browser or native-goal proof is implied.

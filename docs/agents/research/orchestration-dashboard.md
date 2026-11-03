@@ -12,9 +12,9 @@ is available while signed in as its owner. Published through Sites on 2026-11-03
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `f981bbf4f3f019dd79a505e9cfea3dca704af233`.
-- Deployment: `appgdep_6ae9fed6e79c8191b9e5f8827b71af26`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_f61aef08ab188191a9553e1fc36d519f`.
+- Pushed Site source: `947a0c35279a49863e84f1c3b33f832b4a07522c`.
+- Deployment: `appgdep_6aea3502bd548191b408a926b1aaa930`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_16acd60ce15c8191a34526150284cc92`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -512,8 +512,9 @@ Both current review-receipt checks passed; `tkt sync-plan --check` passed.
 this is not a warning-free whole-board audit. No new native/model probe ran.
 `node scripts/deploy.mjs --no-agy` installed 50 skills; Agy remains excluded.
 
-Sites returned terminal `succeeded` at 2026-11-03T15:33:51Z for the exact pushed
-source/version listed above. Owner-only access was confirmed before publication
+Sites returned terminal `succeeded` at 2026-11-03T15:33:51Z for historical source
+`f981bbf4f3f019dd79a505e9cfea3dca704af233`, deployment
+`appgdep_6ae9fed6e79c8191b9e5f8827b71af26`. Owner-only access was confirmed before publication
 and preserved. Packaged checks verified all 37 source-ticket links target the
 repository root. Native deployment success does not substitute for production
 browser or accessibility testing. Current screenshots and receipts are promoted

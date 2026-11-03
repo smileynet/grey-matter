@@ -1,0 +1,13 @@
+{
+  "candidate": "4fdac4a153e49c83f4722b4130bcb919053d3d68",
+  "integrated": "b5f164246aff6a7c593a8339146f2122d4230dc5",
+  "retentionOwner": "parent orchestration integration",
+  "state": "retained",
+  "purpose": "independent review, failure comparison and final outcome-delivery audit",
+  "endCondition": "authorized delivery cycle verification and explicit artifact disposition",
+  "raw": [
+    {"path": "D:\\code\\grey-matter\\.scratch\\proposal19-204-critic-tests.txt", "sha256": "45d61e658d4fe3a212be261f9bbd67226c1e578cdc39c80044550efd91fe46bb", "tests": 6, "review": "blocked: expected base and regular-file boundary gaps"},
+    {"path": "D:\\code\\grey-matter\\.scratch\\proposal19-204-critic-tests-final.txt", "sha256": "74a9a8aaee7fdbdf706ec773320d46a0ed003183776733e51ed3721d50042943", "tests": 8, "review": "accepted exact revised candidate"}
+  ],
+  "limits": ["FIFO behavior not exercised on Windows", "no native dispatched-worker integration run", "check is point-in-time, not a lock"]
+}
