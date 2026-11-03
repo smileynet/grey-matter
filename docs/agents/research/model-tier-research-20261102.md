@@ -1,15 +1,14 @@
 # Model tier research: preparation and invocation plan
 
-**Status: eight calls captured; no quality findings yet.** Ticket #169 compares
+**Status: all 18 calls captured; 15 have valid blind scores, and 3 remain unscorable because their review receipts failed validation.** Ticket #169 compares
 three read-only research tasks under each harness's low-cost profile and native
-default. Six Claude cells have terminal responses. The first Codex and Kiro
-cells also completed, but their native output omitted actual model identity.
-Their raw responses remain eligible for semantic blind grading as requested-
-profile observations; they cannot support model-level comparison. Ten planned
-cells remain pending renewed critic review and a parent continuation receipt.
-The first-wave protocol, authorization and measurement ledger are preserved at
-their original hashes in private scratch. The continuation clarification is
-bound by protocol SHA-256
+default. All cells completed without retry; all six Claude outputs report model
+identity. Codex and Kiro outputs do not report actual identity. Their responses
+are eligible for semantic blind grading as requested-profile observations, but
+cannot support model-level comparison or adoption. Google and Agy were not
+invoked. The first-wave protocol, authorization and measurement ledger are
+preserved at their original hashes in private scratch. The active continuation
+protocol SHA-256 is
 `927726a9190c0612d5c562e1fe44c95b14f7d1842ca87b5402faf0e17b37ebb0`.
 
 ## What the planned comparison measures
@@ -31,10 +30,12 @@ Mentioning a path alone does not establish that it is a caller.
 
 A profile passes this small fixture bar only if all three one-shot task scores
 pass both native execution checks and independent manual review. Otherwise the
-recommendation is to keep the native default. These are directional examples,
-not a reliability or broad coding benchmark. The native default can differ in
-both model identity and reasoning effort, so any difference will be reported as
-an invocation-profile result, not attributed to model identity alone.
+recommendation is to keep the native default. A semantic pass with unreported
+Codex/Kiro identity remains a requested-profile observation and cannot support
+an adoption recommendation. These are directional examples, not a reliability
+or broad coding benchmark. The native default can differ in both model identity
+and reasoning effort, so any difference will be reported as an
+invocation-profile result, not attributed to model identity alone.
 
 ## Candidate profiles and prior evidence
 
@@ -59,32 +60,45 @@ replacement provider will be tried. Two prior Google model catalogs disagreed
 on the Flash effort suffix. That conflict remains unresolved and is not needed
 to execute the three permitted providers.
 
-## Partial execution evidence (2026-11-03)
+## Execution evidence (2026-11-03)
 
-Every response below has a pending semantic grade. No row is a quality pass.
-Claude's native defaults reported Opus 5.5 and the cheap profile reported
-Haiku 5.5. Codex and Kiro completed the caller task but did not report actual
-identity. Their statuses were retained by the first-wave controller as
-`identity-unreported`; the accepted clarification keeps them as requested-
-profile observations with `actualModel=null` and `profileComparable=false`.
+Blind review completed for all 18 outputs. Thirteen valid scores passed and two
+valid scores failed. Three outputs are unscorable because their reviewer
+receipts could not be validated; they are not counted as model failures or
+passes. Claude's native defaults reported Opus 5.5 and the cheap profile
+reported Haiku 5.5. Codex and Kiro completed all six requested profiles but did
+not report actual identity. The first caller cells were initially held as
+`identity-unreported`; a reviewed, hash-bound continuation allowed the remaining
+five cells per provider. All twelve Codex/Kiro receipts record
+`actualModel=null`, `identityUnreported=true`, and `profileComparable=false`.
 
 | Harness | Requested profile | Task | Native result | Actual identity | Time | Reported usage or cost |
 |---|---|---|---|---|---:|---|
-| Claude | Haiku 5.5 | Caller discovery | Terminal response; blind grade pending | Haiku 5.5 | 8.139 s | $0.001527 list estimate |
-| Claude | Native default | Caller discovery | Terminal response; blind grade pending | Opus 5.5 | 6.562 s | $0.036134 list estimate |
-| Claude | Haiku 5.5 | Module summary | Terminal response; blind grade pending | Haiku 5.5 | 11.010 s | $0.001653 list estimate |
-| Claude | Native default | Module summary | Terminal response; blind grade pending | Opus 5.5 | 8.480 s | $0.036270 list estimate |
-| Claude | Haiku 5.5 | Cited answer | Terminal response; blind grade pending | Haiku 5.5 | 5.251 s | $0.000851 list estimate |
-| Claude | Native default | Cited answer | Terminal response; blind grade pending | Opus 5.5 | 6.930 s | $0.031826 list estimate |
-| Codex | `gpt-6-luna` requested | Caller discovery | Terminal response; blind grade pending | Unreported | 6.381 s | 18,599 input / 108 output tokens; cost unknown |
-| Kiro | `qwen3-coder-next` requested | Caller discovery | Terminal response; blind grade pending | Unreported | 6.526 s | Context-use metadata only; cost unknown |
+| Claude | Haiku 5.5 | Caller discovery | Blind review pass | Haiku 5.5 | 8.139 s | $0.001527 list estimate |
+| Claude | Native default | Caller discovery | Blind review pass | Opus 5.5 | 6.562 s | $0.036134 list estimate |
+| Claude | Haiku 5.5 | Module summary | Blind review fail: 101 words; unsupported claim | Haiku 5.5 | 11.010 s | $0.001653 list estimate |
+| Claude | Native default | Module summary | Unscorable: review evidence failed validation | Opus 5.5 | 8.480 s | $0.036270 list estimate |
+| Claude | Haiku 5.5 | Cited answer | Unscorable: review receipt failed schema validation | Haiku 5.5 | 5.251 s | $0.000851 list estimate |
+| Claude | Native default | Cited answer | Blind review pass | Opus 5.5 | 6.930 s | $0.031826 list estimate |
+| Codex | `gpt-6-luna` requested | Caller discovery | Blind review pass | Unreported | 6.381 s | 18,599 input / 108 output tokens; cost unknown |
+| Codex | `gpt-6-luna` requested | Module summary | Blind review pass | Unreported | 5.362 s | 18,586 input / 94 output tokens; cost unknown |
+| Codex | Native default | Caller discovery | Blind review pass | Unreported | 8.478 s | 19,289 input / 129 output tokens; cost unknown |
+| Codex | Native default | Module summary | Blind review pass | Unreported | 6.573 s | 19,274 input / 129 output tokens; cost unknown |
+| Codex | `gpt-6-luna` requested | Cited answer | Blind review pass | Unreported | 5.042 s | 18,579 input / 51 output tokens; cost unknown |
+| Codex | Native default | Cited answer | Blind review pass | Unreported | 6.161 s | 19,277 input / 51 output tokens; cost unknown |
+| Kiro | `qwen3-coder-next` requested | Caller discovery | Blind review pass | Unreported | 6.526 s | Context-use metadata only; cost unknown |
+| Kiro | `qwen3-coder-next` requested | Module summary | Blind review pass | Unreported | 10.268 s | Context-use metadata only; cost unknown |
+| Kiro | Native default | Module summary | Blind review pass | Unreported | 6.930 s | Context-use metadata only; cost unknown |
+| Kiro | Native default | Caller discovery | Unscorable: reviewer returned no actual callers | Unreported | 9.705 s | Context-use metadata only; cost unknown |
+| Kiro | `qwen3-coder-next` requested | Cited answer | Blind review fail: required heading not cited | Unreported | 4.653 s | Context-use metadata only; cost unknown |
+| Kiro | Native default | Cited answer | Blind review pass | Unreported | 5.510 s | Context-use metadata only; cost unknown |
 
 Claude's six list estimates total USD 0.108260 against the USD 0.60 ceiling.
-The Codex and Kiro first cells were consumed once and will not be retried.
-Their five remaining cells each can resume only under parent authorization
-listing those exact held cell IDs; other errors or limits still stop that
-provider. Raw responses, full receipts, the identity crosswalk and first-wave
-ledger remain private in `.scratch/t169/`.
+Codex reported token counts but no cost. Kiro reported context-use and
+turn-duration metadata, not tokens or credits; its cost remains unknown. These
+wall times include process startup and host load, so they are observations, not
+pure model latency. Raw responses, full receipts, blind-review candidates,
+identity crosswalk and first-wave ledger remain private in `.scratch/t169/`.
 
 ## Safety, limits and classification
 
@@ -131,8 +145,30 @@ and heading. Keyword or citation-presence checks never decide semantic pass.
 
 The candidate command records deterministic evidence only. The `finalize`
 command requires a blinded manual receipt bound to the candidate and response
-hashes before it can emit a pass or fail. Until then, the semantic grade stays
-`pending`.
+hashes before it can emit a pass or fail. Three review receipts failed
+validation and remain unscorable; those outputs have no quality
+classification. Exact attempts, normalized envelopes, score receipts, and
+identifiers remain private in `.scratch/t169/`.
+
+## Review outcome and validation notes
+
+Thirteen of the 15 valid receipts passed. Two failed: one module summary exceeded
+the 90-token limit and made an unsupported claim; one cited answer omitted the
+required heading in its citation. Three other results have no quality
+classification because the reviewer receipt could not be validated: one
+summary review used non-verbatim evidence, one citation review did not provide
+a boolean for its one-sentence judgment, and one caller review returned an
+actual-caller set inconsistent with the answer and source. These are review
+validation failures, not model failures.
+
+The grader, rubric, source, key, and native answers were not changed. A
+scratch-only deterministic envelope helper attached each candidate hash and
+the actual independent reviewer's opaque ID; it copied the task-specific
+review body without scoring or inferring any semantic field. Explicit field
+aliases and verbatim quote corrections are recorded with their raw attempts.
+An independent critic checked the helper and its two offline tests; both tests
+passed. Full raw attempts, hashes, normalization notes, and outcomes are in
+private `.scratch/t169/`.
 
 ## Verification before measurement
 
