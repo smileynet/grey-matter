@@ -131,8 +131,9 @@ none of this establishes rendered UI acceptance.
 The bounded adoption audit is complete against pinned current source of the originating
 projects. Both already use scoped checks and retention; remaining phase/hook/documentation
 reconciliation is input to existing #164. No project policy or runtime was changed. A stale
-local checkout cannot establish a current adopter gap. Laptop/phone dashboard review remains
-pending separately; no rendered acceptance is claimed.
+local checkout cannot establish a current adopter gap. The user will give dashboard feedback
+during normal use; there is no standing visual-review task or completion gate. No tool-observed
+rendered acceptance is claimed.
 
 | ID | Work | Status |
 | --- | --- | --- |

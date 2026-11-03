@@ -12,5 +12,10 @@
     "limits": "No rendered observation, screenshot, phone-layout proof or accepted visual review receipt exists. The user requested the link but has not reported a visual review result."
   },
   "structuralChecks": "Strict dashboard contract checks pass; this establishes source/data shape only.",
-  "visualAcceptance": "pending"
+  "visualAcceptance": "not a standing task or completion gate; no tool-observed rendering claimed",
+  "userDecision": {
+    "date": "2026-11-02",
+    "instruction": "Do not count dashboard visual review as a task; the user will give feedback while working with it.",
+    "disposition": "The dashboard ask is answered and removed from pending asks. Earlier blocked observation remains historical evidence."
+  }
 }

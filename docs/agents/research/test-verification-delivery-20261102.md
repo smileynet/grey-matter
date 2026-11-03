@@ -36,8 +36,9 @@ Mac test, provider operation or rendered UI observation was run for this closeou
 | #131 | Validate macOS/APFS commands, inspector and allocation/free-space behavior. | Same user/space conditions, with distinct platform acceptance evidence. |
 | #192 | Validate an owned online-only OneDrive placeholder. | User resumes the work and supplies an approved fixture already online-only. Previously inspected fixture was local; do not change its state to manufacture a test. |
 
-Dashboard laptop/phone visual acceptance is a separate pending observation. Its source/data
-checks passed; browser policy blocked local-file rendering and no bypass was attempted.
+The user will give dashboard feedback during normal use; visual review is not a separate
+task or completion gate. Source/data checks passed; browser policy blocked local-file
+rendering and no bypass was attempted. No tool-observed rendering is claimed.
 
 ## Adoption audit scope
 
