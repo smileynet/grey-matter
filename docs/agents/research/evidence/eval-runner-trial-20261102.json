@@ -274,14 +274,14 @@
     }
   },
   "privateLogs": {
-    "disposition": "Five Claude CLI session history files created by early runs were hashed without reading bodies; not promoted; retain privately through critic review then clean exact owned files.",
+    "disposition": "After final independent critic clearance, all five exact Claude session files were re-identified by unique session ID, byte count and corrected SHA-256 without opening bodies; all were sent to the OS Recycle Bin and each original path verified absent. They were not promoted. Raw runner stdout/stderr and grade evidence remain in ticket scratch for parent integration.",
     "aggregateBytes": 1574468,
     "sessions": [
-      {"id": "8c2ece5c-d7b0-4cb4-993f-63bfee1e8860", "bytes": 321277, "sha256": "d73081a4a322077c5c045bf69c3731e77a5058db575ecfeefe45822b9737918ce"},
+      {"id": "8c2ece5c-d7b0-4cb4-993f-63bfee1e8860", "bytes": 321277, "sha256": "d73081a4a322077c5c045bf69c3731e77a5058db575ecfefe45822b9737918ce"},
       {"id": "38a3c398-1525-424a-aa4c-da4e72a4900e", "bytes": 313941, "sha256": "8e7395b010792c15061bd9a09ef85f2faef2fd0277bad73050976a0146cc5ea6"},
       {"id": "e1f74fe3-b0db-4411-9643-308dca076e60", "bytes": 312911, "sha256": "ecc4dc2933193caaa96be24bf5f95d889aa765013597fe669eee0dc619e2d0f1"},
-      {"id": "97a65eab-2585-4147-969b-c639f210cc76", "bytes": 314391, "sha256": "2c145815c0694191ff4fe6d75b6dd3d50186fa201a6cad393f7a084b1ee5a01"},
-      {"id": "a71f4c79-528e-4102-852c-6a0e5e09c172", "bytes": 311948, "sha256": "1a119ffac6c01caa31e517555f98649ed5fa97c4040ea27410a2fa26231e47048"}
+      {"id": "97a65eab-2585-4147-969b-c639f210cc76", "bytes": 314391, "sha256": "2c145815c0694191ff4fe6d75b6dd3d50186fa201a6caad393f7a084b1ee5a01"},
+      {"id": "a71f4c79-528e-4102-852c-6a0e5e09c172", "bytes": 311948, "sha256": "1a119ffac6c01caa31e517555f98649ed5fa97c4040ea27410afa26231e47048"}
     ]
   },
   "limits": ["Small task sample; not a model ranking.", "Codex actual model ID and dollar cost not available in captured JSONL.", "Claude costs are CLI list estimates, not billing.", "Harbor remote modes and Kiro/ACP were not tested.", "Native output files are retained under ticket scratch for the independent critic."]
