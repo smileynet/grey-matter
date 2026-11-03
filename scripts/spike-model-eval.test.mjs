@@ -1,15 +1,28 @@
 import { after, test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
-import { claudeArgs, codexArgs, parseClaudeOutput, parseCodexOutput, parseTestCounts, testCommand, classifyResult } from "./spike-model-eval.mjs";
+import { claudeArgs, codexArgs, parseClaudeOutput, parseCodexOutput, parseTestCounts, testCommand, classifyResult, changedFilesSince } from "./spike-model-eval.mjs";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const FIXTURES = join(ROOT, "fixtures", "model-eval");
 const TEST_ROOT = mkdtempSync(join(tmpdir(), "spike-model-eval-test-"));
 after(() => rmSync(TEST_ROOT, { recursive: true, force: true, maxRetries: 3 }));
+
+function createGitFixture(name) {
+  const repo = join(TEST_ROOT, name);
+  mkdirSync(repo, { recursive: true });
+  const git = (...args) => execFileSync("git", args, { cwd: repo, encoding: "utf8" });
+  git("init", "--quiet");
+  writeFileSync(join(repo, "tracked.txt"), "seed\n");
+  writeFileSync(join(repo, ".gitignore"), "ignored.txt\n");
+  git("add", "tracked.txt", ".gitignore");
+  git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.test", "commit", "--quiet", "-m", "seed");
+  return { repo, git, seedCommit: git("rev-parse", "HEAD").trim() };
+}
 
 test("T1 and T3 pin the same deterministic seed and differ in grader expectations", () => {
   const t1 = JSON.parse(readFileSync(join(FIXTURES, "t1.json"), "utf8"));
@@ -91,6 +104,75 @@ test("classification refuses zero tests, malformed output, and native turn failu
   assert.equal(classifyResult({ ...base, adapterResult: { ...base.adapterResult, malformedLines: [2] } }), "malformed-output");
   assert.equal(classifyResult({ ...base, adapterResult: { ...base.adapterResult, turnFailed: true } }), "turn-failed");
   assert.equal(classifyResult({ ...base, testCounts: { tests: 1, pass: 1, fail: 0, skipped: 0, cancelled: 0 } }), "pass");
+});
+
+test("seed-relative scope catches a staged-only out-of-scope path", () => {
+  const { repo, git, seedCommit } = createGitFixture("staged-scope");
+  writeFileSync(join(repo, "unexpected.txt"), "staged content\n");
+  git("add", "unexpected.txt");
+
+  const changed = changedFilesSince(repo, seedCommit);
+  assert.deepEqual(changed, ["unexpected.txt"]);
+  const result = classifyResult({
+    agent: { status: 0, error: null, errorCode: null },
+    adapterResult: { complete: true, turnFailed: false },
+    fileGrade: { outOfScope: changed, sourceAndTestChecksPass: true },
+    seedUnchanged: true,
+    test: { status: 0 },
+    testCounts: { tests: 1, pass: 1, fail: 0, skipped: 0, cancelled: 0 },
+    behavior: { status: 0 },
+  });
+  assert.equal(result, "out-of-scope-change");
+});
+
+test("seed-relative scope catches unstaged tracked edits", () => {
+  const { repo, seedCommit } = createGitFixture("unstaged-scope");
+  writeFileSync(join(repo, "tracked.txt"), "unstaged edit\n");
+
+  assert.deepEqual(changedFilesSince(repo, seedCommit), ["tracked.txt"]);
+});
+
+test("seed-relative scope includes ignored untracked paths", () => {
+  const { repo, seedCommit } = createGitFixture("ignored-scope");
+  writeFileSync(join(repo, "ignored.txt"), "ignored but changed\n");
+
+  assert.deepEqual(changedFilesSince(repo, seedCommit), ["ignored.txt"]);
+});
+
+test("seed-relative scope catches an out-of-scope path committed after the fixture seed", () => {
+  const { repo, git, seedCommit } = createGitFixture("committed-scope");
+  writeFileSync(join(repo, "unexpected.txt"), "committed content\n");
+  git("add", "unexpected.txt");
+  git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.test", "commit", "--quiet", "-m", "unexpected path");
+
+  const changed = changedFilesSince(repo, seedCommit);
+  const headAfter = git("rev-parse", "HEAD").trim();
+  assert.notEqual(headAfter, seedCommit);
+  assert.deepEqual(changed, ["unexpected.txt"]);
+  const result = classifyResult({
+    agent: { status: 0, error: null, errorCode: null },
+    adapterResult: { complete: true, turnFailed: false },
+    fileGrade: { outOfScope: changed, sourceAndTestChecksPass: true },
+    seedUnchanged: headAfter === seedCommit,
+    test: { status: 0 },
+    testCounts: { tests: 1, pass: 1, fail: 0, skipped: 0, cancelled: 0 },
+    behavior: { status: 0 },
+  });
+  assert.equal(result, "out-of-scope-change");
+});
+
+test("classification rejects a commit even when every committed path is in scope", () => {
+  const base = {
+    agent: { status: 0, error: null, errorCode: null },
+    adapterResult: { complete: true, turnFailed: false },
+    fileGrade: { outOfScope: [], sourceAndTestChecksPass: true },
+    seedUnchanged: false,
+    test: { status: 0 },
+    testCounts: { tests: 1, pass: 1, fail: 0, skipped: 0, cancelled: 0 },
+    behavior: { status: 0 },
+  };
+
+  assert.equal(classifyResult(base), "unexpected-commit");
 });
 
 test("controller npm test uses the active Node executable path without inherited secrets", () => {

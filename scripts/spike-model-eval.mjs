@@ -86,6 +86,18 @@ function git(cwd, ...args) {
   return result.stdout.trim();
 }
 
+function gitPaths(cwd, ...args) {
+  const result = run("git", args, { cwd });
+  if (result.status !== 0) fail("git " + args.join(" ") + " failed: " + (result.stderr || result.stdout));
+  return result.stdout.split("\0").filter(Boolean);
+}
+
+function changedFilesSince(workDir, seedCommit) {
+  const tracked = gitPaths(workDir, "diff", "--name-only", "--no-renames", "-z", seedCommit, "--");
+  const untracked = gitPaths(workDir, "ls-files", "--others", "-z", "--");
+  return [...new Set([...tracked, ...untracked].map((file) => file.replaceAll("\\", "/")))].sort();
+}
+
 function quotePowerShell(value) {
   return `'${value.replaceAll("'", "''")}'`;
 }
@@ -187,9 +199,8 @@ function parseCodexOutput(stdout) {
   };
 }
 
-function gradeFiles(workDir, task) {
-  const changed = git(workDir, "ls-files", "--modified", "--deleted", "--others", "--exclude-standard")
-    .split(/\r?\n/).filter(Boolean).map((file) => file.replaceAll("\\", "/")).sort();
+function gradeFiles(workDir, task, seedCommit) {
+  const changed = changedFilesSince(workDir, seedCommit);
   const outOfScope = changed.filter((file) => !task.allowedFiles.includes(file));
   const source = readFileSync(join(workDir, "src", "a.js"), "utf8");
   const tests = readFileSync(join(workDir, "test", "a.test.js"), "utf8");
@@ -355,7 +366,7 @@ async function main() {
   const behavior = hiddenBehaviorCheck(workDir, task, nodeExe);
   const behaviorOutput = `${behavior.stdout}${behavior.stderr}`;
   const behaviorCapture = writeCapture(evidenceDir, "controller-behavior.txt", behaviorOutput);
-  const fileGrade = gradeFiles(workDir, task);
+  const fileGrade = gradeFiles(workDir, task, seedCommit);
   const headAfter = git(workDir, "rev-parse", "HEAD");
   const testCounts = parseTestCounts(testOutput);
   const classification = classifyResult({
@@ -407,6 +418,7 @@ async function main() {
     grading: {
       status: classification,
       changedFiles: fileGrade.changedFiles,
+      changeBaseCommit: seedCommit,
       outOfScopeFiles: fileGrade.outOfScope,
       sourceHasExpectedExport: fileGrade.sourceHasExport,
       sourceLacksForbiddenExport: fileGrade.sourceLacksForbidden,
@@ -440,4 +452,4 @@ if (invokedPath === import.meta.url) {
   });
 }
 
-export { claudeArgs, codexArgs, parseClaudeOutput, parseCodexOutput, parseTestCounts, testCommand, classifyResult };
+export { claudeArgs, codexArgs, parseClaudeOutput, parseCodexOutput, parseTestCounts, testCommand, classifyResult, changedFilesSince, gradeFiles, hiddenBehaviorCheck };
