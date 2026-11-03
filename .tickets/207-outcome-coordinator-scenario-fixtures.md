@@ -1,7 +1,7 @@
 ---
 id: "207"
 title: "Exercise outcome coordinator continuation and failure recovery scenarios"
-status: in_progress
+status: done
 blocked_by: ["202", "204", "205", "208"]
 priority: medium
 validation_criteria:
@@ -23,7 +23,15 @@ Extend existing orchestration fixture with deterministic scenarios for outcome c
 
 ## Acceptance criteria
 
-- [ ] Meaningful injected coordinator errors are rejected and successful continuation/recovery scenarios produce explicit evidence.
-- [ ] Fixture guidance distinguishes deterministic guarantees from unrun native persistence/delivery and current unsupported/security-held lanes.
-- [ ] Independent review of final fixture/source, measured targeted tests and required repository checks pass with artifact disposition.
+- [x] Meaningful injected coordinator errors are rejected and successful continuation/recovery scenarios produce explicit evidence.
+- [x] Fixture guidance distinguishes deterministic guarantees from unrun native persistence/delivery and current unsupported/security-held lanes.
+- [x] Independent review of final fixture/source, measured targeted tests and required repository checks pass with artifact disposition.
 
+## Resolution (2026-11-03)
+
+done: passive evidence-bound outcome trace audit and14fault scenarios delivered, integrated c474931,pushed,deployed. Supplied event claims remain attestations; no native goal or background monitor qualification. Report docs/agents/research/outcome-orchestration-delivery-20261103.md.
+
+### Verification
+1. ✓ Meaningful injected coordinator errors are rejected and successful continuation/recovery scenarios produce explicit evidence. — "PASS: scenario-recovery.test.mjs 14/14 parent and independent critic; prior pinned false-delivery counterexamples now rejected. Integrated notification/scenario run22/22 on c474931; trace audit15events passed at retainedcae90bb as attestations."
+2. ✓ Fixture guidance distinguishes deterministic guarantees from unrun native persistence/delivery and current unsupported/security-held lanes. — "PASS: scenario-audit reference separates deterministic consistency and real208process-replay from unproved native persistence, independence and held lanes; independent exact1c318f0 review accepted."
+3. ✓ Independent review of final fixture/source, measured targeted tests and required repository checks pass with artifact disposition. — "PASS: critic1c318f0 and renewed parentc474931 acceptance, dispatch preflight exactworker PASS, current pre-merge2/2 and pre-push5/5, deploy50; retained raw evidence ownership/lifecycle in orchestration-delivery-207-20261103.json."
