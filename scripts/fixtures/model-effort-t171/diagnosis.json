@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "diagnosis",
+  "files": {
+    "src/snapshot-service.mjs": "const snapshots = new Map();\nconst store = { read, write };\n\nexport async function loadSnapshot(name) {\n  if (snapshots.has(name)) return snapshots.get(name);\n  const value = await store.read(name);\n  snapshots.set(name, value);\n  return value;\n}\n\nexport async function updateSnapshot(name, next) {\n  await store.write(name, next);\n  snapshots.set(name, next);\n  return next;\n}\n\nexport function clearSnapshot(name) {\n  snapshots.delete(name);\n}\n",
+    "src/store.mjs": "export async function read(name) {\n  return database.read(name);\n}\n\nexport async function write(name, value) {\n  return database.write(name, value);\n}\n",
+    "test/snapshot-service.test.mjs": "test('a loaded snapshot is cached', async () => {\n  await loadSnapshot('alpha');\n  assert.equal(await loadSnapshot('alpha'), expected);\n});\n\ntest('clear forces a later load', async () => {\n  await loadSnapshot('alpha');\n  clearSnapshot('alpha');\n  assert.equal(await loadSnapshot('alpha'), changed);\n});\n"
+  },
+  "prompt": "Diagnose the cache consistency defect in this service. Return one JSON object with exactly: rootCause, minimalFix, regressionTest, affectedPaths. Ground claims in the supplied files. The contract is that when an update finishes while an older read is pending, the older read may finish for its original caller but must not replace the newer shared cache value. Do not invent runtime observations or recommend a global cache purge."
+}
