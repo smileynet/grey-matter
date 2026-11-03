@@ -274,7 +274,7 @@ auth remains conditional on the result of #186.
 | 199 | Pin the evaluation dashboard seed after observed template drift | ✅ done |
 | 167 | 13. Compare implementation worker tiers | in_progress |
 | 168 | 14. Compare reviewer tiers with planted defects and false positives | in_progress |
-| 169 | 15. Compare research/exploration tiers against a fixed answer key | open |
+| 169 | 15. Compare research/exploration tiers against a fixed answer key | in_progress |
 | 170 | 16. Compare documentation, triage and classification tiers | open |
 | 171 | 17. Sweep effort levels while holding each model fixed | open |
 | 172 | 18. Compare Claude fast mode on/off with measured quality and usage | open |

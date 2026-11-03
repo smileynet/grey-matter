@@ -1,7 +1,7 @@
 ---
 id: "169"
 title: "Spike: fast models for read-only research and codebase exploration fan-out"
-status: open
+status: in_progress
 blocked_by: ["174", "199"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
