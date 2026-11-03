@@ -8,7 +8,7 @@ tags: ["stream:orchestration", "type:fix"]
 validation_criteria:
   - "The selected runner produces the original c474646 seed without invoking live tkt or the mutable general fixture generator; full asset and extra-file checks pass."
   - "Independent exact-source review and current repository verification pass, including the full model-evaluation suite."
-  - "Seed provenance, historical execution limits and owned artifact disposition are recorded; shared recipe and dashboards reflect the repair."
+  - "Seed provenance, historical execution limits and owned artifact disposition are recorded, and the shared recipe reflects the repair."
 ---
 
 # Freeze the complete evaluation seed independently of host tooling
@@ -32,4 +32,4 @@ historical native execution/source identities.
 
 - [ ] All fifteen files produce the original tree without live tkt/generator inputs, with asset hashes and extra-file rejection checked.
 - [ ] Independent exact-source review and current gates pass, including the complete evaluation tests.
-- [ ] Provenance, artifact disposition, selected recipe and both dashboards reflect the repair without claiming new model execution.
+- [ ] Provenance, artifact disposition and selected recipe reflect the repair without claiming new model execution.

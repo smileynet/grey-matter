@@ -71,13 +71,16 @@ Dropped as stale, archived or off-topic: METR's task-standard and vivaria (archi
 
 Use Node 22+ and the checked-in T1/T3 manifests under
 <code>scripts/fixtures/model-eval/</code>. Both pin seed Git tree object ID
-`c474646ea61e037fcdbc1be3d2dc6c0833f5e260` (SHA-1). The reviewed hardened
-grader was reviewed at SHA-256 `92588b2ef6356eeb56b75ddc77f87fd3b73b6b9624d7eb9c38134f561960adea`.
-The current runner also pins the fixture dashboard before checking the full tree,
-so later template maintenance cannot silently alter a comparison. Other seed
-drift still blocks execution. See the [seed repair](eval-seed-drift-20261102.md)
-for current source identity and the setup-only regression; historical native
-execution provenance is unchanged.
+`c474646ea61e037fcdbc1be3d2dc6c0833f5e260` (SHA-1). At the #174 review, the hardened
+grader had SHA-256 `92588b2ef6356eeb56b75ddc77f87fd3b73b6b9624d7eb9c38134f561960adea`.
+The current runner materializes all fifteen original seed files from checked-in,
+hash-checked inputs. It no longer invokes live tkt or the general fixture
+generator. The earlier dashboard-only pin correctly rejected later guidance
+drift; the [complete seed repair](eval-frozen-seed-20261102.md) removes that
+remaining host dependency while retaining full-tree and extra-file checks.
+The [earlier repair](eval-seed-drift-20261102.md) records its own source identity;
+historical native execution provenance is unchanged. These setup-only checks
+do not constitute new model executions.
 From the repository root, use a fresh directory for every fixture/adapter pair:
 
 ~~~~powershell
