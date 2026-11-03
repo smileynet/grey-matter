@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-02",
+  "ticket": "188",
+  "fixture": {
+    "path": "%TEMP%/gm-t188-fixture",
+    "creation_command": "node scripts/spike-orchestrate-fixture.mjs create --variant trunk --dir <TEMP>/gm-t188-fixture",
+    "result": "Created local trunk fixture; github=null; no remote.",
+    "free_space_before_creation": {
+      "C": "about 174 GB free",
+      "D": "about 98 GB free"
+    }
+  },
+  "package": {
+    "owner": "@openai/codex 0.166.0; Windows x64 optional dependency @openai/codex-win32-x64 0.166.0-win32-x64",
+    "executable": "<Bun global package root>/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe",
+    "host": "<Bun global package root>/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex-code-mode-host.exe",
+    "executable_version": "codex-cli 0.166.0",
+    "executable_bytes": 371735856,
+    "executable_sha256": "9D563EE4E0441FF9D59D612013E0460DDF8E5709735C2D9F6B98B7EF8CA4EB42",
+    "executable_authenticode": "Valid; OpenAI OpCo, LLC; thumbprint DB0AA48794DC07B481F286EAD18ABC2CD17EDC22",
+    "host_bytes": 79101744,
+    "host_sha256": "977C1F01C9EFAC0BFE1B9032717C95F92E1C965C8441A8DACBFE824C5C79A527",
+    "host_authenticode": "Valid; OpenAI OpCo, LLC; thumbprint DB0AA48794DC07B481F286EAD18ABC2CD17EDC22",
+    "bun_path_has_sibling_host": false,
+    "standalone_vendor_path": "<Bun global package root> is D:/tools/bun-install/global; the Bun home symlink targets D:/tools/bun-install."
+  },
+  "harmless_command": "git -c core.excludesFile=<fixture>/.gitignore status --short",
+  "probes": [
+    {
+      "identity": "PATH-selected %USERPROFILE%/.bun/bin/codex.exe",
+      "version": "codex-cli 0.166.0",
+      "command": "codex exec --ephemeral --cd <fixture> --sandbox read-only --json '<harmless command and exact-output request>'",
+      "result": "The native error said it failed to spawn %USERPROFILE%/.bun/bin/codex-code-mode-host.exe (Windows: system cannot find the file, OS error 2). The requested shell command did not execute.",
+      "native_shell_exit": null,
+      "codex_process_exit": 0,
+      "classification": "Infrastructure failure reproduced; process exit 0 is not a pass.",
+      "raw": ".scratch/t188-evidence/standalone-clean.jsonl"
+    },
+    {
+      "identity": "Installed @openai/codex-win32-x64 package vendor codex.exe",
+      "version": "codex-cli 0.166.0; identical executable SHA-256 to PATH-selected binary",
+      "command": "<absolute package vendor codex.exe> exec --ephemeral --cd <fixture> --sandbox read-only --json '<harmless command and exact-output request>'",
+      "result": "Native command_execution invoked PowerShell with git -c core.excludesFile=<fixture>/.gitignore status --short; exit_code 0; aggregated_output empty. Agent reported exact output empty and command executed.",
+      "native_shell_exit": 0,
+      "codex_process_exit": 0,
+      "classification": "Pass for one harmless shell command through this package-owned session path.",
+      "raw": ".scratch/t188-evidence/package-managed-clean.jsonl"
+    },
+    {
+      "identity": "App-managed Codex executable under LocalAppData/OpenAI/Codex/bin/<managed-version>",
+      "version": "codex-cli 0.166.0-alpha.5.1; differs from standalone 0.166.0",
+      "command": "<absolute app-managed codex.exe> exec --ephemeral --cd <fixture> --sandbox read-only --json '<harmless command and exact-output request>'",
+      "result": "After setting core.excludesFile to the fixture's .gitignore, native PowerShell command completed with exit_code 0 and empty output. An earlier run exited 0 but Git emitted two permission warnings while reading the user's global ignore path; that attempt is not treated as a clean pass.",
+      "native_shell_exit": 0,
+      "codex_process_exit": 0,
+      "classification": "Observed working app-managed path, but version differs; not used to isolate host-layout causality.",
+      "raw": ".scratch/t188-evidence/app-managed-fixture-ignore.jsonl"
+    }
+  ],
+  "source": {
+    "official": "https://learn.chatgpt.com/docs/enterprise/windows-deployment",
+    "claim_scope": "Official Windows guidance distinguishes app-managed and standalone installs and says to preserve the complete standalone runtime layout; it does not specifically document this package's internal vendor path as a stable public launcher contract."
+  },
+  "changes": {
+    "install_or_download": false,
+    "binary_copy": false,
+    "global_config_or_path_edit": false,
+    "persistent_codex_settings_edit": false,
+    "cleanup": "Fixture and raw captures retained through independent critic review; remove after review, preserving this sanitized committed receipt."
+  },
+  "limitations": [
+    "Only one harmless read-only shell command was verified.",
+    "No approval behavior, write command, or broader tool suite was tested.",
+    "Persistence of the package's internal vendor path across updates is unverified.",
+    "The app-managed CLI version differs from standalone 0.166.0 and is not causal evidence for the same-version result."
+  ]
+}
