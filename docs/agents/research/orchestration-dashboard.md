@@ -12,9 +12,9 @@ is available while signed in as its owner. Published through Sites on 2026-11-03
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `310902e89c98695031fffb05dfe470399a5ba983`.
-- Deployment: `appgdep_6ae9d51238188191852e7011de63ca47`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_e6435ee54b888191862f4659924337bf`.
+- Pushed Site source: `0aa9135f3b2f0f5d82b4f1185168ddfb9e1a33f8`.
+- Deployment: `appgdep_6ae9f42a86e88191a5e735a212a619e1`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_2cde45996de88191b43e0985d470d073`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -28,9 +28,39 @@ Windows System32 first on the child process PATH succeeded. No plugin code chang
 
 ## Maintain it
 
+### Fast-model scope clarified (2026-11-03)
+
+The user meant fast models such as Claude Haiku 5.5 and GPT Luna, rather than
+paid fast mode. Existing tier comparisons already cover that intent, with
+quality, infrastructure, grading and served-identity limits kept distinct.
+Independent scope review found no newly requested comparison goal. Ticket #172
+was cancelled as obsolete, not completed; none of its twelve paid-fast-mode
+cells ran. Its credit question is answered by the scope correction and retained
+in history, without inferring anything about account entitlement.
+
+The latest page has 20 findings and 36 scoped tickets: 34 done, one cancelled
+and only #189 unfinished. Cancelled work has an explicit label/filter/count
+and is absent from the default active diagram. The delivery page has 54 entries,
+zero open asks and the existing four-tab decision interface preserved. All 53
+earlier entries were retained, with only the former ask's answer and explanatory
+detail updated. The old capture helper's three-tab assumption failed, then was
+corrected; fresh four-tab checks passed at both viewport widths.
+
+An independent critic inspected all twelve laptop/phone captures and accepted
+dedicated receipt `70a068dbf1fcc7cd3379d72477143554cebba81862d3988cd7613f49babd2509`
+in `evidence/orchestration-dashboard/t172-model-scope-final/` and delivery receipt
+`7dafecc21d6c07a7f93d2474d4a162ffc3e4c04cbdaa19460d1b4c92933d0b4a`
+in `evidence/orchestration-dashboard/t172-model-scope-status-final/`. Scope,
+snapshots and captures were pushed as `d71bb48`; three explicit pre-merge checks
+and all three applicable pre-push checks passed. Native publication succeeded
+at 14:48:18 UTC, preserving owner-private access with no failure message.
+The packaged cancellation, active count and all 36 ticket links were checked;
+production browser interaction was not checked. Supervision remains active
+only for the Kiro shutdown condition. The obsolete paid-mode plans must not run.
+
 ### Current blocker snapshot (2026-11-03)
 
-The latest publication includes the reconciled plan and durable fast-mode hold
+That publication included the reconciled plan and then-current fast-mode hold
 in ticket #172. Its expanded dashboard description now states that credits
 must already be enabled and no fast-mode model calls have run. Completed
 writing, effort and ACP work is no longer described as upcoming. Counts remain
