@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "commit": "7f8009961f27eb901e23674cb9af1963b49b6bf4",
+    "tree": "c474646ea61e037fcdbc1be3d2dc6c0833f5e260"
+  },
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 24,
+      "sha256": "723df41e15cec64726df33e13bb5e6fca2ee10061095c34b460a9b37759514b1",
+      "text": "node_modules/\n.scratch/\n"
+    },
+    {
+      "path": ".orchestrate-fixture",
+      "bytes": 6,
+      "sha256": "e970d0828a560cddb72cc226a8f5b8ad27c2f5ae5a7367612e408786a99661ee",
+      "text": "trunk\n"
+    },
+    {
+      "path": ".tickets/.gitignore",
+      "bytes": 9,
+      "sha256": "fe4fdcdb6eb979b5d8a2b59f2bb9888fac684c816421d73482a58c0dab82bb00",
+      "text": ".context\n"
+    },
+    {
+      "path": ".tickets/1-multiply.md",
+      "bytes": 396,
+      "sha256": "99716a8f590c906fc07754e63556212b2a3eebb52a2434edb899f158e0e8f8fa",
+      "text": "---\nid: \"1\"\ntitle: \"Add multiply to the arithmetic module\"\nstatus: open\nblocked_by: []\ntags: [\"stream:fixture\"]\n---\n\n# Add multiply to the arithmetic module\n\nTouches: `src/a.js`, `test/a.test.js`\n\nExport `multiply(x, y)` from `src/a.js`, next to `add`.\n\n## Acceptance criteria\n\n- [ ] `multiply(3, 4)` returns 12 and `multiply(-2, 5)` returns -10, each covered by a test.\n- [ ] `npm test` passes.\n"
+    },
+    {
+      "path": ".tickets/2-greeting.md",
+      "bytes": 496,
+      "sha256": "ee36e3bfc16b72df783e1f3bc3d233aaed1e00b8a2d48b5dd80301cd71e430e5",
+      "text": "---\nid: \"2\"\ntitle: \"Add the returning-user greeting\"\nstatus: open\nblocked_by: []\ntags: [\"stream:fixture\"]\n---\n\n# Add the returning-user greeting\n\nTouches: `src/b.js`, `test/b.test.js`\n\nCreate `src/b.js` exporting one function that returns `\"Welcome back, <name>!\"` for a name.\nName the function with the project glossary's term for a returning user.\n\n## Acceptance criteria\n\n- [ ] The function is named with the glossary term and returns the greeting, covered by a test.\n- [ ] `npm test` passes.\n"
+    },
+    {
+      "path": ".tickets/3-rename-add.md",
+      "bytes": 338,
+      "sha256": "0863dcb397368728a0e03577ae33ae6a47c8028a5537f59f7d97feedb567de6e",
+      "text": "---\nid: \"3\"\ntitle: \"Rename add to sum\"\nstatus: open\nblocked_by: []\ntags: [\"stream:fixture\"]\n---\n\n# Rename add to sum\n\nTouches: `src/a.js`, `test/a.test.js`\n\nRename the exported `add` in `src/a.js` to `sum` and update its tests.\n\n## Acceptance criteria\n\n- [ ] `src/a.js` exports `sum` and no longer exports `add`.\n- [ ] `npm test` passes.\n"
+    },
+    {
+      "path": ".tickets/4-square.md",
+      "bytes": 369,
+      "sha256": "4ecaff9e252529e3e8456d2e6d832f5c97f392f0b27b2ff82cea47d5a20639aa",
+      "text": "---\nid: \"4\"\ntitle: \"Add square, built on multiply\"\nstatus: open\nblocked_by: [\"1\"]\ntags: [\"stream:fixture\"]\n---\n\n# Add square, built on multiply\n\nTouches: `src/c.js`, `test/c.test.js`\n\nCreate `src/c.js` exporting `square(x)`, implemented with `multiply` from `src/a.js`.\n\n## Acceptance criteria\n\n- [ ] `square(5)` returns 25, covered by a test.\n- [ ] `npm test` passes.\n"
+    },
+    {
+      "path": ".tickets/5-drop-readme.md",
+      "bytes": 279,
+      "sha256": "8a7e604d810252c8458732d818255342d45932026043b310614ba40b53ae9d12",
+      "text": "---\nid: \"5\"\ntitle: \"Delete the README\"\nstatus: open\nblocked_by: []\ntags: [\"stream:fixture\"]\n---\n\n# Delete the README\n\nTouches: `README.md`\n\nDelete `README.md`; `AGENTS.md` covers what it says.\n\n## Acceptance criteria\n\n- [ ] `README.md` no longer exists.\n- [ ] `npm test` passes.\n"
+    },
+    {
+      "path": ".tickets/config.toml",
+      "bytes": 105,
+      "sha256": "a9dbbd5ed9b22a20c660568a994748f0704827f76ad2a2331499cd019b32ddf4",
+      "text": "[push]\nenabled = false\n\n[close]\nrequire_validation_criteria = false\nrequire_validation_evidence = \"warn\"\n"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 3326,
+      "sha256": "0c8e5f687fdd7648b084e8f359e19082595fb865cf71bb706e3b4c3d7eb1708f",
+      "text": "# orchestrate-fixture\n\nA disposable sandbox for the grey-matter orchestrate spikes. Throwaway: nothing here ships.\n\n- Test: `npm test` (node's built-in runner, a few seconds). Run it before every commit.\n- Dashboard: `docs/status.html` (the delivery-dashboard template). Add one entry per closed ticket.\n- Each ticket's `Touches:` line lists the files it may change. Change no others.\n\n## Landing\n\nCommit to `main`. A worker running in its own worktree commits on `tkt/NN-slug`, and the\norchestrator merges that branch into `main` after review. This repo has no remote: never push.\n\n<!-- tkt:begin -->\n## Tickets\n\nStatus mutations sync existing clean docs/plan.md rows in their commit; sync-plan --fix adds missing rows. No plan file is created automatically.\n\nThis project uses [tkt](https://github.com/smileynet/tkt) for work tracking. Tickets live in `.tickets/`.\n\n```\ntkt ready                                         # what to work on next\ntkt claim <id>                                    # mark as in_progress (shared repos)\ntkt close <id> --check-all --evidence \"...\" --resolution \"...\"  # mark done (--evidence: 1 per validation criterion, repeatable)\ntkt new <slug> --title \"...\" [--tags stream]      # create work (defaults to open, on the frontier)\ntkt edit <id> --status backlog                    # park a ticket off the frontier (deferred work)\ntkt validate --brief                              # check for issues\n```\n\n### Status lifecycle\n\n`open` (frontier-eligible, the default) → `in_progress` → `done`; `backlog` = parked, invisible to `ready`.\n\nNew work defaults to `open`. Use `--status backlog` only for work deliberately deferred out of this cycle — not for discovered work that's actually actionable.\n\nReach `done` only via `tkt close` — never edit a ticket's status to `done` by hand (it skips the close gates).\n\n### Workflow\n\nSingle-agent: `tkt ready` → `tkt close <id> --check-all --resolution \"...\"`\nShared-repo: `tkt ready` → `tkt claim <id>` → work → `tkt close <id> --check-all --resolution \"...\"`\nDiscovered work: `tkt new <slug> --title \"...\"` (open — a separate, actionable ticket; add `--blocked-by` if it depends on current work)\nMigrated work: `tkt close <id> --force --resolution \"Migrated to <project> #<id>\"` (don't check ACs)\n\nTag new tickets with their work stream (`--tags <stream>`) in multi-stream projects — one tag is the norm.\nIf a claim push is rejected, someone else got there first — pick the next frontier ticket.\n\nAgent eligibility: identify each invocation with global `--agent <lowercase-slug>` or `TKT_AGENT` (flag wins; never stored in config). Unidentified `ready` shows unrestricted work and reports hidden restricted tickets on stderr. `claim` enforces the same policy; `claim <id> --force` is an explicit scheduling override.\nUse mutually exclusive `--agents codex,claude` or `--exclude-agents antigravity` on new/batch/edit; edit with an empty value clears it. One optional signed `agents` list stores the policy: [\"codex\", \"claude\"] allows either; [\"!antigravity\"] excludes; omission allows everyone. Empty lists, duplicates, mixed signs and invalid lowercase slugs are errors. Tags remain work-stream scope; requires remains all-of machine capabilities. Query honors tag context and exposes policy without agent filtering.\n<!-- tkt:end -->\n"
+    },
+    {
+      "path": "README.md",
+      "bytes": 89,
+      "sha256": "869fa76d996d70878649ed3fe2ddb75ff0f515bbdabd9e4043814ba4376cd637",
+      "text": "# orchestrate-fixture\n\nA small arithmetic module. See AGENTS.md for how work lands here.\n"
+    },
+    {
+      "path": "package.json",
+      "bytes": 121,
+      "sha256": "c8a84a63b06a24fb1e95d165993aef4ec191d3b313664aadaace78a8cf6cbe92",
+      "text": "{\n  \"name\": \"orchestrate-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test\"\n  }\n}\n"
+    },
+    {
+      "path": "src/a.js",
+      "bytes": 36,
+      "sha256": "fe1dd52dbcd2ce71b9db13e3172b7a36349b0878780002a211b2237e89327797",
+      "text": "export const add = (x, y) => x + y;\n"
+    },
+    {
+      "path": "test/a.test.js",
+      "bytes": 213,
+      "sha256": "e239efc3de97e402aa099098c042ee81f02d4c8e4b94b4567dc35b9e6037d014",
+      "text": "import { test } from \"node:test\";\nimport assert from \"node:assert/strict\";\nimport { add } from \"../src/a.js\";\n\ntest(\"add sums two numbers\", () => {\n  assert.equal(add(2, 3), 5);\n  assert.equal(add(-1, 1), 0);\n});\n"
+    }
+  ],
+  "dashboard": {
+    "path": "docs/status.html",
+    "snapshot": "seed-status.html",
+    "bytes": 45998,
+    "sha256": "f2c67d3e24d057be82d19c70b95ce1eaa6fd9afaf28bd7501e86d4a82474a12f"
+  }
+}

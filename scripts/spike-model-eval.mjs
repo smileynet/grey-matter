@@ -10,7 +10,7 @@ import { parseArgs } from "node:util";
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const FIXTURES = join(REPO, "scripts", "fixtures", "model-eval");
-const CREATE_FIXTURE = join(REPO, "scripts", "spike-orchestrate-fixture.mjs");
+const SEED = JSON.parse(readFileSync(join(FIXTURES, "seed-files.json"), "utf8"));
 const TIMEOUT_MS = 600_000;
 const MAX_BUFFER = 16 * 1024 * 1024;
 
@@ -93,13 +93,40 @@ function gitPaths(cwd, ...args) {
 }
 
 function freezeFixture(workDir, expectedTree) {
-  // The general spike generator tracks the live dashboard; comparisons require its original bytes.
-  writeFileSync(join(workDir, "docs", "status.html"), readFileSync(join(FIXTURES, "seed-status.html")));
-  git(workDir, "add", "--", "docs/status.html");
-  git(workDir, "-c", "commit.gpgsign=false", "commit", "--amend", "--no-edit", "--quiet");
-  const tree = git(workDir, "rev-parse", "HEAD^{tree}");
+  mkdirSync(workDir, { recursive: true });
+  if (!existsSync(join(workDir, ".git"))) {
+    git(workDir, "init", "--quiet", "--initial-branch=main");
+    git(workDir, "config", "core.autocrlf", "false");
+  }
+  const files = [...SEED.files, {
+    path: SEED.dashboard.path,
+    bytes: SEED.dashboard.bytes,
+    sha256: SEED.dashboard.sha256,
+    source: join(FIXTURES, SEED.dashboard.snapshot),
+  }];
+  for (const file of files) {
+    const contents = file.source ? readFileSync(file.source) : Buffer.from(file.text, "utf8");
+    if (contents.length !== file.bytes || createHash("sha256").update(contents).digest("hex") !== file.sha256) {
+      fail(`frozen fixture source changed: ${file.path}`);
+    }
+    const destination = join(workDir, file.path);
+    mkdirSync(dirname(destination), { recursive: true });
+    writeFileSync(destination, contents);
+  }
+  git(workDir, "add", "-A");
+  const headResult = run("git", ["rev-parse", "HEAD"], { cwd: workDir });
+  const outside = gitPaths(workDir, "ls-files", "--others", "-z", "--");
+  if (outside.length) fail(`fixture contains unexpected changes before grading: ${outside.join(", ")}`);
+  if (headResult.status === 0) {
+    const changed = changedFilesSince(workDir, headResult.stdout.trim());
+    if (changed.length) fail(`fixture contains unexpected changes before grading: ${changed.join(", ")}`);
+  }
+  const tree = git(workDir, "write-tree");
   if (tree !== expectedTree) fail(`fixture seed changed: expected ${expectedTree}, observed ${tree}`);
-  return tree;
+  if (headResult.status !== 0) {
+    git(workDir, "-c", "user.name=fixture", "-c", "user.email=fixture@example.invalid", "-c", "commit.gpgsign=false", "commit", "--quiet", "-m", "fixture: frozen model evaluation seed");
+  }
+  return { tree, commit: git(workDir, "rev-parse", "HEAD"), creation: "checked-in frozen seed files; no live generator or host tkt command" };
 }
 
 function changedFilesSince(workDir, seedCommit) {
@@ -349,14 +376,11 @@ async function main() {
 
   mkdirSync(dirname(evidenceDir), { recursive: true });
   mkdirSync(evidenceDir);
-  const created = run(process.execPath, [CREATE_FIXTURE, "create", "--variant", "trunk", "--dir", workDir]);
-  writeCapture(evidenceDir, "fixture-create.stdout.json", created.stdout);
-  writeCapture(evidenceDir, "fixture-create.stderr.txt", created.stderr);
-  if (created.status !== 0) fail(`fixture creation failed: ${created.error ?? created.stderr ?? created.stdout}`);
-  const fixtureIdentity = JSON.parse(created.stdout);
-  const generatedTree = fixtureIdentity.tree;
-  fixtureIdentity.tree = freezeFixture(workDir, task.seedTree);
-  const seedCommit = git(workDir, "rev-parse", "HEAD");
+  const fixture = freezeFixture(workDir, task.seedTree);
+  const fixtureIdentity = { dir: workDir, variant: "frozen-model-eval", tree: fixture.tree, github: null };
+  writeCapture(evidenceDir, "fixture-create.stdout.json", `${JSON.stringify(fixtureIdentity, null, 2)}\n`);
+  writeCapture(evidenceDir, "fixture-create.stderr.txt", "");
+  const seedCommit = fixture.commit;
   const ticketText = readFileSync(join(workDir, task.ticketFile), "utf8");
   const nodeExe = process.execPath;
   const npmCommand = join(dirname(nodeExe), process.platform === "win32" ? "npm.cmd" : "npm");
@@ -405,8 +429,8 @@ async function main() {
       id: task.id,
       ticketId: task.ticketId,
       seedTree: fixtureIdentity.tree,
-      generatedTree,
       seedCommit,
+      creation: fixture.creation,
       workingDirectory: workDir,
     },
     adapter: {
