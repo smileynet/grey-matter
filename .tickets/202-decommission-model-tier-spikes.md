@@ -3,7 +3,14 @@ id: "202"
 title: "Decommission the model-tier spike harnesses (168-171) and keep a retest recipe"
 status: open
 blocked_by: []
+validation_criteria:
+  - "No t168-t171 spike harness, test, fixture or gate remains in scripts/ or scripts/gates.json."
+  - "Every research doc link to a removed file points at a pinned commit that still has it; the docs consistency check passes."
+  - "A 'How to rerun' recipe names the commit, host, CLI versions, commands and authorization step for each spike."
+  - "node scripts/gate.mjs pre-release passes on Linux with no Windows-only wrapper for these checks."
+tags: ["type:chore", "stream:tooling"]
 ---
+
 # Decommission the model-tier spike harnesses and keep a retest recipe
 
 ## Why
