@@ -4,6 +4,8 @@ Date: 2026-11-03
 Ticket: [170](../../../.tickets/170-spike-model-tier-docs-triage.md)
 Status: native calls and one recorded blind review per cell are complete; results and evidence limits follow below.
 
+Frozen protocol used for the native calls: [model-task-tiers-protocol-20261103.md](./model-task-tiers-protocol-20261103.md). Its bytes remain unchanged at the recorded protocol SHA-256.
+
 Human-readable summary: [Fast text-task model results](../../model-tier-spike-results-2026-11-03.md).
 
 ## Question and scope

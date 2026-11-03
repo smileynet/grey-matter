@@ -88,8 +88,14 @@
     {
       "name": "t170-results-evidence-20261103.json",
       "privatePath": "docs/agents/research/t170-results-evidence-20261103.json",
-      "sha256": "435E38F5A7E7574E9E7D7BFAF340A9A539A7AC1AECA977C14428B335EDF8171B",
+      "sha256": "8583D5F972BBAB189B556BA42FB046871374ED87857AE08441BFA94E5A2FED1A",
       "purpose": "Committed per-cell score outcome, native timing/usage/cost/identity, provenance limits, and hashes for the immutable evidence chain; contains no response text, private key, or reviewer rationale."
+    },
+    {
+      "name": "model-task-tiers-protocol-20261103.md",
+      "privatePath": "docs/agents/research/model-task-tiers-protocol-20261103.md",
+      "sha256": "D49E8C8C9B3BFE4E6CB246F94A12BAA22856EC9D0B65DE5225C4C2A3067DAA19",
+      "purpose": "Byte-preserved copy of the exact original protocol Git blob whose SHA-256 the controller verified during the 18 native calls; the results report links here and future controller checks read this immutable copy."
     },
     {
       "name": "t170-session-cleanup-evidence-20261103.json",

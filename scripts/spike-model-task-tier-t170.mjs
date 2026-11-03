@@ -11,7 +11,7 @@ import { parseArgs } from "node:util";
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TASK_DIR = join(REPO, "scripts", "fixtures", "model-tasks", "t170");
-const NOTE = join(REPO, "docs", "agents", "research", "model-task-tiers-20261103.md");
+const NOTE = join(REPO, "docs", "agents", "research", "model-task-tiers-protocol-20261103.md");
 export const TICKET = 170;
 export const PROVIDERS = Object.freeze(["claude", "codex", "kiro"]);
 export const TASKS = Object.freeze(["doc-rewrite", "triage", "changelog-classification"]);
