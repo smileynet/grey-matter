@@ -14,4 +14,20 @@ An Ask rule that causes a headless rejection is not itself proof of matching: un
 
 Fresh native calls, exact settings, output/error text, CLI identity, and the native-history inventory are recorded in [the evidence receipt](evidence/agy-approval-overlap-20261102.json). The prior #158 raw receipt and source guide are cited there as local provenance. After the independent critic verified the four new native histories and cleared cleanup, the parent authorized coordinated disposal. The four #193 histories and six #158 histories (10 exact sets, 4,792,060 bytes total) were recycled to the OS trash; every inventoried brain directory and conversation database was checked absent afterward. No ticket #194 histories were accessed or changed. My four session-only settings files (792 bytes total) were also recycled; no private fixture was created.
 
-The observed `unsandboxed` wording does not establish account tier, OS sandbox confinement, or the matching implementation. There was no installed source for the CLI inspected, no effective scope enumeration, and no upstream issue filed. The safe bounded mitigation is to avoid relying on an Ask regex override of an Allow regex: use an explicit matching Deny where blocking is intended, and validate each target with a native result. This is not a general command confinement claim. A sanitized upstream report can be prepared from the receipt; filing it requires separate authorization.
+The observed `unsandboxed` wording does not establish account tier, OS sandbox confinement, or the matching implementation. There was no installed source for the CLI inspected, no effective scope enumeration, and no upstream issue filed. The safe bounded mitigation is to avoid relying on an Ask regex override of an Allow regex: use an explicit matching Deny where blocking is intended, and validate each target with a native result. This is not a general command confinement claim. The following sanitized issue brief is prepared locally; filing it requires separate authorization.
+
+## Sanitized upstream issue brief (not submitted)
+
+**Title:** Identical command regex in Ask and Allow executes headless despite documented Ask precedence.
+
+**Environment:** native Windows, agy 1.4.12; executable hash and complete native commands/settings are in the [receipt](evidence/agy-approval-overlap-20261102.json). No skip-permissions or sandbox flag; session-only request-review settings, accept-edits mode, no global edits.
+
+**Reproduction:** in an owned disposable session, put `command(regex:^git --version$)` in both `permissions.allow` and `permissions.ask`, leave Deny empty, and request only `git --version`. Inspect the native command tool result rather than the assistant's summary. This case also occurred twice in the earlier #158 receipt.
+
+**Expected:** the documented Deny > Ask > Allow order would require review for an identical effective match; headless execution would not run the command without approval.
+
+**Actual:** native command exit 0 and Git version output. Fresh literal Ask `command(git --version)` and broad Ask `command(*)` controls rejected the command, while identical regex Deny produced the matching-deny error. These controls do not prove which Ask rule parsed or matched, because fallback also asks.
+
+**Unknown:** effective inherited rule lists, Ask regex parsing/matching and command-to-unsandboxed target mapping. `list_permissions` was advertised but not natively invoked; a model refusal is not a rule enumeration.
+
+**Scoped mitigation:** do not rely on this regex Ask override. An explicit matching Deny blocked the tested command; independently validate intended targets. No broader shell confinement or fixed release is established.

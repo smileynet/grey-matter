@@ -1,6 +1,6 @@
 # Independent audit: Antigravity CLI Ask/Allow overlap
 
-**Audited:** 2026-11-03 against commit `38098d808dd6992d9ec87852dc6703a900f0c125`.
+**Audited:** 2026-11-02 (America/Los_Angeles) against commit `38098d808dd6992d9ec87852dc6703a900f0c125`.
 
 ## Per-claim verdicts
 
