@@ -1,0 +1,538 @@
+{
+  "schemaVersion": 1,
+  "ticket": 167,
+  "date": "2026-11-02",
+  "frozenBaseTree": "c474646ea61e037fcdbc1be3d2dc6c0833f5e260",
+  "originalPrivateFixtureManifestSha256": "aa02eaec908f619ee0d325742a2cb1b5be8a2166a0ffc4e138b9a228fc912628",
+  "cases": [
+    {
+      "id": "t1",
+      "seedTree": "c474646ea61e037fcdbc1be3d2dc6c0833f5e260",
+      "seedCommit": "7f8009961f27eb901e23674cb9af1963b49b6bf4",
+      "ticketPath": ".tickets/1-multiply.md",
+      "ticketSha256": "12fafb2db2955a27a3ad3ca182ea6b41a03dd1b461a2716f3a62d926b33a3b65",
+      "files": [
+        {
+          "path": ".gitignore",
+          "bytes": 26,
+          "sha256": "2f0937b3c35bbe7b9ba491f445a6a21fa34d24be9df1c88540fca63f167ec4e1"
+        },
+        {
+          "path": ".orchestrate-fixture",
+          "bytes": 7,
+          "sha256": "271341accf91401186a4b6e0d9de06f655890b48b3799cff9fffad2d100fcc39"
+        },
+        {
+          "path": ".tickets/.gitignore",
+          "bytes": 10,
+          "sha256": "dac0c716064f1e156b2acaa1899fc87d6a1e01099cd73499eb297e60627562c2"
+        },
+        {
+          "path": ".tickets/1-multiply.md",
+          "bytes": 414,
+          "sha256": "12fafb2db2955a27a3ad3ca182ea6b41a03dd1b461a2716f3a62d926b33a3b65"
+        },
+        {
+          "path": ".tickets/2-greeting.md",
+          "bytes": 515,
+          "sha256": "6082d0f4c64b02542d872451cfdacadf7b066ed0ed46ad996aee207381f81701"
+        },
+        {
+          "path": ".tickets/3-rename-add.md",
+          "bytes": 356,
+          "sha256": "d10c265ab56d24e7887dad7fbc8645715688adc64d0d763365194b488a06b700"
+        },
+        {
+          "path": ".tickets/4-square.md",
+          "bytes": 387,
+          "sha256": "b1df78e43459afbd9e90b5c3488c6eb392a9b1830d51f6df2a138029b491b394"
+        },
+        {
+          "path": ".tickets/5-drop-readme.md",
+          "bytes": 297,
+          "sha256": "0dd9ad75b46964b5e711ecffc9ce7b4d9b6596a5173b20df3a405c4b61874e14"
+        },
+        {
+          "path": ".tickets/config.toml",
+          "bytes": 111,
+          "sha256": "3a6ca1de0ec1858c970ef3d1c39a12690172dd9c3360f1c13c1f1e2795622dbb"
+        },
+        {
+          "path": "AGENTS.md",
+          "bytes": 3376,
+          "sha256": "3fbb8e262b5eb3b569f30d300bbbcc6a2efa780c357f0df5cfca7f4d67390556"
+        },
+        {
+          "path": "README.md",
+          "bytes": 92,
+          "sha256": "5a0bc7d6d8e69a8cf4da888f73155b35fd63bfdf35445ef289aeb43c37d959ff"
+        },
+        {
+          "path": "docs/status.html",
+          "bytes": 46628,
+          "sha256": "3b6d546084ea7f44cd5183f963133b53f6582302e0dcc2afc523dc7f0514dce7"
+        },
+        {
+          "path": "package.json",
+          "bytes": 129,
+          "sha256": "db75e81c87dba15494854b9789f4f27de2e6d306164695ea0a5c67c7158fe38f"
+        },
+        {
+          "path": "src/a.js",
+          "bytes": 37,
+          "sha256": "0995b81b8697768115cdfb296f516f0af64522d6b207ddfa7eb1a33777726f10"
+        },
+        {
+          "path": "test/a.test.js",
+          "bytes": 221,
+          "sha256": "e39581ce449841e94db3f86e9dc7fc387571f4e62cd5e14f01caf82578ffe609"
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "seedTree": "c474646ea61e037fcdbc1be3d2dc6c0833f5e260",
+      "seedCommit": "7f8009961f27eb901e23674cb9af1963b49b6bf4",
+      "ticketPath": ".tickets/2-greeting.md",
+      "ticketSha256": "6082d0f4c64b02542d872451cfdacadf7b066ed0ed46ad996aee207381f81701",
+      "files": [
+        {
+          "path": ".gitignore",
+          "bytes": 26,
+          "sha256": "2f0937b3c35bbe7b9ba491f445a6a21fa34d24be9df1c88540fca63f167ec4e1"
+        },
+        {
+          "path": ".orchestrate-fixture",
+          "bytes": 7,
+          "sha256": "271341accf91401186a4b6e0d9de06f655890b48b3799cff9fffad2d100fcc39"
+        },
+        {
+          "path": ".tickets/.gitignore",
+          "bytes": 10,
+          "sha256": "dac0c716064f1e156b2acaa1899fc87d6a1e01099cd73499eb297e60627562c2"
+        },
+        {
+          "path": ".tickets/1-multiply.md",
+          "bytes": 414,
+          "sha256": "12fafb2db2955a27a3ad3ca182ea6b41a03dd1b461a2716f3a62d926b33a3b65"
+        },
+        {
+          "path": ".tickets/2-greeting.md",
+          "bytes": 515,
+          "sha256": "6082d0f4c64b02542d872451cfdacadf7b066ed0ed46ad996aee207381f81701"
+        },
+        {
+          "path": ".tickets/3-rename-add.md",
+          "bytes": 356,
+          "sha256": "d10c265ab56d24e7887dad7fbc8645715688adc64d0d763365194b488a06b700"
+        },
+        {
+          "path": ".tickets/4-square.md",
+          "bytes": 387,
+          "sha256": "b1df78e43459afbd9e90b5c3488c6eb392a9b1830d51f6df2a138029b491b394"
+        },
+        {
+          "path": ".tickets/5-drop-readme.md",
+          "bytes": 297,
+          "sha256": "0dd9ad75b46964b5e711ecffc9ce7b4d9b6596a5173b20df3a405c4b61874e14"
+        },
+        {
+          "path": ".tickets/config.toml",
+          "bytes": 111,
+          "sha256": "3a6ca1de0ec1858c970ef3d1c39a12690172dd9c3360f1c13c1f1e2795622dbb"
+        },
+        {
+          "path": "AGENTS.md",
+          "bytes": 3376,
+          "sha256": "3fbb8e262b5eb3b569f30d300bbbcc6a2efa780c357f0df5cfca7f4d67390556"
+        },
+        {
+          "path": "README.md",
+          "bytes": 92,
+          "sha256": "5a0bc7d6d8e69a8cf4da888f73155b35fd63bfdf35445ef289aeb43c37d959ff"
+        },
+        {
+          "path": "docs/status.html",
+          "bytes": 46628,
+          "sha256": "3b6d546084ea7f44cd5183f963133b53f6582302e0dcc2afc523dc7f0514dce7"
+        },
+        {
+          "path": "package.json",
+          "bytes": 129,
+          "sha256": "db75e81c87dba15494854b9789f4f27de2e6d306164695ea0a5c67c7158fe38f"
+        },
+        {
+          "path": "src/a.js",
+          "bytes": 37,
+          "sha256": "0995b81b8697768115cdfb296f516f0af64522d6b207ddfa7eb1a33777726f10"
+        },
+        {
+          "path": "test/a.test.js",
+          "bytes": 221,
+          "sha256": "e39581ce449841e94db3f86e9dc7fc387571f4e62cd5e14f01caf82578ffe609"
+        }
+      ]
+    },
+    {
+      "id": "t3",
+      "seedTree": "c474646ea61e037fcdbc1be3d2dc6c0833f5e260",
+      "seedCommit": "7f8009961f27eb901e23674cb9af1963b49b6bf4",
+      "ticketPath": ".tickets/3-rename-add.md",
+      "ticketSha256": "d10c265ab56d24e7887dad7fbc8645715688adc64d0d763365194b488a06b700",
+      "files": [
+        {
+          "path": ".gitignore",
+          "bytes": 26,
+          "sha256": "2f0937b3c35bbe7b9ba491f445a6a21fa34d24be9df1c88540fca63f167ec4e1"
+        },
+        {
+          "path": ".orchestrate-fixture",
+          "bytes": 7,
+          "sha256": "271341accf91401186a4b6e0d9de06f655890b48b3799cff9fffad2d100fcc39"
+        },
+        {
+          "path": ".tickets/.gitignore",
+          "bytes": 10,
+          "sha256": "dac0c716064f1e156b2acaa1899fc87d6a1e01099cd73499eb297e60627562c2"
+        },
+        {
+          "path": ".tickets/1-multiply.md",
+          "bytes": 414,
+          "sha256": "12fafb2db2955a27a3ad3ca182ea6b41a03dd1b461a2716f3a62d926b33a3b65"
+        },
+        {
+          "path": ".tickets/2-greeting.md",
+          "bytes": 515,
+          "sha256": "6082d0f4c64b02542d872451cfdacadf7b066ed0ed46ad996aee207381f81701"
+        },
+        {
+          "path": ".tickets/3-rename-add.md",
+          "bytes": 356,
+          "sha256": "d10c265ab56d24e7887dad7fbc8645715688adc64d0d763365194b488a06b700"
+        },
+        {
+          "path": ".tickets/4-square.md",
+          "bytes": 387,
+          "sha256": "b1df78e43459afbd9e90b5c3488c6eb392a9b1830d51f6df2a138029b491b394"
+        },
+        {
+          "path": ".tickets/5-drop-readme.md",
+          "bytes": 297,
+          "sha256": "0dd9ad75b46964b5e711ecffc9ce7b4d9b6596a5173b20df3a405c4b61874e14"
+        },
+        {
+          "path": ".tickets/config.toml",
+          "bytes": 111,
+          "sha256": "3a6ca1de0ec1858c970ef3d1c39a12690172dd9c3360f1c13c1f1e2795622dbb"
+        },
+        {
+          "path": "AGENTS.md",
+          "bytes": 3376,
+          "sha256": "3fbb8e262b5eb3b569f30d300bbbcc6a2efa780c357f0df5cfca7f4d67390556"
+        },
+        {
+          "path": "README.md",
+          "bytes": 92,
+          "sha256": "5a0bc7d6d8e69a8cf4da888f73155b35fd63bfdf35445ef289aeb43c37d959ff"
+        },
+        {
+          "path": "docs/status.html",
+          "bytes": 46628,
+          "sha256": "3b6d546084ea7f44cd5183f963133b53f6582302e0dcc2afc523dc7f0514dce7"
+        },
+        {
+          "path": "package.json",
+          "bytes": 129,
+          "sha256": "db75e81c87dba15494854b9789f4f27de2e6d306164695ea0a5c67c7158fe38f"
+        },
+        {
+          "path": "src/a.js",
+          "bytes": 37,
+          "sha256": "0995b81b8697768115cdfb296f516f0af64522d6b207ddfa7eb1a33777726f10"
+        },
+        {
+          "path": "test/a.test.js",
+          "bytes": 221,
+          "sha256": "e39581ce449841e94db3f86e9dc7fc387571f4e62cd5e14f01caf82578ffe609"
+        }
+      ]
+    },
+    {
+      "id": "t4",
+      "seedTree": "2f8267d3ebba09b70fe1973af073c9c4c613bbab",
+      "seedCommit": "976dcab0afaf501709ae0a7ede406b581e46e7d4",
+      "ticketPath": ".tickets/4-square.md",
+      "ticketSha256": "b1df78e43459afbd9e90b5c3488c6eb392a9b1830d51f6df2a138029b491b394",
+      "files": [
+        {
+          "path": ".gitignore",
+          "bytes": 26,
+          "sha256": "2f0937b3c35bbe7b9ba491f445a6a21fa34d24be9df1c88540fca63f167ec4e1"
+        },
+        {
+          "path": ".orchestrate-fixture",
+          "bytes": 7,
+          "sha256": "271341accf91401186a4b6e0d9de06f655890b48b3799cff9fffad2d100fcc39"
+        },
+        {
+          "path": ".tickets/.gitignore",
+          "bytes": 10,
+          "sha256": "dac0c716064f1e156b2acaa1899fc87d6a1e01099cd73499eb297e60627562c2"
+        },
+        {
+          "path": ".tickets/1-multiply.md",
+          "bytes": 414,
+          "sha256": "12fafb2db2955a27a3ad3ca182ea6b41a03dd1b461a2716f3a62d926b33a3b65"
+        },
+        {
+          "path": ".tickets/2-greeting.md",
+          "bytes": 515,
+          "sha256": "6082d0f4c64b02542d872451cfdacadf7b066ed0ed46ad996aee207381f81701"
+        },
+        {
+          "path": ".tickets/3-rename-add.md",
+          "bytes": 356,
+          "sha256": "d10c265ab56d24e7887dad7fbc8645715688adc64d0d763365194b488a06b700"
+        },
+        {
+          "path": ".tickets/4-square.md",
+          "bytes": 387,
+          "sha256": "b1df78e43459afbd9e90b5c3488c6eb392a9b1830d51f6df2a138029b491b394"
+        },
+        {
+          "path": ".tickets/5-drop-readme.md",
+          "bytes": 297,
+          "sha256": "0dd9ad75b46964b5e711ecffc9ce7b4d9b6596a5173b20df3a405c4b61874e14"
+        },
+        {
+          "path": ".tickets/config.toml",
+          "bytes": 111,
+          "sha256": "3a6ca1de0ec1858c970ef3d1c39a12690172dd9c3360f1c13c1f1e2795622dbb"
+        },
+        {
+          "path": "AGENTS.md",
+          "bytes": 3376,
+          "sha256": "3fbb8e262b5eb3b569f30d300bbbcc6a2efa780c357f0df5cfca7f4d67390556"
+        },
+        {
+          "path": "README.md",
+          "bytes": 92,
+          "sha256": "5a0bc7d6d8e69a8cf4da888f73155b35fd63bfdf35445ef289aeb43c37d959ff"
+        },
+        {
+          "path": "docs/status.html",
+          "bytes": 46628,
+          "sha256": "3b6d546084ea7f44cd5183f963133b53f6582302e0dcc2afc523dc7f0514dce7"
+        },
+        {
+          "path": "package.json",
+          "bytes": 129,
+          "sha256": "db75e81c87dba15494854b9789f4f27de2e6d306164695ea0a5c67c7158fe38f"
+        },
+        {
+          "path": "src/a.js",
+          "bytes": 78,
+          "sha256": "c07f26bdd77c0922e478027e6f5c8bb34593c5fa0f95069f56d377702df37c25"
+        },
+        {
+          "path": "test/a.test.js",
+          "bytes": 221,
+          "sha256": "e39581ce449841e94db3f86e9dc7fc387571f4e62cd5e14f01caf82578ffe609"
+        },
+        {
+          "path": "test/multiply-prerequisite.test.js",
+          "bytes": 187,
+          "sha256": "366dd96d0d16cdc3e848c1947e744162142b2b4a1f3372c4ac531a7dacbbcf0c"
+        }
+      ]
+    },
+    {
+      "id": "t5",
+      "seedTree": "dc4e1c3c9eca609b1701e3980191fd3e58cdc358",
+      "seedCommit": "86320c8dc4e4f3ce739b434423f2484e98007bfe",
+      "ticketPath": ".tickets/6-count-format.md",
+      "ticketSha256": "ae76c41a74c9b25b56568aa1c950920e11f5e74884f68446a028cc60e0d4bb40",
+      "files": [
+        {
+          "path": ".gitignore",
+          "bytes": 26,
+          "sha256": "2f0937b3c35bbe7b9ba491f445a6a21fa34d24be9df1c88540fca63f167ec4e1"
+        },
+        {
+          "path": ".orchestrate-fixture",
+          "bytes": 7,
+          "sha256": "271341accf91401186a4b6e0d9de06f655890b48b3799cff9fffad2d100fcc39"
+        },
+        {
+          "path": ".tickets/.gitignore",
+          "bytes": 10,
+          "sha256": "dac0c716064f1e156b2acaa1899fc87d6a1e01099cd73499eb297e60627562c2"
+        },
+        {
+          "path": ".tickets/1-multiply.md",
+          "bytes": 414,
+          "sha256": "12fafb2db2955a27a3ad3ca182ea6b41a03dd1b461a2716f3a62d926b33a3b65"
+        },
+        {
+          "path": ".tickets/2-greeting.md",
+          "bytes": 515,
+          "sha256": "6082d0f4c64b02542d872451cfdacadf7b066ed0ed46ad996aee207381f81701"
+        },
+        {
+          "path": ".tickets/3-rename-add.md",
+          "bytes": 356,
+          "sha256": "d10c265ab56d24e7887dad7fbc8645715688adc64d0d763365194b488a06b700"
+        },
+        {
+          "path": ".tickets/4-square.md",
+          "bytes": 387,
+          "sha256": "b1df78e43459afbd9e90b5c3488c6eb392a9b1830d51f6df2a138029b491b394"
+        },
+        {
+          "path": ".tickets/5-drop-readme.md",
+          "bytes": 297,
+          "sha256": "0dd9ad75b46964b5e711ecffc9ce7b4d9b6596a5173b20df3a405c4b61874e14"
+        },
+        {
+          "path": ".tickets/6-count-format.md",
+          "bytes": 399,
+          "sha256": "ae76c41a74c9b25b56568aa1c950920e11f5e74884f68446a028cc60e0d4bb40"
+        },
+        {
+          "path": ".tickets/config.toml",
+          "bytes": 111,
+          "sha256": "3a6ca1de0ec1858c970ef3d1c39a12690172dd9c3360f1c13c1f1e2795622dbb"
+        },
+        {
+          "path": "AGENTS.md",
+          "bytes": 3376,
+          "sha256": "3fbb8e262b5eb3b569f30d300bbbcc6a2efa780c357f0df5cfca7f4d67390556"
+        },
+        {
+          "path": "README.md",
+          "bytes": 92,
+          "sha256": "5a0bc7d6d8e69a8cf4da888f73155b35fd63bfdf35445ef289aeb43c37d959ff"
+        },
+        {
+          "path": "docs/status.html",
+          "bytes": 46628,
+          "sha256": "3b6d546084ea7f44cd5183f963133b53f6582302e0dcc2afc523dc7f0514dce7"
+        },
+        {
+          "path": "package.json",
+          "bytes": 129,
+          "sha256": "db75e81c87dba15494854b9789f4f27de2e6d306164695ea0a5c67c7158fe38f"
+        },
+        {
+          "path": "src/a.js",
+          "bytes": 37,
+          "sha256": "0995b81b8697768115cdfb296f516f0af64522d6b207ddfa7eb1a33777726f10"
+        },
+        {
+          "path": "test/a.test.js",
+          "bytes": 221,
+          "sha256": "e39581ce449841e94db3f86e9dc7fc387571f4e62cd5e14f01caf82578ffe609"
+        }
+      ]
+    },
+    {
+      "id": "t6",
+      "seedTree": "fc47e39056b336cb99226056ab3801ba020f908d",
+      "seedCommit": "92be55e017b39419d72dc63279af9a9f68d9fceb",
+      "ticketPath": ".tickets/6-multiply-hidden-case.md",
+      "ticketSha256": "33dca8a617d7b972bbaef95718a7fb463e451854ecf26c53f9f4dfbd8d9103f5",
+      "files": [
+        {
+          "path": ".gitignore",
+          "bytes": 26,
+          "sha256": "2f0937b3c35bbe7b9ba491f445a6a21fa34d24be9df1c88540fca63f167ec4e1"
+        },
+        {
+          "path": ".orchestrate-fixture",
+          "bytes": 7,
+          "sha256": "271341accf91401186a4b6e0d9de06f655890b48b3799cff9fffad2d100fcc39"
+        },
+        {
+          "path": ".tickets/.gitignore",
+          "bytes": 10,
+          "sha256": "dac0c716064f1e156b2acaa1899fc87d6a1e01099cd73499eb297e60627562c2"
+        },
+        {
+          "path": ".tickets/1-multiply.md",
+          "bytes": 414,
+          "sha256": "12fafb2db2955a27a3ad3ca182ea6b41a03dd1b461a2716f3a62d926b33a3b65"
+        },
+        {
+          "path": ".tickets/2-greeting.md",
+          "bytes": 515,
+          "sha256": "6082d0f4c64b02542d872451cfdacadf7b066ed0ed46ad996aee207381f81701"
+        },
+        {
+          "path": ".tickets/3-rename-add.md",
+          "bytes": 356,
+          "sha256": "d10c265ab56d24e7887dad7fbc8645715688adc64d0d763365194b488a06b700"
+        },
+        {
+          "path": ".tickets/4-square.md",
+          "bytes": 387,
+          "sha256": "b1df78e43459afbd9e90b5c3488c6eb392a9b1830d51f6df2a138029b491b394"
+        },
+        {
+          "path": ".tickets/5-drop-readme.md",
+          "bytes": 297,
+          "sha256": "0dd9ad75b46964b5e711ecffc9ce7b4d9b6596a5173b20df3a405c4b61874e14"
+        },
+        {
+          "path": ".tickets/6-multiply-hidden-case.md",
+          "bytes": 283,
+          "sha256": "33dca8a617d7b972bbaef95718a7fb463e451854ecf26c53f9f4dfbd8d9103f5"
+        },
+        {
+          "path": ".tickets/config.toml",
+          "bytes": 111,
+          "sha256": "3a6ca1de0ec1858c970ef3d1c39a12690172dd9c3360f1c13c1f1e2795622dbb"
+        },
+        {
+          "path": "AGENTS.md",
+          "bytes": 3376,
+          "sha256": "3fbb8e262b5eb3b569f30d300bbbcc6a2efa780c357f0df5cfca7f4d67390556"
+        },
+        {
+          "path": "README.md",
+          "bytes": 92,
+          "sha256": "5a0bc7d6d8e69a8cf4da888f73155b35fd63bfdf35445ef289aeb43c37d959ff"
+        },
+        {
+          "path": "docs/status.html",
+          "bytes": 46628,
+          "sha256": "3b6d546084ea7f44cd5183f963133b53f6582302e0dcc2afc523dc7f0514dce7"
+        },
+        {
+          "path": "package.json",
+          "bytes": 129,
+          "sha256": "db75e81c87dba15494854b9789f4f27de2e6d306164695ea0a5c67c7158fe38f"
+        },
+        {
+          "path": "src/a.js",
+          "bytes": 37,
+          "sha256": "0995b81b8697768115cdfb296f516f0af64522d6b207ddfa7eb1a33777726f10"
+        },
+        {
+          "path": "test/a.test.js",
+          "bytes": 221,
+          "sha256": "e39581ce449841e94db3f86e9dc7fc387571f4e62cd5e14f01caf82578ffe609"
+        },
+        {
+          "path": "test/multiply-hidden-case.test.js",
+          "bytes": 187,
+          "sha256": "344d01661d334da97eabaee068360c224e4c865ceca0a447cf0ac0c1f9e7d138"
+        }
+      ]
+    }
+  ],
+  "hiddenOracle": {
+    "included": false,
+    "privateArtifactPath": ".scratch/t167/oracle-key.json",
+    "reason": "Expected outputs and hidden vectors remain separate from the task fixtures and worker context."
+  }
+}

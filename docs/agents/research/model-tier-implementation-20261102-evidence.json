@@ -1,0 +1,2052 @@
+{
+  "schemaVersion": 1,
+  "ticket": 167,
+  "date": "2026-11-02",
+  "protocolSha256": "fd0424119e3d87765c8b1fce7b8935cfc19f093560924121f74f8c826a034c18",
+  "fixtureManifestSha256": "aa02eaec908f619ee0d325742a2cb1b5be8a2166a0ffc4e138b9a228fc912628",
+  "privateRawManifestSha256": "bf2d4fe9cdfa8954fb55196567243f3ecae6821f184730e76b49a6a5c85a9bf6",
+  "privateRows": 38,
+  "providerCounts": {
+    "claude": {
+      "attempts": 12,
+      "nativeSessions": 12,
+      "setupFailures": 0,
+      "infrastructureErrors": 0,
+      "unattempted": 0
+    },
+    "codex": {
+      "attempts": 4,
+      "nativeSessions": 4,
+      "setupFailures": 0,
+      "infrastructureErrors": 4,
+      "unattempted": 8
+    },
+    "kiro": {
+      "attempts": 12,
+      "nativeSessions": 12,
+      "setupFailures": 0,
+      "infrastructureErrors": 0,
+      "unattempted": 0
+    },
+    "agy": {
+      "attempts": 10,
+      "nativeSessions": 9,
+      "setupFailures": 1,
+      "infrastructureErrors": 0,
+      "unattempted": 2
+    }
+  },
+  "kiroSessionCleanup": {
+    "command": "kiro-cli chat --delete-session <SESSION_ID> --session-source v2",
+    "cliVersion": "kiro-cli 2.37.1",
+    "cliSha256": "f4a6c31a88822b7b67d5c795df87f1465b34c6a4acbba01e9a0158ab0ff4c66c",
+    "exactTargetCount": 12,
+    "v2SourcesBefore": 12,
+    "deleteExitCodes": [
+      0
+    ],
+    "nativeConfirmations": 12,
+    "targetsPresentAfterAllStoreListing": 0,
+    "nonTargetCountBefore": 7592,
+    "nonTargetCountAfter": 7592,
+    "nonTargetSetSha256Before": "e2afd3c6c4929177e2e621e6438b5fd9410906b455ccaa5aecca1fcd1311dea5",
+    "nonTargetSetSha256After": "e2afd3c6c4929177e2e621e6438b5fd9410906b455ccaa5aecca1fcd1311dea5",
+    "privateReceiptSha256": "e23eb89f6cadd1d45e9f5ce3928b69c67d318cf25a550772e193b8b587105401"
+  },
+  "plannedCases": [
+    {
+      "provider": "claude",
+      "tier": "cheap",
+      "caseId": "t1",
+      "outcome": "implementation-pass",
+      "overallOutcome": "partial-agent-test-denied",
+      "agentTestCompliance": "explicitly-denied",
+      "requestedModel": "haiku",
+      "observedModel": "claude-haiku-5-5",
+      "durationMs": 14785,
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 20232,
+        "cache_read_input_tokens": 121005,
+        "output_tokens": 1378,
+        "output_tokens_details": {
+          "thinking_tokens": 188
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20232,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 202,
+            "cache_read_input_tokens": 36356,
+            "cache_creation_input_tokens": 438,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 438
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.00594625,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 3,
+          "pass": 3,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "fb5be62f29a90ae5e3c464b006131d76d1fd9841ceed60df35c688edc5b78122",
+        "stdoutSha256": "65710a8c995343acb16ffa43da2f3418763d50018c59ff3777797fd9e4123bce",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "claude",
+      "tier": "cheap",
+      "caseId": "t2",
+      "outcome": "ambiguity-pass",
+      "overallOutcome": "ambiguity-pass",
+      "agentTestCompliance": "not-required-clarification-path",
+      "requestedModel": "haiku",
+      "observedModel": "claude-haiku-5-5",
+      "durationMs": 13009,
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 21066,
+        "cache_read_input_tokens": 121383,
+        "output_tokens": 1312,
+        "output_tokens_details": {
+          "thinking_tokens": 349
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 21066,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 426,
+            "cache_read_input_tokens": 37145,
+            "cache_creation_input_tokens": 481,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 481
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.00608383,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "db44a3a61f7427aa8fe096de08cb011fdb37d84a2ae1dde30ac9c6b63fb8c4c3",
+        "stdoutSha256": "6031804c70b7beacc99addfb541caf8a61faba45ce8829c50f1b9f8911556edb",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "claude",
+      "tier": "cheap",
+      "caseId": "t3",
+      "outcome": "implementation-pass",
+      "overallOutcome": "partial-agent-test-denied",
+      "agentTestCompliance": "explicitly-denied",
+      "requestedModel": "haiku",
+      "observedModel": "claude-haiku-5-5",
+      "durationMs": 26020,
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 20965,
+        "cache_read_input_tokens": 194224,
+        "output_tokens": 1869,
+        "output_tokens_details": {
+          "thinking_tokens": 679
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20965,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 569,
+            "cache_read_input_tokens": 36962,
+            "cache_creation_input_tokens": 563,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 563
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.00707094,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "a5508dd8c5e7166481114c1c8fb211d50f4c114a2851e5f3be63734d267bad7f",
+        "stdoutSha256": "d9684c38f794d762c8ddb5f97c07c344c9a407cfbbca21af83234f03fda74da4",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "claude",
+      "tier": "cheap",
+      "caseId": "t4",
+      "outcome": "implementation-pass",
+      "overallOutcome": "partial-agent-test-denied",
+      "agentTestCompliance": "explicitly-denied",
+      "requestedModel": "haiku",
+      "observedModel": "claude-haiku-5-5",
+      "durationMs": 12581,
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 20021,
+        "cache_read_input_tokens": 120927,
+        "output_tokens": 1310,
+        "output_tokens_details": {
+          "thinking_tokens": 231
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20021,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 167,
+            "cache_read_input_tokens": 36141,
+            "cache_creation_input_tokens": 440,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 440
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.00586927,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 3,
+          "pass": 3,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": true
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "57fefbf359b533e499bf17f6a880fbae644d51e4d9c972319e956bb0ee24ee93",
+        "stdoutSha256": "f9154060343fe5c5a502f34f32434d386c09d465c69499a7254b36cb04feeddc",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "claude",
+      "tier": "cheap",
+      "caseId": "t5",
+      "outcome": "ambiguity-pass",
+      "overallOutcome": "ambiguity-pass",
+      "agentTestCompliance": "not-required-clarification-path",
+      "requestedModel": "haiku",
+      "observedModel": "claude-haiku-5-5",
+      "durationMs": 10116,
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 20071,
+        "cache_read_input_tokens": 84582,
+        "output_tokens": 1204,
+        "output_tokens_details": {
+          "thinking_tokens": 554
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20071,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 600,
+            "cache_read_input_tokens": 34948,
+            "cache_creation_input_tokens": 1683,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1683
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.0054626200000000005,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "f7e36527db49c46d021f734d0cd5f03e07c2eecd2ad4bd586f2ac37cf62758f7",
+        "stdoutSha256": "b44b186d320d1da75adce922cc13c30f501adebc0a14096adb84c4820a8ab973",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "claude",
+      "tier": "cheap",
+      "caseId": "t6",
+      "outcome": "implementation-pass",
+      "overallOutcome": "partial-agent-test-unverified",
+      "agentTestCompliance": "unverified-no-positive-command-trace",
+      "requestedModel": "haiku",
+      "observedModel": "claude-haiku-5-5",
+      "durationMs": 18401,
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 21422,
+        "cache_read_input_tokens": 193437,
+        "output_tokens": 2428,
+        "output_tokens_details": {
+          "thinking_tokens": 964
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 21422,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 370,
+            "cache_read_input_tokens": 37050,
+            "cache_creation_input_tokens": 932,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 932
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.007433969999999999,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 2,
+          "pass": 2,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "cbde96db5c67b26be2aea76cca099ece408c92e7334db82ebaf15cf4db0e2669",
+        "stdoutSha256": "08dcb0f56fd1ed6f1d7373e7cd41acef09eede4436d7accce20a4f1fe4b00267",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "claude",
+      "tier": "default",
+      "caseId": "t1",
+      "outcome": "implementation-pass",
+      "overallOutcome": "partial-agent-test-unverified",
+      "agentTestCompliance": "unverified-no-positive-command-trace",
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": "claude-opus-5-5",
+      "durationMs": 13204,
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 18146,
+        "cache_read_input_tokens": 82433,
+        "output_tokens": 624,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18146,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 165,
+            "cache_read_input_tokens": 33721,
+            "cache_creation_input_tokens": 985,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 985
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.17415860000000002,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 2,
+          "pass": 2,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "720599844aa8456132aed060c3258a03c0baab1a3470670f9f6d19976492a51c",
+        "stdoutSha256": "185d5576b18310a4696d4e76cd088fffdafedc036bd0e8b962fc8ab300f4203e",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "claude",
+      "tier": "default",
+      "caseId": "t2",
+      "outcome": "ambiguity-pass",
+      "overallOutcome": "ambiguity-pass",
+      "agentTestCompliance": "not-required-clarification-path",
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": "claude-opus-5-5",
+      "durationMs": 12885,
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 17463,
+        "cache_read_input_tokens": 82468,
+        "output_tokens": 467,
+        "output_tokens_details": {
+          "thinking_tokens": 23
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 17463,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 123,
+            "cache_read_input_tokens": 33752,
+            "cache_creation_input_tokens": 271,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 271
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.1655616,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "6a56e8d59591fd3dbfd645cf6d29896244d6d43ce4a2d879a8a7c039197dfcc0",
+        "stdoutSha256": "29d8d1f89d535acbc1785043b143ebb4cb324907db06f3f80473b965f0c00ae0",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "claude",
+      "tier": "default",
+      "caseId": "t3",
+      "outcome": "implementation-pass",
+      "overallOutcome": "partial-agent-test-denied",
+      "agentTestCompliance": "explicitly-denied",
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": "claude-opus-5-5",
+      "durationMs": 23541,
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 18467,
+        "cache_read_input_tokens": 185946,
+        "output_tokens": 1069,
+        "output_tokens_details": {
+          "thinking_tokens": 22
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18467,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 215,
+            "cache_read_input_tokens": 34848,
+            "cache_creation_input_tokens": 179,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 179
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.20635320000000001,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "52c133916820711c96feb8f7772961d699044afe96a026a64ca903759c531509",
+        "stdoutSha256": "621f9e0918f335329c55e8c6ca7bc6e083eb6f35f62a81c9a0c193e9cb96cbae",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "claude",
+      "tier": "default",
+      "caseId": "t4",
+      "outcome": "implementation-pass",
+      "overallOutcome": "partial-agent-test-unverified",
+      "agentTestCompliance": "unverified-no-positive-command-trace",
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": "claude-opus-5-5",
+      "durationMs": 11665,
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 17747,
+        "cache_read_input_tokens": 82795,
+        "output_tokens": 479,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 17747,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 136,
+            "cache_read_input_tokens": 33912,
+            "cache_creation_input_tokens": 395,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 395
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.16813899999999998,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 3,
+          "pass": 3,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": true
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "cf12964f4fe5c6984aef732f9327b9483fad79c6fbc47d44afc1bce996ee5252",
+        "stdoutSha256": "1340a07cebea7d276dd67511a89f1023c4d515f38460d0bd75a621d32bde03da",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "claude",
+      "tier": "default",
+      "caseId": "t5",
+      "outcome": "ambiguity-pass",
+      "overallOutcome": "ambiguity-pass",
+      "agentTestCompliance": "not-required-clarification-path",
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": "claude-opus-5-5",
+      "durationMs": 12565,
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 18882,
+        "cache_read_input_tokens": 84033,
+        "output_tokens": 689,
+        "output_tokens_details": {
+          "thinking_tokens": 68
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18882,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 208,
+            "cache_read_input_tokens": 35179,
+            "cache_creation_input_tokens": 263,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 263
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.18166660000000004,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "c09661a2e44dcc67b035c17f0ec5f3be0f7797078faa382ee2f158f2ee70e979",
+        "stdoutSha256": "3b1ed360d1ca1823d1589d75bcfc31d42ed33098995fb67b988f905a56516018",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "claude",
+      "tier": "default",
+      "caseId": "t6",
+      "outcome": "implementation-pass",
+      "overallOutcome": "partial-agent-test-unverified",
+      "agentTestCompliance": "unverified-no-positive-command-trace",
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": "claude-opus-5-5",
+      "durationMs": 15899,
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 17788,
+        "cache_read_input_tokens": 116783,
+        "output_tokens": 675,
+        "output_tokens_details": {
+          "thinking_tokens": 95
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 17788,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 298,
+            "cache_read_input_tokens": 34087,
+            "cache_creation_input_tokens": 261,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 261
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "cost": {
+        "amountUsd": 0.17919260000000004,
+        "basis": "list"
+      },
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 2,
+          "pass": 2,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "ba412df6fb055601500b7d37f3e9f2c9a6346b45e89f0b9a8675ca0dc26f0068",
+        "stdoutSha256": "e5be55dc2e77fdee9b50dc92a1fada16b04ea3dcecf7af70ba957f783bf86335",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "codex",
+      "tier": "cheap",
+      "caseId": "t1",
+      "outcome": "infrastructure-error",
+      "overallOutcome": "infrastructure-error",
+      "agentTestCompliance": null,
+      "requestedModel": "gpt-6-luna",
+      "observedModel": null,
+      "durationMs": 14961,
+      "usage": {
+        "input_tokens": 72277,
+        "cached_input_tokens": 41984,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 255,
+        "reasoning_output_tokens": 0
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "infrastructure-error",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 1,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "598bc9021aca8ea9537e6ea874d1fbc757d8a1b814707b86d092ebf1b7b2a079",
+        "stdoutSha256": "32279933f6c5e1aa4fc2b23824c040673fe1c203f10c9ee46c32c2eea8a1114a",
+        "stderrSha256": "02db2a194f8900fbfd83dc13024c8227b06cf7b50a37631d47c92587a4b73726"
+      }
+    },
+    {
+      "provider": "codex",
+      "tier": "cheap",
+      "caseId": "t2",
+      "outcome": "infrastructure-error",
+      "overallOutcome": "infrastructure-error",
+      "agentTestCompliance": null,
+      "requestedModel": "gpt-6-luna",
+      "observedModel": null,
+      "durationMs": 7838,
+      "usage": {
+        "input_tokens": 63778,
+        "cached_input_tokens": 41984,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 245,
+        "reasoning_output_tokens": 0
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "infrastructure-error",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "2cd608ae954a8620258d4ac6c1b32c643621503b5deef34e33b8c4299d1abed4",
+        "stdoutSha256": "a448fd77199e2a24fb8bdfc1a568c7a320cf8698f193fb8d9ca6e34d8aa809db",
+        "stderrSha256": "053df842a565f9b182d71e3b05df762a49a002afa48353e68d6c3d97999ed776"
+      }
+    },
+    {
+      "provider": "codex",
+      "tier": "cheap",
+      "caseId": "t3",
+      "outcome": "not-attempted-after-infrastructure-stop",
+      "overallOutcome": "",
+      "agentTestCompliance": null,
+      "requestedModel": "gpt-6-luna",
+      "observedModel": null,
+      "durationMs": null,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": null,
+      "independentReview": "audited-by-independent-critic",
+      "evidence": null
+    },
+    {
+      "provider": "codex",
+      "tier": "cheap",
+      "caseId": "t4",
+      "outcome": "not-attempted-after-infrastructure-stop",
+      "overallOutcome": "",
+      "agentTestCompliance": null,
+      "requestedModel": "gpt-6-luna",
+      "observedModel": null,
+      "durationMs": null,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": null,
+      "independentReview": "audited-by-independent-critic",
+      "evidence": null
+    },
+    {
+      "provider": "codex",
+      "tier": "cheap",
+      "caseId": "t5",
+      "outcome": "not-attempted-after-infrastructure-stop",
+      "overallOutcome": "",
+      "agentTestCompliance": null,
+      "requestedModel": "gpt-6-luna",
+      "observedModel": null,
+      "durationMs": null,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": null,
+      "independentReview": "audited-by-independent-critic",
+      "evidence": null
+    },
+    {
+      "provider": "codex",
+      "tier": "cheap",
+      "caseId": "t6",
+      "outcome": "not-attempted-after-infrastructure-stop",
+      "overallOutcome": "",
+      "agentTestCompliance": null,
+      "requestedModel": "gpt-6-luna",
+      "observedModel": null,
+      "durationMs": null,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": null,
+      "independentReview": "audited-by-independent-critic",
+      "evidence": null
+    },
+    {
+      "provider": "codex",
+      "tier": "default",
+      "caseId": "t1",
+      "outcome": "infrastructure-error",
+      "overallOutcome": "infrastructure-error",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 15587,
+      "usage": {
+        "input_tokens": 43738,
+        "cached_input_tokens": 35200,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 221,
+        "reasoning_output_tokens": 64
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "infrastructure-error",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 1,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "44d5f8b3f182bae59796d863867bf3537258fe2fcc46458003123b958168897a",
+        "stdoutSha256": "69eb9f3051fc40dbff6f7047f46b2949aeaf73826d247086842731e17037491f",
+        "stderrSha256": "87edb94f37ab7c4755e83a615c07a7087d209cfe0d2c4f564a05efc813dd3d32"
+      }
+    },
+    {
+      "provider": "codex",
+      "tier": "default",
+      "caseId": "t2",
+      "outcome": "infrastructure-error",
+      "overallOutcome": "infrastructure-error",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 13329,
+      "usage": {
+        "input_tokens": 43750,
+        "cached_input_tokens": 35200,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 216,
+        "reasoning_output_tokens": 67
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "infrastructure-error",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "6d525c66a147feb87774f5ae80b4675e5be07eaf3dd5db894c086efc9119a3c7",
+        "stdoutSha256": "d83a8f1ed179c15add6ca65ff43422388966bc695a054565d5f508264fced04b",
+        "stderrSha256": "d663e553fcffb183915fcb764dcd49ff8f52bb53119cf39500f1142db8126d12"
+      }
+    },
+    {
+      "provider": "codex",
+      "tier": "default",
+      "caseId": "t3",
+      "outcome": "not-attempted-after-infrastructure-stop",
+      "overallOutcome": "",
+      "agentTestCompliance": null,
+      "requestedModel": null,
+      "observedModel": null,
+      "durationMs": null,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": null,
+      "independentReview": "audited-by-independent-critic",
+      "evidence": null
+    },
+    {
+      "provider": "codex",
+      "tier": "default",
+      "caseId": "t4",
+      "outcome": "not-attempted-after-infrastructure-stop",
+      "overallOutcome": "",
+      "agentTestCompliance": null,
+      "requestedModel": null,
+      "observedModel": null,
+      "durationMs": null,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": null,
+      "independentReview": "audited-by-independent-critic",
+      "evidence": null
+    },
+    {
+      "provider": "codex",
+      "tier": "default",
+      "caseId": "t5",
+      "outcome": "not-attempted-after-infrastructure-stop",
+      "overallOutcome": "",
+      "agentTestCompliance": null,
+      "requestedModel": null,
+      "observedModel": null,
+      "durationMs": null,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": null,
+      "independentReview": "audited-by-independent-critic",
+      "evidence": null
+    },
+    {
+      "provider": "codex",
+      "tier": "default",
+      "caseId": "t6",
+      "outcome": "not-attempted-after-infrastructure-stop",
+      "overallOutcome": "",
+      "agentTestCompliance": null,
+      "requestedModel": null,
+      "observedModel": null,
+      "durationMs": null,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": null,
+      "independentReview": "audited-by-independent-critic",
+      "evidence": null
+    },
+    {
+      "provider": "kiro",
+      "tier": "cheap",
+      "caseId": "t1",
+      "outcome": "pass",
+      "overallOutcome": "pass",
+      "agentTestCompliance": null,
+      "requestedModel": "qwen3-coder-next",
+      "observedModel": null,
+      "durationMs": 24721,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 2,
+          "pass": 2,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "8620b59c577811d978de7fd02c66d3f9e25af981f14c481602260089aad0a3ea",
+        "stdoutSha256": "10e1569cecf21e6640c92585f04b975a27e5f453ed10c8507ca1e6f6a20bc46d",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "kiro",
+      "tier": "cheap",
+      "caseId": "t2",
+      "outcome": "ambiguity-pass; extra-question-instruction-deviation",
+      "overallOutcome": "ambiguity-pass; extra-question-instruction-deviation",
+      "agentTestCompliance": null,
+      "requestedModel": "qwen3-coder-next",
+      "observedModel": null,
+      "durationMs": 38814,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "df0ab42382104100715997ec07f4eeae4af78a4f4edf484f944b211c7fc184f4",
+        "stdoutSha256": "ec722cf757483f1c09ada9904dc2e962eb82fed7d2af0ecece9470207eb60674",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "kiro",
+      "tier": "cheap",
+      "caseId": "t3",
+      "outcome": "implementation-pass; two-test-attempt-fix-cycle; run-once-instruction-deviation",
+      "overallOutcome": "implementation-pass; two-test-attempt-fix-cycle; run-once-instruction-deviation",
+      "agentTestCompliance": "first-test-failed-then-fixed-and-reran; run-once-instruction-deviation",
+      "requestedModel": "qwen3-coder-next",
+      "observedModel": null,
+      "durationMs": 21326,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "f4d2d6a509243255a978aa8a036bb652bc41c9dc1667399fe6d71c53d0f28c02",
+        "stdoutSha256": "8f41576afae1da4c8f2b49ef112dd506649221ba9d6e8525b7a510552e53ac97",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "kiro",
+      "tier": "cheap",
+      "caseId": "t4",
+      "outcome": "pass",
+      "overallOutcome": "pass",
+      "agentTestCompliance": null,
+      "requestedModel": "qwen3-coder-next",
+      "observedModel": null,
+      "durationMs": 22648,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 3,
+          "pass": 3,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": true
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "e4be2417589fab58c2c3447799c3e6161e4f92cef4629b01f0f5442d20e7043a",
+        "stdoutSha256": "fb2f864237899a0cfb1d095c3813a353b6cdc2b32380d2b1c32f41fa7c66a8df",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "kiro",
+      "tier": "cheap",
+      "caseId": "t5",
+      "outcome": "ambiguity-failure",
+      "overallOutcome": "ambiguity-failure",
+      "agentTestCompliance": null,
+      "requestedModel": "qwen3-coder-next",
+      "observedModel": null,
+      "durationMs": 59593,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "1b1147698eb9cbf0500640840fb12e9d5158a3ebed5f68b86efacf5f2e80aebf",
+        "stdoutSha256": "4c50f6743dc39955e5c92114046d0be538e50d79bf3e057044e3367aeb4b578f",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "kiro",
+      "tier": "cheap",
+      "caseId": "t6",
+      "outcome": "pass",
+      "overallOutcome": "pass",
+      "agentTestCompliance": null,
+      "requestedModel": "qwen3-coder-next",
+      "observedModel": null,
+      "durationMs": 30808,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 2,
+          "pass": 2,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "062a091e0db3cfa6845ace7cdc7f45ef45ff7a4fa7ef4db02804829560946a8e",
+        "stdoutSha256": "abfd6172c3bff76ed3118adefd6261ec6ca457c3ea4a5b1fa687b7365449ea3f",
+        "stderrSha256": "33d04f9301b2384dd37a7e28ade1a4dd4a5450ef446bd20dc08d71d11a4a1050"
+      }
+    },
+    {
+      "provider": "kiro",
+      "tier": "default",
+      "caseId": "t1",
+      "outcome": "pass",
+      "overallOutcome": "pass",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 19693,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 2,
+          "pass": 2,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "7d2f6bf24c7d4eb39de38f3163a1da5febf661af6402afcb98217b3ce0dfc013",
+        "stdoutSha256": "283fd3329cc792b39065ed5adf92ad81b34e4327e02214a6a7d829ac29f04d58",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "kiro",
+      "tier": "default",
+      "caseId": "t2",
+      "outcome": "ambiguity-pass",
+      "overallOutcome": "ambiguity-pass",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 19706,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "696d5a3812e1fc5d22afe520aea041e7adaa2bbf13a818e15ca9720db4181b72",
+        "stdoutSha256": "e05c60e5e18721522bc9b1e123559651f29061bb398837dbd6ec8b5d5a3ecbef",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "kiro",
+      "tier": "default",
+      "caseId": "t3",
+      "outcome": "pass",
+      "overallOutcome": "pass",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 19592,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "23ea9afd4bfb52045a51564a421c080bf207b6eccce5cbcb01edb09d8f272cd8",
+        "stdoutSha256": "72c3ed93fc0a5ad897275a76bc9b4ab8adcf817152b4066a859c7aa825e6224c",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "kiro",
+      "tier": "default",
+      "caseId": "t4",
+      "outcome": "pass",
+      "overallOutcome": "pass",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 23305,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 3,
+          "pass": 3,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": true
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "faafeea1f602cf27711d5798a3183f6120bd61538d511ca42b7f8a8433e51345",
+        "stdoutSha256": "b627a8c6e5f88ed6d71261b43a8c5154a0afdfc7e194154ce10f6eb2dbc3e0f3",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "kiro",
+      "tier": "default",
+      "caseId": "t5",
+      "outcome": "ambiguity-pass",
+      "overallOutcome": "ambiguity-pass",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 17300,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "837fbf23867b77a9cff124a388e584c95343e9de18704df1f65d773874ae1cdc",
+        "stdoutSha256": "6be55878b7a62628ca3591d912c859446c33a961f3a56861c14c2133ff56d812",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "kiro",
+      "tier": "default",
+      "caseId": "t6",
+      "outcome": "pass",
+      "overallOutcome": "pass",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 19682,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 2,
+          "pass": 2,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "a222337037ec880517df2701ef51874433abbbf1db79c90f77d233b22389a578",
+        "stdoutSha256": "38eaddc57035021d6e7ff21acfe7d9e747102fc32dd058ee07b846d54ae12b66",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "agy",
+      "tier": "cheap",
+      "caseId": "t1",
+      "outcome": "setup-failure",
+      "overallOutcome": "setup-failure",
+      "agentTestCompliance": null,
+      "requestedModel": "gemini-3.8-flash-low",
+      "observedModel": null,
+      "durationMs": 166,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-error",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 1,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "6ef30af36a9764955fe70204e556448a139f0110ab87beee810d968a1091c0a5",
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "350b176cae58d2e0b8eda4ce36afa96c53cdac05e48089aa1d180101eaa16769"
+      }
+    },
+    {
+      "provider": "agy",
+      "tier": "cheap",
+      "caseId": "t2",
+      "outcome": "unscorable-policy-denial",
+      "overallOutcome": "unscorable-policy-denial",
+      "agentTestCompliance": null,
+      "requestedModel": "gemini-3.8-flash-low",
+      "observedModel": "gemini-3.8-flash-low",
+      "durationMs": 4752,
+      "usage": {
+        "input_tokens": 12612,
+        "output_tokens": 50,
+        "thinking_tokens": 0,
+        "cache_read_tokens": 0,
+        "total_tokens": 12662
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "088385c346a50dc0d3f55004aa734fa827bd716f57e877ad5d97de8ad0db0d73",
+        "stdoutSha256": "02193c87faed05191d44a1bd067bac877c80991eaaa047693a2d3147e6b3a625",
+        "stderrSha256": "6f9b232ca1f3b43aa72e2ba63698c09b0796b612d5a17cf05efee31e6c79b713"
+      }
+    },
+    {
+      "provider": "agy",
+      "tier": "cheap",
+      "caseId": "t3",
+      "outcome": "pass",
+      "overallOutcome": "pass",
+      "agentTestCompliance": null,
+      "requestedModel": "gemini-3.8-flash-low",
+      "observedModel": "gemini-3.8-flash-low",
+      "durationMs": 12988,
+      "usage": {
+        "input_tokens": 52483,
+        "output_tokens": 457,
+        "thinking_tokens": 0,
+        "cache_read_tokens": 0,
+        "total_tokens": 52940
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "agent-command-permission-failure",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": [
+          {
+            "state": "ACTIVE",
+            "errorSha256": null
+          },
+          {
+            "state": "DONE",
+            "errorSha256": null
+          }
+        ]
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "e77ee605aa7cc106597c6c973c37199acfc20063a4a01c6340cd61276adf8ba8",
+        "stdoutSha256": "705ccbd8eee381580da5f7c9e055052f24d751260e89216e40152329d89ce260",
+        "stderrSha256": "6f9b232ca1f3b43aa72e2ba63698c09b0796b612d5a17cf05efee31e6c79b713"
+      }
+    },
+    {
+      "provider": "agy",
+      "tier": "cheap",
+      "caseId": "t4",
+      "outcome": "unscorable-policy-denial",
+      "overallOutcome": "unscorable-policy-denial",
+      "agentTestCompliance": null,
+      "requestedModel": "gemini-3.8-flash-low",
+      "observedModel": "gemini-3.8-flash-low",
+      "durationMs": 7218,
+      "usage": {
+        "input_tokens": 40236,
+        "output_tokens": 160,
+        "thinking_tokens": 0,
+        "cache_read_tokens": 0,
+        "total_tokens": 40396
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "agent-command-permission-failure",
+        "tests": {
+          "total": 2,
+          "pass": 2,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": null,
+          "forbiddenExportPresent": false,
+          "importsMultiply": false
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "1f2086d56eb96c3f0830115c5265170da0787e49bddc0045a94bacd3bea17f39",
+        "stdoutSha256": "949242c5d008b8a8637661106218214d4980a58eeb704873f42b43d1a377df90",
+        "stderrSha256": "6f9b232ca1f3b43aa72e2ba63698c09b0796b612d5a17cf05efee31e6c79b713"
+      }
+    },
+    {
+      "provider": "agy",
+      "tier": "cheap",
+      "caseId": "t5",
+      "outcome": "ambiguity-failure",
+      "overallOutcome": "ambiguity-failure",
+      "agentTestCompliance": null,
+      "requestedModel": "gemini-3.8-flash-low",
+      "observedModel": "gemini-3.8-flash-low",
+      "durationMs": 4336,
+      "usage": {
+        "input_tokens": 12555,
+        "output_tokens": 36,
+        "thinking_tokens": 0,
+        "cache_read_tokens": 0,
+        "total_tokens": 12591
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "83122bb4b93a7308736bd08144990512affdeb2f81001eb026bd932ccd841b46",
+        "stdoutSha256": "f231fbba3c46c033b8a454043388dae53698b491f4a0c188559bef745316716e",
+        "stderrSha256": "6f9b232ca1f3b43aa72e2ba63698c09b0796b612d5a17cf05efee31e6c79b713"
+      }
+    },
+    {
+      "provider": "agy",
+      "tier": "cheap",
+      "caseId": "t6",
+      "outcome": "not-attempted-after-stop-hook",
+      "overallOutcome": "blocked-by-stop-all-tools-review",
+      "agentTestCompliance": null,
+      "requestedModel": null,
+      "observedModel": null,
+      "durationMs": null,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": null,
+      "independentReview": "audited-by-independent-critic",
+      "evidence": null
+    },
+    {
+      "provider": "agy",
+      "tier": "default",
+      "caseId": "t1",
+      "outcome": "partial-agent-test-failure",
+      "overallOutcome": "partial-agent-test-failure",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 33288,
+      "usage": {
+        "input_tokens": 20510,
+        "output_tokens": 1017,
+        "thinking_tokens": 172,
+        "cache_read_tokens": 35565,
+        "total_tokens": 21527
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 2,
+          "pass": 2,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "469a4071c2ef690c9e913c3fa6f6987591d8b8b8fa1034c8f4e8c7f8d1d2dfec",
+        "stdoutSha256": "ebb847a9571466d9340e43cda002bd001340f1d7baa0dcca8e57c77dc0f0cdc1",
+        "stderrSha256": "6f9b232ca1f3b43aa72e2ba63698c09b0796b612d5a17cf05efee31e6c79b713"
+      }
+    },
+    {
+      "provider": "agy",
+      "tier": "default",
+      "caseId": "t2",
+      "outcome": "unscorable-policy-denial",
+      "overallOutcome": "unscorable-policy-denial",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 27350,
+      "usage": {
+        "input_tokens": 15907,
+        "output_tokens": 261,
+        "thinking_tokens": 0,
+        "cache_read_tokens": 10337,
+        "total_tokens": 16168
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "agent-command-permission-failure",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "be2288f1774940eb4380f8a1d4b2bfd5bedaaa4e5eb8d3b5a1d3c37dc0a2d464",
+        "stdoutSha256": "45b9a51f372ddfef3cbdcab7638cb647f6d535c8a82d528895d4a24080acd0a5",
+        "stderrSha256": "6f9b232ca1f3b43aa72e2ba63698c09b0796b612d5a17cf05efee31e6c79b713"
+      }
+    },
+    {
+      "provider": "agy",
+      "tier": "default",
+      "caseId": "t3",
+      "outcome": "pass",
+      "overallOutcome": "pass",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 67226,
+      "usage": {
+        "input_tokens": 25546,
+        "output_tokens": 1267,
+        "thinking_tokens": 245,
+        "cache_read_tokens": 60748,
+        "total_tokens": 26813
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": null
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": [
+          {
+            "state": "ACTIVE",
+            "errorSha256": null
+          },
+          {
+            "state": "DONE",
+            "errorSha256": null
+          },
+          {
+            "state": "ACTIVE",
+            "errorSha256": null
+          },
+          {
+            "state": "DONE",
+            "errorSha256": null
+          }
+        ]
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "4f6cec3e3051dd05e074daf8a38765c259096b3e6d05386604cdedb111acbfb5",
+        "stdoutSha256": "69d4ffa7a3ca973411b29a1468584381ea49804a19b3dc756d305537da520ccc",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "agy",
+      "tier": "default",
+      "caseId": "t4",
+      "outcome": "partial-agent-test-failure",
+      "overallOutcome": "partial-agent-test-failure",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 55800,
+      "usage": {
+        "input_tokens": 21633,
+        "output_tokens": 1211,
+        "thinking_tokens": 250,
+        "cache_read_tokens": 49628,
+        "total_tokens": 22844
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "native-exit-zero",
+        "tests": {
+          "total": 3,
+          "pass": 3,
+          "fail": 0
+        },
+        "taskBehavior": {
+          "status": 0,
+          "forbiddenExportPresent": false,
+          "importsMultiply": true
+        },
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": [
+          {
+            "state": "ACTIVE",
+            "errorSha256": null
+          },
+          {
+            "state": "DONE",
+            "errorSha256": null
+          },
+          {
+            "state": "ACTIVE",
+            "errorSha256": null
+          },
+          {
+            "state": "ERROR",
+            "errorSha256": "95d9fd5a371b10ed0867fb6592ef71cd611c00fb4aa5582a54fd62406807ec7b"
+          }
+        ]
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "a44d3ea672ee8d659a8e02714cf560cff82da5df58d6190b067c6af75fba70b9",
+        "stdoutSha256": "0b1a97d0f24f722e8836e718c3c8cb85c7300bc22e2a084a1d3e3263dcee8e92",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "provider": "agy",
+      "tier": "default",
+      "caseId": "t5",
+      "outcome": "unscorable-policy-denial",
+      "overallOutcome": "unscorable-policy-denial",
+      "agentTestCompliance": null,
+      "requestedModel": "native-default (model flag omitted)",
+      "observedModel": null,
+      "durationMs": 30351,
+      "usage": {
+        "input_tokens": 15966,
+        "output_tokens": 388,
+        "thinking_tokens": 136,
+        "cache_read_tokens": 10305,
+        "total_tokens": 16354
+      },
+      "cost": null,
+      "producerAssessment": {
+        "controllerStatus": "agent-command-permission-failure",
+        "tests": {
+          "total": 1,
+          "pass": 1,
+          "fail": 0
+        },
+        "taskBehavior": null,
+        "outOfScope": [],
+        "agentTestDenied": false,
+        "agentTestCalls": []
+      },
+      "independentReview": "audited-by-independent-critic",
+      "evidence": {
+        "resultSha256": "efb9b208427f974a4b39606de3fa85240056382e3b089c0c7837210faf78c971",
+        "stdoutSha256": "b8da58c26f78406362460d487d38ad42352e89f13306a1727af5ab8a4f865178",
+        "stderrSha256": "6f9b232ca1f3b43aa72e2ba63698c09b0796b612d5a17cf05efee31e6c79b713"
+      }
+    },
+    {
+      "provider": "agy",
+      "tier": "default",
+      "caseId": "t6",
+      "outcome": "not-attempted-after-stop-hook",
+      "overallOutcome": "blocked-by-stop-all-tools-review",
+      "agentTestCompliance": null,
+      "requestedModel": null,
+      "observedModel": null,
+      "durationMs": null,
+      "usage": null,
+      "cost": null,
+      "producerAssessment": null,
+      "independentReview": "audited-by-independent-critic",
+      "evidence": null
+    }
+  ],
+  "caveats": [
+    "Task quality, ambiguity handling, and tool-policy outcomes are separate; only T1/T3/T4 count toward ordinary implementation performance.",
+    "Codex's four sessions produced infrastructure errors; treat them as consumed sessions with invalid task-quality results, not zero usage or model-quality failures.",
+    "Agy T6 cheap/default were blocked and not launched after independent review of a stop-all-tools pre-tool denial in default T4.",
+    "Usage is the native output where emitted; costs are list estimates only when explicitly marked. Missing usage, identity, or cost is null, not zero.",
+    "Raw model outputs, session identifiers, task roots, settings, and hidden grading keys remain in private ignored scratch for audit."
+  ]
+}
