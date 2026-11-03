@@ -81,21 +81,27 @@ Proposed pair, pending preflight and live catalog confirmation:
 
 | Provider | Cheaper tier | Default tier | Effort | Status |
 |---|---|---|---|
-| Anthropic / Claude Code | `haiku` | `opus` | `medium` both | Alias/model calls may fail if no longer available; record, do not substitute |
-| OpenAI / Codex | `gpt-6-luna` | `gpt-6.1-sol` | `low` both | Both visible in current bundled catalog; Sol machine default per shared guide |
-| Amazon / Kiro | `qwen3-coder-next` | `auto` | `low` both | Current catalog; `auto` marked account default |
-| Google / Antigravity | `gemini-3.8-flash-medium` | configured CLI default (omit `--model`) | `medium` both | Flash and Argon are available; only a returned identity can identify the configured default |
+| Anthropic / Claude Code | `haiku` | native CLI default | model-specific native effort default | Model alias from current guide; verify response model |
+| OpenAI / Codex | `gpt-6-luna` | native CLI default | model-specific native effort default | Cheap model visible in catalog; default invocation omits model and effort |
+| Amazon / Kiro | `qwen3-coder-next` | native CLI default | model-specific native effort default | Cheap model visible in catalog; default invocation omits model and effort |
+| Google / Antigravity | `gemini-3.8-flash-medium` | native CLI default | model-specific native effort default | Both candidates visible; default identity must appear in native output to support a comparison |
 
 The candidate invocation is frozen below. Substitute only the fixture prompt and
 listed model; create a new empty `%TEMP%\gm-review-168-*` working directory with
 no repository checkout, and run calls serially:
 
 ~~~~text
-claude --print --tools "" --no-session-persistence --output-format json --permission-mode plan --model <haiku|opus> --effort medium --max-budget-usd 0.10 <prompt>
-codex -c model_reasoning_effort="low" exec --ephemeral --cd <empty-temp-dir> --sandbox read-only --model <gpt-6-luna|gpt-6.1-sol> --json <prompt>
-kiro-cli chat --no-interactive --agent-engine v2 --model <qwen3-coder-next|auto> --effort low --trust-tools= --output-format stream-json <prompt>
-agy --print --mode plan --disable-slash-commands --print-timeout 120 --effort medium [--model gemini-3.8-flash-medium] <prompt>
+claude --print --tools "" --no-session-persistence --output-format json --permission-mode plan --max-budget-usd 0.10 <prompt> [--model haiku]
+codex exec --ephemeral --cd <empty-temp-dir> --sandbox read-only --json <prompt> [--model gpt-6-luna]
+kiro-cli chat --no-interactive --agent-engine v2 --trust-tools= --output-format stream-json <prompt> [--model qwen3-coder-next]
+agy --print --mode plan --disable-slash-commands --print-timeout 120 <prompt> [--model gemini-3.8-flash-medium]
 ~~~~
+
+Default-tier commands omit both `--model` and any effort override. Cheap-tier
+commands pin only the named model; effort also remains at the model's native
+default. This measures each tier under its native default configuration, not an
+isolated model-only effect. Record requested model/effort as native default and
+reported model/effort only when the CLI emits them.
 
 All four providers have a fixed 120-second per-call timeout. A timeout is a
 failed cell and will not be retried. The parent authorized exactly eight calls
