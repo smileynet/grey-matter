@@ -60,7 +60,14 @@ test("native responses require terminal success and keep model identity separate
   const kiroEmpty = parseKiro(Buffer.from(JSON.stringify({ type: "runFinished", data: { status: "success", stopReason: "end_turn", finalText: " " } })));
   assert.equal(classify({ status: 0 }, kiroEmpty, null), "empty-response");
   const noIdentity = parseCodex(Buffer.from('{"type":"item.completed","item":{"type":"agent_message","text":"answer"}}\n{"type":"turn.completed","usage":{"input_tokens":10}}'));
+  assert.equal(noIdentity.identity, null);
   assert.equal(classify({ status: 0 }, noIdentity, null), "identity-unreported");
+  assert.equal(classify({ status: 0 }, noIdentity, null, { allowIdentityUnreported: true }), "response-ready-for-independent-grading");
+  const kiroNoIdentity = parseKiro(Buffer.from('{"type":"metadata","data":{"contextUsagePercentage":1}}\n{"type":"runFinished","data":{"status":"success","stopReason":"end_turn","finalText":"answer"}}'));
+  assert.equal(kiroNoIdentity.identity, null);
+  assert.equal(classify({ status: 0 }, kiroNoIdentity, "qwen3-coder-next", { allowIdentityUnreported: true }), "response-ready-for-independent-grading");
+  assert.equal(classify({ status: 0 }, { ...noIdentity, failed: true }, null, { allowIdentityUnreported: true }), "native-error");
+  assert.equal(classify({ status: 0 }, { ...noIdentity, usageLimit: true }, null, { allowIdentityUnreported: true }), "usage-limit");
   const overBudget = parseClaude(Buffer.from(JSON.stringify({ type: "result", subtype: "success", result: "answer", modelUsage: { haiku: { canonicalModel: "claude-haiku-5-5" } }, usage: { output_tokens: 2 }, total_cost_usd: 0.11 })));
   assert.equal(classify({ status: 0 }, overBudget, "claude-haiku-5-5"), "provider-budget-exceeded");
 });

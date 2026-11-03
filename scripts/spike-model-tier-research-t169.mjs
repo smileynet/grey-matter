@@ -160,7 +160,7 @@ export function parseKiro(bytes) {
   return { terminal: terminal !== null && status === "success" && stopReason === "end_turn", malformed: malformedLines.length > 0, failed: errors.length > 0 || (terminal !== null && status !== "success"), response: typeof terminal?.data?.finalText === "string" ? terminal.data.finalText : "", identity: findIdentity(metadata), usage: metadata.filter(item => Object.keys(item).some(key => /usage|credit|token/i.test(key))), cost: null, usageLimit: /(?:usage|rate|quota|credit|budget)[\s_-]+(?:limit|exhausted|depleted|insufficient)|(?:limit|exhausted|depleted|insufficient)[\s_-]+(?:usage|rate|quota|credit|budget)/i.test(text), malformedLines };
 }
 
-export function classify(child, native, requestedModel) {
+export function classify(child, native, requestedModel, { allowIdentityUnreported = false } = {}) {
   if (child.error?.code === "ETIMEDOUT") return "timeout";
   if (child.error) return "infrastructure-error";
   if (native.usageLimit) return "usage-limit";
@@ -170,7 +170,7 @@ export function classify(child, native, requestedModel) {
   if (!native.terminal) return "missing-terminal-event";
   if (!native.response.trim()) return "empty-response";
   if (requestedModel && native.identity && requestedModel !== native.identity) return "identity-mismatch";
-  if (!native.identity) return "identity-unreported";
+  if (!native.identity && !allowIdentityUnreported) return "identity-unreported";
   if (!native.usage || (typeof native.usage === "object" && Object.keys(native.usage).length === 0)) return "usage-unreported";
   if (native.cost?.amountUsd > CLAUDE_CALL_BUDGET_USD) return "provider-budget-exceeded";
   return "response-ready-for-independent-grading";
@@ -211,7 +211,7 @@ function makePlan(options) {
 }
 
 function cellLedgerPath() { return join(REPO, ".scratch", "t169", "measurement-ledger.json"); }
-function reserveCell(provider, task, tier, cell) {
+function reserveCell(provider, task, tier, cell, authorization, authorizationHash) {
   const path = cellLedgerPath();
   const lock = `${path}.lock`;
   let fd;
@@ -220,7 +220,14 @@ function reserveCell(provider, task, tier, cell) {
     let ledger;
     try { ledger = JSON.parse(readFileSync(path, "utf8")); } catch (error) { if (error.code !== "ENOENT") throw error; ledger = { schemaVersion: 1, blockedGoogleCells: BLOCKED_GOOGLE_CELLS, cells: [], stoppedProviders: [] }; }
     if (ledger.cells.some(item => item.cell === cell || (item.provider === provider && item.task === task && item.tier === tier))) throw new Error("This cell already started; retries are forbidden");
-    if (ledger.stoppedProviders.includes(provider)) throw new Error(`Provider ${provider} is held pending parent review`);
+    if (ledger.stoppedProviders.includes(provider)) {
+      const allowedHeldCells = authorization.identityUnreportedContinuation?.[provider];
+      const heldCells = ledger.cells.filter(item => item.provider === provider && item.status === "identity-unreported").map(item => item.cell).sort();
+      const otherStops = ledger.cells.filter(item => item.provider === provider && ["timeout", "infrastructure-error", "native-error", "usage-limit", "provider-process-failure", "missing-terminal-event", "empty-response", "identity-mismatch", "usage-unreported", "provider-budget-exceeded", "malformed-native-output", "controller-error"].includes(item.status));
+      if (!Array.isArray(allowedHeldCells) || JSON.stringify([...allowedHeldCells].sort()) !== JSON.stringify(heldCells) || heldCells.length === 0 || otherStops.length > 0) throw new Error(`Provider ${provider} is held pending parent review`);
+      ledger.continuations ??= [];
+      ledger.continuations.push({ provider, reason: "parent-authorized continuation after identity-unreported response", priorHeldCells: heldCells, authorizationSha256: authorizationHash, authorizedAt: new Date().toISOString() });
+    }
     if (ledger.cells.filter(item => item.provider === provider && item.startedAt).length >= CALL_LIMIT) throw new Error("Provider session limit reached");
     if (provider === "claude" && ledger.cells.filter(item => item.provider === provider).reduce((sum, item) => sum + (item.costUsd ?? 0), 0) + CLAUDE_CALL_BUDGET_USD > CLAUDE_TOTAL_BUDGET_USD) throw new Error("Claude aggregate cost envelope reached");
     ledger.cells.push({ cell, provider, task, tier, startedAt: new Date().toISOString(), status: "started" });
@@ -234,7 +241,7 @@ function completeCell(reservation, cell, result) {
   const record = ledger.cells.find(item => item.cell === cell && item.status === "started");
   if (!record) throw new Error("Measurement reservation is missing");
   Object.assign(record, result, { finishedAt: new Date().toISOString() });
-  if (["timeout", "infrastructure-error", "native-error", "usage-limit", "provider-process-failure", "missing-terminal-event", "empty-response", "identity-mismatch", "identity-unreported", "usage-unreported", "provider-budget-exceeded", "controller-error"].includes(result.status) && !ledger.stoppedProviders.includes(record.provider)) ledger.stoppedProviders.push(record.provider);
+  if (["timeout", "infrastructure-error", "native-error", "usage-limit", "provider-process-failure", "missing-terminal-event", "empty-response", "identity-mismatch", "usage-unreported", "provider-budget-exceeded", "controller-error"].includes(result.status) && !ledger.stoppedProviders.includes(record.provider)) ledger.stoppedProviders.push(record.provider);
   writeFileSync(reservation.path, `${JSON.stringify(ledger, null, 2)}\n`);
 }
 function capture(directory, name, bytes) {
@@ -244,7 +251,7 @@ function capture(directory, name, bytes) {
 
 function execute(options, built) {
   const controllerHash = currentSourceHash();
-  parseAuthorization(options.authorization, options.provider, controllerHash);
+  const authorization = parseAuthorization(options.authorization, options.provider, controllerHash);
   const launcher = verifiedLauncher(options.provider);
   const workPrefix = join(tmpdir(), `gm-t169-${options.cell}-`);
   const evidenceDir = resolve(options["evidence-dir"] ?? join(REPO, ".scratch", "t169", "raw", options.cell));
@@ -253,7 +260,7 @@ function execute(options, built) {
   const stats = statfsSync(tmpdir());
   const free = stats.bavail * stats.bsize;
   if (free < MIN_FREE_BYTES) throw new Error("Free space below 20 GiB");
-  const reservation = reserveCell(options.provider, options.task, options.tier, options.cell);
+  const reservation = reserveCell(options.provider, options.task, options.tier, options.cell, authorization, sha256File(options.authorization));
   let workDir = null;
   try {
     workDir = mkdtempSync(workPrefix);
@@ -268,11 +275,12 @@ function execute(options, built) {
     const stdout = child.stdout ?? Buffer.alloc(0);
     const stderr = child.stderr ?? Buffer.alloc(0);
     const native = options.provider === "claude" ? parseClaude(stdout) : options.provider === "codex" ? parseCodex(stdout) : parseKiro(stdout);
-    const status = classify(child, native, plan.requestedModel);
+    const status = classify(child, native, plan.requestedModel, { allowIdentityUnreported: options.provider === "codex" || options.provider === "kiro" });
     const outputFile = capture(evidenceDir, "stdout.bin", stdout);
     const errorFile = capture(evidenceDir, "stderr.bin", stderr);
     const responseFile = capture(evidenceDir, "response.txt", Buffer.from(native.response, "utf8"));
-    const receipt = { schemaVersion: 1, ticket: 169, cell: { id: options.cell, provider: options.provider, task: options.task, tier: options.tier }, status, semanticGrade: status === "response-ready-for-independent-grading" ? "pending-blind-semantic-review" : "not-ready", qualityGrade: null, profileComparable: false, process: { status: child.status, signal: child.signal, errorCode: child.error?.code ?? null, durationMs }, controller: { sha256: controllerHash, nodeVersion: process.version, argv, shell: false, stdinBytes: 0, timeoutMs: TIMEOUT_MS, freeBytesBeforeCall: free, retainedWorkDir: workDir }, inputs: { sourceSha256: SOURCE_HASH, tasksSha256: TASK_HASH, promptSha256: plan.promptSha256, answerKeySha256: KEY_HASH, answerKeyInPrompt: false }, executable: { path: plan.executable, sha256: plan.executableSha256, version: plan.version, siblingSha256: plan.siblingSha256 }, native: { terminal: native.terminal, failed: native.failed, malformed: native.malformed, identity: native.identity, requestedModel: plan.requestedModel, requestedEffort: plan.requestedEffort, usage: native.usage, usageObserved: Boolean(native.usage && (typeof native.usage !== "object" || Object.keys(native.usage).length > 0)), cost: native.cost, usageLimit: native.usageLimit }, raw: { stdout: outputFile, stderr: errorFile, finalResponse: responseFile }, privateEvidence: "Raw outputs and final text can contain sensitive model content; retain in .scratch/t169 pending independent audit; do not commit/promote content. The empty working directory is retained for parent-directed OS Recycle Bin cleanup." };
+    const identityUnreported = native.identity === null;
+    const receipt = { schemaVersion: 1, ticket: 169, cell: { id: options.cell, provider: options.provider, task: options.task, tier: options.tier }, status, semanticGrade: status === "response-ready-for-independent-grading" ? "pending-blind-semantic-review" : "not-ready", qualityGrade: null, profileComparable: status === "response-ready-for-independent-grading" && !identityUnreported, process: { status: child.status, signal: child.signal, errorCode: child.error?.code ?? null, durationMs }, controller: { sha256: controllerHash, nodeVersion: process.version, argv, shell: false, stdinBytes: 0, timeoutMs: TIMEOUT_MS, freeBytesBeforeCall: free, retainedWorkDir: workDir }, inputs: { sourceSha256: SOURCE_HASH, tasksSha256: TASK_HASH, promptSha256: plan.promptSha256, answerKeySha256: KEY_HASH, answerKeyInPrompt: false }, executable: { path: plan.executable, sha256: plan.executableSha256, version: plan.version, siblingSha256: plan.siblingSha256 }, native: { terminal: native.terminal, failed: native.failed, malformed: native.malformed, identity: native.identity, identityUnreported, requestedModel: plan.requestedModel, requestedEffort: plan.requestedEffort, usage: native.usage, usageObserved: Boolean(native.usage && (typeof native.usage !== "object" || Object.keys(native.usage).length > 0)), cost: native.cost, usageLimit: native.usageLimit }, raw: { stdout: outputFile, stderr: errorFile, finalResponse: responseFile }, privateEvidence: "Raw outputs and final text can contain sensitive model content; retain in .scratch/t169 pending independent audit; do not commit/promote content. The empty working directory is retained for parent-directed OS Recycle Bin cleanup." };
     writeFileSync(join(evidenceDir, "receipt.json"), `${JSON.stringify(receipt, null, 2)}\n`);
     completeCell(reservation, options.cell, { status, durationMs, costUsd: native.cost?.amountUsd ?? null, usageLimit: native.usageLimit, workDir, receipt: join(evidenceDir, "receipt.json"), stdoutSha256: outputFile.sha256, responseSha256: responseFile.sha256 });
     return { status, receipt: join(evidenceDir, "receipt.json"), durationMs };

@@ -1,11 +1,16 @@
 # Model tier research: preparation and invocation plan
 
-**Status: no model calls made and no quality findings yet.** Ticket #169 compares
-three read-only research tasks under each available harness's low-cost profile
-and native default. Calls are gated on independent review of the frozen packet,
-controller and blinded-review procedure, followed by the parent releasing the
-serial measurement lease. Frozen protocol SHA-256 is
-`e086dfb13a8ac3b16de4712d1e82707be6cad663b18eb98c0d2d40d60f62ec8c`.
+**Status: eight calls captured; no quality findings yet.** Ticket #169 compares
+three read-only research tasks under each harness's low-cost profile and native
+default. Six Claude cells have terminal responses. The first Codex and Kiro
+cells also completed, but their native output omitted actual model identity.
+Their raw responses remain eligible for semantic blind grading as requested-
+profile observations; they cannot support model-level comparison. Ten planned
+cells remain pending renewed critic review and a parent continuation receipt.
+The first-wave protocol, authorization and measurement ledger are preserved at
+their original hashes in private scratch. The continuation clarification is
+bound by protocol SHA-256
+`927726a9190c0612d5c562e1fe44c95b14f7d1842ca87b5402faf0e17b37ebb0`.
 
 ## What the planned comparison measures
 
@@ -38,7 +43,9 @@ The candidates are Claude `claude-haiku-5-5`, Codex `gpt-6-luna`, and Kiro
 effort overrides. A prior #168 observation requested Claude's `haiku` alias,
 but the native response reported Claude Sonnet 5.5. This protocol therefore
 uses the documented canonical Haiku ID and requires native output to report the
-served identity; a mismatch or missing identity is not a quality pass.
+served identity. Codex and Kiro may retain successful responses when identity
+is absent, but those are requested-profile observations only; they cannot
+support a model-level comparison or adoption recommendation.
 
 The #167 adapter inventory captured the current harness versions and selected
 help output on 2026-11-03 at 05:43 UTC. Its raw inventory SHA-256 is
@@ -51,6 +58,33 @@ All six Google/Agy cells are security-blocked by the workstream decision; no
 replacement provider will be tried. Two prior Google model catalogs disagreed
 on the Flash effort suffix. That conflict remains unresolved and is not needed
 to execute the three permitted providers.
+
+## Partial execution evidence (2026-11-03)
+
+Every response below has a pending semantic grade. No row is a quality pass.
+Claude's native defaults reported Opus 5.5 and the cheap profile reported
+Haiku 5.5. Codex and Kiro completed the caller task but did not report actual
+identity. Their statuses were retained by the first-wave controller as
+`identity-unreported`; the accepted clarification keeps them as requested-
+profile observations with `actualModel=null` and `profileComparable=false`.
+
+| Harness | Requested profile | Task | Native result | Actual identity | Time | Reported usage or cost |
+|---|---|---|---|---|---:|---|
+| Claude | Haiku 5.5 | Caller discovery | Terminal response; blind grade pending | Haiku 5.5 | 8.139 s | $0.001527 list estimate |
+| Claude | Native default | Caller discovery | Terminal response; blind grade pending | Opus 5.5 | 6.562 s | $0.036134 list estimate |
+| Claude | Haiku 5.5 | Module summary | Terminal response; blind grade pending | Haiku 5.5 | 11.010 s | $0.001653 list estimate |
+| Claude | Native default | Module summary | Terminal response; blind grade pending | Opus 5.5 | 8.480 s | $0.036270 list estimate |
+| Claude | Haiku 5.5 | Cited answer | Terminal response; blind grade pending | Haiku 5.5 | 5.251 s | $0.000851 list estimate |
+| Claude | Native default | Cited answer | Terminal response; blind grade pending | Opus 5.5 | 6.930 s | $0.031826 list estimate |
+| Codex | `gpt-6-luna` requested | Caller discovery | Terminal response; blind grade pending | Unreported | 6.381 s | 18,599 input / 108 output tokens; cost unknown |
+| Kiro | `qwen3-coder-next` requested | Caller discovery | Terminal response; blind grade pending | Unreported | 6.526 s | Context-use metadata only; cost unknown |
+
+Claude's six list estimates total USD 0.108260 against the USD 0.60 ceiling.
+The Codex and Kiro first cells were consumed once and will not be retried.
+Their five remaining cells each can resume only under parent authorization
+listing those exact held cell IDs; other errors or limits still stop that
+provider. Raw responses, full receipts, the identity crosswalk and first-wave
+ledger remain private in `.scratch/t169/`.
 
 ## Safety, limits and classification
 
@@ -67,9 +101,11 @@ The cap is six calls per provider, one per task/profile pair, no retries, and a
 maximum 120 seconds each. Claude's planned total cap is USD 0.60. Other native
 costs are unknown; a reported usage limit or reset stops that provider, without
 fallback. A timeout, native error, missing terminal success, empty text,
-unreported identity or usage, identity mismatch, malformed output, or exceeded
-budget holds the provider for parent review and cannot count as a pass. Startup
-failures consume their planned cell. Captured raw output is private scratch
+unreported usage, identity mismatch, malformed output, or exceeded budget holds
+the provider for parent review and cannot count as a pass. Claude also holds on
+unreported identity. Successful Codex/Kiro responses with unreported identity
+can be graded semantically, but remain non-comparable. Startup failures consume
+their planned cell. Captured raw output is private scratch
 evidence and will not be promoted; private model reasoning is not collected as a
 finding.
 
@@ -101,12 +137,9 @@ hashes before it can emit a pass or fail. Until then, the semantic grade stays
 ## Verification before measurement
 
 The [controller](../../../scripts/spike-model-tier-research-t169.mjs) SHA-256 is
-`7f1e53e42f952c155bf313a3081720ee66f1f700f49c475e5a978d671d7ef921`; the
+`a499ef5bf3f45195062ec167c08f0248c26cede0401f91d53110c31f347e9cc1`; the
 [separate held-out grader](../../../scripts/grade-model-tier-research-t169.mjs)
 SHA-256 is
 `7db36c67ceca1c8eaaf20d7bfd103684fb7319b91447d9ed653931df79a6c88c`. Their
-exact hashes, the source packet and prompt hashes are bound in the private
-protocol. No live provider command or measurement call has been run for #169.
-After critic acceptance, the parent must issue an authorization receipt
-matching the exact controller, protocol and this report before the runner can
-execute.
+exact hashes and the source/task hashes are bound in the continuation protocol.
+No model response is semantically scored by the producing session.
