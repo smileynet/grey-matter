@@ -1,93 +1,89 @@
-# Model tiers for read-only research and exploration: fixture preparation
+# Model tier research: preparation and invocation plan
 
-**Status: protocol preparation only. No model calls or performance results are
-reported.** Tickets #167 and #168 hold the shared native measurement lease first.
-This file freezes the #169 tasks so an independent reviewer can approve the
-inputs and scoring before measurement begins.
+**Status: no model calls made and no quality findings yet.** Ticket #169 compares
+three read-only research tasks under each available harness's low-cost profile
+and native default. Calls are gated on an independent review of the frozen
+packet and controller, followed by the parent releasing the serial measurement
+lease. The protocol is `.scratch/t169/protocol.json` (SHA-256
+`62e0c1e69998df5a3a09bf86f1f46ced55eaefa785a0b21a32f1a508f5d82c0a`).
 
-## Frozen source packet
+## What the planned comparison measures
 
-Three small tasks use the same eight source files: identify every caller of an
-exported function, summarize a policy module, and answer a documentation question
-with a citation. The packet includes alias and dynamic imports, a similarly named
-non-caller, distinct policy rules, and a short source heading. These are synthetic
-fixtures; no repository code or external research answer is exposed as a result.
-
-Task definitions and exact prompts are in
-[`scripts/fixtures/model-research/t169/tasks.json`](../../../scripts/fixtures/model-research/t169/tasks.json);
-the shared input bytes are in
+The same eight-file synthetic source packet supports three tasks: discover all
+callers of an exported function (including alias and dynamic imports), summarize
+a small policy module, and answer a question from a cited document. Exact
+prompts, sources and hashes are listed in the protocol and in
+[`scripts/fixtures/model-research/t169/tasks.json`](../../../scripts/fixtures/model-research/t169/tasks.json)
+and
 [`scripts/fixtures/model-research/t169/source-files.json`](../../../scripts/fixtures/model-research/t169/source-files.json).
-The held-out answer key stays private at `.scratch/t169/answer-key.json`; its
-path and SHA-256 go in the evidence receipt, not in the model prompt. Each model
-session receives one task and identical source text, in a fresh context. The key
-never reaches the runner or target models until grading.
+The held-out answer key is private at `.scratch/t169/answer-key.json`; only its
+hash is recorded in receipts. Each session will receive one prompt and all eight
+sources. The grader independently checks the response text, including caller
+precision/recall, keyed summary facts and citation correctness. Mentioning a
+path alone does not establish that it is a caller.
 
-Frozen artifact SHA-256 values: source packet
-`a43525e265ddc6d7cc832cbee0ca9b0ed4a6090a614a0dbb747eb24bc4be572c`, task/prompt
-manifest `2872f907bc1616af68ef081933394a2873b97fab8e4bcdd4a3cfff9ebd105f653`,
-private answer key `429bf76172338d0f52963d3ac2c14fba3f701defae42e444997a1096c04efae`.
-The private protocol packet is
-`eca3fe77ff8f357128a752db46b65f7b69989c7b3f889fc4d0f2d6df329901c7`.
+A profile passes this small fixture bar only if all three one-shot task scores
+pass. Otherwise the recommendation is to keep the native default. These are
+directional examples, not a reliability or broad coding benchmark. The native
+default can differ in both model identity and reasoning effort, so any
+difference will be reported as an invocation-profile result, not attributed to
+model identity alone.
 
-## Scoring, fixed before calls
+## Candidate profiles and prior evidence
 
-- Caller discovery: exact path precision and recall. Report missing and invented
-  callers separately. Pass only all three expected paths and no invented paths.
-  File mentions without a call do not count.
-- Module summary: check five discrete facts; pass at least four and make no
-  unsupported material claims.
-- Cited answer: pass only if semantically correct and cited to the supporting
-  heading. A wrong or unsupported citation fails even if the prose is readable.
+The candidates are Claude `claude-haiku-5-5`, Codex `gpt-6-luna`, and Kiro
+`qwen3-coder-next`. In each default profile, the runner omits both model and
+effort overrides. A prior #168 observation requested Claude's `haiku` alias,
+but the native response reported Claude Sonnet 5.5. This protocol therefore
+uses the documented canonical Haiku ID and requires the native response to
+report the served identity; a mismatch or missing identity is not a quality
+pass.
 
-A profile meets this fixture bar only if it passes all three one-shot tasks.
-Otherwise the recommendation is “keep default.” With one attempt per cell, these
-results are directional and do not establish population reliability.
+The #167 adapter inventory captured the current harness versions and selected
+help output on 2026-11-03 at 05:43 UTC. Its raw inventory SHA-256 is
+`4163dd66914448a75a99baf6eecdf0d6870cb256e46c1b5f036ca1a1511b0a57`. The
+selected help hashes are Claude `ad08d3ae28285ca6751211aebf9b70cf63a13351aa0e229274d73ab60f887079`,
+Codex `031e67c790835206fc786b24793207dd57ced5a169afa6f6320e85a46d50c5a3`,
+and Kiro `f58673b80b3c6c004ce55f5791c2e9a7f7c65de688a3d0e48786d55f70ddb5b6`.
+These are retained in the #167 worktree, not copied into this branch. The
+controller's exact argv construction and captured empty-argument behavior are
+covered by its local recorder tests.
 
-Freeze these rubrics with the packet. The independent grader receives response
-text and the private key only after the model session ends; the target sees no
-tier label or key. Do not score the producer's judgment as evidence.
+All six Google/Agy cells are security-blocked by the workstream decision; no
+replacement provider will be tried. Two prior Google model catalogs disagreed
+on the Flash effort suffix, which remains unresolved and is not needed to
+execute the three permitted providers.
 
-## Candidate profiles and controls
+## Safety, limits and classification
 
-The current project snapshot records Anthropic's `haiku` alias, OpenAI
-`gpt-6-luna`, Kiro `qwen3-coder-next`, and Antigravity `gemini-3.8-flash`
-as low-cost candidates; each must be matched to the retained read-only catalog
-and invocation evidence before any calls. The comparison profile uses each
-harness's native default by omitting both model and effort overrides. If the
-served identity is absent, report it as unknown and do not claim an identity-
-specific comparison. The Google candidate is the currently listed medium Flash
-variant; two same-host inventories three minutes apart disagree on its effort
-suffix (`medium` versus `low`), so Google calls are specifically blocked until
-the critic resolves that catalog conflict. The configured native default is
-not known, so a comparison remains unverified unless output names the served
-model. The #168 list hash is `697b857ddb101c351a5a773ba51b8637d1161ae2b97227756e496fcbf3febff4`;
-the later #167 list hash is `00f1c26360e3dbbf92d47e27bf0a1a5f55d00d2a7375175478252a0c9b6084eb`.
+The controller uses `spawnSync` with an argv array, `shell: false`, empty closed
+stdin, a fresh empty directory outside the repository, and a 120-second timeout.
+Codex uses an ephemeral, read-only session with user config ignored and the
+documented skip-repository-check flag. Claude uses safe mode, strict empty MCP,
+no tools, denied MCP tools, plan permission, no session persistence and a
+USD 0.10 per-call ceiling. Kiro uses V2, non-interactive mode, and an empty
+trusted-tool list; the protocol does not claim its no-tool catalog is disabled.
+Executable and Codex sibling hashes are pinned in the runner.
 
-Ticket-local plan: three tasks × two profiles = six sessions per provider, one
-attempt per cell, at most 120 seconds per session. Claude's native list estimate
-cap is USD 0.10 per call and USD 0.60 total. Other providers have no verified
-dollar conversion in this preparation; report native usage and unknown cost.
-Stop a provider at its first native limit/reset, record the affected cells and
-reset signal, and do not retry or move to another provider. Do not use a
-quota-check command that consumes a turn.
+The cap is six calls per provider, one per task/profile pair, no retries, and a
+maximum 120 seconds each. Claude's planned total cap is USD 0.60. Other native
+costs are unknown; a reported usage limit or reset stops that provider, without
+fallback. A timeout, native error, missing terminal success, empty text,
+unreported identity or usage, identity mismatch, malformed output, or exceeded
+budget holds the provider for parent review and cannot count as a pass. Startup
+failures consume their planned cell. Captured raw output is private scratch
+evidence and will not be promoted; private model reasoning is not collected as a
+finding.
 
-Native effort may differ between a cheap candidate and a provider's default.
-Record the requested command profile and any observed model/effort separately.
-Interpret the results as an invocation-profile comparison; do not attribute a
-difference to model identity alone when effort also changed. An alias rejection
-is a failed/unavailable cell with no retry or substitute.
+## Verification before measurement
 
-## Invocation review and evidence
-
-Each adapter's exact executable, version, argv, prompt transport, disabled-tool
-or read-only control, output parser, timeout, and native usage fields must be
-bound to the current retained catalog/help receipt before the critic approves
-calls. This is an explicit preflight condition, not a result of this preparation
-note. Provider protocol details may differ; do not assume one runner's flags
-apply to another. A completed receipt should bind input, task, prompt, key hash,
-grader version, protocol version, executable/version, requested and observed
-profile, raw response hash, classification, elapsed time, and native usage.
-Private model reasoning is not promoted.
-
-Until the parent releases the serial-measurement lease and the critic accepts the
-exact protocol/evidence hashes, the experiment remains on hold.
+The controller is
+[`scripts/spike-model-tier-research-t169.mjs`](../../../scripts/spike-model-tier-research-t169.mjs)
+(SHA-256 `8aaca73abfcbc4d552a6207209fd35b7cca4cee4f446134004ead37d1ba50307`);
+the separate held-out grader is
+[`scripts/grade-model-tier-research-t169.mjs`](../../../scripts/grade-model-tier-research-t169.mjs)
+(SHA-256 `a52ab3441de064f86addfdecfb90cb85e64072d9d7e1108ba82d46944697476d`).
+Both and the exact prompts are bound in the protocol. No live provider command
+or measurement call has been run for #169. After critic acceptance, the parent
+must issue an authorization receipt matching the exact controller, protocol
+and this report before the runner can execute.
