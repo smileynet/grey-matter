@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "manifestDigest": "18fc58629f56240af37de7dc2cc46875f5eed6e265e8f4a8f569e0fc153559ee",
+  "subject": "Delivery update after the evaluation runner selection",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 130737,
+      "sha256": "e623105d7dd3f01af16840e625e349baad88b6abea9e2c546fbee7f22cacdc63"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t200-status-final/tab-0-1280.png",
+      "bytes": 76712,
+      "sha256": "e6748bc80f95e180f0d3724ef5d3fdb973120699a152ad0acc362bfa5f8ee8aa",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t200-status-final/tab-1-1280.png",
+      "bytes": 255985,
+      "sha256": "5dbbd66d78e5f2d35f53f571462e370059ba2554a9fa138c06655e813c196867",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t200-status-final/tab-2-1280.png",
+      "bytes": 397967,
+      "sha256": "0be1958367a44241cb2fb918715e047a4c04549d0bb399e4b82b29f03a337520",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t200-status-final/tab-0-390.png",
+      "bytes": 72213,
+      "sha256": "8e2674728ae1ab2e1abf4461e2a8abefc10defda0c7537968b7479bca548bb5f",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t200-status-final/tab-1-390.png",
+      "bytes": 251017,
+      "sha256": "32618d3ac7263a912dd202adaff41b225c0b486ec4cd25dc50d7e6f8aaa745dd",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t200-status-final/tab-2-390.png",
+      "bytes": 384821,
+      "sha256": "97c3e7849b6ad4c29ebd17282374e1072d7985396cc9e3edcdf344d8ba953dc9",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "9ab98d35be4cb987073f5a02ea5676f081a9bb8addef5a401c875fe998bc2c83",
+  "id": "2116c39fa241e62da21970024791595d51b5481cf8751797602f9750465c695a",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "Codex critic #200",
+    "note": "Tool observed and visually inspected all six bound status dashboard captures across overview, entries and plan at declared 1280x900 and 390x900 viewports. Information hierarchy, tab state, responsive cards/list and ticket-flow ordering are clear; no material clipping or claim issue observed. Latest entry accurately describes the frozen-workspace repair. The global 44-entry/198-ticket counts are visible and preserve unrelated work. This review inspected captures, not live interactions; reported interaction checks remain attributed to their runner.",
+    "acceptedAt": "2026-11-03T06:30:31.336Z",
+    "snapshotId": "2116c39fa241e62da21970024791595d51b5481cf8751797602f9750465c695a"
+  }
+}

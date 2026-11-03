@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "subject": "Selected evaluation recipe and dispatched implementation/review trials",
+  "sources": ["docs/orchestration.html", "docs/orchestration-findings.json", "scripts/assets/orchestration-dashboard.html", "scripts/build-orchestration-dashboard.mjs", "scripts/orchestration-dashboard.test.mjs"],
+  "captures": [
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t200-final/findings-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t200-final/tickets-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t200-final/findings-390.png","viewport":{"width":390,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t200-final/tickets-390.png","viewport":{"width":390,"height":900}}
+  ]
+}
+
+

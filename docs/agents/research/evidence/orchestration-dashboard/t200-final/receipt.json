@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "243812dfa3deec1a8ad69537214279abd5c7e60d21758000f210e60818894303",
+  "subject": "Selected evaluation recipe and dispatched implementation/review trials",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 23133,
+      "sha256": "5c401fb65163183210945fc1205bef1a60592ca1d74a0d0b7958a0b332bedba4"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 178775,
+      "sha256": "6416b5bc2ca258174318a47a530df8f49a2125df07cca548cffd50a21a558acc"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4264,
+      "sha256": "afcd2dcda83dc67ae9405c296d8806d5fc11afb95436bfe02f041addf342e7f4"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t200-final/findings-1280.png",
+      "bytes": 443824,
+      "sha256": "8c8eafd41cd6d5b54ef450002811d484a81864002ff19b8f2a0fa31a5dda8abb",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t200-final/tickets-1280.png",
+      "bytes": 235444,
+      "sha256": "83137c21e44d62734c38a4e2ba1e7ea1948c5f3fe255b232e25777a60ee2ed59",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t200-final/findings-390.png",
+      "bytes": 444484,
+      "sha256": "8ac7123f5ce8f959b216e9eaccd285e5f37079be11e450f825a8b1f5098a2c33",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t200-final/tickets-390.png",
+      "bytes": 214322,
+      "sha256": "65ade88a3df479c85400bc4a0b3955cd6beb35cb7ea8b4b8469145bb0ae315a6",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "cee2e0610473c2b314acf20ef5563cdee6f8478e578ad6bae44d7463056b7e66",
+  "id": "a3154fd4505bbd5b0f3abdabb7f6d5ecff0f43a9ed4ddebe9fd080d93c3f0640",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "Codex critic #200",
+    "note": "Tool observed and visually inspected all four bound findings/ticket captures at declared 1280x900 and 390x900 viewports; reviewed current findings source and ticket #200 repair report. Layout hierarchy, collapsed ticket rows, mobile wrapping and flow labels are coherent. Seed repair claims match the recorded 15-file frozen, hash-checked setup and setup-only fixture evidence; no new native model execution or ranking is claimed. Tool did not independently exercise UI interactions; reported interaction checks remain attributed to their runner.",
+    "acceptedAt": "2026-11-03T06:30:31.149Z",
+    "snapshotId": "a3154fd4505bbd5b0f3abdabb7f6d5ecff0f43a9ed4ddebe9fd080d93c3f0640"
+  }
+}
