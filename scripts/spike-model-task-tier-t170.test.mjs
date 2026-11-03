@@ -9,11 +9,11 @@ import { fileURLToPath } from "node:url";
 import {
   BLOCKED_GOOGLE_CELLS, CALL_TIMEOUT_MS, FIXTURE_HASHES, PROVIDERS,
   TASKS, TIERS, buildArgv, buildCellPlan, buildPrompt, extractResult,
-  loadPlanFile, readFixture, runCell,
+  readFixture, runCell,
 } from "./spike-model-task-tier-t170.mjs";
 import { bindReview, validateReviewBody } from "./t170-review-envelope.mjs";
 
-const key = JSON.parse(readFileSync(new URL("../.scratch/t170/preparation/answer-key.json", import.meta.url), "utf8"));
+const syntheticAnswerKey = Object.freeze({ issueKeys: ["synthetic.expected-item"] });
 const providerResponse = (provider, tier, prompt) => buildArgv(provider, tier, prompt, "C:\\Temp\\gm t170");
 const sha = (value) => createHash("sha256").update(value).digest("hex").toUpperCase();
 
@@ -116,7 +116,7 @@ test("terminal parsing distinguishes completed responses from missing terminal a
 
 test("blind review schema binds trusted hashes without changing or completing semantic decisions", () => {
   const { fixture } = readFixture("doc-rewrite");
-  const answer = key.fixtures[fixture.id];
+  const answer = syntheticAnswerKey;
   const responseBytes = Buffer.from("Schedule days stay selected when you change time zones.");
   const body = {
     scorable: true,
@@ -157,7 +157,7 @@ test("runCell executes the cwd and argv in its exact authorized plan through a h
   const planPath = join(root, "plan.json");
   const planBytes = Buffer.from(`${JSON.stringify(builtPlan, null, 2)}\n`);
   writeFileSync(planPath, planBytes);
-  const { plan } = loadPlanFile(planPath);
+  const plan = JSON.parse(readFileSync(planPath, "utf8"));
   const authorization = authorize(plan, planBytes, root);
   const fake = join(root, "fake-provider.mjs");
   const observedPath = join(root, "observed.json");
@@ -192,7 +192,7 @@ test("runCell refuses a changed path, a nonempty plan directory, and a reparse d
     const planPath = join(root, cellId, "plan.json");
     const planBytes = Buffer.from(`${JSON.stringify(builtPlan, null, 2)}\n`);
     writeFileSync(planPath, planBytes);
-    const { plan } = loadPlanFile(planPath);
+    const plan = JSON.parse(readFileSync(planPath, "utf8"));
     return { plan, planBytes, authorization: authorize(plan, planBytes, join(root, cellId)), ledgerPath: join(root, cellId, "ledger.json") };
   };
   const changed = make("T170-EXEC-02");

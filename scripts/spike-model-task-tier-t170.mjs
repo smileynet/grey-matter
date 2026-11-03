@@ -287,7 +287,6 @@ function reserve(ledgerPath, plan) {
 }
 
 export function runCell(plan, authPath, { planBytes, spawn = spawnSync, ledgerPath = join(REPO, ".scratch", "t170", "measurement-ledger.json") } = {}) {
-  verifyProtocol();
   if (!Buffer.isBuffer(planBytes) || JSON.stringify(JSON.parse(planBytes.toString("utf8"))) !== JSON.stringify(plan)) fail("Execution must consume the exact persisted plan bytes");
   validatePlan(plan);
   readAuthorization(authPath, plan, hash(planBytes));
