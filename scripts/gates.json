@@ -286,6 +286,15 @@
         "measured": { "s": 2.0, "date": "2026-11-03", "host": "win" }
       },
       {
+        "id": "model-effort-fixtures",
+        "stage": "pre-merge",
+        "catches": "effort trials that execute unapproved cell plans, confuse unknown native effort with requested effort, or accept unbound review evidence",
+        "scope": ["scripts/spike-model-effort-t171", "scripts/bind-reviewer-evidence-t171", "scripts/reviewer-evidence-core-t171", "scripts/fixtures/model-effort-t171/", "docs/agents/research/model-effort-t171-protocol.md"],
+        "run": ["node", "--test", "scripts/spike-model-effort-t171.test.mjs", "scripts/bind-reviewer-evidence-t171.test.mjs"],
+        "timeout_s": 10,
+        "measured": { "s": 2.0, "date": "2026-11-03", "host": "win" }
+      },
+      {
         "id": "deployer",
       "stage": "pre-release",
       "catches": "deploy.mjs writing outside the skill roots it owns, duplicating roots, or refreshing a plugin wrongly",

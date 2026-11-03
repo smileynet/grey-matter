@@ -1,0 +1,1747 @@
+{
+  "schemaVersion": 1,
+  "ticket": 171,
+  "status": "partial effort wave with incomplete quality evidence; retain existing defaults",
+  "evidenceScope": {
+    "plannedByProvider": {
+      "claude": 10,
+      "codex": 10,
+      "kiro": 10,
+      "agy": 10
+    },
+    "consumedAttemptRecords": 14,
+    "providerSpawnSyncInvocations": 13,
+    "completedResponses": 11,
+    "timeouts": 2,
+    "preSpawnSetupFailures": 1,
+    "retries": 0,
+    "providerFallbacks": 0,
+    "gradingOutcomes": {
+      "unscorable": 10,
+      "pass": 1
+    },
+    "gradingValidationErrors": {
+      "source quote is not an exact fixture substring": 4,
+      "unsupported-fact quote-shape violation": 2,
+      "source path is outside the expected fixture set": 2,
+      "format-validity assessment contradicts observed response schema": 1,
+      "candidate response quote is not an exact substring": 1
+    }
+  },
+  "frozenArtifactHashes": {
+    "finalAttemptManifestSha256": "97655e3878031ef849bf35928cd4178fa4aa2e794bfe31516f7e56d9837dbcc0",
+    "finalAttemptSummarySha256": "1185a7195a078c8b02775b0e9316e5111b149c78e309a01d9ed5b330bd6a0dbb",
+    "appendOnlyAttemptLedgerSha256": "c30116b1859f8799f21e92c6d59a7f01fc8cf7f5bf5e3a5d1498db5a93993e1f",
+    "blindPacketManifestSha256": "33e36505a112a69f961a81a126e0d8f25aaf29ee7850d77589f021160d7db6cc",
+    "privateCrosswalkSha256": "db1d633a2d3793eebf54772ecf11bd82071d6fc1c944e43fc30f444863125485",
+    "privateAnswerKeySha256": "85da0db122808651dcd64988469faad6ab87a9bfcc7d06c3b04f24c99dbbf859",
+    "privateRubricSha256": "fa2dfdb23f701e6bd53adff959aa421df2bae87dfcdad76ad02755a58e2e942b",
+    "amendedPlanBytesSha256": "1b5a645ac309ca0cf6967437b91258096be4e844befdcba721d605c664a64aaf",
+    "originalCodexAuthorizationSha256": "892fbf0b8746239b0e13563fe65420ad78736005e138d3b6a36aae543e9cefcb",
+    "parentGradingLedgerSha256": "e8f9d01fd98c28a565c917216ff0864a3d4d44c5cd14f55c60a8bf9e9ff74000",
+    "independentGradingAuditSha256": "0bd13bb79f41d528df5e1738fe3b3eda16a71d147b4f8b101338e46c792c06c6",
+    "gradingBinderCommit": "4e90b304af5a4f4025ccc4edb5eef56108c5563e",
+    "currentHermeticBinderCommit": "9340ed1362681804b9a380eed7f23238cd9180d9",
+    "hermeticBinderWrapperSha256": "f8c5c3a9d6b7598eb35bee109e97568cb86357214584cb6f17bbadd5934f7aef",
+    "hermeticBinderCoreSha256": "7a066012a3587e163573e34f8478b120a9cf9c614446139e4ee0807d8ab18a6b",
+    "hermeticBinderTestSha256": "6cb8caa17d82f6517d9247f4ae0f15a3a4ed16b5899747e112dc55d431795f45",
+    "finalResultsReportSha256": "5a7f1bb8d7a6a7396ea7fbdd8df37c05b9ab1602045c61b02739439e3cb641a5",
+    "parentOnlyCwdCleanupPlanSha256": "5333bceadd6cf58418e0cad673baa843ae525af0f8b59b158b5277e6a657bc8e"
+  },
+  "provenanceLimits": [
+    "Claude actual canonical model was observed in retained modelUsage metadata for four completed responses; actual effort was not reported for any completed response.",
+    "Codex actual model and effort were not reported in retained receipts or selected raw JSON metadata; requested profile is not observed identity or effort.",
+    "The two timeout attempts have unknown execution completion, identity, effort, usage and cost where absent; empty streams do not imply zero execution or zero cost.",
+    "The setup-failed Codex low cell was consumed before process spawn; native model call count is zero, but cost remains unknown.",
+    "Reviewer dispatch/completion traces are parent transcriptions with exact raw hashes, not platform-authenticated exports. Independent audit confirmed consistency and reports parent verification against live collaboration history.",
+    "All 10 failed review bindings are unscorable, not quality failures. No regrade, repair, resampling, or retrospective binding to the hermetic binder version occurred.",
+    "Per-provider metering fields differ; do not aggregate token fields or infer cross-provider cost comparability."
+  ],
+  "unattemptedAndHeld": {
+    "claudeDesign": {
+      "count": 5,
+      "state": "held"
+    },
+    "codexDesignMax": {
+      "count": 1,
+      "state": "not attempted after prior timeout"
+    },
+    "kiro": {
+      "count": 10,
+      "state": "held; pinned V2 effort support unverified"
+    },
+    "agy": {
+      "count": 10,
+      "state": "security blocked; no commands"
+    }
+  },
+  "reviewerRows": [
+    {
+      "packetId": "pkt-581c5c1e-de13-478b-ad7a-a2ff77f0bf6b",
+      "cellId": "T171-claude-diagnosis-xhigh",
+      "provider": "claude",
+      "taskId": "diagnosis",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "xhigh",
+      "actualModel": "claude-opus-5-5",
+      "actualEffort": "unknown/not reported",
+      "gradingOutcome": "unscorable",
+      "bindingState": "validation-failed",
+      "validationErrorCategory": "source quote is not an exact fixture substring",
+      "reviewerEvidence": {
+        "provenanceKind": "parent transcription of collaboration records; not a platform-authenticated export",
+        "assignmentSha256": "2802808c3e97892c43b1545ae8bd7067669feab3cb6b6b243a0a6bf7ea5200dd",
+        "assignment": {
+          "path": "private/grading-assignments/01.md",
+          "state": "present",
+          "bytes": 1482,
+          "sha256": "2802808c3e97892c43b1545ae8bd7067669feab3cb6b6b243a0a6bf7ea5200dd",
+          "empty": false
+        },
+        "rawSemanticBodySha256": "b600411019310e45ddad540a7167f6730fd6d39968663899b21ec3ae2f9c24b4",
+        "dispatchTrace": {
+          "path": "private/parent-reviews/pkt-581c5c1e-de13-478b-ad7a-a2ff77f0bf6b/dispatch.json",
+          "state": "present",
+          "bytes": 156,
+          "sha256": "c8733e79a107f23ebf6ae2064190bbc1c1c9f4fd0282abf3603d1bf58195ce22",
+          "empty": false
+        },
+        "completionTrace": {
+          "path": "private/parent-reviews/pkt-581c5c1e-de13-478b-ad7a-a2ff77f0bf6b/completion.json",
+          "state": "present",
+          "bytes": 407,
+          "sha256": "bd76c8e8bc54e98da994799652a5d36b28a9738bfb50332764a7950f3ac6a019",
+          "empty": false
+        },
+        "actualCollaborationTranscription": {
+          "path": "private/parent-reviews/pkt-581c5c1e-de13-478b-ad7a-a2ff77f0bf6b/actual-collaboration-transcription.json",
+          "state": "present",
+          "bytes": 950,
+          "sha256": "86e81a1180a2be155928c80e27a73a3b4bd3f6c7a5c1c60363290ed664b4c022",
+          "empty": false
+        },
+        "envelopeAttempt": {
+          "path": "private/parent-reviews/pkt-581c5c1e-de13-478b-ad7a-a2ff77f0bf6b/envelope-attempt-1.json",
+          "state": "absent"
+        }
+      }
+    },
+    {
+      "packetId": "pkt-1c422ab4-86aa-4729-80be-b5d92fdfc486",
+      "cellId": "T171-codex-design-low",
+      "provider": "codex",
+      "taskId": "design",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "low",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "gradingOutcome": "unscorable",
+      "bindingState": "validation-failed",
+      "validationErrorCategory": "unsupported-fact quote-shape violation",
+      "reviewerEvidence": {
+        "provenanceKind": "parent transcription of collaboration records; not a platform-authenticated export",
+        "assignmentSha256": "4df152eda965550f5d6605a31a28ebcbf195b4086009e4a7bf82ef095fb825af",
+        "assignment": {
+          "path": "private/grading-assignments/02.md",
+          "state": "present",
+          "bytes": 1482,
+          "sha256": "4df152eda965550f5d6605a31a28ebcbf195b4086009e4a7bf82ef095fb825af",
+          "empty": false
+        },
+        "rawSemanticBodySha256": "e2a8d86f4726f26ce6eaaf2e1c523ee2488593a8867a8ec5fb59ad8422ea1f29",
+        "dispatchTrace": {
+          "path": "private/parent-reviews/pkt-1c422ab4-86aa-4729-80be-b5d92fdfc486/dispatch.json",
+          "state": "present",
+          "bytes": 156,
+          "sha256": "9b1a8c8aaf97e8eb08e6c1ba6490dffa85faa7b111546b3733a8f88478b94454",
+          "empty": false
+        },
+        "completionTrace": {
+          "path": "private/parent-reviews/pkt-1c422ab4-86aa-4729-80be-b5d92fdfc486/completion.json",
+          "state": "present",
+          "bytes": 407,
+          "sha256": "322f92f49d7bc7a3629800a09d4971fd090f8dc024b72516d1ea562688d24014",
+          "empty": false
+        },
+        "actualCollaborationTranscription": {
+          "path": "private/parent-reviews/pkt-1c422ab4-86aa-4729-80be-b5d92fdfc486/actual-collaboration-transcription.json",
+          "state": "present",
+          "bytes": 950,
+          "sha256": "b61e6fa8cfbbdbc0300eb931f7eca23c2daefb9b6e79563f6ace041d6333a254",
+          "empty": false
+        },
+        "envelopeAttempt": {
+          "path": "private/parent-reviews/pkt-1c422ab4-86aa-4729-80be-b5d92fdfc486/envelope-attempt-1.json",
+          "state": "absent"
+        }
+      }
+    },
+    {
+      "packetId": "pkt-ee662be9-ba86-4ebc-97fb-c48d404def6d",
+      "cellId": "T171-codex-diagnosis-max",
+      "provider": "codex",
+      "taskId": "diagnosis",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "max",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "gradingOutcome": "pass",
+      "bindingState": "bound",
+      "validationErrorCategory": null,
+      "reviewerEvidence": {
+        "provenanceKind": "parent transcription of collaboration records; not a platform-authenticated export",
+        "assignmentSha256": "11b3c050b4255ab63ce2a0d48a75417faeb77d155273a2a87c3dd2f25e231280",
+        "assignment": {
+          "path": "private/grading-assignments/03.md",
+          "state": "present",
+          "bytes": 1482,
+          "sha256": "11b3c050b4255ab63ce2a0d48a75417faeb77d155273a2a87c3dd2f25e231280",
+          "empty": false
+        },
+        "rawSemanticBodySha256": "061ce5fd7ce3d457b0142ae4f96ddde1d5a4ee8e919c1d8cc2ffc7a344e66270",
+        "dispatchTrace": {
+          "path": "private/parent-reviews/pkt-ee662be9-ba86-4ebc-97fb-c48d404def6d/dispatch.json",
+          "state": "present",
+          "bytes": 156,
+          "sha256": "013821e9cc156336e69d9971ace34a2d20b9be3502321f70f400d64f5ea8040e",
+          "empty": false
+        },
+        "completionTrace": {
+          "path": "private/parent-reviews/pkt-ee662be9-ba86-4ebc-97fb-c48d404def6d/completion.json",
+          "state": "present",
+          "bytes": 407,
+          "sha256": "f459f0bfebfac42a19a8e675d1796af881c1ee46c9992da44efeaab08d0e8d32",
+          "empty": false
+        },
+        "actualCollaborationTranscription": {
+          "path": "private/parent-reviews/pkt-ee662be9-ba86-4ebc-97fb-c48d404def6d/actual-collaboration-transcription.json",
+          "state": "present",
+          "bytes": 950,
+          "sha256": "fab6ebe051baf835d448f3e1477f2ae058133c6d40d541f9bd40e340ffaa79d7",
+          "empty": false
+        },
+        "envelopeAttempt": {
+          "path": "private/parent-reviews/pkt-ee662be9-ba86-4ebc-97fb-c48d404def6d/envelope-attempt-1.json",
+          "state": "present",
+          "bytes": 2995,
+          "sha256": "dcb3dfd41c19dc40ea940e99676045aee1f5a937d4430b09bf9552214646dcf1",
+          "empty": false
+        }
+      }
+    },
+    {
+      "packetId": "pkt-51f61bf5-8f86-4951-94af-3e5c1bcf537b",
+      "cellId": "T171-codex-diagnosis-high",
+      "provider": "codex",
+      "taskId": "diagnosis",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "high",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "gradingOutcome": "unscorable",
+      "bindingState": "validation-failed",
+      "validationErrorCategory": "source quote is not an exact fixture substring",
+      "reviewerEvidence": {
+        "provenanceKind": "parent transcription of collaboration records; not a platform-authenticated export",
+        "assignmentSha256": "ac370189a323fd698e703e6f162eeeee9e579422bea92276873a02cdcea43d49",
+        "assignment": {
+          "path": "private/grading-assignments/04.md",
+          "state": "present",
+          "bytes": 1482,
+          "sha256": "ac370189a323fd698e703e6f162eeeee9e579422bea92276873a02cdcea43d49",
+          "empty": false
+        },
+        "rawSemanticBodySha256": "0467ec1b140bd63ad6cb8f000d75e8ec399dc778a03935bc16b9549c7c89342b",
+        "dispatchTrace": {
+          "path": "private/parent-reviews/pkt-51f61bf5-8f86-4951-94af-3e5c1bcf537b/dispatch.json",
+          "state": "present",
+          "bytes": 156,
+          "sha256": "cf41e094645c0373204bdc5e67873863ac082741cf3b2dfb22dd52996e15503f",
+          "empty": false
+        },
+        "completionTrace": {
+          "path": "private/parent-reviews/pkt-51f61bf5-8f86-4951-94af-3e5c1bcf537b/completion.json",
+          "state": "present",
+          "bytes": 407,
+          "sha256": "0371e20be23dc62d3fe131b7bd8ccac7c89e8c900ef0eee08d3e0073383026f8",
+          "empty": false
+        },
+        "actualCollaborationTranscription": {
+          "path": "private/parent-reviews/pkt-51f61bf5-8f86-4951-94af-3e5c1bcf537b/actual-collaboration-transcription.json",
+          "state": "present",
+          "bytes": 950,
+          "sha256": "38b46ef53ce5a0fb8d30a1bd1efa87096e32760408d34105f64cbc3fa526cf7f",
+          "empty": false
+        },
+        "envelopeAttempt": {
+          "path": "private/parent-reviews/pkt-51f61bf5-8f86-4951-94af-3e5c1bcf537b/envelope-attempt-1.json",
+          "state": "absent"
+        }
+      }
+    },
+    {
+      "packetId": "pkt-f51ee366-a8cf-46c8-97fc-8a13a496fc2d",
+      "cellId": "T171-codex-diagnosis-medium",
+      "provider": "codex",
+      "taskId": "diagnosis",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "medium",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "gradingOutcome": "unscorable",
+      "bindingState": "validation-failed",
+      "validationErrorCategory": "source path is outside the expected fixture set",
+      "reviewerEvidence": {
+        "provenanceKind": "parent transcription of collaboration records; not a platform-authenticated export",
+        "assignmentSha256": "7637a74a79713bdeb9b08bb447233e01cd9ac2d6f5b740358e5bb47681f9b9d3",
+        "assignment": {
+          "path": "private/grading-assignments/05.md",
+          "state": "present",
+          "bytes": 1482,
+          "sha256": "7637a74a79713bdeb9b08bb447233e01cd9ac2d6f5b740358e5bb47681f9b9d3",
+          "empty": false
+        },
+        "rawSemanticBodySha256": "dcd9fb6154d6a3f5b16236a0538c7416e85138337fe875d4851c0ba59e9e124a",
+        "dispatchTrace": {
+          "path": "private/parent-reviews/pkt-f51ee366-a8cf-46c8-97fc-8a13a496fc2d/dispatch.json",
+          "state": "present",
+          "bytes": 156,
+          "sha256": "2d10cb91fc4187d3e278cdef738bbddb69a236e3cdaaad9897e12fa3911a29d1",
+          "empty": false
+        },
+        "completionTrace": {
+          "path": "private/parent-reviews/pkt-f51ee366-a8cf-46c8-97fc-8a13a496fc2d/completion.json",
+          "state": "present",
+          "bytes": 407,
+          "sha256": "d17b972b8225d0bc3363dacba69f298cd0f00db0f9e8c7e588b8a295fd03d651",
+          "empty": false
+        },
+        "actualCollaborationTranscription": {
+          "path": "private/parent-reviews/pkt-f51ee366-a8cf-46c8-97fc-8a13a496fc2d/actual-collaboration-transcription.json",
+          "state": "present",
+          "bytes": 950,
+          "sha256": "54adf9338a67caf71219a0fa01e845f5b9acfce1f5fafcce0f978bab98bc8f6e",
+          "empty": false
+        },
+        "envelopeAttempt": {
+          "path": "private/parent-reviews/pkt-f51ee366-a8cf-46c8-97fc-8a13a496fc2d/envelope-attempt-1.json",
+          "state": "absent"
+        }
+      }
+    },
+    {
+      "packetId": "pkt-734c5604-4893-4811-94d2-d6bea2ff538b",
+      "cellId": "T171-claude-diagnosis-low",
+      "provider": "claude",
+      "taskId": "diagnosis",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "low",
+      "actualModel": "claude-opus-5-5",
+      "actualEffort": "unknown/not reported",
+      "gradingOutcome": "unscorable",
+      "bindingState": "validation-failed",
+      "validationErrorCategory": "format-validity assessment contradicts observed response schema",
+      "reviewerEvidence": {
+        "provenanceKind": "parent transcription of collaboration records; not a platform-authenticated export",
+        "assignmentSha256": "1a86b4f12c324310223e5e6ac957374f569475b2d73ad3b6577807a60f95d4a8",
+        "assignment": {
+          "path": "private/grading-assignments/06.md",
+          "state": "present",
+          "bytes": 1482,
+          "sha256": "1a86b4f12c324310223e5e6ac957374f569475b2d73ad3b6577807a60f95d4a8",
+          "empty": false
+        },
+        "rawSemanticBodySha256": "97934c59b6f6b4fa758c8aefc3543afc9cff29928723479e37be69389bfad0a2",
+        "dispatchTrace": {
+          "path": "private/parent-reviews/pkt-734c5604-4893-4811-94d2-d6bea2ff538b/dispatch.json",
+          "state": "present",
+          "bytes": 156,
+          "sha256": "1fa51391167e3cc9f631d8277c35ca4eb52007992c630f08453109a552094184",
+          "empty": false
+        },
+        "completionTrace": {
+          "path": "private/parent-reviews/pkt-734c5604-4893-4811-94d2-d6bea2ff538b/completion.json",
+          "state": "present",
+          "bytes": 407,
+          "sha256": "b193cf940e5dbfb5ef6f4325d2ed762f54556432848401f977e9e700cb8771aa",
+          "empty": false
+        },
+        "actualCollaborationTranscription": {
+          "path": "private/parent-reviews/pkt-734c5604-4893-4811-94d2-d6bea2ff538b/actual-collaboration-transcription.json",
+          "state": "present",
+          "bytes": 950,
+          "sha256": "f5fe6986da419eebca15d4af1050f9ca33e1dfdbe92b9e399b8ec74f5a66575c",
+          "empty": false
+        },
+        "envelopeAttempt": {
+          "path": "private/parent-reviews/pkt-734c5604-4893-4811-94d2-d6bea2ff538b/envelope-attempt-1.json",
+          "state": "absent"
+        }
+      }
+    },
+    {
+      "packetId": "pkt-423db38c-a337-4a04-98f2-80439c135ee8",
+      "cellId": "T171-codex-design-medium",
+      "provider": "codex",
+      "taskId": "design",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "medium",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "gradingOutcome": "unscorable",
+      "bindingState": "validation-failed",
+      "validationErrorCategory": "unsupported-fact quote-shape violation",
+      "reviewerEvidence": {
+        "provenanceKind": "parent transcription of collaboration records; not a platform-authenticated export",
+        "assignmentSha256": "1c9d5d677a7b5edac75e6aae243674a3ac29d14a86251d640d5c5e9903c62c3e",
+        "assignment": {
+          "path": "private/grading-assignments/07.md",
+          "state": "present",
+          "bytes": 1482,
+          "sha256": "1c9d5d677a7b5edac75e6aae243674a3ac29d14a86251d640d5c5e9903c62c3e",
+          "empty": false
+        },
+        "rawSemanticBodySha256": "742e338cb8af1e098f8ec48ee3bcd5a65d3f9e15c5609f1186da893c252326fb",
+        "dispatchTrace": {
+          "path": "private/parent-reviews/pkt-423db38c-a337-4a04-98f2-80439c135ee8/dispatch.json",
+          "state": "present",
+          "bytes": 156,
+          "sha256": "cb6331d6b23920c4413c585ba077ce514b4861b83348fe9e98847a08ecbf9646",
+          "empty": false
+        },
+        "completionTrace": {
+          "path": "private/parent-reviews/pkt-423db38c-a337-4a04-98f2-80439c135ee8/completion.json",
+          "state": "present",
+          "bytes": 407,
+          "sha256": "beff08d76405c6ad3866d1106b58e984c0f353ea9799e641d918caad69776dfa",
+          "empty": false
+        },
+        "actualCollaborationTranscription": {
+          "path": "private/parent-reviews/pkt-423db38c-a337-4a04-98f2-80439c135ee8/actual-collaboration-transcription.json",
+          "state": "present",
+          "bytes": 950,
+          "sha256": "cb16e30eaf51b053085be5bd807b7053269936efc2172013862ad0bbcd96bc1a",
+          "empty": false
+        },
+        "envelopeAttempt": {
+          "path": "private/parent-reviews/pkt-423db38c-a337-4a04-98f2-80439c135ee8/envelope-attempt-1.json",
+          "state": "absent"
+        }
+      }
+    },
+    {
+      "packetId": "pkt-2e20713f-91c2-4eff-818b-13fcae08debe",
+      "cellId": "T171-codex-design-high",
+      "provider": "codex",
+      "taskId": "design",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "high",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "gradingOutcome": "unscorable",
+      "bindingState": "validation-failed",
+      "validationErrorCategory": "candidate response quote is not an exact substring",
+      "reviewerEvidence": {
+        "provenanceKind": "parent transcription of collaboration records; not a platform-authenticated export",
+        "assignmentSha256": "f7fe180567fbd28d55624c1da750c8222f4d6e128089b49b1117cffb1785c8cd",
+        "assignment": {
+          "path": "private/grading-assignments/08.md",
+          "state": "present",
+          "bytes": 1482,
+          "sha256": "f7fe180567fbd28d55624c1da750c8222f4d6e128089b49b1117cffb1785c8cd",
+          "empty": false
+        },
+        "rawSemanticBodySha256": "60aa65a00960ade5700a280e87b4938d4c260e21d72a6ad0987b5812f7fc90f2",
+        "dispatchTrace": {
+          "path": "private/parent-reviews/pkt-2e20713f-91c2-4eff-818b-13fcae08debe/dispatch.json",
+          "state": "present",
+          "bytes": 156,
+          "sha256": "7880ee044d64e2ddaf227eb3d60790718a93c049542a8bf762f0b2e582444e1d",
+          "empty": false
+        },
+        "completionTrace": {
+          "path": "private/parent-reviews/pkt-2e20713f-91c2-4eff-818b-13fcae08debe/completion.json",
+          "state": "present",
+          "bytes": 407,
+          "sha256": "4fa330a958224b0df3a1af4bb7a16acd92bcd7fd1895af2a737725a70af33d8b",
+          "empty": false
+        },
+        "actualCollaborationTranscription": {
+          "path": "private/parent-reviews/pkt-2e20713f-91c2-4eff-818b-13fcae08debe/actual-collaboration-transcription.json",
+          "state": "present",
+          "bytes": 950,
+          "sha256": "0b01bb1af7398940c5fff2657ac29ddd33699ffcd00449139152416f41cdbfa2",
+          "empty": false
+        },
+        "envelopeAttempt": {
+          "path": "private/parent-reviews/pkt-2e20713f-91c2-4eff-818b-13fcae08debe/envelope-attempt-1.json",
+          "state": "absent"
+        }
+      }
+    },
+    {
+      "packetId": "pkt-a44e4034-0cac-4ca5-9312-daf9c20f8a4f",
+      "cellId": "T171-claude-diagnosis-medium",
+      "provider": "claude",
+      "taskId": "diagnosis",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "medium",
+      "actualModel": "claude-opus-5-5",
+      "actualEffort": "unknown/not reported",
+      "gradingOutcome": "unscorable",
+      "bindingState": "validation-failed",
+      "validationErrorCategory": "source quote is not an exact fixture substring",
+      "reviewerEvidence": {
+        "provenanceKind": "parent transcription of collaboration records; not a platform-authenticated export",
+        "assignmentSha256": "a112ff23131cd27a83e1918159828d576c45c49bb2ad57b8e911e4337a4c57ff",
+        "assignment": {
+          "path": "private/grading-assignments/09.md",
+          "state": "present",
+          "bytes": 1482,
+          "sha256": "a112ff23131cd27a83e1918159828d576c45c49bb2ad57b8e911e4337a4c57ff",
+          "empty": false
+        },
+        "rawSemanticBodySha256": "82f5cd7cbf8ac65e184477b320c2e39142b10ec8eb62d0bea514df3c136c8ab6",
+        "dispatchTrace": {
+          "path": "private/parent-reviews/pkt-a44e4034-0cac-4ca5-9312-daf9c20f8a4f/dispatch.json",
+          "state": "present",
+          "bytes": 156,
+          "sha256": "28bb21d1c6ec9e255caef8675ebd9fb8b1fc5948dc3be28383f473d773f4a7b6",
+          "empty": false
+        },
+        "completionTrace": {
+          "path": "private/parent-reviews/pkt-a44e4034-0cac-4ca5-9312-daf9c20f8a4f/completion.json",
+          "state": "present",
+          "bytes": 407,
+          "sha256": "5b7821baa4bcfd3efe03fdf4c5660fc6c6188986997c0b0ab17e000bf821290f",
+          "empty": false
+        },
+        "actualCollaborationTranscription": {
+          "path": "private/parent-reviews/pkt-a44e4034-0cac-4ca5-9312-daf9c20f8a4f/actual-collaboration-transcription.json",
+          "state": "present",
+          "bytes": 950,
+          "sha256": "89c03d8afbe0bc4c552756e77b0a39a9251d99e83b458063669dab4e12d527ef",
+          "empty": false
+        },
+        "envelopeAttempt": {
+          "path": "private/parent-reviews/pkt-a44e4034-0cac-4ca5-9312-daf9c20f8a4f/envelope-attempt-1.json",
+          "state": "absent"
+        }
+      }
+    },
+    {
+      "packetId": "pkt-d367d50a-df96-4f83-9aef-74df99738914",
+      "cellId": "T171-codex-diagnosis-xhigh",
+      "provider": "codex",
+      "taskId": "diagnosis",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "xhigh",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "gradingOutcome": "unscorable",
+      "bindingState": "validation-failed",
+      "validationErrorCategory": "source path is outside the expected fixture set",
+      "reviewerEvidence": {
+        "provenanceKind": "parent transcription of collaboration records; not a platform-authenticated export",
+        "assignmentSha256": "18ea7b0084c443c4d53ccdc37bea37187c40e66103b166448d1eab16005693a4",
+        "assignment": {
+          "path": "private/grading-assignments/10.md",
+          "state": "present",
+          "bytes": 1482,
+          "sha256": "18ea7b0084c443c4d53ccdc37bea37187c40e66103b166448d1eab16005693a4",
+          "empty": false
+        },
+        "rawSemanticBodySha256": "92b8744171770d39ef1a35a3fba07bb6ec6fd33e8dd1b29c7beb47b6390a06cc",
+        "dispatchTrace": {
+          "path": "private/parent-reviews/pkt-d367d50a-df96-4f83-9aef-74df99738914/dispatch.json",
+          "state": "present",
+          "bytes": 156,
+          "sha256": "2ed047b57e648b09a45ef1a0f0c728decaf68b9baa9752cd423ad691aacfe8f8",
+          "empty": false
+        },
+        "completionTrace": {
+          "path": "private/parent-reviews/pkt-d367d50a-df96-4f83-9aef-74df99738914/completion.json",
+          "state": "present",
+          "bytes": 407,
+          "sha256": "96296a6189d3830deaea1d6a9b375a9a3ae63b7745fd759d744de2aa4b3f5d3d",
+          "empty": false
+        },
+        "actualCollaborationTranscription": {
+          "path": "private/parent-reviews/pkt-d367d50a-df96-4f83-9aef-74df99738914/actual-collaboration-transcription.json",
+          "state": "present",
+          "bytes": 950,
+          "sha256": "2103aaafc165a06b9bcfeabc58ca23ab8953db52ba6b3c5a3d9d7c91914978a1",
+          "empty": false
+        },
+        "envelopeAttempt": {
+          "path": "private/parent-reviews/pkt-d367d50a-df96-4f83-9aef-74df99738914/envelope-attempt-1.json",
+          "state": "absent"
+        }
+      }
+    },
+    {
+      "packetId": "pkt-cb7360ef-c966-4361-b982-658afdf4662d",
+      "cellId": "T171-claude-diagnosis-high",
+      "provider": "claude",
+      "taskId": "diagnosis",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "actualModel": "claude-opus-5-5",
+      "actualEffort": "unknown/not reported",
+      "gradingOutcome": "unscorable",
+      "bindingState": "validation-failed",
+      "validationErrorCategory": "source quote is not an exact fixture substring",
+      "reviewerEvidence": {
+        "provenanceKind": "parent transcription of collaboration records; not a platform-authenticated export",
+        "assignmentSha256": "35c2234fa6599e439d220b4f635d511e14a9237b647a0055a0fa723a9deb7321",
+        "assignment": {
+          "path": "private/grading-assignments/11.md",
+          "state": "present",
+          "bytes": 1482,
+          "sha256": "35c2234fa6599e439d220b4f635d511e14a9237b647a0055a0fa723a9deb7321",
+          "empty": false
+        },
+        "rawSemanticBodySha256": "529aca9106003d6055cf7b53b30d735feb28ac59110be8649040b16a9c273237",
+        "dispatchTrace": {
+          "path": "private/parent-reviews/pkt-cb7360ef-c966-4361-b982-658afdf4662d/dispatch.json",
+          "state": "present",
+          "bytes": 156,
+          "sha256": "e7d836a39a3a42b6f24e39a4eb185a0414592e901066c54c2461455b661fd610",
+          "empty": false
+        },
+        "completionTrace": {
+          "path": "private/parent-reviews/pkt-cb7360ef-c966-4361-b982-658afdf4662d/completion.json",
+          "state": "present",
+          "bytes": 407,
+          "sha256": "ba368047d0d259c5ecf89c9135a157efd8939db2f5557fd3930d56469f5345a9",
+          "empty": false
+        },
+        "actualCollaborationTranscription": {
+          "path": "private/parent-reviews/pkt-cb7360ef-c966-4361-b982-658afdf4662d/actual-collaboration-transcription.json",
+          "state": "present",
+          "bytes": 950,
+          "sha256": "5b5c3ceeb382a9aa37180e427057bb1750d82c8f6e4680b2af95055303277be8",
+          "empty": false
+        },
+        "envelopeAttempt": {
+          "path": "private/parent-reviews/pkt-cb7360ef-c966-4361-b982-658afdf4662d/envelope-attempt-1.json",
+          "state": "absent"
+        }
+      }
+    }
+  ],
+  "nativeAttempts": [
+    {
+      "attemptSequence": 1,
+      "cellId": "T171-claude-diagnosis-low",
+      "provider": "claude",
+      "taskId": "diagnosis",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "low",
+      "actualModel": "claude-opus-5-5",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "$.modelUsage[\"claude-opus-5-5\"].canonicalModel",
+      "actualEffortSource": "No effort field found in result envelope or modelUsage object",
+      "execution": {
+        "state": "complete",
+        "completionObserved": true,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 12580,
+        "timeoutMs": 120000,
+        "nativeExitCode": 0,
+        "processError": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 2836,
+          "cache_read_input_tokens": 1569,
+          "output_tokens": 1123,
+          "output_tokens_details": {
+            "thinking_tokens": 141
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 2836,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "global",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 1123,
+              "cache_read_input_tokens": 1569,
+              "cache_creation_input_tokens": 2836,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 2836
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard",
+          "fallback_credit": null
+        },
+        "providerReportedCost": 0.045469800000000005,
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "3376c6342386424b58ce0735e856e5520271242b",
+        "controllerSha256": "37b766e420f2f9135c1e196f982b85207cbdfb27411b73e10def03012372f8ca",
+        "protocolSha256": "1077b9eed81ca2317e73b4b9991f5172449d005055672e6c195c26bd095f7486",
+        "planSha256": "6a840d7e686cbfb4821bb25d6cc124b8deaee3c36780b67a31560a30d171f066",
+        "authorizationCriticCommit": "da6521f7cb86c7f6dc4c76a41a21fe25b52e3d80",
+        "authorizationLeaseId": "orchestration-t171-20261103-parent-01"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-low/agent.stdout.bin",
+          "state": "present",
+          "bytes": 4820,
+          "sha256": "4997beceb6e1022e0a71f19d704b486ab01fe263416e82dc390d880a45518501",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-low/agent.stderr.bin",
+          "state": "present",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "empty": true
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-low/final-response.txt",
+          "state": "present",
+          "bytes": 2878,
+          "sha256": "64beb7b2a04c7c433918cc12bd71be306d2a4ac3e9bec1dc57946093ca838ca4",
+          "empty": false
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-low/receipt.json",
+          "state": "present",
+          "bytes": 1827,
+          "sha256": "e2586fbea60110eeb2c0b3ae302e236a289ffef74817e635875315b74c7eee01",
+          "empty": false
+        }
+      },
+      "grading": {
+        "packetId": "pkt-734c5604-4893-4811-94d2-d6bea2ff538b",
+        "outcome": "unscorable",
+        "bindingState": "validation-failed",
+        "errorCategory": "format-validity assessment contradicts observed response schema",
+        "rawReviewSha256": "97934c59b6f6b4fa758c8aefc3543afc9cff29928723479e37be69389bfad0a2"
+      }
+    },
+    {
+      "attemptSequence": 2,
+      "cellId": "T171-claude-diagnosis-medium",
+      "provider": "claude",
+      "taskId": "diagnosis",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "medium",
+      "actualModel": "claude-opus-5-5",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "$.modelUsage[\"claude-opus-5-5\"].canonicalModel",
+      "actualEffortSource": "No effort field found in result envelope or modelUsage object",
+      "execution": {
+        "state": "complete",
+        "completionObserved": true,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 20148,
+        "timeoutMs": 120000,
+        "nativeExitCode": 0,
+        "processError": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 2012,
+          "cache_read_input_tokens": 2387,
+          "output_tokens": 1907,
+          "output_tokens_details": {
+            "thinking_tokens": 633
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 2012,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "global",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 1907,
+              "cache_read_input_tokens": 2387,
+              "cache_creation_input_tokens": 2012,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 2012
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard",
+          "fallback_credit": null
+        },
+        "providerReportedCost": 0.0547214,
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "3376c6342386424b58ce0735e856e5520271242b",
+        "controllerSha256": "37b766e420f2f9135c1e196f982b85207cbdfb27411b73e10def03012372f8ca",
+        "protocolSha256": "1077b9eed81ca2317e73b4b9991f5172449d005055672e6c195c26bd095f7486",
+        "planSha256": "6a840d7e686cbfb4821bb25d6cc124b8deaee3c36780b67a31560a30d171f066",
+        "authorizationCriticCommit": "da6521f7cb86c7f6dc4c76a41a21fe25b52e3d80",
+        "authorizationLeaseId": "orchestration-t171-20261103-parent-01"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-medium/agent.stdout.bin",
+          "state": "present",
+          "bytes": 5660,
+          "sha256": "097dc66d3854bf0d8d4dc6f074553a6afa1ceda74184c9c48b2d4c6f631a85fa",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-medium/agent.stderr.bin",
+          "state": "present",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "empty": true
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-medium/final-response.txt",
+          "state": "present",
+          "bytes": 3742,
+          "sha256": "d74715e2e23a5e12e45203491f6fd247ae2fae5f6a339293ed4255486ddf8954",
+          "empty": false
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-medium/receipt.json",
+          "state": "present",
+          "bytes": 1822,
+          "sha256": "f12bf0f378c9f143b635d1533b04f83975c04a2942f1ef183c5a6b5786277b42",
+          "empty": false
+        }
+      },
+      "grading": {
+        "packetId": "pkt-a44e4034-0cac-4ca5-9312-daf9c20f8a4f",
+        "outcome": "unscorable",
+        "bindingState": "validation-failed",
+        "errorCategory": "source quote is not an exact fixture substring",
+        "rawReviewSha256": "82f5cd7cbf8ac65e184477b320c2e39142b10ec8eb62d0bea514df3c136c8ab6"
+      }
+    },
+    {
+      "attemptSequence": 3,
+      "cellId": "T171-claude-diagnosis-high",
+      "provider": "claude",
+      "taskId": "diagnosis",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "high",
+      "actualModel": "claude-opus-5-5",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "$.modelUsage[\"claude-opus-5-5\"].canonicalModel",
+      "actualEffortSource": "No effort field found in result envelope or modelUsage object",
+      "execution": {
+        "state": "complete",
+        "completionObserved": true,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 19708,
+        "timeoutMs": 120000,
+        "nativeExitCode": 0,
+        "processError": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 2014,
+          "cache_read_input_tokens": 2387,
+          "output_tokens": 1849,
+          "output_tokens_details": {
+            "thinking_tokens": 691
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 2014,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "global",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 1849,
+              "cache_read_input_tokens": 2387,
+              "cache_creation_input_tokens": 2014,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 2014
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard",
+          "fallback_credit": null
+        },
+        "providerReportedCost": 0.053577400000000004,
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "3376c6342386424b58ce0735e856e5520271242b",
+        "controllerSha256": "37b766e420f2f9135c1e196f982b85207cbdfb27411b73e10def03012372f8ca",
+        "protocolSha256": "1077b9eed81ca2317e73b4b9991f5172449d005055672e6c195c26bd095f7486",
+        "planSha256": "6a840d7e686cbfb4821bb25d6cc124b8deaee3c36780b67a31560a30d171f066",
+        "authorizationCriticCommit": "da6521f7cb86c7f6dc4c76a41a21fe25b52e3d80",
+        "authorizationLeaseId": "orchestration-t171-20261103-parent-01"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-high/agent.stdout.bin",
+          "state": "present",
+          "bytes": 5320,
+          "sha256": "8999892dd2493cd4df9c1bcb4d2ed0b2a645402be289ea5d0c89c6c7fdea577b",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-high/agent.stderr.bin",
+          "state": "present",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "empty": true
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-high/final-response.txt",
+          "state": "present",
+          "bytes": 3384,
+          "sha256": "34576c45682836ec76a6f7f99ae7857bd751839f44e550775829bec18b5a0571",
+          "empty": false
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-high/receipt.json",
+          "state": "present",
+          "bytes": 1829,
+          "sha256": "3ba82d069ad5b03e14009da64dd45163a706e2cc24fe4a0dc8f26ac738f50b65",
+          "empty": false
+        }
+      },
+      "grading": {
+        "packetId": "pkt-cb7360ef-c966-4361-b982-658afdf4662d",
+        "outcome": "unscorable",
+        "bindingState": "validation-failed",
+        "errorCategory": "source quote is not an exact fixture substring",
+        "rawReviewSha256": "529aca9106003d6055cf7b53b30d735feb28ac59110be8649040b16a9c273237"
+      }
+    },
+    {
+      "attemptSequence": 4,
+      "cellId": "T171-claude-diagnosis-xhigh",
+      "provider": "claude",
+      "taskId": "diagnosis",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "xhigh",
+      "actualModel": "claude-opus-5-5",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "$.modelUsage[\"claude-opus-5-5\"].canonicalModel",
+      "actualEffortSource": "No effort field found in result envelope or modelUsage object",
+      "execution": {
+        "state": "complete",
+        "completionObserved": true,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 31228,
+        "timeoutMs": 120000,
+        "nativeExitCode": 0,
+        "processError": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 2014,
+          "cache_read_input_tokens": 2387,
+          "output_tokens": 3020,
+          "output_tokens_details": {
+            "thinking_tokens": 1827
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 2014,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "global",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 3020,
+              "cache_read_input_tokens": 2387,
+              "cache_creation_input_tokens": 2014,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 2014
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard",
+          "fallback_credit": null
+        },
+        "providerReportedCost": 0.07699740000000001,
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "3376c6342386424b58ce0735e856e5520271242b",
+        "controllerSha256": "37b766e420f2f9135c1e196f982b85207cbdfb27411b73e10def03012372f8ca",
+        "protocolSha256": "1077b9eed81ca2317e73b4b9991f5172449d005055672e6c195c26bd095f7486",
+        "planSha256": "6a840d7e686cbfb4821bb25d6cc124b8deaee3c36780b67a31560a30d171f066",
+        "authorizationCriticCommit": "da6521f7cb86c7f6dc4c76a41a21fe25b52e3d80",
+        "authorizationLeaseId": "orchestration-t171-20261103-parent-01"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-xhigh/agent.stdout.bin",
+          "state": "present",
+          "bytes": 5327,
+          "sha256": "309e1e3b5c83d8353074c6d3486a4ca8d3d334be82a117fec1545032868dbb9c",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-xhigh/agent.stderr.bin",
+          "state": "present",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "empty": true
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-xhigh/final-response.txt",
+          "state": "present",
+          "bytes": 3392,
+          "sha256": "08eb1fc783c7d7428263ee75ad7e8b85edb9bce556401d62c1c00aa1aac69c3f",
+          "empty": false
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-xhigh/receipt.json",
+          "state": "present",
+          "bytes": 1831,
+          "sha256": "d290021da718e35c5e2600f9d4e32a9eaad3d7e022417745a079d641dfe2429c",
+          "empty": false
+        }
+      },
+      "grading": {
+        "packetId": "pkt-581c5c1e-de13-478b-ad7a-a2ff77f0bf6b",
+        "outcome": "unscorable",
+        "bindingState": "validation-failed",
+        "errorCategory": "source quote is not an exact fixture substring",
+        "rawReviewSha256": "b600411019310e45ddad540a7167f6730fd6d39968663899b21ec3ae2f9c24b4"
+      }
+    },
+    {
+      "attemptSequence": 5,
+      "cellId": "T171-claude-diagnosis-max",
+      "provider": "claude",
+      "taskId": "diagnosis",
+      "requestedModel": "claude-opus-5-5",
+      "requestedEffort": "max",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "not reported in receipt or selected raw identity metadata",
+      "actualEffortSource": "not reported in receipt or selected raw identity metadata",
+      "execution": {
+        "state": "timeout",
+        "completionObserved": false,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 120046,
+        "timeoutMs": 120000,
+        "nativeExitCode": null,
+        "processError": "ETIMEDOUT",
+        "usage": null,
+        "providerReportedCost": "unknown/not reported",
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "3376c6342386424b58ce0735e856e5520271242b",
+        "controllerSha256": "37b766e420f2f9135c1e196f982b85207cbdfb27411b73e10def03012372f8ca",
+        "protocolSha256": "1077b9eed81ca2317e73b4b9991f5172449d005055672e6c195c26bd095f7486",
+        "planSha256": "6a840d7e686cbfb4821bb25d6cc124b8deaee3c36780b67a31560a30d171f066",
+        "authorizationCriticCommit": "da6521f7cb86c7f6dc4c76a41a21fe25b52e3d80",
+        "authorizationLeaseId": "orchestration-t171-20261103-parent-01"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-max/agent.stdout.bin",
+          "state": "present",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "empty": true
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-max/agent.stderr.bin",
+          "state": "present",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "empty": true
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-max/final-response.txt",
+          "state": "present",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "empty": true
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-claude-diagnosis-max/receipt.json",
+          "state": "present",
+          "bytes": 1260,
+          "sha256": "4bd0729e5cb6d692ca06925cf54f839564e9071b016e5b7798156859b9b7110e",
+          "empty": false
+        }
+      },
+      "grading": null
+    },
+    {
+      "attemptSequence": 7,
+      "cellId": "T171-codex-diagnosis-medium",
+      "provider": "codex",
+      "taskId": "diagnosis",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "medium",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "not reported in receipt or selected raw identity metadata",
+      "actualEffortSource": "not reported in receipt or selected raw identity metadata",
+      "execution": {
+        "state": "complete",
+        "completionObserved": true,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 17617,
+        "timeoutMs": 120000,
+        "nativeExitCode": 0,
+        "processError": null,
+        "usage": {
+          "input_tokens": 18247,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 382,
+          "reasoning_output_tokens": 154
+        },
+        "providerReportedCost": "unknown/not reported",
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "1a71074c8b09a45b4bd4d97346fa21002d2b5bae",
+        "controllerSha256": "3c6d0d3091d4a3fcc082b914bfa913d4e6441101ef005accab2dde79b173bd20",
+        "protocolSha256": "65260b7b6466dab98a0496619d8b1734bcb7f2e52bcf0364943f1382200d34c0",
+        "planSha256": "8b887b09f7d1eb8ce2667967a4741dbf2d61927718a96b70f4a2bb2f23d366cd",
+        "authorizationCriticCommit": "c67807ecf035ed8c3df30442632df20c52db0a7e",
+        "authorizationLeaseId": "orchestration-t171-codex-nine-hostpin-amendment"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-medium/agent.stdout.bin",
+          "state": "present",
+          "bytes": 1456,
+          "sha256": "42dc95859bb33ecda8eb769aeadc765f366e11eac93c4746cd233d3cb81e3ed3",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-medium/agent.stderr.bin",
+          "state": "present",
+          "bytes": 39,
+          "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+          "empty": false
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-medium/final-response.txt",
+          "state": "present",
+          "bytes": 1083,
+          "sha256": "e2229d28d7938fc2947c639e9060de0e7b922c490fe496ec4f0d7e6280fbdf4d",
+          "empty": false
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-medium/receipt.json",
+          "state": "present",
+          "bytes": 1337,
+          "sha256": "8b2c3b8cb007530b98892ff5f232cea4346f38a4543cca81129014420b67962f",
+          "empty": false
+        }
+      },
+      "grading": {
+        "packetId": "pkt-f51ee366-a8cf-46c8-97fc-8a13a496fc2d",
+        "outcome": "unscorable",
+        "bindingState": "validation-failed",
+        "errorCategory": "source path is outside the expected fixture set",
+        "rawReviewSha256": "dcd9fb6154d6a3f5b16236a0538c7416e85138337fe875d4851c0ba59e9e124a"
+      }
+    },
+    {
+      "attemptSequence": 8,
+      "cellId": "T171-codex-diagnosis-high",
+      "provider": "codex",
+      "taskId": "diagnosis",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "high",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "not reported in receipt or selected raw identity metadata",
+      "actualEffortSource": "not reported in receipt or selected raw identity metadata",
+      "execution": {
+        "state": "complete",
+        "completionObserved": true,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 25440,
+        "timeoutMs": 120000,
+        "nativeExitCode": 0,
+        "processError": null,
+        "usage": {
+          "input_tokens": 19189,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 660,
+          "reasoning_output_tokens": 402
+        },
+        "providerReportedCost": "unknown/not reported",
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "1a71074c8b09a45b4bd4d97346fa21002d2b5bae",
+        "controllerSha256": "3c6d0d3091d4a3fcc082b914bfa913d4e6441101ef005accab2dde79b173bd20",
+        "protocolSha256": "65260b7b6466dab98a0496619d8b1734bcb7f2e52bcf0364943f1382200d34c0",
+        "planSha256": "8b887b09f7d1eb8ce2667967a4741dbf2d61927718a96b70f4a2bb2f23d366cd",
+        "authorizationCriticCommit": "c67807ecf035ed8c3df30442632df20c52db0a7e",
+        "authorizationLeaseId": "orchestration-t171-codex-nine-hostpin-amendment"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-high/agent.stdout.bin",
+          "state": "present",
+          "bytes": 1630,
+          "sha256": "11714e90c42bf74ff4efd4bd6b5da180059cb692de7e8171bf4c7892cebf0129",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-high/agent.stderr.bin",
+          "state": "present",
+          "bytes": 39,
+          "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+          "empty": false
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-high/final-response.txt",
+          "state": "present",
+          "bytes": 1257,
+          "sha256": "621ad44fe2b2b2da814c6cc3d642051bc333a97abfa2c85327c4db7cfbae4df0",
+          "empty": false
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-high/receipt.json",
+          "state": "present",
+          "bytes": 1333,
+          "sha256": "125de49e6e53806a528e89f4702a804ebfce66690756815e5acb497fe635c8c0",
+          "empty": false
+        }
+      },
+      "grading": {
+        "packetId": "pkt-51f61bf5-8f86-4951-94af-3e5c1bcf537b",
+        "outcome": "unscorable",
+        "bindingState": "validation-failed",
+        "errorCategory": "source quote is not an exact fixture substring",
+        "rawReviewSha256": "0467ec1b140bd63ad6cb8f000d75e8ec399dc778a03935bc16b9549c7c89342b"
+      }
+    },
+    {
+      "attemptSequence": 9,
+      "cellId": "T171-codex-diagnosis-xhigh",
+      "provider": "codex",
+      "taskId": "diagnosis",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "xhigh",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "not reported in receipt or selected raw identity metadata",
+      "actualEffortSource": "not reported in receipt or selected raw identity metadata",
+      "execution": {
+        "state": "complete",
+        "completionObserved": true,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 43488,
+        "timeoutMs": 120000,
+        "nativeExitCode": 0,
+        "processError": null,
+        "usage": {
+          "input_tokens": 19185,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1174,
+          "reasoning_output_tokens": 937
+        },
+        "providerReportedCost": "unknown/not reported",
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "1a71074c8b09a45b4bd4d97346fa21002d2b5bae",
+        "controllerSha256": "3c6d0d3091d4a3fcc082b914bfa913d4e6441101ef005accab2dde79b173bd20",
+        "protocolSha256": "65260b7b6466dab98a0496619d8b1734bcb7f2e52bcf0364943f1382200d34c0",
+        "planSha256": "8b887b09f7d1eb8ce2667967a4741dbf2d61927718a96b70f4a2bb2f23d366cd",
+        "authorizationCriticCommit": "c67807ecf035ed8c3df30442632df20c52db0a7e",
+        "authorizationLeaseId": "orchestration-t171-codex-nine-hostpin-amendment"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-xhigh/agent.stdout.bin",
+          "state": "present",
+          "bytes": 1552,
+          "sha256": "279bb6f595fcc3761e131a3e04cf12a6880dcffde4d1f107eed65bc5282937af",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-xhigh/agent.stderr.bin",
+          "state": "present",
+          "bytes": 39,
+          "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+          "empty": false
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-xhigh/final-response.txt",
+          "state": "present",
+          "bytes": 1178,
+          "sha256": "5bb1ecb9ee8893f8eebeebda7c009e1408e35f2984d2894102c97d3141348cfc",
+          "empty": false
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-xhigh/receipt.json",
+          "state": "present",
+          "bytes": 1336,
+          "sha256": "4b32cd0e42e49db6921e0d5873f1731a77222a46875247e567462f79db3cd280",
+          "empty": false
+        }
+      },
+      "grading": {
+        "packetId": "pkt-d367d50a-df96-4f83-9aef-74df99738914",
+        "outcome": "unscorable",
+        "bindingState": "validation-failed",
+        "errorCategory": "source path is outside the expected fixture set",
+        "rawReviewSha256": "92b8744171770d39ef1a35a3fba07bb6ec6fd33e8dd1b29c7beb47b6390a06cc"
+      }
+    },
+    {
+      "attemptSequence": 10,
+      "cellId": "T171-codex-diagnosis-max",
+      "provider": "codex",
+      "taskId": "diagnosis",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "max",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "not reported in receipt or selected raw identity metadata",
+      "actualEffortSource": "not reported in receipt or selected raw identity metadata",
+      "execution": {
+        "state": "complete",
+        "completionObserved": true,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 67545,
+        "timeoutMs": 120000,
+        "nativeExitCode": 0,
+        "processError": null,
+        "usage": {
+          "input_tokens": 19179,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2007,
+          "reasoning_output_tokens": 1746
+        },
+        "providerReportedCost": "unknown/not reported",
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "1a71074c8b09a45b4bd4d97346fa21002d2b5bae",
+        "controllerSha256": "3c6d0d3091d4a3fcc082b914bfa913d4e6441101ef005accab2dde79b173bd20",
+        "protocolSha256": "65260b7b6466dab98a0496619d8b1734bcb7f2e52bcf0364943f1382200d34c0",
+        "planSha256": "8b887b09f7d1eb8ce2667967a4741dbf2d61927718a96b70f4a2bb2f23d366cd",
+        "authorizationCriticCommit": "c67807ecf035ed8c3df30442632df20c52db0a7e",
+        "authorizationLeaseId": "orchestration-t171-codex-nine-hostpin-amendment"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-max/agent.stdout.bin",
+          "state": "present",
+          "bytes": 1657,
+          "sha256": "0b36c3cfeb648badcfa15b3520c871538705a86e0ba7fb65a93029e5f0f48d87",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-max/agent.stderr.bin",
+          "state": "present",
+          "bytes": 39,
+          "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+          "empty": false
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-max/final-response.txt",
+          "state": "present",
+          "bytes": 1282,
+          "sha256": "e96189aad65d80edf0b253b60b09a6e20ded3fdc40f006c55b7a43942033dee4",
+          "empty": false
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-codex-diagnosis-max/receipt.json",
+          "state": "present",
+          "bytes": 1333,
+          "sha256": "0d42f9e643564d5b102e4d49ab5b8381936ee9b6c08c5ef6b17c102c7235832e",
+          "empty": false
+        }
+      },
+      "grading": {
+        "packetId": "pkt-ee662be9-ba86-4ebc-97fb-c48d404def6d",
+        "outcome": "pass",
+        "bindingState": "bound",
+        "errorCategory": null,
+        "rawReviewSha256": "061ce5fd7ce3d457b0142ae4f96ddde1d5a4ee8e919c1d8cc2ffc7a344e66270"
+      }
+    },
+    {
+      "attemptSequence": 11,
+      "cellId": "T171-codex-design-low",
+      "provider": "codex",
+      "taskId": "design",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "low",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "not reported in receipt or selected raw identity metadata",
+      "actualEffortSource": "not reported in receipt or selected raw identity metadata",
+      "execution": {
+        "state": "complete",
+        "completionObserved": true,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 19646,
+        "timeoutMs": 120000,
+        "nativeExitCode": 0,
+        "processError": null,
+        "usage": {
+          "input_tokens": 19198,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 633,
+          "reasoning_output_tokens": 80
+        },
+        "providerReportedCost": "unknown/not reported",
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "1a71074c8b09a45b4bd4d97346fa21002d2b5bae",
+        "controllerSha256": "3c6d0d3091d4a3fcc082b914bfa913d4e6441101ef005accab2dde79b173bd20",
+        "protocolSha256": "65260b7b6466dab98a0496619d8b1734bcb7f2e52bcf0364943f1382200d34c0",
+        "planSha256": "8b887b09f7d1eb8ce2667967a4741dbf2d61927718a96b70f4a2bb2f23d366cd",
+        "authorizationCriticCommit": "c67807ecf035ed8c3df30442632df20c52db0a7e",
+        "authorizationLeaseId": "orchestration-t171-codex-nine-hostpin-amendment"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-codex-design-low/agent.stdout.bin",
+          "state": "present",
+          "bytes": 3401,
+          "sha256": "9740522b9406182b14f275a4a8dbed45575e23afaf68997e4f70a07ecbbea208",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-codex-design-low/agent.stderr.bin",
+          "state": "present",
+          "bytes": 39,
+          "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+          "empty": false
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-codex-design-low/final-response.txt",
+          "state": "present",
+          "bytes": 3015,
+          "sha256": "ffdb6e3a8d4842c1f4b45248f7229e06d29ae6802f4d9a43224f983bc8d315de",
+          "empty": false
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-codex-design-low/receipt.json",
+          "state": "present",
+          "bytes": 1324,
+          "sha256": "db4233b19c6fe59b4549e40d5d6099b519efaf7cc0bf5943d3c8ff269c503bb2",
+          "empty": false
+        }
+      },
+      "grading": {
+        "packetId": "pkt-1c422ab4-86aa-4729-80be-b5d92fdfc486",
+        "outcome": "unscorable",
+        "bindingState": "validation-failed",
+        "errorCategory": "unsupported-fact quote-shape violation",
+        "rawReviewSha256": "e2a8d86f4726f26ce6eaaf2e1c523ee2488593a8867a8ec5fb59ad8422ea1f29"
+      }
+    },
+    {
+      "attemptSequence": 12,
+      "cellId": "T171-codex-design-medium",
+      "provider": "codex",
+      "taskId": "design",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "medium",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "not reported in receipt or selected raw identity metadata",
+      "actualEffortSource": "not reported in receipt or selected raw identity metadata",
+      "execution": {
+        "state": "complete",
+        "completionObserved": true,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 30387,
+        "timeoutMs": 120000,
+        "nativeExitCode": 0,
+        "processError": null,
+        "usage": {
+          "input_tokens": 18258,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 676,
+          "reasoning_output_tokens": 127
+        },
+        "providerReportedCost": "unknown/not reported",
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "1a71074c8b09a45b4bd4d97346fa21002d2b5bae",
+        "controllerSha256": "3c6d0d3091d4a3fcc082b914bfa913d4e6441101ef005accab2dde79b173bd20",
+        "protocolSha256": "65260b7b6466dab98a0496619d8b1734bcb7f2e52bcf0364943f1382200d34c0",
+        "planSha256": "8b887b09f7d1eb8ce2667967a4741dbf2d61927718a96b70f4a2bb2f23d366cd",
+        "authorizationCriticCommit": "c67807ecf035ed8c3df30442632df20c52db0a7e",
+        "authorizationLeaseId": "orchestration-t171-codex-nine-hostpin-amendment"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-codex-design-medium/agent.stdout.bin",
+          "state": "present",
+          "bytes": 3387,
+          "sha256": "72f0c61fe175107b707a9a145199db0711c954f227aac073b1f00405094e7865",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-codex-design-medium/agent.stderr.bin",
+          "state": "present",
+          "bytes": 39,
+          "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+          "empty": false
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-codex-design-medium/final-response.txt",
+          "state": "present",
+          "bytes": 3000,
+          "sha256": "1f181d88f2cd7f49b0702c35ebcdbe670d23268b941c6341ef023fb975c3122f",
+          "empty": false
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-codex-design-medium/receipt.json",
+          "state": "present",
+          "bytes": 1331,
+          "sha256": "e2fa69e7aac4d8ba0b05ea62a9618e8ae34b7d275235f97892bb4016b4d7249c",
+          "empty": false
+        }
+      },
+      "grading": {
+        "packetId": "pkt-423db38c-a337-4a04-98f2-80439c135ee8",
+        "outcome": "unscorable",
+        "bindingState": "validation-failed",
+        "errorCategory": "unsupported-fact quote-shape violation",
+        "rawReviewSha256": "742e338cb8af1e098f8ec48ee3bcd5a65d3f9e15c5609f1186da893c252326fb"
+      }
+    },
+    {
+      "attemptSequence": 13,
+      "cellId": "T171-codex-design-high",
+      "provider": "codex",
+      "taskId": "design",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "high",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "not reported in receipt or selected raw identity metadata",
+      "actualEffortSource": "not reported in receipt or selected raw identity metadata",
+      "execution": {
+        "state": "complete",
+        "completionObserved": true,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 59819,
+        "timeoutMs": 120000,
+        "nativeExitCode": 0,
+        "processError": null,
+        "usage": {
+          "input_tokens": 19196,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1485,
+          "reasoning_output_tokens": 815
+        },
+        "providerReportedCost": "unknown/not reported",
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "1a71074c8b09a45b4bd4d97346fa21002d2b5bae",
+        "controllerSha256": "3c6d0d3091d4a3fcc082b914bfa913d4e6441101ef005accab2dde79b173bd20",
+        "protocolSha256": "65260b7b6466dab98a0496619d8b1734bcb7f2e52bcf0364943f1382200d34c0",
+        "planSha256": "8b887b09f7d1eb8ce2667967a4741dbf2d61927718a96b70f4a2bb2f23d366cd",
+        "authorizationCriticCommit": "c67807ecf035ed8c3df30442632df20c52db0a7e",
+        "authorizationLeaseId": "orchestration-t171-codex-nine-hostpin-amendment"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-codex-design-high/agent.stdout.bin",
+          "state": "present",
+          "bytes": 3992,
+          "sha256": "fd6fee7e6efca009f4e696f76bdafd679b55ec3a2a71494e5d2d1025e8becca6",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-codex-design-high/agent.stderr.bin",
+          "state": "present",
+          "bytes": 39,
+          "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+          "empty": false
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-codex-design-high/final-response.txt",
+          "state": "present",
+          "bytes": 3553,
+          "sha256": "89dad45efb74504d51718c0eedf9b9ffbe2b0e4db67d34b6a2562e1e07e88447",
+          "empty": false
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-codex-design-high/receipt.json",
+          "state": "present",
+          "bytes": 1328,
+          "sha256": "40c135cbb8dfb798b5e3d70b14db6dcfe0fc924449db4135283010f48140e086",
+          "empty": false
+        }
+      },
+      "grading": {
+        "packetId": "pkt-2e20713f-91c2-4eff-818b-13fcae08debe",
+        "outcome": "unscorable",
+        "bindingState": "validation-failed",
+        "errorCategory": "candidate response quote is not an exact substring",
+        "rawReviewSha256": "60aa65a00960ade5700a280e87b4938d4c260e21d72a6ad0987b5812f7fc90f2"
+      }
+    },
+    {
+      "attemptSequence": 14,
+      "cellId": "T171-codex-design-xhigh",
+      "provider": "codex",
+      "taskId": "design",
+      "requestedModel": "gpt-6.1-sol",
+      "requestedEffort": "xhigh",
+      "actualModel": "unknown/not reported",
+      "actualEffort": "unknown/not reported",
+      "actualModelSource": "not reported in receipt or selected raw identity metadata",
+      "actualEffortSource": "not reported in receipt or selected raw identity metadata",
+      "execution": {
+        "state": "timeout",
+        "completionObserved": false,
+        "providerSpawnSyncInvoked": true,
+        "processPid": "not recorded",
+        "elapsedMs": 120239,
+        "timeoutMs": 120000,
+        "nativeExitCode": null,
+        "processError": "ETIMEDOUT",
+        "usage": null,
+        "providerReportedCost": "unknown/not reported",
+        "retryCount": 0,
+        "fallbackCount": 0
+      },
+      "sourceBinding": {
+        "sourceGitCommit": "1a71074c8b09a45b4bd4d97346fa21002d2b5bae",
+        "controllerSha256": "3c6d0d3091d4a3fcc082b914bfa913d4e6441101ef005accab2dde79b173bd20",
+        "protocolSha256": "65260b7b6466dab98a0496619d8b1734bcb7f2e52bcf0364943f1382200d34c0",
+        "planSha256": "8b887b09f7d1eb8ce2667967a4741dbf2d61927718a96b70f4a2bb2f23d366cd",
+        "authorizationCriticCommit": "c67807ecf035ed8c3df30442632df20c52db0a7e",
+        "authorizationLeaseId": "orchestration-t171-codex-nine-hostpin-amendment"
+      },
+      "rawEvidence": {
+        "stdout": {
+          "path": "private/preparation/evidence/T171-codex-design-xhigh/agent.stdout.bin",
+          "state": "present",
+          "bytes": 101,
+          "sha256": "f90d7682720c81b5e99eaa588e2097c9febe96b1ca76a724e07f5070f1a3f201",
+          "empty": false
+        },
+        "stderr": {
+          "path": "private/preparation/evidence/T171-codex-design-xhigh/agent.stderr.bin",
+          "state": "present",
+          "bytes": 39,
+          "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+          "empty": false
+        },
+        "response": {
+          "path": "private/preparation/evidence/T171-codex-design-xhigh/final-response.txt",
+          "state": "present",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "empty": true
+        },
+        "receipt": {
+          "path": "private/preparation/evidence/T171-codex-design-xhigh/receipt.json",
+          "state": "present",
+          "bytes": 1333,
+          "sha256": "c5e58ec3f525a94dcc08d67a1a822e1924063aa4fe0a0ebd114d28d653d5c4eb",
+          "empty": false
+        }
+      },
+      "grading": null
+    }
+  ],
+  "consumedPreSpawnSetupFailure": {
+    "cellId": "T171-codex-diagnosis-low",
+    "attemptKind": "setup-failure-consumed",
+    "attemptSourceCommit": "da6521f7cb86c7f6dc4c76a41a21fe25b52e3d80",
+    "sourceBinding": {
+      "controllerSha256": "37b766e420f2f9135c1e196f982b85207cbdfb27411b73e10def03012372f8ca",
+      "protocolSha256": "1077b9eed81ca2317e73b4b9991f5172449d005055672e6c195c26bd095f7486",
+      "planSha256": "6a840d7e686cbfb4821bb25d6cc124b8deaee3c36780b67a31560a30d171f066",
+      "planBytesSha256": "5d6cdfbfdc30bcde6b823d0b52228f1eb95b362d5eb8a07309522ed044d09ad9",
+      "criticCommit": "da6521f7cb86c7f6dc4c76a41a21fe25b52e3d80",
+      "leaseId": "orchestration-t171-20261103-codex-only-after-timeout",
+      "authorizationSha256": "892fbf0b8746239b0e13563fe65420ad78736005e138d3b6a36aae543e9cefcb"
+    },
+    "providerProcessLaunched": false,
+    "nativeModelCallCount": 0,
+    "reportedUsage": null,
+    "cost": "unknown",
+    "artifactType": "transcription of tool output, not raw stderr",
+    "transcription": {
+      "path": "private/preparation/setup-failure-transcripts/T171-codex-diagnosis-low-setup-failure-transcription.txt",
+      "state": "present",
+      "bytes": 486,
+      "sha256": "2f084617b16738638841aaa42985e81bbc664204988505ec31c89c1c00fc94ca",
+      "empty": false
+    }
+  },
+  "resultLimit": "One valid pass is the Codex diagnosis cell with requested max; actual Codex model and effort remain unreported. Ten other completed responses have invalid reviewer evidence and are unscorable. The study does not support an effort recommendation; retain the existing defaults."
+}

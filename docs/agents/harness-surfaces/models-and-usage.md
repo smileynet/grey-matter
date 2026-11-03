@@ -156,6 +156,19 @@ review-file write has no retained semantic bytes for comparison with recovery.
 - **Codex:** `/fast` (`service_tier=priority`), 1.5x to 2x, with some models noted as "increased usage". The app also offers Ultrafast on Pro (L).
 - **Kiro and agy:** none found.
 
+### Effort trial evidence (2026-11-03)
+
+The [fixed-model effort trial](../research/model-effort-t171-results.md) does not
+justify changing current defaults. Thirteen native calls produced eleven complete
+responses and two timeouts; a separate setup failure occurred before a model call.
+One completed response had a valid blind pass, while ten review receipts failed
+validation and remain unscorable. Those gaps are not model-quality failures.
+The passing diagnosis response requested Codex `max`, but its served model and
+actual effort were unreported. Actual effort was absent from every completed call.
+One usable score cannot establish a quality or speed advantage for an effort level.
+Provider costs and timeout usage remain incomplete; no aggregate billed total is
+known. Kiro and Google cohorts were held without calls. Keep current defaults.
+
 ## Usage
 
 How much of the subscription is left. Run one of these before a long fan-out, and when a limit error appears.
