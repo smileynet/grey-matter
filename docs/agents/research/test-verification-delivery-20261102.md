@@ -88,3 +88,33 @@ separation. The only new scratch artifact was a 3,653-byte metadata-update helpe
 use it was sent to the OS trash and its original path was absent. Bin contents were not
 inspected. No source clone, raw corpus, screenshot or dependency copy was created. Previously
 retained and unowned artifacts keep the sizes and lifecycle recorded in the linked inventory.
+
+## Session wrap — 2026-11-02
+
+Board reconciliation found no new work or stale in-progress tickets. The 25 delivered core
+tickets and four independent follow-ups remain current; #164 owns the adopter migration
+inputs. Dashboard feedback is normal use, not a task. No new ticket or dependency was added.
+
+A fresh-context retro inspected the inherited session summary, current plan and targeted
+generator sources; the full raw trace was unavailable and earlier truncated tool output
+limits coverage. The cheap mechanical finding was an obsolete scratch dashboard builder
+that would recreate the dismissed visual-review ask. It and the obsolete progress builder
+were recycled with one unused ticket index: three owned files, 124,120 file bytes, original
+paths absent. No host Bin inspection or physical-reclaim claim was made. The #182 parser and
+fixture repairs remain already-landed work, not new tickets. Broad/minified tool output was
+a tool-economy finding; pinned file reads and bounded field extraction are sufficient, with
+no additional checker or workflow gate warranted.
+
+A concurrent plan commit introduced a durable reference to a peer-owned scratch routing
+ledger. The existing docs-consistency check failed on that single citation; an independent
+retro reread reproduced it. Removing only the ephemeral locator preserved the supervision
+policy and made the same check pass for 50 skills. The peer's ledger was not read, moved,
+promoted or deleted. This mechanical repair was landed directly rather than filed as new work.
+
+The reference rehydration index matches all nine directories and their clone commands; no
+index edit or new clone was needed. Retention custody passes to the next test-verification
+session: the named checkouts, four native logs and stopped owned WSL baseline remain held
+for the independent platform reproduction/regression audit, then may be retired when their
+exact inputs are no longer needed. Owner, purpose, sizes and limits remain in the linked
+retention inventory. The 958-byte isolated-index ticket helper is kept through #140's staged
+commit safety fix. Unrelated worktrees, private files and both Mac simulators were untouched.

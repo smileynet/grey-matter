@@ -202,9 +202,9 @@ non-overlapping frontier work in separate worktrees, require independent critic
 review, and let the parent integrate, verify, push and close. Completing a pair
 does not require another proceed and does not end supervision. Keep the periodic
 check-in job active until the whole authorized queue is settled or the user stops
-it; record real blockers and continue independent work. The runtime routing ledger
-is `.scratch/orchestration-workstream-supervision.md`; ticket state stays here and
-in `.tickets/`. ACP research #187 remains last. Model comparisons may need serial
+it; record real blockers and continue independent work. Runtime routing stays in
+the session-local ledger; durable ticket state stays here and in `.tickets/`.
+ACP research #187 remains last. Model comparisons may need serial
 measurement to avoid shared-load confounding even when their files do not overlap.
 
 The remaining-work table is the proposed execution order. #162's driver
