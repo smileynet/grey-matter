@@ -240,6 +240,7 @@ evidence is accepted but the fix criterion is unmet. #190, #193 and #194 are
 qualified with their stated limits. #173's qualified recommendations are deployed
 and closed without claiming live GUI steering. #174 selected the runner, and
 #199 pinned its fixture dashboard after preflight detected template drift.
+#200 freezes the complete seed after a host tooling update changed guidance.
 #167 and #168 are dispatched with independent protocol review and serialized
 model measurements. The supervisor keeps advancing independent frontier work; these results
 do not imply a production-ready orchestrator.
@@ -272,6 +273,7 @@ auth remains conditional on the result of #186.
 | 173 | 11. Compare GUI watch/answer surfaces against #162's qualified live driver | ✅ done |
 | 174 | 12. Select and demonstrate Harbor or a thin runner for the model trials | ✅ done |
 | 199 | Pin the evaluation dashboard seed after observed template drift | ✅ done |
+| 200 | Freeze the complete evaluation seed independently of host tooling | in_progress |
 | 167 | 13. Compare implementation worker tiers | in_progress |
 | 168 | 14. Compare reviewer tiers with planted defects and false positives | in_progress |
 | 169 | 15. Compare research/exploration tiers against a fixed answer key | in_progress |
