@@ -25,6 +25,38 @@
     "standalone_vendor_path": "<Bun global package root> is D:/tools/bun-install/global; the Bun home symlink targets D:/tools/bun-install."
   },
   "harmless_command": "git -c core.excludesFile=<fixture>/.gitignore status --short",
+  "raw_capture_inventory": [
+    {
+      "path": ".scratch/t188-evidence/standalone-clean.jsonl",
+      "bytes": 1727,
+      "result": "Missing-host failure reproduced; shell did not run.",
+      "disposition": "Recycled after critic review; path verified absent."
+    },
+    {
+      "path": ".scratch/t188-evidence/package-managed-clean.jsonl",
+      "bytes": 1783,
+      "result": "Same-version package executable ran the harmless command; exit 0, empty output.",
+      "disposition": "Recycled after critic review; path verified absent."
+    },
+    {
+      "path": ".scratch/t188-evidence/app-managed-fixture-ignore.jsonl",
+      "bytes": 1933,
+      "result": "App-managed alpha executable ran the command; exit 0, empty output.",
+      "disposition": "Recycled after critic review; path verified absent."
+    },
+    {
+      "path": ".scratch/t188-evidence/app-managed-exec.jsonl",
+      "bytes": 2175,
+      "result": "Initial app-managed run executed Git but produced global-ignore permission warnings; not treated as clean evidence.",
+      "disposition": "Recycled after critic review; path verified absent."
+    },
+    {
+      "path": ".scratch/t188-evidence/app-managed-clean.jsonl",
+      "bytes": 1988,
+      "result": "Attempt using core.excludesFile=NUL failed because Git rejects NUL as an exclude file; invalid probe setup, not a Codex host result.",
+      "disposition": "Recycled after critic review; path verified absent."
+    }
+  ],
   "probes": [
     {
       "identity": "PATH-selected %USERPROFILE%/.bun/bin/codex.exe",
@@ -34,7 +66,8 @@
       "native_shell_exit": null,
       "codex_process_exit": 0,
       "classification": "Infrastructure failure reproduced; process exit 0 is not a pass.",
-      "raw": ".scratch/t188-evidence/standalone-clean.jsonl"
+      "raw": ".scratch/t188-evidence/standalone-clean.jsonl",
+      "raw_disposition": "Recycled to the Windows Recycle Bin after critic review; path verified absent."
     },
     {
       "identity": "Installed @openai/codex-win32-x64 package vendor codex.exe",
@@ -44,7 +77,8 @@
       "native_shell_exit": 0,
       "codex_process_exit": 0,
       "classification": "Pass for one harmless shell command through this package-owned session path.",
-      "raw": ".scratch/t188-evidence/package-managed-clean.jsonl"
+      "raw": ".scratch/t188-evidence/package-managed-clean.jsonl",
+      "raw_disposition": "Recycled to the Windows Recycle Bin after critic review; path verified absent."
     },
     {
       "identity": "App-managed Codex executable under LocalAppData/OpenAI/Codex/bin/<managed-version>",
@@ -54,7 +88,8 @@
       "native_shell_exit": 0,
       "codex_process_exit": 0,
       "classification": "Observed working app-managed path, but version differs; not used to isolate host-layout causality.",
-      "raw": ".scratch/t188-evidence/app-managed-fixture-ignore.jsonl"
+      "raw": ".scratch/t188-evidence/app-managed-fixture-ignore.jsonl",
+      "raw_disposition": "Recycled to the Windows Recycle Bin after critic review; path verified absent."
     }
   ],
   "source": {
@@ -66,7 +101,13 @@
     "binary_copy": false,
     "global_config_or_path_edit": false,
     "persistent_codex_settings_edit": false,
-    "cleanup": "Fixture and raw captures retained through independent critic review; remove after review, preserving this sanitized committed receipt."
+    "cleanup": {
+      "critic_review": "Accepted at 0.92/high; see codex-tool-host-20261102-audit.md.",
+      "scratch_directory": ".scratch/t188-evidence; 5 JSONL files; 9606 bytes before cleanup; sent to Windows Recycle Bin; verified absent.",
+      "fixture_directory": "%TEMP%/gm-t188-fixture; 60 files; 98400 bytes before cleanup; sent to Windows Recycle Bin; verified absent.",
+      "native_session_files": "All probes used --ephemeral; installed CLI help says this does not persist session files. No ticket-owned native session history identified; other user session files were not touched.",
+      "installed_binaries_or_settings": "Not modified."
+    }
   },
   "limitations": [
     "Only one harmless read-only shell command was verified.",

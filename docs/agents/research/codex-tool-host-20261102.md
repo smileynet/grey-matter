@@ -86,10 +86,23 @@ write access, broader tool behavior, or that future package updates retain this
 path. Existing #162 evidence independently reproduces the original host failure;
 this report adds an exact current reproduction and same-version remedy.
 
-## Artifact disposition
+## Review and artifact disposition
 
-The fixture and native JSONL captures were retained under the worker's ignored
-`.scratch/t188-*` paths through independent review. No Codex configuration,
-PATH, global Git configuration, or installation was changed. No binary was
-copied or downloaded. After critic review, the parent can remove the fixture and
-raw captures; the committed sanitized receipt remains the evidence record.
+The independent critic accepted the evidence at **0.92 / high**. Its claim-by-
+claim audit is [codex-tool-host-20261102-audit.md](./codex-tool-host-20261102-audit.md).
+The critic confirmed that the raw native streams match the sanitized receipt and
+that the package path is not documented as a stable launcher contract.
+
+After review, the owned raw captures and fixture were sent to the Windows
+Recycle Bin. Before cleanup, `.scratch/t188-evidence/` contained five JSONL files
+totaling 9,606 bytes; `%TEMP%\\gm-t188-fixture` contained 60 files totaling
+98,400 bytes. The exact two directories were moved to the OS trash and their
+paths were checked absent afterward. The sanitized receipt and independent audit
+remain tracked evidence. Each receipt probe names its former raw path and states
+that the capture was recycled after review.
+
+All CLI probes used `exec --ephemeral`; the installed CLI's `exec --help` says
+this runs “without persisting session files to disk.” No ticket-owned native
+session history was identified for cleanup. Other user session files were left
+untouched. No Codex configuration, PATH, global Git configuration, or
+installation was changed. No binary was copied or downloaded.

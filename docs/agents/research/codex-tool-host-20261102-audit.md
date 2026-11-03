@@ -1,0 +1,23 @@
+# Audit: Windows Codex code-mode host (2026-11-02)
+
+## Score: 0.92 / high
+
+The local probes support the reproduced host-resolution failure and a narrowly scoped same-version workaround: invoking the executable from its installed platform package, where its companion is colocated, ran one harmless read-only Git command. The report correctly says this internal vendor path is not documented as a stable public launcher contract, and it does not claim a permanent install repair or broader tool qualification.
+
+## Per-claim verdicts
+
+| Claim | Verdict | Evidence check |
+| --- | --- | --- |
+| PATH-selected Codex 0.166.0 cannot find its sibling code-mode host | **Supported** | The native transcript in `standalone-clean.jsonl` returns “Code Mode is unavailable” and names the sanitized `%USERPROFILE%/.bun/bin/codex-code-mode-host.exe`; no `command_execution` item follows. The receipt correctly classifies CLI process exit 0 as an infrastructure failure, not command success. |
+| The package executable is the same standalone release | **Supported by local primary evidence** | Receipt identifies `@openai/codex` 0.166.0 and its optional `@openai/codex-win32-x64` 0.166.0-win32-x64 package. Local package metadata corroborates the exact optional dependency and lists `vendor` as package content. The receipt records identical executable SHA-256 and Authenticode publisher/thumbprint for CLI and host. |
+| The required companion is alongside the package-owned executable and absent beside the PATH executable | **Supported by local primary evidence** | Receipt records each observed path, file sizes, SHA-256/signature metadata, and the sibling presence/absence checks. No binary copy or download was performed. |
+| Invoking the package-owned executable runs a harmless fixture command | **Supported** | In `package-managed-clean.jsonl`, the native `command_execution` item is completed with status completed, exit code 0, and empty aggregated output. It invokes PowerShell to run only `git -c core.excludesFile=<fixture>/.gitignore status --short`. This is one read-only command in the owned, remote-free fixture. |
+| The package vendor path is a stable, public launcher contract | **Not claimed; correctly unresolved** | Current official [Windows deployment guidance](https://learn.chatgpt.com/docs/enterprise/windows-deployment) says at lines 1184–1208 to choose/version the package, set installation context, and keep the standalone runtime files together. It does not publish this internal npm vendor path as a stable launcher API. |
+| A supported durable installation remedy is the complete standalone installation layout | **Supported, with correct scope** | The same first-party guide documents standalone installer and npm installation, directs admins to preserve runtime files together, and says to verify CLI from the intended account. It supports reinstalling the complete package/layout; it does not assert this specific local package path survives updates. |
+| The app-managed executable also ran the harmless command | **Supported but correctly excluded from causal attribution** | `app-managed-fixture-ignore.jsonl` records the successful native shell item. The receipt distinguishes its `0.166.0-alpha.5.1` version from standalone 0.166.0, and records the earlier global-ignore warnings as a non-clean attempt. |
+| The probe validates approvals, writes, or broad tool availability | **Unsupported if inferred** | Only one read-only Git status command was tested. The report and receipt explicitly limit the conclusion to that command/path and say approvals, write behavior and future package layout remain unverified. |
+| The work is separate from ticket 121's shim-launch diagnosis | **Supported, scope-based** | Ticket 121 owns how a Windows `.cmd` shim is spawned by a critic probe. This probe invokes Codex successfully and observes the later child code-mode-host path. The report does not duplicate #121 source changes. |
+
+## Findings for the producer
+
+No material evidence or source mismatch found. The official documentation is current for the Windows deployment topic and is appropriately limited to complete runtime layout and supported install routes. Keep the caveat that invoking an internal vendor path was observed to work locally but is not a documented stable launcher contract. The raw native streams match the sanitized receipt. The package fixture and raw captures are clear for disposal after the parent integrates this audit; the committed sanitized receipt retains the relevant commands, native outcomes, executable metadata and limitations. No install/config mutation was observed or claimed.
