@@ -30,3 +30,13 @@ No model call or controlled fixture was made. The receipt says the spike created
 - The research report and receipt are accepted at the audited revision. No additional GUI probe is warranted from this evidence: the available capture API failed, and Codex desktop automation is explicitly excluded.
 - Ticket #173 also requires a dated five-row section in the shared experimental-features note and a per-harness recommendation in the shared `orchestrate` references. Those parent-owned integration edits are outside the audited worker commit and remain required before ticket close. The worker added concise proposed wording for that integration without editing the shared files.
 - The sandbox-removal criterion is satisfied as recorded because this run created no sandbox folders. Cleanup of the pre-existing #162 histories is not established by the worker’s report and should be resolved separately by the parent if still required by the #162 handoff.
+
+## Parent integration review
+
+**Reviewed:** 2026-11-02 (client local date), against the parent’s exact uncommitted hunks in `docs/agents/research/harness-experimental-features-20261101.md`, `skills/engineering/orchestrate/references/gui-watch.md`, and the five linked `harness-*.md` references.
+
+**AC1: accepted.** The experimental-features note adds a dated five-row table with documented state, approval/question capability, usage qualification, and local observation for each requested surface. It keeps documented capabilities distinct from local GUI outcomes. Claude Agent View versus Desktop, Codex state labels/policy limitation, Crew’s 0.9.0 versus 0.11.1 usage caveat, retained #162 histories, and uncertain Crew-window ownership are faithfully represented.
+
+**AC2: accepted.** The new GUI reference gives a qualified native candidate and limitation for each harness. Each of the five existing harness reference pages links to it, and the orchestrate skill already links to those harness references. The Kiro EOF caveat is preserved; no GUI action or external-worker attachment is claimed as observed.
+
+No factual correction is requested for these parent-owned hunks. The additions retain the report’s cleanup boundary: the pre-existing #162 histories and the open Crew window are not silently deleted or terminated.
