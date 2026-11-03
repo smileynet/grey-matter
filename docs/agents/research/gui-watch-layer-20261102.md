@@ -39,6 +39,8 @@ On 2026-11-03 the CUA app inventory showed the ChatGPT/Codex app running, Claude
 | Antigravity | Launched the installed executable path; refreshed `listApps`. | CUA returned `system cursor manager did not become ready`; refreshed inventory showed no Antigravity window. |
 | Kiro Crew | Launched the existing installed executable; refreshed `listApps`, then tried the returned window ID with CUA. | The launch call timed out but inventory showed window `270586`. `getApp` returned `Accessibility state unavailable for window 270586`; `getScreenshot` returned `no screenshot targets found for process: C:\Users\uosmi\AppData\Local\Programs\KiroCrew\KiroCrew.exe`. No screenshot or session transcript was captured. The app remains open because the supported API did not yield a safe controllable view. |
 
+After the launch attempt, a read-only process snapshot found the Crew root process PID `106148`, created 2026-11-02 20:30:10 Pacific, with parent PID `56968`. The initial CUA inventory had not listed a Crew window. This is consistent with the launch call starting a new process, but no pre-launch process snapshot exists to rule out activation of an already-running process. The window remains open; no close or process-control action was taken because CUA provided no safe control surface.
+
 The initial browser inventory returned unrelated personal tab metadata; no tab was opened, claimed, navigated, or read for page content, and none of its metadata was copied into the durable artifacts. The exact #162 session histories, shared session databases, and telemetry were left untouched. No model probe, controlled fixture, sign-in, permission change, setting change, screenshot, or sandbox was created.
 
 ## Suggested reference wording for ticket 111
@@ -67,7 +69,7 @@ Sources were opened on 2026-11-03. Quotes are kept short; product documentation 
 - No safe local screenshot or UIA tree was available for the five owned histories. Their GUI state, exact controls, and actual ability to answer the pending #162 approval remain unverified.
 - CUA did not expose Claude, Kiro IDE, or Antigravity windows after their launch attempts; Codex GUI automation was disallowed by the computer-use rule. Kiro Crew had a window but no usable CUA accessibility or screenshot target.
 - No product documentation examined demonstrates that these native UIs adopt arbitrary cross-harness worker processes. This is an unverified integration claim, not evidence that it is impossible.
-- No persisted screenshots, transcripts, native histories, sandbox folders, or additional app data were created. The only new durable artifacts for this spike are this report and its evidence JSON.
+- No screenshots, transcripts, native histories, private fixture/scratch folders, or additional app data were deliberately created or extracted. Kiro Crew may have written routine app data when launched; it was not inspected. The spike's durable research artifacts are this report, its evidence JSON, and the independent audit.
 
 ## Proposed concise dated section for the experimental-features note
 
@@ -83,6 +85,6 @@ Use this header and summary when integrating the findings into the shared note:
 | Codex app thread list | State labels/details unspecified in docs; app composer approval and eligible usage are documented; native thread continuation is supported. | Desktop UI automation disallowed; exact thread list and headless-worker actions unobserved. |
 | Kiro IDE Agent Focus | Docs describe Spinning/Warning/Paused, in-place question/command responses; usage unspecified. | Launch timed out; no GUI state/action observed. |
 | Antigravity app Overview / Subagents | App can follow subagent conversation; app state and approval controls unspecified; `/agents` and `/usage` are documented under CLI. | CUA cursor manager failed; no GUI state/action observed. |
-| Kiro Crew session grid | Docs describe thinking/waiting/idle, interactive approval, Usage estimates, and chat continuation. | Window appeared, but accessibility and screenshot capture failed; no session or action observed. |
+| Kiro Crew session grid | Docs describe thinking/waiting/idle, interactive approval, Usage estimates, and chat continuation. | CUA initially listed no Crew window; after `launch_app`, a window appeared. Read-only process metadata found PID `106148`, created 2026-11-02 20:30:10 Pacific, parent PID `56968`. Likely started by the attempt, though no pre-launch PID snapshot can exclude activating a pre-existing process. Accessibility and screenshot capture failed; window remains open, no session/action observed. |
 
 Keep the orchestrator ledger authoritative until a same-session mapping proves worker identity, live state, pending question/approval, and response path.

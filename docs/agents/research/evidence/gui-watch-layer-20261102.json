@@ -83,6 +83,17 @@
       ],
       "observed_gui": false,
       "content_opened": false,
+      "process_lifecycle": {
+        "initial_cua_inventory_listed_crew_window": false,
+        "attempted_action": "CUA launch_app for the installed executable; request timed out, then refreshed inventory exposed the window.",
+        "read_only_process_snapshot_at": "2026-11-03",
+        "root_pid": 106148,
+        "root_creation_time_local": "2026-11-02 20:30:10 America/Los_Angeles",
+        "root_parent_pid": 56968,
+        "root_parent_present_in_process_snapshot": false,
+        "ownership_assessment": "Timing and absent initial CUA window are consistent with this spike's launch attempt starting the process. No pre-launch PID snapshot was captured, so activation of a pre-existing process cannot be ruled out.",
+        "current_state_at_snapshot": "Process remained running; no close or process-control action was taken because CUA provided no safe control surface."
+      },
       "residual_app_state": "Kiro Crew remains open; the supported API did not provide a safe view/control surface to close it. No session was selected or modified."
     }
   ],
@@ -215,12 +226,15 @@
   "retention_and_cleanup": {
     "new_screenshot_files": 0,
     "new_fixture_folders": 0,
+    "new_private_scratch_folders_or_files": 0,
+    "new_private_captures_or_transcripts": 0,
     "native_sessions_deleted_or_archived": 0,
-    "native_session_histories": "Retained only as named in #162 receipt for the independent critic; no shared DB or telemetry was accessed.",
-    "generated_app_data": "No app data extracted. Kiro Crew is open after the launch/capture attempt and was not closed because CUA returned no usable accessibility/screenshot surface; no session was changed.",
+    "native_session_histories": "The five #162-owned histories named in the receipt remain untouched and retained because UI inspection was unavailable. Parent owns any future targeted disposition. No shared DB or telemetry was accessed.",
+    "generated_app_data": "No app data was extracted or inspected. Kiro Crew may have written routine app data when launched. Its root process remained open after the capture attempt and was not closed because CUA returned no usable accessibility/screenshot surface; no session was changed.",
     "new_durable_files": [
       "docs/agents/research/gui-watch-layer-20261102.md",
-      "docs/agents/research/evidence/gui-watch-layer-20261102.json"
+      "docs/agents/research/evidence/gui-watch-layer-20261102.json",
+      "docs/agents/research/gui-watch-layer-20261102-audit.md"
     ]
   },
   "limitations": [
