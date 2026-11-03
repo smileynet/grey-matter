@@ -5,7 +5,7 @@ import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
-import { claudeArgs, codexArgs, parseClaudeOutput, parseCodexOutput, parseTestCounts, testCommand, classifyResult, changedFilesSince } from "./spike-model-eval.mjs";
+import { claudeArgs, codexArgs, parseClaudeOutput, parseCodexOutput, parseTestCounts, testCommand, classifyResult, changedFilesSince, freezeFixture } from "./spike-model-eval.mjs";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const FIXTURES = join(ROOT, "fixtures", "model-eval");
@@ -32,6 +32,25 @@ test("T1 and T3 pin the same deterministic seed and differ in grader expectation
   assert.equal(t1.expectedExport, "multiply");
   assert.equal(t3.expectedExport, "sum");
   assert.equal(t3.forbiddenExport, "add");
+});
+
+test("the pinned dashboard restores the seed while other fixture drift is rejected without a model call", () => {
+  const workDir = join(TEST_ROOT, "pinned-seed-work");
+  const evidenceDir = join(TEST_ROOT, "pinned-seed-evidence");
+  // Node rejects Claude arguments; this exercises fixture setup without calling a model.
+  assert.throws(() => execFileSync(process.execPath, [join(ROOT, "spike-model-eval.mjs"),
+    "--adapter", "claude", "--fixture", "t1", "--model", "fake",
+    "--claude-exe", process.execPath, "--work-dir", workDir, "--evidence-dir", evidenceDir,
+  ], { encoding: "utf8", stdio: "pipe" }));
+  const result = JSON.parse(readFileSync(join(evidenceDir, "result.json"), "utf8"));
+  const task = JSON.parse(readFileSync(join(FIXTURES, "t1.json"), "utf8"));
+  assert.equal(result.fixture.seedTree, task.seedTree);
+  assert.equal(result.grading.seedTreeMatches, true);
+  assert.equal(result.grading.status, "agent-process-failure");
+
+  writeFileSync(join(workDir, "unexpected.txt"), "unrelated drift\n");
+  execFileSync("git", ["add", "--", "unexpected.txt"], { cwd: workDir });
+  assert.throws(() => freezeFixture(workDir, task.seedTree), /fixture seed changed/);
 });
 
 test("native adapter arguments keep the prompt as one value and scope Codex", () => {

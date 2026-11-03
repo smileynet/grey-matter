@@ -92,6 +92,16 @@ function gitPaths(cwd, ...args) {
   return result.stdout.split("\0").filter(Boolean);
 }
 
+function freezeFixture(workDir, expectedTree) {
+  // The general spike generator tracks the live dashboard; comparisons require its original bytes.
+  writeFileSync(join(workDir, "docs", "status.html"), readFileSync(join(FIXTURES, "seed-status.html")));
+  git(workDir, "add", "--", "docs/status.html");
+  git(workDir, "-c", "commit.gpgsign=false", "commit", "--amend", "--no-edit", "--quiet");
+  const tree = git(workDir, "rev-parse", "HEAD^{tree}");
+  if (tree !== expectedTree) fail(`fixture seed changed: expected ${expectedTree}, observed ${tree}`);
+  return tree;
+}
+
 function changedFilesSince(workDir, seedCommit) {
   const tracked = gitPaths(workDir, "diff", "--name-only", "--no-renames", "-z", seedCommit, "--");
   const untracked = gitPaths(workDir, "ls-files", "--others", "-z", "--");
@@ -340,7 +350,8 @@ async function main() {
   writeCapture(evidenceDir, "fixture-create.stderr.txt", created.stderr);
   if (created.status !== 0) fail(`fixture creation failed: ${created.error ?? created.stderr ?? created.stdout}`);
   const fixtureIdentity = JSON.parse(created.stdout);
-  if (fixtureIdentity.tree !== task.seedTree) fail(`fixture seed changed: expected ${task.seedTree}, observed ${fixtureIdentity.tree}`);
+  const generatedTree = fixtureIdentity.tree;
+  fixtureIdentity.tree = freezeFixture(workDir, task.seedTree);
   const seedCommit = git(workDir, "rev-parse", "HEAD");
   const ticketText = readFileSync(join(workDir, task.ticketFile), "utf8");
   const nodeExe = process.execPath;
@@ -390,6 +401,7 @@ async function main() {
       id: task.id,
       ticketId: task.ticketId,
       seedTree: fixtureIdentity.tree,
+      generatedTree,
       seedCommit,
       workingDirectory: workDir,
     },
@@ -452,4 +464,4 @@ if (invokedPath === import.meta.url) {
   });
 }
 
-export { claudeArgs, codexArgs, parseClaudeOutput, parseCodexOutput, parseTestCounts, testCommand, classifyResult, changedFilesSince, gradeFiles, hiddenBehaviorCheck };
+export { claudeArgs, codexArgs, parseClaudeOutput, parseCodexOutput, parseTestCounts, testCommand, classifyResult, changedFilesSince, gradeFiles, hiddenBehaviorCheck, freezeFixture };
