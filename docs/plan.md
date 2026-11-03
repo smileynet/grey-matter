@@ -216,7 +216,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | ID | Work | Status |
 | --- | --- | --- |
 | 202 | Outcome-driven orchestrate contract and role guidance | ✅ done |
-| 203 | Complete tool-script inventory and owning skill usage guidance | in_progress |
+| 203 | Complete tool-script inventory and owning skill usage guidance | ✅ done |
 | 204 | Dispatch checkout and review-evidence preflight | in_progress |
 | 208 | Durable session/message foundation and recovery fixture (child of 179) | open |
 | 179 | Shared inter-harness messaging and wakeups (existing owner) | open |
