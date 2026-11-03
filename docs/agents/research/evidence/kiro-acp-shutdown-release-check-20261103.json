@@ -1,0 +1,25 @@
+{
+  "ticket": 189,
+  "date": "2026-11-03",
+  "scope": "Read-only installed metadata and current official release/lifecycle documentation; conditional retest only",
+  "installed": {
+    "cliVersion": "2.37.1",
+    "cliSha256": "F4A6C31A88822B7B67D5C795DF87F1465B34C6A4ACBBA01E9A0158AB0FF4C66C",
+    "kasPackage": "@kiro/agent",
+    "kasVersion": "0.66.70",
+    "kasPackageJsonSha256": "017660A7415DC49D09C0D2503FC4A1E475C219A2641F1ED218996C499FB61E42"
+  },
+  "sources": [
+    {"url": "https://cli.kiro.dev/install.ps1", "result": "Read only; identifies official stable latest manifest"},
+    {"url": "https://prod.download.cli.kiro.dev/stable/latest/manifest.json", "result": "Retrieved; version 2.37.1"},
+    {"url": "https://kiro.dev/changelog/cli/", "result": "Retrieved; newest visible CLI entry 2.37.0; not authoritative for latest patch availability"},
+    {"url": "https://kiro.dev/docs/cli/v3/acp-migration/", "result": "Retrieved; old terminate extension has no current V3 equivalent; no applicable new shutdown fix identified"},
+    {"url": "https://github.com/kirodotdev/Kiro/releases", "result": "Retrieved; no releases published there"},
+    {"url": "https://github.com/kirodotdev/Kiro/issues/6050", "result": "Open; older macOS orphan-process report, not a verified fix for this Windows V3 error"},
+    {"url": "https://prod.download.cli.kiro.dev/stable/2.37.1/feed.json", "result": "Web retrieval unavailable; cached installed feed was not treated as a fresh remote result"}
+  ],
+  "decision": "No qualifying newer supported stable bundle or applicable documented fix found in checked sources",
+  "retest": {"outcome": "not_run", "reason": "Conditional prerequisite not met; installed CLI/KAS versions match prior tested pair"},
+  "changes": {"installedFiles": false, "globalSettings": false, "modelPrompts": 0, "acpSessions": 0, "sessionDeletions": 0, "processTerminations": 0},
+  "limits": ["Separate supported KAS upgrade not established", "Private or preview releases not exhaustively verified", "This check is not a fresh runtime reproduction"]
+}

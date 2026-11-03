@@ -63,3 +63,38 @@ Owned raw artifacts retained in this worktree (byte sizes at handoff):
 
 These scratch artifacts and four API session records are retained until the next qualifying upstream retest or resolution; parent integration owns cleanup after that lifecycle point. The independent critic audit is promoted as [kiro-acp-shutdown-20261102-audit.md](kiro-acp-shutdown-20261102-audit.md).
 
+## Release and supported-fix recheck (2026-11-03)
+
+The user requested a newer-release/fix search and a retest only if a qualifying
+candidate was found. No qualifying candidate was found in the checked supported
+stable distribution and official lifecycle documentation. This is a release
+check, not a new reproduction or proof that every private/preview build is unchanged.
+
+- **Observed locally:** the resolved Windows executable reports `kiro-cli 2.37.1`;
+  its SHA-256 is `F4A6C31A88822B7B67D5C795DF87F1465B34C6A4ACBBA01E9A0158AB0FF4C66C`.
+  Its extracted `@kiro/agent` package reports KAS `0.66.70`, matching the prior
+  tested pair. Package metadata SHA-256 is
+  `017660A7415DC49D09C0D2503FC4A1E475C219A2641F1ED218996C499FB61E42`.
+- **Current stable distribution:** the [official Windows installer source](https://cli.kiro.dev/install.ps1)
+  selects the [stable latest manifest](https://prod.download.cli.kiro.dev/stable/latest/manifest.json),
+  whose version is still `2.37.1`. The installer was read, not executed; no MSI
+  or runtime was downloaded. A separate supported KAS upgrade was not established.
+- **Supported shutdown route:** the [official V3 migration guide](https://kiro.dev/docs/cli/v3/acp-migration/)
+  still documents no V3 equivalent for the old terminate extension. Cancellation
+  stops an active turn; closing the client locally is not a documented fix for
+  engine teardown. No newly supported shutdown sequence was identified. The
+  [CLI changelog](https://kiro.dev/changelog/cli/) currently tops out at `2.37.0`,
+  so it is less current than the distribution manifest for patch availability.
+
+The related upstream [macOS issue #6050](https://github.com/kirodotdev/Kiro/issues/6050)
+is still open, but concerns an older CLI and a different orphan-process symptom;
+it is not evidence that the current Windows failure has a fix. The versioned
+release-feed URL could not be retrieved through the web tool; installed cached
+feed contents were not substituted for a fresh remote fetch.
+
+**Retest: not run — prerequisite not met.** No model prompt, ACP session, settings
+change, installation, process termination or session deletion was performed.
+Ticket #189 stays unresolved. Recheck after a supported release/runtime change or
+a documented applicable shutdown fix. Compact observations are recorded in the
+[release-check receipt](evidence/kiro-acp-shutdown-release-check-20261103.json).
+
