@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "7b5ed2c538cd1eb288ed0124d3e4f07c7adab21429035d2233e6a0df46d52147",
+  "subject": "Accepted effort trial findings; ticket171 closed; pending fast-mode account fact visible",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 31148,
+      "sha256": "a9833661b9e0ba5659bd990568bfb35707a54dda00ec97a9334ba9378554830b"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 200218,
+      "sha256": "f6498ffdaa56d20402dd35de0c1b02609e46db0ea356cc84ac15443018ab2ebe"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4441,
+      "sha256": "8beac850615b720b6e6aae26dba5ce132d8aa6969fb44cba4999975ce94d4341"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t171-final/findings-1280.png",
+      "bytes": 599665,
+      "sha256": "20e7cd1d7e95abc05568849416e80929dcf3dd74e81a0ec5defe5f1c2ce685fa",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t171-final/tickets-1280.png",
+      "bytes": 216824,
+      "sha256": "35c10b790d9b8c16e16b094e27b164377af00ee949ef71167f2d18f8ed640c84",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t171-final/findings-390.png",
+      "bytes": 594019,
+      "sha256": "82ecc77bbd2c08225f06bb24095f466135e6369995bd9cc92d8f0958c9e7cba6",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t171-final/tickets-390.png",
+      "bytes": 197570,
+      "sha256": "1277c7dded12bab5380ed9029b66565f46a50bf28af4d7054532e54a7e6dda9b",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "d22269c8a4aef7901c416fbf6b0355bf9abcf34a22c63b7926f6709b514f56ba",
+  "id": "93cd16ce679423df25c1530c37a6af675e1dfa73d0aa0ad2fdc57011e97175fc",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic_dashboard171",
+    "note": "Inspected all four declared final orchestration dashboard captures at laptop and phone widths. Findings cards are readable and the evidence-limits text communicates one valid finding, ten unscorable cases, and that defaults should remain; ticket flow presents 3 open/in-progress tickets and 33 completed. No material clipping or misleading claim observed. Tool observed: screenshots; source bytes match the reviewed pending snapshot.",
+    "acceptedAt": "2026-11-03T12:06:13.664Z",
+    "snapshotId": "93cd16ce679423df25c1530c37a6af675e1dfa73d0aa0ad2fdc57011e97175fc"
+  }
+}

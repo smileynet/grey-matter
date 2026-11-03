@@ -3,6 +3,16 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "effort-trial", "state": "partial", "label": "Effort trial incomplete; defaults retained",
+      "title": "Keep effort defaults until quality can be compared",
+      "value": "The trial did not establish a better effort level. Incomplete runs and unusable review evidence prevent a fair quality comparison.",
+      "diagramLabel": "Observed trial and decision", "steps": ["Use one requested model", "Try effort levels", "Check the evidence", "Keep current defaults"],
+      "limit": "Actual effort was not reported, and most review receipts were invalid. The single usable score cannot establish an effort-level advantage.",
+      "details": "Thirteen native calls produced eleven complete responses and two timeouts; one additional cell failed setup before a model call. One response had a valid blind pass and ten are unscorable because their review receipts failed validation. These are evidence gaps, not model-quality failures. The passing requested Codex max result lacked served model and actual effort. Kiro and Google cohorts remained held. Unknown costs and timeout usage remain unknown. Twenty authorized empty working directories were recycled and their source paths verified absent; destination identifiers were not recorded. No defaults changed.",
+      "tickets": ["171"],
+      "sources": [{"label": "Effort findings and limits", "href": "agents/research/model-effort-t171-results.md"}, {"label": "Independent final audit", "href": "agents/research/model-effort-t171-independent-audit.md"}, {"label": "Current effort guidance", "href": "agents/harness-surfaces/models-and-usage.md"}]
+    },
+    {
       "id": "text-task-tiers", "state": "partial", "label": "Rewrites passed; triage and classification need care",
       "title": "Keep human checks beside routine text work",
       "value": "All six profiles handled the small rewrite. Triage and changelog classification exposed mistakes, so none qualified to replace the current defaults across these tasks.",

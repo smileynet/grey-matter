@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "manifestDigest": "f1b6504a368d776342e0eabdf489097f9913d2d04dac8ee09cd88236805dd0fe",
+  "subject": "Accepted effort trial findings; ticket171 closed; pending fast-mode account fact visible",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 143645,
+      "sha256": "6344adeb2136c3fc5e98b2bbac054c90fcb180e2a43b7963fc384b512d0f3366"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 58862,
+      "sha256": "28b7d65a7d5fb070f964523754265ab0956e310de3878db40314f22ca94136fe"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 49648,
+      "sha256": "b511ad983694959ca8f925c3b508da62e1a6c9289d533325ae630e6cbcdc59a4"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t171-status-final-valid/tab-0-1280.png",
+      "bytes": 89213,
+      "sha256": "f3d7f32a2d56ba0338fa5ca613c2c919425c07d8870014bec4bffaa3e81ec3a0",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t171-status-final-valid/tab-1-1280.png",
+      "bytes": 289492,
+      "sha256": "11ca25d88ec88377b0b8651d548a14563fd3db5c40c4a64c5f1ad96159c7912a",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t171-status-final-valid/tab-2-1280.png",
+      "bytes": 375798,
+      "sha256": "3a6c88f53e75cfec91f9544a31b7df32d483eeab53a73ce1d7d089ba7cbcb759",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t171-status-final-valid/tab-0-390.png",
+      "bytes": 87218,
+      "sha256": "dc094fa2ad91e9e629446b447e8a8ebe14af511ccd13eadc30520d3194ae4026",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t171-status-final-valid/tab-1-390.png",
+      "bytes": 282690,
+      "sha256": "4950dde202a75f3734ca5fd57202e00e402e02f496581ed0ce35749bfd3a540e",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t171-status-final-valid/tab-2-390.png",
+      "bytes": 361772,
+      "sha256": "77d78e8cfbdad86ea63a723c7eaacbcfc3e92871b25885eba975de8b4a6e5f18",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "b2056c062f1a3568ba17d5797b39ff15d899071be0cd46720c2106f8588592f5",
+  "id": "12b3d87582094cabaf7a1a59ba7c4a7ba2ace487198b00326a78376f38f2650f",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic_dashboard171",
+    "note": "Inspected all six declared final status-dashboard captures: Overview, All entries, and Plan at laptop and phone widths. Overview clearly asks only whether fast-mode credits are already enabled, explicitly says the answer does not enable credits, and presents readable choices. The Plan view retains the full ticket inventory and distinguishes active work from deferred work; mobile layout remains legible. No material clipping or misleading claim observed. Tool observed: screenshots; source bytes match the reviewed pending snapshot.",
+    "acceptedAt": "2026-11-03T12:06:14.027Z",
+    "snapshotId": "12b3d87582094cabaf7a1a59ba7c4a7ba2ace487198b00326a78376f38f2650f"
+  }
+}
