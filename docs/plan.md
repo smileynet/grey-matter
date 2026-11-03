@@ -238,15 +238,17 @@ package; the internal launcher path is not a stable installation contract.
 #189 remains blocked on the current Kiro/KAS shutdown behavior; its diagnostic
 evidence is accepted but the fix criterion is unmet. #190, #193 and #194 are
 qualified with their stated limits. #173's qualified recommendations are deployed
-and closed without claiming live GUI steering; #174 is demonstrating the runner before #167–172 can
-start. The supervisor keeps advancing independent frontier work; these results
+and closed without claiming live GUI steering. #174 selected the runner, and
+#199 pinned its fixture dashboard after preflight detected template drift.
+#167 and #168 are dispatched with independent protocol review and serialized
+model measurements. The supervisor keeps advancing independent frontier work; these results
 do not imply a production-ready orchestrator.
 The #158-before-#157 order is a recommendation, not a fabricated blocker. Other
 independent probes may proceed in parallel with disjoint private fixtures and
 bounded usage; their order below keeps the current harness work together before
 the model comparisons.
 
-Hard edges are #162 → #173/#188/#189, #158 → #193 and #174 → #167–172. The rest of each
+Hard edges are #162 → #173/#188/#189, #158 → #193, #174 → #199 and #174/#199 → #167–172. The rest of each
 ticket's blocked_by records completed fixture/baseline prerequisites, retained
 for provenance. #174 must leave a runnable selected recipe. If both runner
 paths fail, create and link the missing execution prerequisite to #167–172
