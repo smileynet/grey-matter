@@ -1,7 +1,7 @@
 ---
 id: "190"
 title: "Resolve: Kiro Crew Windows host-auth relay must select client ownership explicitly"
-status: in_progress
+status: done
 blocked_by: ["186"]
 validation_criteria:
   - "The Windows omitted-flag routing mismatch is reproduced or marked fixed on the selected Crew/CLI versions, with credential-free callback evidence."
@@ -41,6 +41,15 @@ separate evidence; do not extrapolate the Windows result.
 
 ## Acceptance criteria
 
-- [ ] The Windows omitted-flag routing mismatch is reproduced or marked fixed on the selected Crew/CLI versions, with credential-free callback evidence.
-- [ ] A supported upstream version or explicitly scoped integration remedy selects client ownership for Crew-owned auth, with failure handling and CLI-owned behavior verified separately.
-- [ ] Guidance records identity assumptions and limits; private processes/data are disposed and required checks pass without global credential changes.
+- [x] The Windows omitted-flag routing mismatch is reproduced or marked fixed on the selected Crew/CLI versions, with credential-free callback evidence.
+- [x] A supported upstream version or explicitly scoped integration remedy selects client ownership for Crew-owned auth, with failure handling and CLI-owned behavior verified separately.
+- [x] Guidance records identity assumptions and limits; private processes/data are disposed and required checks pass without global credential changes.
+
+## Resolution (2026-11-03)
+
+done: documented and verified scoped bundled-KAS client-auth route with negative callback evidence, explicit CLI-owned comparison and identity limits
+
+### Verification
+1. ✓ The Windows omitted-flag routing mismatch is reproduced or marked fixed on the selected Crew/CLI versions, with credential-free callback evidence. — "InstalledCrew0.11.1builder/help andCLI2.37.1samehash186evidence verifyWindowsomittedflagmismatchstillpresent; CLI-ownedhistoricsuccessexplicitlydistinguishedfromfreshbundleprobe. Independentcritic accepted9058a48 afterunmeasuredtool_eventsfieldcorrection."
+2. ✓ A supported upstream version or explicitly scoped integration remedy selects client ownership for Crew-owned auth, with failure handling and CLI-owned behavior verified separately. — "Documented scopedconfig agent.kas_bundle=true selectsinstalledKAS0.66.33 --auth=acp-callback; privatefreshnegativeprobe received8callbackrequests, fixedno-credentialresponses causedexpected-32000failure. No realvaultdeliveryoridentitycomparisonclaim, no installedpatch/globaledit. CLI-ownedpathseparate186nativeevidence."
+3. ✓ Guidance records identity assumptions and limits; private processes/data are disposed and required checks pass without global credential changes. — "Privateprofile12456B and2scripts7110B OSrecycled afterreview, absencesverified; ownprocesssettled. Report/receipt/critic auditpromoted. Parent pre-merge ticket-graph/syntax-fixtures andpre-push doc-links/home-pathpassed aftercitationnormalization;diffscopechecked."
