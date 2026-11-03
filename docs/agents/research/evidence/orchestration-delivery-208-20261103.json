@@ -1,0 +1,20 @@
+{
+  "candidate": "5b32423ed58df723c9e9156afbfd6bd0e3aeaa30",
+  "acceptedCurrentTree": "b5ce898a5313f653fc528b380070423cce1a6819",
+  "retentionOwner": "parent orchestration integration",
+  "state": "retained",
+  "purpose": "exact-source independent acceptance, production check provenance and final outcome-delivery audit",
+  "endCondition": "authorized delivery cycle verification and explicit disposition",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-208-critic.txt",
+      "bytes": 2607,
+      "sha256": "87c10b506622c0ec760bbd6bf1b814c9784371cbc87856cb633e1bb6fe9c38c3"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-208-critic-version-final.txt",
+      "bytes": 2611,
+      "sha256": "e11c9939d091c34d1bf9b42c66f0a22605a022124e77e2c36c4206c0d3df152c"
+    }
+  ]
+}

@@ -518,3 +518,4 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 183 | Preserve artifact ownership across agent handoffs | ✅ done |
 | 184 | Revalidate preservation state before cleanup recommendations | ✅ done |
 | 191 | Dashboard: orchestration findings and expandable ticket flow in two tabs | ✅ done |
+| 209 | Decommission historical model-tier spikes and retain retest recipes (separate tooling owner) | open |

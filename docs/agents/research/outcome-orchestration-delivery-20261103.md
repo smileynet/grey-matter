@@ -148,3 +148,89 @@ audit; the compact [retention index](evidence/orchestration-delivery-203-2026110
 records their exact identities. The 203 worktree/dependencies are retained only
 through integration/closure and reuse or managed archival, preserving unrelated
 worktrees and historical native evidence.
+
+## Publication preflight (205)
+
+Exact candidate `79df42f0aac38bbd204695926f9fda6dbd075e15` received independent
+acceptance. Parent also ran all ten rejection/acceptance fixtures on integrated
+bytes. The helper composes the existing accepted review receipt with a separately
+parent-owned identity, exact packet/check-attestation hashes, required check IDs,
+current Git candidate and the complete materialized package inventory. Check
+records are explicitly attestations; they do not prove commands ran. Parent
+retains and reads actual command output separately.
+
+The first supported path compares exact unprojected source copies. The second is
+one fixed transform for this effort's dashboard links; unknown transformations,
+mapping or arguments are rejected. The critic compared it with the current
+exporter. It does not inspect archives, remote state or later uploads, and cannot
+lock files against mutation after the check.
+
+Two bounded production uses passed at historical parent candidate
+`ee7b30d717c8d271e16f4bf038bffed88b164206`: dispatch preflight inspected the
+actual completed 205 worker's registered checkout, assigned base, four changed
+files and exact independent-review output; publication preflight compared the
+actual known 202/206 Site payload with the committed, unprojected, reviewed
+dashboard and the two actual parent gate logs. It reported
+`checksAreAttestations: true`. This is a check of that snapshot, not a claim that
+a new Site deployment occurred during these production checks. The
+[private evidence index](evidence/orchestration-delivery-205-20261103.json)
+binds the retained packets, expected identity, attestations and raw results.
+
+Worker verification passed 10 publication fixtures, 56 dashboard/receipt tests,
+ten syntax fixtures, strict global-dashboard validation and syntax/invocation/
+docs/provider checks. Two additional browser test commands were **infrastructure
+errors** because Playwright modules were absent in that isolated worktree; they
+were not passed. Parent's separately retained twelve actual phone/laptop captures
+cover the published 202/206 snapshot, not later renderer changes.
+
+## Durable session/message foundation (208)
+
+Independent exact-source review accepted final candidate
+`5b32423ed58df723c9e9156afbfd6bd0e3aeaa30`; parent and critic each passed all
+11 regression tests, including the Windows temporary-root ACL denial case.
+The parent requested a missing harness-version field after initial review;
+it is now mandatory in complete targets, with explicit `not-reported` allowed
+without claiming qualification. Wrong versions and stale generations are rejected.
+The code persists local queued messages, requires exact registered targets,
+handles stable duplicates/conflicts, correlated replies/done, ordered receipt
+transitions, unchanged replay and ambiguous-lock failures. No native notification
+or automatic retry is implemented, and the full native matrix remains unqualified
+by this child. **Parent #179 remains open.**
+
+No crash-injection/power-loss or simultaneous-lock stress test was performed;
+the restart-process fixture and fsync/rename implementation are narrower evidence.
+The registry is an operational private control plane, not an authenticated
+multi-user security boundary. Native delivery and exactly-once processing are
+not established. [Raw evidence retention](evidence/orchestration-delivery-208-20261103.json)
+includes parent-verified copies of the critic's original worktree-local output;
+the critic initially named the requested parent location, then corrected the
+actual worktree location. The parent verified byte hashes before copying.
+
+## Concurrent upstream reconciliation and deployment
+
+An unrelated upstream update advanced `main`, added the temporary Windows test
+wrapper and updated canonical deployment. A clean rebase preserved those changes;
+the accepted helper implementations remained byte-identical to their reviewed
+candidates. Original pre-rebase tree `6118dbe` is retained under a parent-owned
+local Git retention ref for the exact historical production evidence. Independent
+critics renewed source-equivalence acceptance and the final catalog changes.
+The new wrapper is documented and classified; current coverage is 146 scripts
+(60 operators, 16 modules, 53 tests, 17 fixtures/templates). Installed catalogs
+are explicitly scoped to grey-matter maintenance, not another project's tooling.
+
+On final accepted tree `b5ce898a5313f653fc528b380070423cce1a6819`, parent
+pre-merge passed 2/2 selected checks (syntax fixtures and dashboard contract),
+pre-push passed 5/5, and the final push hook passed 5/5. A deploy attempt first
+failed lint because the registered tkt checkout had an older vendored deployer.
+The user approved preserving its unpublished claim during a rebase; a guard found
+that the other owner had already rebased and added another documentation commit.
+Parent left both unpublished commits untouched and pushed neither. The read-only
+deployer synchronization check then passed with matching source blobs.
+
+`node scripts/deploy.mjs --no-agy --no-kirocrew` completed with `installed 50
+skills.` and push of `b5ce898` succeeded. These flags skip plugin/app deployment;
+they are not execution controls. The separate Agy execution hold remains, and
+unrelated Crew app adoption/trust is excluded from this delivery. No global
+harness setting or model default was changed by these operations. Parent retains
+the evidence, isolated worktrees and owned runtime inputs through this cycle's
+integration/final audit, then records reuse or managed archival/disposition.

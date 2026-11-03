@@ -1,0 +1,45 @@
+{
+  "candidate": "79df42f0aac38bbd204695926f9fda6dbd075e15",
+  "acceptedCurrentTree": "b5ce898a5313f653fc528b380070423cce1a6819",
+  "retentionOwner": "parent orchestration integration",
+  "state": "retained",
+  "purpose": "exact-source independent acceptance, production check provenance and final outcome-delivery audit",
+  "endCondition": "authorized delivery cycle verification and explicit disposition",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-205-critic.txt",
+      "bytes": 1816,
+      "sha256": "489276ec71669728a1da150f5ddc93f235cfe0c09d35786c1545a4c2da363711"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-205-critic-transform-final.txt",
+      "bytes": 2447,
+      "sha256": "2fd2e7f26a4824f32da63d67ce36c514086809d0e39a9e54f375a7cfaf7939eb"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-production-dispatch-205.json",
+      "bytes": 822,
+      "sha256": "84fa00d7227b2a6ddda38f438bf9046f7aa6c77835eba9e3246790632113301d"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-production-publication-205.json",
+      "bytes": 1195,
+      "sha256": "f7ed252e647ccabc95a216f5881936f3ab499e38b80a521b18dac1dec5a4dc48"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-205-production-packet.json",
+      "bytes": 699,
+      "sha256": "d4ac3e4379e74b5786cb1042457cd6628e2a423b5a9f796aac9796255a5d14c4"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-205-production-expected.json",
+      "bytes": 439,
+      "sha256": "18c1c869c89eb4777b2d23a25dd4de0fe1ddd491835c977f7a78d970d2d3d730"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-205-production-checks.json",
+      "bytes": 719,
+      "sha256": "c03761fd0e56b8651b5bb95823d796287cb9ba8e923a5dc476c2d8463c0ae1f9"
+    }
+  ]
+}
