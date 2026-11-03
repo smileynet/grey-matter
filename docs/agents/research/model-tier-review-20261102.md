@@ -77,9 +77,9 @@ paths and hashes are pinned in the private
 `.scratch/t168/controller-preflight/incident.json`. Codex must use the
 same-version package executable beside its verified code-mode host, as in ticket
 188; the PATH-selected copy is not acceptable. Future launches must use
-PowerShell 7.6.9 with recorded absolute executable, actual argv, native exit,
-timeout, stdout/stderr bytes, and native turn/usage metadata. The command text
-and tool metadata from the anomalous preflight are retained at
+the dedicated Node controller with recorded absolute executable, actual argv,
+native exit, timeout, stdout/stderr bytes, and native turn/usage metadata. The
+command text and tool metadata from the anomalous PowerShell 7.6.9 preflight are retained at
 `.scratch/t168/controller-preflight/command-record.json`; it used splatted
 variables, merged stdout/stderr, and did not capture OS-level argv or per-process
 exit/time/usage events.
@@ -94,8 +94,9 @@ returned an argument parse error with no assistant response. Codex and Kiro's
 two-item argument arrays remained intact. The exact PowerShell command and raw
 outputs are retained privately. These are not review results or scored cells.
 All provider commands remain held until the argument builder is corrected,
-verified with an argv recorder, independently reviewed, and the parent releases
-the measurement lease.
+verified with an argv recorder, and independently reviewed. The parent has
+released the #168 measurement lease; no provider run begins before exact critic
+acceptance of the durable controller.
 
 The earlier agy catalog receipt is incomplete: its helper retained only a hash
 of full command output, then extracted two model rows with a regex that excluded
@@ -108,27 +109,63 @@ retained at `.scratch/t168/controller-preflight/agy-catalog/agy-models.stdout.bi
 The pinned medium cheap candidate is therefore available. The configured default
 identity remains unknown until native model output reports it.
 
+### Durable controller
+
+The review controller is `scripts/spike-model-tier-review-t168.mjs`. It uses
+Node `spawnSync` with explicit argument arrays, absolute executable paths, hash
+checks, `shell: false`, an empty stdin buffer, an empty temporary working
+directory, and a fixed 120-second timeout. It caps stdout and stderr at 8 MiB
+each per cell, so 23 planned non-Google cells cannot retain more than 368 MiB
+of raw streams. Its default mode only emits a plan.
+Execution requires a parent authorization receipt bound to the exact controller
+SHA-256, this protocol note hash, critic acceptance, and the released lease. It
+reserves each opaque cell ID in a private ledger before launching, so an
+interrupted or failed cell cannot be retried, and a held ledger lock keeps cells
+serial. No provider alias is resolved through `PATH`.
+
+The offline test `node --test scripts/spike-model-tier-review-t168.test.mjs`
+feeds each built argument array to a local Node argv recorder. It checks that
+quotes, newlines, the empty Claude tool-list argument, and the entire prompt
+arrive as intended without launching a provider. It also checks provider flags,
+native terminal detection, and nested-error classification. Reviewers receive
+only the frozen prompt with the ticket and diff; fixture ID, provider, tier,
+answer key and scoring data are absent from the prompt. Controller receipts
+keep provider/tier, executable identity, exact argv, native completion,
+session/model/usage fields when emitted, and separate stdout/stderr hashes.
+Raw outputs remain private through the independent audit.
+
+The three permitted launchers are Claude with no tools and no session
+persistence, Codex with user MCP configuration ignored and a read-only sandbox,
+and Kiro with its documented empty trusted-tool list. Codex's complete sibling
+host is hash-checked. The script does not define or invoke an agy launcher:
+workstream safety policy blocks all eight Google cells, independently of the
+catalog's available models. Claude's earlier accidental turn counts against
+its eight-session ceiling, leaving seven planned cells; cheap fixture f1 is
+omitted for budget accounting without replacement.
+
 The existing shared models-and-usage note names Claude Haiku as a cheap tier and
 Opus 5.5 as the default, Codex Luna as a cheap tier and `gpt-6.1-sol` as the
 machine default, and Google Flash as a cheap tier. These are candidate selections,
 not fresh invocation results. Recheck current advertised tiers and usage limits
-before measurement. #167 holds the model-call lease while this preparation runs.
+before measurement using only already retained local catalogs and native usage
+returned by an authorized review cell; do not make extra usage probes. Ticket
+167's lease is settled; the parent has released the #168 measurement lease, with
+calls still gated on exact controller review.
 
-The prior CLI help inspection confirmed the candidate invocations below. Kiro's V2 CLI can
-delete an exact captured session; Claude and Codex support non-persistent
-sessions. Agy lacks a no-persistence or session-deletion option in the inspected
-help, so its local history lifecycle must be recorded and reviewed after calls.
+Prior CLI help inspection confirmed the three eligible invocations below. Kiro's
+V2 CLI can delete an exact captured session; Claude and Codex support
+non-persistent sessions. No Agy invocation or command is defined because its
+eight cells are safety-blocked.
 
-Use each CLI's scoped tool restrictions: Claude's empty `--tools` list, Codex's
+Use each eligible CLI's scoped tool restrictions: Claude's empty `--tools` list, Codex's
 `--ignore-user-config` plus read-only sandbox, and Kiro's empty `--trust-tools`
-list. Agy's inspected help advertises plan mode and sandboxing but no all-tools
-deny option. The CLI help does not establish whether a separate computer-use
-integration is exposed; keep agy held until the critic confirms its invocation
-cannot access such a tool or approves a scoped control.
+list. Workstream policy blocks every Google/Agy command and all eight Google
+cells after ticket 167's pre-tool security hook stop. This is a safety block,
+not a model availability result; there will be no Agy preflight or fallback.
 
 ## Planned usage and isolation
 
-Proposed pair, pending renewed controller review and lease release:
+Proposed matrix, pending exact controller acceptance; the parent has released the lease:
 
 | Provider | Cheaper tier | Default tier | Effort | Status |
 |---|---|---|---|
@@ -137,18 +174,17 @@ Proposed pair, pending renewed controller review and lease release:
 | Amazon / Kiro | `qwen3-coder-next` | native CLI default | model-specific native effort default | Cheap model visible in catalog; default invocation omits model and effort |
 | Google / Antigravity | `gemini-3.8-flash-medium` | native CLI default | model-specific native effort default | Cheap model confirmed in full catalog; default identity must appear in native output to verify comparison |
 
-The candidate argument vectors below are frozen, but may not be launched until
-the anomaly and controller preflight receive renewed approval and the parent
-releases the lease. Use only the absolute executable paths and hashes in the
-private controller receipt. Substitute only the fixture prompt and listed
-model; create a new empty `%TEMP%\gm-review-168-*` working directory with no
-repository checkout, and run calls serially:
+The three eligible argument vectors below are frozen, but may not be launched
+until the durable controller passes independent critic preflight. Use only the
+absolute executable paths and hashes in the private controller receipt.
+Substitute only the fixture prompt and listed model; create a new empty
+`%TEMP%\gm-review-168-*` working directory with no repository checkout, and run
+calls serially:
 
 ~~~~text
 <absolute-claude.exe> --print --tools "" --no-session-persistence --output-format json --permission-mode plan --max-budget-usd 0.10 <prompt> [--model haiku]
 <absolute-codex.exe> exec --ephemeral --ignore-user-config --cd <empty-temp-dir> --sandbox read-only --json <prompt> [--model gpt-6-luna]
 <absolute-kiro-cli.exe> chat --no-interactive --agent-engine v2 --trust-tools= --output-format stream-json <prompt> [--model qwen3-coder-next]
-<absolute-agy.exe> --print --mode plan --disable-slash-commands --print-timeout 120 <prompt> [--model gemini-3.8-flash-medium]
 ~~~~
 
 Default-tier commands omit both `--model` and any effort override. Cheap-tier
@@ -169,15 +205,17 @@ preflight turn's usage is unknown, the aggregate USD 0.80 cap cannot be claimed
 verified. Codex, Kiro and agy retain eight planned fixture cells each. They do
 not expose comparable dollar caps in retained help; report native cost/usage if
 emitted, otherwise unknown. Do not infer cost from model names or time. A missing
-quota counter remains unknown, not model unavailability. Stop a provider on a
+quota counter remains unknown, not model unavailability. Codex and Kiro retain
+eight planned cells each. The eight Google cells are blocked by the workstream
+security hook, with no Agy call, replacement, or fallback. Stop a provider on a
 reported usage limit; never substitute another provider or tier for a failed
 cell.
 
 No global settings, account plan, default model, provider configuration, or trust
 list will change. Capture the Kiro V2 session ID and delete only that exact
 session afterward using `--delete-session ID --session-source v2`. Claude and
-Codex do not persist sessions. Record agy session retention as a limitation; its
-inspected help has no no-persistence or session-deletion option.
+Codex do not persist sessions. Agy session lifecycle is not measured because
+all Google cells are blocked.
 
 ## Retention and unresolved protocol items
 
@@ -197,5 +235,6 @@ prompt `4a69932852c61207346ed7d62be9f3f6755bfcd86190e1818fd734dfd6229dd6`.
 The answer key hash and requested model-to-blind-ID mapping are recorded in the
 private evidence receipt, not the prompt. The parent owns blind scoring without
 the tier map; the producer and protocol critic do not grade. These identities
-and invocations require independent critic acceptance and parent release of the
-#167 lease before calls. No measurement or tier recommendation is in this note.
+and invocations require independent critic acceptance of the exact controller;
+the parent has released the #168 lease. No measurement or tier recommendation
+is in this note.
