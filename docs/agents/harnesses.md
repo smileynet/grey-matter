@@ -166,7 +166,10 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - Skills reach Kiro Crew agents only through an enabled app's `skill://` entries. `deploy.mjs`
   builds and installs the `grey-matter` app; details in
   [distribution maintenance](distribution-maintenance.md#kiro-crew-app).
-- Test: `kirocrew app info grey-matter`, then in a dashboard chat `skill_search` for `compass`.
+- First install: trust `grey-matter` in Settings -> Security -> Third-party apps, then
+  `kirocrew app enable grey-matter`. Skills load when a chat starts.
+- Test: `kirocrew app info grey-matter` shows `"enabled": true`; in a new dashboard chat,
+  `skill_search` finds `compass`.
 
 ### Crush (ancillary, Charm)
 

@@ -1002,56 +1002,112 @@ test("kirocrew: build writes an app.json listing every skill, with linked resour
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
-// A fake `kirocrew` CLI: logs each call; refuses `app install` when TEST_KC_REFUSE is set.
+// A fake `kirocrew` CLI with real state: `install` copies the app into KIROCREW_HOME/apps,
+// `enable` flips a flag, `info` prints it. TEST_KC_OWNER refuses install as the gateway does
+// for a sandboxed caller; TEST_KC_POLICY refuses enable as untrusted third-party code. Both
+// print the gateway's real noise lines first.
 function fakeKirocrew(sb) {
   const bin = join(sb.home, "kc-bin"), log = join(sb.home, "kc-calls.log");
+  const crew = join(sb.home, ".kiro", "crew"), state = join(sb.home, "kc-state.json");
   mkdirSync(bin, { recursive: true });
-  writeFileSync(join(bin, "kirocrew"), `#!/bin/sh
-echo "$*" >> "${log}"
-[ "$2" = "info" ] && { [ -f "${sb.home}/kc-installed" ] && exit 0 || exit 1; }
-[ "$2" = "install" ] && [ -n "$TEST_KC_REFUSE" ] && { echo "gateway refused: not the local owner" >&2; exit 1; }
-[ "$2" = "install" ] && : > "${sb.home}/kc-installed"
-exit 0
+  mkdirSync(crew, { recursive: true });
+  writeFileSync(join(bin, "kirocrew"), `#!${process.execPath}
+const fs = require("fs"), path = require("path");
+const [, , , cmd, arg] = process.argv;
+fs.appendFileSync(${JSON.stringify(log)}, process.argv.slice(2).join(" ") + "\\n");
+const st = fs.existsSync(${JSON.stringify(state)}) ? JSON.parse(fs.readFileSync(${JSON.stringify(state)}, "utf8")) : null;
+const save = (v) => v ? fs.writeFileSync(${JSON.stringify(state)}, JSON.stringify(v)) : fs.rmSync(${JSON.stringify(state)}, { force: true });
+const dest = path.join(${JSON.stringify(crew)}, "apps", "grey-matter");
+const noise = () => console.error("Ignoring SSL_CERT_DIR=/x inherited from another Kiro Crew process\\n17:23:15 WARNING kiro_crew.sandbox: userns probe failed (permanent)");
+if (cmd === "list") process.exit(0);
+if (cmd === "info") { if (!st) process.exit(1); console.log(JSON.stringify({ name: "grey-matter", enabled: st.enabled })); process.exit(0); }
+if (cmd === "uninstall") { fs.rmSync(dest, { recursive: true, force: true }); save(null); process.exit(0); }
+if (cmd === "install") {
+  if (process.env.TEST_KC_OWNER) { noise(); console.log("❌ gateway refused: The gateway could not verify this process as the local owner."); process.exit(1); }
+  if (st) { console.log("❌ gateway refused: app 'grey-matter' is already installed"); process.exit(1); }
+  fs.cpSync(arg, dest, { recursive: true }); fs.writeFileSync(path.join(dest, "installed.json"), "{}"); save({ enabled: false }); process.exit(0);
+}
+if (cmd === "enable") {
+  if (process.env.TEST_KC_POLICY) { noise(); console.log("❌ gateway refused: blocked by execution policy: third-party app execution is disabled"); process.exit(1); }
+  save({ enabled: true }); process.exit(0);
+}
+process.exit(2);
 `);
   chmodSync(join(bin, "kirocrew"), 0o755);
-  const crew = join(sb.home, ".kiro", "crew");
-  mkdirSync(crew, { recursive: true });
-  return { env: { ...sb.env, PATH: bin + delimiter + sb.env.PATH, KIROCREW_HOME: crew }, calls: () => readFileSync(log, "utf8").trim().split("\n") };
+  const calls = () => existsSync(log) ? readFileSync(log, "utf8").trim().split("\n").filter((c) => c !== "app list") : [];
+  const reset = () => rmSync(log, { force: true });
+  return { env: { ...sb.env, PATH: bin + delimiter + sb.env.PATH, KIROCREW_HOME: crew }, calls, reset, dest: join(crew, "apps", "grey-matter") };
 }
+const verbs = (calls) => calls.map((c) => c.split(" ")[1]);
+const posixFake = process.platform === "win32" ? "the fake kirocrew CLI is a shebang script" : false;
 
-test("kirocrew: default deploy installs and enables the app; a rerun reinstalls it", { skip: process.platform === "win32" }, () => {
+test("kirocrew: first deploy installs and enables; an unchanged rerun does nothing", { skip: posixFake }, () => {
   const sb = homeSandbox({ harnesses: ["kiro"] });
   try {
     const kc = fakeKirocrew(sb);
     let r = runWithEnv(["--no-agy"], kc.env);
     assert.equal(r.status, 0, r.stdout);
     assert.match(r.stdout, /installed and enabled app grey-matter/);
-    assert.deepEqual(kc.calls().filter((c) => !c.endsWith("list")).map((c) => c.split(" ")[1]), ["info", "install", "enable"]);
+    assert.deepEqual(verbs(kc.calls()), ["info", "install", "enable"]);
+    kc.reset();
     r = runWithEnv(["--no-agy"], kc.env);
-    assert.match(r.stdout, /reinstalled and enabled/);
-    assert.ok(kc.calls().some((c) => c === "app uninstall grey-matter"));
+    assert.match(r.stdout, /app grey-matter is up to date and enabled/);
+    assert.deepEqual(verbs(kc.calls()), ["info"]);
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
-test("kirocrew: a refused install warns with the manual command and does not fail the deploy", { skip: process.platform === "win32" }, () => {
+test("kirocrew: changed skills are reinstalled; an unchanged disabled app is only enabled", { skip: posixFake }, () => {
   const sb = homeSandbox({ harnesses: ["kiro"] });
   try {
     const kc = fakeKirocrew(sb);
-    const r = runWithEnv(["--no-agy"], { ...kc.env, TEST_KC_REFUSE: "1" });
-    assert.equal(r.status, 0, r.stdout);
-    assert.match(r.stdout, /warning: kirocrew app install did not finish \(gateway refused/);
-    assert.match(r.stdout, /kirocrew app install .*kirocrew-app && kirocrew app enable grey-matter/);
-    assert.ok(!kc.calls().some((c) => c.startsWith("app enable")), "no enable after a refused install");
+    assert.equal(runWithEnv(["--no-agy"], kc.env).status, 0);
+    writeFileSync(join(kc.dest, "skills", "orient", "SKILL.md"), "stale\n");
+    kc.reset();
+    let r = runWithEnv(["--no-agy"], kc.env);
+    assert.match(r.stdout, /reinstalled and enabled app grey-matter/);
+    assert.deepEqual(verbs(kc.calls()), ["info", "uninstall", "install", "enable"]);
+    writeFileSync(join(sb.home, "kc-state.json"), JSON.stringify({ enabled: false }));
+    kc.reset();
+    r = runWithEnv(["--no-agy"], kc.env);
+    assert.match(r.stdout, /  enabled app grey-matter/);
+    assert.deepEqual(verbs(kc.calls()), ["info", "enable"]);
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
-test("kirocrew: --no-kirocrew skips the app even when ~/.kiro/crew exists", { skip: process.platform === "win32" }, () => {
+test("kirocrew: an owner refusal prints the remaining steps, without gateway noise, and passes", { skip: posixFake }, () => {
+  const sb = homeSandbox({ harnesses: ["kiro"] });
+  try {
+    const kc = fakeKirocrew(sb);
+    const r = runWithEnv(["--no-agy"], { ...kc.env, TEST_KC_OWNER: "1" });
+    assert.equal(r.status, 0, r.stdout);
+    assert.match(r.stdout, /warning: kirocrew app install did not finish \(❌ gateway refused: The gateway could not verify/);
+    assert.doesNotMatch(r.stdout, /userns|Ignoring/);
+    assert.doesNotMatch(r.stdout, /Third-party apps/);
+    assert.match(r.stdout, /kirocrew app install \S*kirocrew-app && kirocrew app enable grey-matter/);
+    assert.ok(!verbs(kc.calls()).includes("enable"), "no enable after a refused install");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("kirocrew: a policy refusal on enable names the trust setting and only the enable step", { skip: posixFake }, () => {
+  const sb = homeSandbox({ harnesses: ["kiro"] });
+  try {
+    const kc = fakeKirocrew(sb);
+    const r = runWithEnv(["--no-agy"], { ...kc.env, TEST_KC_POLICY: "1" });
+    assert.equal(r.status, 0, r.stdout);
+    assert.match(r.stdout, /warning: kirocrew app enable did not finish \(❌ gateway refused: blocked by execution policy/);
+    assert.match(r.stdout, /Settings -> Security -> Third-party apps, add "grey-matter"/);
+    assert.match(r.stdout, /\n    kirocrew app enable grey-matter\n/);
+    assert.doesNotMatch(r.stdout, /kirocrew app install \S*kirocrew-app &&/);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("kirocrew: --no-kirocrew skips the app even when ~/.kiro/crew exists", { skip: posixFake }, () => {
   const sb = homeSandbox({ harnesses: ["kiro"] });
   try {
     const kc = fakeKirocrew(sb);
     const r = runWithEnv(["--no-agy", "--no-kirocrew"], kc.env);
     assert.equal(r.status, 0, r.stdout);
     assert.doesNotMatch(r.stdout, /kirocrew app/);
-    assert.ok(!existsSync(join(sb.home, "kc-calls.log")));
+    assert.deepEqual(kc.calls(), []);
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });

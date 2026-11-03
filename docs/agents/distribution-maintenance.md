@@ -40,12 +40,20 @@ tkt's marketplace, so add both: `/plugin marketplace add smileynet/tkt`,
 
 Kiro Crew agents load a skill only through a `skill://` entry an enabled app registers; they
 do not scan `~/.kiro/skills`. So `deploy.mjs` builds `dist/kirocrew-app/` (an `app.json` listing
-every skill, plus the same self-contained resources as the agy plugin), then runs
-`kirocrew app install` and `kirocrew app enable` (uninstalling first on a rerun; app data is
+every skill, plus the same self-contained resources as the agy plugin). It then compares the
+build with the installed copy in `~/.kiro/crew/apps/<pack>`: unchanged and enabled does
+nothing, unchanged and disabled only enables, changed uninstalls and reinstalls (app data is
 kept). `node scripts/deploy.mjs kirocrew [build|install] [--out DIR]` runs only this step;
-`--no-kirocrew` skips it. The gateway installs apps only for its verified local owner, so from
-an agent sandbox the install is refused: deploy prints the exact command to run in your own
-terminal and does not fail. The app carries no backend, MCP server or hooks; the Claude push
+`--no-kirocrew` skips it.
+
+Two gateway refusals need the owner, and neither fails the deploy; it prints the steps still
+left, to run in your own terminal:
+
+- **Not the local owner.** The gateway installs apps only for its verified local owner, so an
+  agent sandbox is refused.
+- **Execution policy.** Third-party apps stay disabled until trusted. Once, in the dashboard:
+  Settings -> Security -> Third-party apps, add `grey-matter`. Leave "Trust every third-party
+  app" off; this app ships only skill files. The app carries no backend, MCP server or hooks; the Claude push
 hook has no Kiro Crew equivalent (`kirocrew app import` reports it as unmappable).
 
 ### Self-contained copy-mode installs

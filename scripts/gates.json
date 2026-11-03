@@ -263,7 +263,7 @@
       "stage": "pre-merge",
       "catches": "a review spike launching with broken argv or tool restrictions, accepting incomplete native output, or consuming duplicate cells",
       "scope": ["scripts/spike-model-tier-review-t168", "scripts/fixtures/model-review/t168/"],
-      "run": ["node", "--test", "scripts/spike-model-tier-review-t168.test.mjs"],
+      "run": ["node", "scripts/windows-only.mjs", "scripts/spike-model-tier-review-t168.test.mjs"],
       "timeout_s": 10,
       "measured": { "s": 0.8, "date": "2026-11-03", "host": "win" }
     },
@@ -272,7 +272,7 @@
       "stage": "pre-merge",
       "catches": "research trials that confuse native completion with model identity or award semantic passes without bound manual evidence",
       "scope": ["scripts/spike-model-tier-research-t169", "scripts/grade-model-tier-research-t169", "scripts/fixtures/model-research/t169/"],
-      "run": ["node", "--test", "scripts/spike-model-tier-research-t169.test.mjs"],
+      "run": ["node", "scripts/windows-only.mjs", "scripts/spike-model-tier-research-t169.test.mjs"],
       "timeout_s": 10,
       "measured": { "s": 2.0, "date": "2026-11-03", "host": "win" }
     },
@@ -281,7 +281,7 @@
         "stage": "pre-merge",
         "catches": "text-task trials that execute a different plan from the authorized bytes or accept unbound semantic reviews",
         "scope": ["scripts/spike-model-task-tier-t170", "scripts/t170-review-envelope", "scripts/fixtures/model-tasks/t170/", "docs/agents/research/model-task-tiers-20261103", "docs/agents/research/model-task-tiers-protocol-20261103.md"],
-        "run": ["node", "--test", "scripts/spike-model-task-tier-t170.test.mjs"],
+        "run": ["node", "scripts/windows-only.mjs", "scripts/spike-model-task-tier-t170.test.mjs"],
         "timeout_s": 10,
         "measured": { "s": 2.0, "date": "2026-11-03", "host": "win" }
       },
@@ -290,7 +290,7 @@
         "stage": "pre-merge",
         "catches": "effort trials that execute unapproved cell plans, confuse unknown native effort with requested effort, or accept unbound review evidence",
         "scope": ["scripts/spike-model-effort-t171", "scripts/bind-reviewer-evidence-t171", "scripts/reviewer-evidence-core-t171", "scripts/fixtures/model-effort-t171/", "docs/agents/research/model-effort-t171-protocol.md"],
-        "run": ["node", "--test", "scripts/spike-model-effort-t171.test.mjs", "scripts/bind-reviewer-evidence-t171.test.mjs"],
+        "run": ["node", "scripts/windows-only.mjs", "scripts/spike-model-effort-t171.test.mjs", "scripts/bind-reviewer-evidence-t171.test.mjs"],
         "timeout_s": 10,
         "measured": { "s": 2.0, "date": "2026-11-03", "host": "win" }
       },
