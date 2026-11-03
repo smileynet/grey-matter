@@ -71,7 +71,7 @@ not report actual identity. The first caller cells were initially held as
 five cells per provider. All twelve Codex/Kiro receipts record
 `actualModel=null`, `identityUnreported=true`, and `profileComparable=false`.
 
-| Harness | Requested profile | Task | Native result | Actual identity | Time | Reported usage or cost |
+| Harness | Requested profile | Task | Task review outcome | Actual identity | Time | Reported usage or cost |
 |---|---|---|---|---|---:|---|
 | Claude | Haiku 5.5 | Caller discovery | Unscorable: reviewer provenance unverified | Haiku 5.5 | 8.139 s | $0.001527 list estimate |
 | Claude | Native default | Caller discovery | Unscorable: reviewer provenance unverified | Opus 5.5 | 6.562 s | $0.036134 list estimate |
