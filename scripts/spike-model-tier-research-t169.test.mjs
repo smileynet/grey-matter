@@ -3,12 +3,19 @@ import { spawnSync } from "node:child_process";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { buildArgv, buildPrompt, classify, parseClaude, parseCodex, parseKiro, readPacket, LAUNCHERS, BLOCKED_GOOGLE_CELLS } from "./spike-model-tier-research-t169.mjs";
-import { analyzeResponse, finalizeReview } from "./grade-model-tier-research-t169.mjs";
+import { analyzeResponse as analyzeWithKey, finalizeReview as finalizeWithKey } from "./grade-model-tier-research-t169.mjs";
 import { createHash } from "node:crypto";
 
 const controller = fileURLToPath(new URL("./spike-model-tier-research-t169.mjs", import.meta.url));
 const cwd = "D:\\Temp\\gm-t169-test-empty";
 const source = readPacket();
+// Tests supply public synthetic expectations so a fresh checkout needs no private study key.
+const testKey = {
+  callers: ["src/pages/history.js", "src/jobs/retention.js", "src/plugins/archive.mjs"],
+  citedAnswer: { source: "docs/policy.md", heading: "Record retention" },
+};
+const analyzeResponse = (task, response, blindId) => analyzeWithKey(task, response, blindId, testKey);
+const finalizeReview = (candidate, review, response) => finalizeWithKey(candidate, review, response, source, testKey);
 
 test("prompts include the same source contents and no private grader key", () => {
   for (const task of ["callers", "module-summary", "cited-answer"]) {

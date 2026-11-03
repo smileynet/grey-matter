@@ -1,0 +1,90 @@
+{
+  "observedAt": "2026-11-03T09:09:17.800Z",
+  "baseline": "0604d8dc4b1159c57c8d11574abc8f8cd6735199",
+  "candidate": "7758f661eedec2f9afaa0c1b8e0cafb58052c0ed",
+  "source": [
+    {
+      "path": "scripts/gate.mjs",
+      "baselineBlob": "47a340758d98810187df211d6d764dcd11932d78",
+      "candidateBlob": "47a340758d98810187df211d6d764dcd11932d78"
+    },
+    {
+      "path": "scripts/gate.test.mjs",
+      "baselineBlob": "daf3658adbbe90b9cacbb20690cf95c1fe63205e",
+      "candidateBlob": "daf3658adbbe90b9cacbb20690cf95c1fe63205e"
+    },
+    {
+      "path": "scripts/test-git-env.mjs",
+      "baselineBlob": "5993182a7b53d47b9127719559d60d3fe10850c1",
+      "candidateBlob": "5993182a7b53d47b9127719559d60d3fe10850c1"
+    },
+    {
+      "path": "scripts/test-git.config",
+      "baselineBlob": "5b8cf42e25fd6c67c95afbc5d1174eb137ff7b12",
+      "candidateBlob": "5b8cf42e25fd6c67c95afbc5d1174eb137ff7b12"
+    },
+    {
+      "path": "scripts/repository-artifact-hygiene.test.mjs",
+      "baselineBlob": "45d02dc0b51450735c06bf2e05b1d0c594e35995",
+      "candidateBlob": "45d02dc0b51450735c06bf2e05b1d0c594e35995"
+    },
+    {
+      "path": "scripts/inspect-footprint.test.mjs",
+      "baselineBlob": "a9ed21c9fd2c9a16f1d3dfd40c4bb0ce1e846693",
+      "candidateBlob": "a9ed21c9fd2c9a16f1d3dfd40c4bb0ce1e846693"
+    },
+    {
+      "path": "skills/meta/repository-artifact-hygiene/scripts/inspect-artifacts.mjs",
+      "baselineBlob": "9c9593793731a2435889cc1163b42c0cb7746da0",
+      "candidateBlob": "9c9593793731a2435889cc1163b42c0cb7746da0"
+    },
+    {
+      "path": "skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs",
+      "baselineBlob": "7d38e91af649a937d9c7533babfa74b45f07a06e",
+      "candidateBlob": "7d38e91af649a937d9c7533babfa74b45f07a06e"
+    },
+    {
+      "path": "scripts/verify-tkt-usage.mjs",
+      "baselineBlob": "9bfe904b5b4e6ae7e6e6f7dcf10e0f9f94c63a4d",
+      "candidateBlob": "9bfe904b5b4e6ae7e6e6f7dcf10e0f9f94c63a4d"
+    },
+    {
+      "path": "scripts/verify-tkt-usage.test.mjs",
+      "baselineBlob": "2de2886e0f0360d78e8ea8c9812ce6df1731dd1e",
+      "candidateBlob": "2de2886e0f0360d78e8ea8c9812ce6df1731dd1e"
+    }
+  ],
+  "policy": "docs/agents/local-gates.md: SKIP only for a failure shown already on origin/main; name check and reason in closure evidence.",
+  "baselineCommand": "node scripts/gate.mjs pre-merge --base HEAD --include gate-runner --include artifact-hygiene --include tkt-usage-compatibility",
+  "baselineCheckout": ".scratch/orchestration-gate-baseline",
+  "checks": [
+    {
+      "id": "gate-runner",
+      "outcome": "timeout",
+      "seconds": 122.2,
+      "limitSeconds": 120,
+      "skipSupported": true
+    },
+    {
+      "id": "artifact-hygiene",
+      "outcome": "timeout",
+      "seconds": 122.6,
+      "limitSeconds": 120,
+      "skipSupported": true
+    },
+    {
+      "id": "tkt-usage-compatibility",
+      "outcome": "pass",
+      "seconds": 25.1,
+      "limitSeconds": 30,
+      "skipSupported": false
+    }
+  ],
+  "completion": {
+    "gateReported": "2 check(s) did not pass",
+    "outerShellExit": 0,
+    "nativeExit": null,
+    "limitation": "PowerShell location wrapper did not preserve native exit. Classification uses completed per-check output; outer exit 0 is not a pass. Future wrappers must explicitly preserve LASTEXITCODE."
+  },
+  "scopeLimit": "Two pre-existing timeouts only. No override for tkt compatibility, study tests, or later failures. Skipped assertions remain unverified under current host timing."
+}

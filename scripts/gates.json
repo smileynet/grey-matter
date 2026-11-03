@@ -268,6 +268,15 @@
       "measured": { "s": 0.8, "date": "2026-11-03", "host": "win" }
     },
     {
+      "id": "model-research-fixtures",
+      "stage": "pre-merge",
+      "catches": "research trials that confuse native completion with model identity or award semantic passes without bound manual evidence",
+      "scope": ["scripts/spike-model-tier-research-t169", "scripts/grade-model-tier-research-t169", "scripts/fixtures/model-research/t169/"],
+      "run": ["node", "--test", "scripts/spike-model-tier-research-t169.test.mjs"],
+      "timeout_s": 10,
+      "measured": { "s": 2.0, "date": "2026-11-03", "host": "win" }
+    },
+    {
       "id": "deployer",
       "stage": "pre-release",
       "catches": "deploy.mjs writing outside the skill roots it owns, duplicating roots, or refreshing a plugin wrongly",

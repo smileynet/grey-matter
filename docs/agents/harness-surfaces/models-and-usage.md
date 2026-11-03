@@ -65,7 +65,7 @@ grey-matter's working defaults, until the model-tier spikes (tickets 167-172) re
 | Orchestration, planning, hard diagnosis, architecture | Strongest default (Opus 5.5, `gpt-6.1-sol`/Astra, Kiro `auto`, Argon) | Judgement errors here cost the most |
 | Implementation of a well-specified ticket | Keep the configured provider default; validate any cheaper profile with independent checks | The dated #167 trial below separates correct artifacts from unverified agent actions and harness failures; it does not justify changing defaults |
 | Review and spec check | Keep the configured provider default, in a separate context | The #168 trial found defects but did not qualify a cheaper profile across all four strict-output cases |
-| Read-only research and exploration fan-out | Fast tier | High volume, low risk; ticket 169 |
+| Read-only research and exploration fan-out | Keep the configured provider default | The #169 trial leaves model identity and five review outcomes unverified; no cheaper model is qualified for adoption |
 | Doc edits, triage, classification | Fast or mid tier | Ticket 170 |
 
 Rules that hold now:
@@ -108,6 +108,26 @@ but the earlier unintended preflight turn's unknown usage prevents verification
 of the aggregate budget. Other missing cost and identity fields remain unknown.
 Human review may use the extra prose as advisory input, with unsupported findings
 checked independently; it does not satisfy the strict automation bar.
+
+### Research evidence (2026-11-03)
+
+The [research trial](../research/model-tier-research-20261102.md) captured 18
+one-shot responses on caller discovery, a policy summary and a cited answer.
+Thirteen grade receipts were valid: 11 passed and two failed. Five results remain
+unscorable: three review receipts failed validation and two earlier passing
+receipts lack retained reviewer dispatch evidence. Those gaps are not model
+failures, and the original passing receipts do not count as verified passes.
+For the other 16 reviewers, task identity evidence is producer-transcribed from
+tool messages, rather than exported platform logs.
+
+Keep current defaults. The requested cheap Codex profile passed all three small
+tasks, but its served identity was absent, so this is a requested-profile
+observation rather than a qualified model recommendation. Kiro also omitted
+served identity. The two scored failures were a Haiku summary over the word cap
+with an unsupported claim and a requested cheap Kiro answer missing the required
+citation heading. Claude reported Haiku 5.5 and Opus 5.5; its six native list-price
+estimates total about $0.108260. Codex reported tokens without cost, while Kiro
+reported context-use metadata without tokens or credits. No setting changed.
 
 ## Effort
 
