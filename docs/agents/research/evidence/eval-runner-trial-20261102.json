@@ -72,7 +72,7 @@
       "tests": "1 passed"
     }
   ],
-  "selectedRunnerEndToEnd": [
+  "earlierRunnerRunsBeforeSourceBinding": [
     {
       "path": ".scratch/t174/runner-final/claude-t3/result.json",
       "bytes": 4651,
@@ -100,6 +100,62 @@
       "cost": {"amountUsd": 0.0950106, "basis": "Claude CLI list estimate"}
     }
   ],
+  "reviewedCommitProof": {
+    "runnerSourceCommit": "1fc45626e396115d7379715b8a56a23b79f621ad",
+    "runnerSourcePath": "scripts/spike-model-eval.mjs",
+    "runnerSourceSha256": "d1e567abd677cc67161024d21245e050e6c928aa840773a289c1c49dd8c3546f",
+    "receiptSchemaVersion": 1,
+    "sourceSha256MatchedCurrentCommittedFileAtRun": true,
+    "runs": [
+      {
+        "path": ".scratch/t174/runner-reviewed/claude-t1/result.json",
+        "bytes": 4937,
+        "sha256": "abf027ae1a6fcf68278eaac26ac06fb6712335f30db9a30cb47431d99e6ae608",
+        "adapter": "Claude Code 2.1.316",
+        "fixture": "t1",
+        "observedModel": "claude-sonnet-5-5",
+        "grade": "pass",
+        "tests": {"total": 2, "passed": 2},
+        "cost": {"amountUsd": 0.0988316, "basis": "CLI list estimate"},
+        "raw": [
+          {"path": ".scratch/t174/runner-reviewed/claude-t1/agent.stdout.json", "bytes": 2425, "sha256": "44b8337181379d0ff0fcf8f0d94a627c3496f94f0733c7b893e5903ffdb965f5"},
+          {"path": ".scratch/t174/runner-reviewed/claude-t1/agent.stderr.txt", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+        ]
+      },
+      {
+        "path": ".scratch/t174/runner-reviewed/claude-t3/result.json",
+        "bytes": 4871,
+        "sha256": "f60688cae162bad8fa138f88e922d5f982067ca845239587b999145bb44ac308",
+        "adapter": "Claude Code 2.1.316",
+        "fixture": "t3",
+        "observedModel": "claude-sonnet-5-5",
+        "grade": "pass",
+        "tests": {"total": 2, "passed": 2},
+        "cost": {"amountUsd": 0.0975996, "basis": "CLI list estimate"},
+        "raw": [
+          {"path": ".scratch/t174/runner-reviewed/claude-t3/agent.stdout.json", "bytes": 2463, "sha256": "3b3253a07c4f452bf73086e02c56eea0dad76914028dad8e868dd4d4135ffbae"},
+          {"path": ".scratch/t174/runner-reviewed/claude-t3/agent.stderr.txt", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+        ]
+      },
+      {
+        "path": ".scratch/t174/runner-reviewed/codex-t1/result.json",
+        "bytes": 6705,
+        "sha256": "89421cb5b83274e947eb1cd249a4fa488461665fd193ba04b7fd2f27a892a64d",
+        "adapter": "Codex CLI 0.166.0",
+        "fixture": "t1",
+        "requestedModel": "gpt-6.1-sol",
+        "observedModel": null,
+        "grade": "pass",
+        "tests": {"total": 3, "passed": 3},
+        "usage": {"inputTokens": 67384, "cachedInputTokens": 49408, "outputTokens": 544},
+        "actualDollarCost": null,
+        "raw": [
+          {"path": ".scratch/t174/runner-reviewed/codex-t1/agent.stdout.jsonl", "bytes": 6473, "sha256": "7212f855f8836851fcf086d0a978a34c926afa470b905f371be624c494a3ffbb"},
+          {"path": ".scratch/t174/runner-reviewed/codex-t1/agent.stderr.txt", "bytes": 485, "sha256": "78b0461793d41f283366299b660fc41ea0ef5946bf35f99c453289ca69948c81"}
+        ]
+      }
+    ]
+  },
   "excludedAttempts": [
     {
       "path": ".scratch/t174/native-runs/codex-t1.stdout.jsonl",
