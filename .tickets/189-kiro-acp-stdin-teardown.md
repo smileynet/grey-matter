@@ -5,7 +5,7 @@ status: in_progress
 blocked_by: ["162"]
 validation_criteria:
   - "The EOF teardown failure is reproduced or marked obsolete, separating successful prompt/cancel/load responses from process settlement."
-  - "A supported shutdown sequence, fixed version or bounded workaround is verified without discarding sessions or treating a live descendant as settled."
+  - "The user-approved workflow handling documents separate task/teardown acceptance, bounded owned-process observation, no duplicate retry and preserved sessions; unresolved native repair is deferred to #201."
   - "Owned processes, sessions and fixtures have recorded disposition; required checks pass and the driver guidance states the remaining limit."
 tags: ["stream:orchestration", "kind:bug"]
 ---
@@ -57,8 +57,32 @@ changes or a newly supported shutdown method is identified. The ticket remains
 in progress with an explicit upstream/runtime blocker, not resolved. Independent
 GUI/auth/runner/model work continues without treating this as a blanket blocker.
 
-## Remaining acceptance criteria
+## User-approved closure scope (2026-11-03)
+
+The user requested closure with the limitation and required workflow workaround
+documented, and a low-priority follow-up after other work. This explicitly replaces
+the earlier unmet native-remedy criterion with acceptance of bounded workflow
+handling; it does not establish a native fix. The historical blocked qualification
+above remains evidence of what was not solved.
+
+The [current Kiro workflow procedure](../skills/engineering/orchestrate/references/harness-kiro.md#v3-acp-shutdown-workaround)
+separates successful task acceptance from teardown infrastructure failure,
+requires bounded independent observation of owned descendants, prohibits automatic
+duplicate retries based on this signature, and preserves durable sessions.
+Unattended graceful teardown remains unqualified. Other exit-1 failures are not
+covered by this classification.
+
+[#201](201-kiro-acp-shutdown-followup.md) is low-priority backlog work, intentionally
+deferred until higher-priority work is finished. Parent integration retains the
+four owned model-bearing sessions and indexed raw files, plus private wrong-tree
+review provenance, for #201 until qualifying comparison and explicit disposition.
+No sessions, evidence or unrelated artifacts are deleted by this closure. The
+original #162 session remains outside cleanup scope. The
+[2026-11-03 release check](../docs/agents/research/evidence/kiro-acp-shutdown-release-check-20261103.json)
+found no qualifying public candidate; no new native/model probe ran.
+
+## Acceptance criteria
 
 - [ ] The EOF teardown failure is reproduced or marked obsolete, separating successful prompt/cancel/load responses from process settlement.
-- [ ] A supported shutdown sequence, fixed version or bounded workaround is verified without discarding sessions or treating a live descendant as settled.
+- [ ] The user-approved workflow handling documents separate task/teardown acceptance, bounded owned-process observation, no duplicate retry and preserved sessions; unresolved native repair is deferred to #201.
 - [ ] Owned processes, sessions and fixtures have recorded disposition; required checks pass and the driver guidance states the remaining limit.

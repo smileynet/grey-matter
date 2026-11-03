@@ -44,3 +44,34 @@ P4 fallback: require a corrected summary status; independently verify any SHA
 before acceptance. P5 fallback: fresh worker with ANSWER. P6 fallback: sequential
 top-level foreground processes. P13 fallback: enforced deny rules or hold
 destructive tickets for the human, rather than trusting the worker's prose.
+
+## V3 ACP shutdown workaround
+
+Apply this procedure to model-bearing V3 ACP workers. On CLI 2.37.1 / KAS
+0.66.70, successful turns and cancelled permission waits were followed by exit 1
+and `the v3 engine did not exit within 5 seconds after ACP stdin closed`, even
+after successful `session/close`. Owned descendants were absent at final polling
+in the recorded runs; reliable graceful shutdown remains unqualified. See the
+[diagnosis and raw evidence](../../../../docs/agents/research/kiro-acp-shutdown-20261102.md).
+
+1. Record the native terminal response for the turn. Accept task results only
+   after independent artifact/quality checks and the required critic review.
+   A successful task response alone does not establish process settlement.
+2. Record teardown separately. Classify the exact error above as the known
+   teardown infrastructure failure only when the captured output identifies it.
+   Other exit-1 failures still require diagnosis. Do not automatically rerun a
+   successful task because its process ended with this shutdown signature:
+   doing so can duplicate edits and spend.
+3. Record owned PID/parent-PID descendants from launch and independently observe
+   their exit within the controller's recorded bounded cleanup deadline. Never
+   label a live or unobserved descendant settled. If any remain, report cleanup
+   unresolved, retain the launch identity and evidence, and use only the
+   project's authorized owned-process cleanup route. Do not kill unrelated trees.
+4. Preserve durable session/checkpoint state. `session/cancel` stops a turn;
+   `session/close` is not proven to shut down the engine. `session/delete` destroys
+   state and must not be used as a shutdown workaround.
+5. Keep unattended Kiro ACP teardown unqualified and expose cleanup status beside
+   task status. Other accepted work may continue. This is workflow handling of a
+   known limitation, not a native shutdown fix. Deeper investigation is deferred
+   to [the follow-up ticket](../../../../.tickets/201-kiro-acp-shutdown-followup.md)
+   until higher-priority work is finished.
