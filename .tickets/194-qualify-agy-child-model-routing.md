@@ -1,7 +1,7 @@
 ---
 id: "194"
 title: "Qualify agy child model routing before relying on per-role tiers"
-status: in_progress
+status: done
 blocked_by: ["157"]
 validation_criteria:
   - "Record request controls and independently interpretable native model evidence, or explicitly leave served identity unverified."
@@ -21,5 +21,13 @@ Use a disposable local fixture and session-only settings. No production work sho
 
 ## Acceptance criteria
 
-- [ ] Record exact requests, native observations and the evidence contract (or its absence).
-- [ ] Publish the supported setup or explicit limitation, refresh the comparison and dispose of retained probe histories.
+- [x] Record exact requests, native observations and the evidence contract (or its absence).
+- [x] Publish the supported setup or explicit limitation, refresh the comparison and dispose of retained probe histories.
+
+## Resolution (2026-11-03)
+
+done: qualified request controls and explicit served-model evidence limitation, refreshed comparison, disposed native probe histories with documented runtime-only retention
+
+### Verification
+1. ✓ Record request controls and independently interpretable native model evidence, or explicitly leave served identity unverified. — "Documented requestedfrontmatter/subagentandworkflowinterfaces; primaryhook/statuslinefields lackverifiedchildserved-modelscope. Prior157request/opaque-labelcontrols preserved, servedidentityexplicitlyunverified. Independentcritic0.92acceptedexactd3d9andmetadata05b5656 plusparent157comparisonpatch."
+2. ✓ Document a supported per-role setup or a bounded limitation; update the orchestration comparison. — "Parentupdatedshared157comparisonanddated194qualification, no cost/capabilitypinclaims. Cleared12historysets6724590Bnative data recycled/verifiedabsent; only91648B runtimehardlink retainedunchangedunderhost-release lifecycle, no bypass ofOSrefusal. Ownscratch23693Brecycled. Parent syntax-fixtures/doc-links/home-path passed after durablecitationnormalization; scoped diffchecked."
