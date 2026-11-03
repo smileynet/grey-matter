@@ -8,6 +8,7 @@
 <style>
 :root{color-scheme:dark;--bg:#0a1120;--panel:#111b2f;--panel2:#162540;--line:#27395a;--text:#e8eef9;--muted:#a3b3cf;--blue:#6aaeff;--blue2:#3b82e0;--cyan:#56d4f0;--ask:#ffc857;--bad:#ff8b8b;--ok:#7fe0b0;--r:14px}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:0 clamp(16px,4vw,40px) 64px}
 a{color:var(--blue)}a:hover{color:var(--cyan)}
@@ -17,7 +18,7 @@ header{padding:28px 0 8px}
 .eyebrow{color:var(--muted);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 h1{margin:4px 0 4px;font-size:clamp(26px,4vw,36px);line-height:1.2;letter-spacing:-.02em}
 .updated{color:var(--muted);font-size:14px;margin:0}
-[role=tablist]{display:flex;gap:6px;margin:22px 0 22px;border-bottom:1px solid var(--line)}
+[role=tablist]{display:flex;flex-wrap:wrap;gap:6px;margin:22px 0 22px;border-bottom:1px solid var(--line)}
 [role=tab]{font:inherit;color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:10px 16px;min-height:44px;cursor:pointer}
 [role=tab][aria-selected=true]{color:var(--text);border-bottom-color:var(--blue)}
 h2{font-size:13px;margin:0 0 10px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;font-weight:600}
@@ -83,6 +84,16 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 @media (max-width:560px){.card{padding:16px}details.row .when{min-width:0}}
 #ticket-flow{margin-top:0}.flow-options>summary,.flow-readable>summary{cursor:pointer;min-height:44px;padding:8px 0}.flow-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:8px 0}.flow-controls label{display:flex;align-items:center;gap:8px;min-height:44px;max-width:100%;min-width:0}.flow-controls select{font:inherit;padding:10px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;min-width:0;max-width:100%}.flow-counts,.flow-notice{font-size:14px;color:var(--muted)}.flow-notice{border-left:3px solid var(--blue);padding:10px}.flow-scroll{max-height:820px;overflow:auto;border:1px solid var(--line);padding:16px;margin:16px 0}.flow-canvas{position:relative;width:max-content;min-width:100%;padding:12px 24px}.flow-layers{display:flex;flex-direction:column;gap:42px;position:relative;z-index:1}.flow-layer{display:grid;grid-template-columns:repeat(3,240px);gap:16px}.flow-layer h3{grid-column:1/-1;font-size:14px;margin:0;color:var(--muted)}.flow-node{font:14px/1.45 system-ui;text-align:left;white-space:normal;overflow-wrap:anywhere;background:var(--panel);color:var(--text);border:2px solid var(--line);border-radius:8px;padding:12px;min-height:110px;cursor:pointer}.flow-node strong,.flow-node span,.flow-node small{display:block}.flow-node span,.flow-node small{margin-top:7px}.flow-node small{color:var(--muted);font-size:12px}.flow-node[data-state=ready]{border-color:var(--ok)}.flow-node[data-state=in_progress]{border-color:var(--cyan)}.flow-node[data-state=backlog]{border-style:dashed}.flow-node[data-state=blocked]{border-color:var(--bad)}.flow-node[data-related=unrelated]{opacity:.55}.flow-node[data-related=before],.flow-node[data-related=after]{border-color:var(--blue)}.flow-node[aria-pressed=true]{outline:3px solid var(--ask);outline-offset:3px}.flow-links{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:visible}.flow-links path{fill:none;stroke:var(--muted);stroke-width:2}.flow-links .flow-arrow{fill:var(--muted);stroke:none}.flow-links path[data-satisfied=true]{stroke-dasharray:5 5}.flow-links path[data-related=true]{stroke:var(--blue);stroke-width:3}.flow-detail{border-left:3px solid var(--blue);padding:12px 16px;background:var(--panel);margin:16px 0}.flow-detail h3{margin:0 0 8px}.flow-detail p{margin:8px 0}.flow-readable li{margin:8px 0}@media(max-width:560px){.flow-scroll{max-height:620px;padding:10px}.flow-canvas{padding:10px 16px}}
 .flow-node[data-gate=decision],.flow-node[data-gate=evidence]{border-color:var(--ask)}
+.decision-card{margin:0 0 18px;min-width:0}
+.decision-card legend{font-size:20px;font-weight:650;padding:0 8px;max-width:100%;overflow-wrap:anywhere}
+.decision-option{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;cursor:pointer;min-height:44px}
+.decision-option:has(input:checked){border-color:var(--blue);background:var(--panel2)}
+.decision-option input{flex:0 0 auto;margin-top:5px;accent-color:var(--blue);width:18px;height:18px}
+.decision-option small{display:block;color:var(--muted)}
+.decision-card textarea,.decision-export textarea{display:block;width:100%;max-width:100%;font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:6px;resize:vertical}
+.decision-option span{min-width:0;overflow-wrap:anywhere}
+.decision-export button{font:inherit;color:var(--bg);background:var(--blue);border:0;border-radius:9px;padding:12px 18px;min-height:44px;cursor:pointer}
+.decision-export button:disabled{opacity:.65;cursor:wait}
 </style>
 </head>
 <body>
@@ -94,6 +105,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   <div role="tablist" aria-label="Dashboard views">
     <button role="tab" id="tab-overview" aria-controls="overview" aria-selected="true">Overview</button>
     <button role="tab" id="tab-history" aria-controls="history" aria-selected="false" tabindex="-1">All entries <span id="history-count"></span></button>
+    <button role="tab" id="tab-decisions" aria-controls="decisions" aria-selected="false" tabindex="-1">Decisions <span id="decisions-count"></span></button>
     <button role="tab" id="tab-plan" aria-controls="plan" aria-selected="false" tabindex="-1">Plan <span id="plan-count"></span></button>
   </div>
 </header>
@@ -116,6 +128,18 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   <div class="tools" id="streams" aria-label="Filter by area"></div>
   <p class="count" id="count" aria-live="polite"></p>
   <div id="list"></div>
+</main>
+
+<main id="decisions" role="tabpanel" aria-labelledby="tab-decisions" hidden>
+  <h2>Decisions</h2>
+  <p>Recommendations are draft selections. Change a choice or add another answer, then copy your answers into chat. Decisions are recorded only after you submit them in chat.</p>
+  <div id="decision-list"></div>
+  <div id="decision-export" class="card decision-export" hidden>
+    <button type="button" id="copy-decisions">Copy answers for chat</button>
+    <p id="decision-copy-status" role="status" aria-live="polite">Copying prepares a message for you to paste into chat.</p>
+    <label for="decision-reply" id="decision-reply-label" hidden>Message to paste into chat</label>
+    <textarea id="decision-reply" rows="10" readonly hidden></textarea>
+  </div>
 </main>
 
 <main id="plan" role="tabpanel" aria-labelledby="tab-plan" hidden>
@@ -277,7 +301,25 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     return !q || q.split(/\s+/).every(function (w) { return hay.indexOf(w) >= 0; });
   }
 
-  var api = { sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref, planGroups: planGroups, planLanes: planLanes, ticketMatches: ticketMatches, ticketFlow: ticketFlow, flowState: flowState };
+  function decisionReply(project, decisions, answers) {
+    var lines = ["Decisions for " + project];
+    decisions.filter(function (d) { return d.status !== "answered"; }).forEach(function (d, i) {
+      var answer = answers[d.id], option = d.options.filter(function (o) { return o.id === answer.choice; })[0];
+      lines.push("", (i + 1) + ". " + d.question);
+      if (d.tickets && d.tickets.length) lines.push("Tickets: " + d.tickets.join(", "));
+      lines.push("Choice: " + option.label + (option.id === d.recommended ? " (recommended)" : ""));
+      if (answer.notes.trim()) lines.push("Notes: " + answer.notes.trim());
+    });
+    return lines.join("\n");
+  }
+  function copyDecisionText(text, clipboard) {
+    return Promise.resolve().then(function () {
+      if (!clipboard || !clipboard.writeText) return false;
+      return clipboard.writeText(text).then(function () { return true; });
+    }).catch(function () { return false; });
+  }
+
+  var api = { decisionReply: decisionReply, copyDecisionText: copyDecisionText, sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref, planGroups: planGroups, planLanes: planLanes, ticketMatches: ticketMatches, ticketFlow: ticketFlow, flowState: flowState };
   if (typeof window !== "undefined") window.GMDashboard = api;
   if (typeof document === "undefined" || !document.getElementById("gm-entries")) return;
 
@@ -376,7 +418,9 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   function renderAsks() {
     var box = $("needs"); box.textContent = "";
     var asks = openAsks(entries);
-    if (!asks.length) { box.appendChild(el("div", { class: "none", text: "Nothing needs you right now." })); return; }
+    var pending = (cfg.decisions || []).filter(function (d) { return d.status === "open"; });
+    pending.forEach(function (d) { box.appendChild(el("p", {}, [el("a", { href: "#decision-" + d.id, text: d.question })])); });
+    if (!asks.length && !pending.length) { box.appendChild(el("div", { class: "none", text: "Nothing needs you right now." })); return; }
     var wrap = el("div", { class: "asks" });
     asks.forEach(function (x) {
       var a = x.ask, c = el("div", { class: "ask" });
@@ -401,6 +445,51 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       wrap.appendChild(c);
     });
     box.appendChild(wrap);
+  }
+
+  function renderDecisions() {
+    var decisions = (cfg.decisions || []).filter(function (d) { return d.status !== "answered"; });
+    var root = $("decision-list"), controls = Object.create(null);
+    var answered = (cfg.decisions || []).filter(function (d) { return d.status === "answered"; });
+    if (answered.length) {
+      var history = el("details", { class: "card" }, [el("summary", { text: "Answered decisions (" + answered.length + ")" })]);
+      answered.forEach(function (d) { history.appendChild(el("h3", { text: d.question })); history.appendChild(el("p", { text: d.answer })); });
+      root.appendChild(history);
+    }
+    $("decisions-count").textContent = decisions.length ? "(" + decisions.length + ")" : "";
+    if (!decisions.length) { root.appendChild(el("p", { class: "none", text: "No decisions are waiting for your input." })); return; }
+    decisions.forEach(function (d) {
+      var card = el("fieldset", { class: "card decision-card", id: "decision-" + d.id }, [el("legend", { text: d.question })]);
+      if (d.context) card.appendChild(el("p", { text: d.context }));
+      if (d.reason) card.appendChild(el("p", { class: "rec", text: "Recommendation: " + d.reason }));
+      if (d.tickets && d.tickets.length) card.appendChild(ticketRefs(d.deferred ? "Deferred work: " : "Related work: ", d.tickets));
+      var radios = [];
+      d.options.forEach(function (o) {
+        var radio = el("input", { type: "radio", name: "decision-" + d.id, id: "decision-" + d.id + "-" + o.id, value: o.id });
+        radio.checked = o.id === d.recommended;
+        var text = el("span", { text: o.label });
+        if (o.id === d.recommended) text.appendChild(el("small", { class: "rec", text: "Recommended" }));
+        if (o.detail) text.appendChild(el("small", { text: o.detail }));
+        card.appendChild(el("label", { class: "decision-option", for: radio.id }, [radio, text]));
+        radios.push(radio);
+      });
+      var notes = el("textarea", { id: "decision-notes-" + d.id, rows: "3", placeholder: "Add context, an alternative, or conditions…" });
+      card.appendChild(el("label", { for: notes.id, text: "Additional context or another answer" })); card.appendChild(notes);
+      controls[d.id] = { radios: radios, notes: notes }; root.appendChild(card);
+    });
+    $("decision-export").hidden = false;
+    $("copy-decisions").addEventListener("click", function () {
+      var answers = Object.create(null), button = $("copy-decisions"), reply = $("decision-reply"), status = $("decision-copy-status");
+      decisions.forEach(function (d) { var c = controls[d.id]; answers[d.id] = { choice: c.radios.filter(function (r) { return r.checked; })[0].value, notes: c.notes.value }; });
+      var text = decisionReply(cfg.project || "Project", decisions, answers);
+      reply.value = text; reply.hidden = false; $("decision-reply-label").hidden = false;
+      button.disabled = true; status.textContent = "Preparing your message…";
+      copyDecisionText(text, typeof navigator === "undefined" ? null : navigator.clipboard).then(function (copied) {
+        status.textContent = copied ? "Copied. Paste your decisions into chat." : "Clipboard unavailable. Copy the selected message below and paste it into chat.";
+        if (!copied) { reply.focus(); reply.select(); }
+        button.disabled = false;
+      });
+    });
   }
 
   function renderOverview() {
@@ -607,8 +696,9 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     if (!shown && total) L.appendChild(el("div", { class: "none", text: "No tickets match. Clear the search or the filter." }));
   }
 
-  var TABS = ["overview", "history", "plan"];
+  var TABS = ["overview", "history", "decisions", "plan"];
   function show(tab, target) {
+    if (tab.indexOf("decision-") === 0) { target = tab; tab = "decisions"; }
     TABS.forEach(function (t) {
       $(t).hidden = t !== tab;
       var b = $("tab-" + t); b.setAttribute("aria-selected", String(t === tab)); b.tabIndex = t === tab ? 0 : -1;
@@ -622,6 +712,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   }
   function route() {
     var h = decodeURIComponent(location.hash.slice(1));
+    if (h.indexOf("decision-") === 0) { show("decisions", h); return; }
     if (h.indexOf("e-") === 0) { show("history", h); return; }
     if (h.indexOf("t-") === 0) { show("plan", h); return; }
     show(TABS.indexOf(h) >= 0 ? h : "overview");
@@ -633,7 +724,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   $("updated").textContent = s0.latest ? "Updated " + s0.latest.date + " after: " + s0.latest.title : "No entries yet";
   $("history-count").textContent = "(" + entries.length + ")";
   $("plan-count").textContent = (snap.tickets || []).length ? "(" + snap.tickets.length + ")" : "";
-  renderOverview(); renderHistory(); renderFlow(); renderPlanTop(); renderTickets();
+  renderDecisions(); renderOverview(); renderHistory(); renderFlow(); renderPlanTop(); renderTickets();
 
   TABS.forEach(function (t) { $("tab-" + t).addEventListener("click", function () { location.hash = t; }); });
   document.querySelector("[role=tablist]").addEventListener("keydown", function (ev) {

@@ -65,6 +65,33 @@ export function check(path, { strict = false } = {}) {
   }
 
   const ids = new Set();
+  if (cfg && cfg.decisions !== undefined) {
+    const decisions = cfg.decisions, decisionIds = new Set();
+    const text = (value) => typeof value === "string" && value.trim().length > 0;
+    const safeId = (value) => typeof value === "string" && /^[a-zA-Z0-9_-]+$/.test(value);
+    if (!Array.isArray(decisions)) err("decisions must be an array");
+    else decisions.forEach((d, i) => {
+      const at = `decision ${i}`;
+      if (!d || typeof d !== "object") return err(`${at}: object required`);
+      if (!safeId(d.id) || decisionIds.has(d.id)) err(`${at}: unique DOM-safe id required`);
+      decisionIds.add(d.id);
+      for (const field of ["question", "context", "reason"]) if (!text(d[field])) err(`${at}: ${field} required`);
+      if (text(d.question) && d.question.length > LIMITS.question) err(`${at}: question too long`);
+      if (!["open", "answered"].includes(d.status)) err(`${at}: status must be open or answered`);
+      if (d.status === "answered" && !text(d.answer)) err(`${at}: answer required`);
+      const optionIds = new Set();
+      if (!Array.isArray(d.options) || d.options.length < 2) err(`${at}: at least two options required`);
+      else d.options.forEach((o) => {
+        if (!o || !safeId(o.id) || optionIds.has(o.id) || !text(o.label) || !text(o.detail)) err(`${at}: options need unique DOM-safe ids, labels and tradeoffs`);
+        if (o) optionIds.add(o.id);
+      });
+      if (!optionIds.has(d.recommended)) err(`${at}: recommended must name an option`);
+      if (d.tickets !== undefined && (!Array.isArray(d.tickets) || !d.tickets.every(text))) err(`${at}: tickets must be a list of ids`);
+    });
+    for (const id of ["tab-decisions", "decision-list", "copy-decisions", "decision-reply", "decision-copy-status"]) {
+      if (!html.includes(`id="${id}"`)) err(`missing decisions control ${id}`);
+    }
+  }
   const hrefOk = (h, where) => {
     if (typeof h !== "string" || !h) return err(`${where}: empty link`);
     if (/^(javascript|data|vbscript):/i.test(h)) return err(`${where}: unsafe link scheme`);

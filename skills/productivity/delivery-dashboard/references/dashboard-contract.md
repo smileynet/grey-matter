@@ -33,6 +33,28 @@ The overview never grows past five entries (`recentCount`). Older entries are no
 drop out of the overview and stay in the history tab, so the at-a-glance view stays short and the
 record stays whole. The changelog still owns release-level, durable value language.
 
+## Project decisions
+
+Store project choices in `gm-config.decisions` (optional array, default empty). Add questions as
+soon as they need user judgment, including during grill sessions; a delivery entry is not required.
+Needs you links to each pending card in the Decisions tab. Keep legacy entry asks for existing
+records; new project decisions live here once rather than being duplicated in entry asks.
+
+Each decision has a unique DOM-safe `id` (letters, digits, underscore or hyphen), `question`
+(at most 140 characters), `context` explaining the impact, `status` (`open` or `answered`),
+`options` (at least two objects with unique DOM-safe `id`, `label` and `detail` tradeoff),
+`recommended` (one option id), and `reason` explaining that recommendation. Optional `tickets`
+links related work. An answered decision also requires `answer` recording the submitted outcome.
+
+Render each open question as a labelled fieldset with mutually exclusive radio buttons and the
+recommended option selected and labelled Recommended. Include an open text box labelled
+Additional context or another answer. Draft controls retain values when switching tabs, but reload
+starts from recommendations. At the bottom, Copy answers for chat exports every pending question,
+selected option and any entered text as one readable message. Show successful-copy feedback;
+when clipboard access fails, show and select the message for manual copying. Defaults, local edits
+and copying never mark a decision answered. Update the source only after submission in chat;
+preserve answered decisions with outcomes in collapsed history. Empty state shows no pending asks.
+
 ## Entry fields
 
 One entry per closed ticket, plus any other finished work worth surfacing, newest first in the

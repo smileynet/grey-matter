@@ -58,6 +58,32 @@ function dashboard(t, entries, edit = (h) => h) {
 }
 const run = (file, opts) => check(file, opts);
 
+const decision = { id: "scope", question: "Which scope?", context: "Sets delivery time.", status: "open", options: [{ id: "small", label: "Small", detail: "Ships sooner." }, { id: "large", label: "Large", detail: "More coverage." }], recommended: "small", reason: "Validate early." };
+const withDecisions = (decisions) => (html) => html.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/, (_, a, b) => a + JSON.stringify({ project: "Test", decisions }) + b);
+test("decision checker accepts valid choices and rejects malformed decisions", (t) => {
+  assert.equal(check(dashboard(t, [], withDecisions([decision])).file).ok, true);
+  for (const change of [{ id: "bad id" }, { recommended: "missing" }, { options: [decision.options[0]] }, { status: "answered" }, { context: "" }, { options: [null, null] }]) {
+    assert.equal(check(dashboard(t, [], withDecisions([{ ...decision, ...change }])).file).ok, false, JSON.stringify(change));
+  }
+  assert.equal(check(dashboard(t, [], withDecisions([decision, decision])).file).ok, false);
+});
+test("export includes pending selections and alternative text while preserving status", () => {
+  const decisions = [decision, { ...decision, id: "old", status: "answered", answer: "Confirmed" }];
+  const reply = api().decisionReply("Test", decisions, { scope: { choice: "large", notes: "  Another approach\nwith conditions  " } });
+  assert.match(reply, /Which scope\?/);
+  assert.match(reply, /Choice: Large/);
+  assert.match(reply, /Notes: Another approach\nwith conditions/);
+  assert.equal(reply.includes("Confirmed"), false);
+  assert.equal(decision.status, "open");
+});
+test("clipboard reports success and falls back on absent or rejected access", async () => {
+  let copied;
+  assert.equal(await api().copyDecisionText("answers", { writeText: async text => { copied = text; } }), true);
+  assert.equal(copied, "answers");
+  assert.equal(await api().copyDecisionText("answers", null), false);
+  assert.equal(await api().copyDecisionText("answers", { writeText: async () => { throw Error("denied"); } }), false);
+});
+
 test("the blank template passes strict mode and shows empty states", () => {
   const f = join(SKILL, "assets/dashboard-template.html");
   const r = run(f, { strict: true });

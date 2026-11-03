@@ -54,3 +54,10 @@ person must make; it claims "done" for something mocked.
 The weather entry's Details hold "built on the existing plan screen" and "14 of 14 checks pass".
 That is enough for a reader who wants evidence and costs the others nothing. Link to the test
 output, ticket or commit there if the reader needs to follow it.
+
+## Decisions tab
+
+The example includes an open map-source decision and a previously answered trip-scope decision.
+Change the recommended radio choice, enter an alternative or conditions, switch tabs and return,
+then use Copy answers for chat. The message includes pending choices and notes; the answered
+choice stays in collapsed history. Copying leaves the pending decision open until submitted in chat.

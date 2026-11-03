@@ -12,6 +12,25 @@ const ticket=(id,status,blocked_by=[],tags=[])=>({id,title:'Fixture work '+id,st
 const snap={generated:'2026-10-31T00:00:00Z',frontier:['start','parallel'],tickets:[ticket('base','done',[],['archive']),ticket('start','open',['base'],['build']),ticket('active','in_progress',['start'],['build']),ticket('finish','open',['active'],['build']),ticket('later','backlog',[],['future']),ticket('parallel','open',[],['other'])]};
 function html(config={},snapshot=snap){return template.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/,'$1'+JSON.stringify({project:'Synthetic flow fixture',ticketFlow:{defaultScope:'archive',scopes:[{id:'archive',label:'Completed stream',tags:['archive']},{id:'build',label:'Build stream',tags:['build']}]},...config})+'$2').replace(/(<script type="application\/json" id="gm-tickets">)[\s\S]*?(<\/script>)/,'$1'+JSON.stringify(snapshot)+'$2');}
 async function pageFor(width,config,snapshot){const context=await browser.newContext({viewport:{width,height:1000}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('**/*',route=>route.fulfill({contentType:'text/html',body:html(config,snapshot)}));await page.goto('http://dashboard.invalid/#plan');return {context,page,errors};}
+for (const width of [1280,390]) test('decision choices, notes and clipboard fallback at '+width, async()=>{
+ const decision={id:'scope',question:'Which scope?',context:'Sets delivery time.',status:'open',options:[{id:'small',label:'Small',detail:'Ships sooner.'},{id:'large',label:'Large',detail:'More coverage.'}],recommended:'small',reason:'Validate early.'};
+ const {context,page,errors}=await pageFor(width,{decisions:[decision,{...decision,id:'old',status:'answered',answer:'Confirmed in chat.'}]});
+ try {
+  await page.locator('#tab-overview').click(); await page.locator('#needs a[href="#decision-scope"]').click(); await page.locator('#decisions').waitFor({state:'visible'});
+  assert.equal(await page.locator('#decision-scope-small').isChecked(),true);
+  await page.locator('#decision-scope-large').check(); await page.locator('#decision-notes-scope').fill('Alternative with conditions');
+  await page.locator('#tab-plan').click(); await page.locator('#tab-decisions').click(); await page.locator('#decisions').waitFor({state:'visible'});
+  assert.equal(await page.locator('#decision-scope-large').isChecked(),true);
+  await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async()=>{throw Error('denied');}},configurable:true}));
+  await page.locator('#copy-decisions').click(); await page.waitForFunction(()=>document.querySelector('#decision-copy-status').textContent.includes('Clipboard unavailable'));
+  assert.match(await page.locator('#decision-reply').inputValue(),/Choice: Large\nNotes: Alternative with conditions/);
+  assert.equal((await page.locator('#decision-reply').inputValue()).includes('Confirmed'),false);
+  await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.copied=text;}},configurable:true}));
+  await page.locator('#copy-decisions').click(); await page.waitForFunction(()=>document.querySelector('#decision-copy-status').textContent.startsWith('Copied.'));
+  assert.match(await page.evaluate(()=>window.copied),/Choice: Large/);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true); assert.deepEqual(errors,[]);
+ } finally {await context.close();}
+});
 for(const width of [1280,390]){
  test('remaining flow, filters, keyboard selection and complete status accounting at '+width,async()=>{
   const {context,page,errors}=await pageFor(width);
@@ -23,7 +42,7 @@ for(const width of [1280,390]){
    assert.deepEqual((await page.locator('.flow-node').evaluateAll(nodes=>nodes.map(n=>n.dataset.ticket))).sort(),['active','finish','later','parallel','start']);
    await page.waitForFunction(()=>document.querySelectorAll('.flow-links path[data-from]').length===2);
    assert.deepEqual((await page.locator('.flow-links path[data-from]').evaluateAll(nodes=>nodes.map(n=>n.dataset.from+'>'+n.dataset.to))).sort(),['active>finish','start>active']);
-   assert.match(await page.locator('.flow-counts').innerText(),/2 prerequisites met · 1 in progress · 1 waiting · 1 deferred · 0 done · 5 shown/);
+   assert.match(await page.locator('.flow-counts').innerText(),/2 unblocked · 1 in progress · 1 waiting on tickets · 0 decision needed · 0 evidence needed · 1 deferred · 0 done · 0 cancelled · 5 shown/);
    const start=page.locator('.flow-node[data-ticket=start]');await start.focus();await page.keyboard.press('Enter');
    assert.equal(await start.getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.flow-node[data-ticket=finish]').getAttribute('data-related'),'after');assert.equal(await page.locator('.flow-node[data-ticket=parallel]').getAttribute('data-related'),'unrelated');
    assert.match(await page.locator('.flow-detail').innerText(),/base \(done\)/);assert.equal(await page.locator('.flow-links path[data-related=true]').count(),2);

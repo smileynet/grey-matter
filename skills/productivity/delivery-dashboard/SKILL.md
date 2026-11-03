@@ -1,6 +1,6 @@
 ---
 name: delivery-dashboard
-description: "Keep one dark, blue status dashboard current after every closed ticket: what the person can now do, what needs their input, recent entries at a glance, a searchable history and a Plan tab of every ticket. Use after closing a ticket or finishing other work worth surfacing, when asked for a status, progress or plan view, or to update the dashboard."
+description: "Keep one dark, blue status dashboard current after every closed ticket: what the person can now do, what needs their input, recent entries at a glance, a searchable history and a Plan tab of every ticket. Use after closing a ticket or finishing other work worth surfacing, when asked for a status, progress or plan view, to collect project decisions (including grill-session questions), or to update the dashboard."
 ---
 
 # Delivery Dashboard
@@ -13,7 +13,7 @@ stays out of the way, under folds and links.
    exists, copy the blank [template](assets/dashboard-template.html) to one committed `docs/`
    path (for example `docs/status.html`), set the project name in `gm-config`, and record the
    path on the originating ticket and in `AGENTS.md` so the next task finds it. Edit only the
-   `gm-config` and `gm-entries` blocks by hand; `gm-tickets` is generated (step 4) and the
+   `gm-config` and `gm-entries` blocks by hand; `gm-tickets` is generated (step 5) and the
    renderer stays as shipped so every project's dashboard behaves alike. For a first entry, read
    the finished [worked example](assets/dashboard-example.html) and its
    [walkthrough](references/worked-example.md) to see the voice and shapes expected.
@@ -43,12 +43,20 @@ stays out of the way, under folds and links.
    When an entry summarizes release or pilot readiness, follow the contract's
    [current delivery readiness guidance](references/dashboard-contract.md#current-delivery-readiness).
 
-3. **Keep the sausage out of sight.** Headline, summary and the three visible changes carry no
+3. **Collect project decisions.** When planning, design or a grill session needs the user's
+   judgment, add a decision to `gm-config.decisions` immediately, even before a ticket closes.
+   Follow the [decision contract](references/dashboard-contract.md#project-decisions): radio
+   options with the recommendation selected, its reason, and an open text box for another answer
+   or context. Needs you links to the same decision. The bottom button copies all pending answers
+   for the user to paste into chat, with selectable text when copying is unavailable. Selections
+   are drafts; record an answer only after the user submits it in chat, and retain answered history.
+
+4. **Keep the sausage out of sight.** Headline, summary and the three visible changes carry no
    ticket numbers, commit hashes, file paths, tool names, test counts or refactoring talk. Put
    evidence, commands and detail under `details` and `links`. Reuse the wording discipline of
    [changelog](../../meta/changelog/SKILL.md) for user value.
 
-4. **Refresh the Plan tab.** Run `node <this skill's directory>/scripts/snapshot-tickets.mjs
+5. **Refresh the Plan tab.** Run `node <this skill's directory>/scripts/snapshot-tickets.mjs
    <file>`. It rewrites only `gm-tickets` from the tkt board, so the Plan tab lists every ticket,
    open work first, with progress and what comes next. It refuses while a tkt tag context is set,
    because a scoped snapshot would hide tickets. The shipped flow starts with all remaining work,
@@ -58,12 +66,12 @@ stays out of the way, under folds and links.
    If the project has an explicit execution queue, preserve and link to it; the snapshot's frontier
    and dependency graph do not replace that queue or justify adding artificial blockers.
 
-5. **Let the page roll.** The overview shows the newest entry in full and the next four as
+6. **Let the page roll.** The overview shows the newest entry in full and the next four as
    collapsed rows; the "All entries" tab keeps every entry as a collapsed row with search and
    filters. Do not delete or merge old entries to shorten the page. The template does the rolling;
    the changelog still owns release-level history.
 
-6. **Check, open and hand back.** Before selecting UI checks, establish which preview,
+7. **Check, open and hand back.** Before selecting UI checks, establish which preview,
    browser, capture and interaction surfaces are permitted and available. Choose checks
    from those capabilities; record blocked or unavailable checks with their limits and
    leave them unverified. Do not try another route to bypass a blocked protocol. Before
@@ -79,7 +87,8 @@ stays out of the way, under folds and links.
    rendering-input change requires affected checks, new captures and renewed acceptance.
    Closure-only metadata may change only through the receipt's explicit projections. Run
    `node <this skill's directory>/scripts/check-dashboard.mjs <file>` and fix
-   every error; clear warnings that are real. Then open all three tabs at phone and laptop width and
+   every error; clear warnings that are real. Exercise decision selection, text retention across
+   tabs, copied output and clipboard fallback. Then open all tabs at phone and laptop width and
    read the page as the owner would. Follow one dependency chain, compare visible nodes/edges and status counts with the board, and check that selected streams do not hide remaining work elsewhere. Read [report-format.md](../../../docs/agents/report-format.md)
    for the HTML rules, and use
    [repository-artifact-hygiene](../../meta/repository-artifact-hygiene/SKILL.md) before adding
