@@ -12,7 +12,11 @@
     "scorerAudit": "2e0b80ec52089e4be9847d5e182c64c596079ca3c9ba6363be5f787e6d69b5e1",
     "executionLedger": "3fa510a13a359f8c52ac6958ca37598d81d69a032d56ff42e4f7d7a3ad9b20f5",
     "integrityAudit": "2d3e27bf335df5eb6d996701b98ddf21bec89c3bffbf44dfa5f739756297cdf3",
-    "derivedJoin": "61d6b6c80e2baab4f00b5d00dae9f94e3ddf1891a0aa563051b3caeb41299315"
+    "derivedJoin": "61d6b6c80e2baab4f00b5d00dae9f94e3ddf1891a0aa563051b3caeb41299315",
+    "cleanupFinalAudit": "fd12ea5636438054a2f5b6fa2189b2b5fbad34b9de844e1b153f7dc7b9e8a6e1",
+    "kiroCleanupReceipt": "bc6bd450a4e6cdb6aadf9040f23d22e7252c78dbf9e68f235a347d16aa62b903",
+    "tempDirectoryRecycleReceipt": "222592e22c611338451e185aa2573235d7120913d9cd0511b5e233a281e25f4a",
+    "retentionPlan": "794551b75800c5186b60bfaf717657811e01a14b3d06defa221ad5b648fe508e"
   },
   "attemptCounts": {
     "total": 23,
@@ -248,6 +252,29 @@
       }
     ]
   },
+  "retentionCleanup": {
+    "completed": true,
+    "measuredKiroV2SessionsDeleted": 8,
+    "finalAllWorktreesListingSha256": "dc44532221691b52fdaf99ed410910f84a320c843a4fc23adf8cf03a128daf17",
+    "allEightTargetsAbsent": true,
+    "originalUnrelatedSessionsPreserved": 7599,
+    "originalUnrelatedSessionSetSha256": "d0ceed64049bbe439ef548b7bdb17a91553998cfdb3d073c0b535a902a19b919",
+    "emptyTempDirectoriesSentToOsRecycleBin": 23,
+    "tempDirectoryBytesAtDeletion": 0,
+    "finalAuditSha256": "fd12ea5636438054a2f5b6fa2189b2b5fbad34b9de844e1b153f7dc7b9e8a6e1",
+    "cleanupReceiptSha256": "bc6bd450a4e6cdb6aadf9040f23d22e7252c78dbf9e68f235a347d16aa62b903",
+    "recycleReceiptSha256": "222592e22c611338451e185aa2573235d7120913d9cd0511b5e233a281e25f4a",
+    "retainedForPrivateHandoff": [
+      "23 raw cell evidence directories",
+      "blinded packet and scores",
+      "answer key and blind map",
+      "ledger and audit receipts"
+    ],
+    "privateScratchInventory": {
+      "files": 148,
+      "bytes": 7219659
+    }
+  },
   "selection": {
     "retainExistingDefaults": true,
     "modelConfigurationChanged": false,
@@ -260,6 +287,7 @@
     "Claude's reported list-cost sum excludes one prior turn of unknown usage; USD 0.80 aggregate cap compliance is unverified.",
     "The scorer's f3 hash transcription was corrected after independently verifying all eight inputs and the rubric; semantic grades are unchanged.",
     "The pre-resume-transition ledger hash was not captured; the transition receipt records the limitation.",
-    "R14 evidence path was corrected within private scratch; receipt and stream hashes match and the path correction is audited."
+    "R14 evidence path was corrected within private scratch; receipt and stream hashes match and the path correction is audited.",
+    "After critic acceptance, only the eight measured Kiro V2 sessions and 23 verified empty owned temp directories were cleaned up; all original unrelated sessions remain present."
   ]
 }
