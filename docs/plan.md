@@ -269,7 +269,7 @@ auth remains conditional on the result of #186.
 | 194 | Qualify agy child model routing before relying on per-role tiers | ✅ done |
 | 173 | 11. Compare GUI watch/answer surfaces against #162's qualified live driver | ✅ done |
 | 174 | 12. Select and demonstrate Harbor or a thin runner for the model trials | ✅ done |
-| 167 | 13. Compare implementation worker tiers | open |
+| 167 | 13. Compare implementation worker tiers | in_progress |
 | 168 | 14. Compare reviewer tiers with planted defects and false positives | open |
 | 169 | 15. Compare research/exploration tiers against a fixed answer key | open |
 | 170 | 16. Compare documentation, triage and classification tiers | open |
