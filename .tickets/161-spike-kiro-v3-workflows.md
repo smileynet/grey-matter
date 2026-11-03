@@ -1,7 +1,7 @@
 ---
 id: "161"
 title: "Spike: kiro-cli V3 workflows expressing the orchestrate loop natively"
-status: open
+status: in_progress
 blocked_by: ["124","126","185"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
