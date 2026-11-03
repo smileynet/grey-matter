@@ -31,7 +31,7 @@ if (provider === "agy") {
   const workspace = workDir.replaceAll("\\", "/");
   writeFileSync(settingsPath, `${JSON.stringify({
     permissions: {
-      allow: [`read_file(${workspace})`, `write_file(${workspace})`, "command(npm test)", "command(npm.cmd test)"],
+      allow: [`read_file(${workspace})`, `write_file(${workspace})`, "command(npm test)"],
       deny: ["mcp(*)", "read_url(*)", "execute_url(*)"],
     },
   }, null, 2)}\n`, "utf8");
