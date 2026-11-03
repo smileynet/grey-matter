@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "b973bdab9ff8c6512b651152b7377b70ceb8af3c66205e49e3667d1b08e12d9b",
+  "subject": "Qualified routing and approval findings with deployed GUI guidance",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 21265,
+      "sha256": "a09570b90824ed58ad5393d2fbc6d4452726de98d85af1fe896950f57efb2aba"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 166261,
+      "sha256": "7250470c77946cf00b585025ede0dc2651bd527b4bb2f6225878d265a2efecdc"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4264,
+      "sha256": "75a5724c582f211ee44e7aadb002d5fbf7b3c38da2ad258bbe5739a27529bad9"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-final/findings-1280.png",
+      "bytes": 424953,
+      "sha256": "a84444ce5e4478915ce5291e477e62335acb403093961d33783fbe9798e19915",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-final/tickets-1280.png",
+      "bytes": 238853,
+      "sha256": "91e2d6a4e994a1af3419a5184f96e01dbf824226bb83e4cc5d9f23a39c3ad8c3",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-final/findings-390.png",
+      "bytes": 415176,
+      "sha256": "a056d3d82d5e47f105487eca673a15b7b1826914c3693dd7f2090e7e0c2ce70b",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-final/tickets-390.png",
+      "bytes": 198759,
+      "sha256": "479da422a64626a0ef3c6b5354d7be63fc53e8aa9c10edfb1ca6eba7d68aaf9b",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "8e0aa75f762625fd72339db38020513aa8ac2ef505d6f7971145bee671b9757c",
+  "id": "edc42d76dc8db94a5cc438a8a5e6b2b3a14490d5da738a3fe47a9a197036df69",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic-dashboard",
+    "note": "Inspected all four 1280px and 390px captures. Findings are readable and consistently separate observed behavior from unverified GUI steering; the ticket diagram, open/other sections, counts, labels, and default-collapsed rows are clear at both widths. No material visual or factual issue found in reviewed content.",
+    "acceptedAt": "2026-11-03T05:02:42.114Z",
+    "snapshotId": "edc42d76dc8db94a5cc438a8a5e6b2b3a14490d5da738a3fe47a9a197036df69"
+  }
+}

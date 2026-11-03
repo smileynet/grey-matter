@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "subject": "Global delivery after GUI guidance deployment and qualified routing",
+  "sources": ["docs/status.html"],
+  "captures": [
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-0-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-1-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-2-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-0-390.png","viewport":{"width":390,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-1-390.png","viewport":{"width":390,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-2-390.png","viewport":{"width":390,"height":900}}
+  ]
+}

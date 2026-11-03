@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "manifestDigest": "36c3eb0e9926b199923f19913dd3223ef2ebd87d0b2979cd783fec0902f5d344",
+  "subject": "Global delivery after GUI guidance deployment and qualified routing",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 122695,
+      "sha256": "31989a852dda10aa656811fa295c738749680a98c078e99716751351f38077c1"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-0-1280.png",
+      "bytes": 80282,
+      "sha256": "0fa50d72a4289d19389c998855afeafdfa6c062f6aaca4cdc91f65d1eb819d36",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-1-1280.png",
+      "bytes": 224842,
+      "sha256": "e4d2a53386035c82604b7247f5ee67731191d99e050a3b36aaf101d916b6328f",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-2-1280.png",
+      "bytes": 406778,
+      "sha256": "48bf0585d82bce7408325c36626b98f4a738199d29f55779f93a34c9248525eb",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-0-390.png",
+      "bytes": 75636,
+      "sha256": "387583f3a911cb02c3ab85634312abd9ac15a4a9b3f851492c421c935e23019d",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-1-390.png",
+      "bytes": 220574,
+      "sha256": "27a8699c78c7e4b36171efea001ebf2fc3b2c2146ae3a5d0bb8ba94a75cc18f4",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t193-t190-t194-status-final/tab-2-390.png",
+      "bytes": 394563,
+      "sha256": "31b283d6c7759eb083edb77d533e8051c679e272c153b5f451c286f0f87aea9f",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "41226c3dc24ae5f0974f54876f6512dd1ae326f79b75b47df1c2a39c9e2bc4cb",
+  "id": "f97fa2e9481513370d7e3e9591e627c3fd98e064219fc6d6985754484a27cdfe",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic-dashboard",
+    "note": "Inspected all six captures across overview, all entries, and plan at 1280px and 390px. New GUI guidance states limits and deployment accurately; shutdown remains blocked, the plan counts/flow are legible, and narrow layouts remain readable without clipping. No material issue found in reviewed content.",
+    "acceptedAt": "2026-11-03T05:02:42.697Z",
+    "snapshotId": "f97fa2e9481513370d7e3e9591e627c3fd98e064219fc6d6985754484a27cdfe"
+  }
+}
