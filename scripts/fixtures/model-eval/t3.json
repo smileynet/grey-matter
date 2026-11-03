@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "t3",
+  "ticketId": "3",
+  "ticketFile": ".tickets/3-rename-add.md",
+  "seedTree": "c474646ea61e037fcdbc1be3d2dc6c0833f5e260",
+  "allowedFiles": ["src/a.js", "test/a.test.js"],
+  "expectedExport": "sum",
+  "forbiddenExport": "add",
+  "expectedCases": [
+    { "args": [2, 3], "expected": 5 },
+    { "args": [-1, 1], "expected": 0 }
+  ],
+  "testSourceCases": ["sum(2, 3)", "sum(-1, 1)"]
+}

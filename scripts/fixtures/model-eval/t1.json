@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "t1",
+  "ticketId": "1",
+  "ticketFile": ".tickets/1-multiply.md",
+  "seedTree": "c474646ea61e037fcdbc1be3d2dc6c0833f5e260",
+  "allowedFiles": ["src/a.js", "test/a.test.js"],
+  "expectedExport": "multiply",
+  "expectedCases": [
+    { "args": [3, 4], "expected": 12 },
+    { "args": [-2, 5], "expected": -10 }
+  ],
+  "testSourceCases": ["multiply(3, 4)", "multiply(-2, 5)"]
+}

@@ -1,0 +1,163 @@
+{
+  "ticket": 174,
+  "date": "2026-11-02",
+  "decision": "Use the focused Node runner for tickets 167-172 on this Windows host; Harbor remains viable for container or remote runs, which were not tested.",
+  "fixtures": {
+    "generator": "scripts/spike-orchestrate-fixture.mjs",
+    "ids": ["t1", "t3"],
+    "identicalSeedTreeSha256": "c474646ea61e037fcdbc1be3d2dc6c0833f5e260",
+    "isolatedRootPerAdapterAndJob": true,
+    "graderOraclePassedToAgent": false,
+    "grading": "Native test command and task-specific behavior/path checks run independently by the controller."
+  },
+  "selectedRunner": {
+    "source": "scripts/spike-model-eval.mjs",
+    "focusedTests": "scripts/spike-model-eval.test.mjs",
+    "resultSchemaVersion": 1,
+    "recipe": [
+      "node scripts/spike-model-eval.mjs --adapter claude --fixture t1 --work-root <unique-root>",
+      "node scripts/spike-model-eval.mjs --adapter claude --fixture t3 --work-root <unique-root>",
+      "node scripts/spike-model-eval.mjs --adapter codex --fixture t1 --work-root <unique-root>",
+      "node scripts/spike-model-eval.mjs --adapter codex --fixture t3 --work-root <unique-root>"
+    ],
+    "receiptFields": ["fixture seed and commit", "adapter version and requested/observed model", "JSON argv", "native exit and duration", "native usage and cost basis", "native tool/test events", "independent test counts", "behavior result", "changed paths and scope", "raw file paths, byte counts, SHA-256"],
+    "unsuccessfulClassifications": ["timeout", "infrastructure error", "malformed output", "native turn failure", "missing tests or counts", "assertion failure", "behavior grader failure", "out-of-scope file change"],
+    "windowsNotes": ["npm.cmd is invoked with shell handling for this executable", "grading process prepends active Node directory to PATH", "Codex uses absolute package-owned executable path and --ephemeral", "Claude uses --no-session-persistence"]
+  },
+  "directNativeRuns": [
+    {
+      "id": "claude-t1",
+      "raw": [
+        {"path": ".scratch/t174/native-runs/claude-t1.stdout.json", "bytes": 2485, "sha256": "335b7ab1ebccc2ca3948d0b6fb4db58b972e802ad135b4de06bc649929a01abd"},
+        {"path": ".scratch/t174/native-runs/claude-t1.stderr.txt", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+      ],
+      "observedModel": "claude-sonnet-5-5",
+      "tests": "2 passed",
+      "cost": {"amountUsd": 0.1046697, "basis": "Claude CLI list estimate, not billed"}
+    },
+    {
+      "id": "claude-t3",
+      "raw": [
+        {"path": ".scratch/t174/native-runs/claude-t3.stdout.json", "bytes": 2493, "sha256": "7f0b84cb9ab8b0f6de272a53f6cbb595ecfe77b645f5d914db498fdd7aa04e3a"},
+        {"path": ".scratch/t174/native-runs/claude-t3.stderr.txt", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+      ],
+      "observedModel": "claude-sonnet-5-5",
+      "tests": "1 passed",
+      "cost": {"amountUsd": 0.1005851, "basis": "Claude CLI list estimate, not billed"}
+    },
+    {
+      "id": "codex-t1-final",
+      "raw": [
+        {"path": ".scratch/t174/native-runs/codex-t1-final.stdout.jsonl", "bytes": 10817, "sha256": "baa9353e0b524e5d0fd3159b49ddf67633fad55686cd8104011faf9d2dfa9593"},
+        {"path": ".scratch/t174/native-runs/codex-t1-final.stderr.txt", "bytes": 779, "sha256": "1bcad18868bb17ac97e805771a4f9578303abbb6bb324d8734625d38625ad393"}
+      ],
+      "requestedModel": "gpt-6.1-sol",
+      "observedModel": null,
+      "usage": {"inputTokens": 88368, "cachedInputTokens": 69376, "outputTokens": 607},
+      "actualDollarCost": null,
+      "tests": "3 passed"
+    },
+    {
+      "id": "codex-t3-isolated",
+      "raw": [
+        {"path": ".scratch/t174/native-runs/codex-t3-isolated.stdout.jsonl", "bytes": 6645, "sha256": "cb50555eb02bf431657c2309c462b964627ca028b7f28838a594ab6ffb3b58c1"},
+        {"path": ".scratch/t174/native-runs/codex-t3-isolated.stderr.txt", "bytes": 779, "sha256": "54ed69f6972c23241646320db3bc9305580edbfd1691240cf485674c24b54bc0"}
+      ],
+      "requestedModel": "gpt-6.1-sol",
+      "observedModel": null,
+      "usage": {"inputTokens": 89191, "cachedInputTokens": 70912, "outputTokens": 577},
+      "actualDollarCost": null,
+      "tests": "1 passed"
+    }
+  ],
+  "selectedRunnerEndToEnd": [
+    {
+      "path": ".scratch/t174/runner-final/claude-t3/result.json",
+      "bytes": 4651,
+      "sha256": "dee4877987a484cf6518a41397e95d26a61c761335c685aeddbf9952c0200f7a",
+      "grade": "pass",
+      "tests": "2 passed",
+      "cost": {"amountUsd": 0.0962241, "basis": "Claude CLI list estimate"}
+    },
+    {
+      "path": ".scratch/t174/runner-final/codex-t1/result.json",
+      "bytes": 6469,
+      "sha256": "66718ab2c0fb6811eb7b0d6d571523d606dfb236b890b1973b2ca550d961768f",
+      "grade": "pass",
+      "tests": "3 passed",
+      "usage": {"inputTokens": 67248, "cachedInputTokens": 57472, "outputTokens": 528},
+      "actualModel": null,
+      "actualDollarCost": null
+    },
+    {
+      "path": ".scratch/t174/runner-check/claude-t1-script-final/result.json",
+      "bytes": 4468,
+      "sha256": "1ef1954d69f416021da85fa4a97c4a861b605702ecef87022861d075d77dd6dc",
+      "grade": "pass",
+      "tests": "2 passed",
+      "cost": {"amountUsd": 0.0950106, "basis": "Claude CLI list estimate"}
+    }
+  ],
+  "excludedAttempts": [
+    {
+      "path": ".scratch/t174/native-runs/codex-t1.stdout.jsonl",
+      "bytes": 9421,
+      "sha256": "4de43e5fb31e286bc5b7acdbb61dc9d1d2d74fbbb04c8158b9737f4b8a9aa7ec",
+      "classification": "Contaminated setup: reused Claude-mutated T1 root; exclude from comparison."
+    },
+    {
+      "path": ".scratch/t174/native-runs/codex-t1-isolated.stdout.jsonl",
+      "bytes": 22668,
+      "sha256": "c0b45e835c0b207dab767896c316994489e89067d9012cc62577ca3092b7d01b",
+      "classification": "Correct code, but agent child shell could not find mise.exe; independent host test passed. Corrected fresh root added process-scoped Node path and passed."
+    },
+    {
+      "classification": "Initial Codex CLI flag conflict (--approve-for-me with --sandbox workspace-write); rejected before model call."
+    },
+    {
+      "classification": "Two initial runner invocations failed controller-side Windows cmd quoting; not model/fixture failures. Fixed argv launcher then passed end-to-end."
+    }
+  ],
+  "harbor": {
+    "referenceClone": ".references/harbor",
+    "cloneCommand": "git clone --depth 1 https://github.com/harbor-framework/harbor.git .references/harbor",
+    "commit": "f6cf2e2e86a102a9d2980ce8888f4bda251aa998",
+    "version": "0.25.0",
+    "cloneBytes": 95599584,
+    "pinnedSources": [
+      "https://github.com/harbor-framework/harbor/blob/f6cf2e2e86a102a9d2980ce8888f4bda251aa998/README.md",
+      "https://github.com/harbor-framework/harbor/blob/f6cf2e2e86a102a9d2980ce8888f4bda251aa998/pyproject.toml",
+      "https://github.com/harbor-framework/harbor/blob/f6cf2e2e86a102a9d2980ce8888f4bda251aa998/src/harbor/cli/jobs.py"
+    ],
+    "localSetupFailure": {
+      "dockerClient": "29.3.1",
+      "dockerDaemonError": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.",
+      "podmanApi": "Refused connection at 127.0.0.1:54641; machine stopped. No machine started.",
+      "python": "3.12.10",
+      "systemUv": "0.11.21",
+      "requiredUv": ">=0.13.5",
+      "ticketLocalUv": "0.13.7",
+      "firstFailure": "Required uv version >=0.13.5 does not match running version 0.11.21.",
+      "attempt": "UV_CACHE_DIR=.scratch/t174/uv-cache; UV_PROJECT_ENVIRONMENT=.scratch/t174/harbor-venv; uv run --project .references/harbor --python 3.12 harbor --help",
+      "partialCacheBytes": 883638935,
+      "partialVenvBytes": 124485,
+      "observedLargeWheel": "torch 108.5 MiB",
+      "result": "Interrupted dependency setup before Harbor CLI ran; not a Harbor benchmark and not representative of packaged install footprint.",
+    "failureManifestPromotedBeforeCleanup": true,
+      "ownCacheAndVenvDisposition": "After promoting the setup failure record, uv cache clean ran with UV_CACHE_DIR set to the explicit ticket-owned .scratch/t174/uv-cache and removed 34,905 files (842.7 MiB); no files remain in that custom cache. The exact ticket-owned partial venv .scratch/t174/harbor-venv was sent to the OS recycle bin after resolving and checking it remained inside .scratch/t174. Global uv cache untouched."
+    },
+    "notTested": ["Harbor remote environments", "Kiro ACP via Harbor", "Harbor benchmark execution"]
+  },
+  "privateLogs": {
+    "disposition": "Five Claude CLI session history files created by early runs were hashed without reading bodies; not promoted; retain privately through critic review then clean exact owned files.",
+    "aggregateBytes": 1574468,
+    "sessions": [
+      {"id": "8c2ece5c-d7b0-4cb4-993f-63bfee1e8860", "bytes": 321277, "sha256": "d73081a4a322077c5c045bf69c3731e77a5058db575ecfeefe45822b9737918ce"},
+      {"id": "38a3c398-1525-424a-aa4c-da4e72a4900e", "bytes": 313941, "sha256": "8e7395b010792c15061bd9a09ef85f2faef2fd0277bad73050976a0146cc5ea6"},
+      {"id": "e1f74fe3-b0db-4411-9643-308dca076e60", "bytes": 312911, "sha256": "ecc4dc2933193caaa96be24bf5f95d889aa765013597fe669eee0dc619e2d0f1"},
+      {"id": "97a65eab-2585-4147-969b-c639f210cc76", "bytes": 314391, "sha256": "2c145815c0694191ff4fe6d75b6dd3d50186fa201a6cad393f7a084b1ee5a01"},
+      {"id": "a71f4c79-528e-4102-852c-6a0e5e09c172", "bytes": 311948, "sha256": "1a119ffac6c01caa31e517555f98649ed5fa97c4040ea27410a2fa26231e47048"}
+    ]
+  },
+  "limits": ["Small task sample; not a model ranking.", "Codex actual model ID and dollar cost not available in captured JSONL.", "Claude costs are CLI list estimates, not billing.", "Harbor remote modes and Kiro/ACP were not tested.", "Native output files are retained under ticket scratch for the independent critic."]
+}
