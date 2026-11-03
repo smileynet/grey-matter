@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "687cddc4a03924cae7ae687e6af8aab7e0973beb0c4ea0f2d991ddaf399d787b",
+  "subject": "Final current plan and durable account-fact hold; twenty findings and two unfinished tickets",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 32823,
+      "sha256": "d8a2e845e62687a0e7b18046da5914cd419d47b4112e3a78184661026d419956"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 205685,
+      "sha256": "0c7ae34c2ffd76189586c73358d32cc21b02af6d0d3e26ebb303b619696a9842"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4576,
+      "sha256": "ffaee1a99633840b4826111639248babe5fe11865adad9ca3637ada4dffbe285"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-current-blockers-final/findings-1280.png",
+      "bytes": 621183,
+      "sha256": "eb6f5f64e48911defd270c321afefbe281f010e3328cf23fd42c4c25344d3f72",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-current-blockers-final/tickets-1280.png",
+      "bytes": 211723,
+      "sha256": "124ff36e90d983b675d691c14aa3bcc9b7d066de21716ed384b0cf52a2c9d10a",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-current-blockers-final/findings-390.png",
+      "bytes": 625343,
+      "sha256": "bf095b35c49cbe19edff786f44038978be74c2508c06dfe08a9630b32ea1f8ba",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-current-blockers-final/tickets-390.png",
+      "bytes": 192755,
+      "sha256": "4c2d425f5432dc3c113c1d8d412f6928478474aef20e273a9b945790c79c17ff",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "90989ffb14313b6ac94b538fd52be455317ee516630d6ae37dc7d8c8bff7c0b2",
+  "id": "90846fd34a87c1b2b75639c2778c81261d22b0db8c59e7528b233ecb1868b0c0",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "independent visual review",
+    "note": "Viewed all four new frozen captures at 1280x900 and 390x900. The findings dashboard retains 20 findings, 2 open tickets and 34 completed; the fast-mode finding now explicitly says it awaits an account-credit detail. Ticket log shows only 172 and 189 open. The ACP finding still distinguishes protocol capabilities from supervisor choices and keeps the no-spike decision bounded. Mobile layout remains readable in the full captures.",
+    "acceptedAt": "2026-11-03T12:32:11.363Z",
+    "snapshotId": "90846fd34a87c1b2b75639c2778c81261d22b0db8c59e7528b233ecb1868b0c0"
+  }
+}

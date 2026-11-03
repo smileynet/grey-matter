@@ -44,6 +44,7 @@ try {
     await page.locator(`[data-node="${selectedTicket.id}"]`).click();
     await page.getByRole('button', { name: 'Open ticket details', exact: true }).click();
     assert.equal(await page.locator(`#ticket-${selectedTicket.id}`).getAttribute('open'), '');
+    if (selectedTicket.id === '172') assert.match(await page.locator('#ticket-172').innerText(), /no fast-mode model calls have run/);
     await page.locator(`#ticket-${selectedTicket.id} > summary`).click();
     await page.locator('#flow-selection').evaluate(n => n.textContent = 'Pick any ticket in the diagram.');
     await page.locator('#open-selected').evaluate(n => n.hidden = true);

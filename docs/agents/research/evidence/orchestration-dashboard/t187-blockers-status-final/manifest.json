@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "subject": "Final current plan and durable account-fact hold; twenty findings and two unfinished tickets",
+  "sources": [
+    "docs/status.html",
+    "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+    "skills/productivity/delivery-dashboard/assets/dashboard-example.html"
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-blockers-status-final/tab-0-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-blockers-status-final/tab-1-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-blockers-status-final/tab-2-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-blockers-status-final/tab-0-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-blockers-status-final/tab-1-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t187-blockers-status-final/tab-2-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ]
+}
