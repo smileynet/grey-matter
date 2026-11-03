@@ -1,26 +1,26 @@
-# Model tier research: preparation and invocation plan
+# Model tier research results
 
-**Status: all 18 calls captured; 15 have valid blind scores, and 3 remain unscorable because their review receipts failed validation.** Ticket #169 compares
+**Status: all 18 calls captured; 13 have valid blind scores (11 pass, 2 fail), and 5 are unscorable.** Two earlier pass receipts lack retained reviewer dispatch/completion provenance; three more receipts failed validation. Ticket #169 compares
 three read-only research tasks under each harness's low-cost profile and native
 default. All cells completed without retry; all six Claude outputs report model
 identity. Codex and Kiro outputs do not report actual identity. Their responses
-are eligible for semantic blind grading as requested-profile observations, but
-cannot support model-level comparison or adoption. Google and Agy were not
+with valid blind grades remain requested-profile observations; no model-level
+comparison or adoption claim is supported. Google and Agy were not
 invoked. The first-wave protocol, authorization and measurement ledger are
 preserved at their original hashes in private scratch. The active continuation
 protocol SHA-256 is
 `927726a9190c0612d5c562e1fe44c95b14f7d1842ca87b5402faf0e17b37ebb0`.
 
-## What the planned comparison measures
+## What the comparison measures
 
 The same eight-file synthetic source packet supports three tasks: discover all
 callers of an exported function (including alias and dynamic imports), summarize
 a policy module, and answer a question from a cited document. Exact prompts and
 inputs are in the [task manifest](../../../scripts/fixtures/model-research/t169/tasks.json)
 and [source packet](../../../scripts/fixtures/model-research/t169/source-files.json).
-The held-out answer key is private at `.scratch/t169/answer-key.json`; only its
-hash is recorded in receipts. Each session will receive one prompt and the same
-eight sources.
+The held-out answer key remains private; receipts bind its hash without
+including its contents. Each session received one prompt and the same eight
+sources.
 
 The grader records deterministic candidate evidence only: mentioned paths,
 citation path/heading presence, and a whitespace-token word count. These checks
@@ -62,10 +62,9 @@ to execute the three permitted providers.
 
 ## Execution evidence (2026-11-03)
 
-Blind review completed for all 18 outputs. Thirteen valid scores passed and two
-valid scores failed. Three outputs are unscorable because their reviewer
-receipts could not be validated; they are not counted as model failures or
-passes. Claude's native defaults reported Opus 5.5 and the cheap profile
+Blind review was attempted for all 18 outputs. Eleven valid scores passed and
+two valid scores failed. Five outputs are unscorable; they are not counted as
+model failures or passes. Claude's native defaults reported Opus 5.5 and the cheap profile
 reported Haiku 5.5. Codex and Kiro completed all six requested profiles but did
 not report actual identity. The first caller cells were initially held as
 `identity-unreported`; a reviewed, hash-bound continuation allowed the remaining
@@ -74,8 +73,8 @@ five cells per provider. All twelve Codex/Kiro receipts record
 
 | Harness | Requested profile | Task | Native result | Actual identity | Time | Reported usage or cost |
 |---|---|---|---|---|---:|---|
-| Claude | Haiku 5.5 | Caller discovery | Blind review pass | Haiku 5.5 | 8.139 s | $0.001527 list estimate |
-| Claude | Native default | Caller discovery | Blind review pass | Opus 5.5 | 6.562 s | $0.036134 list estimate |
+| Claude | Haiku 5.5 | Caller discovery | Unscorable: reviewer provenance unverified | Haiku 5.5 | 8.139 s | $0.001527 list estimate |
+| Claude | Native default | Caller discovery | Unscorable: reviewer provenance unverified | Opus 5.5 | 6.562 s | $0.036134 list estimate |
 | Claude | Haiku 5.5 | Module summary | Blind review fail: 101 words; unsupported claim | Haiku 5.5 | 11.010 s | $0.001653 list estimate |
 | Claude | Native default | Module summary | Unscorable: review evidence failed validation | Opus 5.5 | 8.480 s | $0.036270 list estimate |
 | Claude | Haiku 5.5 | Cited answer | Unscorable: review receipt failed schema validation | Haiku 5.5 | 5.251 s | $0.000851 list estimate |
@@ -98,7 +97,7 @@ Codex reported token counts but no cost. Kiro reported context-use and
 turn-duration metadata, not tokens or credits; its cost remains unknown. These
 wall times include process startup and host load, so they are observations, not
 pure model latency. Raw responses, full receipts, blind-review candidates,
-identity crosswalk and first-wave ledger remain private in `.scratch/t169/`.
+identity crosswalk and first-wave ledger remain private in the evidence bundle.
 
 ## Safety, limits and classification
 
@@ -145,32 +144,42 @@ and heading. Keyword or citation-presence checks never decide semantic pass.
 
 The candidate command records deterministic evidence only. The `finalize`
 command requires a blinded manual receipt bound to the candidate and response
-hashes before it can emit a pass or fail. Three review receipts failed
-validation and remain unscorable; those outputs have no quality
-classification. Exact attempts, normalized envelopes, score receipts, and
-identifiers remain private in `.scratch/t169/`.
+hashes before it can emit a pass or fail. Five results remain unscorable: two
+earlier pass receipts have no retained dispatch/completion trace, and three
+receipts failed schema, quote, or semantic validation. Unscorable outputs have
+no quality classification; the earlier pass receipts are retained only as
+secondary evidence.
 
 ## Review outcome and validation notes
 
-Thirteen of the 15 valid receipts passed. Two failed: one module summary exceeded
+Eleven of the 13 valid receipts passed. Two failed: one module summary exceeded
 the 90-token limit and made an unsupported claim; one cited answer omitted the
 required heading in its citation. Three other results have no quality
 classification because the reviewer receipt could not be validated: one
 summary review used non-verbatim evidence, one citation review did not provide
 a boolean for its one-sentence judgment, and one caller review returned an
 actual-caller set inconsistent with the answer and source. These are review
-validation failures, not model failures.
+validation failures, not model failures. Two earlier pass receipts lack
+retained dispatch/completion traces proving reviewer independence; those grades
+are unverified and do not count in the 13-score denominator.
 
 The grader, rubric, source, key, and native answers were not changed. A
-scratch-only deterministic envelope helper attached each candidate hash and
-the actual independent reviewer's opaque ID; it copied the task-specific
-review body without scoring or inferring any semantic field. Explicit field
-aliases and verbatim quote corrections are recorded with their raw attempts.
+deterministic envelope helper attached candidate hashes and the observed
+collaboration agent names to reviews with retained task provenance; it copied
+task-specific review bodies without scoring or inferring any semantic field.
+Two earlier receipt IDs were generated inside the review bodies and their
+collaboration traces are unavailable, so they were not rebound and their pass
+grades remain secondary only. Explicit field aliases and verbatim quote
+corrections are recorded with their raw attempts.
 An independent critic checked the helper and its two offline tests; both tests
-passed. Full raw attempts, hashes, normalization notes, and outcomes are in
-private `.scratch/t169/`.
+passed. The [private artifact index](model-tier-private-artifact-index-20261103.json)
+records paths and hashes without exposing the payloads, provider crosswalk,
+review IDs, or session IDs. Private response and review evidence, the answer
+key, and native Kiro sessions remain retained through the #169–#172 handoff.
+After the independent audit, cleanup of six captured Kiro V2 sessions and 18
+verified-empty controller working directories awaits parent authorization.
 
-## Verification before measurement
+## Verification and cleanup status
 
 The [controller](../../../scripts/spike-model-tier-research-t169.mjs) SHA-256 is
 `a499ef5bf3f45195062ec167c08f0248c26cede0401f91d53110c31f347e9cc1`; the
@@ -178,4 +187,6 @@ The [controller](../../../scripts/spike-model-tier-research-t169.mjs) SHA-256 is
 SHA-256 is
 `7db36c67ceca1c8eaaf20d7bfd103684fb7319b91447d9ed653931df79a6c88c`. Their
 exact hashes and the source/task hashes are bound in the continuation protocol.
-No model response is semantically scored by the producing session.
+No model response is semantically scored by the producing session. The study
+and its review are complete; private evidence cleanup has not been authorized or
+performed.

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "ticket": 169,
+  "status": "Private evidence retained through the 169–172 handoff; cleanup awaits parent authorization after independent audit.",
+  "privacy": {
+    "indexBodyIncludesRawText": false,
+    "indexBodyIncludesSessionIdentifiers": false,
+    "indexBodyIncludesReviewerOrBlindIdentifiers": false,
+    "indexBodyIncludesProviderCrosswalk": false,
+    "indexBodyIncludesAnswerKeyPayload": false,
+    "referencedPrivatePayloadsAreRepresentedByPathAndHashOnly": true
+  },
+  "artifacts": [
+    {
+      "label": "Captured raw responses and native receipts",
+      "path": ".scratch/t169/raw/",
+      "fileCount": 72,
+      "bytes": 175407,
+      "treeSha256": "c3879ad245f5f64b1af505168a5abe7b613714027e23ae3870f85c1deb77012e",
+      "contentsIncluded": false
+    },
+    {
+      "label": "Blinded review inputs, attempts, envelopes and scores",
+      "path": ".scratch/t169/reviews/",
+      "fileCount": 91,
+      "bytes": 95137,
+      "treeSha256": "7dd7b0f21809949a2489be85b459758d09b65a2124641ec3ea51c49d57ade303",
+      "contentsIncluded": false
+    },
+    {
+      "label": "Held-out answer key (payload withheld)",
+      "path": ".scratch/t169/answer-key.json",
+      "bytes": 727,
+      "sha256": "429bf76172338d0f52963d3ac2c14fba3f701defaae42e444997a1096c04efae",
+      "contentsIncluded": false
+    },
+    {
+      "label": "Active protocol receipt",
+      "path": ".scratch/t169/protocol.json",
+      "bytes": 12084,
+      "sha256": "927726a9190c0612d5c562e1fe44c95b14f7d1842ca87b5402faf0e17b37ebb0",
+      "contentsIncluded": false
+    },
+    {
+      "label": "Active measurement ledger",
+      "path": ".scratch/t169/measurement-ledger.json",
+      "bytes": 16822,
+      "sha256": "c59cd82c626c1b607d0347bfe87cf7c48fc3465f28c8e0fdf11656823f78a77f",
+      "contentsIncluded": false
+    },
+    {
+      "label": "Continuation authorization receipt",
+      "path": ".scratch/t169/authorization.json",
+      "bytes": 1310,
+      "sha256": "45fd0ad9a176672c8d7f972423779f3e37e932df61ad280bba4d9823ebb11cfc",
+      "contentsIncluded": false
+    },
+    {
+      "label": "First-wave protocol snapshot",
+      "path": ".scratch/t169/protocol-first-wave.json",
+      "bytes": 9403,
+      "sha256": "e086dfb13a8ac3b16de4712d1e82707be6cad663b18eb98c0d2d40d60f62ec8c",
+      "contentsIncluded": false
+    },
+    {
+      "label": "First-wave measurement ledger snapshot",
+      "path": ".scratch/t169/measurement-ledger-first-wave.json",
+      "bytes": 6066,
+      "sha256": "e23a749b82885f94cfe126d6300666c3ca8ace3df308a535861e2a2a39fabc5e",
+      "contentsIncluded": false
+    },
+    {
+      "label": "First-wave authorization snapshot",
+      "path": ".scratch/t169/authorization-first-wave.json",
+      "bytes": 813,
+      "sha256": "6a05a0f1394a6138f082f5406a364471a644488cf1041beae25b7b16586af35e",
+      "contentsIncluded": false
+    },
+    {
+      "label": "Review provenance manifest (IDs and body omitted here)",
+      "path": ".scratch/t169/review-provenance.json",
+      "bytes": 22295,
+      "sha256": "2bc406be26111ca23fae08476e93e99607bffd6305371cce8cca728161918feb",
+      "contentsIncluded": false
+    },
+    {
+      "label": "Reviewer dispatch/completion trace excerpts (private)",
+      "path": ".scratch/t169/review-traces.json",
+      "bytes": 43108,
+      "sha256": "c8b77e1e9a28cfac02dc7316668e217b53bfc19e54f93564ed62294125a154cd",
+      "contentsIncluded": false
+    },
+    {
+      "label": "Cleanup inventory (session identifiers withheld)",
+      "path": ".scratch/t169/cleanup-plan.json",
+      "bytes": 16340,
+      "sha256": "05b777a8dd7fc31dc5d4103150c7cfbe22ce8777158c8ecca89e5681c5e5184a",
+      "contentsIncluded": false
+    }
+  ]
+}
