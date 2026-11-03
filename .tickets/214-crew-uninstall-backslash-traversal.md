@@ -1,7 +1,7 @@
 ---
 id: "214"
 title: "crew-research uninstaller can delete outside its skill root via backslash or linked paths on Windows"
-status: open
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -23,6 +23,15 @@ Intent source: the 2026-11-03 sync found an uncommitted working-tree change to `
 
 ## Acceptance criteria
 
-- [ ] A manifest entry containing `\`, `/`, `:` or a leading dot is kept as unsafe and never joined into a delete path
-- [ ] No path is removed when the manifest, skill root, steering, tier file or codex AGENTS.md is reached through a symlink or junction
-- [ ] Regression tests cover backslash traversal and each linked root; `node scripts/gate.mjs pre-merge` shows crew-uninstall ok on Windows
+- [x] A manifest entry containing `\`, `/`, `:` or a leading dot is kept as unsafe and never joined into a delete path
+- [x] No path is removed when the manifest, skill root, steering, tier file or codex AGENTS.md is reached through a symlink or junction
+- [x] Regression tests cover backslash traversal and each linked root; `node scripts/gate.mjs pre-merge` shows crew-uninstall ok on Windows
+
+## Resolution (2026-11-03)
+
+done: uninstaller rejects backslash/colon traversal names before joining and skips any path reached through a symlink or junction; Windows fixtures use junctions
+
+### Verification
+1. ✓ A manifest entry containing \, /, : or a leading dot is kept as unsafe and never joined into a delete path — "b8936c1: plan() tests /[\\/:]/ or leading dot before join(root,name); 'manifest traversal entries cannot delete directories outside the skill root' passes (backslash and slash variants)"
+2. ✓ No path is removed when the manifest, skill root, steering, tier file or codex AGENTS.md is reached through a symlink or junction — "b8936c1: linkedPath() walk keeps manifest/root/tier/steering/codex paths reached via link; 5 'migration preserves contents reached through a linked <root>' tests pass with junctions"
+3. ✓ Regression tests cover backslash traversal and each linked root; node scripts/gate.mjs pre-merge shows crew-uninstall ok on Windows — "node --test scripts/uninstall-crew-research.test.mjs: 9 pass 0 fail on Windows; node scripts/gate.mjs pre-merge: [ok] crew-uninstall (ticket-graph red only on pre-existing 172, tracked by 219)"
