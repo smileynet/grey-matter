@@ -60,13 +60,22 @@ enter a prompt or promoted report.
 ## Invocation and isolation
 
 The dedicated Node controller uses absolute, hash-pinned executable paths and
-explicit argument arrays (`shell: false`). Default mode only builds a plan. A
-native call requires an authorization receipt bound to the exact controller and
-protocol hashes, independent critic acceptance, and the parent's release of
-the serial native lease. The controller reserves each provider/task/profile
-cell before launch; duplicate cells cannot be retried. It captures stdout,
-stderr, native completion or failure, elapsed time, requested/served identity,
-usage fields when present, and raw stream hashes.
+explicit argument arrays (`shell: false`). Plan mode creates a unique empty
+temporary directory and freezes its absolute path, filesystem identity, and the
+complete argv (including the matching cwd) into one JSON plan file. The parent
+reviews the full plan and authorizes the SHA-256 of the exact plan file bytes.
+Execution loads that same file with `--plan <absolute-path>`; it validates the
+serialized inputs and passes its authorized cwd and argv unchanged to the
+process. Before launch, the controller verifies the path still names the same
+ordinary, non-reparse, empty directory. A native call also requires an
+authorization receipt bound to the plan file hash, controller and protocol
+hashes, independent critic acceptance, and the parent's release of the serial
+native lease. The controller reserves each provider/task/profile cell before
+launch; duplicate cells cannot be retried. It captures stdout, stderr, native
+completion or failure, elapsed time, requested/served identity, usage fields
+when present, and raw stream hashes. Unused plan directories must be removed by
+their exact path after the plan is abandoned; execution removes the used
+directory.
 
 Claude runs with built-in tools disabled, MCP tools denied, and session
 persistence off. Codex runs with user configuration ignored, the local `0.166.0`
@@ -123,9 +132,12 @@ frozen answer-key item. The grader envelope binder attaches the actual reviewer
 identity from the exact private dispatch/completion trace: dispatched task text,
 canonical task name returned by the collaboration service, completion status,
 and the completed response hash. The trace remains private and is bound by its
-own hash. The binder also attaches trusted fixture, response, rubric, key, and
-prompt hashes after review. It copies the semantic body byte-for-byte; it does not invent missing
-fields, map aliases, or change a judgment. Invalid schema, missing fields,
+own hash. The binder checks consistency of the supplied trace but cannot
+authenticate it; the audit must compare its dispatch input, canonical task
+identity, completion metadata, and response hash with the actual collaboration
+records. The binder also attaches trusted fixture, response, rubric, key, and
+prompt hashes after review. It copies the semantic body byte-for-byte; it does
+not invent missing fields, map aliases, or change a judgment. Invalid schema, missing fields,
 unrecognized dimension/key, or inexact evidence makes the reviewer result
 unscorable. There is no second attempt to improve a grade. Preserve the raw
 review bytes and the validator result.

@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import {
-  closeSync, existsSync, mkdirSync, mkdtempSync, openSync, readFileSync,
-  rmSync, writeFileSync,
+  closeSync, existsSync, lstatSync, mkdirSync, mkdtempSync, openSync, readFileSync,
+  readdirSync, realpathSync, rmSync, writeFileSync,
 } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
@@ -28,7 +28,7 @@ export const FIXTURE_HASHES = Object.freeze({
 });
 export const ANSWER_KEY_SHA256 = "975DDA95E186A4735915D4647FC331D068DCE6DDF9F25F019FCAB9ED9DFD6634";
 // Rebound after the protocol is frozen; the controller source is hashed at runtime.
-export const PROTOCOL_SHA256 = "4D4193AF0CA1603537D075D3C0F3EDB8D6E3B225A1F228010D9EE81CFE4ED264";
+export const PROTOCOL_SHA256 = "64AB145A70702B7E3B0F3EFA5B031FA7A88B8AC2ADC26E95021BC0AD57BDAA40";
 
 const models = Object.freeze({
   claude: Object.freeze({ cheap: "claude-haiku-5-5", default: null }),
@@ -47,7 +47,7 @@ export function parseOptions(argv = process.argv.slice(2)) {
       help: { type: "boolean", short: "h" }, fixture: { type: "string" },
       provider: { type: "string" }, tier: { type: "string" },
       "cell-id": { type: "string" }, execute: { type: "boolean" },
-      authorization: { type: "string" }, "evidence-dir": { type: "string" },
+      authorization: { type: "string" }, plan: { type: "string" }, "evidence-dir": { type: "string" },
     },
   });
   return parsed.values;
@@ -86,7 +86,7 @@ function launcher(provider) {
       executable: "D:\\tools\\bun-install\\global\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
       sha256: "9D563EE4E0441FF9D59D612013E0460DDF8E5709735C2D9F6B98B7EF8CA4EB42",
       sibling: "D:\\tools\\bun-install\\global\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex-code-mode-host.exe",
-      siblingSha256: "977C1F01C9EFA0CBFE1B9032717C95F92E1C965C8441A8DACBFE824C5C79A527",
+      siblingSha256: "977C1F01C9EFAC0BFE1B9032717C95F92E1C965C8441A8DACBFE824C5C79A527",
       version: "Codex CLI 0.166.0 (observed for prior study)",
     },
     kiro: {
@@ -126,10 +126,61 @@ function isWithin(path, parent) {
   return rel === "" || (!rel.startsWith(`..${sep}`) && rel !== ".." && !isAbsolute(rel));
 }
 
+function samePath(left, right) {
+  const a = resolve(left); const b = resolve(right);
+  return process.platform === "win32" ? a.toLowerCase() === b.toLowerCase() : a === b;
+}
+
+function cwdIdentity(path) {
+  const info = lstatSync(path, { bigint: true });
+  if (!info.isDirectory() || info.isSymbolicLink() || !samePath(realpathSync(path), path)) fail("Planned working directory must be an ordinary directory");
+  return { dev: info.dev.toString(), ino: info.ino.toString(), birthtimeNs: info.birthtimeNs.toString() };
+}
+
+function verifyPlannedCwd(plan) {
+  if (!isAbsolute(plan.cwd) || isWithin(plan.cwd, REPO)) fail("Planned working directory must be absolute and outside the repository");
+  const identity = cwdIdentity(plan.cwd);
+  if (JSON.stringify(identity) !== JSON.stringify(plan.cwdIdentity)) fail("Planned working directory identity changed");
+  if (readdirSync(plan.cwd).length !== 0) fail("Planned working directory is not empty");
+}
+
 function verifyProtocol() {
-  if (PROTOCOL_SHA256 === "8D0766424A2225C0C9BD698484AA0D0C6F0F5599CDCFCA16E8937EB471960E2D" || hashFile(NOTE) !== PROTOCOL_SHA256) fail("Protocol hash is not bound to the frozen note");
+  if (PROTOCOL_SHA256 === "PENDING" || hashFile(NOTE) !== PROTOCOL_SHA256) fail("Protocol hash is not bound to the frozen note");
   const keyPath = join(REPO, ".scratch", "t170", "preparation", "answer-key.json");
   if (hashFile(keyPath) !== ANSWER_KEY_SHA256) fail("Private answer-key hash changed or is unavailable");
+}
+
+function validatePlan(plan) {
+  if (!plan || typeof plan !== "object" || Array.isArray(plan) || plan.schemaVersion !== 1 || plan.ticket !== TICKET ||
+    !PROVIDERS.includes(plan.provider) || !TIERS.includes(plan.tier) || !TASKS.includes(plan.fixtureId) ||
+    !/^[A-Z0-9-]{3,32}$/.test(plan.cellId ?? "")) fail("Malformed or ineligible persisted plan");
+  const { fixture, sha256 } = readFixture(plan.fixtureId);
+  const prompt = buildPrompt(fixture);
+  const bin = launcher(plan.provider);
+  if (!isAbsolute(plan.cwd) || !plan.cwdIdentity || typeof plan.cwdIdentity.dev !== "string" ||
+    typeof plan.cwdIdentity.ino !== "string" || typeof plan.cwdIdentity.birthtimeNs !== "string") fail("Persisted plan has no absolute identified working directory");
+  if (plan.executable !== bin.executable || plan.executableSha256 !== bin.sha256 || plan.expectedVersion !== bin.version ||
+    plan.siblingHost !== (bin.sibling ?? null) || plan.siblingHostSha256 !== (bin.siblingSha256 ?? null) ||
+    plan.requestedModel !== models[plan.provider][plan.tier] || plan.requestedIdentityIsNotServedIdentity !== true ||
+    JSON.stringify(plan.argv) !== JSON.stringify(buildArgv(plan.provider, plan.tier, prompt, plan.cwd)) ||
+    plan.shell !== false || plan.stdinBytes !== 0 || plan.timeoutMs !== CALL_TIMEOUT_MS || plan.fixtureSha256 !== sha256 ||
+    plan.promptSha256 !== hash(Buffer.from(prompt)) || plan.protocolSha256 !== PROTOCOL_SHA256 ||
+    plan.controllerSha256 !== hashFile(fileURLToPath(import.meta.url)) || plan.answerKeySha256 !== ANSWER_KEY_SHA256) {
+    fail("Persisted plan differs from the frozen controller inputs");
+  }
+  const evidenceDir = resolve(plan.evidenceDir);
+  if (evidenceDir !== plan.evidenceDir || isWithin(evidenceDir, REPO) && !isWithin(evidenceDir, join(REPO, ".scratch", "t170"))) fail("Persisted evidence path violates the ticket boundary");
+  const expectedToolPolicy = plan.provider === "claude" ? "built-in tools disabled; MCP denied" : plan.provider === "codex" ? "shell tool disabled; read-only sandbox; user config ignored" : "no tools pre-approved; schemas may remain present";
+  if (plan.toolPolicy !== expectedToolPolicy) fail("Persisted plan has an unexpected tool policy");
+}
+
+export function loadPlanFile(path) {
+  if (!path || !isAbsolute(path)) fail("Plan file path must be absolute");
+  verifyProtocol();
+  const bytes = readFileSync(path);
+  const plan = JSON.parse(bytes.toString("utf8"));
+  validatePlan(plan);
+  return { plan, bytes };
 }
 
 export function buildCellPlan({ provider, tier, fixtureId, cellId, evidenceDir } = {}) {
@@ -139,15 +190,18 @@ export function buildCellPlan({ provider, tier, fixtureId, cellId, evidenceDir }
   const renderedPrompt = buildPrompt(fixture);
   const bin = launcher(provider);
   if (!isAbsolute(bin.executable)) fail("Pinned executable path is not absolute on this host");
-  const cwd = join(tmpdir(), `gm-t170-${cellId}`);
   const privateEvidence = resolve(evidenceDir ?? join(REPO, ".scratch", "t170", "raw", cellId));
-  if (isWithin(cwd, REPO) || isWithin(privateEvidence, REPO) && !isWithin(privateEvidence, join(REPO, ".scratch", "t170"))) fail("Temporary and evidence paths violate the ticket boundary");
+  if (isWithin(privateEvidence, REPO) && !isWithin(privateEvidence, join(REPO, ".scratch", "t170"))) fail("Evidence path violates the ticket boundary");
+  const cwd = realpathSync(mkdtempSync(join(tmpdir(), "gm-t170-")));
+  const identity = cwdIdentity(cwd);
+  if (isWithin(cwd, REPO)) fail("Temporary path violates the ticket boundary");
+  const argv = buildArgv(provider, tier, renderedPrompt, cwd);
   return {
     schemaVersion: 1, ticket: TICKET, cellId, provider, tier, fixtureId,
     requestedModel: models[provider][tier], requestedIdentityIsNotServedIdentity: true,
     executable: bin.executable, executableSha256: bin.sha256, expectedVersion: bin.version,
     siblingHost: bin.sibling ?? null, siblingHostSha256: bin.siblingSha256 ?? null,
-    cwd, argv: buildArgv(provider, tier, renderedPrompt, cwd), shell: false,
+    cwd, cwdIdentity: identity, argv, shell: false,
     stdinBytes: 0, timeoutMs: CALL_TIMEOUT_MS, fixtureSha256: sha256,
     promptSha256: hash(Buffer.from(renderedPrompt)),
     protocolSha256: PROTOCOL_SHA256, controllerSha256: hashFile(fileURLToPath(import.meta.url)),
@@ -207,12 +261,12 @@ export function extractResult(provider, stdout) {
     errors: errors ? ["native-error"] : malformed };
 }
 
-function readAuthorization(path, plan) {
+function readAuthorization(path, plan, planSha256) {
   if (!path || !isAbsolute(path)) fail("Execution requires an absolute parent authorization receipt");
   const auth = JSON.parse(readFileSync(path, "utf8"));
   if (auth.schemaVersion !== 1 || auth.ticket !== TICKET || auth.protocolSha256 !== PROTOCOL_SHA256 || auth.controllerSha256 !== plan.controllerSha256) fail("Authorization receipt is not bound to the frozen protocol and controller");
   if (auth.criticAccepted !== true || typeof auth.criticCommit !== "string" || auth.parentLeaseReleased !== true) fail("Independent critic acceptance and parent lease release are required");
-  if (!Array.isArray(auth.allowedCells) || !auth.allowedCells.some((cell) => cell.cellId === plan.cellId && cell.provider === plan.provider && cell.fixtureId === plan.fixtureId && cell.tier === plan.tier && cell.planSha256 === hash(Buffer.from(JSON.stringify(plan))))) fail("This exact cell plan is not released by the parent");
+  if (!Array.isArray(auth.allowedCells) || !auth.allowedCells.some((cell) => cell.cellId === plan.cellId && cell.provider === plan.provider && cell.fixtureId === plan.fixtureId && cell.tier === plan.tier && cell.planSha256 === planSha256)) fail("This exact plan file is not released by the parent");
 }
 
 function reserve(ledgerPath, plan) {
@@ -232,24 +286,23 @@ function reserve(ledgerPath, plan) {
   } catch (error) { closeSync(lockFd); rmSync(lockPath, { force: true }); throw error; }
 }
 
-export function runCell(plan, authPath) {
+export function runCell(plan, authPath, { planBytes, spawn = spawnSync, ledgerPath = join(REPO, ".scratch", "t170", "measurement-ledger.json") } = {}) {
   verifyProtocol();
-  if (hashFile(fileURLToPath(import.meta.url)) !== plan.controllerSha256) fail("Controller changed after the cell plan was built");
-  readAuthorization(authPath, plan);
+  if (!Buffer.isBuffer(planBytes) || JSON.stringify(JSON.parse(planBytes.toString("utf8"))) !== JSON.stringify(plan)) fail("Execution must consume the exact persisted plan bytes");
+  validatePlan(plan);
+  readAuthorization(authPath, plan, hash(planBytes));
   const bin = launcher(plan.provider);
   if (!existsSync(bin.executable) || hashFile(bin.executable) !== bin.sha256) fail("Pinned executable is missing or changed; do not fall back to PATH");
   if (plan.siblingHost && (!existsSync(plan.siblingHost) || hashFile(plan.siblingHost) !== bin.siblingSha256)) fail("Pinned Codex host is missing or changed");
-  const ledgerPath = join(REPO, ".scratch", "t170", "measurement-ledger.json");
+  verifyPlannedCwd(plan);
   const reservation = reserve(ledgerPath, plan);
-  let cwd;
   try {
-    cwd = mkdtempSync(join(tmpdir(), `gm-t170-${plan.cellId}-`));
-    const argv = buildArgv(plan.provider, plan.tier, buildPrompt(readFixture(plan.fixtureId).fixture), cwd);
     mkdirSync(dirname(plan.evidenceDir), { recursive: true });
     mkdirSync(plan.evidenceDir, { recursive: false });
+    verifyPlannedCwd(plan);
     const started = process.hrtime.bigint();
-    const result = spawnSync(bin.executable, argv, {
-      cwd, env: process.env, input: Buffer.alloc(0), encoding: null, shell: false,
+    const result = spawn(bin.executable, plan.argv, {
+      cwd: plan.cwd, env: process.env, input: Buffer.alloc(0), encoding: null, shell: false,
       timeout: CALL_TIMEOUT_MS, maxBuffer: 8 * 1024 * 1024, windowsHide: true,
     });
     const durationMs = Number(process.hrtime.bigint() - started) / 1e6;
@@ -284,16 +337,28 @@ export function runCell(plan, authPath) {
     writeFileSync(reservation.ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
     return { status, durationMs, receiptPath: join(plan.evidenceDir, "receipt.json") };
   } finally {
-    if (cwd) rmSync(cwd, { recursive: true, force: true, maxRetries: 3 });
-    closeSync(reservation.lockFd); rmSync(reservation.lockPath, { force: true });
+    try {
+      if (existsSync(plan.cwd)) {
+        if (JSON.stringify(cwdIdentity(plan.cwd)) !== JSON.stringify(plan.cwdIdentity)) fail("Planned working directory changed; preserving it during cleanup");
+        rmSync(plan.cwd, { recursive: true, force: true, maxRetries: 3 });
+      }
+    } finally { closeSync(reservation.lockFd); rmSync(reservation.lockPath, { force: true }); }
   }
 }
 
 function main(argv) {
   const opts = parseOptions(argv);
-  if (opts.help) return "node scripts/spike-model-task-tier-t170.mjs --fixture <task> --provider <claude|codex|kiro> --tier <cheap|default> --cell-id <opaque-id> [--execute --authorization <absolute-json>]";
+  if (opts.help) return "node scripts/spike-model-task-tier-t170.mjs --fixture <task> --provider <claude|codex|kiro> --tier <cheap|default> --cell-id <opaque-id> [--execute --plan <absolute-json> --authorization <absolute-json>]";
+  if (opts.plan) {
+    if (opts.fixture || opts.provider || opts.tier || opts["cell-id"] || opts["evidence-dir"]) fail("Use either --plan or plan selectors, not both");
+    const loaded = loadPlanFile(opts.plan);
+    if (opts.execute) return JSON.stringify(runCell(loaded.plan, opts.authorization, { planBytes: loaded.bytes }), null, 2);
+    if (opts.authorization) fail("--authorization requires --execute");
+    return JSON.stringify(loaded.plan, null, 2);
+  }
+  if (opts.execute || opts.authorization) fail("Execution requires the exact persisted --plan and --authorization files");
   const plan = buildCellPlan({ fixtureId: opts.fixture, provider: opts.provider, tier: opts.tier, cellId: opts["cell-id"], evidenceDir: opts["evidence-dir"] });
-  return JSON.stringify(opts.execute ? runCell(plan, opts.authorization) : { mode: "dry-run", ...plan }, null, 2);
+  return JSON.stringify(plan, null, 2);
 }
 
 const invokedPath = process.argv[1] ? pathToFileURL(resolve(process.argv[1])).href : null;

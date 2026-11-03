@@ -3,6 +3,11 @@
   "ticket": 170,
   "items": [
     {
+      "name": "offline-evidence-revision.json",
+      "privatePath": ".scratch/t170/preparation/offline-evidence-revision.json",
+      "purpose": "Retained fake-process execution-boundary evidence, syntax checks, and dry-run plan; contains no provider call output."
+    },
+    {
       "name": "answer-key.json",
       "privatePath": ".scratch/t170/preparation/answer-key.json",
       "sha256": "975DDA95E186A4735915D4647FC331D068DCE6DDF9F25F019FCAB9ED9DFD6634",

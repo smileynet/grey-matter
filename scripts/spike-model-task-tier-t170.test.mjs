@@ -1,18 +1,34 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import {
   BLOCKED_GOOGLE_CELLS, CALL_TIMEOUT_MS, FIXTURE_HASHES, PROVIDERS,
   TASKS, TIERS, buildArgv, buildCellPlan, buildPrompt, extractResult,
-  readFixture,
+  loadPlanFile, readFixture, runCell,
 } from "./spike-model-task-tier-t170.mjs";
 import { bindReview, validateReviewBody } from "./t170-review-envelope.mjs";
 
 const key = JSON.parse(readFileSync(new URL("../.scratch/t170/preparation/answer-key.json", import.meta.url), "utf8"));
 const providerResponse = (provider, tier, prompt) => buildArgv(provider, tier, prompt, "C:\\Temp\\gm t170");
+const sha = (value) => createHash("sha256").update(value).digest("hex").toUpperCase();
+
+function authorize(plan, planBytes, root) {
+  const authorization = {
+    schemaVersion: 1, ticket: 170, protocolSha256: plan.protocolSha256,
+    controllerSha256: plan.controllerSha256, criticAccepted: true,
+    criticCommit: "offline-fake-only", parentLeaseReleased: true,
+    allowedCells: [{ cellId: plan.cellId, provider: plan.provider, fixtureId: plan.fixtureId,
+      tier: plan.tier, planSha256: sha(planBytes) }],
+  };
+  const path = join(root, "authorization.json");
+  writeFileSync(path, JSON.stringify(authorization));
+  return path;
+}
 
 test("all three fixture byte hashes and scored dimensions are frozen", () => {
   assert.deepEqual(TASKS, ["doc-rewrite", "triage", "changelog-classification"]);
@@ -35,6 +51,7 @@ test("the planned matrix is exactly 18 native cells and excludes Google", () => 
   assert.equal(plan.requestedIdentityIsNotServedIdentity, true);
   assert.equal(plan.timeoutMs, CALL_TIMEOUT_MS);
   assert.throws(() => buildCellPlan({ provider: "agy", tier: "cheap", fixtureId: TASKS[0], cellId: "T170-C01" }), /eligible/);
+  rmSync(plan.cwd, { recursive: true, force: true });
 });
 
 test("provider argv uses restricted modes, explicit model selections and no fallback", () => {
@@ -132,4 +149,77 @@ test("blind review schema binds trusted hashes without changing or completing se
   assert.equal(rejected.valid, false);
   assert.match(rejected.errors.join(" "), /exact response substring/);
   assert.equal(changed.issues[0].evidence, "all weeks");
+});
+
+test("runCell executes the cwd and argv in its exact authorized plan through a harmless fake process", () => {
+  const root = mkdtempSync(join(tmpdir(), "t170-fake-run-"));
+  const builtPlan = buildCellPlan({ provider: "codex", tier: "cheap", fixtureId: "doc-rewrite", cellId: "T170-EXEC-01", evidenceDir: join(root, "evidence") });
+  const planPath = join(root, "plan.json");
+  const planBytes = Buffer.from(`${JSON.stringify(builtPlan, null, 2)}\n`);
+  writeFileSync(planPath, planBytes);
+  const { plan } = loadPlanFile(planPath);
+  const authorization = authorize(plan, planBytes, root);
+  const fake = join(root, "fake-provider.mjs");
+  const observedPath = join(root, "observed.json");
+  const ledgerPath = join(root, "ledger.json");
+  writeFileSync(fake, [
+    'import { writeFileSync } from "node:fs";',
+    'const observed = JSON.parse(process.argv[2]);',
+    'writeFileSync(process.argv[3], JSON.stringify(observed));',
+    'process.stdout.write(JSON.stringify({ type: "item.completed", item: { type: "agent_message", text: "Schedule days remain selected." } }) + "\\n");',
+    'process.stdout.write(JSON.stringify({ type: "turn.completed", usage: { total_tokens: 5 } }) + "\\n");',
+  ].join("\n"));
+  const fakeSpawn = (executable, argv, options) => spawnSync(process.execPath, [fake, JSON.stringify({ executable, argv, cwd: options.cwd, shell: options.shell }), observedPath], { ...options, shell: false });
+  try {
+    const release = JSON.parse(readFileSync(authorization, "utf8"));
+    assert.equal(release.allowedCells[0].planSha256, sha(planBytes));
+    const result = runCell(plan, authorization, { planBytes, spawn: fakeSpawn, ledgerPath });
+    assert.equal(result.status, "completed");
+    const observed = JSON.parse(readFileSync(observedPath, "utf8"));
+    assert.equal(observed.executable, plan.executable);
+    assert.deepEqual(observed.argv, plan.argv);
+    assert.equal(observed.cwd, plan.cwd);
+    assert.equal(observed.shell, false);
+    assert.equal(existsSync(plan.cwd), false);
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
+test("runCell refuses a changed path, a nonempty plan directory, and a reparse directory", () => {
+  const root = mkdtempSync(join(tmpdir(), "t170-cwd-check-"));
+  const make = (cellId) => {
+    mkdirSync(join(root, cellId), { recursive: true });
+    const builtPlan = buildCellPlan({ provider: "codex", tier: "cheap", fixtureId: "doc-rewrite", cellId, evidenceDir: join(root, cellId, "evidence") });
+    const planPath = join(root, cellId, "plan.json");
+    const planBytes = Buffer.from(`${JSON.stringify(builtPlan, null, 2)}\n`);
+    writeFileSync(planPath, planBytes);
+    const { plan } = loadPlanFile(planPath);
+    return { plan, planBytes, authorization: authorize(plan, planBytes, join(root, cellId)), ledgerPath: join(root, cellId, "ledger.json") };
+  };
+  const changed = make("T170-EXEC-02");
+  const changedPlan = { ...changed.plan, cwd: `${changed.plan.cwd}-other` };
+  changedPlan.argv = buildArgv(changedPlan.provider, changedPlan.tier, buildPrompt(readFixture(changedPlan.fixtureId).fixture), changedPlan.cwd);
+  const changedBytes = Buffer.from(JSON.stringify(changedPlan));
+  assert.throws(() => runCell(changedPlan, changed.authorization, { planBytes: changedBytes }), /exact plan file/);
+  rmSync(changed.plan.cwd, { recursive: true, force: true });
+
+  const nonempty = make("T170-EXEC-03");
+  writeFileSync(join(nonempty.plan.cwd, "unexpected.txt"), "occupied");
+  assert.throws(() => runCell(nonempty.plan, nonempty.authorization, { planBytes: nonempty.planBytes }), /not empty/);
+  rmSync(nonempty.plan.cwd, { recursive: true, force: true });
+
+  const reparse = make("T170-EXEC-04");
+  const target = mkdtempSync(join(tmpdir(), "t170-target-"));
+  const displaced = `${reparse.plan.cwd}-original`;
+  renameSync(reparse.plan.cwd, displaced);
+  try {
+    symlinkSync(target, reparse.plan.cwd, "junction");
+    assert.equal(lstatSync(reparse.plan.cwd).isSymbolicLink(), true);
+    assert.throws(() => runCell(reparse.plan, reparse.authorization, { planBytes: reparse.planBytes }), /ordinary directory/);
+  } finally {
+    rmSync(reparse.plan.cwd, { recursive: true, force: true });
+    renameSync(displaced, reparse.plan.cwd);
+    rmSync(reparse.plan.cwd, { recursive: true, force: true });
+    rmSync(target, { recursive: true, force: true });
+    rmSync(root, { recursive: true, force: true });
+  }
 });
