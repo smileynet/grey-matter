@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "id": "f2",
+  "ticket": "When rendering a profile response, use displayName when it is present; otherwise fall back to the legacy name. Do not change any other profile behavior.",
+  "diff": "diff --git a/src/profile-label.js b/src/profile-label.js\n+export function profileLabel(profile) {\n+  return profile.name ?? profile.displayName ?? '';\n+}\ndiff --git a/test/profile-label.test.js b/test/profile-label.test.js\n+test('falls back to legacy name', () => {\n+  assert.equal(profileLabel({name: 'River'}), 'River');\n+});\n+test('uses the only available display name', () => {\n+  assert.equal(profileLabel({displayName: 'R. Lee'}), 'R. Lee');\n+});"
+}
