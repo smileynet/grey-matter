@@ -1,7 +1,7 @@
 ---
 id: "209"
 title: "Decommission the model-tier spike harnesses (168-171) and keep a retest recipe"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "No t168-t171 spike harness, test, fixture or gate remains in scripts/ or scripts/gates.json."
@@ -49,3 +49,13 @@ protocol docs, or one shared note they link to):
 
 `scripts/` files listed above, `scripts/gates.json`, `scripts/fixtures/model-*`,
 `docs/agents/research/*` link edits, `docs/orchestration.html` link edits, `CHANGELOG.md`.
+
+## Resolution (2026-11-03)
+
+done: spike harnesses removed; rerun recipe in docs/agents/research/model-tier-spikes-rerun.md
+
+### Verification
+1. ✓ No t168-t171 spike harness, test, fixture or gate remains in scripts/ or scripts/gates.json. — "PR merged; gate pre-release 30/30; links pinned to e35d8a8"
+2. ✓ Every research doc link to a removed file points at a pinned commit that still has it; the docs consistency check passes. — "(no evidence)"
+3. ✓ A 'How to rerun' recipe names the commit, host, CLI versions, commands and authorization step for each spike. — "(no evidence)"
+4. ✓ node scripts/gate.mjs pre-release passes on Linux with no Windows-only wrapper for these checks. — "(no evidence)"
