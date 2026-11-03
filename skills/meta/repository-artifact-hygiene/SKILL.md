@@ -5,6 +5,9 @@ description: "Classify repository artifacts and choose storage, retention and re
 
 # Repository Artifact Hygiene
 
+The tracked inspectors' operator contracts are indexed in
+[the tool-script catalog](../../engineering/orchestrate/references/tool-scripts.md).
+
 Inspect staged candidates during work; use a selected tree or bounded history only
 when requested. User and agent invocation are both supported. Inspection is
 read-only; use the user's existing authorization for subsequent changes.

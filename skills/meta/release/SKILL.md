@@ -5,6 +5,9 @@ description: "Prepare, verify, stage, publish or resume a coordinated versioned 
 
 # Release
 
+The tracked release entry points and supporting module roles are indexed in
+[the tool-script catalog](../../engineering/orchestrate/references/tool-scripts.md).
+
 Orchestrate release work for grey-matter or tkt. Read the
 [release contract](../../../docs/agents/release-contract.md) before choosing a mode;
 it owns version authorities, publishers, channels, recovery and completion gates.

@@ -6,6 +6,9 @@ disable-model-invocation: true
 
 # Sync
 
+Tracked script roles, task-specific usage routing and the on-demand inventory update
+procedure live in [orchestrate's tool-script catalog](../../engineering/orchestrate/references/tool-scripts.md).
+
 The **inbound counterpart of `release`**. Sync pulls the configured source, aligns
 its coupled state and refreshes local skills/plugins. Release handles versioned
 preparation, staging and separately authorized publication.

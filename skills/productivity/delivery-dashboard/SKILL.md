@@ -5,6 +5,9 @@ description: "Keep one dark, blue status dashboard current after every closed ti
 
 # Delivery Dashboard
 
+The tracked helpers' roles and operator boundaries are indexed in
+[the tool-script catalog](../../engineering/orchestrate/references/tool-scripts.md).
+
 One durable HTML page, updated after each closed ticket, that lets the owner see what changed for
 them, where you need them and what comes next. Write for that reader. The process behind the work
 stays out of the way, under folds and links.

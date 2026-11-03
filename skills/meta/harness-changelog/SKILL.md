@@ -5,6 +5,9 @@ description: "Detect harness upgrades (Claude Code, Codex, kiro-cli, Kiro Crew, 
 
 # Harness Changelog
 
+The tracked version helper's operator boundary is indexed in
+[the tool-script catalog](../../engineering/orchestrate/references/tool-scripts.md).
+
 Harnesses update themselves silently. Kiro Crew moved 0.9.0 to 0.11.1 in the middle of a spike, and kiro-cli moved 2.34 to 2.37 without anyone noticing. This skill turns that drift into a reviewed list of changes and proposed edits. It never applies an edit without review.
 
 ## The baseline
