@@ -1,7 +1,7 @@
 ---
 id: "196"
 title: "Reconcile original outcomes before treating residual tickets as delivery blockers"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
