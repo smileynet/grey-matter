@@ -3,6 +3,36 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "implementation-tiers", "state": "partial", "label": "Correct code observed; full workflow proof incomplete",
+      "title": "Keep default coding workers while the full job is unproven",
+      "value": "Cheaper workers produced correct code in several tasks. Missing test proof and mistakes on unclear requests kept them from qualifying as replacements for the current defaults.",
+      "diagramLabel": "Observed comparison and resulting guidance", "steps": ["Give the same task", "Check the code", "Check the worker's actions", "Keep current defaults"],
+      "limit": "One run per task and profile does not establish reliability. Harness and policy interruptions prevented several fair comparisons.",
+      "details": "The trial attempted 38 of 48 planned cells. Claude's implementation artifacts passed, but native output did not prove successful agent test execution. Kiro's ordinary tasks passed; the cheaper requested profile guessed a missing style in an ambiguity case. Codex's incomplete launch path failed before a fair comparison. Agy execution remains held after a security stop. Served identity and costs were missing for some providers; Claude costs are list estimates, not billing. No default or global permission changed.",
+      "tickets": ["167"],
+      "sources": [{"label": "Implementation results and limitations", "href": "agents/research/model-tier-implementation-20261102.md"}, {"label": "Independent evidence audit", "href": "agents/research/model-tier-trial-20261103-audit.md"}, {"label": "Current model guidance", "href": "agents/harness-surfaces/models-and-usage.md"}]
+    },
+    {
+      "id": "review-tiers", "state": "partial", "label": "Planted defects found; strict review output incomplete",
+      "title": "Check review findings before using them as a gate",
+      "value": "Reviewers found the planted problems in these small cases. Unsupported extra claims and output-format failures leave cheaper automated review unqualified.",
+      "diagramLabel": "Observed review checks", "steps": ["Show one proposed change", "Read the findings", "Verify each claim", "Keep current defaults"],
+      "limit": "Four small cases do not establish production review quality. One requested cheaper alias served a different model.",
+      "details": "Fourteen of 23 attempts met the required JSON format. Secondary blind scoring found the seeded defect and changed-line citation in all 22 nonempty responses, with nine unsupported claims and five duplicate findings. One startup failure produced no response. No cheaper profile covered all four strict-format cases. Claude's requested haiku alias served Sonnet 5.5; Codex and Kiro did not report actual identity. The earlier unintended help turn had unknown usage, so total budget compliance remains unverified. Google was held without a call.",
+      "tickets": ["168"],
+      "sources": [{"label": "Review results", "href": "agents/research/model-tier-review-20261103-results.md"}, {"label": "Independent audit", "href": "agents/research/model-tier-review-20261103-audit.md"}]
+    },
+    {
+      "id": "research-tiers", "state": "partial", "label": "Accuracy tested; model choice unchanged",
+      "title": "Keep source checks beside delegated research",
+      "value": "Most scored answers met the small research tasks. Missing citations, an oversized summary and gaps in review evidence kept the trial from qualifying a cheaper model.",
+      "diagramLabel": "Observed research checks", "steps": ["Freeze the sources", "Ask one question", "Check the answer and citation", "Keep current defaults"],
+      "limit": "Five of 18 results were unscorable. Some model identities were absent; retained reviewer traces were producer-transcribed rather than platform exports.",
+      "details": "Thirteen valid review receipts yielded eleven passes and two failures. A Haiku summary exceeded the word cap and added an unsupported claim; a requested cheap Kiro answer omitted the required citation heading. Three review receipts failed validation, and two earlier passing receipts lacked retained dispatch evidence; neither gap counts as a model failure or verified pass. The requested cheap Codex profile passed all three tasks, but its actual model was unreported. Keep defaults. Exact native sessions and empty work directories were cleaned; private evidence remains retained for the remaining trials.",
+      "tickets": ["169"],
+      "sources": [{"label": "Research results and provenance limits", "href": "agents/research/model-tier-research-20261102.md"}, {"label": "Independent results and cleanup audit", "href": "agents/research/model-tier-research-20261103-audit.md"}]
+    },
+    {
       "id": "evaluation-runner", "state": "confirmed", "label": "Shared tasks demonstrated; tier trials underway",
       "title": "Compare workers on the same tasks",
       "value": "Two small implementation tasks ran through two assistants with separate workspaces and independent checks. The same approach now supports the next model trials.",
@@ -145,7 +175,7 @@
   ],
   "possibilities": [
     {"title": "Watch and answer through a familiar interface", "value": "Compare which interfaces show worker state and let a person answer questions or approvals.", "tickets": ["173"]},
-    {"title": "Spend less without losing the quality bar", "value": "Choose a repeatable runner, then compare models, effort and fast mode on fixed tasks.", "tickets": ["174", "167", "168", "169", "170", "171", "172"]}
+    {"title": "Spend less without losing the quality bar", "value": "The first three model trials support keeping defaults. Next, compare writing tasks, effort levels and fast mode on fixed inputs.", "tickets": ["174", "167", "168", "169", "170", "171", "172"]}
   ],
   "ticketNotes": {
     "200": ["Keep the full test workspace stable", "Build the original fixture from frozen files instead of changing host tools or templates."],
@@ -167,9 +197,9 @@
     "160": ["Follow a background worker's reply", "One message and idle notice worked; test-project dispatch, automatic worktrees and landing remain unverified."],
     "161": ["Inspect a native workflow run", "Recipe launch, guidance and a failed-step retry were observed; isolation, safe pause and successful landing remain unverified."],
     "162": ["Follow headless sessions", "Compare native results, questions, continuation and approval visibility."],
-    "167": ["Compare implementation workers", "Find which cheaper workers meet the measured quality bar on fixed coding tasks."],
-    "168": ["Compare reviewer quality", "Measure planted-defect recall and false positives before trusting a cheaper reviewer."],
-    "169": ["Compare research accuracy", "Measure caller recall and citation accuracy against a fixed answer key."],
+    "167": ["Keep defaults for implementation", "Correct code did not establish a complete cheaper-worker workflow; unclear requests and missing execution proof limit adoption."],
+    "168": ["Keep defaults for automated review", "Planted bugs were found in small cases; unsupported claims and output format still need checking."],
+    "169": ["Keep defaults for research", "Source and review evidence matter; unscorable results and missing model identities limit comparisons."],
     "170": ["Compare routine writing and triage", "Find which lighter models handle bounded text tasks without measured quality loss."],
     "171": ["Find useful effort levels", "Measure when extra reasoning effort stops helping on a fixed model and task."],
     "172": ["Measure fast mode", "Compare speed, quality and observed usage with fast mode on and off."],

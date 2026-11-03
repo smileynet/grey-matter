@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "8b7af956a819196c5fba68bd5d527139e5e093db4422bc8ba900073dbf82e576",
+  "subject": "Audited implementation, review and research findings; closed tickets167–169",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 27947,
+      "sha256": "dcb032e35b5a5d49cd19b34c895ef02b82ec04269a2fce7590357fc128415d58"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 192581,
+      "sha256": "dc8d9a5b17491960a2c87c0566077c72db3b565ae66a770b978cdd49928025de"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4441,
+      "sha256": "40f1c61335268f992ce9efbd5b8ac997063aa9ffd520c36ab2f868f29b72213c"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-final/findings-1280.png",
+      "bytes": 545335,
+      "sha256": "97a143402577e7b826624345849c092285527405b613c71d25cf539e12fcd417",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-final/tickets-1280.png",
+      "bytes": 225592,
+      "sha256": "5bf476986bb4d383917daf4e5951216fa68fbb6823b06e31459116eb9151ab62",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-final/findings-390.png",
+      "bytes": 538838,
+      "sha256": "7f1ba146ea7887cab2ca7bbea0f1edff8b874b0a1b3fbbe7bff610a2b7106172",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-final/tickets-390.png",
+      "bytes": 205485,
+      "sha256": "34b6ac8b148559256cfbc18dea3c09a414dfcef4bc48f9f95f53e9efd89fe774",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "c73b013d0768bf931e329bd1d4d4f3fa72c89a1faba7e20b1e330dc44bba54b7",
+  "id": "668ce4a67b2160d6a4d2a5669c241cb04c1a0fdea83c8d6392b3268a9e2b1e60",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/critic_dashboard167_169",
+    "note": "Visually inspected all four declared captures: findings and ticket log at 1280x900 and 390x900. Card text and evidence-limit notes remain legible; findings distinguish confirmed observations from unproven possibilities; ticket flow is first, then five open tickets, then collapsed completed tickets. No clipping or page overflow seen. Static illustrations are explicitly identified as observed sequences, not product screenshots.",
+    "acceptedAt": "2026-11-03T09:47:27.743Z",
+    "snapshotId": "668ce4a67b2160d6a4d2a5669c241cb04c1a0fdea83c8d6392b3268a9e2b1e60"
+  }
+}

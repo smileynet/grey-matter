@@ -497,7 +497,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     form.appendChild(el("label", {}, [completed, document.createTextNode("Include done/cancelled context")]));
     form.appendChild(el("label", {}, [deferred, document.createTextNode("Include deferred work")]));
     controls.appendChild(form); root.appendChild(controls);
-    root.appendChild(el("p", { class: "meta", text: "Arrows show ticket prerequisites. Decision and evidence gates come from ticket planning notes. Unblocked means these recorded gates are clear; machine and access eligibility remain separate. Deferred work stays deferred." }));
+    root.appendChild(el("p", { class: "meta", text: "Swipe or scroll sideways inside the diagram to see more tickets. Arrows show ticket prerequisites. Decision and evidence gates come from ticket planning notes. Unblocked means these recorded gates are clear; machine and access eligibility remain separate. Deferred work stays deferred." }));
     var notice = el("p", { class: "flow-notice", role: "status" }), summary = el("p", { class: "flow-counts" }), scroll = el("div", { class: "flow-scroll", tabindex: "0", role: "region", "aria-label": "Ticket dependency flow; scroll to follow branches" });
     var canvas = el("div", { class: "flow-canvas" }), layers = el("div", { class: "flow-layers" }), svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "flow-links"); svg.setAttribute("aria-hidden", "true");
     canvas.appendChild(svg); canvas.appendChild(layers); scroll.appendChild(canvas);

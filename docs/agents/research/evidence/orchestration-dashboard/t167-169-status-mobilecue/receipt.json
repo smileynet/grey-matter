@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "manifestDigest": "0f77aca9ae508a0bc81205f86547474af26311c3eaecabf87f722c4b6101f806",
+  "subject": "Closed model-trial findings and visible phone diagram pan cue",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 140338,
+      "sha256": "4b8deb1ae3499c52b14ff78ce988f7a9d70227cfecb9292e9b468668163d515a"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 58862,
+      "sha256": "28b7d65a7d5fb070f964523754265ab0956e310de3878db40314f22ca94136fe"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 49648,
+      "sha256": "b511ad983694959ca8f925c3b508da62e1a6c9289d533325ae630e6cbcdc59a4"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-mobilecue/tab-0-1280.png",
+      "bytes": 76569,
+      "sha256": "eab8f27f607e369cf117c2331cb72ac9491860259de15f5a5d8241a6413e8b93",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-mobilecue/tab-1-1280.png",
+      "bytes": 277183,
+      "sha256": "adb53b3aede034efa54d197f465dff7f5b87a9374743f0d988618348931e7e39",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-mobilecue/tab-2-1280.png",
+      "bytes": 386530,
+      "sha256": "c2e106e8188b58c2a027c4b4958241c5e976e9a551908a8de0056ed7fbccbd49",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-mobilecue/tab-0-390.png",
+      "bytes": 72635,
+      "sha256": "af30dabbb52142f2d8934a697e8c74f3ba0bea32a736d0c4bbaa1170812f03c6",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-mobilecue/tab-1-390.png",
+      "bytes": 271767,
+      "sha256": "8823b9a05c5df635b38d64bca9243e10d74bf5860d8ca7ee6912af9daf7b49c8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-mobilecue/tab-2-390.png",
+      "bytes": 372958,
+      "sha256": "570af93f2393e619c4d8674c086355ff17fac9c73588507750d5f04ce20f0c74",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t167-169-status-mobilecue/plan-panned-390.png",
+      "bytes": 364545,
+      "sha256": "8993b685780aecf78d2a55ed02a79cb0942693166df527ffa545990b206854e9",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "3ae00f783497ee5ef193ece6692dfbb9cbb566c4ead1c4af8627b6e345ddb26a",
+  "id": "f47073efdec6cba986d2edb57b7948d25fedc9836a6177bb5fdee7116f9bf6a8",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/critic_dashboard167_169",
+    "note": "Inspected all seven declared captures: overview and entries at 1280x900/390x900, Plan at both widths, and the additional 390px panned diagram. The new instruction to swipe or scroll sideways is visible before the diagram; the panned capture confirms the right-side ticket can be revealed. Text hierarchy remains readable, counts and statuses are legible, and no page-level horizontal overflow is apparent in the captures. Entry descriptions make research limitations clear and do not claim model adoption.",
+    "acceptedAt": "2026-11-03T09:54:50.323Z",
+    "snapshotId": "f47073efdec6cba986d2edb57b7948d25fedc9836a6177bb5fdee7116f9bf6a8"
+  }
+}
