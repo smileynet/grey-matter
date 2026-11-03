@@ -87,7 +87,15 @@
     "method": "Windows Recycle Bin",
     "original_path_absent_after": true,
     "process_exit_observed_before_cleanup": true,
-    "scratch_runner_scripts": "retained under .scratch/t190-* until independent review"
+    "scratch_runner_scripts": {
+      "files": [
+        ".scratch/t190-kas-bundle-probe.py",
+        ".scratch/t190-source-inspect.py"
+      ],
+      "bytes": 7110,
+      "method": "Windows Recycle Bin after critic clearance",
+      "original_paths_absent_after": true
+    }
   },
   "global_credential_changes": false,
   "shared_crew_gateway_touched": false,

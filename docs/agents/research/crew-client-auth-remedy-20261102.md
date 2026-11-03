@@ -141,7 +141,7 @@ and describes `client` as forwarding access-token requests to the ACP client.
   implementation of token delivery or refresh.
 - The temporary runtime profile/workspace was 12,456 bytes and was sent to the
   Windows Recycle Bin; absence at its original path was verified. The process
-  exited normally before cleanup. Scratch runner and source-inspection scripts
-  remain under `.scratch/t190-*` through independent review and should be
-  recycled afterward. Installed Crew/CLI files were read-only inputs and were
-  not changed.
+  exited normally before cleanup. After independent review clearance, both
+  scratch runner/source-inspection scripts were sent to the Windows Recycle
+  Bin (7,110 bytes total); both original paths were verified absent.
+  Installed Crew/CLI files were read-only inputs and were not changed.
