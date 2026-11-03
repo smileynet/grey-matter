@@ -222,7 +222,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 179 | Shared inter-harness messaging and wakeups (existing owner) | in_progress |
 | 205 | Dashboard publication preflight using existing receipts | ✅ done |
 | 206 | Correct observed operational reference drift | ✅ done |
-| 207 | Outcome-coordinator failure and continuation fixtures | open |
+| 207 | Outcome-coordinator failure and continuation fixtures | in_progress |
 
 ```mermaid
 flowchart LR

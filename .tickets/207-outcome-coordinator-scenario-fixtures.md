@@ -1,7 +1,7 @@
 ---
 id: "207"
 title: "Exercise outcome coordinator continuation and failure recovery scenarios"
-status: open
+status: in_progress
 blocked_by: ["202", "204", "205", "208"]
 priority: medium
 validation_criteria:
@@ -9,6 +9,7 @@ validation_criteria:
   - "Fixture guidance distinguishes deterministic guarantees from unrun native persistence/delivery and current unsupported/security-held lanes."
   - "Independent review of final fixture/source, measured targeted tests and required repository checks pass with artifact disposition."
 tags: ["stream:orchestration", "type:chore"]
+assignee: "codex"
 ---
 # Exercise outcome coordinator continuation and failure recovery scenarios
 
