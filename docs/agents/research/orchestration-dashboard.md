@@ -12,9 +12,9 @@ is available while signed in as its owner. Published through Sites on 2026-11-02
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `16e94154ee8622967e0e059950390968459b9f19`.
-- Deployment: `appgdep_6ae974d05ff08191952708953639128c`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_f33b52d3dbf48191a4a34ba18a04bd09`.
+- Pushed Site source: `c9bcf0d023ba0d2f8e15f0ffacd26c8fe8fab38a`.
+- Deployment: `appgdep_6ae9801122708191952447fe92fb63c6`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_c1fe9d3832b48191bfd3e6094b6afeba`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -28,9 +28,33 @@ Windows System32 first on the child process PATH succeeded. No plugin code chang
 
 ## Maintain it
 
+### Complete frozen setup (#200, 2026-11-02)
+
+The latest publication has 14 findings and 36 scoped tickets: 28 done and eight
+remaining. The evaluation now assembles all fifteen seed files without live
+tooling or templates. This is setup verification; the ongoing model trials have
+not yet produced accepted recommendations.
+
+Both pages passed interaction and overflow checks at laptop and phone widths.
+The static delivery check reported 44 entries, 198 tickets and no issues. An
+independent critic inspected all ten captures and accepted receipt
+`a3154fd4505bbd5b0f3abdabb7f6d5ecff0f43a9ed4ddebe9fd080d93c3f0640`
+in `evidence/orchestration-dashboard/t200-final/` and receipt
+`2116c39fa241e62da21970024791595d51b5481cf8751797602f9750465c695a`
+in `evidence/orchestration-dashboard/t200-status-final/`.
+Source/captures were pushed as `3c24f83`; selected repository gates passed.
+Sites returned `succeeded` for the current deployment above, with its owner-private
+audience preserved. Production browser interaction was not checked.
+
+Keep the frozen 8,779-byte seed manifest and existing dashboard snapshot in Git.
+The parent's setup probe fixture (117,299 bytes) and helper (559 bytes) were
+recycled after review. The 49,771-byte successful publication archive is
+disposable. Reuse the browser/helper/Site checkout through the workstream;
+the model workers' private raw runs and sessions remain for independent audit.
+
 ### Reproducible evaluations (#174 and #199, 2026-11-02)
 
-The latest publication has 14 findings and 35 scoped tickets: 27 done and eight
+That publication had 14 findings and 35 scoped tickets: 27 done and eight
 remaining. The selected runner demonstrated two implementation tasks; its
 fixture dashboard is now frozen after preflight detected drift from unrelated
 template maintenance. Historical native runs retain their original provenance.
