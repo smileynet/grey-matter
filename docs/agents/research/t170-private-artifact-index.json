@@ -36,13 +36,14 @@
     {
       "name": "kiro-session-cleanup.json",
       "privatePath": ".scratch/t170/kiro-session-cleanup/cleanup-audit.json",
-      "purpose": "Exact captured V2 session deletions, complete before/after tuple-set verification, and preservation of unrelated sessions; private through parent close."
+      "sha256": "B9D72862033B03E358043B1D132D0136341939854167874649A2FDDED433230E",
+      "purpose": "Private exact V2 session IDs, before/after native list payload hashes, command results, and non-target ID/source-pair preservation audit; retain through independent acceptance."
     },
     {
       "name": "t170-kiro-session-cleanup-plan.json",
       "privatePath": ".scratch/t170/kiro-session-cleanup/t170-kiro-session-cleanup-plan.json",
       "sha256": "05C1DF2047A9A1144A703E90C1C1A8FE88957A83CD3640BEAC2DE1FDC51E8B9E",
-      "purpose": "Private exact session IDs and temporary working-directory identities for six Kiro runs; prepared only. No session deletion was performed; parent owns the authorized V2 cleanup and before/after listing."
+      "purpose": "Immutable private target plan for six Kiro sessions and their temporary working-directory identities; session deletion and before/after preservation evidence are recorded in cleanup-audit.json."
     },
     {
       "name": "native-cell-receipt.json",
@@ -89,6 +90,11 @@
       "privatePath": "docs/agents/research/t170-results-evidence-20261103.json",
       "sha256": "435E38F5A7E7574E9E7D7BFAF340A9A539A7AC1AECA977C14428B335EDF8171B",
       "purpose": "Committed per-cell score outcome, native timing/usage/cost/identity, provenance limits, and hashes for the immutable evidence chain; contains no response text, private key, or reviewer rationale."
+    },
+    {
+      "name": "t170-session-cleanup-evidence-20261103.json",
+      "privatePath": "docs/agents/research/t170-session-cleanup-evidence-20261103.json",
+      "purpose": "Promoted cleanup result with before/after listing hashes and non-target ID/source-pair equality; exact session IDs and raw listing contents remain private."
     }
   ]
 }
