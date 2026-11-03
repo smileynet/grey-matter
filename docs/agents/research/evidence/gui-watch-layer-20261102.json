@@ -1,0 +1,232 @@
+{
+  "ticket": 173,
+  "checked_at": "2026-11-03",
+  "scope": "Documented capability review plus bounded Windows CUA inventory/launch/capture attempts for the five requested watch surfaces.",
+  "method": {
+    "ui_automation": "mcp__cua_repl only",
+    "initial_inventory": "cua.getState()",
+    "targeted_inventory": "cua.listApps({emit:false}) filtered to candidate product names",
+    "screenshots_saved": 0,
+    "private_browser_tabs_opened_or_claimed_or_navigated": 0,
+    "private_page_content_read": 0,
+    "private_tab_metadata_returned_by_initial_inventory": true,
+    "private_tab_metadata_persisted_in_durable_artifacts": false,
+    "codex_desktop_ui_calls": 0,
+    "controlled_fixtures_created": 0,
+    "model_probes_run": 0,
+    "sign_in_or_permissions_changed": false,
+    "global_or_app_settings_changed": false
+  },
+  "local_install_evidence": {
+    "check": "Read-only file metadata at known local install paths and the CUA app inventory.",
+    "versions": {
+      "claude_code_cli": "2.1.316 (from #162 receipt)",
+      "codex_cli": "0.166.0 (from #162 receipt)",
+      "kiro_ide": "1.3.11 (local executable file metadata)",
+      "kiro_cli": "2.37.1 (from #162 receipt)",
+      "kiro_crew": "0.11.1 (previous local research record; the executable itself exposes no usable product version)",
+      "antigravity": "2.28.2.0 (local executable file metadata)",
+      "agy_cli": "1.4.12 (from #162 receipt)"
+    }
+  },
+  "candidate_attempts": [
+    {
+      "surface": "Claude Code Desktop",
+      "inventory": "Existing Claude app ID was listed, isRunning=false, windows=[].",
+      "action": "cua.computer.launch_app with the returned app ID.",
+      "result": "computer-use request timed out: launch_app",
+      "refresh": "cua.listApps({emit:false}) showed Claude isRunning=false and windows=[].",
+      "observed_gui": false,
+      "content_opened": false
+    },
+    {
+      "surface": "Codex desktop",
+      "inventory": "ChatGPT app listed as running; the app name in the window inventory was ChatGPT.",
+      "action": "No GUI action. The computer-use policy forbids automating the ChatGPT/Codex desktop UI.",
+      "result": "No GUI state or private thread history inspected.",
+      "observed_gui": false,
+      "content_opened": false
+    },
+    {
+      "surface": "Kiro IDE Agent Focus",
+      "inventory": "Known local executable present; file metadata product version 1.3.11.",
+      "action": "cua.computer.launch_app with C:\\Users\\uosmi\\AppData\\Local\\Programs\\Kiro\\Kiro.exe.",
+      "result": "computer-use request timed out: launch_app",
+      "refresh": "cua.listApps({emit:false}) returned no Kiro window.",
+      "observed_gui": false,
+      "content_opened": false
+    },
+    {
+      "surface": "Antigravity app / Agent Manager",
+      "inventory": "Known local executable present; file metadata product version 2.28.2.0.",
+      "action": "cua.computer.launch_app with C:\\Users\\uosmi\\AppData\\Local\\Programs\\Antigravity\\Antigravity.exe.",
+      "result": "system cursor manager did not become ready",
+      "refresh": "cua.listApps({emit:false}) returned no Antigravity window.",
+      "observed_gui": false,
+      "content_opened": false
+    },
+    {
+      "surface": "Kiro Crew session grid",
+      "inventory": "Known local executable present under %LOCALAPPDATA%\\Programs\\KiroCrew.",
+      "action": "cua.computer.launch_app with C:\\Users\\uosmi\\AppData\\Local\\Programs\\KiroCrew\\KiroCrew.exe.",
+      "launch_result": "computer-use request timed out: launch_app",
+      "refresh": "cua.listApps({emit:false}) showed KiroCrew isRunning=true, process path C:\\Users\\uosmi\\AppData\\Local\\Programs\\KiroCrew\\KiroCrew.exe, window ID 270586, title Kiro Crew.",
+      "capture_attempts": [
+        {
+          "api": "cua.getApp({windowId:270586})",
+          "result": "Accessibility state unavailable for window 270586"
+        },
+        {
+          "api": "app.getScreenshot()",
+          "result": "no screenshot targets found for process:C:\\Users\\uosmi\\AppData\\Local\\Programs\\KiroCrew\\KiroCrew.exe"
+        }
+      ],
+      "observed_gui": false,
+      "content_opened": false,
+      "residual_app_state": "Kiro Crew remains open; the supported API did not provide a safe view/control surface to close it. No session was selected or modified."
+    }
+  ],
+  "owned_histories": {
+    "source": "docs/agents/research/evidence/headless-drivers-20261102.json",
+    "owned_native_sessions_named_in_source": [
+      "agy-stream-2",
+      "claude-stream",
+      "codex-approval / codex-first / codex-follow",
+      "kiro-acp / kiro-acp-recovery",
+      "kiro-chat-approval / kiro-chat-first / kiro-chat-follow"
+    ],
+    "number_of_native_session_ids": 5,
+    "opened_or_modified": false,
+    "raw_contents_promoted_here": false,
+    "receipt_only_summary": "The #162 receipt records question/follow-up events; Codex tool execution lacked its companion host; Kiro ACP recorded a permission request that was cancelled, not answered. These are transport outcomes, not GUI observations."
+  },
+  "sources": [
+    {
+      "id": "anthropic-agent-view",
+      "title": "Agent view in Claude Code",
+      "url": "https://claude.com/resources/articles/agent-view-in-claude-code",
+      "published": "2026-05-11; Research Preview",
+      "accessed": "2026-11-03",
+      "quote": "Agent view improves visualizing and interacting with your Claude Code sessions in the CLI.",
+      "supports": "Corrects the candidate name/surface; agent view is CLI/TUI. Article describes state rows and inline responses to decisions.",
+      "confidence": "high for product statement; no local UI proof"
+    },
+    {
+      "id": "anthropic-desktop-redesign",
+      "title": "Redesigning Claude Code on desktop for parallel agents",
+      "url": "https://claude.com/resources/articles/claude-code-desktop-redesign",
+      "published": "2026-04-14",
+      "accessed": "2026-11-03",
+      "quote": "A new usage button shows both your context window and session usage at a glance.",
+      "supports": "Desktop session sidebar and session usage are documented independently from CLI Agent View.",
+      "confidence": "high for announced feature; local app not inspected"
+    },
+    {
+      "id": "openai-codex-app",
+      "title": "Introducing the Codex app",
+      "url": "https://openai.com/index/introducing-the-codex-app/",
+      "published": "2026-02-02; Windows availability update 2026-03-04",
+      "accessed": "2026-11-03",
+      "quote": "The app picks up your session history and configuration from the Codex CLI and IDE extension.",
+      "supports": "Documented native CLI/IDE history continuity; does not prove the particular #162 thread was visible or answerable in this app instance.",
+      "confidence": "high for statement; local UI unobserved"
+    },
+    {
+      "id": "openai-codex-approval",
+      "title": "Using Codex with your ChatGPT plan",
+      "url": "https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan",
+      "updated": "2026-11-03 (page said updated 4 hours before retrieval)",
+      "accessed": "2026-11-03",
+      "quote": "Open the approvals menu in the ChatGPT desktop app’s composer and select Approve for me.",
+      "supports": "App-side approval control when Auto-review is available; does not establish that the #162 pending headless approval was presented there.",
+      "confidence": "high for documented control; local GUI unobserved"
+    },
+    {
+      "id": "openai-codex-usage",
+      "title": "Reviewing Work and Codex usage and using Personal Analytics in ChatGPT Desktop",
+      "url": "https://help.openai.com/en/articles/20001478-reviewing-work-and-codex-usage-and-using-personal-analytics-in-chatgpt-desktop",
+      "updated": "2026-10 (page says updated 12 days before retrieval)",
+      "accessed": "2026-11-03",
+      "version_condition": "Full article feature set requires ChatGPT Desktop 26.812.10818 or later; feature availability is eligible Enterprise/Edu workspace dependent.",
+      "quotes": [
+        "Lifetime credits used by the Work or Codex chat.",
+        "Sub-agents and separate tasks may not be included."
+      ],
+      "supports": "Per-chat usage and the documented completeness caveat.",
+      "confidence": "high for eligible-workspace feature; account eligibility unknown"
+    },
+    {
+      "id": "kiro-agent-focus",
+      "title": "Agent Focus Mode — Kiro IDE docs",
+      "url": "https://kiro.dev/docs/ide/experimental/focus-mode/",
+      "published": "Current docs retrieved 2026-11-03; page does not identify a release version",
+      "accessed": "2026-11-03",
+      "quote": "Each card names the session and its project, shows the question and the exact command or path involved, and presents the agent's options as buttons.",
+      "supports": "Agent Focus offers in-place response to a question or command approval for sessions shown in its panel.",
+      "confidence": "high for documented behavior; local UI unavailable"
+    },
+    {
+      "id": "antigravity-features",
+      "title": "Feature overview — Google Antigravity Docs",
+      "url": "https://antigravity.google/docs/features",
+      "published": "Current App/CLI documentation retrieved 2026-11-03; no exact app version stated",
+      "accessed": "2026-11-03",
+      "quote": "In the side panel’s Overview, open Subagents and select a subagent to follow its conversation.",
+      "supports": "App can follow a subagent conversation. The same page assigns `/agents` approval controls and `/usage` to CLI feature sections.",
+      "confidence": "high for page-defined surface split; app UI unavailable"
+    },
+    {
+      "id": "kiro-crew-sessions",
+      "title": "Sessions — Kiro Crew docs",
+      "url": "https://kiro.dev/docs/crew/chat/sessions/",
+      "published": "Current docs retrieved 2026-11-03; page does not identify a release version",
+      "accessed": "2026-11-03",
+      "quote": "Each tab shows whether its session is thinking, waiting, or idle.",
+      "supports": "Per-tab state in Crew sessions.",
+      "confidence": "high for documented behavior; local GUI capture failed"
+    },
+    {
+      "id": "kiro-crew-security",
+      "title": "Security — Kiro Crew docs",
+      "url": "https://kiro.dev/docs/crew/security/",
+      "published": "Current docs retrieved 2026-11-03; page does not identify a release version",
+      "accessed": "2026-11-03",
+      "quote": "Interactive: Tool calls ask for approval on a surface that can present the prompt.",
+      "supports": "Approval capability in an interactive Crew surface; exact local prompt layout was not captured.",
+      "confidence": "high for documented behavior; local GUI capture failed"
+    },
+    {
+      "id": "kiro-crew-usage",
+      "title": "Crew changelog, version 0.9.0",
+      "url": "https://kiro.dev/changelog/crew/",
+      "published": "2026-10-16; Crew 0.9.0 entry",
+      "accessed": "2026-11-03",
+      "version_mismatch": "Local install previously recorded as 0.11.1; this quote is for 0.9.0 and is not an exact-build validation.",
+      "quote": "The Usage tab estimates token use and projects when your credits may run out.",
+      "supports": "A Crew usage estimate exists in the documented product family; exact 0.11.1 UI not observed.",
+      "confidence": "medium for current local build; high for 0.9.0 source"
+    }
+  ],
+  "recommendation": {
+    "summary": "Use native UIs for their own mapped sessions; keep the orchestrator ledger authoritative across harnesses.",
+    "reference_text_proposed": "Use each harness UI only as a watch surface for sessions the harness can map and display. Claude's Agent View is CLI/TUI; its Desktop session sidebar is separate. Kiro Agent Focus documents in-place replies for Kiro IDE sessions; Crew state and usage views apply to Crew sessions. Antigravity App Overview follows subagents, while documented approval-jump controls are CLI-only. Codex app imports CLI/IDE session history and has eligible per-chat usage, but may omit delegated work. Keep the orchestrator ledger authoritative for cross-harness state, questions, approvals, and usage until an exact worker-to-native-session mapping is demonstrated.",
+    "cross_harness_gui_watch_proven": false
+  },
+  "retention_and_cleanup": {
+    "new_screenshot_files": 0,
+    "new_fixture_folders": 0,
+    "native_sessions_deleted_or_archived": 0,
+    "native_session_histories": "Retained only as named in #162 receipt for the independent critic; no shared DB or telemetry was accessed.",
+    "generated_app_data": "No app data extracted. Kiro Crew is open after the launch/capture attempt and was not closed because CUA returned no usable accessibility/screenshot surface; no session was changed.",
+    "new_durable_files": [
+      "docs/agents/research/gui-watch-layer-20261102.md",
+      "docs/agents/research/evidence/gui-watch-layer-20261102.json"
+    ]
+  },
+  "limitations": [
+    "No local GUI showed any of the five #162 histories; all documented controls are not local observations.",
+    "The Codex app UI was not automated because the computer-use policy forbids it; no Codex app API metadata was used as a substitute for GUI evidence.",
+    "No source found establishes arbitrary external headless-worker adoption across all candidate UIs; absence of documentation does not prove impossibility.",
+    "Usage eligibility is account-dependent for Codex. Kiro Crew usage evidence is for 0.9.0 and is mismatched to the locally recorded 0.11.1. Kiro Agent Focus and Antigravity app usage details were not specified by the inspected pages."
+  ]
+}
