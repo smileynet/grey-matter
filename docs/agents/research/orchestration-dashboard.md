@@ -12,9 +12,9 @@ is available while signed in as its owner. Published through Sites on 2026-11-03
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `0aa9135f3b2f0f5d82b4f1185168ddfb9e1a33f8`.
-- Deployment: `appgdep_6ae9f42a86e88191a5e735a212a619e1`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_2cde45996de88191b43e0985d470d073`.
+- Pushed Site source: `f981bbf4f3f019dd79a505e9cfea3dca704af233`.
+- Deployment: `appgdep_6ae9fed6e79c8191b9e5f8827b71af26`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_f61aef08ab188191a9553e1fc36d519f`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -475,3 +475,49 @@ artifacts were left untouched; none are required to open the offline page.
 
 The portable receipt supersedes the first final receipt after normalizing the
 manifest's line endings to Git's LF bytes. Source and capture digests are unchanged.
+
+## Accepted Kiro limitation and deferred repair (2026-11-03)
+
+At the user's request, #189 is closed with the known native shutdown limitation
+and a required [workflow workaround](../../../skills/engineering/orchestrate/references/harness-kiro.md#v3-acp-shutdown-workaround).
+This separates task acceptance from teardown, prevents duplicate retries based
+only on the known signature, requires bounded owned-process observation, and
+preserves session state. Graceful unattended shutdown remains unqualified.
+Low-priority #201 is intentionally backlog work until higher-priority work is
+finished. Existing evidence and four model-bearing sessions remain parent-owned
+and retained for its investigation, not released by #189's closure.
+
+The published dashboard has 21 findings and 37 scoped tickets: 35 done, one
+cancelled and one deferred, with no active orchestration dispatch. The default
+diagram includes the deferred follow-up. Global status retains all four tabs,
+55 entries, 199 tickets across all streams, and no current user ask.
+
+Independent review accepted the exact procedure commit
+`4bc0c2224f5def6ef6590b1113ec29034871c5b0` and the current
+[dedicated dashboard receipt](evidence/orchestration-dashboard/t189-closure-final2/receipt.json)
+and [global dashboard receipt](evidence/orchestration-dashboard/t189-closure-status-final/receipt.json).
+All twelve current phone/laptop captures were inspected. The first dedicated
+capture set is superseded history after final plan ordering changed; it does not
+cover the published source.
+
+Verification classifications: `node scripts/gate.mjs pre-merge` passed the
+procedure's selected ticket-graph check (1/1); dashboard-only commits selected
+zero pre-merge checks (skip, no applicable checks). `pre-push` passed the
+procedure's five selected checks and the dashboard's three selected checks.
+`node scripts/orchestration-dashboard.test.mjs` passed interaction checks at
+1280 and 390 pixels; global four-tab captures passed without script errors or
+horizontal overflow. The global dashboard checker passed with no warnings.
+Both current review-receipt checks passed; `tkt sync-plan --check` passed.
+`tkt validate --brief` reported pass with 16 pre-existing corpus warnings, so
+this is not a warning-free whole-board audit. No new native/model probe ran.
+`node scripts/deploy.mjs --no-agy` installed 50 skills; Agy remains excluded.
+
+Sites returned terminal `succeeded` at 2026-11-03T15:33:51Z for the exact pushed
+source/version listed above. Owner-only access was confirmed before publication
+and preserved. Packaged checks verified all 37 source-ticket links target the
+repository root. Native deployment success does not substitute for production
+browser or accessibility testing. Current screenshots and receipts are promoted
+durable evidence; disposable preparation scripts and the deployment archive are
+recycled after publication. Shared browser/Site tooling remains retained for
+future dashboard updates. The earlier supervision job was observed absent;
+no background monitor is scheduled for the deferred investigation.
