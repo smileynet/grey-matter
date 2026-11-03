@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "1fc1a2bf9c0317488340330895a221b00c8d4a0883ef14a104d00f949b6d7501",
+  "subject": "Outcome-driven delivery, tool guidance, local safeguards, scenario audit and bounded existing-agent native handoff; broader messaging partial",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 46246,
+      "sha256": "91bd738fc69dfe978932f4c8c35f006c41c48a01c7994fb5a3630e0e5da96bcf"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 265978,
+      "sha256": "05e3cf6e7a36a3ba47478509e0cbaf26b7f9322db6a6d3ee7c42b48a03f7ead3"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14145,
+      "sha256": "fe47a7d9ad8c78c5425925fd712403b013032b7d7f744b0a6d309edf946df76f"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1762,
+      "sha256": "2e1d9d64cd8c35663ef930d96187cb530fb4f7bb5827faf32a5c82f6b4871c4f"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5890,
+      "sha256": "16784d51172ccf9f876105e8f473824510e08b58269867c600191e1c9f2b5c03"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-final/findings-1280.png",
+      "bytes": 736049,
+      "sha256": "2cf7bd0556d75dcded0b65f06b1a0407c4da370810498ca224e9e16fe94a2e67",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-final/tickets-1280.png",
+      "bytes": 257158,
+      "sha256": "13c14233cbfe22690a36bf5c4786b16527c6f3922b1cfd0198896e92fbfff059",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-final/findings-390.png",
+      "bytes": 742036,
+      "sha256": "e4302324f4d09568cc19d240c4a1e04bc43e7a75efde0e48b61c70373fc25839",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-final/tickets-390.png",
+      "bytes": 237738,
+      "sha256": "cf00c098879a147a6348f7c03ed7ab547bba0dfcbb3389e96a55c0546b8e6874",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "d0dcdd1df9fbaa29dd292627e060980c4704e4e1a8b47fc4b1fd1a0b03915893",
+  "id": "62b4c83fb70e9961d1647d4c20979ac17234ffb64dc32a918485377ff52ebd50",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/critic207_scenarios",
+    "note": "PASS: viewed all four findings and ticket-log captures at 1280px and 390px. User-facing findings separate confirmed observations from proposed features and state the one-idle-agent/native-delivery limits. Ticket flow precedes open then other tickets; ticket details are collapsed by default. Counts show one open #179, one deferred #201, and #207/#210 done. Layout remains readable at both captured widths.",
+    "acceptedAt": "2026-11-03T21:05:36.868Z",
+    "snapshotId": "62b4c83fb70e9961d1647d4c20979ac17234ffb64dc32a918485377ff52ebd50"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "6f24d7037ef8603eb0c4eb84cc89b3db6db42d7344f117201ac5c04400a0d2b3",
+  "subject": "Outcome-driven delivery, tool guidance, local safeguards, scenario audit and bounded existing-agent native handoff; broader messaging partial",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 169244,
+      "sha256": "5c391aa93b53c10b5ae7b463349ed1f4fbcb5906d5853398cfb8cf77e9ab8a51"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-0-1280.png",
+      "bytes": 89705,
+      "sha256": "4951675c9165c60fabf602da153269b24adca8fe1f6f7ff39789f473849ba1f8",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-1-1280.png",
+      "bytes": 357842,
+      "sha256": "64a14d3ae8b72a5c99b5cbbbc665b8f127e1fcefcec2a5ddb152acac31a2be55",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-2-1280.png",
+      "bytes": 27135,
+      "sha256": "aa8e44719f12c2973f2b936524b93bad831b2c1931e3609dfa87900ba5b2fb2c",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-3-1280.png",
+      "bytes": 373468,
+      "sha256": "7ce81f00c47c1603353c9d54a1d81697d0a2e11f3bdd0a5bf7be70795c127336",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-0-390.png",
+      "bytes": 84025,
+      "sha256": "5fac2796f201f7865e4f1d4a47bc8fbe857d66008f03c1fe8e69bf1a765f3630",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-1-390.png",
+      "bytes": 350124,
+      "sha256": "d14d6cceda572555fbc3bbeedb098d2953299c4327c4a2432d6cea9747ad10aa",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-2-390.png",
+      "bytes": 22286,
+      "sha256": "2b94b6063f74850c2103917b94b742e9ba4b62b8460f0b40985dcabc7247895d",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-3-390.png",
+      "bytes": 359209,
+      "sha256": "dcd816761d5e4270cbffbf1ff9ef539e15afbcd63b57fa8de0c031887a5078ce",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "c4830483576a77c82c301a63b94d764036a972001cb0db86ad8e2ae707feb2be",
+  "id": "351a5d162945a84bea0eaceb3b0c6d40b281bd66c4e41ae767ac371414a85282",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/critic207_scenarios",
+    "note": "PASS: viewed all eight status-dashboard captures at 1280px and 390px. Overview communicates current delivery, All entries are collapsed and searchable, Decisions and Plan tabs render legibly; plan shows 209 tickets with one in progress #179, #201 backlog, and the recent #207/#210 closures. At phone width the tab navigation wraps without hiding Plan.",
+    "acceptedAt": "2026-11-03T21:05:36.868Z",
+    "snapshotId": "351a5d162945a84bea0eaceb3b0c6d40b281bd66c4e41ae767ac371414a85282"
+  }
+}

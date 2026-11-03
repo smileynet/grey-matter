@@ -309,3 +309,23 @@ entries stayed classified. The current inventory check passes **136/136** paths:
 55 operators, 14 modules, 50 tests and 17 fixtures/templates. The accepted new helper
 implementations remain unchanged. Historical `cae90bb` and its point-in-time audit
 evidence are retained separately; that earlier count is not the current inventory.
+
+## Integrated verification and retention
+
+On pushed integration `c47493192d03245fb5ad7525437881bcef876c0c`, parent reran
+the focused suites (**PASS, 22/22**), pre-merge (**PASS, 2/2 selected**), pre-push
+(**PASS, 5/5 selected**) and deployment (**installed 50 skills**, Agy and unrelated
+Crew-app adoption excluded). Independent review renewed source equivalence and
+guidance acceptance after the upstream reconciliation. #207 and #210 were then
+closed with evidence; #179 remains partial.
+
+The parent also used the new auditor on a retrospective, evidence-bound settlement
+trace at retained historical `cae90bb`: **PASS, 15 events**. It correctly kept work
+running, cleanup unresolved, monitor unknown and publication not attempted rather
+than declaring the outcome complete. This was a real operator invocation over
+retained check/native evidence, not a live native-goal trace. Historical plan and
+ledger bytes are retained because ticket closure and subsequent publication move
+those sources forward. [Settlement/current-check retention](evidence/orchestration-delivery-settlement-20261103.json)
+records exact hashes and boundaries. Private raw evidence and the small owned native
+runtime remain retained for the #179 qualification audit or explicit owner
+disposition; no unrelated historical sessions or private draft ancestry were removed.

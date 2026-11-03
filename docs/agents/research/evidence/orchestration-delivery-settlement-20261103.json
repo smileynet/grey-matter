@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "candidateAtAudit": "cae90bb462bf2ef14cd156e078fdb53f194caa58",
+  "integratedSource": "c47493192d03245fb5ad7525437881bcef876c0c",
+  "retentionOwner": "parent orchestration integration",
+  "state": "retained",
+  "endCondition": "Keep exact evidence through explicit owner verification audit/disposition",
+  "boundary": "Retrospective consistency audit atcae90bb before ticket close/publication, not a live autonomous-goal trace or completion proof. Historical source/ledger copies retained; currentHEAD and ticket lifecycle intentionally advanced.",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-real-settlement-expected.json",
+      "bytes": 246,
+      "sha256": "cbe6dec0816bf3034a9e3d08cbea935555ecfee009b48bb97a9e71f4f697498f"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-real-settlement-trace.json",
+      "bytes": 5027,
+      "sha256": "591827d1f8f871243c109886470cfb5a10c6ef92bf43dadb2aa5d6acf68743d2"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-real-settlement-audit-result.json",
+      "bytes": 1921,
+      "sha256": "27967e933735a64dfc2a419f5a607f12e8981723702db144c2515a8eba5c65b7"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-audit-bound-plan-copy.md",
+      "bytes": 37300,
+      "sha256": "7f6207f8e3d3c3f931a598c48576a48eef38e5a52d1bbb297f1c1870a386043e"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-audit-bound-ledger-copy.md",
+      "bytes": 7411,
+      "sha256": "0516ec276d8a0f74d12eac0ee72b6e22501e44cb32c97dbb1a78a532b81fe05b"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-rebased-207210-tests.log",
+      "bytes": 5093,
+      "sha256": "6c40dd2ba3104cb8f1aa845226268c8412837169c04b58cdfda446bd09ae5ba3"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-rebased-207210-premerge.log",
+      "bytes": 137,
+      "sha256": "0b15200d60b79257f52193f3012ab7cbb135b4832d029b39c85943f387af7386"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-rebased-207210-prepush.log",
+      "bytes": 284,
+      "sha256": "889b2616b0fd13368939e957d3f842252b9f43cb05986974e363993a06374831"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-rebased-final-deploy.log",
+      "bytes": 3806,
+      "sha256": "99db60c26b976cf4f64343f6ac6890fbaee79d8a8815714f1bdd526579498624"
+    }
+  ]
+}

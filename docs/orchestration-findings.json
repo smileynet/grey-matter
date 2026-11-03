@@ -3,9 +3,76 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "existing-agent-notification",
+      "state": "partial",
+      "label": "Observed with one idle assigned agent",
+      "title": "Pick up a saved handoff in the same agent",
+      "value": "In the tested desktop workflow, the coordinator nudged its existing agent, which handled the handoff and reported completion.",
+      "diagramLabel": "The observed handoff",
+      "steps": [
+        "Save the handoff",
+        "Nudge the exact agent",
+        "Receive its report",
+        "Acknowledge completion"
+      ],
+      "limit": "One idle Codex agent was observed. Busy delivery, crash recovery and other harnesses remain unqualified.",
+      "details": "A once-only local intent is persisted before preparing the native action. The parent independently selected the existing live agent and invoked the tool. The agent returned a correlated completion and native report. Replay kept two records unchanged; another preparation was refused. Source fixtures passed eight cases, and independent evidence review matched the five retained native platform records to their source lines. Message arguments remain opaque in the platform log, so exact plaintext equality is unverified. The broad cross-harness ticket stays partial.",
+      "tickets": [
+        "210",
+        "179",
+        "208"
+      ],
+      "sources": [
+        {
+          "label": "Delivery evidence and limits",
+          "href": "agents/research/outcome-orchestration-delivery-20261103.md"
+        },
+        {
+          "label": "Notification contract",
+          "href": "../skills/engineering/orchestrate/references/native-notification.md"
+        }
+      ]
+    },
+    {
+      "id": "handoff-publication-checks",
+      "state": "partial",
+      "label": "Local checks and message records shipped",
+      "title": "Check a handoff before acting on it",
+      "value": "The coordinator can check the selected checkout, candidate, review evidence and prepared page. A local message record keeps queued, received and handled states separate.",
+      "diagramLabel": "The local safeguards",
+      "steps": [
+        "Verify the exact worker",
+        "Match candidate and evidence",
+        "Check the prepared page",
+        "Keep a message receipt"
+      ],
+      "limit": "These checks verify local records and prepared files. Human judgment and the actual remote publication result remain separate.",
+      "details": "Every current script candidate is classified and operator commands have specific task guidance. Dispatch checks passed eight fixtures and an actual completed-worker checkout. Publication checks passed ten fixtures and the actual known link-transformed Site payload. The spool passed eleven identity/lifecycle/restart/permission fixtures. The outcome-trace auditor rejects inconsistent scope, review, capacity, stop and delivery claims; those event claims remain attestations. Independent critics reviewed exact final candidates. No model default or global harness setting changed.",
+      "tickets": [
+        "203",
+        "204",
+        "205",
+        "208"
+      ],
+      "sources": [
+        {
+          "label": "Delivery evidence and limits",
+          "href": "agents/research/outcome-orchestration-delivery-20261103.md"
+        },
+        {
+          "label": "Tool usage guidance",
+          "href": "../skills/engineering/orchestrate/references/tool-scripts.md"
+        },
+        {
+          "label": "Session message contract",
+          "href": "../skills/engineering/orchestrate/references/session-messages.md"
+        }
+      ]
+    },
+    {
       "id": "outcome-driven-session",
       "state": "partial",
-      "label": "Session guidance shipped; recovery tooling in progress",
+      "label": "Outcome guidance and local safeguards shipped",
       "title": "Give the coordinator an outcome and a clear finish line",
       "value": "You can start a session around what needs to be delivered. The guidance keeps work moving through review and integration, with explicit reasons to pause or stop.",
       "diagramLabel": "The session loop",
@@ -15,7 +82,7 @@
         "Review and integrate",
         "Continue until proved or blocked"
       ],
-      "limit": "The guidance is shipped. Dispatch checks, script guidance, publication checks and recovery scenarios are still being implemented; live goal persistence is not newly qualified.",
+      "limit": "Background continuation and delivery across other harnesses remain unqualified.",
       "details": "The outcome contract names scope, authority, resources, proof and stop conditions. User and authorized-agent invocation policies agree. Reviewer capacity, separate task/cleanup/delivery observations and current monitor state are explicit. Independent critic accepted candidate bdf2f182; parent integrated and passed the selected checks, then deployed with Agy excluded. No native model or goal run was used to qualify this slice. The effort queue also displays its existing shared-messaging dependency, whose ticket retains tooling-stream ownership.",
       "tickets": [
         "202",
@@ -827,27 +894,36 @@
       "Delivered: scoped continuation, role boundaries, authority and stop conditions; native persistence remains unprobed."
     ],
     "203": [
-      "Know when and how to use every tool",
-      "In progress: complete script classification and task-specific agent guidance; incorrect initial tool descriptions are being revised."
+      "Find the right instructions for every tool",
+      "Delivered: all current script candidates are classified and operators have specific command, authorization and result guidance."
     ],
     "204": [
-      "Check worker and review identities before acting",
-      "Validate actual worktree, base, candidate and evidence bindings without pretending to prove semantic independence."
+      "Verify a handoff before acceptance",
+      "Delivered: exact checkout, assigned base, candidate, scope and evidence hashes; judgment and owner authentication remain separate."
     ],
     "205": [
-      "Check review currency before publication",
-      "Reuse review receipts and verify exact source/package identity before the authorized publishing step."
+      "Check the reviewed page before publication",
+      "Delivered: reject stale receipts/check attestations and changed exact-copy or fixed-link-transformed payloads; native upload results remain separate."
     ],
     "206": [
       "Use current operational guidance",
       "Delivered: discovery and ticket-lifecycle references agree with observed interfaces, and verification fits the work."
     ],
     "207": [
-      "Exercise continuation and recovery failures",
-      "Deterministic scenarios will test stale identities, lost completion, capacity and stop conditions without restarting completed benchmarks."
+      "Check the session before declaring completion",
+      "Delivered deterministic trace audit with explicit scope, review, capacity and delivery checks. It does not prove native persistence."
+    ],
+    "208": [
+      "Keep a durable local message record",
+      "Delivered local spool: exact target/version/generation, ordered receipts and safe replay. Native notification has a separate bounded child."
+    ],
+    "210": [
+      "Nudge an existing assigned agent",
+      "Observed one idle Codex desktop agent receiving a saved handoff and reporting correlated completion. Broader messaging remains partial under its parent."
     ]
   },
   "includedTicketIds": [
-    "179"
+    "179",
+    "208"
   ]
 }

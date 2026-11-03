@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "subject": "Outcome-driven delivery, tool guidance, local safeguards, scenario audit and bounded existing-agent native handoff; broader messaging partial",
+  "sources": [
+    "docs/orchestration.html",
+    "docs/orchestration-findings.json",
+    "scripts/assets/orchestration-dashboard.html",
+    "scripts/build-orchestration-dashboard.mjs",
+    "scripts/orchestration-dashboard.test.mjs"
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-final/findings-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-final/tickets-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-final/findings-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-final/tickets-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ]
+}

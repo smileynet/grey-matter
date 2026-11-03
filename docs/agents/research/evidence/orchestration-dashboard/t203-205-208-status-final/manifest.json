@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "subject": "Outcome-driven delivery, tool guidance, local safeguards, scenario audit and bounded existing-agent native handoff; broader messaging partial",
+  "sources": [
+    "docs/status.html",
+    "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+    "skills/productivity/delivery-dashboard/assets/dashboard-example.html"
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-0-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-1-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-2-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-3-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-0-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-1-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-2-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t203-205-208-status-final/tab-3-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ]
+}
