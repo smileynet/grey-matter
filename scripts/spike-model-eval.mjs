@@ -370,6 +370,11 @@ async function main() {
   const passed = classification === "pass";
   const result = {
     schemaVersion: 1,
+    runner: {
+      source: "scripts/spike-model-eval.mjs",
+      sourceCommit: git(REPO, "rev-parse", "HEAD"),
+      sourceSha256: createHash("sha256").update(readFileSync(fileURLToPath(import.meta.url))).digest("hex"),
+    },
     fixture: {
       id: task.id,
       ticketId: task.ticketId,

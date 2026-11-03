@@ -5,9 +5,11 @@
   "fixtures": {
     "generator": "scripts/spike-orchestrate-fixture.mjs",
     "ids": ["t1", "t3"],
-    "identicalSeedTreeSha256": "c474646ea61e037fcdbc1be3d2dc6c0833f5e260",
+    "identicalSeedTreeObjectId": "c474646ea61e037fcdbc1be3d2dc6c0833f5e260",
+    "treeObjectHashAlgorithm": "SHA-1 (Git tree object ID)",
     "isolatedRootPerAdapterAndJob": true,
     "graderOraclePassedToAgent": false,
+    "filesystemIsolationLimitation": "The oracle is not passed in the task prompt or copied into the fixture root, but no OS boundary prevents a harness process from reading the parent repository; each harness's own permissions/sandbox determine access. Runs are non-adversarial.",
     "grading": "Native test command and task-specific behavior/path checks run independently by the controller."
   },
   "selectedRunner": {
@@ -15,12 +17,12 @@
     "focusedTests": "scripts/spike-model-eval.test.mjs",
     "resultSchemaVersion": 1,
     "recipe": [
-      "node scripts/spike-model-eval.mjs --adapter claude --fixture t1 --work-root <unique-root>",
-      "node scripts/spike-model-eval.mjs --adapter claude --fixture t3 --work-root <unique-root>",
-      "node scripts/spike-model-eval.mjs --adapter codex --fixture t1 --work-root <unique-root>",
-      "node scripts/spike-model-eval.mjs --adapter codex --fixture t3 --work-root <unique-root>"
+      "node scripts/spike-model-eval.mjs --adapter claude --fixture t1 --model sonnet --claude-exe <absolute-claude-exe> --work-dir <new-outside-repo-path> --evidence-dir <new-path>",
+      "node scripts/spike-model-eval.mjs --adapter claude --fixture t3 --model sonnet --claude-exe <absolute-claude-exe> --work-dir <new-outside-repo-path> --evidence-dir <new-path>",
+      "node scripts/spike-model-eval.mjs --adapter codex --fixture t1 --model gpt-6.1-sol --codex-exe <absolute-package-exe> --work-dir <new-outside-repo-path> --evidence-dir <new-path>",
+      "node scripts/spike-model-eval.mjs --adapter codex --fixture t3 --model gpt-6.1-sol --codex-exe <absolute-package-exe> --work-dir <new-outside-repo-path> --evidence-dir <new-path>"
     ],
-    "receiptFields": ["fixture seed and commit", "adapter version and requested/observed model", "JSON argv", "native exit and duration", "native usage and cost basis", "native tool/test events", "independent test counts", "behavior result", "changed paths and scope", "raw file paths, byte counts, SHA-256"],
+    "receiptFields": ["runner source commit and source SHA-256", "fixture seed Git tree object ID (SHA-1) and commit", "adapter version and requested/observed model", "JSON argv", "native exit and duration", "native usage and cost basis", "native tool/test events", "independent test counts", "behavior result", "changed paths and scope", "raw file paths, byte counts, SHA-256"],
     "unsuccessfulClassifications": ["timeout", "infrastructure error", "malformed output", "native turn failure", "missing tests or counts", "assertion failure", "behavior grader failure", "out-of-scope file change"],
     "windowsNotes": ["npm.cmd is invoked with shell handling for this executable", "grading process prepends active Node directory to PATH", "Codex uses absolute package-owned executable path and --ephemeral", "Claude uses --no-session-persistence"]
   },
