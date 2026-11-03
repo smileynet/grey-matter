@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "ticket": 170,
+  "date": "2026-11-03",
+  "status": "complete",
+  "nativeManagementOnly": true,
+  "modelCallsMade": 0,
+  "targetCount": 6,
+  "targetIdentity": "Each exact V2 session ID matched its retained Kiro receipt before deletion; IDs are omitted from this promoted receipt.",
+  "method": {
+    "cliVersion": "kiro-cli 2.37.1",
+    "executableSha256": "F4A6C31A88822B7B67D5C795DF87F1465B34C6A4ACBBA01E9A0158AB0FF4C66C",
+    "listArguments": ["chat", "--list-sessions", "--all-cwds", "--format", "json"],
+    "deleteArguments": ["chat", "--delete-session", "<exact receipt-bound ID>", "--session-source", "v2"],
+    "listingParsedInMemory": true,
+    "leadingBomRemovedBeforeJsonParse": true,
+    "beforeListingHadBom": false,
+    "afterListingHadBom": false,
+    "rawListingsAndCommandStreamsRetainedPrivately": true
+  },
+  "before": {
+    "allSessionRecords": 7606,
+    "nonTargetIdSourcePairCount": 7600,
+    "nonTargetIdSourcePairSetSha256": "D4BF1D29205EFA580D395D9BD93697EC353FC6DE9577F8D26EC74F0F88F9E459",
+    "listingStdoutBytes": 1988542,
+    "listingStdoutSha256": "8917F35B7F17FDE3C70C8F92CFDE8722A74A57B878BFEFD9595A702921358D07",
+    "listingStderrBytes": 0,
+    "listingStderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  "deletions": {
+    "attempted": 6,
+    "exitCodes": [0, 0, 0, 0, 0, 0],
+    "sourceRestrictedToV2": true,
+    "eachTargetMatchedRetainedReceipt": true
+  },
+  "after": {
+    "allSessionRecords": 7600,
+    "targetSessionsAbsent": true,
+    "nonTargetIdSourcePairCount": 7600,
+    "nonTargetIdSourcePairSetSha256": "D4BF1D29205EFA580D395D9BD93697EC353FC6DE9577F8D26EC74F0F88F9E459",
+    "nonTargetIdSourcePairSetMatchesBefore": true,
+    "listingStdoutBytes": 1986292,
+    "listingStdoutSha256": "E8A9D6158662C4C6FB7BC1022CC4A734776BDC5016C1357F6904474B17D2F737",
+    "listingStderrBytes": 0,
+    "listingStderrSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  "temporaryDirectories": {
+    "planned": 6,
+    "presentBeforeCleanup": 0,
+    "cleanupActionNeeded": false
+  },
+  "privateBindings": {
+    "cleanupPlanSha256": "05C1DF2047A9A1144A703E90C1C1A8FE88957A83CD3640BEAC2DE1FDC51E8B9E",
+    "nativeWaveManifestSha256": "A514606E9AC8D078C1433186AA2406FFC3809BDD70523364FAA2F76DC89F59A4",
+    "privateCleanupAuditSha256": "B9D72862033B03E358043B1D132D0136341939854167874649A2FDDED433230E",
+    "privateBeforeSummarySha256": "046C94A4898E3E4D96030D95DD977FE31F81AD07E5086226CC827B29B22C9079",
+    "privateAfterSummarySha256": "8B33FA42F173B3335D63FED5842CBB628E71B2B7E4DB2AEE1AE5D5CE9F5577A7"
+  },
+  "privacy": "No session IDs, raw session-list contents, CLI output snippets, or unrelated session contents are included here."
+}

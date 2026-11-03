@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "ticket": 170,
+  "items": [
+    {
+      "name": "offline-evidence-hermetic.json",
+      "privatePath": ".scratch/t170/preparation/offline-evidence-hermetic.json",
+      "purpose": "Fresh detached source checkout (without the held-out answer key) shows the real CLI main path and fake-process integration passing 7/7, plus syntax and diff checks; no provider invocation."
+    },
+    {
+      "name": "offline-evidence-revision.json",
+      "privatePath": ".scratch/t170/preparation/offline-evidence-revision.json",
+      "purpose": "Retained fake-process execution-boundary evidence, syntax checks, and dry-run plan; contains no provider call output."
+    },
+    {
+      "name": "answer-key.json",
+      "privatePath": ".scratch/t170/preparation/answer-key.json",
+      "sha256": "975DDA95E186A4735915D4647FC331D068DCE6DDF9F25F019FCAB9ED9DFD6634",
+      "purpose": "Hidden task keys and issue key vocabulary; retain pending parent acceptance of final review and provenance evidence."
+    },
+    {
+      "name": "measurement-ledger.json",
+      "privatePath": ".scratch/t170/measurement-ledger.json",
+      "purpose": "One row per authorized native cell, including unattempted cells and stop state; private through ticket close."
+    },
+    {
+      "name": "review-receipt.json",
+      "privatePath": ".scratch/t170/reviews/<opaque-cell-id>/review-receipt.json",
+      "purpose": "Raw blind reviewer response, exact hashes, reviewer provenance, and deterministic schema validation; private through final audit."
+    },
+    {
+      "name": "review-dispatch-trace.json",
+      "privatePath": ".scratch/t170/reviews/<opaque-cell-id>/review-dispatch-trace.json",
+      "purpose": "Exact dispatched review task, canonical agent identity returned by collaboration, completed status, and response hash, bound by the review envelope; private through final audit."
+    },
+    {
+      "name": "kiro-session-cleanup.json",
+      "privatePath": ".scratch/t170/kiro-session-cleanup/cleanup-audit.json",
+      "sha256": "B9D72862033B03E358043B1D132D0136341939854167874649A2FDDED433230E",
+      "purpose": "Private exact V2 session IDs, before/after native list payload hashes, command results, and non-target ID/source-pair preservation audit; retain through independent acceptance."
+    },
+    {
+      "name": "t170-kiro-session-cleanup-plan.json",
+      "privatePath": ".scratch/t170/kiro-session-cleanup/t170-kiro-session-cleanup-plan.json",
+      "sha256": "05C1DF2047A9A1144A703E90C1C1A8FE88957A83CD3640BEAC2DE1FDC51E8B9E",
+      "purpose": "Immutable private target plan for six Kiro sessions and their temporary working-directory identities; session deletion and before/after preservation evidence are recorded in cleanup-audit.json."
+    },
+    {
+      "name": "native-cell-receipt.json",
+      "privatePath": ".scratch/t170/raw/<opaque-cell-id>/receipt.json",
+      "purpose": "Requested and served model when emitted, elapsed time, native usage/cost, terminal state, and raw stream hashes; private until final audit."
+    },
+    {
+      "name": "native-wave-manifest.json",
+      "privatePath": ".scratch/t170/native-wave-manifest.json",
+      "sha256": "A514606E9AC8D078C1433186AA2406FFC3809BDD70523364FAA2F76DC89F59A4",
+      "purpose": "Private hash manifest for all 18 authorized native receipts and raw stdout/stderr streams; retained for the final audit."
+    },
+    {
+      "name": "blind-packet-manifest.json",
+      "privatePath": ".scratch/t170/blind-packets-final3-2026-11-03/t170-blind-packet-manifest.json",
+      "sha256": "58BC8F9CF7EAEE8E05289DF82873E47C6A8F89893284DDBAC739BDAFD1B2A5F0",
+      "purpose": "Private manifest binding the randomized 18-packet blind review set to frozen fixtures, grader instructions, held-out key hash, and native evidence."
+    },
+    {
+      "name": "blind-packet-crosswalk.json",
+      "privatePath": ".scratch/t170/private/t170-blind-packet-crosswalk-final3.json",
+      "sha256": "39A405E914FF18D915308BB73F0EC27BC6ED9945911060FD67225F940B5CFBE0",
+      "purpose": "Private mapping from opaque reviewer packet names to provider, tier, task, and cell; used only after reviews were frozen."
+    },
+    {
+      "name": "parent-grading-ledger.json",
+      "privatePath": "Parent integration checkout .scratch/t170-parent-grading-ledger.json",
+      "sha256": "13EC7F7E07B788D9B747CC1D9AB6E9E45FDFFA82C873910A1976AB77C55368AA",
+      "purpose": "Private parent-transcribed one-time review ledger with packet, semantic-body, completion-trace, and binding hashes; not a platform export."
+    },
+    {
+      "name": "grading-integrity-audit.md",
+      "privatePath": "Parent integration checkout .scratch/t170-grading-independent-audit.md",
+      "purpose": "Independent integrity audit of frozen review and native evidence bindings; it did not semantically regrade or authenticate a platform export."
+    },
+    {
+      "name": "review09-write-recovery.json",
+      "privatePath": "Parent integration checkout .scratch/t170-review09-write-recovery.json",
+      "sha256": "4F5A7D3CED0A7CD0450EFA960B4369EFAC5EF43FAA25AB4367E8992B04D3C693",
+      "purpose": "Records the failed first write and same-reviewer recovery for one review; the unchanged decision is not byte-comparable to the absent first file."
+    },
+    {
+      "name": "t170-results-evidence-20261103.json",
+      "privatePath": "docs/agents/research/t170-results-evidence-20261103.json",
+      "sha256": "8583D5F972BBAB189B556BA42FB046871374ED87857AE08441BFA94E5A2FED1A",
+      "purpose": "Committed per-cell score outcome, native timing/usage/cost/identity, provenance limits, and hashes for the immutable evidence chain; contains no response text, private key, or reviewer rationale."
+    },
+    {
+      "name": "model-task-tiers-protocol-20261103.md",
+      "privatePath": "docs/agents/research/model-task-tiers-protocol-20261103.md",
+      "sha256": "D49E8C8C9B3BFE4E6CB246F94A12BAA22856EC9D0B65DE5225C4C2A3067DAA19",
+      "purpose": "Byte-preserved copy of the exact original protocol Git blob whose SHA-256 the controller verified during the 18 native calls; the results report links here and future controller checks read this immutable copy."
+    },
+    {
+      "name": "t170-session-cleanup-evidence-20261103.json",
+      "privatePath": "docs/agents/research/t170-session-cleanup-evidence-20261103.json",
+      "purpose": "Promoted cleanup result with before/after listing hashes and non-target ID/source-pair equality; exact session IDs and raw listing contents remain private."
+    }
+  ]
+}
