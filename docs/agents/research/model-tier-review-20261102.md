@@ -1,9 +1,14 @@
 # Ticket 168: cheap versus default model reviewers
 
-**Status: fixture and protocol preparation only. No model calls have been made.**
-Ticket 167 currently owns the shared native measurement lease. This note records
-the frozen fixture design and available local catalog facts for critic review.
-Measured results, recommendations and usage attribution remain pending.
+**Status: preparation only; no fixture review has been run.** Ticket 167 owns the
+shared native measurement lease. A controller revalidation produced one Claude
+assistant-style response to an attempted help command; an independent critic
+assessed it as a likely unintended model turn, but no native turn or usage
+metadata was retained, so consumption and cost are unknown. An agy help attempt
+returned an argument parse error. Both raw outputs are private at
+`.scratch/t168/controller-preflight/`; neither is a review result or scored cell.
+All provider invocations are stopped pending renewed parent and critic review.
+Measured results and recommendations remain pending.
 
 ## Question and scope
 
@@ -64,37 +69,86 @@ configured CLI default. If output does not expose the served model, the
 comparison remains unverified; do not label it Argon. These checks establish
 authentication/catalog availability, not account quota or remaining balance.
 
+### Controller revalidation (2026-11-03)
+
+The earlier receipts invoked provider names through `PATH`; they do not prove
+which executable a future measurement would launch. Exact proposed executable
+paths and hashes are pinned in the private
+`.scratch/t168/controller-preflight/incident.json`. Codex must use the
+same-version package executable beside its verified code-mode host, as in ticket
+188; the PATH-selected copy is not acceptable. Future launches must use
+PowerShell 7.6.9 with recorded absolute executable, actual argv, native exit,
+timeout, stdout/stderr bytes, and native turn/usage metadata. The command text
+and tool metadata from the anomalous preflight are retained at
+`.scratch/t168/controller-preflight/command-record.json`; it used splatted
+variables, merged stdout/stderr, and did not capture OS-level argv or per-process
+exit/time/usage events.
+
+The batch help collection exposed a PowerShell argument-construction bug, not
+CLI help behavior. A safe Node argv recorder independently reproduced that the
+one-item `switch` result for Claude and agy became a scalar string; splatting it
+passed its characters (`-`, `-`, `h`, `e`, `l`, `p`) as separate arguments.
+Claude returned an assistant response to the malformed arguments; the critic
+assesses this as a likely unintended turn, with consumption/cost unknown. Agy
+returned an argument parse error with no assistant response. Codex and Kiro's
+two-item argument arrays remained intact. The exact PowerShell command and raw
+outputs are retained privately. These are not review results or scored cells.
+All provider commands remain held until the argument builder is corrected,
+verified with an argv recorder, independently reviewed, and the parent releases
+the measurement lease.
+
+The earlier agy catalog receipt is incomplete: its helper retained only a hash
+of full command output, then extracted two model rows with a regex that excluded
+other rows. Ticket 167's separate full 590-byte catalog capture confirms both
+`gemini-3.8-flash-low` and `gemini-3.8-flash-medium` are available alongside
+Argon tiers; the earlier difference came from each inventory filtering for a
+different Flash tier, not evidence of changed availability. The full capture is
+retained at `.scratch/t168/controller-preflight/agy-catalog/agy-models.stdout.bin`
+(SHA-256 `B8EF1100468943EC66037166702B013793898730D02BCD3008EC0DA5A3A70755`).
+The pinned medium cheap candidate is therefore available. The configured default
+identity remains unknown until native model output reports it.
+
 The existing shared models-and-usage note names Claude Haiku as a cheap tier and
 Opus 5.5 as the default, Codex Luna as a cheap tier and `gpt-6.1-sol` as the
 machine default, and Google Flash as a cheap tier. These are candidate selections,
 not fresh invocation results. Recheck current advertised tiers and usage limits
 before measurement. #167 holds the model-call lease while this preparation runs.
 
-Current CLI help confirms the candidate invocations below. Kiro's V2 CLI can
+The prior CLI help inspection confirmed the candidate invocations below. Kiro's V2 CLI can
 delete an exact captured session; Claude and Codex support non-persistent
 sessions. Agy lacks a no-persistence or session-deletion option in the inspected
 help, so its local history lifecycle must be recorded and reviewed after calls.
 
+Use each CLI's scoped tool restrictions: Claude's empty `--tools` list, Codex's
+`--ignore-user-config` plus read-only sandbox, and Kiro's empty `--trust-tools`
+list. Agy's inspected help advertises plan mode and sandboxing but no all-tools
+deny option. The CLI help does not establish whether a separate computer-use
+integration is exposed; keep agy held until the critic confirms its invocation
+cannot access such a tool or approves a scoped control.
+
 ## Planned usage and isolation
 
-Proposed pair, pending preflight and live catalog confirmation:
+Proposed pair, pending renewed controller review and lease release:
 
 | Provider | Cheaper tier | Default tier | Effort | Status |
 |---|---|---|---|
 | Anthropic / Claude Code | `haiku` | native CLI default | model-specific native effort default | Model alias from current guide; verify response model |
 | OpenAI / Codex | `gpt-6-luna` | native CLI default | model-specific native effort default | Cheap model visible in catalog; default invocation omits model and effort |
 | Amazon / Kiro | `qwen3-coder-next` | native CLI default | model-specific native effort default | Cheap model visible in catalog; default invocation omits model and effort |
-| Google / Antigravity | `gemini-3.8-flash-medium` | native CLI default | model-specific native effort default | Both candidates visible; default identity must appear in native output to support a comparison |
+| Google / Antigravity | `gemini-3.8-flash-medium` | native CLI default | model-specific native effort default | Cheap model confirmed in full catalog; default identity must appear in native output to verify comparison |
 
-The candidate invocation is frozen below. Substitute only the fixture prompt and
-listed model; create a new empty `%TEMP%\gm-review-168-*` working directory with
-no repository checkout, and run calls serially:
+The candidate argument vectors below are frozen, but may not be launched until
+the anomaly and controller preflight receive renewed approval and the parent
+releases the lease. Use only the absolute executable paths and hashes in the
+private controller receipt. Substitute only the fixture prompt and listed
+model; create a new empty `%TEMP%\gm-review-168-*` working directory with no
+repository checkout, and run calls serially:
 
 ~~~~text
-claude --print --tools "" --no-session-persistence --output-format json --permission-mode plan --max-budget-usd 0.10 <prompt> [--model haiku]
-codex exec --ephemeral --cd <empty-temp-dir> --sandbox read-only --json <prompt> [--model gpt-6-luna]
-kiro-cli chat --no-interactive --agent-engine v2 --trust-tools= --output-format stream-json <prompt> [--model qwen3-coder-next]
-agy --print --mode plan --disable-slash-commands --print-timeout 120 <prompt> [--model gemini-3.8-flash-medium]
+<absolute-claude.exe> --print --tools "" --no-session-persistence --output-format json --permission-mode plan --max-budget-usd 0.10 <prompt> [--model haiku]
+<absolute-codex.exe> exec --ephemeral --ignore-user-config --cd <empty-temp-dir> --sandbox read-only --json <prompt> [--model gpt-6-luna]
+<absolute-kiro-cli.exe> chat --no-interactive --agent-engine v2 --trust-tools= --output-format stream-json <prompt> [--model qwen3-coder-next]
+<absolute-agy.exe> --print --mode plan --disable-slash-commands --print-timeout 120 <prompt> [--model gemini-3.8-flash-medium]
 ~~~~
 
 Default-tier commands omit both `--model` and any effort override. Cheap-tier
@@ -103,15 +157,21 @@ default. This measures each tier under its native default configuration, not an
 isolated model-only effect. Record requested model/effort as native default and
 reported model/effort only when the CLI emits them.
 
-All four providers have a fixed 120-second per-call timeout. A timeout is a
-failed cell and will not be retried. The parent authorized exactly eight calls
-per provider (four fixtures, two tiers); no retries or extra usage-check calls.
-Claude's native per-call cap is USD 0.10 and aggregate cap USD 0.80. Codex, Kiro
-and agy do not expose comparable dollar caps in checked help; report native
-costs/usage if emitted, otherwise unknown. Do not infer cost from model names or
-time. A missing quota counter remains unknown, not model unavailability. Stop a
-provider on a reported usage limit; never substitute another provider or tier for
-a failed cell.
+All planned fixture calls have a fixed 120-second timeout. A timeout is a failed
+cell and will not be retried. The parent authorized eight calls per provider
+(four fixtures, two tiers); no retries or extra usage-check calls. Claude had
+one unintended assistant-style turn during controller preflight; count it
+against the eight-call ceiling. Therefore, at most seven Claude fixture cells
+remain, and the first cheap cell (fixture f1) is omitted for budget accounting,
+not counted as a model-quality failure. Do not replace it. The seven planned
+Claude cells have at most USD 0.70 of requested per-call ceilings; because the
+preflight turn's usage is unknown, the aggregate USD 0.80 cap cannot be claimed
+verified. Codex, Kiro and agy retain eight planned fixture cells each. They do
+not expose comparable dollar caps in retained help; report native cost/usage if
+emitted, otherwise unknown. Do not infer cost from model names or time. A missing
+quota counter remains unknown, not model unavailability. Stop a provider on a
+reported usage limit; never substitute another provider or tier for a failed
+cell.
 
 No global settings, account plan, default model, provider configuration, or trust
 list will change. Capture the Kiro V2 session ID and delete only that exact
