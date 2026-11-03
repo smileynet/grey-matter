@@ -11,7 +11,7 @@ const tickets = fs.readdirSync(path.join(root, '.tickets')).filter(p => p.endsWi
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!match) return [];
   const data = YAML.parse(match[1]);
-  if (!data.tags?.includes('stream:orchestration')) return [];
+  if (!data.tags?.includes('stream:orchestration') && !editorial.includedTicketIds?.includes(String(data.id))) return [];
   const id = String(data.id);
   return [{ id, title: data.title, status: data.status, blocked_by: (data.blocked_by ?? []).map(String), criteria: data.validation_criteria ?? [], body: match[2].trim(), file: `../.tickets/${name}`, label: editorial.ticketNotes[id]?.[0] ?? data.title, value: editorial.ticketNotes[id]?.[1] ?? data.title }];
 }).sort((a, b) => Number(a.id) - Number(b.id));

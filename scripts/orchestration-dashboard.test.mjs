@@ -14,7 +14,8 @@ try {
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(pathToFileURL(path.resolve('docs/orchestration.html')).href);
     assert.equal(await page.getByRole('tab').count(), 2);
-    assert.equal(await page.locator('#finding-cards article').count(), 21);
+    const findings = await page.locator('#gm-findings').evaluate(n => JSON.parse(n.textContent));
+    assert.equal(await page.locator('#finding-cards article').count(), findings.findings.length);
     assert.equal(await page.locator('#possibilities article').count(), 2);
     assert.equal(await page.locator('details[open]').count(), 0);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
@@ -24,6 +25,7 @@ try {
     assert.equal(await page.locator('#tickets').isVisible(), true);
     const data = await page.locator('#gm-tickets').evaluate(n => JSON.parse(n.textContent));
     assert.equal(await page.locator('.ticket').count(), data.tickets.length);
+    assert.ok(data.tickets.some(t => t.id === '179'), 'Explicit integration dependency stays visible without changing its owning stream');
     assert.equal(await page.locator('.ticket[open]').count(), 0);
     assert.equal(await page.locator('#flow path').count(), data.tickets.filter(t => ['open', 'in_progress', 'backlog'].includes(t.status)).reduce((n, t) => n + t.blocked_by.filter(id => data.tickets.some(p => p.id === id && ['open', 'in_progress', 'backlog'].includes(p.status))).length, 0));
     await page.getByLabel('Search tickets').fill('Research Agent Client Protocol');

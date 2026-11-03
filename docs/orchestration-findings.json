@@ -3,6 +3,45 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "outcome-driven-session",
+      "state": "partial",
+      "label": "Session guidance shipped; recovery tooling in progress",
+      "title": "Give the coordinator an outcome and a clear finish line",
+      "value": "You can start a session around what needs to be delivered. The guidance keeps work moving through review and integration, with explicit reasons to pause or stop.",
+      "diagramLabel": "The session loop",
+      "steps": [
+        "Define outcome and proof",
+        "Assign bounded work",
+        "Review and integrate",
+        "Continue until proved or blocked"
+      ],
+      "limit": "The guidance is shipped. Dispatch checks, script guidance, publication checks and recovery scenarios are still being implemented; live goal persistence is not newly qualified.",
+      "details": "The outcome contract names scope, authority, resources, proof and stop conditions. User and authorized-agent invocation policies agree. Reviewer capacity, separate task/cleanup/delivery observations and current monitor state are explicit. Independent critic accepted candidate bdf2f182; parent integrated and passed the selected checks, then deployed with Agy excluded. No native model or goal run was used to qualify this slice. The effort queue also displays its existing shared-messaging dependency, whose ticket retains tooling-stream ownership.",
+      "tickets": [
+        "202",
+        "203",
+        "204",
+        "205",
+        "206",
+        "207",
+        "179"
+      ],
+      "sources": [
+        {
+          "label": "Delivered outcome guidance",
+          "href": "../skills/engineering/orchestrate/SKILL.md"
+        },
+        {
+          "label": "Acceptance and verification",
+          "href": "agents/research/outcome-orchestration-delivery-20261103.md"
+        },
+        {
+          "label": "Approved proposal and remaining work",
+          "href": "agents/proposals/19-outcome-driven-orchestration.md"
+        }
+      ]
+    },
+    {
       "id": "kiro-shutdown-handling",
       "state": "partial",
       "label": "Workaround documented; native shutdown unresolved",
@@ -731,6 +770,10 @@
       "Choose a repeatable evaluation runner",
       "Leave a runnable way to compare model trials on the same fixtures."
     ],
+    "179": [
+      "Connect existing workers across supported interfaces",
+      "Shared session messaging keeps its existing tooling owner. Native delivery and unsupported lanes must remain explicit."
+    ],
     "185": [
       "Understand the shared agent runtime",
       "Explain where the agent loop, tools, protocol and policy boundaries live."
@@ -778,6 +821,33 @@
     "201": [
       "Deferred shutdown research",
       "Low priority: investigate and qualify a remedy after higher-priority work is finished. Existing evidence and sessions remain protected."
+    ],
+    "202": [
+      "Start from an outcome and proof",
+      "Delivered: scoped continuation, role boundaries, authority and stop conditions; native persistence remains unprobed."
+    ],
+    "203": [
+      "Know when and how to use every tool",
+      "In progress: complete script classification and task-specific agent guidance; incorrect initial tool descriptions are being revised."
+    ],
+    "204": [
+      "Check worker and review identities before acting",
+      "Validate actual worktree, base, candidate and evidence bindings without pretending to prove semantic independence."
+    ],
+    "205": [
+      "Check review currency before publication",
+      "Reuse review receipts and verify exact source/package identity before the authorized publishing step."
+    ],
+    "206": [
+      "Use current operational guidance",
+      "Delivered: discovery and ticket-lifecycle references agree with observed interfaces, and verification fits the work."
+    ],
+    "207": [
+      "Exercise continuation and recovery failures",
+      "Deterministic scenarios will test stale identities, lost completion, capacity and stop conditions without restarting completed benchmarks."
     ]
-  }
+  },
+  "includedTicketIds": [
+    "179"
+  ]
 }

@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "2cccaad141a89f76628199ef0a804c28bd515eac87a7057256e1de88f91db908",
+  "subject": "Delivered outcome contract and reference corrections; current approved implementation queue",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 161259,
+      "sha256": "58f624b944125681f84d49bf54c7143fdf57908052a8ff464d88cc10f9215e3e"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-status-final/tab-0-1280.png",
+      "bytes": 91336,
+      "sha256": "b6345acd174fbf3de1e20ee08890cec8300b17a20e180f0bdbf286740fd6993b",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-status-final/tab-1-1280.png",
+      "bytes": 325941,
+      "sha256": "b1ee892b3c2c8382adacffd23b8802d4b6387aced5e55de1dd3fbe73e3f7c2c5",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-status-final/tab-2-1280.png",
+      "bytes": 26645,
+      "sha256": "195ce4dff2d5f5834db92b6c7f64dd0810cb6f730f7e9795039ea308fb6f239e",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-status-final/tab-3-1280.png",
+      "bytes": 393655,
+      "sha256": "d5dfd2c654f0409b0bf0ba21f4400aabc8c32e5f442594f9c6b5279df85056ad",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-status-final/tab-0-390.png",
+      "bytes": 87923,
+      "sha256": "69ca8cf13f18e386271bf3ccdf785b8ff4c01af64cc6beff764a017fe9b08b57",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-status-final/tab-1-390.png",
+      "bytes": 319085,
+      "sha256": "4f7a25d768e3dd687f1b9d48b47b9a9ac7c1a3f5f6c5e9deed6e17c65fa2298a",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-status-final/tab-2-390.png",
+      "bytes": 21770,
+      "sha256": "50e704d2845eeb3e8ca571f0a55aa0c6ccdf2502267ce52069869b05455584d8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-status-final/tab-3-390.png",
+      "bytes": 379058,
+      "sha256": "93b31454e0222c7728884a0a5a0ca8d05c9741368748ee7e13c27569830a9c60",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "e4bef3782b96ed874c27b5465856e641078498f06800662e380fe151181dd37e",
+  "id": "e8a7fe5f49441aff13cb5f41c60ce9266f81b760c15e1d0884de7bc2849ae053",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "Independent UI critic",
+    "note": "PASS: inspected all eight 1280x900 and 390x900 captures across four tabs. Confirmed current global 57 entries, four tabs, zero asks and 205-ticket plan. Overview and activity summaries are legible and plan shows #179 open/high, #201 backlog, 203-205 in progress and #207 blocked in plan flow because its source ticket remains open with dependencies 202/204/205. Default ticket rows are collapsed. Mobile plan diagram is intentionally horizontally scrollable; tabs wrap cleanly and no screenshot shows viewport overflow. No native goal proof is claimed.",
+    "acceptedAt": "2026-11-03T19:20:37.582Z",
+    "snapshotId": "e8a7fe5f49441aff13cb5f41c60ce9266f81b760c15e1d0884de7bc2849ae053"
+  }
+}

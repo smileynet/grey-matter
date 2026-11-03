@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "97e5e8ff1ecf33a047f89f78150937b72a3224f8432c92ad8d3a00ef1f4e75de",
+  "subject": "Delivered outcome contract and reference corrections; current approved implementation queue",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 42300,
+      "sha256": "1c5cb023cf27462ceb6368708f7610bf29f1b02ce4b646582cf4ab3d63e10ed5"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 245444,
+      "sha256": "ad5ccc13ee1afda8e613adcc99b829a5291a59bd23133dd00314954693d1342c"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14145,
+      "sha256": "fe47a7d9ad8c78c5425925fd712403b013032b7d7f744b0a6d309edf946df76f"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1762,
+      "sha256": "2e1d9d64cd8c35663ef930d96187cb530fb4f7bb5827faf32a5c82f6b4871c4f"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5890,
+      "sha256": "16784d51172ccf9f876105e8f473824510e08b58269867c600191e1c9f2b5c03"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-final/findings-1280.png",
+      "bytes": 684316,
+      "sha256": "eab4af89047a5dc781f647affd783728f2d2038293c760954c05f600fcee6229",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-final/tickets-1280.png",
+      "bytes": 272257,
+      "sha256": "d45cbf24742b579990436a80f3182d7a8036232fca2d0a9af0decad982e93cf2",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-final/findings-390.png",
+      "bytes": 691328,
+      "sha256": "245dfd5a50a72cd676a41aef32c011da85c87893f13ef9c3ed81e45d539fb506",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-final/tickets-390.png",
+      "bytes": 247910,
+      "sha256": "8a124b0adf2abb24c977f219caa6d4fbc5ee73702da09fd537162776b1437baa",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "ca54fbac8d7c8a6cb663f3a5e700251eaba6d9271296969056ce704e5fbb30ba",
+  "id": "1175f88112516d4ba1e92d53485797041911cb60e158cb15bd42718538f1833c",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "Independent UI critic",
+    "note": "PASS: inspected both 1280x900 and both 390x900 captures. Source hashes and ticket snapshot match this receipt. Confirmed 22 findings, five open tickets with #179 explicitly included and no retagging, 37 done, one deferred and #172 cancelled; collapsed ticket rows are the default. Text/cards remain readable on phone and laptop; status and queue distinctions are visible. No native goal proof is claimed.",
+    "acceptedAt": "2026-11-03T19:20:37.385Z",
+    "snapshotId": "1175f88112516d4ba1e92d53485797041911cb60e158cb15bd42718538f1833c"
+  }
+}

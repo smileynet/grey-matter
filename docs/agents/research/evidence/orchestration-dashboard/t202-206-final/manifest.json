@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "subject": "Delivered outcome contract and reference corrections; current approved implementation queue",
+  "sources": [
+    "docs/orchestration.html",
+    "docs/orchestration-findings.json",
+    "scripts/assets/orchestration-dashboard.html",
+    "scripts/build-orchestration-dashboard.mjs",
+    "scripts/orchestration-dashboard.test.mjs"
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-final/findings-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-final/tickets-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-final/findings-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t202-206-final/tickets-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ]
+}
