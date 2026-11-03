@@ -10,6 +10,8 @@ const MAX_FILES = 1000;
 const MAX_FILE_BYTES = 32 * 1024 * 1024;
 const MAX_PACKAGE_BYTES = 128 * 1024 * 1024;
 const MAX_JSON_BYTES = 1024 * 1024;
+const DASHBOARD_SITE_BASE = 'https://github.com/smileynet/grey-matter/blob/main/docs/';
+const DASHBOARD_SITE_TRANSFORM = 'grey-matter-orchestration-dashboard-links';
 
 function demand(ok, message) {
   if (!ok) throw new Error(message);
@@ -76,14 +78,53 @@ function validatePacket(packet) {
   demand(typeof packet.candidateCommit === 'string' && /^[0-9a-f]{40,64}$/i.test(packet.candidateCommit), 'Packet needs a full candidate commit SHA');
   keys(packet.dashboard, ['manifest', 'receipt'], 'dashboard');
   demand(typeof packet.dashboard.manifest === 'string' && typeof packet.dashboard.receipt === 'string', 'Dashboard packet needs manifest and receipt paths');
-  keys(packet.package, ['directory', 'files'], 'package');
+  keys(packet.package, ['directory', 'files', 'transform'], 'package');
   demand(typeof packet.package.directory === 'string' && Array.isArray(packet.package.files) && packet.package.files.length > 0, 'Package needs a directory and source-to-package file map');
   for (const row of packet.package.files) {
     keys(row, ['source', 'packaged'], 'package file');
     demand(typeof row.source === 'string' && typeof row.packaged === 'string', 'Package files need source and packaged paths');
   }
+  if (packet.package.transform !== undefined) {
+    keys(packet.package.transform, ['kind'], 'package transform');
+    demand(packet.package.transform.kind === DASHBOARD_SITE_TRANSFORM, 'Unsupported package transform');
+    demand(packet.package.files.length === 1
+      && packet.package.files[0].source === 'docs/orchestration.html'
+      && packet.package.files[0].packaged === 'index.html',
+    'Dashboard site transform requires docs/orchestration.html -> index.html');
+  }
   keys(packet.checks, ['attestation'], 'checks');
   demand(typeof packet.checks.attestation === 'string', 'Packet needs a check attestation path');
+}
+
+export function transformOrchestrationDashboardSiteLinks(sourceText) {
+  let html = sourceText;
+  for (const id of ['gm-findings', 'gm-tickets']) {
+    const pattern = new RegExp(`(<script[^>]*id="${id}"[^>]*>)([\\s\\S]*?)(</script>)`, 'g');
+    const matches = [...html.matchAll(pattern)];
+    demand(matches.length === 1, `Dashboard site source needs exactly one ${id} block`);
+    html = html.replace(pattern, (_, open, raw, close) => {
+      const data = JSON.parse(raw);
+      if (id === 'gm-findings') {
+        demand(Array.isArray(data.findings) && Array.isArray(data.possibilities), 'gm-findings needs findings and possibilities arrays');
+        for (const card of [...data.findings, ...data.possibilities]) {
+          if (card.sources == null) continue;
+          demand(Array.isArray(card.sources), 'Finding sources must be an array');
+          for (const source of card.sources) {
+            demand(source && typeof source.href === 'string', 'Finding source needs an href');
+            if (!/^https?:/.test(source.href)) source.href = new URL(source.href, DASHBOARD_SITE_BASE).href;
+          }
+        }
+      } else {
+        demand(Array.isArray(data.tickets), 'gm-tickets needs a tickets array');
+        for (const ticket of data.tickets) {
+          demand(ticket && typeof ticket.file === 'string', 'Ticket needs a file path');
+          ticket.file = new URL(ticket.file, DASHBOARD_SITE_BASE).href;
+        }
+      }
+      return open + JSON.stringify(data).replace(/</g, '\\u003c') + close;
+    });
+  }
+  return html.replaceAll('href="plan.md"', `href="${DASHBOARD_SITE_BASE}plan.md"`);
 }
 
 function validateExpected(expected) {
@@ -143,11 +184,21 @@ function checkPackage(root, commit, packageSpec, receipt) {
     demand(asset, `Packaged asset is missing: ${row.packaged}`);
     const sourceBytes = git(root, ['show', `${commit}:${row.source}`], true);
     demand(sourceBytes.length <= MAX_FILE_BYTES, `Committed source exceeds ${MAX_FILE_BYTES} bytes: ${row.source}`);
+    let expectedBytes = sourceBytes;
+    if (packageSpec.transform?.kind === DASHBOARD_SITE_TRANSFORM) {
+      const sourceText = sourceBytes.toString('utf8');
+      demand(Buffer.from(sourceText, 'utf8').equals(sourceBytes), 'Dashboard site source must be valid UTF-8');
+      expectedBytes = Buffer.from(transformOrchestrationDashboardSiteLinks(sourceText), 'utf8');
+    }
     const packageBytes = readFileSync(asset.full);
     const sourceHash = digest(sourceBytes);
     const packageHash = digest(packageBytes);
-    demand(sourceHash === packageHash && sourceBytes.equals(packageBytes), `Packaged asset differs from committed source: ${row.packaged}`);
-    return { source: row.source, path: row.packaged, bytes: packageBytes.length, sha256: packageHash };
+    const expectedHash = digest(expectedBytes);
+    demand(expectedHash === packageHash && expectedBytes.equals(packageBytes),
+      packageSpec.transform
+        ? `Packaged asset differs from the fixed transform of committed source: ${row.packaged}`
+        : `Packaged asset differs from committed source: ${row.packaged}`);
+    return { source: row.source, path: row.packaged, bytes: packageBytes.length, sourceSha256: sourceHash, sha256: packageHash };
   }).sort((a, b) => a.path.localeCompare(b.path));
   return { files: rows, digest: digest(Buffer.from(JSON.stringify(rows))) };
 }

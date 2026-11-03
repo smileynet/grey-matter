@@ -60,12 +60,25 @@ evidence.
 
 The helper checks that the current Git HEAD matches both identities, invokes the existing
 read-only `review-receipt.mjs` API to verify the accepted receipt is still current, and
-requires the receipt to include every mapped source file without a metadata projection. It
-compares every materialized package file byte-for-byte with its source blob at the candidate
-commit and rejects missing or extra assets. The packet must be hash-bound by the separately
-owned expected identity. Pass output reports the candidate, receipt ID, sorted package
-inventory and digest, check IDs/output hashes, and `checksAreAttestations: true`. Any
+requires the receipt to include every mapped source file without a metadata projection. By
+default it compares every materialized package file byte-for-byte with its source blob at the
+candidate commit and rejects missing or extra assets. The packet must be hash-bound by the
+separately owned expected identity. Pass output reports the candidate, receipt ID, sorted
+package inventory and digest, check IDs/output hashes, and `checksAreAttestations: true`. Any
 mismatch exits nonzero with an error on stderr.
+
+One deterministic transformation is supported for the current orchestration dashboard Site
+payload. Set `package.transform` to exactly
+`{"kind":"grey-matter-orchestration-dashboard-links"}` and map exactly
+`docs/orchestration.html` to `index.html`. The committed source must be included as an
+unprojected source in the review manifest. The helper computes the payload from that committed
+Git blob: `gm-findings` relative source hrefs and `gm-tickets` file paths resolve against the
+fixed base `https://github.com/smileynet/grey-matter/blob/main/docs/`, while existing HTTP(S)
+finding links are retained; literal `href="plan.md"` links resolve to that base plus
+`plan.md`. JSON blocks are serialized with `<` escaped as `\\u003c`, matching the existing
+dashboard exporter. The actual materialized `index.html` bytes must equal those computed
+bytes. The base, mapping, transform kind and arguments are fixed; additional fields, mappings,
+or transform kinds are rejected. The parent binds the whole packet in its expected identity.
 
 Check records are attestations, not proof that a command ran: this helper does not execute
 commands or inspect output semantics. The orchestrator must retain the actual command
@@ -73,10 +86,10 @@ output and candidate binding; a claimed pass record alone is not verification. T
 identity is an operational trust boundary, not a cryptographic signature. Only the parent
 may supply it from the recorded integration/publication contract.
 
-Package verification supports a materialized directory of exact source copies: up to 1,000
-files, 32 MiB per file and 128 MiB total. It does not verify ZIP/archive metadata, transformed
-build outputs, remote Site state or what a publisher later uploads. A transform needs a
-separate provenance mapping before it can be checked here. Run this check immediately before
+Package verification supports a materialized directory of exact source copies or the one
+fixed dashboard link transform: up to 1,000 files, 32 MiB per file and 128 MiB total. It does
+not verify ZIP/archive metadata, other transformed build outputs, remote Site state or what a
+publisher later uploads. Run this check immediately before
 publication and ensure the publisher consumes the reported directory/digest. It performs no
 Site calls, network operations, credential handling, publishing or authorization. Keep the
 existing Site audience and credential route; inspect actual deployment output to establish

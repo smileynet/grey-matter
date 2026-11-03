@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { acceptReceipt, createReceipt } from './review-receipt.mjs';
-import { preflightPublication } from './preflight-publication.mjs';
+import { preflightPublication, transformOrchestrationDashboardSiteLinks } from './preflight-publication.mjs';
 
 const roots = [];
 const sidecars = [];
@@ -18,18 +18,20 @@ function git(root, ...args) {
   return execFileSync('git', ['-C', root, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 }
 
-function fixture() {
+function fixture({ transformed = false } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'dashboard-publish-205-'));
   roots.push(root);
   for (const dir of ['site', 'docs', 'evidence', '.scratch']) mkdirSync(join(root, dir), { recursive: true });
   writeFileSync(join(root, '.gitignore'), '.scratch/\n');
   writeFileSync(join(root, 'site/index.html'), '<main>Committed site source</main>\n');
   writeFileSync(join(root, 'docs/status.html'), '<main>Reviewed dashboard render input</main>\n');
+  const orchestration = '<a href="plan.md">Plan</a><script id="gm-findings" type="application/json">{"findings":[{"sources":[{"href":"agents/report.md"}]}],"possibilities":[]}</script><script id="gm-tickets" type="application/json">{"tickets":[{"file":".tickets/205.md"}]}</script>\n';
+  if (transformed) writeFileSync(join(root, 'docs/orchestration.html'), orchestration);
   writeFileSync(join(root, 'evidence/capture.bin'), Buffer.from([1, 2, 3, 4]));
   const manifest = {
     version: 1,
     subject: 'Dashboard publication fixture',
-    sources: ['site', 'docs/status.html'],
+    sources: transformed ? ['site', 'docs/status.html', 'docs/orchestration.html'] : ['site', 'docs/status.html'],
     captures: [{ path: 'evidence/capture.bin', viewport: { width: 1000, height: 700 } }],
   };
   writeFileSync(join(root, 'review-manifest.json'), JSON.stringify(manifest));
@@ -51,7 +53,8 @@ function fixture() {
 
   const packageDir = join(root, '.scratch/package');
   mkdirSync(packageDir);
-  writeFileSync(join(packageDir, 'index.html'), readFileSync(join(root, 'site/index.html')));
+  const packageSource = transformed ? orchestration : readFileSync(join(root, 'site/index.html'));
+  writeFileSync(join(packageDir, 'index.html'), transformed ? transformOrchestrationDashboardSiteLinks(packageSource) : packageSource);
   const checkOutputPath = '.scratch/check-output.json';
   const checkOutput = Buffer.from('{"ok":true}\n');
   writeFileSync(join(root, checkOutputPath), checkOutput);
@@ -73,7 +76,11 @@ function fixture() {
     root,
     candidateCommit,
     dashboard: { manifest: 'review-manifest.json', receipt: 'review-receipt.json' },
-    package: { directory: '.scratch/package', files: [{ source: 'site/index.html', packaged: 'index.html' }] },
+    package: {
+      directory: '.scratch/package',
+      files: [{ source: transformed ? 'docs/orchestration.html' : 'site/index.html', packaged: 'index.html' }],
+      ...(transformed ? { transform: { kind: 'grey-matter-orchestration-dashboard-links' } } : {}),
+    },
     checks: { attestation: checksPath },
   };
   const packetPath = `${root}-packet.json`;
@@ -134,6 +141,34 @@ test('rejects unexpected files in the packaged asset directory', () => {
   const f = fixture();
   writeFileSync(join(f.packageDir, 'extra.js'), 'unexpected\n');
   assert.throws(() => preflightPublication(f.packetPath, f.expectedPath), /inventory does not match/);
+});
+
+test('accepts only the fixed orchestration dashboard link transform over committed source', () => {
+  const f = fixture({ transformed: true });
+  const output = readFileSync(join(f.packageDir, 'index.html'), 'utf8');
+  assert.match(output, /https:\/\/github\.com\/smileynet\/grey-matter\/blob\/main\/docs\/agents\/report\.md/);
+  assert.match(output, /https:\/\/github\.com\/smileynet\/grey-matter\/blob\/main\/docs\/.tickets\/205\.md/);
+  assert.match(output, /href="https:\/\/github\.com\/smileynet\/grey-matter\/blob\/main\/docs\/plan\.md"/);
+  assert.equal(preflightPublication(f.packetPath, f.expectedPath).status, 'pass');
+});
+
+test('rejects a transformed payload with a tampered link', () => {
+  const f = fixture({ transformed: true });
+  const outputPath = join(f.packageDir, 'index.html');
+  writeFileSync(outputPath, readFileSync(outputPath, 'utf8').replace('agents/report.md', 'agents/other.md'));
+  assert.throws(() => preflightPublication(f.packetPath, f.expectedPath), /fixed transform of committed source/);
+});
+
+test('rejects unknown transform kinds and arbitrary transform arguments', () => {
+  const f = fixture({ transformed: true });
+  f.packet.package.transform.kind = 'arbitrary-code';
+  f.savePacket();
+  f.saveExpected();
+  assert.throws(() => preflightPublication(f.packetPath, f.expectedPath), /Unsupported package transform/);
+  f.packet.package.transform = { kind: 'grey-matter-orchestration-dashboard-links', command: 'run arbitrary code' };
+  f.savePacket();
+  f.saveExpected();
+  assert.throws(() => preflightPublication(f.packetPath, f.expectedPath), /Unsupported package transform fields/);
 });
 
 test('rejects a packet or expected identity changed after parent binding', () => {
