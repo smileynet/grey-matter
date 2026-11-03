@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "subject": "Delivery update after the evaluation runner selection",
+  "sources": ["docs/status.html"],
+  "captures": [
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-0-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-1-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-2-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-0-390.png","viewport":{"width":390,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-1-390.png","viewport":{"width":390,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-2-390.png","viewport":{"width":390,"height":900}}
+  ]
+}
+

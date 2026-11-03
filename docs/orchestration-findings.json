@@ -3,6 +3,16 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "evaluation-runner", "state": "confirmed", "label": "Two tasks demonstrated; broader trials next",
+      "title": "Compare workers on the same tasks",
+      "value": "Two small implementation tasks ran through two assistants with separate workspaces and independent checks. The same approach now supports the next model trials.",
+      "diagramLabel": "Observed evaluation flow", "steps": ["Freeze the task", "Run in a fresh workspace", "Check behavior and scope", "Read usage with its limits"],
+      "limit": "These were task demonstrations, not a model ranking. Other task types still need their own fixtures; the host setup did not provide an isolation boundary.",
+      "details": "The selected Windows-native runner preserves requested versus observed model identity, native usage and independent grading. Its hardened grader catches staged, untracked and committed changes outside allowed paths and rejects unexpected commits. Claude costs are native list estimates; Codex dollar cost and observed identity were absent. Harbor's local setup was blocked before execution, while remote modes remain untested. Implementation and review trials are now dispatched separately; measured model runs are serialized.",
+      "tickets": ["174", "199"],
+      "sources": [{"label": "Runner demonstration and evidence limits", "href": "agents/research/eval-runner-trial-20261102.md"}, {"label": "Selected recipe", "href": "agents/research/eval-prior-art-20261101.md"}, {"label": "Frozen input repair", "href": "agents/research/eval-seed-drift-20261102.md"}]
+    },
+    {
       "id": "gui-candidates", "state": "partial", "label": "Candidates documented; live steering unverified",
       "title": "Compare native views before relying on them",
       "value": "Five interfaces were compared for worker status, approvals, questions and usage. The comparison separates documented features from what could actually be observed here.",
@@ -138,6 +148,7 @@
     {"title": "Spend less without losing the quality bar", "value": "Choose a repeatable runner, then compare models, effort and fast mode on fixed tasks.", "tickets": ["174", "167", "168", "169", "170", "171", "172"]}
   ],
   "ticketNotes": {
+    "199": ["Keep comparison inputs fixed", "Restore the original fixture dashboard and reject any other unexpected seed change."],
     "95": ["Mirror ticket and worker state", "See native worker bookkeeping follow the authoritative ticket state."],
     "111": ["Run a controlled ticket-to-review loop", "Delegate separate jobs and review their evidence before accepting changes."],
     "124": ["Reuse disposable test jobs", "Compare approaches against the same small project and shaped tasks."],

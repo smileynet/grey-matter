@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "d85d6c6a3b759d8593f96762a78c064abd4b2051f7d9292452d02f559e11e089",
+  "subject": "Selected evaluation recipe and dispatched implementation/review trials",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 22974,
+      "sha256": "f2bdec39af8e10f253270e70460167c6477668360e5ccccaf8665376fbdaa9b2"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 173585,
+      "sha256": "4dc177253456439a8ee88abfe25729c9e555feea9bc6a681275cc528120e9ff8"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 13902,
+      "sha256": "4b67b56e8846882eadefc61c9ae9741b7956c776932727c643605373eaa0f625"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1703,
+      "sha256": "a5fa8647e63ce606aeaa6e1a564e2a4ad60a5ebac1ddd2ecdcb5c1d19cd02d77"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 4264,
+      "sha256": "afcd2dcda83dc67ae9405c296d8806d5fc11afb95436bfe02f041addf342e7f4"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t199-final/findings-1280.png",
+      "bytes": 443567,
+      "sha256": "6b8ff8da786be25f0464b8fca3a5a955b0547ed24fca4cdcdf0b2cca2e4b50dc",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t199-final/tickets-1280.png",
+      "bytes": 230842,
+      "sha256": "b227593e0c52f70871e0cb9d765e38170d1bcfa6df7f44162ff6402dcae4ba54",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t199-final/findings-390.png",
+      "bytes": 444259,
+      "sha256": "1535748b111a630d270900a6698d6cd62e3c47c66fe5e130369fe8bfb4073376",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t199-final/tickets-390.png",
+      "bytes": 209750,
+      "sha256": "0837bc38f1f89bb04f9f3321c2a6059a6e9499a107ea71d6b75cafac03349a78",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "b4a4fe63f6eb20eb1a39e5d587aabd16d5281876c75d1acd399164f56d32917f",
+  "id": "49ae91a3f9cad705a4ad09eca65606199e1b4cd8b50b409104ec1326a0af8dcc",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic_t174",
+    "note": "Inspected all four current findings and ticket-log captures at desktop and mobile widths; figures and rendered ticket flow/content are legible and consistent. Accepted current t199 dashboard capture set.",
+    "acceptedAt": "2026-11-03T05:43:28.258Z",
+    "snapshotId": "49ae91a3f9cad705a4ad09eca65606199e1b4cd8b50b409104ec1326a0af8dcc"
+  }
+}

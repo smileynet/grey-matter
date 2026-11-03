@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "manifestDigest": "aa58d0b1f9d0fb6a018abfedcf618fec87975705895a9931c602ed524cfd54b6",
+  "subject": "Delivery update after the evaluation runner selection",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 129404,
+      "sha256": "c281fe737027b64d84c1986abb4a5bd577cd90cea7c7fac227ea0e68d0b328ee"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-0-1280.png",
+      "bytes": 77648,
+      "sha256": "0ca4bf261eb36818c02123d2af70db3ed3b74e338f7613ceccf329be59edd41a",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-1-1280.png",
+      "bytes": 250195,
+      "sha256": "c854bad9ba2bcf7f65e12ab287a2d0c9965aa60309f665d18981b1668e4573e0",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-2-1280.png",
+      "bytes": 397679,
+      "sha256": "22b7c863ff9dee1f117b781236f695a244d3c432e2ef9f1824f4251c34ebd23a",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-0-390.png",
+      "bytes": 72718,
+      "sha256": "aed5cff08a4bda1b930aec0924bc4a2b6e67c56d21c58d35e93c49f748bbbe77",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-1-390.png",
+      "bytes": 245476,
+      "sha256": "a8badcaf7b0ad8c370dcb84a8a42e63b53241cf0b3e6d485f36f0d782e94ff9e",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t199-status-final/tab-2-390.png",
+      "bytes": 384655,
+      "sha256": "dd66a9542326c9c7f7b9c94612f7ce1f74f087a29d067531133dd78f72edd163",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "217c42eae5fe3a2a27477612edb4a5d08af16859572bdde14fa1b222968ebae2",
+  "id": "a2fd2cec280f4fa140d60d7b0b74b7f489e488716c7550a35c6d6dccc73c3fce",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic_t174",
+    "note": "Inspected all six current overview, entries, and plan captures at desktop and mobile widths. Current #199 entry and plan counts render legibly; accepted current t199 status capture set.",
+    "acceptedAt": "2026-11-03T05:43:31.035Z",
+    "snapshotId": "a2fd2cec280f4fa140d60d7b0b74b7f489e488716c7550a35c6d6dccc73c3fce"
+  }
+}

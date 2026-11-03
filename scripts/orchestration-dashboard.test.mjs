@@ -14,7 +14,7 @@ try {
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(pathToFileURL(path.resolve('docs/orchestration.html')).href);
     assert.equal(await page.getByRole('tab').count(), 2);
-    assert.equal(await page.locator('#finding-cards article').count(), 13);
+    assert.equal(await page.locator('#finding-cards article').count(), 14);
     assert.equal(await page.locator('#possibilities article').count(), 2);
     assert.equal(await page.locator('details[open]').count(), 0);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
@@ -39,10 +39,10 @@ try {
     await page.getByLabel('Include completed work').check();
     assert.equal(await page.locator('.node').count(), data.tickets.length);
     await page.getByLabel('Include completed work').uncheck();
-    await page.locator('[data-node="174"]').click();
+    await page.locator('[data-node="167"]').click();
     await page.getByRole('button', { name: 'Open ticket details', exact: true }).click();
-    assert.equal(await page.locator('#ticket-174').getAttribute('open'), '');
-    await page.locator('#ticket-174 > summary').click();
+    assert.equal(await page.locator('#ticket-167').getAttribute('open'), '');
+    await page.locator('#ticket-167 > summary').click();
     await page.locator('#flow-selection').evaluate(n => n.textContent = 'Pick any ticket in the diagram.');
     await page.locator('#open-selected').evaluate(n => n.hidden = true);
     await page.locator('.node.selected').evaluateAll(nodes => nodes.forEach(n => n.classList.remove('selected')));
