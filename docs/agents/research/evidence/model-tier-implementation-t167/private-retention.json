@@ -6,5 +6,5 @@
     {"path":".scratch/t167/protocol-v1.md","bytes":11321,"sha256":"fd0424119e3d87765c8b1fce7b8935cfc19f093560924121f74f8c826a034c18"}
   ],
   "backupVerified": false,
-  "retainUntil": "Independent audit and parent integration decision; then parent must retain and hash-verify private bytes or explicitly release exact hidden-vector recovery."
+  "retainUntil": "Tickets 169-172 and parent integration review; before retiring the worker worktree, parent must retain and hash-verify private bytes or explicitly release exact hidden-vector recovery."
 }
