@@ -26,6 +26,24 @@ const api = () => {
 };
 const tk = (id, status, blocked_by = []) => ({ id, title: `Ticket ${id}`, status, blocked_by });
 
+test("cancelled tickets stay distinct terminal context and never satisfy prerequisites", (t) => {
+  const snap = { generated: "2026-11-02T00:00:00Z", frontier: [], tickets: [tk("retired", "cancelled"), tk("child", "open", ["retired"])] };
+  const groups = api().planGroups(snap);
+  assert.equal(groups.cancelled.length, 1);
+  assert.equal(groups.done.length, 0);
+  assert.equal(groups.blocked.length, 1);
+  const flow = api().ticketFlow(snap);
+  assert.deepEqual(Array.from(flow.visible, ticket => ticket.id), ["child"]);
+  assert.equal(flow.elsewhere, 0);
+  const context = api().ticketFlow(snap, { completed: true });
+  assert.equal(context.counts.cancelled, 1);
+  assert.equal(context.counts.done, 0);
+  assert.equal(context.readiness.cancelled, 1);
+  assert.equal(context.edges[0].satisfied, false);
+  const file = dashboard(t, [], withTickets(snap));
+  assert.deepEqual(check(file.file).errors, []);
+});
+
 function entry(n, extra = {}) {
   const day = String(n).padStart(2, "0");
   return { id: `e${n}`, date: `2026-09-${day}`, kind: "shipped", title: `You can do thing ${n}`, summary: `Thing ${n} works.`, ...extra };
@@ -256,7 +274,7 @@ test("remaining flow includes deferred work, complete counts and every visible e
   const flow = api().ticketFlow(snap), plain = (value) => JSON.parse(JSON.stringify(value));
   assert.deepEqual(plain(flow.visible.map((ticket) => ticket.id)), ["one", "two", "three", "later", "other"]);
   assert.deepEqual(plain(flow.edges.map((edge) => edge.from + ">" + edge.to)), ["one>two", "two>three"]);
-  assert.deepEqual(plain(flow.counts), { ready: 2, in_progress: 1, blocked: 1, backlog: 1, done: 0 });
+  assert.deepEqual(plain(flow.counts), { ready: 2, in_progress: 1, blocked: 1, backlog: 1, done: 0, cancelled: 0 });
   assert.deepEqual(plain(flow.relations("two")), { before: ["one", "base"], after: ["three"], waiting: ["one"] });
   const completed = api().ticketFlow(snap, { completed: true });
   assert.ok(completed.edges.some((edge) => edge.from === "base" && edge.satisfied));
@@ -315,7 +333,7 @@ test("planning gates stay separate from lifecycle, dependencies and deferred wor
     { ...tk("next", "open"), tags: ["docs", "relations"] }
   ] };
   const flow = api().ticketFlow(snap, { scopes: [{ id: "docs", label: "Guidance", tags: ["docs"] }, { id: "rel", label: "Relations", tags: ["relations"] }] });
-  assert.deepEqual(JSON.parse(JSON.stringify(flow.readiness)), { ready: 1, in_progress: 0, blocked: 1, decision: 1, evidence: 1, backlog: 1, done: 0 });
+  assert.deepEqual(JSON.parse(JSON.stringify(flow.readiness)), { ready: 1, in_progress: 0, blocked: 1, decision: 1, evidence: 1, backlog: 1, done: 0, cancelled: 0 });
   assert.deepEqual(Array.from(flow.groups, (g) => [g.label, Array.from(g.tickets, (t) => t.id)]), [["Guidance", ["next", "child"]], ["Relations", ["decide"]], ["Other work", ["probe", "later"]]]);
   assert.ok(flow.edges.some((edge) => edge.from === "decide" && edge.to === "child"));
   assert.deepEqual(Array.from(flow.relations("child").before), ["decide"]);

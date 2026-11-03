@@ -13,7 +13,7 @@ import vm from "node:vm";
 const KINDS = ["shipped", "progress", "decision", "blocked", "learning"];
 const RUNGS = ["wireframe", "mocked", "live"];
 const VISUALS = ["image", "compare", "progress", "steps", "metrics"];
-const STATUSES = ["backlog", "open", "in_progress", "done"];
+const STATUSES = ["backlog", "open", "in_progress", "done", "cancelled"];
 const PRIORITIES = ["urgent", "high", "medium", "low"];
 const LIMITS = { title: 90, summary: 280, changes: 3, change: 100, question: 140, option: 60 };
 const MAX_FILE = 400 * 1024;
@@ -180,7 +180,7 @@ export function check(path, { strict = false } = {}) {
         if (grouped !== snap.tickets.length) err(`plan grouping broken: ${grouped} of ${snap.tickets.length} tickets shown`);
         if (api.ticketFlow && cfg && cfg.ticketFlow !== false && !(cfg.ticketFlow && cfg.ticketFlow.enabled === false)) {
           const flow = api.ticketFlow(snap, { scopes: cfg.ticketFlow && cfg.ticketFlow.scopes });
-          const remaining = snap.tickets.filter((ticket) => ticket.status !== "done");
+          const remaining = snap.tickets.filter((ticket) => !["done", "cancelled"].includes(ticket.status));
           if (flow.visible.length !== remaining.length || remaining.some((ticket) => !flow.visible.some((visible) => visible.id === ticket.id))) err("default ticket flow hides remaining work");
           if (Object.values(flow.counts).reduce((total, count) => total + count, 0) !== flow.visible.length) err("ticket flow status counts omit visible work");
           if (flow.readiness && Object.values(flow.readiness).reduce((total, count) => total + count, 0) !== flow.visible.length) err("ticket flow planning counts omit visible work");

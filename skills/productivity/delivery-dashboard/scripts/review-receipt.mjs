@@ -5,7 +5,7 @@ import {resolve,relative,isAbsolute,extname,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const digest=value=>createHash('sha256').update(value).digest('hex');
-const statuses=new Set(['open','in_progress','backlog','done']);
+const statuses=new Set(['open','in_progress','backlog','done','cancelled']);
 function demand(condition,message){if(!condition)throw Error(message);}
 function object(value){return value!==null&&typeof value==='object'&&!Array.isArray(value);}
 function keys(value,allowed,label){demand(object(value)&&Object.keys(value).every(key=>allowed.includes(key)),`Unsupported ${label} fields`);}
