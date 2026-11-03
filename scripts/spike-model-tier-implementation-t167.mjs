@@ -198,10 +198,13 @@ if (provider === "claude") {
     permissionMode: initialized?.permission_mode ?? null,
     availableTools: initialized?.tools ?? null,
     toolCalls,
+    finalResponse: terminal?.response ?? null,
   };
   adapter.agentTestDenied = toolCalls.some(call => call.name === "run_command"
     && /^npm(?:\.cmd)?\s+test(?:\s|$)/i.test(call.command ?? "")
     && /permission check failed/i.test(call.error ?? ""));
+  adapter.agentCommandDenied = toolCalls.some(call => call.name === "run_command" && /permission check failed/i.test(call.error ?? ""));
+  if (typeof adapter.finalResponse === "string") finalText = adapter.finalResponse;
 }
 
 function gitPaths(...gitArgs) {
@@ -297,6 +300,8 @@ const native = {
   permissionMode: adapter.permissionMode ?? null,
   availableTools: adapter.availableTools ?? null,
   toolCalls: adapter.toolCalls ?? null,
+  agentTestDenied: adapter.agentTestDenied ?? null,
+  agentCommandDenied: adapter.agentCommandDenied ?? null,
   scopedSettings: provider === "agy" ? {
     path: "agy-settings.json",
     sha256: createHash("sha256").update(readFileSync(settingsPath)).digest("hex"),
@@ -314,7 +319,7 @@ const native = {
 };
 const result = {
   schemaVersion: 1,
-  status: child.error?.code === "ETIMEDOUT" ? "timeout" : child.status !== 0 ? "native-error" : embeddedErrors.length > 0 ? "infrastructure-error" : ["kiro", "agy"].includes(provider) && !adapter.completionObserved ? "missing-completion" : adapter.agentTestDenied ? "agent-test-permission-failure" : adapter.complete === false ? "native-turn-failed" : "native-exit-zero",
+  status: child.error?.code === "ETIMEDOUT" ? "timeout" : child.status !== 0 ? "native-error" : embeddedErrors.length > 0 ? "infrastructure-error" : ["kiro", "agy"].includes(provider) && !adapter.completionObserved ? "missing-completion" : adapter.agentTestDenied ? "agent-test-permission-failure" : adapter.agentCommandDenied ? "agent-command-permission-failure" : adapter.complete === false ? "native-turn-failed" : "native-exit-zero",
   command: [executable, ...commandArgs],
   cell: { caseId, seedCommit: headBefore, seedTree: treeBefore, workDir },
   native,
