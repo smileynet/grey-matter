@@ -8,7 +8,7 @@ Protocol SHA-256: `fd0424119e3d87765c8b1fce7b8935cfc19f093560924121f74f8c826a034
 
 Fixture manifest SHA-256: `aa02eaec908f619ee0d325742a2cb1b5be8a2166a0ffc4e138b9a228fc912628`
 
-Private raw-evidence manifest SHA-256: `cc9ddccb13445f0e35c4a1dedbca0e685c9d7214f3e150a307a575dd60fbf6c2`
+Private raw-evidence manifest SHA-256: `bf2d4fe9cdfa8954fb55196567243f3ecae6821f184730e76b49a6a5c85a9bf6`
 
 ## Finding
 
@@ -37,7 +37,7 @@ Labels: **pass** = task oracle met; **fail** = observed task/ambiguity requireme
 
 Codex attempted only T1/T2 at both tiers. The four native invocations reported exit zero but nested code-mode errors; they are infrastructure failures, not model-quality failures. One T1 cheap output made a single CUA app/window inventory inspection call; no UI mutation or browser interaction occurred. The private raw includes app/window metadata and is not reproduced here.
 
-Agy attempted ten of twelve planned cells. Cheap T1 failed before model launch because the CLI interpreted `--mode` as the `--print` prompt; it was not retried. T1 default's required test command was denied by the initial scoped command rule. On T4 default, the sandbox could not find `npm`; a second test attempt received a stop-all-tools pre-tool-hook denial. The independent critic reviewed that raw and approved stopping Agy. T5 cheap/default had already started and settled before the parent hold arrived; T6 cheap/default were never launched. No setting, PATH, provider, or prompt workaround was made after the stop-hook finding.
+Agy attempted ten of twelve planned cells. Cheap T1 failed before model launch because the CLI interpreted `--mode` as the `--print` prompt; it was not retried. T1 default's required test command was denied by the initial scoped command rule. On T4 default, the sandbox could not find `npm`; a second test attempt received a stop-all-tools pre-tool-hook denial. The independent critic reviewed that raw and approved stopping Agy. T5 cheap returned no clarification; its denied `git status` diagnostic was nonblocking and did not prevent task-context access, so this is an ambiguity failure. T5 cheap/default had already started and settled before the parent hold arrived; T6 cheap/default were never launched. No setting, PATH, provider, or prompt workaround was made after the stop-hook finding.
 
 ## Interpretation and recommendation
 

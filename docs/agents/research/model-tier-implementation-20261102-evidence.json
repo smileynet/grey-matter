@@ -4,7 +4,7 @@
   "date": "2026-11-02",
   "protocolSha256": "fd0424119e3d87765c8b1fce7b8935cfc19f093560924121f74f8c826a034c18",
   "fixtureManifestSha256": "aa02eaec908f619ee0d325742a2cb1b5be8a2166a0ffc4e138b9a228fc912628",
-  "privateRawManifestSha256": "cc9ddccb13445f0e35c4a1dedbca0e685c9d7214f3e150a307a575dd60fbf6c2",
+  "privateRawManifestSha256": "bf2d4fe9cdfa8954fb55196567243f3ecae6821f184730e76b49a6a5c85a9bf6",
   "privateRows": 38,
   "providerCounts": {
     "claude": {
