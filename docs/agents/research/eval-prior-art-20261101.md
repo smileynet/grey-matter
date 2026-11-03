@@ -64,8 +64,43 @@ Dropped as stale, archived or off-topic: METR's task-standard and vivaria (archi
 
 ## What grey-matter should decide
 
-- **Adopt a runner, or write a small one.** harbor already drives most of our harnesses and is current and well-starred, but it is Docker-centred and has no Kiro adapter. A thin runner of our own over the existing spike fixture keeps Windows-native runs simple. A one-day trial of harbor with two adapters (Claude Code, Codex) would settle this before tickets 167-172 start.
-- **Cost accounting:** read the harnesses' own logs (the tokenmeter approach), plus each provider's usage check, rather than wrapping the CLIs.
+- **Runner choice for tickets 167-172 (ticket 174).** Use the focused Node runner in <code>scripts/spike-model-eval.mjs</code> for the existing fixtures on this Windows host. The four-case recipe runs T1 and T3 with Claude Code and Codex CLI, gives each adapter/job its own fixture and evidence directory, and independently grades native tests and task behavior. The trial report has the exact supported commands, adapter executable paths, receipt fields, results and failure classifications: [evaluation runner trial](eval-runner-trial-20261102.md). This is a bounded local-host decision: consider Harbor if later tasks need container isolation, remote environments or a maintained benchmark suite. The tested local Harbor setup could not reach Docker or Podman and stopped before Harbor ran; no claim is made about its packaged installation or remote modes.
+- **Cost accounting:** keep native usage as the source: Claude reports list-price estimates, not billing; Codex's captured JSONL reports token counts but no actual model ID or dollar amount. Do not fill those gaps with estimates.
+
+### Runnable selected path (2026-11-02)
+
+Use Node 22+ and the checked-in T1/T3 manifests under
+<code>scripts/fixtures/model-eval/</code>. Both pin seed Git tree object ID
+`c474646ea61e037fcdbc1be3d2dc6c0833f5e260` (SHA-1). The reviewed hardened
+runner has SHA-256 `92588b2ef6356eeb56b75ddc77f87fd3b73b6b9624d7eb9c38134f561960adea`.
+From the repository root, use a fresh directory for every fixture/adapter pair:
+
+~~~~powershell
+$run = Join-Path $env:TEMP ('gm-eval-' + [guid]::NewGuid().ToString('N'))
+$claudeExe = (Get-Command claude).Source
+$codexExe = 'D:\tools\bun-install\global\node_modules\@openai\codex-win32-x64\vendor\x86_64-pc-windows-msvc\bin\codex.exe'
+foreach ($fixture in @('t1', 't3')) {
+  node scripts/spike-model-eval.mjs --adapter claude --fixture $fixture --model sonnet --effort low --claude-exe $claudeExe --work-dir (Join-Path $run "claude-$fixture-work") --evidence-dir (Join-Path $run "claude-$fixture-evidence")
+  node scripts/spike-model-eval.mjs --adapter codex --fixture $fixture --model gpt-6.1-sol --effort low --codex-exe $codexExe --work-dir (Join-Path $run "codex-$fixture-work") --evidence-dir (Join-Path $run "codex-$fixture-evidence")
+}
+~~~~
+
+The executable paths are host-specific; discover and verify installed binaries
+before reuse. <code>result.json</code> schema version 1 records runner commit/hash,
+fixture seed, adapter version and argv, requested and observed model separately,
+native duration/exit/usage/cost, raw output hashes and independent grading.
+Unknown usage or identity stays null. A pass requires a completed native turn,
+passing nonzero test counts, independent expected behavior and export checks,
+only allowed paths changed relative to the frozen seed, and unchanged HEAD.
+Staged, unstaged, ignored untracked and committed changes are checked.
+
+The oracle is omitted from task inputs, but no OS isolation prevents host file
+access: these demonstrations are non-adversarial. Native execution evidence
+predates the hardened grader; four retained runs passed offline regrading under
+the hardened source. The report separates those provenance records. This recipe
+is a foundation for #167–172; review/research/effort tasks need their own frozen
+fixtures, rubrics and any additional adapter support before model comparisons.
+Kiro ACP remains untested by this runner.
 
 ## Couldn't verify
 
