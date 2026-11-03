@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "ticket": 170,
+  "items": [
+    {
+      "name": "answer-key.json",
+      "privatePath": ".scratch/t170/preparation/answer-key.json",
+      "sha256": "975DDA95E186A4735915D4647FC331D068DCE6DDF9F25F019FCAB9ED9DFD6634",
+      "purpose": "Hidden task keys and issue key vocabulary; retain through blind scoring and final independent audit, then recycle after parent acceptance."
+    },
+    {
+      "name": "measurement-ledger.json",
+      "privatePath": ".scratch/t170/measurement-ledger.json",
+      "purpose": "One row per authorized native cell, including unattempted cells and stop state; private through ticket close."
+    },
+    {
+      "name": "review-receipt.json",
+      "privatePath": ".scratch/t170/reviews/<opaque-cell-id>/review-receipt.json",
+      "purpose": "Raw blind reviewer response, exact hashes, reviewer provenance, and deterministic schema validation; private through final audit."
+    },
+    {
+      "name": "review-dispatch-trace.json",
+      "privatePath": ".scratch/t170/reviews/<opaque-cell-id>/review-dispatch-trace.json",
+      "purpose": "Exact dispatched review task, canonical agent identity returned by collaboration, completed status, and response hash, bound by the review envelope; private through final audit."
+    },
+    {
+      "name": "kiro-session-cleanup.json",
+      "privatePath": ".scratch/t170/kiro-session-cleanup/cleanup-audit.json",
+      "purpose": "Exact captured V2 session deletions, complete before/after tuple-set verification, and preservation of unrelated sessions; private through parent close."
+    },
+    {
+      "name": "native-cell-receipt.json",
+      "privatePath": ".scratch/t170/raw/<opaque-cell-id>/receipt.json",
+      "purpose": "Requested and served model when emitted, elapsed time, native usage/cost, terminal state, and raw stream hashes; private until final audit."
+    }
+  ]
+}

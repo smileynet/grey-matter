@@ -1,0 +1,15 @@
+{
+  "id": "changelog-classification",
+  "task": "Classify the documented change using the supplied harness-changelog categories and evidence marks. Return one JSON object with `classifications` (an array), `evidence`, `affectedArea`, and `proposal`. Use only claims supported by the excerpt.",
+  "source": {
+    "releaseExcerpt": "Version 6.4 adds an optional `--approval-preview` flag. With this flag, write commands display the proposed changes and wait for an explicit approval. Without the flag, the existing behavior is unchanged. The release note does not report a live test.",
+    "categories": ["New capability", "Changed behaviour or default", "Removed or deprecated", "Security or permission relevant"],
+    "evidenceMarks": ["observed", "documented"]
+  },
+  "scoreDimensions": {
+    "format": "0 = not parseable as the requested JSON object or required fields absent; 1 = parseable JSON with extra fields or wrong field types; 2 = exact requested fields with correct scalar/array types.",
+    "classification": "0 = misses or invents a material class; 1 = identifies one supported class; 2 = includes both New capability and Security or permission relevant and no unsupported class.",
+    "evidence": "0 = says observed or tested; 1 = omits evidence status; 2 = labels the release-note claim documented and notes no live test is reported.",
+    "proposal": "0 = asserts adoption or a change not established by the excerpt; 1 = vague; 2 = proposes checking applicability and updating affected guidance after reviewing exact changed help/run evidence."
+  }
+}
