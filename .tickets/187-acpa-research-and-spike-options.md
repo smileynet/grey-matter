@@ -1,7 +1,7 @@
 ---
 id: "187"
 title: "Research: Agent Client Protocol (ACP), orchestration fit and evidence-led spikes"
-status: open
+status: in_progress
 blocked_by: []
 priority: low
 validation_criteria:
@@ -9,6 +9,7 @@ validation_criteria:
   - "Dated audited findings compare its capabilities and gaps with this workstream's observed driver results and recommend bounded spikes or no further work."
   - "Any recommended actionable spikes are separately ticketed with dependencies and acceptance criteria; required checks pass and owned artifacts have a recorded disposition."
 tags: ["stream:orchestration", "type:research"]
+assignee: "codex"
 ---
 
 # Research: Agent Client Protocol (ACP), orchestration fit and evidence-led spikes
