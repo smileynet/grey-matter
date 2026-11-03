@@ -29,3 +29,21 @@ Prior art to borrow techniques from (not authority): [eval prior art](../docs/ag
 ## Reconciliation (2026-11-02)
 
 Keep ordinary well-specified cases separate from deliberately ambiguous/trap cases. Freeze fixture revision, model identity, effort and grading before each comparison; report requested versus observed model separately. Never expose hidden tests or answer keys to workers, and report unavailable usage counters as unknown.
+
+## Measurement check-in (2026-11-02)
+
+Claude's twelve planned cells completed; final independent grading is pending.
+The first four Codex cells are infrastructure failures, excluded from model
+quality comparisons. The controller invoked the PATH binary whose companion
+host is missing, repeating the layout diagnosed in #188 instead of using its
+verified complete-package route. Native exit zero concealed embedded error
+events. One trace completed a `cua.getState()` inventory call outside the task
+workflow; no further computer-use actions appear in those retained traces.
+This does not establish that the host was otherwise unchanged.
+
+Codex measurements stopped with no retries or provider substitution. The other
+eight Codex cells remain unattempted. Further native measurements are held while
+the independent critic reviews controller source, raw events, executable binding
+and the fixture byte-restoration change. Private outputs remain unpromoted.
+Parent rechecked the two stable executable hashes/versions and the packaged
+companion's presence; no global configuration or installation change was made.
