@@ -1,5 +1,8 @@
 # Antigravity (agy)
 
+For app watching or answering, read [GUI watch qualifications](gui-watch.md).
+App subagent views and CLI approval/usage controls are separate surfaces.
+
 Source: [ticket 129 results](../../../../docs/agents/research/harness-orchestration-primitives.md#spike-results-agy-2026-10-31),
 observed 2026-10-31 on 1.4.12/Windows. Recheck current tools and account features.
 

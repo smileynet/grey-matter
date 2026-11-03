@@ -1,5 +1,8 @@
 # kiro-cli
 
+For IDE watching or answering, read [GUI watch qualifications](gui-watch.md).
+Agent Focus documentation does not establish attachment of a CLI/ACP worker.
+
 Source: [ticket 126 results](../../../../docs/agents/research/harness-orchestration-primitives.md#spike-results-kiro-cli-2026-10-31),
 observed 2026-10-31 on 2.34. Compare with the installed engine's live tools.
 

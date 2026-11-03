@@ -1,5 +1,8 @@
 # Kiro Crew
 
+For grid/chat watching or answering, read [GUI watch qualifications](gui-watch.md).
+Crew-owned views do not establish attachment of an external worker.
+
 Source: [ticket 128 results](../../../../docs/agents/research/harness-orchestration-primitives.md#spike-results-kiro-crew-2026-11-01)
 and [prior art](../../../../docs/agents/research/kirocrew-orchestration.md).
 Observed 2026-11-01 on 0.11.1/KAS; the installed conductor differed from source HEAD.

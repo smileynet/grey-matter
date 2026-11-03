@@ -1,5 +1,28 @@
 # Harness experimental features: follow-up spikes and QoL options
 
+## Ticket 173: GUI watch candidates and coverage (2026-11-02)
+
+These are documented product capabilities, not verified attachment of the
+retained headless workers. The [comparison](gui-watch-layer-20261102.md),
+[receipt](evidence/gui-watch-layer-20261102.json) and [audit](gui-watch-layer-20261102-audit.md)
+record versions, primary sources and exact local attempts.
+
+| Surface | State | Approvals / questions | Usage | Local observation |
+| --- | --- | --- | --- | --- |
+| Claude Desktop; Agent View is separate CLI/TUI | Desktop sidebar documented; Agent View documents CLI states | Agent View inline decisions documented, not a Desktop observation | Desktop usage button documented | Desktop launch timed out; no GUI action verified |
+| Codex app | App-list state labels unspecified in reviewed docs | Composer approvals and native continuation documented; external-worker mapping unverified | Eligible per-chat usage can omit delegated work | UI automation disallowed by the available policy; no controls inspected |
+| Kiro IDE Agent Focus | Spinning / Warning / Paused documented | In-place question and command replies documented | Unspecified in reviewed docs | Launch timed out; no GUI state/action verified |
+| Antigravity app Overview/Subagents | Following subagents documented; app state labels unspecified | Reviewed approval-jump controls belong to CLI | Reviewed usage controls belong to CLI | Cursor manager failed; no app observation |
+| Kiro Crew grid/chat | Thinking / waiting / idle documented | Interactive approval and chat continuation documented | Estimates described in older 0.9.0 docs, not locally qualified for 0.11.1 | Window appeared, but accessibility/screenshot capture failed; no session action verified |
+
+The [orchestrate GUI reference](../../../skills/engineering/orchestrate/references/gui-watch.md)
+recommends native candidates per harness with these qualifications. Keep the
+orchestrator ledger and native results authoritative until exact session mapping
+and an actual reply/approval path are demonstrated. No new private fixture was
+created; five #162 histories remain for future supported targeted inspection or
+disposal. The Crew window remains open because ownership/control is uncertain;
+no unknown user process was terminated.
+
 ## Ticket 194: Antigravity child model evidence (2026-11-02)
 
 **Request controls documented; served child identity still unverified.** Custom

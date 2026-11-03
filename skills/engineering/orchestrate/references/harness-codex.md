@@ -1,5 +1,8 @@
 # Codex
 
+For native GUI watching or answering, read [GUI watch qualifications](gui-watch.md).
+Verify exact worker/session mapping; app history does not prove live steering.
+
 Source: [ticket 127 results](../../../../docs/agents/research/harness-orchestration-primitives.md#spike-results-codex-2026-10-31),
 observed 2026-10-31 on CLI 0.166. Use the current exposed schema over old examples.
 

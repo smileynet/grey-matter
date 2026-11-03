@@ -1,5 +1,8 @@
 # Claude Code
 
+For native GUI watching or answering, read [GUI watch qualifications](gui-watch.md).
+Agent View is CLI/TUI; distinguish it from the Desktop session sidebar.
+
 Source: [ticket 125 results](../../../../docs/agents/research/harness-orchestration-primitives.md#spike-results-claude-code-2026-10-31),
 observed 2026-10-31 on 2.1.316. Inspect live tool schemas before using these names.
 
