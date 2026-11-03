@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "manifestDigest": "5f3f327f7a37bf026b69d72dc152f3952888d2c68c29eb922c01fd8c038f6a58",
+  "subject": "Global delivery entries and ticket snapshot after 161 and 188",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 117436,
+      "sha256": "8cd6be090abdeda6b52536724f5dccf976b82ca7abbd17bb97c2239f969a347b"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-0-1280.png",
+      "bytes": 91864,
+      "sha256": "2d1c875c6d59b9288404904d88d148285f8820c114ec3699b43beee3fedb1050",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-1-1280.png",
+      "bytes": 198985,
+      "sha256": "c39b178b554baaeb693db3fce3a9a13b05ee8498ce95bbc4c3386d58351172a7",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-2-1280.png",
+      "bytes": 425369,
+      "sha256": "9e99f11657aeba360f450eaf2a16929c541abafaea8cfe18feef16a4be05ac8c",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-0-390.png",
+      "bytes": 88235,
+      "sha256": "1e7499758f41591045f05e6b60bc9e4194f6b13f8a8fd701a5a54b267a5737bd",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-1-390.png",
+      "bytes": 194163,
+      "sha256": "bf418b6f74440dc98fdef9f9c1a606b112ec7dd36d441714cda1ac6620fa30eb",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-2-390.png",
+      "bytes": 412602,
+      "sha256": "15d3e0732c32706a4eaf7540cee5a22ca64826d7fc206176018ade9b4e156ecf",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "6e75ff20239ffa494589ce5f160da841a15fba5d2606d10b5dc09f159a8e9bec",
+  "id": "6ea9c1269c6ba5b0f2f8b7e48dfc3deba4186e2d6b8935fc64a8259b7cb65704",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic-dashboard",
+    "note": "Reviewed all six laptop/phone captures and exact docs/status.html snapshot. Two learning entries preserve incomplete workflow run, safety/tool/hook limits and one harmless complete-package check with no durable repair. Existing entries retained; all three tabs legible, 193-ticket plan visible.",
+    "acceptedAt": "2026-11-03T02:21:27.987Z",
+    "snapshotId": "6ea9c1269c6ba5b0f2f8b7e48dfc3deba4186e2d6b8935fc64a8259b7cb65704"
+  }
+}

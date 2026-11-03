@@ -7,14 +7,14 @@ the suggested queue follows the first matching row in `docs/plan.md`.
 
 ## Remote access
 
-The [private hosted dashboard](https://orchestration-findings.honestriver130.chatgpt.site)
+The [private hosted dashboard](https://orchestration-findings.sambiggins.chatgpt.site)
 is available while signed in as its owner. Published through Sites on 2026-11-02;
 the native deployment returned `succeeded`, with no failure message.
 
 - Site: `appgprj_6ae8c6a5462481918dbcf580c7fa764e` (reuse; do not create another).
-- Pushed Site source: `09937a0f2577453f4430ff99fb237d30a54c7e4f`.
-- Deployment: `appgdep_6ae8c6fe17288191bb85cf2fdd19544a`.
-- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_347159afd8e881919113db1b0d7b73c6`.
+- Pushed Site source: `a287371957ffcfc15d9b5d5c3fb607e374ced0fb`.
+- Deployment: `appgdep_6ae944cbb3f48191911da6934154f483`.
+- Version: `appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_b21816b5ecc081918d1528bb54041032`.
 
 The hosted page preserves the reviewed UI and embeds the same findings/tickets;
 its evidence and source links target GitHub so they work remotely. This is a
@@ -132,6 +132,52 @@ attachments until the host releases them; do not bypass the refusal with manual
 deletion. The pre-existing generated plugin bundle (17,579,656 bytes), other
 worktrees, and another session's plan/status edits were left untouched. Only
 the orchestration plan hunks were selected into the parent commit.
+
+### Kiro monitor and Codex tool-host findings (#161 and #188, 2026-11-02)
+
+Both isolated worker branches passed independent critics before parent
+integration and closure: #161 scored 8/10 with limits; #188 scored 0.92/high.
+The Kiro run launched a recipe, continued after an input pause and restarted a
+failed step. It did not complete or demonstrate isolated worktrees, accepted
+review, safe-boundary pause or landing. Approval interaction and inherited
+global hooks remain uncertain. The Codex matched executable control ran one
+read-only command from the complete installed package; the internal package
+path is not a stable launcher guarantee and no durable install repair was made.
+
+The effort dashboard has 12 findings and 34 tickets (13 remaining, 21 done).
+Both viewport scenarios passed, and the independent critic accepted receipt
+`a1495fabd2a6abb6675ea1fd67dd43625a1ea2598c82c523ba4961cebd834883`
+in `evidence/orchestration-dashboard/t161-t188-final/` (five sources, four
+captures). The shared `docs/status.html` was also updated with two learning
+entries and the full 193-ticket snapshot. Its static checker passed with no
+errors/warnings; all three tabs rendered without overflow/script errors at
+1280×900 and 390×900. Independent acceptance is recorded in
+`evidence/orchestration-dashboard/t161-t188-status-v2/`, receipt
+`6ea9c1269c6ba5b0f2f8b7e48dfc3deba4186e2d6b8935fc64a8259b7cb65704`.
+The initial capture assertion raced the asynchronous hash navigation; waiting
+for selected-tab state fixed that test without changing product code.
+
+The same owner-private Site publication returned pending, then native status
+reported succeeded for the exact deployment/version listed above. The returned
+production URL is now `https://orchestration-findings.sambiggins.chatgpt.site`;
+older URLs in historical notes are not an alias guarantee. Local rendering and
+native publication were verified; production browser interaction was not.
+
+Selected parent syntax/doc-link/home-path/coverage gates passed; a private
+scratch citation failure was corrected before pushing. Ticket validation passed
+with the same seven historical unchecked-acceptance warnings on other tickets.
+Owned fixture/raw/private-profile disposal and exact process settlement are in
+the promoted receipts. No global trust/configuration or installed binary edit
+was made. Promote reports, receipts, independent audits and accepted captures.
+Recycle browser module (13,658,899 bytes), publication archive (43,213 bytes),
+Site preparation script (837 bytes), status update/capture scripts (2,577/1,465
+bytes), and superseded unaccepted capture (91,864 bytes). Retain Site checkout
+(471,087 bytes) until next publication. App archival refused the clean managed
+#161 worktree (20,653,596 bytes) because another active task uses it, and #188
+(20,653,032 bytes) because it is the primary checkout. Keep these recoverable
+attachments until host release; no manual deletion bypass. The pre-existing
+generated plugin bundle (18,834,184 bytes) and unrelated worktrees were left
+untouched. The check-in monitor ends once these reviewed dispatches settle.
 
 Edit `docs/orchestration-findings.json` for findings and short ticket outcomes.
 Keep observations distinct from proposed capabilities and preserve source links.

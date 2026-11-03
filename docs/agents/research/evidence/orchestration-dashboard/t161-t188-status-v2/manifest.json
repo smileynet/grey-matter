@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "subject": "Global delivery entries and ticket snapshot after 161 and 188",
+  "sources": ["docs/status.html"],
+  "captures": [
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-0-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-1-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-2-1280.png","viewport":{"width":1280,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-0-390.png","viewport":{"width":390,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-1-390.png","viewport":{"width":390,"height":900}},
+    {"path":"docs/agents/research/evidence/orchestration-dashboard/t161-t188-status-v2/tab-2-390.png","viewport":{"width":390,"height":900}}
+  ]
+}
