@@ -35,6 +35,12 @@ const GM_MANIFEST = ".installed-by-grey-matter.json";
 const lines = (f) => (existsSync(f) ? readFileSync(f, "utf8").split(/\r?\n/).map((s) => s.trim()).filter(Boolean) : []);
 const isLink = (p) => { try { return lstatSync(p).isSymbolicLink(); } catch { return false; } };
 const exists = (p) => { try { lstatSync(p); return true; } catch { return false; } };
+function linkedPath(path, home) {
+  for (let at = resolve(path); ; at = dirname(at)) {
+    if (isLink(at)) return true;
+    if (at === resolve(home) || at === dirname(at)) return false;
+  }
+}
 
 export function plan(home) {
   const kiroSkills = join(home, ".kiro", "skills");
@@ -51,30 +57,40 @@ export function plan(home) {
   const remove = [], keep = [];
   const seen = new Set();
   for (const { file, root } of manifests) {
+    if (linkedPath(file, home) || linkedPath(root, home)) {
+      keep.push([file, "symlink in manifest or skill root path"]);
+      continue;
+    }
     const owned = gmOwned(root);
     for (const name of lines(file)) {
+      if (/[\\/:]/.test(name) || name.startsWith(".")) {
+        keep.push([file, `unsafe manifest entry: ${name}`]);
+        continue;
+      }
       const p = join(root, name);
       if (seen.has(p) || !exists(p)) continue;
       seen.add(p);
-      if (name.includes("/") || name.startsWith(".")) keep.push([p, "unsafe manifest entry"]);
-      else if (owned.has(name)) keep.push([p, "owned by grey-matter"]);
+      if (owned.has(name)) keep.push([p, "owned by grey-matter"]);
       else if (isLink(p)) keep.push([p, "symlink"]);
       else remove.push(p);
     }
     if (exists(file)) remove.push(file);
   }
   const tier = join(home, ".kiro", ".crew-tier");
-  if (exists(tier)) remove.push(tier);
+  if (exists(tier)) {
+    if (linkedPath(tier, home)) keep.push([tier, "symlink"]);
+    else remove.push(tier);
+  }
   const steering = join(home, ".kiro", "steering");
   for (const f of CREW_STEERING) {
     const p = join(steering, f);
     if (!exists(p)) continue;
-    if (isLink(p) || !lstatSync(p).isFile()) keep.push([p, "not a regular file"]);
+    if (linkedPath(p, home) || !lstatSync(p).isFile()) keep.push([p, "not a regular file"]);
     else remove.push(p);
   }
   const codex = join(home, ".codex", "AGENTS.md");
   if (exists(codex)) {
-    if (!isLink(codex) && /crew-research/.test(readFileSync(codex, "utf8").split("\n").slice(0, 3).join("\n"))) remove.push(codex);
+    if (!linkedPath(codex, home) && /crew-research/.test(readFileSync(codex, "utf8").split("\n").slice(0, 3).join("\n"))) remove.push(codex);
     else keep.push([codex, "not crew-generated"]);
   }
   return { remove, keep };
