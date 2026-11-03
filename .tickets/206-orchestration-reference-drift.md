@@ -1,7 +1,7 @@
 ---
 id: "206"
 title: "Reconcile operational reference drift found in the orchestration review"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -9,6 +9,7 @@ validation_criteria:
   - "Operational references, role guidance and historical proposal status agree without reviving completed tickets or modifying held harness settings."
   - "Independent content review, syntax/invocation/docs checks as applicable and repository stages pass; guidance deployment is recorded."
 tags: ["stream:orchestration", "type:chore"]
+assignee: "codex"
 ---
 # Reconcile operational reference drift found in the orchestration review
 
