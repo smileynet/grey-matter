@@ -1,14 +1,15 @@
 # Ticket 168: cheap versus default model reviewers
 
-**Status: preparation only; no fixture review has been run.** Ticket 167 owns the
+**Status at protocol freeze (2026-11-03): no fixture review had run.** Ticket 167 owns the
 shared native measurement lease. A controller revalidation produced one Claude
 assistant-style response to an attempted help command; an independent critic
 assessed it as a likely unintended model turn, but no native turn or usage
 metadata was retained, so consumption and cost are unknown. An agy help attempt
 returned an argument parse error. Both raw outputs are private at
 `.scratch/t168/controller-preflight/`; neither is a review result or scored cell.
-All provider invocations are stopped pending renewed parent and critic review.
-Measured results and recommendations remain pending.
+This file freezes the review protocol. Execution status, provider identities,
+holds, and per-cell evidence belong in the separate private run ledger and
+receipts, not this protocol.
 
 ## Question and scope
 
@@ -49,8 +50,9 @@ reviews, compares responses with the hidden key.
   defect. Do not replace it with a call to another provider or tier.
 
 The parent scores pseudonymized responses without the provider/tier mapping. The
-producer and protocol critic do not make measured model calls. The protocol does
-not presume a cutoff that makes a tier safe to approve production changes. Any
+producer runs the measured calls through the frozen controller; the protocol
+critic reviews their setup and evidence independently. The protocol does not
+presume a cutoff that makes a tier safe to approve production changes. Any
 recommendation is limited to this four-case set.
 
 ## Local inventory (2026-11-02)
@@ -93,10 +95,9 @@ assesses this as a likely unintended turn, with consumption/cost unknown. Agy
 returned an argument parse error with no assistant response. Codex and Kiro's
 two-item argument arrays remained intact. The exact PowerShell command and raw
 outputs are retained privately. These are not review results or scored cells.
-All provider commands remain held until the argument builder is corrected,
-verified with an argv recorder, and independently reviewed. The parent has
-released the #168 measurement lease; no provider run begins before exact critic
-acceptance of the durable controller.
+At the time of this incident capture, all provider commands remained held until
+the argument builder was corrected, verified with an argv recorder, and
+independently reviewed.
 
 The earlier agy catalog receipt is incomplete: its helper retained only a hash
 of full command output, then extracted two model rows with a regex that excluded
@@ -184,7 +185,7 @@ not a model availability result; there will be no Agy preflight or fallback.
 
 ## Planned usage and isolation
 
-Proposed matrix, pending exact controller acceptance; the parent has released the lease:
+Frozen comparison matrix; exact requested/served identities and cell outcomes are in the private receipts:
 
 | Provider | Cheaper tier | Default tier | Effort | Status |
 |---|---|---|---|
@@ -193,9 +194,10 @@ Proposed matrix, pending exact controller acceptance; the parent has released th
 | Amazon / Kiro | `qwen3-coder-next` | native CLI default | model-specific native effort default | Cheap model visible in catalog; no tools pre-approved; V2 tool/catalog behavior remains unverified |
 | Google / Antigravity | `gemini-3.8-flash-medium` | native CLI default | model-specific native effort default | Cheap model confirmed in full catalog; default identity must appear in native output to verify comparison |
 
-The three eligible argument vectors below are frozen, but may not be launched
-until the durable controller passes independent critic preflight. Use only the
-absolute executable paths and hashes in the private controller receipt.
+These reference vectors describe the frozen comparison protocol. The checked-in
+controller is the execution authority, and each cell receipt binds its actual
+argv. Use only the absolute executable paths and hashes in the private
+controller receipt.
 Substitute only the fixture prompt and listed model; create a new empty
 `%TEMP%\gm-review-168-*` working directory with no repository checkout, and run
 calls serially:
