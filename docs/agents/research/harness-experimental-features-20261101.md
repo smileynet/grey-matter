@@ -1,5 +1,54 @@
 # Harness experimental features: follow-up spikes and QoL options
 
+## Ticket 194: Antigravity child model evidence (2026-11-02)
+
+**Request controls documented; served child identity still unverified.** Custom
+`invoke_subagent` frontmatter and workflow `agent(..., model=...)` are separate
+interfaces. The documented hook `modelName` and active-session status-line model
+fields do not establish a child-scoped result for the tested workflow release.
+Opaque database labels are not independently interpretable served-model evidence.
+
+The [qualification report](agy-model-routing-20261102.md),
+[receipt](evidence/agy-model-routing-20261102.json) and [independent review](agy-model-routing-20261102-audit.md) qualify
+the #157 comparison below. Do not treat a requested per-role tier as a cost or
+capability guarantee, or infer that a `pro` request was ignored from a label scan.
+
+## Ticket 193: Antigravity regex approval overlap (2026-11-02)
+
+**Discrepancy reproduced; internal matching cause unresolved.** Identical Ask
+and Allow command regexes executed `git --version` again. Literal/broad Ask
+controls rejected the command, while identical regex Deny produced a matching
+deny error. No effective rule enumeration was obtained. The [report and local
+upstream issue brief](agy-approval-overlap-20261102.md), [receipt](evidence/agy-approval-overlap-20261102.json)
+and [audit](agy-approval-overlap-20261102-audit.md) preserve the bounded result.
+Use an independently checked matching Deny when blocking is intended; do not
+rely on this regex Ask override. No general shell-confinement fix is established.
+
+## Ticket 190: Crew-owned auth route (2026-11-02)
+
+**Supported bundled route qualified through a credential-free failure path.**
+Crew's Windows relay still omits the client ownership flag. Its documented
+`agent.kas_bundle=true` option selects bundled KAS with `--auth=acp-callback`.
+A private direct bundled-engine probe received eight host credential requests;
+fixed credential-unavailable responses produced the expected prompt error.
+This tests the callback path, not real Crew vault delivery. Historical CLI-owned
+success is reused only for the exact matching executable hash. The [report](crew-client-auth-remedy-20261102.md),
+[receipt](evidence/crew-client-auth-remedy-20261102.json) and [audit](crew-client-auth-remedy-20261102-audit.md)
+state version, identity and end-to-end integration limits. No installed product
+or global credential setting was changed.
+
+## Ticket 189: Kiro ACP teardown remains blocked (2026-11-02)
+
+**Fresh model-bearing failure reproduced; no shutdown fix verified.** Kiro
+2.37.1 / KAS 0.66.70 still emits the five-second EOF error and exits 1 after
+completed and canceled turns, even after successful `session/close`. Prompt
+results and durable marker reload succeeded; captured descendants were absent
+at the final poll. Empty-session close success does not fix this model-bearing
+path. The [report](kiro-acp-shutdown-20261102.md), [receipt](evidence/kiro-acp-shutdown-20261102.json)
+and [audit](kiro-acp-shutdown-20261102-audit.md) leave the shutdown criterion
+unmet. Retest on a changed Kiro/KAS build or newly supported method. Live GUI,
+auth and independent runner trials can proceed with that caveat.
+
 ## Ticket 161: Kiro V3 workflow monitor (2026-11-02)
 
 **Recipe launch and limited monitor controls observed; full ticket loop unverified.**
@@ -125,8 +174,11 @@ was attempted. The opaque native `gen_metadata` blobs contained Flash Tiered
 labels for flash/pro workflow requests, and Argon Medium for the inherit
 control matching its parent. No verified first-party descriptor establishes
 that these fields identify the model that served generation. Neither a working
-pro pin nor an ignored configuration is established. [Ticket 194](../../../.tickets/194-qualify-agy-child-model-routing.md)
-owns the routing/observability qualification before relying on per-role tiers.
+pro pin nor an ignored configuration is established. The [#194 qualification](agy-model-routing-20261102.md)
+keeps this comparison unverified: custom subagent frontmatter and the workflow
+model argument are request controls; hook/status-line fields have no established
+child-result mapping here. Use neither the requested tier nor an opaque label
+as a served-model, capability or cost guarantee.
 
 ### Settings and limits
 

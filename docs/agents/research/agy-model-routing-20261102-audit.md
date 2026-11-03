@@ -22,7 +22,7 @@ No unsupported or weak factual claims found. The distinction among requested mod
 
 The parent’s comparison diff in `harness-experimental-features-20261101.md` satisfies the ticket’s comparison-update criterion. Its new #194 section and revised #157 qualification distinguish documented request controls from unverified served identity, separate custom subagent and workflow interfaces, and state that hook/status-line fields and opaque labels do not prove the child’s served model. It links the qualified findings, receipt, and audit. The worker did not edit this shared comparison. Parent integration and ticket closure remain parent-owned.
 
-## Post-audit cleanup (2026-11-03)
+## Post-audit cleanup (2026-11-02, America/Los_Angeles)
 
 The parent coordinated clearance for exactly the 12 #157 model-control history sets listed in the #157 receipt's `cleanup.disposition`; no other history was in scope. A metadata-only re-inventory matched all 48 receipt entries and their recorded byte sizes (6,816,238 bytes total). I independently checked the final receipt against that inventory: it contains 56 removal operations covering exactly the same 12 IDs and totaling 6,724,590 bytes. I independently confirmed all 56 operation paths are absent. The 11 brain trees, 36 database/sidecar entries, and nine non-hardlink files in the `be551…` brain tree were sent to the Windows OS Recycle Bin. The nine `be551…` files totaled 26,466 bytes. The zero-byte `.db-wal` entry was recycled in the first verified call and is included in the 56 operations.
 
