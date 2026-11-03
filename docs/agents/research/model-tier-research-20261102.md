@@ -27,7 +27,7 @@ Frozen artifact SHA-256 values: source packet
 manifest `2872f907bc1616af68ef081933394a2873b97fab8e4bcdd4a3cfff9ebd105f653`,
 private answer key `429bf76172338d0f52963d3ac2c14fba3f701defae42e444997a1096c04efae`.
 The private protocol packet is
-`adc403c0c525f231563967315c6d8eee69224251c3ced6d332a4f221b50d127d`.
+`eca3fe77ff8f357128a752db46b65f7b69989c7b3f889fc4d0f2d6df329901c7`.
 
 ## Scoring, fixed before calls
 
