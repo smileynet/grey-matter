@@ -219,7 +219,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 203 | Complete tool-script inventory and owning skill usage guidance | in_progress |
 | 204 | Dispatch checkout and review-evidence preflight | in_progress |
 | 179 | Shared inter-harness messaging and wakeups (existing owner) | open |
-| 205 | Dashboard publication preflight using existing receipts | open |
+| 205 | Dashboard publication preflight using existing receipts | in_progress |
 | 206 | Correct observed operational reference drift | ✅ done |
 | 207 | Outcome-coordinator failure and continuation fixtures | open |
 

@@ -1,7 +1,7 @@
 ---
 id: "205"
 title: "Reject stale review receipts and source mismatch before dashboard publication"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -9,6 +9,7 @@ validation_criteria:
   - "Guidance specifies preflight before authorized publication, exact commands and limits, preserving audience/credentials and requiring actual deployment results."
   - "Meaningful rejection fixtures, current dashboard checks, independent review and required repository stages pass."
 tags: ["stream:orchestration", "type:chore"]
+assignee: "codex"
 ---
 # Reject stale review receipts and source mismatch before dashboard publication
 
