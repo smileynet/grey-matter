@@ -251,7 +251,7 @@ auth remains conditional on the result of #186.
 | 190 | Resolve Crew Windows host-auth integration before relying on Crew-owned identity | ✅ done |
 | 193 | Diagnose overlapping regex approval rules before relying on that override | ✅ done |
 | 194 | Qualify agy child model routing before relying on per-role tiers | in_progress |
-| 173 | 11. Compare GUI watch/answer surfaces against #162's qualified live driver | open |
+| 173 | 11. Compare GUI watch/answer surfaces against #162's qualified live driver | in_progress |
 | 174 | 12. Select and demonstrate Harbor or a thin runner for the model trials | open |
 | 167 | 13. Compare implementation worker tiers | open |
 | 168 | 14. Compare reviewer tiers with planted defects and false positives | open |

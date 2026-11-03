@@ -1,7 +1,7 @@
 ---
 id: "173"
 title: "Spike: GUI surfaces as the watch layer over a headless orchestrator"
-status: open
+status: in_progress
 blocked_by: ["124","162"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
