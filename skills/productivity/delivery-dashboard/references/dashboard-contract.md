@@ -46,7 +46,10 @@ Each decision has a unique DOM-safe `id` (letters, digits, underscore or hyphen)
 `recommended` (one option id), and `reason` explaining that recommendation. Optional `tickets`
 links related work. An answered decision also requires `answer` recording the submitted outcome.
 
-Render each open question as a labelled fieldset with mutually exclusive radio buttons and the
+Render each open question with a heading fully inside its card, followed by muted impact context,
+then a labelled radio group. Put the recommendation reason beside its option, and the optional
+text answer after the choices. Keep answered history below pending questions and the copy action.
+Use mutually exclusive radio buttons with the
 recommended option selected and labelled Recommended. Include an open text box labelled
 Additional context or another answer. Draft controls retain values when switching tabs, but reload
 starts from recommendations. At the bottom, Copy answers for chat exports every pending question,

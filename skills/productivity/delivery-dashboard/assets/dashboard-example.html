@@ -85,7 +85,11 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 #ticket-flow{margin-top:0}.flow-options>summary,.flow-readable>summary{cursor:pointer;min-height:44px;padding:8px 0}.flow-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:8px 0}.flow-controls label{display:flex;align-items:center;gap:8px;min-height:44px;max-width:100%;min-width:0}.flow-controls select{font:inherit;padding:10px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;min-width:0;max-width:100%}.flow-counts,.flow-notice{font-size:14px;color:var(--muted)}.flow-notice{border-left:3px solid var(--blue);padding:10px}.flow-scroll{max-height:820px;overflow:auto;border:1px solid var(--line);padding:16px;margin:16px 0}.flow-canvas{position:relative;width:max-content;min-width:100%;padding:12px 24px}.flow-layers{display:flex;flex-direction:column;gap:42px;position:relative;z-index:1}.flow-layer{display:grid;grid-template-columns:repeat(3,240px);gap:16px}.flow-layer h3{grid-column:1/-1;font-size:14px;margin:0;color:var(--muted)}.flow-node{font:14px/1.45 system-ui;text-align:left;white-space:normal;overflow-wrap:anywhere;background:var(--panel);color:var(--text);border:2px solid var(--line);border-radius:8px;padding:12px;min-height:110px;cursor:pointer}.flow-node strong,.flow-node span,.flow-node small{display:block}.flow-node span,.flow-node small{margin-top:7px}.flow-node small{color:var(--muted);font-size:12px}.flow-node[data-state=ready]{border-color:var(--ok)}.flow-node[data-state=in_progress]{border-color:var(--cyan)}.flow-node[data-state=backlog]{border-style:dashed}.flow-node[data-state=blocked]{border-color:var(--bad)}.flow-node[data-related=unrelated]{opacity:.55}.flow-node[data-related=before],.flow-node[data-related=after]{border-color:var(--blue)}.flow-node[aria-pressed=true]{outline:3px solid var(--ask);outline-offset:3px}.flow-links{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:visible}.flow-links path{fill:none;stroke:var(--muted);stroke-width:2}.flow-links .flow-arrow{fill:var(--muted);stroke:none}.flow-links path[data-satisfied=true]{stroke-dasharray:5 5}.flow-links path[data-related=true]{stroke:var(--blue);stroke-width:3}.flow-detail{border-left:3px solid var(--blue);padding:12px 16px;background:var(--panel);margin:16px 0}.flow-detail h3{margin:0 0 8px}.flow-detail p{margin:8px 0}.flow-readable li{margin:8px 0}@media(max-width:560px){.flow-scroll{max-height:620px;padding:10px}.flow-canvas{padding:10px 16px}}
 .flow-node[data-gate=decision],.flow-node[data-gate=evidence]{border-color:var(--ask)}
 .decision-card{margin:0 0 18px;min-width:0}
-.decision-card legend{font-size:20px;font-weight:650;padding:0 8px;max-width:100%;overflow-wrap:anywhere}
+.decision-card h3{font-size:20px;line-height:1.35;margin:0 0 8px;font-weight:650;overflow-wrap:anywhere}
+.decision-context{color:var(--muted);margin:0 0 18px}
+.decision-options{margin:0 0 20px}
+.decision-notes-label{display:block;font-size:14px;color:var(--muted)}
+#decisions>p{color:var(--muted);font-size:14px;max-width:75ch}
 .decision-option{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;cursor:pointer;min-height:44px}
 .decision-option:has(input:checked){border-color:var(--blue);background:var(--panel2)}
 .decision-option input{flex:0 0 auto;margin-top:5px;accent-color:var(--blue);width:18px;height:18px}
@@ -709,27 +713,29 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     if (answered.length) {
       var history = el("details", { class: "card" }, [el("summary", { text: "Answered decisions (" + answered.length + ")" })]);
       answered.forEach(function (d) { history.appendChild(el("h3", { text: d.question })); history.appendChild(el("p", { text: d.answer })); });
-      root.appendChild(history);
+      root.parentNode.appendChild(history);
     }
     $("decisions-count").textContent = decisions.length ? "(" + decisions.length + ")" : "";
     if (!decisions.length) { root.appendChild(el("p", { class: "none", text: "No decisions are waiting for your input." })); return; }
     decisions.forEach(function (d) {
-      var card = el("fieldset", { class: "card decision-card", id: "decision-" + d.id }, [el("legend", { text: d.question })]);
-      if (d.context) card.appendChild(el("p", { text: d.context }));
-      if (d.reason) card.appendChild(el("p", { class: "rec", text: "Recommendation: " + d.reason }));
+      var titleId = "decision-title-" + d.id;
+      var card = el("section", { class: "card decision-card", id: "decision-" + d.id, "aria-labelledby": titleId }, [el("h3", { id: titleId, text: d.question })]);
+      if (d.context) card.appendChild(el("p", { class: "decision-context", text: d.context }));
       if (d.tickets && d.tickets.length) card.appendChild(ticketRefs(d.deferred ? "Deferred work: " : "Related work: ", d.tickets));
       var radios = [];
+      var options = el("div", { class: "decision-options", role: "radiogroup", "aria-labelledby": titleId });
       d.options.forEach(function (o) {
         var radio = el("input", { type: "radio", name: "decision-" + d.id, id: "decision-" + d.id + "-" + o.id, value: o.id });
         radio.checked = o.id === d.recommended;
         var text = el("span", { text: o.label });
-        if (o.id === d.recommended) text.appendChild(el("small", { class: "rec", text: "Recommended" }));
+        if (o.id === d.recommended) text.appendChild(el("small", { class: "rec", text: "Recommended — " + d.reason }));
         if (o.detail) text.appendChild(el("small", { text: o.detail }));
-        card.appendChild(el("label", { class: "decision-option", for: radio.id }, [radio, text]));
+        options.appendChild(el("label", { class: "decision-option", for: radio.id }, [radio, text]));
         radios.push(radio);
       });
+      card.appendChild(options);
       var notes = el("textarea", { id: "decision-notes-" + d.id, rows: "3", placeholder: "Add context, an alternative, or conditions…" });
-      card.appendChild(el("label", { for: notes.id, text: "Additional context or another answer" })); card.appendChild(notes);
+      card.appendChild(el("label", { class: "decision-notes-label", for: notes.id, text: "Additional context or another answer" })); card.appendChild(notes);
       controls[d.id] = { radios: radios, notes: notes }; root.appendChild(card);
     });
     $("decision-export").hidden = false;
