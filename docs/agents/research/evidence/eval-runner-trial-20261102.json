@@ -22,7 +22,7 @@
       "node scripts/spike-model-eval.mjs --adapter codex --fixture t1 --model gpt-6.1-sol --codex-exe <absolute-package-exe> --work-dir <new-outside-repo-path> --evidence-dir <new-path>",
       "node scripts/spike-model-eval.mjs --adapter codex --fixture t3 --model gpt-6.1-sol --codex-exe <absolute-package-exe> --work-dir <new-outside-repo-path> --evidence-dir <new-path>"
     ],
-    "receiptFields": ["runner source commit and source SHA-256", "fixture seed Git tree object ID (SHA-1) and commit", "adapter version and requested/observed model", "JSON argv", "native exit and duration", "native usage and cost basis", "native tool/test events", "independent test counts", "behavior result", "changed paths and scope", "raw file paths, byte counts, SHA-256"],
+    "receiptFields": ["runner source commit and source SHA-256", "fixture seed Git tree object ID (SHA-1) and commit", "adapter version and requested/observed model", "JSON argv", "native exit and duration", "native usage and cost basis", "native tool/test events", "independent test counts", "behavior result", "changed paths relative to grading.changeBaseCommit and scope", "raw file paths, byte counts, SHA-256"],
     "unsuccessfulClassifications": ["timeout", "infrastructure error", "malformed output", "native turn failure", "missing tests or counts", "assertion failure", "behavior grader failure", "out-of-scope file change"],
     "windowsNotes": ["npm.cmd is invoked with shell handling for this executable", "grading process prepends active Node directory to PATH", "Codex uses absolute package-owned executable path and --ephemeral", "Claude uses --no-session-persistence"]
   },
@@ -205,6 +205,73 @@
       "ownCacheAndVenvDisposition": "After promoting the setup failure record, uv cache clean ran with UV_CACHE_DIR set to the explicit ticket-owned .scratch/t174/uv-cache and removed 34,905 files (842.7 MiB); no files remain in that custom cache. The exact ticket-owned partial venv .scratch/t174/harbor-venv was sent to the OS recycle bin after resolving and checking it remained inside .scratch/t174. Global uv cache untouched."
     },
     "notTested": ["Harbor remote environments", "Kiro ACP via Harbor", "Harbor benchmark execution"]
+  },
+  "graderHardening": {
+    "commit": "962a9247aec4aaa8f3129937b28c31569a8a1685",
+    "runnerSourceSha256": "92588b2ef6356eeb56b75ddc77f87fd3b73b6b9624d7eb9c38134f561960adea",
+    "changePathRule": "git diff --name-only --no-renames -z <frozen-seed-commit> -- union git ls-files --others -z --; no exclude-standard so ignored untracked files are included",
+    "finalHeadRule": "Current HEAD must still equal the frozen seed commit; commit movement is rejected even when every changed path is in scope.",
+    "baselineFailure": {
+      "script": ".scratch/t174/staged-path-blindspot.mjs",
+      "scriptBytes": 2334,
+      "scriptSha256": "2ed850edb5f50ab8552b3fdae84bdcefad65733b0b4b312b0981d3e2bef76596",
+      "output": ".scratch/t174/staged-path-blindspot.stdout.txt",
+      "bytes": 255,
+      "sha256": "87980a46b6057975b3ae48fb25ad8dcef3164078bf446af4e2e514eadad769d5",
+      "oldCommand": "git ls-files --modified --deleted --others --exclude-standard",
+      "observed": "Old command returned no paths for staged-only and committed out-of-scope unexpected.txt. New diff against the seed returned unexpected.txt in both cases; HEAD movement was true after commit."
+    },
+    "regressions": {
+      "command": "node --test scripts/spike-model-eval.test.mjs",
+      "result": "pass: 12 tests, 0 failures",
+      "cases": ["staged-only out-of-scope addition fails", "unstaged tracked change is included", "ignored untracked path is included", "committed out-of-scope path is included against seed", "commit movement fails even for in-scope paths"]
+    },
+    "offlineRegrade": {
+      "script": ".scratch/t174/regrade-frozen-native.mjs",
+      "scriptBytes": 6698,
+      "scriptSha256": "288b44dd49b222824600cd820fd70ac9d6222c689d3fdb4c482a7fe3acbf9aae",
+      "path": ".scratch/t174/regrade-hardened/result.json",
+      "bytes": 12161,
+      "sha256": "4dfda00ab8fab5a903d53313ae74057e5e1d731acae6a90b94be18240c6f81a7",
+      "graderCommit": "962a9247aec4aaa8f3129937b28c31569a8a1685",
+      "graderRunnerSha256": "92588b2ef6356eeb56b75ddc77f87fd3b73b6b9624d7eb9c38134f561960adea",
+      "modelCalls": 0,
+      "originalExecutionReceiptsRewritten": false,
+      "results": [
+        {
+          "id": "claude-t1",
+          "executionCommit": "1fc45626e396115d7379715b8a56a23b79f621ad",
+          "executionReceiptSha256": "abf027ae1a6fcf68278eaac26ac06fb6712335f30db9a30cb47431d99e6ae608",
+          "nativeStdoutSha256": "44b8337181379d0ff0fcf8f0d94a627c3496f94f0733c7b893e5903ffdb965f5",
+          "graderStatus": "pass",
+          "tests": {"total": 2, "passed": 2}
+        },
+        {
+          "id": "claude-t3",
+          "executionCommit": "1fc45626e396115d7379715b8a56a23b79f621ad",
+          "executionReceiptSha256": "f60688cae162bad8fa138f88e922d5f982067ca845239587b999145bb44ac308",
+          "nativeStdoutSha256": "3b3253a07c4f452bf73086e02c56eea0dad76914028dad8e868dd4d4135ffbae",
+          "graderStatus": "pass",
+          "tests": {"total": 2, "passed": 2}
+        },
+        {
+          "id": "codex-t1",
+          "executionCommit": "1fc45626e396115d7379715b8a56a23b79f621ad",
+          "executionReceiptSha256": "89421cb5b83274e947eb1cd249a4fa488461665fd193ba04b7fd2f27a892a64d",
+          "nativeStdoutSha256": "7212f855f8836851fcf086d0a978a34c926afa470b905f371be624c494a3ffbb",
+          "graderStatus": "pass",
+          "tests": {"total": 3, "passed": 3}
+        },
+        {
+          "id": "codex-t3-direct",
+          "executionCommit": null,
+          "executionMethod": "earlier direct native Codex CLI run; not launched through the runner",
+          "nativeStdoutSha256": "cb50555eb02bf431657c2309c462b964627ca028b7f28838a594ab6ffb3b58c1",
+          "graderStatus": "pass",
+          "tests": {"total": 1, "passed": 1}
+        }
+      ]
+    }
   },
   "privateLogs": {
     "disposition": "Five Claude CLI session history files created by early runs were hashed without reading bodies; not promoted; retain privately through critic review then clean exact owned files.",
