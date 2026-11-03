@@ -5,8 +5,10 @@ shared native measurement lease. A controller revalidation produced one Claude
 assistant-style response to an attempted help command; an independent critic
 assessed it as a likely unintended model turn, but no native turn or usage
 metadata was retained, so consumption and cost are unknown. An agy help attempt
-returned an argument parse error. Both raw outputs are private at
-`.scratch/t168/controller-preflight/`; neither is a review result or scored cell.
+returned an argument parse error. Both raw outputs are private in the ticket 168
+controller-preflight archive; neither is a review result or scored cell. Exact
+private paths are listed in
+[`t168-private-artifact-index.json`](./t168-private-artifact-index.json).
 This file freezes the review protocol. Execution status, provider identities,
 holds, and per-cell evidence belong in the separate private run ledger and
 receipts, not this protocol.
@@ -76,13 +78,15 @@ authentication/catalog availability, not account quota or remaining balance.
 The earlier receipts invoked provider names through `PATH`; they do not prove
 which executable a future measurement would launch. Exact proposed executable
 paths and hashes are pinned in the private
-`.scratch/t168/controller-preflight/incident.json`. Codex must use the
+private `incident.json` controller-preflight record (see the artifact index).
+Codex must use the
 same-version package executable beside its verified code-mode host, as in ticket
 188; the PATH-selected copy is not acceptable. Future launches must use
 the dedicated Node controller with recorded absolute executable, actual argv,
 native exit, timeout, stdout/stderr bytes, and native turn/usage metadata. The
 command text and tool metadata from the anomalous PowerShell 7.6.9 preflight are retained at
-`.scratch/t168/controller-preflight/command-record.json`; it used splatted
+private `command-record.json` controller-preflight record (see the artifact
+index); it used splatted
 variables, merged stdout/stderr, and did not capture OS-level argv or per-process
 exit/time/usage events.
 
@@ -105,7 +109,7 @@ other rows. Ticket 167's separate full 590-byte catalog capture confirms both
 `gemini-3.8-flash-low` and `gemini-3.8-flash-medium` are available alongside
 Argon tiers; the earlier difference came from each inventory filtering for a
 different Flash tier, not evidence of changed availability. The full capture is
-retained at `.scratch/t168/controller-preflight/agy-catalog/agy-models.stdout.bin`
+retained privately as `agy-models.stdout.bin` (see the artifact index)
 (SHA-256 `B8EF1100468943EC66037166702B013793898730D02BCD3008EC0DA5A3A70755`).
 The pinned medium cheap candidate is therefore available. The configured default
 identity remains unknown until native model output reports it.
@@ -147,7 +151,7 @@ built-ins ([CLI reference](https://code.claude.com/docs/en/cli-usage)). Managed
 settings may still apply, but managed MCP servers do not load in safe mode.
 Codex's complete sibling host is hash-checked. Its pinned 0.166.0 CLI help
 documents `--skip-git-repo-check` as allowing execution outside a Git repository;
-the retained private capture is `.scratch/t168/controller-preflight/codex-help.txt`
+the retained private capture is `codex-help.txt` (see the artifact index)
 (SHA-256 `FF5A00D7F3926A45D9B58EC703A45D6972B1664C0FA465156C48577BB4CEEAF4`).
 The script does not define or invoke an agy launcher:
 workstream safety policy blocks all eight Google cells, independently of the

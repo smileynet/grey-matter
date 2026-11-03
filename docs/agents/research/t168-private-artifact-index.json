@@ -1,0 +1,19 @@
+{
+  "ticket": 168,
+  "purpose": "Private local evidence locations cited by the public protocol and audit. This index contains paths only; artifacts remain in local scratch.",
+  "artifacts": {
+    "controllerPreflightDirectory": ".scratch/t168/controller-preflight/",
+    "incident": ".scratch/t168/controller-preflight/incident.json",
+    "commandRecord": ".scratch/t168/controller-preflight/command-record.json",
+    "agyCatalog": ".scratch/t168/controller-preflight/agy-catalog/agy-models.stdout.bin",
+    "codexHelp": ".scratch/t168/controller-preflight/codex-help.txt",
+    "measurementLedger": ".scratch/t168/measurement-ledger.json",
+    "ledgerIntegrityAudit": ".scratch/t168/ledger-integrity-audit.json",
+    "semanticScores": ".scratch/t168/blind/semantic-scores.json",
+    "scoringAudit": ".scratch/t168/blind/scoring-audit.md",
+    "derivedResultsJoin": ".scratch/t168/blind/derived-results-join.json",
+    "cleanupFinalAudit": ".scratch/t168/cleanup-final-audit.json",
+    "kiroCleanupAudit": ".scratch/t168/kiro-session-cleanup/cleanup-audit.json",
+    "tempWorkdirRecycleReceipt": ".scratch/t168/temp-workdir-recycle-receipt.json"
+  }
+}
