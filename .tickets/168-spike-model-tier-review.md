@@ -20,6 +20,17 @@ Prior art to borrow techniques from (not authority): [eval prior art](../docs/ag
 
 **Question:** Which planted defects does each tier catch, and is a cheap reviewer ever good enough to gate a merge?
 
+## Integration status (2026-11-03)
+
+Results and independent audit are integrated: 14/23 attempts met strict JSON;
+secondary blind scoring found the seeded defect in all 22 nonempty responses,
+with nine unsupported claims and five duplicates. Current defaults are retained.
+Exact Kiro sessions and empty working directories were removed; private evidence
+is retained for the remaining trials. Closure awaits repository gates: artifact
+hygiene exceeded its 120s budget despite isolated assertion passes, and a fresh
+full run also timed out in runner fixtures. Parent is continuing independent
+work and withholding push/closure; no timeout is treated as a pass.
+
 ## Acceptance criteria
 
 - [ ] A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note.

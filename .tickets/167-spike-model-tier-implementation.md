@@ -28,6 +28,17 @@ Prior art to borrow techniques from (not authority): [eval prior art](../docs/ag
 
 ## Reconciliation (2026-11-02)
 
+## Integration status (2026-11-03)
+
+The results, independent audit, exact-session cleanup and public frozen fixtures
+are integrated. The model guidance retains current defaults. Closure is waiting
+for repository verification, not another model run: the full pre-merge run timed
+out in artifact hygiene and its runner fixtures. Independent isolated artifact
+suites passed their assertions (20 pass/3 Windows skips in 102.576s; footprint
+23 pass/2 WSL skips in 262.246s), exceeding the combined 120s gate budget.
+No timeout is counted as a pass. Parent is retaining evidence, continuing
+independent work, and withholding push/closure until required gates settle.
+
 Keep ordinary well-specified cases separate from deliberately ambiguous/trap cases. Freeze fixture revision, model identity, effort and grading before each comparison; report requested versus observed model separately. Never expose hidden tests or answer keys to workers, and report unavailable usage counters as unknown.
 
 ## Measurement check-in (2026-11-02)
