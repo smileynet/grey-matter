@@ -1,13 +1,14 @@
 ---
 id: "171"
 title: "Spike: effort levels (low to max) on one model per provider for diagnosis and design tasks"
-status: open
+status: in_progress
 blocked_by: ["174", "199"]
 tags: ["stream:orchestration", "type:research"]
 validation_criteria:
   - "A results table per available provider with one fixed model, advertised effort level, fixture outcome, time, usage and repeat count."
   - "An evidence-bounded effort recommendation per measured task/model, or keep the current default, recorded in models-and-usage.md without silently changing user settings."
   - "Settings changed for the spike restored or recorded; sandbox folders removed."
+assignee: "codex"
 ---
 
 # Spike: effort levels (low to max) on one model per provider for diagnosis and design tasks
