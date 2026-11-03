@@ -38,8 +38,6 @@ the installed engine or kill unrelated processes.
 this caveat until the teardown path is qualified; this is not a blanket blocker
 on observing a running session.
 
-## Acceptance criteria
-
 ## Blocked qualification (2026-11-02)
 
 Fresh current-build probes and [independent review](../docs/agents/research/kiro-acp-shutdown-20261102-audit.md)

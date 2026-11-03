@@ -28,7 +28,7 @@ The earlier review required this correction before acceptance. On the corrected 
 - The proposed remedy is limited to the observed Windows Crew 0.11.1 / CLI 2.37.1 installation. POSIX routing, other releases, standalone bundles, and real Crew vault delivery remain unverified.
 - The report records no account switch, login/logout, global credential change, Crew configuration change, or shared gateway restart. It makes no assertion that Crew and CLI identities match.
 - The probe's controlled callback returned only a fixed credential-unavailable error. Its runner records callback methods and counts, request outcomes, stderr byte count, and process exit; it does not print or persist callback payloads, tokens, prompt output, stdout, or raw stderr.
-- The 12,456-byte private runtime profile was recycled after process exit, and its original path was verified absent. After the reviewer granted cleanup clearance, the worker recycled `.scratch/t190-kas-bundle-probe.py` and `.scratch/t190-source-inspect.py` (7,110 bytes total); both original paths were verified absent.
+- The 12,456-byte private runtime profile was recycled after process exit, and its original path was verified absent. After the reviewer granted cleanup clearance, the worker recycled the two private probe/source scripts (7,110 bytes total); both original paths were verified absent. Exact artifact identities are in the [promoted receipt](evidence/crew-client-auth-remedy-20261102.json).
 
 ## Overall assessment
 

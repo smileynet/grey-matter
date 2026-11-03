@@ -50,16 +50,16 @@ Owned raw artifacts retained in this worktree (byte sizes at handoff):
 
 | Path | Bytes |
 |---|---:|
-| `.scratch/t189-baseline.json` | 190,966 |
-| `.scratch/t189-cancel-arm.mjs` | 5,844 |
-| `.scratch/t189-cancel-close-write.json` | 28,071 |
-| `.scratch/t189-cancel-close.json` | 28,656 |
-| `.scratch/t189-capabilities.mjs` | 2,218 |
-| `.scratch/t189-close.json` | 7,715 |
-| `.scratch/t189-model-arm.mjs` | 6,182 |
-| `.scratch/t189-native-observations.json` | 1,462 |
-| `.scratch/t189-reload-close.json` | 8,086 |
-| `.scratch/t189-reload-delete.mjs` | 2,243 |
+| `t189-baseline.json` | 190,966 |
+| `t189-cancel-arm.mjs` | 5,844 |
+| `t189-cancel-close-write.json` | 28,071 |
+| `t189-cancel-close.json` | 28,656 |
+| `t189-capabilities.mjs` | 2,218 |
+| `t189-close.json` | 7,715 |
+| `t189-model-arm.mjs` | 6,182 |
+| `t189-native-observations.json` | 1,462 |
+| `t189-reload-close.json` | 8,086 |
+| `t189-reload-delete.mjs` | 2,243 |
 
 These scratch artifacts and four API session records are retained until the next qualifying upstream retest or resolution; parent integration owns cleanup after that lifecycle point. The independent critic audit is promoted as [kiro-acp-shutdown-20261102-audit.md](kiro-acp-shutdown-20261102-audit.md).
 
