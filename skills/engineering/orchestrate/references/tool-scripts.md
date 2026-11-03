@@ -17,6 +17,12 @@ The checker is deliberately on-demand and read-only; it is not registered as a b
 
 ## Operator usage guidance
 
+### Publication identity
+
+| Entrypoint | Owning guidance | Safe use and limits |
+|---|---|---|
+| `skills/productivity/delivery-dashboard/scripts/preflight-publication.mjs` | [publication contract](../../../productivity/delivery-dashboard/references/publication-preflight.md), [delivery-dashboard](../../../productivity/delivery-dashboard/SKILL.md) | `node <delivery-dashboard-skill>/scripts/preflight-publication.mjs parent-expected.json packet.json` is read-only and requires an independently parent-owned expected identity. `--hash-file FILE` hashes one regular input up to 1 MiB; it grants no authority. JSON reports current candidate/receipt, materialized package inventory/digest and hashed check attestations; mismatch exits nonzero. It compares exact source copies or the one fixed orchestration link transform with reviewed Git blobs, not arbitrary builds/archives/remote uploads. Retain packet, expected identity, output and raw check evidence through review/publication disposition; publication remains a separately authorized operation confirmed by native deployment results. |
+
 ### Dispatch and review identity
 
 | Entrypoint | Owning guidance | Safe use and limits |
@@ -273,4 +279,6 @@ Rows below are generated inventory entries with one explicit reason each. Operat
 | `skills/engineering/orchestrate/scripts/check-tool-guidance.test.mjs` | test | Test harness or test case, not a supported operator CLI. |  |
 | `skills/engineering/orchestrate/scripts/preflight-dispatch.mjs` | operator | Checks recorded dispatch identity, committed scope and evidence byte hashes without executing packet commands. | [dispatch preflight](dispatch-preflight.md) |
 | `skills/engineering/orchestrate/scripts/preflight-dispatch.test.mjs` | test | Isolated Git-fixture regressions for wrong identities, scope, evidence and input boundaries; no supported operator CLI. | |
+| `skills/productivity/delivery-dashboard/scripts/preflight-publication.mjs` | operator | Read-only current-receipt, check-attestation and materialized package/source binding before separately authorized publication. | [publication preflight](../../../productivity/delivery-dashboard/references/publication-preflight.md) |
+| `skills/productivity/delivery-dashboard/scripts/preflight-publication.test.mjs` | test | Isolated static-package/review fixtures reject stale or failed inputs and incorrect transformations; no supported operator CLI. | |
 <!-- tool-script-inventory:end -->
