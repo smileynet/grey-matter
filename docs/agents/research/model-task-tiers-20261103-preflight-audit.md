@@ -133,3 +133,43 @@ native-release decision. The parent must issue a new authorization bound to
 these exact hashes, confirm the current pinned executable/model availability
 for each provider, retain the actual review dispatch and completion records,
 and release the serial native lease explicitly. This critic did not release it.
+
+### Renewed hermeticity review of commit `74e8d3a4fc5285c927f2a1a9d5ca98255aab309f`
+
+**Verdict: accepted for the parent's native-release decision.** The source
+changes in `c2f3c44087d6c9845a6c26c2b81825f1acc6730b` remove the unit test's
+dependency on the private answer-key file and route execution-boundary tests
+through the exported `main(argv)` path, parsing the persisted plan and
+authorization arguments. The controller no longer reads the answer key. Its
+release receipt now requires an explicit parent verification flag and the
+frozen key hash; the parent must still check the private key's actual bytes
+before setting that flag. The fake authorization in tests exercises parsing
+and refusal behavior only; it is not evidence of parent verification.
+
+I inspected the detached source checkout directly and confirmed the private
+answer-key file and its containing private directory are absent. I reran the
+test suite there: **pass**, 7 tests, 0 failures, 0 skipped, 1.323s. Syntax
+checks for the controller, its test, and review-envelope script all passed;
+`git diff --check` on the source commit passed. The 7th test reaches
+`main(["--execute", "--plan", ..., "--authorization", ...])`, confirms an
+unverified receipt is refused before the fake child runs, then confirms the
+actual fake child's cwd, argv, and `shell: false` match the authorized plan.
+The refusal cases also use `main` and cover a changed plan, occupied directory,
+and junction. No provider process or model was invoked.
+
+Independently recomputed source hashes are controller
+`0B57B14603D72E650B5A61782EFA83E422959FF5E256BBF7CECF05A57D305469`, test
+`D713B3FD82FA08D5C77489D945A1E79C259979E11020B082E909C9F6AA67D866`, and
+protocol `D49E8C8C9B3BFE4E6CB246F94A12BAA22856EC9D0B65DE5225C4C2A3067DAA19`.
+The three frozen fixture hashes match the controller constants. The exact
+reviewed branch head adds only the private-artifact index entry for the fresh
+checkout evidence; its index SHA-256 is
+`F37BEDC909C00FC3F04A272FD917ED621F4118C5A4FF740F7EF1705424EC86A4`. The
+retained hermetic evidence JSON hash is
+`9246AFE268CAFF07A26C3107324BC3EBEC05580ADB3C7EA011084B620443EEAD`.
+
+This review validates offline test hermeticity and the preparation/controller
+only. Parent verification of the held-out answer-key bytes, actual host and
+provider/model availability, and retained real collaboration records remain
+prerequisites to any native release or scoring; this critic did not release
+the serial lease.
