@@ -36,6 +36,9 @@ function git(...gitArgs) {
   return result.stdout.trim();
 }
 
+git("remote", "remove", "origin");
+assert.equal(git("remote"), "", "fixture clone must not expose a push remote");
+
 const headBefore = git("rev-parse", "HEAD");
 const treeBefore = git("rev-parse", "HEAD^{tree}");
 assert.equal(headBefore, task.seedCommit, "task seed commit changed");
@@ -142,6 +145,20 @@ if (provider === "claude") {
       .filter(event => event.type === "item.completed" && event.item?.type === "agent_message")
       .map(event => event.item.text ?? "").join("\n");
   } catch { finalText = ""; }
+} else if (provider === "kiro") {
+  const events = stdout.toString("utf8").split(/\r?\n/).filter(Boolean).flatMap(line => {
+    try { return [JSON.parse(line)]; } catch { return []; }
+  });
+  const sessionIds = [...new Set(events.map(event => event.data?.sessionId).filter(Boolean))];
+  assert(sessionIds.length <= 1, "Kiro stream contained conflicting session IDs");
+  const finished = [...events].reverse().find(event => event.type === "runFinished")?.data;
+  adapter = {
+    ...adapter,
+    sessionId: sessionIds[0] ?? finished?.sessionId ?? null,
+    complete: finished?.status === "success",
+    stopReason: finished?.stopReason ?? null,
+    contextUsagePercentage: [...events].reverse().find(event => event.data?.contextUsagePercentage != null)?.data.contextUsagePercentage ?? null,
+  };
 }
 
 function gitPaths(...gitArgs) {
@@ -231,6 +248,8 @@ const native = {
   error: child.error?.message ?? null,
   durationMs,
   complete: adapter.complete,
+  stopReason: adapter.stopReason ?? null,
+  contextUsagePercentage: adapter.contextUsagePercentage ?? null,
   embeddedErrors,
   observedModel: adapter.actualModel,
   usage: adapter.usage,
