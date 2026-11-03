@@ -39,6 +39,12 @@ suites passed their assertions (20 pass/3 Windows skips in 102.576s; footprint
 No timeout is counted as a pass. Parent is retaining evidence, continuing
 independent work, and withholding push/closure until required gates settle.
 
+Latest committed-source checks: pre-merge at `d5d5484` selected 22 checks;
+19 passed and 3 timed out (gate-runner 123.9s, artifact-hygiene 124.9s,
+tkt-usage-compatibility 32.9s). Model-eval passed in 28.2s after its measured
+budget update. Pre-push at `e3a9e0c` passed all 7 selected checks. Required
+pre-merge evidence remains incomplete; neither run authorizes closure.
+
 Keep ordinary well-specified cases separate from deliberately ambiguous/trap cases. Freeze fixture revision, model identity, effort and grading before each comparison; report requested versus observed model separately. Never expose hidden tests or answer keys to workers, and report unavailable usage counters as unknown.
 
 ## Measurement check-in (2026-11-02)

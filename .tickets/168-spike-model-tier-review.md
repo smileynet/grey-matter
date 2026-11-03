@@ -31,6 +31,11 @@ hygiene exceeded its 120s budget despite isolated assertion passes, and a fresh
 full run also timed out in runner fixtures. Parent is continuing independent
 work and withholding push/closure; no timeout is treated as a pass.
 
+Latest committed-source checks: pre-merge at `d5d5484` passed 19/22 checks;
+gate-runner, artifact-hygiene and tkt-usage-compatibility timed out. The review
+controller fixtures passed in 8.4s. Pre-push at `e3a9e0c` passed all 7 selected
+checks. Required pre-merge evidence remains incomplete.
+
 ## Acceptance criteria
 
 - [ ] A results table per provider (tier, pass or fail per fixture, time, usage spent), as a dated section in a research note.
