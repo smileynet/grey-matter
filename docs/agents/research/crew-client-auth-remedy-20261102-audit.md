@@ -1,8 +1,8 @@
 # Independent audit: Kiro Crew Windows client-auth remedy
 
-**Audited commit:** `9058a48a5fe89aac5f13369eeb8a087b9b74286b`  
-**Parent:** `569e6662fcaf40cc81605ca30a7048d38e84beb0`  
-**Overall verdict:** Accept, with the limits below.  
+**Audited commit:** `9058a48a5fe89aac5f13369eeb8a087b9b74286b`
+**Parent:** `569e6662fcaf40cc81605ca30a7048d38e84beb0`
+**Overall verdict:** Accept, with the limits below.
 **Trust:** High for the observed Windows routing and credential-unavailable path; moderate for using the Crew bundle as the operational remedy because Crew's live vault delivery was not exercised.
 
 ## Per-claim audit
