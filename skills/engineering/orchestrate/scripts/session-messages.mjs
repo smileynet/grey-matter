@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const VERSION = 1;
 const STATES = ['queued', 'accepted', 'received', 'handled', 'acked'];
-const TARGET_FIELDS = ['project', 'host', 'harness', 'interface', 'nativeId', 'generation', 'role', 'worktree', 'branch'];
+const TARGET_FIELDS = ['project', 'host', 'harness', 'harnessVersion', 'interface', 'nativeId', 'generation', 'role', 'worktree', 'branch'];
 const KIND = ['message', 'reply', 'done'];
 const MAX_BODY = 16_384;
 

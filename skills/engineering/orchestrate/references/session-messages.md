@@ -31,6 +31,7 @@ Before using it, confirm that the parent task authorizes the particular local re
   "project": "project-key",
   "host": "host-key",
   "harness": "codex",
+  "harnessVersion": "not-reported",
   "interface": "desktop",
   "nativeId": "opaque-existing-session-id",
   "generation": 1,
@@ -40,7 +41,7 @@ Before using it, confirm that the parent task authorizes the particular local re
 }
 ```
 
-All values except `generation` are nonempty strings. Generation is a positive integer. Registering the same project/host/harness/interface/native ID requires a strictly higher generation and marks prior generations superseded. Every route and transition must present the full exact target object. There is no partial lookup or fallback target.
+All values except `generation` are nonempty strings. Set `harnessVersion` to the observed harness/client version or the explicit value `not-reported` when it is unknown; the latter records missing metadata and does not qualify that interface. Generation is a positive integer. Registering the same project/host/harness/interface/native ID requires a strictly higher generation and marks prior generations superseded, including when the recorded harness version changes. Every route and transition must present the full exact target object, including the same harness version. A version mismatch is a different target. There is no partial lookup or fallback target.
 
 Each message is a version 1 JSON record in `messages/<id>.json`, with stable `id`, `correlationId`, optional `replyTo`, `kind` (`message`, `reply`, `done`), exact `from` and `to` targets, bounded UTF-8 `body` (16 KiB), `state`, timestamps and content hash. An existing ID with the same content is idempotent; changed content under that ID is a conflict. A reply or done message must reference a persisted parent, reverse its exact route, and keep its correlation ID. Acknowledgments are control state, never messages, so they cannot produce acknowledgment loops.
 

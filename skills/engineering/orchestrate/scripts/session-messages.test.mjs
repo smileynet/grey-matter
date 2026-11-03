@@ -10,7 +10,7 @@ import { operate } from './session-messages.mjs';
 const roots = [];
 function runtime() { const root = mkdtempSync(join(tmpdir(), 'session-messages-')); roots.push(root); return root; }
 function target(nativeId = 'session-a', generation = 1, host = 'host-a') {
-  return { project: 'project-a', host, harness: 'codex', interface: 'desktop', nativeId, generation, role: 'worker', worktree: 'D:/work/project-a', branch: 'worker/one' };
+  return { project: 'project-a', host, harness: 'codex', harnessVersion: 'not-reported', interface: 'desktop', nativeId, generation, role: 'worker', worktree: 'D:/work/project-a', branch: 'worker/one' };
 }
 function setup() {
   const root = runtime(); operate(root, 'init');
@@ -31,11 +31,15 @@ test('init preserves unknown files and creates versioned private runtime structu
 test('requires exact registered target, and rejects stale generations before enqueue', () => {
   const { root, a, b } = setup();
   assert.throws(() => send(root, { ...a, nativeId: 'new-session' }, b), /not registered/);
+  assert.throws(() => send(root, { ...a, harnessVersion: '1.2.3' }, b), /not registered/);
   assert.throws(() => operate(root, 'register', { target: { ...a, generation: 1 } }), /Generation must increase/);
   assert.throws(() => send(root, { ...a, generation: 2 }, b), /not registered/);
-  operate(root, 'register', { target: { ...a, generation: 2 } });
+  const updated = { ...a, harnessVersion: '1.2.3', generation: 2 };
+  operate(root, 'register', { target: updated });
   assert.throws(() => send(root, a, b), /not active/);
-  assert.deepEqual(operate(root, 'status').messages, []);
+  assert.equal(send(root, updated, b).result, 'queued');
+  assert.equal(operate(root, 'status').messages[0].from.generation, 2);
+  assert.equal(operate(root, 'status').messages[0].from.harnessVersion, '1.2.3');
 });
 
 test('stable duplicate is idempotent and changed content under same id conflicts', () => {
