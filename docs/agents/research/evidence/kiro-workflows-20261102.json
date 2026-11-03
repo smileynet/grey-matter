@@ -106,17 +106,30 @@
       "profile_files": 37,
       "profile_bytes": 502689,
       "fixture_files": 65,
-      "fixture_bytes": 100555
+      "fixture_bytes": 100555,
+      "workspace_settings_bytes": "{}",
+      "global_workflow_setting_present_after_cleanup": false,
+      "fixture_recycled_and_absent": true,
+      "profile_recycled_and_absent": true,
+      "scratch_recycled_and_absent": true
     }
   },
+  "independent_audit": {
+    "path": "kiro-workflows-20261102-audit.md",
+    "reviewed_commit": "d2a86f7",
+    "verdict": "accepted with limits",
+    "trust_score": "8/10",
+    "cleanup_clearance": true,
+    "minor_receipt_finding_fixed_in": "5a73c31"
+  },
   "raw_artifacts": [
-    {"path": ".scratch/t161-native-evidence.txt", "bytes": 2656, "lifecycle": "retain through critic review, then recycle exact file"},
-    {"path": ".scratch/t161-orchestrate.workflow.json", "bytes": 1285, "lifecycle": "retain through critic review, then recycle exact file; recipe contents are promoted above"},
-    {"path": ".scratch/t161-runtime-evidence.txt", "bytes": 5729, "lifecycle": "retain through critic review, then recycle exact file"},
-    {"path": "%TEMP%/gm-t161-fixture", "files": 65, "bytes": 100555, "lifecycle": "retain through critic review, then recycle exact fixture tree"},
-    {"path": "%TEMP%/gm-t161-kiro-home", "files": 37, "bytes": 502689, "lifecycle": "retain through critic review, then recycle exact profile tree; contains generated session state"},
-    {"path": "%TEMP%/gm-t161-fixture/.kiro/workflows/lifecycle-pause.workflow.json", "bytes": 511, "lifecycle": "not run; recycle with fixture after critic"},
-    {"path": "%TEMP%/gm-t161-fixture/.kiro/workflows/lifecycle-retry.workflow.json", "bytes": 402, "lifecycle": "not run; recycle with fixture after critic"}
+    {"path": ".scratch/t161-native-evidence.txt", "bytes": 2656, "lifecycle": "recycled to OS Recycle Bin after critic clearance; verified absent"},
+    {"path": ".scratch/t161-orchestrate.workflow.json", "bytes": 1285, "lifecycle": "recycled to OS Recycle Bin after critic clearance; verified absent; recipe content promoted above"},
+    {"path": ".scratch/t161-runtime-evidence.txt", "bytes": 5729, "lifecycle": "recycled to OS Recycle Bin after critic clearance; verified absent"},
+    {"path": "%TEMP%/gm-t161-fixture", "files": 65, "bytes": 100555, "lifecycle": "recycled to OS Recycle Bin after critic clearance; verified absent"},
+    {"path": "%TEMP%/gm-t161-kiro-home", "files": 37, "bytes": 502689, "lifecycle": "recycled to OS Recycle Bin after critic clearance; verified absent; included generated session state"},
+    {"path": "%TEMP%/gm-t161-fixture/.kiro/workflows/lifecycle-pause.workflow.json", "bytes": 511, "lifecycle": "not run; recycled as part of fixture tree; verified absent"},
+    {"path": "%TEMP%/gm-t161-fixture/.kiro/workflows/lifecycle-retry.workflow.json", "bytes": 402, "lifecycle": "not run; recycled as part of fixture tree; verified absent"}
   ],
   "sources": [
     "https://kiro.dev/docs/workflows/authoring/",

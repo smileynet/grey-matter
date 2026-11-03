@@ -88,3 +88,20 @@ was ambiguous during one local inspection sequence, so treat it as an empty trus
 allowlist, not as a hard prohibition on tool use. Global hook loading also remains
 unknown. A follow-up would need a stricter interaction harness before authorizing real
 repository reads or writes.
+
+## Independent review
+
+The independent audit rated this report **8/10, accepted with limits**. It confirms the
+primary-source claims while retaining the approval ambiguity, summarized UI capture, and
+unknown global-hook loading as material limits. The audit reviewed commit `d2a86f7`; the
+following receipt-only correction in `5a73c31` aligns the draft recipe's land agent with
+the raw draft (`wf-coder`) and leaves the executed recipe (`wf-planner`) unchanged.
+See the [independent audit](kiro-workflows-20261102-audit.md).
+
+## Artifact disposition
+
+After audit clearance, the three raw scratch files, 65-file fixture (100,555 bytes), and
+isolated KIRO_HOME profile (37 files, 502,689 bytes) were sent to the OS Recycle Bin;
+all five owned paths were verified absent. Before cleanup, fixture Git status was only
+`?? .kiro/`, workspace settings were `{}`, the global workflow flag remained absent, and
+the global CLI settings hash was unchanged. The receipt records sizes and dispositions.
