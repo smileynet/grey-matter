@@ -5,6 +5,9 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 # Diagnosing Bugs
 
+The HITL shell loop is a template; its tracked role is indexed in
+[the tool-script catalog](../orchestrate/references/tool-scripts.md).
+
 A discipline for hard bugs. Skip phases only when explicitly justified.
 
 When exploring the codebase, read `GLOSSARY.md` (if it exists) to get a clear mental model of the relevant modules, and check ADRs in the area you're touching.

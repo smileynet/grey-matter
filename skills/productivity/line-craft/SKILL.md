@@ -9,6 +9,9 @@ as the backstop. The moves come from prior art (the LucasArts adventures; see
 [`references/MOVES.md`](references/MOVES.md)) and are offered as craft, not law: the project's own
 voice guide outranks them.
 
+The shape checker's role and invocation boundary are indexed in
+[the tool-script catalog](../../engineering/orchestrate/references/tool-scripts.md).
+
 ## The moves
 
 Feeling lives in what people **do** and **ask for**, stated plainly:

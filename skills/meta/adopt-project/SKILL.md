@@ -6,6 +6,9 @@ disable-model-invocation: true
 
 # Adopt Project
 
+The tracked migration and survey helper roles are indexed in
+[the tool-script catalog](../../engineering/orchestrate/references/tool-scripts.md).
+
 Bring the grey-matter workflow into a repo that **already has code and history** — the brownfield
 twin of `init-project` (which scaffolds a fresh repo forward from intent). Where init-project
 assumes nothing to preserve and nothing to back-fill from, adopt-project inverts the source of
