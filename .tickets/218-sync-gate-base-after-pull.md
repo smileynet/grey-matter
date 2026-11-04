@@ -1,7 +1,7 @@
 ---
 id: "218"
 title: "sync verifies the pulled range, not an empty diff, and survives a Windows vendor check"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -38,7 +38,17 @@ All other applicable gates remain required.
 
 ## Acceptance criteria
 
-- [ ] sync step 5 runs `gate.mjs pre-merge` with `--base <pre-pull sha>`, so a clean tree after a pull still selects the affected checks
-- [ ] sync detects tkt CLI drift by build hash (not only the version string) and states what pack/ticket features need the newer build
-- [ ] sync names the fallback when tkt's `mise run check` cannot run locally (no cargo/bash) and when a push cannot authenticate, instead of leaving it to the agent
-- [ ] sync reloads pulled guidance, preflights authorized registered sources and CLI compatibility before ticket operations, and preserves authorization and completed steps on retry
+- [x] sync step 5 runs `gate.mjs pre-merge` with `--base <pre-pull sha>`, so a clean tree after a pull still selects the affected checks
+- [x] sync detects tkt CLI drift by build hash (not only the version string) and states what pack/ticket features need the newer build
+- [x] sync names the fallback when tkt's `mise run check` cannot run locally (no cargo/bash) and when a push cannot authenticate, instead of leaving it to the agent
+- [x] sync reloads pulled guidance, preflights authorized registered sources and CLI compatibility before ticket operations, and preserves authorization and completed steps on retry
+
+## Resolution (2026-11-04)
+
+done: sync reloads pulled guidance, snapshots all authorized sources, checks CLI build/compatibility before ticket operations, uses the original gate base and resumes observed deployments. Documented Git auth/tooling failures and retained authorization. Independent prose findings corrected; source checks and compatibility fixtures passed. Session evidence retained until deployment verification.
+
+### Verification
+1. ✓ sync step 5 runs gate.mjs pre-merge with --base <pre-pull sha>, so a clean tree after a pull still selects the affected checks — "skills/meta/sync/SKILL.md step 4 uses original pre-pull SHA with gate.mjs --base; syntax fixtures 10 passed and docs consistency passed."
+2. ✓ sync detects tkt CLI drift by build hash (not only the version string) and states what pack/ticket features need the newer build — "Step 2 resolves native executable and full build hash, names cancel/cancelled support, checks every pack and re-verifies already-authorized upgrades."
+3. ✓ sync names the fallback when tkt's mise run check cannot run locally (no cargo/bash) and when a push cannot authenticate, instead of leaving it to the agent — "Step 3 records unavailable gate dependencies and owning tickets, permits only equivalent documented checks, and handles unattended Git plus retained local commits after auth failure."
+4. ✓ sync reloads pulled guidance, preflights authorized registered sources and CLI compatibility before ticket operations, and preserves authorization and completed steps on retry — "Independent prose review completed and corrections applied: explicit pull conditions, both product gates and native check preflight. Retry boundaries preserve snapshots, completed steps, source selection and session footprint exceptions."
