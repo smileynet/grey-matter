@@ -20,7 +20,13 @@ Use `node scripts/deploy.mjs check --profile directory` to also reject native ca
 blockers and warnings, including a missing icon. The profile applies to the plugin,
 while its marketplace still receives strict manifest validation. When Claude is absent,
 native checks are skipped with a message. Run `check` before installing; install itself
-checks skill lint and ownership, without running native validation.
+checks skill lint and ownership, without running Claude native validation.
+Default/portfolio installs build and strictly validate every Antigravity package before
+installed targets change. Linked root `AGENTS.md` is packaged as inert reference material
+under `.resources-<pack>/`, with rewritten links; it does not become an active rule.
+Retries compare installed bytes and skip current copy roots, Codex caches and Antigravity
+plugins. Changed/missing outputs are repaired; source and ownership checks still apply.
+Kiro Crew retains its own content/enabled-state check. Run the same command to resume.
 Project guidance belongs in `.claude/CLAUDE.md` (importing `../AGENTS.md`); a root
 `CLAUDE.md` produces a strict plugin-content warning. tkt vendors the same
 file at `tools/deploy.mjs` (ticket 64), so **change the harness table here, never in a copy**. The earlier

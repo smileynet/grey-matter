@@ -28,6 +28,129 @@ const SKILL_COUNT = readdirSync(join(dirname(HERE), "skills"), { recursive: true
 const INSTALLER = join(HERE, "deploy.mjs");
 const MANIFEST_NAME = ".installed-by-grey-matter.json";
 
+function smallPack(home) {
+  const pack = join(home, "source"), skill = join(pack, "skills", "example");
+  mkdirSync(skill, { recursive: true });
+  mkdirSync(join(pack, ".claude-plugin"));
+  writeFileSync(join(pack, ".claude-plugin/plugin.json"), JSON.stringify({ name: "example", version: "1.0.0" }));
+  writeFileSync(join(skill, "SKILL.md"), "---\nname: example\ndescription: Fixture\n---\nRead [reference](../../AGENTS.md).\n");
+  writeFileSync(join(pack, "AGENTS.md"), "Reference only.\n");
+  return pack;
+}
+
+test("agy reference guidance stays inert and its rewritten link resolves", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = smallPack(sb.home), out = join(sb.home, "package");
+    const r = runWithEnv(["agy", "build", "--pack", pack, "--out", out], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.equal(existsSync(join(out, "AGENTS.md")), false);
+    const markdown = readFileSync(join(out, "skills/example/SKILL.md"), "utf8");
+    const link = markdown.match(/\[reference\]\(([^)]+)\)/)[1];
+    assert.equal(readFileSync(join(out, "skills/example", link), "utf8"), "Reference only.\n");
+    assert.equal(existsSync(join(out, "rules")), false);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("rerunning a deploy preserves current roots and repairs a changed output", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = smallPack(sb.home), dest = join(sb.home, "dest");
+    const args = ["--pack", pack, "--root", dest];
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    const manifest = join(dest, ".installed-by-example.json");
+    const before = readFileSync(manifest, "utf8");
+    const repeat = runWithEnv(args, sb.env);
+    assert.equal(repeat.status, 0, repeat.stdout);
+    assert.match(repeat.stdout, /up to date/);
+    assert.equal(readFileSync(manifest, "utf8"), before);
+    const output = join(dest, "example/SKILL.md");
+    writeFileSync(output, "changed outside installer");
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    assert.match(readFileSync(output, "utf8"), /name: example/);
+    rmSync(output);
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    assert.ok(existsSync(output));
+    writeFileSync(join(pack, "AGENTS.md"), "Updated reference.\n");
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    assert.equal(readFileSync(join(dest, ".resources-example/AGENTS.md"), "utf8"), "Updated reference.\n");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("package validation failure leaves every installed root untouched", { skip: process.platform === "win32" }, () => {
+  const sb = homeSandbox({ harnesses: ["kiro"] });
+  try {
+    const pack = smallPack(sb.home);
+    mkdirSync(join(sb.home, ".gemini"));
+    const cli = join(sb.home, "bin/agy");
+    writeFileSync(cli, `#!${process.execPath}\nif (process.argv.includes("--version")) process.exit(0);\nconsole.error("fixture package rejected"); process.exit(1);\n`);
+    chmodSync(cli, 0o755);
+    const result = runWithEnv(["--pack", pack], sb.env);
+    assert.notEqual(result.status, 0, result.stdout);
+    assert.equal(existsSync(join(sb.home, ".kiro/skills/example")), false);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("an Antigravity retry skips an already-current owned plugin", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = smallPack(sb.home), out = join(sb.home, "package");
+    const args = ["agy", "install", "--pack", pack, "--out", out];
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    const builtAt = lstatSync(join(out, "plugin.json")).mtimeMs;
+    const repeat = runWithEnv(args, sb.env);
+    assert.equal(repeat.status, 0, repeat.stdout);
+    assert.match(repeat.stdout, /agy plugin example is up to date/);
+    assert.equal(lstatSync(join(out, "plugin.json")).mtimeMs, builtAt);
+    writeFileSync(join(sb.home, ".gemini/config/plugins/example/skills/example/SKILL.md"), "edited");
+    assert.equal(runWithEnv(args, sb.env).status, 0);
+    assert.match(readFileSync(join(sb.home, ".gemini/config/plugins/example/skills/example/SKILL.md"), "utf8"), /name: example/);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("portfolio validates later packages before updating the first pack", { skip: process.platform === "win32" }, () => {
+  const sb = homeSandbox({ harnesses: ["kiro"] });
+  try {
+    const first = smallPack(sb.home), second = smallPack(join(sb.home, "later"));
+    writeFileSync(join(second, ".claude-plugin/plugin.json"), JSON.stringify({ name: "other", version: "1.0.0" }));
+    writeFileSync(join(second, "skills/example/SKILL.md"), "---\nname: peer\ndescription: Fixture\n---\n");
+    // Different skill names avoid a real portfolio collision masking the validation check.
+    const old = join(second, "skills/example"), peer = join(second, "skills/peer");
+    cpSync(old, peer, { recursive: true }); rmSync(old, { recursive: true });
+    mkdirSync(join(sb.home, ".gemini"));
+    const cli = join(sb.home, "bin/agy");
+    writeFileSync(cli, `#!${process.execPath}\nif (process.argv.includes("--version")) process.exit(0);\nif (process.argv.includes("install")) throw Error("unexpected install");\nif (process.argv.some(a => a.includes("later"))) { console.error("later package rejected"); process.exit(1); }\n`);
+    chmodSync(cli, 0o755);
+    const portfolio = join(sb.home, "packs.json");
+    writeFileSync(portfolio, JSON.stringify({ packs: [{ name: "example", path: first }, { name: "other", path: second }] }));
+    const result = runWithEnv(["--pack", first, "--portfolio", portfolio], sb.env);
+    assert.notEqual(result.status, 0, result.stdout);
+    assert.match(result.stdout, /later package rejected/);
+    assert.equal(existsSync(join(sb.home, ".kiro/skills/example")), false);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("a current Codex plugin is observed without another refresh; cache drift requires refresh", () => {
+  const sb = homeSandbox({ harnesses: ["codex"], codex: true });
+  try {
+    const pack = smallPack(sb.home), cached = join(sb.home, "current-cache");
+    const manifest = { name: "grey-matter", version: PACK_VERSION, skills: "./skills/" };
+    writeFileSync(join(pack, ".claude-plugin/plugin.json"), JSON.stringify(manifest));
+    mkdirSync(join(pack, ".codex-plugin"));
+    writeFileSync(join(pack, ".codex-plugin/plugin.json"), JSON.stringify(manifest));
+    cpSync(pack, cached, { recursive: true });
+    const env = { ...sb.env, TEST_PACK: pack, TEST_PLUGIN_LIST: JSON.stringify({ installed: [{ pluginId: "grey-matter@grey-matter", enabled: true, installedPath: cached, source: { source: "local", path: pack } }] }) };
+    const result = runWithEnv(["--pack", pack, "--no-agy"], env);
+    assert.equal(result.status, 0, result.stdout);
+    assert.match(result.stdout, /Codex plugin grey-matter@grey-matter is up to date/);
+    const log = join(sb.home, "codex-calls.jsonl");
+    assert.ok(readFileSync(log, "utf8").trim().split("\n").map(JSON.parse).every((args) => args[1] === "list"));
+    rmSync(join(cached, "skills/example/SKILL.md"));
+    assert.equal(runWithEnv(["--pack", pack, "--no-agy"], env).status, 0);
+    assert.ok(readFileSync(log, "utf8").trim().split("\n").map(JSON.parse).some((args) => args[1] === "add"));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
 let root;
 
 function runInstaller(args) {
