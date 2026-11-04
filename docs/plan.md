@@ -665,3 +665,5 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 250 | Scope the home-path gate to introduced leaks instead of historical evidence | ✅ done |
 | 251 | Choose skill judgment or existing checks before adding retro mechanisms | ✅ done |
 | 253 | Review findings: published history and cleanup gate isolation | ✅ done |
+| 254 | Keep shared tooling environments out of disposable run directories | open |
+| 255 | Order cheap prerequisites before expensive resource allocation | open |
