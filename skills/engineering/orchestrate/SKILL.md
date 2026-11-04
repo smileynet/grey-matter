@@ -73,9 +73,8 @@ When implementing an admitted native adapter with an owned subprocess, use the
 opaque child handle and finite stream/stop limits supply process observations;
 they do not establish a native session receipt or permission to launch a provider.
 The [Claude stream](references/claude-stream.md) and [Kiro ACP](references/kiro-acp.md)
-modules require explicit owned-session admission. Claude native qualification is
-still open; Kiro has a bounded V2 two-turn result with separate teardown limits in
-its reference. Bind an already-held client through the
+modules require explicit owned-session admission. Their references record bounded
+Windows two-turn cases and separate lifecycle/platform limits. Bind an already-held client through the
 [owned input conversion](references/native-notification.md#existing-owned-client-handoff)
 after persisted attempt-start; native preflight and receipt qualification remain
 required. They do not attach to foreign live chats or replace manual fallback.

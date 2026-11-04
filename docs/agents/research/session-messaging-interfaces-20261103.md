@@ -14,6 +14,12 @@ Its original update-stream disconnect and local-only classification fix are
 reported separately. This does not qualify V3 teardown, busy queueing or a
 foreign-session attachment surface.
 
+The [owned Claude case](session-messaging-claude-owned-20261104.md) also completed
+two correlated core-acknowledged turns and observed process settlement on Windows
+with CLI 2.1.316. Its identical initialization metadata remained status only.
+The version-pinned source and historical failures remain in the linked evidence;
+this does not qualify arbitrary attachment or native reconnect.
+
 | Surface | Existing-session input and wake-up | Busy/idle and completion | Evidence status / adapter direction |
 |---|---|---|---|
 | **Codex CLI `queue`** | Current local CLI 0.166.0 accepts `codex queue --thread <UUID or exact session name> --message <TEXT>`; `--resume` is optional. This targets a known existing thread. The official CLI reference documents the same interface and says queue messages use that thread’s model. | Queue is meant for a thread message and optional resume. A resume failure only warns; the CLI still exits successfully. Therefore a zero exit is not a receipt. This help does not promise busy-turn steer semantics or an end-to-end receipt. | **Locally observed command/help; docs corroborate interface, delivery not probed here.** Good low-cost idle/existing-thread adapter candidate after verify target identity, record output, and independently observe correlated follow-up. Treat resume warning as a non-receipt. [Codex CLI reference](https://learn.chatgpt.com/docs/cli/reference) |

@@ -6,6 +6,19 @@ recovery (#232), native outcome/dead-letter semantics (#233) and work-context bi
 (#234, after #232) have separate source ownership and independent reviews. The
 parent retains native canaries, integration and final acceptance mapping.
 
+## Current qualification (2026-11-04)
+
+The source milestones below are historical. Current bounded native results are
+the [owned Codex desktop exchange](session-messaging-codex-owned-20261104.md),
+[owned Claude text-worker session](session-messaging-claude-owned-20261104.md), and
+[owned Kiro V2 ACP session](session-messaging-kiro-owned-20261104.md). They record
+correlated question/follow-up results and their separate lifecycle limits.
+Native CLI queue delivery remains held, Crew lacks the trusted caller grant,
+and Antigravity remains under its security hold; those routes use manual reporting.
+Native transport evidence is Windows-only. These results do not qualify arbitrary
+attachment, native reconnect, cross-platform parity or exactly-once delivery.
+The parent retains final ticket, gate and publication closeout.
+
 ## Exact retirement and spool recovery (#232)
 
 Accepted worker source: `74347e3b99facf67756f62c18a2b568f6546d859`. Exact retirement
@@ -49,8 +62,9 @@ caller identity; a project profile cannot grant it. The active conductor lacks
 that send grant. The existing Antigravity security-hook hold remains. These are
 distinct capability/permission states, not a broad claim of product unavailability.
 
-Native qualification is queued in #235 (Codex), #236 (owned Claude stream) and
-#237 (owned Kiro ACP), after the shared lifecycle/context work. The native
+Native qualification was queued in #235 (Codex), #236 (owned Claude stream) and
+#237 (owned Kiro ACP), after the shared lifecycle/context work; current bounded
+results are linked above. The native
 `session-messaging-supervision` monitor is confirmed ACTIVE for the resumed scope;
 it keeps healthy progress quiet and does not stop at a child/batch boundary.
 
@@ -127,7 +141,8 @@ queue tests; parent integrated checks are separate. The worker's YAML-fixture
 dependency error is infrastructure failure, not a passing check.
 [Source evidence](evidence/session-messaging-235-20261103.json) retains both results.
 The [earlier desktop native case](session-messaging-desktop-20261103.md) does not
-qualify this extension or actual CLI delivery. Native qualification remains open.
+qualify this extension or actual CLI delivery. At that source milestone, native
+qualification remained open; the current bounded results are linked above.
 
 ## Owned provider protocol modules (#236/#237 source)
 
@@ -201,4 +216,5 @@ the first turn ends. No dummy bootstrap or automatic retry is added. Fourteen
 local tests pass, including a fake peer that waits for stdin before emitting init.
 The [startup evidence index](evidence/session-messaging-243-20261104.json) retains
 the native timeout, independent postflight and source correction. Native first-input
-delivery remains unqualified until the parent canary under #236 completes.
+delivery was unqualified at that source milestone; the later accepted parent
+canary is recorded in the owned Claude qualification linked above.

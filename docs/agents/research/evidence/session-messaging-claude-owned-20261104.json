@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179 final audit and explicit disposition",
+  "sourceCommit": "d2bf2cc61ae9fe1fc97c8f2adbc349ead9e33ddb",
+  "nativeOutcome": "two-correlated-turns-completed",
+  "coreOutcome": "all four records acknowledged, both intents revision3 receipt-confirmed",
+  "cleanup": "observed launch/before root and child absent after owned stop; exit0 and closed stdio",
+  "repeatedInitStatusCount": 1,
+  "requestedModel": "claude-haiku-5-5",
+  "servedModelBillingEntitlement": "not independently attested",
+  "scope": "one Windows owned text-worker case; no foreign attach, busy queue, reconnect or disk recovery",
+  "priorAmbiguity": "all earlier cases retained; no cause or completion retroactively assigned",
+  "raw": [
+    {
+      "path": ".scratch/t236-native-v10-evidence.json",
+      "bytes": 29189,
+      "sha256": "24091b69251c2e2a5821bc2ab867abf35204d8ec8ce6b1c4e13e6c8555a6c0b3"
+    },
+    {
+      "path": ".scratch/t236-native-v10-live-admission.json",
+      "bytes": 334,
+      "sha256": "95ac653929750351f65206dcf8daf3ba7602808ab253025b1fcc960ce611ef01"
+    },
+    {
+      "path": ".scratch/t236-native-v10-parent-preflight.json",
+      "bytes": 2131,
+      "sha256": "830b71b7188664ece439a75ae9203894c12f9064870e120f15e7d3cf34aa56f5"
+    },
+    {
+      "path": ".scratch/t236-native-v10-parent-result.json",
+      "bytes": 604,
+      "sha256": "4c89f1341b9edb6af7bb81cb1acb5a952b6e1adfe29090e4be33ca66138be886"
+    },
+    {
+      "path": ".scratch/t236-native-v10-pair-review.md",
+      "bytes": 3459,
+      "sha256": "9d4a79be9f7529cb97a869f086aebd491976ef4b48b3858102f0449b8ae251c1"
+    },
+    {
+      "path": ".scratch/t236-native-v10-pair-review-r2.md",
+      "bytes": 1656,
+      "sha256": "fd43b039f4e9f3fa84df0586ca0c0974de9bee11d35abfc7a1b8210f1c41514f"
+    },
+    {
+      "path": ".scratch/t236-v10-native-postflight-review.md",
+      "bytes": 5175,
+      "sha256": "76522198ffb03a1ae605fcb0d95480895ca98a78fe6007e56d155379106c1fa6"
+    },
+    {
+      "path": ".scratch/t236-parent-boundary-dispatch-result.json",
+      "bytes": 910,
+      "sha256": "e3be7af2de9103143283a555500befbceef833a54c1dcf659da27739555e53d7"
+    },
+    {
+      "path": ".scratch/t236-turn-boundary-source-review-r2.md",
+      "bytes": 3066,
+      "sha256": "33ddc4b7c489d7b370ebb18269b44020765a3fe55e0e7e12c814bddc14837f7c"
+    },
+    {
+      "path": ".scratch/t236-parent-boundary-focused.log",
+      "bytes": 6435,
+      "sha256": "bdd5c70414d88a991fae4cf70dcd8ac55978900012116cbf81250b095b9c472d"
+    },
+    {
+      "path": ".scratch/t236-parent-boundary-premerge.log",
+      "bytes": 104,
+      "sha256": "011e9650c2f0d70873375a60dd463f32c6037267cbf5a628ee4a131875ee6073"
+    },
+    {
+      "path": ".scratch/t236-parent-boundary-push-r2.log",
+      "bytes": 367,
+      "sha256": "9839c62864ce27f3e6eeb31e55535148c0d99bc29f25c20562c7bed7e8d72549"
+    },
+    {
+      "path": ".scratch/t236-parent-boundary-deploy-r2.log",
+      "bytes": 3806,
+      "sha256": "99db60c26b976cf4f64343f6ac6890fbaee79d8a8815714f1bdd526579498624"
+    },
+    {
+      "path": ".scratch/t236-init-producer-scan.json",
+      "bytes": 10765,
+      "sha256": "c17cb3c15eb41956bc59e25be5cf23e5acea2070cb38e4bc70112891ca1abdf9"
+    },
+    {
+      "path": ".scratch/t236-init-callscan.json",
+      "bytes": 6645,
+      "sha256": "088f33ec1a93dbd0435db550f95e828269c9a4314361cb3b6820bfc589626442"
+    },
+    {
+      "path": ".scratch/t236-init-reemit-scope.json",
+      "bytes": 7422,
+      "sha256": "92cee279d100dc8381ef3bac3f848ec07bc76453457783df51577ce63b1e411e"
+    }
+  ]
+}

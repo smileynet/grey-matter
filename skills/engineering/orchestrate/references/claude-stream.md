@@ -1,5 +1,11 @@
 # Owned Claude stream adapter
 
+The [owned-stream qualification](../../../../docs/agents/research/session-messaging-claude-owned-20261104.md)
+records two correlated, core-acknowledged turns and observed process-tree settlement
+on Windows with CLI 2.1.316. Recheck the exact executable, model, permission/tool
+surface and owned handle before another launch. This bounded text-worker result
+does not admit foreign attachment, busy queueing, reconnect or other platforms.
+
 `scripts/claude-stream.mjs` wraps one Claude Code CLI process owned by the
 orchestrator. It is an internal adapter, not a CLI command, a general process
 runner, or a way to attach to another person's terminal or desktop session.
