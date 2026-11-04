@@ -225,6 +225,9 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 232 | Exact session retirement and real spool crash/restart recovery (child of 179) | ✅ done |
 | 233 | Bounded native outcome/dead-letter lifecycle (child of 179) | in_progress |
 | 234 | Ticket/candidate/durable-handoff message context (after 232) | in_progress |
+| 235 | Codex public queue adapter and existing-agent busy/idle receipts (after 231/233/234) | open |
+| 236 | Owned Claude streaming handoff transport and receipt fixture (after 231/233/234) | open |
+| 237 | Owned Kiro ACP transport and receipt/teardown fixture (after 231/233/234) | open |
 | 205 | Dashboard publication preflight using existing receipts | ✅ done |
 | 206 | Correct observed operational reference drift | ✅ done |
 | 207 | Outcome-coordinator failure and continuation fixtures | ✅ done |
@@ -263,6 +266,12 @@ No user conversation, global setting change, provider fallback or Antigravity
 execution is admitted by assumption. The recorded native security-hook hold stays
 explicit until its supported scope is cleared. The parent owns final native canaries,
 integration, current gates, push/close and both dashboard updates/publication.
+
+Native monitor `session-messaging-supervision` was created ACTIVE for this resumed
+#179 scope, every ten minutes, following the user's standing check-in request.
+Its saved prompt follows the live tracker/bindings, nudges stale active sessions,
+preserves the security/permission boundaries and stays quiet on unchanged progress.
+It remains until the whole authorized #179 outcome settles or the user stops it.
 
 ## Orchestration workstream (reconciled 2026-11-03)
 

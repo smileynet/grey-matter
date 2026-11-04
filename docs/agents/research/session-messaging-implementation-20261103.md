@@ -30,3 +30,26 @@ files in the other worker's checkout. The mismatch was detected before acceptanc
 the author moved only its own files to its assigned worktree and both locations
 were reverified. Worker guidance now requires absolute edit paths as well as an
 explicit shell working directory.
+
+## Interface qualification (#231)
+
+The [current cited interface survey](session-messaging-interfaces-20261103.md) and
+its evidence index were independently accepted at exact worker candidate
+`abaeaf2581c9265664799422d7c123fd6692d600`. Parent dispatch preflight passed and
+all fourteen retained version/help/schema captures matched their byte counts and
+SHA-256 hashes. Installed Crew source fingerprints were independently checked.
+No server launch, message, model call or configuration write is claimed by this
+research. Initial review corrected help-output wording and permission scope.
+
+Codex CLI advertises an existing-thread queue, while a successful exit can still
+accompany a failed resume. Claude's persistent input and Kiro's ACP are owned-client
+interfaces requiring separate native receipt qualification. Crew's installed
+0.11.1 messaging tool requires a trusted user-profile grant and Gateway-issued
+caller identity; a project profile cannot grant it. The active conductor lacks
+that send grant. The existing Antigravity security-hook hold remains. These are
+distinct capability/permission states, not a broad claim of product unavailability.
+
+Native qualification is queued in #235 (Codex), #236 (owned Claude stream) and
+#237 (owned Kiro ACP), after the shared lifecycle/context work. The native
+`session-messaging-supervision` monitor is confirmed ACTIVE for the resumed scope;
+it keeps healthy progress quiet and does not stop at a child/batch boundary.

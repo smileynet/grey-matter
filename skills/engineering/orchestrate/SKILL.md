@@ -48,6 +48,11 @@ When a scoped task needs a durable local handoff, use the
 [session-message contract](references/session-messages.md) with the exact recorded target
 and generation. Its manual spool does not wake a native session; load the active harness
 reference and confirm supported notification separately. Queued is not delivered.
+Before selecting a native interface, read the
+[current messaging qualification](../../../docs/agents/research/session-messaging-interfaces-20261103.md)
+and recheck its live version, tool schema and caller grant. Documentation or a
+visible tool does not establish permission; project profiles cannot manufacture
+a trusted Gateway identity or lift a security hold.
 For an existing Codex desktop collaboration agent, load the
 [notification preparation contract](references/native-notification.md). It persists
 one intent and prepares a fixed action; the parent still verifies the live target,

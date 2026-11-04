@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "ticket": "231",
+  "parent": "179",
+  "observedAt": "2026-11-03",
+  "state": "retained",
+  "retentionOwner": "parent orchestration integration",
+  "purpose": "Support source-backed interface comparison without storing transcripts, credentials, or message content.",
+  "endCondition": "Retain through independent exact-commit review and parent integration; parent may then prune raw scratch after recording review disposition.",
+  "rawLocalChecks": [
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/codex-version.txt",
+      "bytes": 19,
+      "sha256": "93a00d60fa70e4e5bf01279fb6b88988261621e198cbf22fec64d2c37251fe30"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/codex-queue-help.txt",
+      "bytes": 1630,
+      "sha256": "aeac62542f612c61cec616eb856471c4fce9a0bccf51fc1793a7a9fea1ebc5d4"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/claude-version.txt",
+      "bytes": 23,
+      "sha256": "205a07aa96d60916385f8805c761e3bba82e451ad84472fdfdd79e095d8adb7f"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/claude-help.txt",
+      "bytes": 22657,
+      "sha256": "c32fb74292c66107a6908bd126750c26525159797df0202762ac2f3ad89cfabf"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/kiro-cli-version.txt",
+      "bytes": 17,
+      "sha256": "bfe2ba554af7e40b48c48890945ab19ad394f421499228e0b7145e07013bed48"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/kiro-chat-help.txt",
+      "bytes": 4284,
+      "sha256": "fa5668530fe7a01eb016d3d25529c12573ffdb6ee3e7d1c065dff3b5a0b181ee"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/kiro-acp-help.txt",
+      "bytes": 1470,
+      "sha256": "024d7f4ce3198a73fe1578ce08032a3ccef5e37d25367d452d0c73bef425ac5b"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/kirocrew-resolution.txt",
+      "bytes": 104,
+      "sha256": "fbd216a5772a1ab3364d7b0947ff811a4d1b9df21cf0a538d5857c9c0ff112a5"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/kirocrew-version.txt",
+      "bytes": 17,
+      "sha256": "bef6f6ae9ccbca3628ecdbd600741bc05edfc5121a470ef3b1e41b3bae1c6913"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/kirocrew-config-get-help.txt",
+      "bytes": 178,
+      "sha256": "0cb8609c775ac3d4e2822f2aeb2a501bbc4c15fa9cb07f6089d1eea8b48c19e3"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/kirocrew-agent-session-control.txt",
+      "bytes": 401,
+      "sha256": "4965c6fdec9f1043531229b5343b4954d8604838b1e49a629e41a04214b09719"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/kirocrew-session-send-schema.txt",
+      "bytes": 2956,
+      "sha256": "9cbea08d0436bb8c9afac20a09b2a59f79631b6b8b666becc5f88a505ddb8000"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/kirocrew-conductor-session-grant.json",
+      "bytes": 339,
+      "sha256": "c36f45f7aa6c8b74e0f5704802fe6020be3ba73b353bd48551d4c4220c348597"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker231-20261103/kirocrew-agent-session-control-sanitized.txt",
+      "bytes": 135,
+      "sha256": "2b461e721f75c704851f7d0661eb6fee4f8bd4183d667fb47c209fd139268479"
+    }
+  ],
+  "primarySources": [
+    "https://learn.chatgpt.com/docs/cli/reference",
+    "https://learn.chatgpt.com/docs/app-server",
+    "https://code.claude.com/docs/en/cli-reference",
+    "https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode",
+    "https://code.claude.com/docs/en/desktop",
+    "https://kiro.dev/docs/cli/chat/session-management/",
+    "https://kiro.dev/docs/cli/acp/",
+    "https://kiro.dev/docs/acp/",
+    "https://kiro.dev/docs/crew/chat/sessions/",
+    "https://kiro.dev/docs/crew/features/workflows/",
+    "https://kiro.dev/docs/crew/capabilities/mcp-tools/",
+    "https://kiro.dev/docs/crew/security/",
+    "https://antigravity.google/docs/settings?tab=ide",
+    "https://antigravity.google/docs/cli-using",
+    "https://antigravity.google/changelog?tab=cli",
+    "https://antigravity.google/docs/at-mentions",
+    "https://antigravity.google/docs/cli/commands/resume"
+  ],
+  "localInstalledSources": [
+    {
+      "pathTemplate": "%LOCALAPPDATA%/Programs/KiroCrew/resources/backend-dist/kirocrew-backend/Lib/site-packages/kiro_crew/mcp_dashboard_session_tools.py",
+      "bytes": 47668,
+      "sha256": "e517024d745ca325d66605707b4106cc8a982749cc6031b1f256dd5df2e36cda",
+      "observation": "Kiro Crew 0.11.1 installed session_send schema; no call made."
+    },
+    {
+      "pathTemplate": "%LOCALAPPDATA%/Programs/KiroCrew/resources/backend-dist/kirocrew-backend/Lib/site-packages/kiro_crew/acp/harness/kas.py",
+      "bytes": 42353,
+      "sha256": "D70294991FD38B035FEBD95D756A295EAEE3AF23F948DE75E52148D665B2FD4B",
+      "observation": "Installed Kiro Crew 0.11.1 KAS profile projection; project agent permissions and server declarations are filtered. Read-only source inspection."
+    },
+    {
+      "pathTemplate": "%LOCALAPPDATA%/Programs/KiroCrew/resources/backend-dist/kirocrew-backend/Lib/site-packages/kiro_crew/acp/kas_agents.py",
+      "bytes": 93452,
+      "sha256": "08E168D3E1F7EFB0DA7998E5C995457FC0DC073426B324880F04B9D1E2CA8917",
+      "observation": "Installed Kiro Crew 0.11.1 KAS agent projection; session-control grants and valid session identity have separate requirements. Read-only source inspection."
+    },
+    {
+      "pathTemplate": "%LOCALAPPDATA%/Programs/KiroCrew/resources/backend-dist/kirocrew-backend/Lib/site-packages/kiro_crew/mcp_dashboard.py",
+      "bytes": 50258,
+      "sha256": "C500128D40B361B023A785035AF936AA779B3B00AE35F85C84C43996BB604CC4",
+      "observation": "Installed Kiro Crew 0.11.1 strict identity gate for session-control tools. Read-only source inspection."
+    },
+    {
+      "pathTemplate": "%USERPROFILE%/.kiro/agents/kirocrew-conductor.json",
+      "observation": "Filtered read only for agent name, mounted MCP names, and dashboard session-send allowlist; raw config not copied."
+    }
+  ],
+  "localObservations": [
+    "Bundled Kiro Crew CLI resolved by the recorded full path and reported 0.11.1.",
+    "The targeted config get agent.session_control query returned True.",
+    "The current kirocrew-conductor mounts kirocrew-dashboard but does not allow @kirocrew-dashboard/session_send; no configuration changed."
+  ],
+  "heldOrUnqualified": [
+    "No model calls or live messages were sent.",
+    "Get-Command did not resolve kirocrew on the current PATH; the read-only bundled CLI was invoked by the recorded full path.",
+    "Antigravity CLI/version/help/PATH/native probing remains held by the recorded security stop; findings are official documentation only.",
+    "No Kiro ACP handshake, Crew MCP enablement, or live Crew delivery was attempted; Crew evidence is read-only installed source/schema and current tool grant.",
+    "No Claude Agent SDK install or live streaming session was attempted.",
+    "No broad cross-harness, busy-session, crash-recovery, or exactly-once qualification is claimed."
+  ]
+}
