@@ -6,7 +6,7 @@
 // "requested, unverified".
 //
 // Usage: node scripts/probe-critic-model.mjs [--harness claude,codex,kiro,opencode] [--json]
-//          [--timeout <seconds>] [--ceiling harness=model ...]
+//          [--timeout <total seconds per harness>] [--ceiling harness=model ...]
 // Each harness costs one tiny model call plus one rejected-model call; Codex costs one more, a forced
 // write attempt under `-s read-only` that must fail (the owner's default Codex critic mode). Exit 0 when every probed
 // harness is `ok`, 1 when any is below ceiling, unverified, unavailable or not authenticated.
@@ -32,7 +32,7 @@ const SAFE_CODEX_MODEL_ID = /^[A-Za-z0-9][A-Za-z0-9._/-]*$/;
 
 const WINDOWS_CODEX_DISPATCH = "$ErrorActionPreference = 'Stop'; $exe = Get-Command -Name 'codex' -CommandType Application -ErrorAction Stop; $codexArgs = @(ConvertFrom-Json -InputObject $env:GM_CODEX_ARGS); & $exe.Source @codexArgs; exit $LASTEXITCODE";
 
-const run = (cmd, args, { cwd, timeout, env } = {}) => {
+const run = (cmd, args, { cwd, timeout, deadline, env } = {}) => {
   let executable = cmd, argv = args;
   const childEnv = { ...process.env, ...env };
   if (process.platform === "win32" && cmd === "codex") {
@@ -40,11 +40,12 @@ const run = (cmd, args, { cwd, timeout, env } = {}) => {
     argv = ["-NoLogo", "-NoProfile", "-NonInteractive", "-Command", WINDOWS_CODEX_DISPATCH];
     childEnv.GM_CODEX_ARGS = JSON.stringify(args);
   }
-  const r = spawnSync(executable, argv, { cwd, encoding: "utf8", timeout: (timeout ?? 60) * 1000, env: childEnv, stdio: ["ignore", "pipe", "pipe"] });
+  const remaining = Math.min((timeout ?? 60) * 1000, deadline === undefined ? Infinity : deadline - Date.now());
+  if (remaining <= 0) return { code: 1, out: "", err: "harness deadline exhausted", missing: false, timedOut: true };
+  const r = spawnSync(executable, argv, { cwd, encoding: "utf8", timeout: Math.max(1, Math.floor(remaining)), killSignal: "SIGKILL", env: childEnv, stdio: ["ignore", "pipe", "pipe"] });
   return { code: r.error ? 127 : r.status ?? 1, out: r.stdout ?? "", err: r.stderr ?? "", missing: r.error?.code === "ENOENT", timedOut: r.error?.code === "ETIMEDOUT" };
 };
 const lines = (s) => s.split(/\r?\n/).filter((l) => l.trim().startsWith("{")).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
-const version = (cmd, options) => { const r = run(cmd, ["--version"], { ...options, timeout: 10 }); return r.missing ? null : (r.out.trim().split("\n")[0] || null).replace(/\s*\(.*$/, ""); };
 const classify = (r) => (AUTH.test(r.out + r.err) ? "not-authenticated" : r.timedOut ? "timed-out" : "failed");
 function belowVersion(value, minimum) {
   const parse = (text) => {
@@ -117,6 +118,7 @@ function refuses(h, ctx) {
     kiro: ["chat", "--no-interactive", "--model", "no-such-model-9", PROMPT] }[h];
   const cmd = h === "kiro" ? "kiro-cli" : h;
   const r = run(cmd, args, ctx);
+  if (r.timedOut) return "not-tested: harness deadline exhausted";
   if (AUTH.test(r.out + r.err) && r.code !== 0) return "not-tested: not authenticated";
   if (h === "claude") { try { if (JSON.parse(r.out).is_error) return "pass"; } catch { /* below */ } }
   return r.code !== 0 ? "pass" : "FAIL: the harness accepted a model that does not exist";
@@ -142,21 +144,25 @@ function kiroPick(ctx) {
 }
 
 export function probe(harness, { ceilings = CEILINGS, timeout = 60 } = {}) {
+  if (!Object.hasOwn(adapters, harness) || !Number.isFinite(timeout) || timeout <= 0) throw new Error("probe requires a known harness and a positive timeout");
+  const deadline = Date.now() + timeout * 1000;
   const cmd = harness === "kiro" ? "kiro-cli" : harness;
   let requested = ceilings[harness];
   if (harness === "codex" && (typeof requested !== "string" || !SAFE_CODEX_MODEL_ID.test(requested))) return {
     harness, status: "invalid-model-id",
     note: "Codex model ID must start with an ASCII letter or digit and contain only letters, digits, dot, underscore, slash or hyphen.",
   };
-  const v = version(cmd, { timeout });
-  if (!v) return { harness, status: "unavailable", note: `${cmd} is not on PATH` };
+  const versionResult = run(cmd, ["--version"], { timeout: Math.min(timeout, 10), deadline });
+  if (versionResult.code !== 0) return { harness, status: versionResult.missing ? "unavailable" : classify(versionResult), note: versionResult.missing ? `${cmd} is not on PATH` : versionResult.err.slice(0, 160) };
+  const v = versionResult.out.trim().split("\n")[0].replace(/\s*\(.*$/, "");
+  if (!v) return { harness, status: "unverified", note: `${cmd} returned no version` };
   const minimum = harness === "codex" ? CODEX_MODEL_MINIMUMS[requested] : null;
   if (minimum && belowVersion(v, minimum)) return {
     harness, version: v, ceiling: requested, requested, status: "unsupported-version",
     note: `Codex CLI ${v} is below the documented minimum ${minimum} for GPT-6.1 Terra; update Codex CLI to ${minimum} or later.`,
   };
   const dir = mkdtempSync(join(tmpdir(), `gm-critic-${harness}-`));
-  const ctx = { cwd: dir, timeout };
+  const ctx = { cwd: dir, timeout, deadline };
   try {
     let picked = null;
     if (harness === "kiro") { picked = kiroPick(ctx); if (!picked.chosen) return { harness, version: v, status: "unavailable", note: "no Claude model in `kiro-cli chat --list-models`" }; requested = picked.chosen; }
@@ -186,8 +192,16 @@ if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).
   const ceilings = { ...CEILINGS };
   a.forEach((x, i) => { if (x === "--ceiling") { const [h, m] = a[i + 1].split("="); ceilings[h] = m; } });
   const harnesses = (opt("--harness") ?? "claude,codex,kiro,opencode").split(",");
-  const results = harnesses.map((h) => probe(h, { ceilings, timeout: Number(opt("--timeout") ?? 60) }));
+  const results = [];
+  for (const h of harnesses) {
+    const r = probe(h, { ceilings, timeout: Number(opt("--timeout") ?? 60) });
+    results.push(r);
+    if (!a.includes("--json")) console.log(formatResult(r));
+  }
   if (a.includes("--json")) console.log(JSON.stringify(results, null, 2));
-  else for (const r of results) console.log(`${r.harness.padEnd(9)} ${r.status.padEnd(18)} ${[r.version, r.recorded && `ran on ${r.recorded}`, r.effort && `effort ${r.effort}`, r.level, r.refusesMissingModel && `missing-model: ${r.refusesMissingModel}`, r.readOnly && `read-only: ${r.readOnly}`, r.note].filter(Boolean).join(" · ")}`);
   process.exit(results.every((r) => r.status === "ok") ? 0 : 1);
+}
+
+function formatResult(r) {
+  return `${r.harness.padEnd(9)} ${r.status.padEnd(18)} ${[r.version, r.recorded && `ran on ${r.recorded}`, r.effort && `effort ${r.effort}`, r.level, r.refusesMissingModel && `missing-model: ${r.refusesMissingModel}`, r.readOnly && `read-only: ${r.readOnly}`, r.note].filter(Boolean).join(" · ")}`;
 }

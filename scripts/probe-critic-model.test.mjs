@@ -10,7 +10,7 @@ import assert from "node:assert/strict";
 import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { CEILINGS, probe } from "./probe-critic-model.mjs";
 
 const unix = process.platform !== "win32";
@@ -227,6 +227,33 @@ test("a harness that is not installed is unavailable", { skip: posixOnly }, asyn
   const r = await probeWith(env, "claude");
   assert.equal(r.status, "unavailable");
   assert.match(r.note, /not on PATH/);
+});
+
+test("one harness shares a deadline and never treats timeout as model rejection", { skip: posixOnly }, async (t) => {
+  const env = sandbox(t, { only: ["claude"] });
+  const bin = env.PATH.split(":")[0];
+  exe(bin, "claude", '[ "$1" = "--version" ] && { echo "2.1.999"; exit 0; }\nexec sleep 2');
+  const start = Date.now();
+  const r = await probeWith(env, "claude", { timeout: 0.3 });
+  assert.equal(r.status, "timed-out");
+  assert.notEqual(r.refusesMissingModel, "pass");
+  assert.ok(Date.now() - start < 1000, "all calls share the harness budget");
+});
+
+test("CLI streams a finished harness before starting the next result", { skip: posixOnly }, async (t) => {
+  const env = sandbox(t);
+  const bin = env.PATH.split(":")[0], release = join(bin, "release");
+  writeFileSync(join(bin, "opencode"), `#!${process.execPath}\nimport {existsSync} from "node:fs";\nif (process.argv.includes("--version")) { const end = Date.now() + 1500; while (!existsSync(process.env.PROBE_RELEASE) && Date.now() < end) {} if (!existsSync(process.env.PROBE_RELEASE)) process.exit(1); console.log("1.99.9"); } else process.exit(1);\n`);
+  chmodSync(join(bin, "opencode"), 0o755);
+  const child = spawn(process.execPath, [resolve("scripts/probe-critic-model.mjs"), "--harness", "claude,opencode", "--timeout", "2"], { env: { ...process.env, ...env, PROBE_RELEASE: release } });
+  let output = "";
+  child.stdout.on("data", (data) => {
+    output += data;
+    if (/claude\s+ok/.test(output)) writeFileSync(release, "continue");
+  });
+  await new Promise((done, reject) => { child.on("error", reject); child.on("close", done); });
+  assert.ok(existsSync(release), output);
+  assert.match(output, /opencode\s+failed\s+1.99.9/);
 });
 
 test("a result with no usable record is unverified, never ok", { skip: posixOnly }, async (t) => {
