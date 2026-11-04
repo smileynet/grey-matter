@@ -1,13 +1,14 @@
 ---
 id: "149"
 title: "reconcile-tickets runs a priority review over workstreams, queue and blockers"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
   - "Review flags inversions and stuck tickets"
   - "Facts come from tool output"
 tags: ["stream:tooling","kind:enhancement","epic:outcome-orchestration"]
+assignee: "codex"
 ---
 
 # reconcile-tickets runs a priority review over workstreams, queue and blockers

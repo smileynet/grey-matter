@@ -222,7 +222,7 @@ scheduled for the new session; do not recreate the settled #179 monitor.
 | ID | Work | Status |
 | --- | --- | --- |
 | 145 | Detect shared-checkout concurrency and recommend isolation | in_progress |
-| 149 | Review priorities, queue inversions and blockers from ticket facts | open |
+| 149 | Review priorities, queue inversions and blockers from ticket facts | in_progress |
 | 148 | Take over worktrees safely and respect harness lifecycle guards | open |
 | 140 | Keep unrelated staged changes out of ticket commits | open |
 | 141 | Review staged and working-tree changes safely | open |
@@ -619,7 +619,7 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 146 | delivery-dashboard lists only open questions, generated from a structured source | open |
 | 147 | to-questionnaire offers an HTML decision form with recommendations and copy-for-chat | open |
 | 148 | Take over another agent's worktrees and branches safely | open |
-| 149 | reconcile-tickets runs a priority review over workstreams, queue and blockers | open |
+| 149 | reconcile-tickets runs a priority review over workstreams, queue and blockers | in_progress |
 | 150 | Add an optional product map (jobs, workflows, feature status) to the delivery dashboard | open |
 | 164 | Upgrade path: bring a project up to a new grey-matter release's standards (conformance-audit mode recommended) | open |
 | 166 | Refresh harnesses.md to the installed harness versions (first harness-changelog review) | open |
