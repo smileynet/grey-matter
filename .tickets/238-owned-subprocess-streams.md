@@ -1,7 +1,7 @@
 ---
 id: "238"
 title: "Bound owned subprocess streams for native session adapters"
-status: open
+status: in_progress
 blocked_by: ["231"]
 priority: high
 validation_criteria:
@@ -10,6 +10,7 @@ validation_criteria:
   - "Agent guidance independent final-source review and integrated checks pass"
 tags: ["stream:orchestration", "type:enhancement"]
 parent: "179"
+assignee: "codex"
 ---
 # Bound process ownership and streams for native adapters
 
