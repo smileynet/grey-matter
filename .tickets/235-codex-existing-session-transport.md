@@ -1,7 +1,7 @@
 ---
 id: "235"
 title: "Qualify Codex queue and busy existing-agent handoffs"
-status: in_progress
+status: done
 blocked_by: ["231", "233", "234"]
 priority: high
 validation_criteria:
@@ -23,6 +23,15 @@ Implement a narrowly typed Codex queue adapter with exact UUID/native identity, 
 
 ## Acceptance criteria
 
-- [ ] Fixed public queue adapter rejects wrong/ambiguous target, executable and command data and shares bounded intent/context semantics.
-- [ ] Parent-owned native fixture proves exact existing-target busy/idle and question/completion behavior where supported, with correlated raw receipts and precise gaps.
-- [ ] Focused regressions, independent exact-source/native-evidence acceptance, agent tool guidance and parent integrated gates pass.
+- [x] Fixed public queue adapter rejects wrong/ambiguous target, executable and command data and shares bounded intent/context semantics.
+- [x] Parent-owned native fixture proves exact existing-target busy/idle and question/completion behavior where supported, with correlated raw receipts and precise gaps.
+- [x] Focused regressions, independent exact-source/native-evidence acceptance, agent tool guidance and parent integrated gates pass.
+
+## Resolution (2026-11-04)
+
+done: fixed queue preparation/refusal adapter and bounded same-owned-desktop question/idle-follow-up qualification delivered. Exact clock-hold timing, arbitrary mid-task steering and native CLI queue delivery remain explicitly unqualified with manual fallback; no held integration was launched.
+
+### Verification
+1. ✓ Fixed public queue adapter preserves exact target and shared bounded intent identity — "Fixed public queue/action source931e507 already accepted and shipped; current node --test native-notification/codex-queue/session-messages suites PASS55/55 no skips, exact UUID/executable/loopback/actionhash refusal guards intact. Source-only CLI preparation is not native queue delivery."
+2. ✓ Owned native busy idle question and completion receipts are independently evidenced — "Fresh desktop v3 same-target question and idle follow-up with remembered nonce: native parent channel +4correlatedspoolrecords +2once-onlystored-actionintents independently reviewed. Roster running before first call, completed before second; exact30secondhold timing UNPROVED (37.440s marker-return upper bound), not claimed. CLI native stays held because prelaunch integrations cannot be safely disabled/inventoried within current authorization; manual fallback documented."
+3. ✓ Regression review guidance and current integrated checks pass — "Independent narrowclaims/guidance review PASS9E3A4D...; final indexreview PASSA9CEC6... verifies14raw+10spoolhashes. Docs/index shipped6c18a3b, current premerge1PASS/prepush5PASS, deploy50 --no-agy --no-kirocrew. Retained evidence index docs/agents/research/evidence/session-messaging-codex-owned-20261104.json; parent owns through179audit. No provider fallback/global grants or user chats."

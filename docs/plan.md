@@ -225,7 +225,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 232 | Exact session retirement and real spool crash/restart recovery (child of 179) | ✅ done |
 | 233 | Bounded native outcome/dead-letter lifecycle (child of 179) | ✅ done |
 | 234 | Ticket/candidate/durable-handoff message context (after 232) | ✅ done |
-| 235 | Codex public queue adapter and existing-agent busy/idle receipts (after 231/233/234) | in_progress |
+| 235 | Codex public queue adapter and existing-agent busy/idle receipts (after 231/233/234) | ✅ done |
 | 242 | Shared intent binding for owned provider clients (after 238; native prerequisite for 236/237) | ✅ done |
 | 243 | First actual bound Claude input during startup (after 242; observed startup gap) | ✅ done |
 | 236 | Owned Claude streaming handoff transport and receipt fixture (after 231/233/234/238/242/243) | in_progress |
