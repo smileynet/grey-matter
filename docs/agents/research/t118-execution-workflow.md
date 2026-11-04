@@ -43,7 +43,7 @@ Local headless captures use synthetic data. Laptop screenshot SHA-256:
 `3E0B8BF85452778955BAFCFC4115F1B2BEC678BDE7000C307185C1A7069438EE`; 150% zoom phone:
 `26D645A68037819F14412D2C34A5D7E88694BAD1A01FA9C4EA9F539059D37A63`. These captures prove the renderer against local fixtures, not the deployed Site, actual user data, physical phones or a user-visible app surface. Parent-owned live dashboard integration and pre-merge gate remain separate.
 
-Earlier failing attempts remain as separate raw logs under `.scratch/t118/`; they exposed and corrected test fixture assumptions, the zoom-control placement, and narrow-width overflow. The final passing logs above supersede none of those records. The 637 KB scratch family includes those attempts, the browser captures and small helper scripts; it is retained under ticket #118 for parent integration and final evidence disposition.
+Earlier failing attempts remain as separate raw logs in the retained ticket-scoped worker evidence family; they exposed and corrected test fixture assumptions, the zoom-control placement, and narrow-width overflow. An intermediate browser run (`browser-9.log`) passed 6/6 before graph zoom controls were added; the final `browser-final-2.log` run passed 7/7 with those controls and supersedes that coverage. The final passing logs above do not erase the earlier records. The 637 KB evidence family includes the attempts, browser captures and small helper scripts; it remains retained under ticket #118 for parent integration and final evidence disposition.
 
 Failure classifications: `unit-1.log` did not parse due to a malformed new test fixture; `unit-2.log`
 and `unit-final.log` each had one fixture expectation failure (missing execution-order metadata,
