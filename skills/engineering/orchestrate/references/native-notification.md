@@ -1,6 +1,6 @@
 # Native notification preparation
 
-`native-notification.mjs` prepares one of two narrowly typed data actions from an already persisted #208 message. It does not discover agents, inspect the live tool registry, call a native tool, connect to an app server, invoke a shell command, or decide that the recipient is authorized.
+`native-notification.mjs` prepares narrowly typed data actions from an already persisted #208 message. It does not discover agents, inspect the live tool registry, call a native tool, connect to a provider, invoke a shell command, or decide that the recipient is authorized.
 
 ## Current capability boundary
 
@@ -8,12 +8,12 @@
 |---|---|
 | Codex desktop, `collaboration.followup_task` | Conditional preparation support only. Caller must verify this exact tool is currently available and that the supplied native ID names the intended existing agent. |
 | Codex CLI `queue` | Fixed plan preparation only. The exact UUID and local remote endpoint are bound to the plan; parent must verify the owned process and loopback listener immediately before execution. Busy/idle wakeup, question/reply, receipt and completion behavior remain unqualified pending the parent-owned canary. |
-| Claude Code | Unsupported/unqualified. |
-| kiro-cli | Unsupported/unqualified. |
+| Claude Code stream-json | Fixed intent preparation and pure owned-client input conversion only. Parent must supply the exact held stream client and verify its live session/process binding. Native delivery remains unqualified. |
+| kiro-cli ACP | Fixed intent preparation and pure owned-client input conversion only. Parent must supply the exact held ACP client and verify its negotiated session/process binding. Native delivery remains unqualified. |
 | Kiro Crew | Unsupported/unqualified. |
 | Antigravity | Unsupported and held. |
 
-The desktop route uses `followup_task` against an existing exact agent ID. The CLI route targets an existing Codex thread by full UUID through the public `codex queue` command. Neither route creates or discovers a recipient. The caller independently selects the exact registered target; never derive it from an untrusted packet or use a “last active” target. A tool plan, local intent, CLI exit status, or local `accepted` state is not native acceptance, receipt, execution or completion. The queue plan omits `--resume`: this work does not claim it wakes an unloaded thread.
+The desktop route uses `followup_task` against an existing exact agent ID. The CLI route targets an existing Codex thread by full UUID through the public `codex queue` command. The owned Claude and Kiro routes target an already-created client held by the same trusted caller. None of these routes creates or discovers a recipient. The caller independently selects the exact registered target; never derive it from an untrusted packet or use a “last active” target. A tool plan, local intent, CLI exit status, or local `accepted` state is not native acceptance, receipt, execution or completion. The queue plan omits `--resume`: this work does not claim it wakes an unloaded thread.
 
 ## Prepare contract
 
@@ -31,6 +31,10 @@ prepareNativeNotification(runtimeRoot, {
 ```
 
 The envelope must already exist at `messages/<id>.json`, have a valid content hash, be in `accepted` state, and route to the exact active versioned target in `registry.json`. The separately supplied native ID and generation must equal that complete target. Every new intent also requires `deadlineAt`, an explicit future UTC ISO timestamp (for example, computed with `new Date(Date.now() + 30 * 60_000).toISOString()`). Missing, malformed, offset-based, or already-expired deadlines fail before an intent is written. The desktop route accepts only the `codex:desktop` target lane; the CLI route is prepared only by [codex-queue.mjs](codex-queue.md) for `codex:cli` targets whose native IDs are full UUIDs.
+
+The owned routes are also prepared here. Claude requires `nativeApi: 'claude-stream.send'`, a `claude:stream-json` target with a UUID session ID, and trusted `transport: { route: 'claude-owned-stream', owner: { pid, generation }, protocolUuid }`. Kiro requires `nativeApi: 'kiro-acp.prompt'`, a `kiro-cli:acp` target with the exact opaque session ID returned by `session/new`, and trusted `transport: { route: 'kiro-owned-acp', owner: { pid, generation } }`. The owner values are copied from the actual client handle and remain caller assertions in the plan. Claude's protocol UUID must be a separate fresh UUID from its session ID. Both plans bind `sessionId === target.nativeId === expectedNativeId` and persist the complete target, message identity, owner, and self-contained text. Unknown fields and accessors are rejected for these owned route inputs.
+
+The owned text includes the accepted message identity, context and body directly; it does not ask the provider to read the spool file. The stored action has no callback, command, provider selection, permission grant, or arbitrary arguments. Preparation does not invoke either client.
 
 New plans persist an exact `transportAction` and its canonical SHA-256 `actionHash` in intent version 3. The returned lifecycle binding includes that hash. An `attempt-start` mutation must provide the exact current binding; it persists the hash before returning the stored action to the trusted caller. The caller must execute only that returned action. Version-2 desktop intents remain usable with their original binding fields; their prior intent is not rewritten. Version-1 intents remain inspect-only with unknown lifecycle.
 
@@ -58,6 +62,26 @@ node skills/engineering/orchestrate/scripts/native-notification.mjs receipt --ro
 ```
 
 The desktop prepare JSON contains the API fields above. Mutation commands take the exact `binding` object returned by prepare (updated with each returned revision); `outcome` additionally takes `outcome` with one of `accepted`, `not-sent`, or `ambiguous`. Inspect takes only `{ "id": "stable-message-id" }`. Every command accepts exactly five arguments after the script name; extra arguments fail. On success stdout is a JSON result; errors exit nonzero and print a diagnostic to stderr. The Codex CLI request/config format and its separate command are documented in [the Codex queue guide](codex-queue.md). There is no retry mode.
+
+## Existing owned-client handoff
+
+Only the parent that already owns and retains the client may convert and invoke an owned-provider plan. Persist `attempt-start` before converting or sending. Pass only the action/hash returned from that attempt and a projection of the same live client handle:
+
+```js
+const started = startNativeNotificationAttempt(root, prepared.binding);
+const { route, input } = ownedStreamInput(started.transportAction, started.actionHash, {
+  pid: client.pid,
+  generation: client.generation,
+  sessionId: client.sessionId,
+});
+if (route === 'claude-owned-stream') await client.send(input);
+else if (route === 'kiro-owned-acp') await client.prompt(input);
+else throw new Error('Unsupported owned provider route');
+```
+
+`ownedStreamInput(action, actionHash, live)` is a pure data converter. It snapshots and validates the stored action and live projection, verifies the whole action fingerprint, checks exact PID/generation ownership and enforces `action.sessionId === action.target.nativeId === live.sessionId`. Claude receives `{ messageId, messageHash, protocolUuid, sessionId, text }`; the separately persisted protocol UUID is reused for that action and is never regenerated by the converter. Kiro receives `{ messageId, messageHash, text }`; its held ACP client allocates the request ID only when `prompt()` is invoked, and the returned request ID is an observation rather than preparation data.
+
+Invoke with two explicit route branches as shown. Do not choose a client, discover/adopt a PID, reconnect, attach to a prior session, change model/grants, retry, or generate a new message ID. Caller-supplied owner fields are not operating-system proof; the trusted caller must pass the actual already-held client and preserve its own ownership/lifecycle evidence. The [Claude stream](claude-stream.md) and [Kiro ACP](kiro-acp.md) references describe their separate adapter boundaries. This converter itself does not authenticate ownership or establish delivery.
 
 ## Intent and ambiguous outcomes
 

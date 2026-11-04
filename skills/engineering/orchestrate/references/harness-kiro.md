@@ -7,6 +7,8 @@ For an admitted owned V2 ACP qualification, load the [protocol contract](kiro-ac
 Source tests cover negotiated routing and protocol refusal, not native agent-profile,
 model, delivery or teardown qualification. Use an actual parent-owned session,
 tool-free task profile and denied client capabilities; no foreign-client attachment.
+Convert the stored attempt action through the [shared owned-client binding](native-notification.md#existing-owned-client-handoff)
+using that exact live process and negotiated session before prompting.
 The V3 shutdown procedure below remains separate and is not resolved by this module.
 
 Source: [ticket 126 results](../../../../docs/agents/research/harness-orchestration-primitives.md#spike-results-kiro-cli-2026-10-31),

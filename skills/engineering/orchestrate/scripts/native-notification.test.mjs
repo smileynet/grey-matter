@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { operate } from './session-messages.mjs';
-import { capabilityMatrix, expireNativeNotification, inspectNativeNotification, nativeTransportActionHash, prepareNativeNotification, recordNativeNotificationOutcome, recordNativeNotificationReceipt, startNativeNotificationAttempt } from './native-notification.mjs';
+import { capabilityMatrix, expireNativeNotification, inspectNativeNotification, nativeTransportActionHash, ownedStreamInput, prepareNativeNotification, recordNativeNotificationOutcome, recordNativeNotificationReceipt, startNativeNotificationAttempt } from './native-notification.mjs';
 
 const from = { project: 'p', host: 'h', harness: 'codex', harnessVersion: 'observed', interface: 'desktop', nativeId: 'parent-agent', generation: 2, role: 'orchestrator', worktree: 'D:/repo', branch: 'main' };
 const to = { ...from, nativeId: 'worker-existing', role: 'worker', worktree: 'D:/worker', branch: 'codex/task' };
@@ -19,6 +19,19 @@ function fixture(t, target = to, context = undefined) {
   return root;
 }
 const args = (target = to) => ({ id: 'msg-1', target, expectedNativeId: target.nativeId, nativeApi: 'collaboration.followup_task', generation: target.generation, deadlineAt: new Date(Date.now() + 60_000).toISOString() });
+const claudeSessionId = '123e4567-e89b-42d3-a456-426614174000';
+const claudeProtocolUuid = '123e4567-e89b-42d3-a456-426614174001';
+const owner = { pid: 4321, generation: '123e4567-e89b-42d3-a456-426614174002' };
+function ownedArgs(route) {
+  const claude = route === 'claude-owned-stream';
+  const target = { ...to, harness: claude ? 'claude' : 'kiro-cli', interface: claude ? 'stream-json' : 'acp',
+    nativeId: claude ? claudeSessionId : 'kiro-session-opaque/abc-1' };
+  return {
+    id: 'msg-1', target, expectedNativeId: target.nativeId, nativeApi: claude ? 'claude-stream.send' : 'kiro-acp.prompt',
+    generation: target.generation, deadlineAt: new Date(Date.now() + 60_000).toISOString(),
+    transport: { route, owner, ...(claude ? { protocolUuid: claudeProtocolUuid } : {}) },
+  };
+}
 
 test('context-bearing handoffs use canonical core validation for preparation and receipts', t => {
   const root = fixture(t);
@@ -56,6 +69,133 @@ test('prepares exact existing Codex collaboration action from accepted record an
   assert.equal(operate(root, 'replay', { id: 'msg-1', target: to }).result, 'replay-unchanged');
 });
 
+test('prepares a self-contained Claude stream intent and converts only for the same owned client', t => {
+  const root = fixture(t, ownedArgs('claude-owned-stream').target,
+    { ticket: '242', candidate: { kind: 'not-produced' }, handoff: { path: 'handoffs/242.md', sha256: 'a'.repeat(64) } });
+  const prepared = prepareNativeNotification(root, ownedArgs('claude-owned-stream'));
+  const intent = JSON.parse(readFileSync(prepared.intent, 'utf8'));
+  const action = intent.transportAction;
+  assert.equal(action.route, 'claude-owned-stream');
+  assert.equal(action.sessionId, claudeSessionId);
+  assert.equal(action.target.nativeId, claudeSessionId);
+  assert.equal(action.protocolUuid, claudeProtocolUuid);
+  assert.equal(action.owner.pid, owner.pid);
+  assert.match(action.text, /Complete bounded assignment/);
+  assert.match(action.text, /"ticket":"242"/);
+  assert.doesNotMatch(action.text, /messages[\\/]msg-1\.json/);
+  assert.equal(prepared.actionHash, nativeTransportActionHash(action));
+  const started = startNativeNotificationAttempt(root, prepared.binding);
+  const converted = ownedStreamInput(started.transportAction, started.actionHash,
+    { ...owner, sessionId: claudeSessionId });
+  assert.equal(converted.route, 'claude-owned-stream');
+  assert.deepEqual(converted.input, { messageId: 'msg-1', messageHash: prepared.binding.contentHash,
+    protocolUuid: claudeProtocolUuid, sessionId: claudeSessionId, text: action.text });
+  assert.equal(JSON.parse(readFileSync(prepared.intent, 'utf8')).events[0].actionHash, prepared.actionHash);
+});
+
+test('prepares a self-contained Kiro ACP intent with opaque negotiated session binding', t => {
+  const input = ownedArgs('kiro-owned-acp');
+  const root = fixture(t, input.target,
+    { ticket: '242', candidate: { kind: 'not-produced' }, handoff: { path: 'handoffs/242.md', sha256: 'b'.repeat(64) } });
+  const prepared = prepareNativeNotification(root, input);
+  const action = JSON.parse(readFileSync(prepared.intent, 'utf8')).transportAction;
+  assert.equal(action.route, 'kiro-owned-acp');
+  assert.equal(action.sessionId, 'kiro-session-opaque/abc-1');
+  assert.equal(action.target.nativeId, action.sessionId);
+  assert.equal(Object.hasOwn(action, 'protocolUuid'), false);
+  assert.match(action.text, /Complete bounded assignment/);
+  assert.doesNotMatch(action.text, /messages[\\/]msg-1\.json/);
+  const started = startNativeNotificationAttempt(root, prepared.binding);
+  const converted = ownedStreamInput(started.transportAction, started.actionHash,
+    { ...owner, sessionId: action.sessionId });
+  assert.equal(converted.route, 'kiro-owned-acp');
+  assert.deepEqual(converted.input, { messageId: 'msg-1', messageHash: prepared.binding.contentHash, text: action.text });
+});
+
+test('owned intent converter rejects route, identity, owner, hash and unknown-field mismatches', t => {
+  for (const route of ['claude-owned-stream', 'kiro-owned-acp']) {
+    const input = ownedArgs(route);
+    const root = fixture(t, input.target);
+    assert.throws(() => prepareNativeNotification(root, { ...input, expectedNativeId: 'different-target-session' }), /differs from the registered recipient/);
+    const prepared = prepareNativeNotification(root, input);
+    const started = startNativeNotificationAttempt(root, prepared.binding);
+    const action = started.transportAction;
+    const live = { ...owner, sessionId: input.target.nativeId };
+    const wrongHash = `${started.actionHash.slice(0, -1)}${started.actionHash.endsWith('0') ? '1' : '0'}`;
+    assert.throws(() => ownedStreamInput(action, wrongHash, live), /hash mismatch/);
+    assert.throws(() => ownedStreamInput(action, started.actionHash, { ...live, pid: live.pid + 1 }), /exact live owned client/);
+    assert.throws(() => ownedStreamInput(action, started.actionHash, { ...live, generation: claudeProtocolUuid }), /exact live owned client/);
+    assert.throws(() => ownedStreamInput(action, started.actionHash, { ...live, sessionId: 'different-live-session' }), /exact live owned client/);
+    assert.throws(() => ownedStreamInput(action, started.actionHash, { ...live, callback: 'send' }), /only its exact process and session identity/);
+    const wrongSession = { ...action, sessionId: 'different-target-session' };
+    assert.throws(() => ownedStreamInput(wrongSession, nativeTransportActionHash(wrongSession), live), /session identity/);
+    const extra = { ...action, command: 'arbitrary' };
+    assert.throws(() => ownedStreamInput(extra, nativeTransportActionHash(extra), live), /Malformed .* action/);
+    for (const malformed of [
+      { ...action, messageId: {} },
+      { ...action, messageId: 'bad/id' },
+      { ...action, contentHash: {} },
+      { ...action, contentHash: 'A'.repeat(64) },
+    ]) {
+      assert.throws(() => ownedStreamInput(malformed, nativeTransportActionHash(malformed), live), /Malformed .* action/);
+    }
+    assert.throws(() => prepareNativeNotification(root, { ...input, callback: 'send' }), /unknown or missing fields/);
+    assert.throws(() => prepareNativeNotification(root, { ...input, transport: { ...input.transport, command: 'arbitrary' } }), /transport configuration/);
+  }
+});
+
+test('owned preparation snapshots plain data once and rejects getters without invoking them', t => {
+  const root = fixture(t, ownedArgs('claude-owned-stream').target);
+  const input = ownedArgs('claude-owned-stream');
+  let getterCalls = 0;
+  Object.defineProperty(input, 'nativeApi', { enumerable: true, get() { getterCalls++; return 'claude-stream.send'; } });
+  assert.throws(() => prepareNativeNotification(root, input), /accessor/);
+  assert.equal(getterCalls, 0);
+  assert.equal(existsSync(join(root, 'notification-intents')), false);
+
+  const transportGetterRoot = fixture(t, input.target);
+  const transportGetter = ownedArgs('claude-owned-stream');
+  let ownerGetterCalls = 0;
+  Object.defineProperty(transportGetter.transport, 'owner', { enumerable: true, get() {
+    ownerGetterCalls++;
+    return owner;
+  } });
+  assert.throws(() => prepareNativeNotification(transportGetterRoot, transportGetter), /accessor/);
+  assert.equal(ownerGetterCalls, 0);
+  assert.equal(existsSync(join(transportGetterRoot, 'notification-intents')), false);
+
+  const protocolIdRoot = fixture(t, input.target);
+  assert.throws(() => prepareNativeNotification(protocolIdRoot, { ...input,
+    transport: { ...input.transport, protocolUuid: input.target.nativeId } }), /distinct canonical session and protocol UUIDs/);
+  assert.equal(existsSync(join(protocolIdRoot, 'notification-intents', 'msg-1.json')), false);
+
+  const valid = prepareNativeNotification(root, ownedArgs('claude-owned-stream'));
+  const started = startNativeNotificationAttempt(root, valid.binding);
+  const action = started.transportAction;
+  const hostileAction = new Proxy(action, { get(target, key, receiver) {
+    return key === 'text' ? 'changed after fingerprint' : Reflect.get(target, key, receiver);
+  } });
+  const converted = ownedStreamInput(hostileAction, started.actionHash, { ...owner, sessionId: claudeSessionId });
+  assert.equal(converted.input.text, action.text);
+  assert.notEqual(converted.input.text, 'changed after fingerprint');
+  const live = { ...owner, sessionId: claudeSessionId };
+  const hostileLive = new Proxy(live, { get(target, key, receiver) {
+    return key === 'sessionId' ? 'changed-live-session' : Reflect.get(target, key, receiver);
+  } });
+  assert.equal(ownedStreamInput(action, started.actionHash, hostileLive).input.sessionId, claudeSessionId);
+});
+
+test('owned preparation rejects stale registrations and preserves the old route matrix', t => {
+  const input = ownedArgs('kiro-owned-acp');
+  const root = fixture(t, input.target);
+  operate(root, 'retire', { target: input.target });
+  assert.throws(() => prepareNativeNotification(root, input), /unregistered|not registered|stale|not active/i);
+  assert.equal(capabilityMatrix().claude.startsWith('fixed owned stream intent preparation only'), true);
+  assert.equal(capabilityMatrix()['kiro-cli'].startsWith('fixed owned ACP intent preparation only'), true);
+  assert.equal(capabilityMatrix()['codex:desktop'].startsWith('conditional preparation support only'), true);
+  assert.equal(capabilityMatrix()['codex:cli'].startsWith('fixed codex queue plan preparation only'), true);
+});
+
 test('expected native ID is independent and must match target', t => {
   const root = fixture(t);
   assert.throws(() => prepareNativeNotification(root, { ...args(), expectedNativeId: 'copied-wrong' }), /differs/);
@@ -77,7 +217,7 @@ test('unsupported adapter, stale target, and wrong generation fail closed', t =>
   assert.throws(() => prepareNativeNotification(root, { ...args(), generation: 1 }), /generation/);
   const stale = { ...to, generation: 3 };
   assert.throws(() => prepareNativeNotification(root, args(stale)), /unregistered|not registered/);
-  assert.deepEqual(capabilityMatrix()['kiro-cli'], 'unsupported/unqualified');
+  assert.equal(capabilityMatrix()['kiro-cli'].startsWith('fixed owned ACP intent preparation only'), true);
 });
 
 test('unaccepted or altered records and malformed input paths are rejected', t => {

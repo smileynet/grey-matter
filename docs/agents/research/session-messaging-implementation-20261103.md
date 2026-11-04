@@ -167,3 +167,20 @@ fake peers. Claude's eight and Kiro's fourteen cases pass without skips, includi
 executable or model is involved. [Startup evidence](evidence/session-messaging-owned-startup-20261103.json)
 preserves the initial deadlock and corrected results. This corrects the held source
 integration before publication; it does not add native qualification.
+
+## Shared owned-client intent binding (#242)
+
+Independent review accepted candidate `786433253cbd24e42e0cf7b3bdc0a7d03bbe0d9b`.
+Claude and Kiro now have fixed input plans in the existing version-3 intent
+lifecycle. The pure converter requires the same process generation and session
+as the stored target; it neither starts a client nor sends a message. Its
+self-contained text lets a tool-free recipient read the actual work context.
+Existing desktop and CLI action formats remain compatible.
+
+Review caught malformed message identity passing the standalone converter even
+though persisted attempt loading rejected it. The correction validates canonical
+IDs and content hashes at both boundaries. Final focused fixtures pass 24
+notification and ten CLI queue cases without skips. The earlier finding, corrected
+checks and exact-source review are retained in the [binding evidence index](evidence/session-messaging-242-20261103.json).
+These are data/lifecycle results; native receipt and teardown qualification remain
+separate work under #235–237.

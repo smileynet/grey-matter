@@ -1,0 +1,40 @@
+{
+  "candidate": "786433253cbd24e42e0cf7b3bdc0a7d03bbe0d9b",
+  "base": "a7e047846a52f04a9de46538e4ddeb7edeeda0f1",
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179 final qualification audit and explicit artifact disposition",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/critic242-owned-binding-review-7864332.md",
+      "bytes": 2560,
+      "sha256": "acbc53f79109ee7c8c250b0137b572cf96ddba49a0253acf406f693d131d5048"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/critic242-owned-binding-review.md",
+      "bytes": 3930,
+      "sha256": "e41f8acaed04c6e5149e28471f18e580009a4bd3f84b324ab2f8181135bdd4ee"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t242-parent-dispatch-result.json",
+      "bytes": 1254,
+      "sha256": "58e38f6f9d0468def3804a775f09227af5749ae93fcbd504c78ec1644a2ecb1d"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t242-kept-t242-owned-revision-verification.log",
+      "bytes": 8905,
+      "sha256": "80173d0985ff109919568f8b15056daae0c0aef1c76554c750f1c006610b5113"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t242-kept-t242-owned-final-verification.log",
+      "bytes": 8883,
+      "sha256": "81cbae81f45509881522ba6f8db4a99296e89033581f0061c7f5852dffd3c57a"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t242-kept-t242-focused-accepted-text-final.log",
+      "bytes": 9820,
+      "sha256": "a7a1afcd08012927b5b8c296967ea863aa8df33eb8220899f7c2a767681835f5"
+    }
+  ],
+  "limits": "Deterministic shared owned-intent binding only. No provider process, model or native receipt. Final worker notification24 and CLIqueue10 passed; earlier wrong-hash fixture failure retained. Parent integrated gates and native qualification are separate."
+}

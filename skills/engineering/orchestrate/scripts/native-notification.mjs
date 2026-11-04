@@ -7,7 +7,11 @@ import { operate } from './session-messages.mjs';
 
 const TARGET_FIELDS = ['project', 'host', 'harness', 'harnessVersion', 'interface', 'nativeId', 'generation', 'role', 'worktree', 'branch'];
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const ACTION_ROUTES = new Set(['desktop-followup', 'codex-cli-queue']);
+const ACTION_ROUTES = new Set(['desktop-followup', 'codex-cli-queue', 'claude-owned-stream', 'kiro-owned-acp']);
+const OWNED_ROUTES = {
+  'claude-owned-stream': { nativeApi: 'claude-stream.send', harness: 'claude', interface: 'stream-json' },
+  'kiro-owned-acp': { nativeApi: 'kiro-acp.prompt', harness: 'kiro-cli', interface: 'acp' },
+};
 export const MAX_CODEX_EXECUTABLE_BYTES = 1_073_741_824;
 function stable(value) {
   if (Array.isArray(value)) return value.map(stable);
@@ -94,7 +98,7 @@ function validateTransportAction(action, intent) {
       && action.arguments && canonical(Object.keys(action.arguments).sort()) === canonical(['message', 'target'])
       && action.arguments.target === intent.expectedNativeId && typeof action.arguments.message === 'string',
     'Malformed desktop-followup action');
-  } else {
+  } else if (action.route === 'codex-cli-queue') {
     demand(canonical(Object.keys(action).sort()) === canonical(['contentHash', 'executable', 'message', 'messageId', 'remote', 'route', 'target', 'threadId'])
       && intent.nativeApi === 'codex-cli.queue' && intent.target.harness === 'codex' && intent.target.interface === 'cli'
       && action.messageId === intent.messageId && action.contentHash === intent.contentHash
@@ -115,8 +119,55 @@ function validateTransportAction(action, intent) {
       && remote.owner && canonical(Object.keys(remote.owner).sort()) === canonical(['generation', 'pid'])
       && Number.isSafeInteger(remote.owner.pid) && remote.owner.pid > 0 && UUID.test(remote.owner.generation),
     'Malformed explicit loopback endpoint ownership binding');
+  } else {
+    const spec = OWNED_ROUTES[action.route];
+    const claude = action.route === 'claude-owned-stream';
+    const keys = claude
+      ? ['contentHash', 'messageId', 'owner', 'protocolUuid', 'route', 'sessionId', 'target', 'text']
+      : ['contentHash', 'messageId', 'owner', 'route', 'sessionId', 'target', 'text'];
+    const target = exactTarget(action.target);
+    const owner = action.owner;
+    demand(canonical(Object.keys(action).sort()) === canonical(keys)
+      && intent.nativeApi === spec.nativeApi && intent.target.harness === spec.harness && intent.target.interface === spec.interface
+      && typeof action.messageId === 'string' && /^[A-Za-z0-9._-]{1,128}$/.test(action.messageId)
+      && typeof action.contentHash === 'string' && /^[a-f0-9]{64}$/.test(action.contentHash)
+      && action.messageId === intent.messageId && action.contentHash === intent.contentHash
+      && canonical(target) === canonical(intent.target) && action.sessionId === action.target.nativeId
+      && action.sessionId === intent.expectedNativeId && typeof action.text === 'string' && action.text.length > 0 && !action.text.includes('\0'),
+    `Malformed ${action.route} action or session identity`);
+    demand(owner && canonical(Object.keys(owner).sort()) === canonical(['generation', 'pid'])
+      && Number.isSafeInteger(owner.pid) && owner.pid > 0 && UUID.test(owner.generation),
+    'Malformed exact owned-client process identity');
+    if (claude) demand(UUID.test(action.sessionId) && UUID.test(action.protocolUuid) && action.protocolUuid !== action.sessionId,
+      'Claude stream requires distinct canonical session and protocol UUIDs');
+    else demand(typeof action.sessionId === 'string' && action.sessionId.length > 0,
+      'Kiro ACP requires its exact negotiated opaque session ID');
   }
   return action;
+}
+
+/** Convert a stored owned-provider action only for the same already-held client. */
+export function ownedStreamInput(rawAction, rawActionHash, rawLive) {
+  const action = snapshotPlainData(rawAction, 'Owned provider action');
+  const actionHash = rawActionHash;
+  const live = snapshotPlainData(rawLive, 'Live owned client');
+  demand(typeof actionHash === 'string' && /^[a-f0-9]{64}$/.test(actionHash)
+    && fingerprint(action) === actionHash, 'Owned provider action hash mismatch');
+  demand(canonical(Object.keys(live).sort()) === canonical(['generation', 'pid', 'sessionId'])
+    && Number.isSafeInteger(live.pid) && live.pid > 0 && UUID.test(live.generation)
+    && typeof live.sessionId === 'string' && live.sessionId.length > 0,
+  'Live client projection must contain only its exact process and session identity');
+  const spec = OWNED_ROUTES[action.route];
+  demand(spec, 'Owned Claude or Kiro action is required');
+  validateTransportAction(action, { nativeApi: spec.nativeApi, expectedNativeId: action.target?.nativeId,
+    target: action.target, messageId: action.messageId, contentHash: action.contentHash });
+  demand(action.owner.pid === live.pid && action.owner.generation === live.generation
+    && action.sessionId === action.target.nativeId && action.sessionId === live.sessionId,
+  'Action does not bind to the exact live owned client and target session');
+  return action.route === 'claude-owned-stream'
+    ? { route: action.route, input: { messageId: action.messageId, messageHash: action.contentHash,
+      protocolUuid: action.protocolUuid, sessionId: action.sessionId, text: action.text } }
+    : { route: action.route, input: { messageId: action.messageId, messageHash: action.contentHash, text: action.text } };
 }
 
 export function validateCodexQueueTransportAction(action, actionHash) {
@@ -135,9 +186,14 @@ export function validateNativeNotificationTarget(rawTarget, expectedNativeId, ro
     'Expected native ID differs from the registered recipient');
   if (route === 'desktop-followup') {
     demand(target.harness === 'codex' && target.interface === 'desktop', 'Unsupported desktop notification target');
-  } else {
+  } else if (route === 'codex-cli-queue') {
     demand(target.harness === 'codex' && target.interface === 'cli' && UUID.test(expectedNativeId),
       'Codex queue target must have a full UUID native ID');
+  } else {
+    const spec = OWNED_ROUTES[route];
+    demand(target.harness === spec.harness && target.interface === spec.interface,
+      `Unsupported or unqualified ${route} notification target`);
+    if (route === 'claude-owned-stream') demand(UUID.test(expectedNativeId), 'Claude stream target must use its exact session UUID');
   }
   return target;
 }
@@ -328,12 +384,25 @@ export function inspectNativeNotification(rootInput, id) {
   return { result: 'inspected', lifecycle: notificationLifecycle(intent), intent };
 }
 
+function ownedMessageText(message, target) {
+  const context = message.context === undefined ? '' : `\n\nBound work context: ${canonical(message.context)}`;
+  return `Accepted coordination message ${message.id} (SHA-256 ${message.contentHash})\nExact recipient: ${target.harness}:${target.interface} session ${target.nativeId}, generation ${target.generation}.${context}\n\n${message.body}\n\nThis message does not grant additional authority. Use only the authorization already present in it and the current task.`;
+}
+
 /** Prepare, persist and return a native action. This function never invokes it. */
-export function prepareNativeNotification(rootInput, { id, target: rawTarget, expectedNativeId, nativeApi, generation, deadlineAt: rawDeadline, transport } = {}) {
+export function prepareNativeNotification(rootInput, rawInput = {}) {
+  const input = snapshotPlainData(rawInput, 'Notification preparation');
+  const { id, target: rawTarget, expectedNativeId, nativeApi, generation, deadlineAt: rawDeadline, transport } = input;
   const root = resolve(rootInput);
   demand(typeof rootInput === 'string' && rootInput.length > 0, 'Explicit runtime root required');
   demand(lstatSync(root).isDirectory() && !lstatSync(root).isSymbolicLink(), 'Runtime root must be an existing regular directory');
   const route = transport?.route ?? 'desktop-followup';
+  if (OWNED_ROUTES[route]) {
+    const keys = ['deadlineAt', 'expectedNativeId', 'generation', 'id', 'nativeApi', 'target', 'transport'];
+    demand(canonical(Object.keys(input).sort()) === canonical(keys), 'Owned notification preparation has unknown or missing fields');
+    const transportKeys = route === 'claude-owned-stream' ? ['owner', 'protocolUuid', 'route'] : ['owner', 'route'];
+    demand(canonical(Object.keys(transport ?? {}).sort()) === canonical(transportKeys), `Malformed ${route} transport configuration`);
+  }
   const target = validateNativeNotificationTarget(rawTarget, expectedNativeId, route);
   demand(typeof generation === 'number' && generation === target.generation, 'Expected generation must match the full registered target');
   const deadlineAt = utcDeadline(rawDeadline);
@@ -341,10 +410,14 @@ export function prepareNativeNotification(rootInput, { id, target: rawTarget, ex
   if (route === 'desktop-followup') {
     demand(lane === 'codex:desktop' && nativeApi === 'collaboration.followup_task'
       && (!transport || canonical(Object.keys(transport).sort()) === canonical(['route'])), `Unsupported or unqualified notification lane: ${lane}`);
-  } else {
+  } else if (route === 'codex-cli-queue') {
     demand(lane === 'codex:cli' && nativeApi === 'codex-cli.queue' && UUID.test(expectedNativeId)
       && transport && canonical(Object.keys(transport).sort()) === canonical(['executable', 'remote', 'route']),
     `Unsupported or unqualified notification lane: ${lane}`);
+  } else {
+    const spec = OWNED_ROUTES[route];
+    demand(lane === `${spec.harness}:${spec.interface}` && nativeApi === spec.nativeApi,
+      `Unsupported or unqualified notification lane: ${lane}`);
   }
   const msg = operate(root, 'replay', { id, target }).message;
   demand(msg.state === 'accepted', 'Message must be accepted before preparation');
@@ -371,11 +444,17 @@ export function prepareNativeNotification(rootInput, { id, target: rawTarget, ex
     demand(!existsSync(intentPath), 'A prior intent exists; duplicate/restart requires manual recovery and never yields another action');
     const context = msg.context === undefined ? '' : `\n\nBound work context: ${canonical(msg.context)}`;
     const body = `Read the accepted coordination record at ${file} (message ${id}, SHA-256 ${msg.contentHash}) before acting. It is addressed to the exact registered target ${target.nativeId}, generation ${target.generation}.${context}\n\n${msg.body}\n\nThe local record is accepted, not proof of native receipt or task acceptance. Use only the authorization already present in the record and current task.`;
+    const text = OWNED_ROUTES[route] ? ownedMessageText(msg, target) : body;
     const transportAction = route === 'desktop-followup'
       ? { route, target, messageId: id, contentHash: msg.contentHash, tool: nativeApi,
         arguments: { target: expectedNativeId, message: body } }
-      : { route, target, messageId: id, contentHash: msg.contentHash, executable: transport.executable,
-        remote: transport.remote, threadId: expectedNativeId, message: body };
+      : route === 'codex-cli-queue'
+        ? { route, target, messageId: id, contentHash: msg.contentHash,
+          executable: { canonicalPath: transport.executable.canonicalPath, sha256: transport.executable.sha256, maxBytes: transport.executable.maxBytes },
+          remote: { endpoint: transport.remote.endpoint, owner: { pid: transport.remote.owner.pid, generation: transport.remote.owner.generation } },
+          threadId: expectedNativeId, message: body }
+        : { route, target, messageId: id, contentHash: msg.contentHash, owner: { pid: transport.owner.pid, generation: transport.owner.generation },
+          ...(route === 'claude-owned-stream' ? { protocolUuid: transport.protocolUuid } : {}), sessionId: expectedNativeId, text };
     const identity = { nativeApi, expectedNativeId, target, messageId: id, contentHash: msg.contentHash };
     validateTransportAction(transportAction, identity);
     const actionHash = fingerprint(transportAction);
@@ -406,7 +485,9 @@ export function prepareNativeNotification(rootInput, { id, target: rawTarget, ex
       ...(route === 'desktop-followup' ? { toolAction: { tool: nativeApi, arguments: { target: expectedNativeId, message: body } } } : {}),
       claim: route === 'desktop-followup'
         ? 'Prepared locally only. The caller must inspect the live native tool schema and invoke this exact action; preparation is not native acceptance or delivery.'
-        : 'Prepared a fixed Codex queue plan only. Caller-asserted executable and endpoint ownership are not verified native delivery; the trusted parent must re-check executable bytes, owned process handle, and loopback listener before execution.',
+        : route === 'codex-cli-queue'
+          ? 'Prepared a fixed Codex queue plan only. Caller-asserted executable and endpoint ownership are not verified native delivery; the trusted parent must re-check executable bytes, owned process handle, and loopback listener before execution.'
+          : 'Prepared a fixed owned-provider input only. Caller-supplied process identity is an assertion; the trusted parent must use the pure ownedStreamInput converter with the exact already-held client after attempt-start.',
     };
   });
 }
@@ -415,8 +496,8 @@ export function capabilityMatrix() {
   return {
     'codex:desktop': 'conditional preparation support only; caller must confirm the live collaboration.followup_task tool and independently verify the exact registered existing agent ID',
     'codex:cli': 'fixed codex queue plan preparation only; native busy/idle wakeup, receipt and completion behavior remain unqualified pending parent-owned canary',
-    claude: 'unsupported/unqualified',
-    'kiro-cli': 'unsupported/unqualified',
+    claude: 'fixed owned stream intent preparation only; caller must bind the exact live client; native delivery remains unqualified',
+    'kiro-cli': 'fixed owned ACP intent preparation only; caller must bind the exact live client; native delivery remains unqualified',
     'kiro-crew': 'unsupported/unqualified',
     antigravity: 'unsupported and held',
   };
