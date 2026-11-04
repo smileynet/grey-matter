@@ -1,7 +1,7 @@
 ---
 id: "251"
 title: "Choose skill judgment or existing checks before adding retro mechanisms"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -9,6 +9,7 @@ validation_criteria:
   - "Independent offline scenarios cover ambiguous dependency and malformed data and an unwired check"
   - "Portable guidance passes applicable documentation and syntax stages"
 tags: ["stream:skills-review", "kind:enhancement", "epic:outcome-orchestration"]
+assignee: "codex"
 ---
 # Choose skill guidance or mechanical checks proportionally
 
