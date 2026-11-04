@@ -232,7 +232,7 @@ scheduled for the new session; do not recreate the settled #179 monitor.
 | 141 | Review staged and working-tree changes safely | ✅ done |
 | 139 | Validate custom dashboards and authoritative ticket projections | in_progress |
 | 118 | Show the complete execution queue and current work | open |
-| 166 | Refresh the broader harness overview from current evidence | in_progress |
+| 166 | Refresh the broader harness overview from current evidence | ✅ done |
 | 201 | Deferred Kiro shutdown investigation after higher-priority work | backlog |
 
 The next unfinished pick is #148: #145 and #149 completed in the accepted retro
@@ -627,7 +627,7 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 149 | reconcile-tickets runs a priority review over workstreams, queue and blockers | ✅ done |
 | 150 | Add an optional product map (jobs, workflows, feature status) to the delivery dashboard | open |
 | 164 | Upgrade path: bring a project up to a new grey-matter release's standards (conformance-audit mode recommended) | open |
-| 166 | Refresh harnesses.md to the installed harness versions (first harness-changelog review) | in_progress |
+| 166 | Refresh harnesses.md to the installed harness versions (first harness-changelog review) | ✅ done |
 | 179 | Implement inter-harness session messaging and wakeups | ✅ done |
 | 180 | Review philippines-trip's worktree rules and audit script for adoption | open |
 | 181 | Add a scratch-prune recipe to repository-artifact-hygiene | ✅ done |
