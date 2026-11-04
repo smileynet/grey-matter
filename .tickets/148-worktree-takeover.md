@@ -1,7 +1,7 @@
 ---
 id: "148"
 title: "Take over another agent's worktrees and branches safely"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
