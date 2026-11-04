@@ -208,8 +208,8 @@ remaining tickets below. The earlier 37-ticket spike history remains under
 `stream:orchestration`; that stream alone does not select this follow-up queue.
 
 **Next session only:** execute this queue after the current session's retro and
-wrap-session. This reconciliation does not claim or start implementation. Existing
-#250 is owned by another active thread and is outside this queue. No monitor is
+wrap-session. This reconciliation does not claim or start implementation. Separate
+#250 completed in another thread during reconciliation and is outside this queue. No monitor is
 scheduled for the new session; do not recreate the settled #179 monitor.
 
 | ID | Work | Status |
@@ -236,7 +236,7 @@ or reopen #179 to broaden its accepted native limits.
 Pickup: read this queue and each ticket's full current criteria, then inspect
 current claims before admission. A scoped tkt query also includes untagged tickets;
 use the exact-tag filter below to establish this queue's membership. Do not claim
-untagged #150/#211 or another session's #250 through an inclusive context view.
+untagged #150/#211 or unrelated work through an inclusive context view.
 tkt's priority/ID-sorted frontier does not replace the authored queue above.
 
 ```powershell
@@ -650,5 +650,5 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 245 | Account for unknown bytes before declaring footprint cleanup complete | open |
 | 246 | Distinguish Trash removal from observed space recovery | open |
 | 247 | Review cleanup plans against changing ownership and protected descendants | open |
-| 250 | Scope the home-path gate to introduced leaks instead of historical evidence | in_progress |
+| 250 | Scope the home-path gate to introduced leaks instead of historical evidence | ✅ done |
 | 251 | Choose skill judgment or existing checks before adding retro mechanisms | open |
