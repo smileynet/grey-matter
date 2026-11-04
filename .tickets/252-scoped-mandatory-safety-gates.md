@@ -1,7 +1,7 @@
 ---
 id: "252"
 title: "Keep mandatory gates scoped to durable safety checks"
-status: open
+status: in_progress
 blocked_by: []
 tags: ["stream:test-verification"]
 ---
