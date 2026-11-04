@@ -1,6 +1,6 @@
 ---
 name: retro
-description: "Conduct a retrospective on a coding session: read it from a fresh context and propose environment fixes (checks, guardrails, steering), classified mechanical vs judgement. Use when a session ends, after a build that went sideways, or when wrap-session reaches its retro step."
+description: "Conduct a retrospective on a coding session and propose proportionate environment improvements, classified mechanical vs judgement. Use when a session ends, after a build that went sideways, or when wrap-session reaches its retro step."
 ---
 
 The user has asked for a **retrospective**. You are suggesting improvements to the coding agent's **environment** to improve future runs.
@@ -9,7 +9,7 @@ The user has asked for a **retrospective**. You are suggesting improvements to t
 
 1. Call the Skill tool with `writing-for-agents` for the writing style guide.
 
-2. Read the primary sources for the session the user specifies (default: the current one). This may mean searching session logs on this machine; where logs aren't reachable, work from the session the user points at. **Read the session from a fresh context: dispatch a subagent to analyse the trace and report candidates.** An agent grading its own session is biased and blind to what it never logged; a fresh-context subagent, and leaning on deterministic checks over self-report, counters that. (A shell-invoked fresh agent via the harness CLI is an alternative, spiked separately.)
+2. Read the primary sources for the session the user specifies (default: the current one). This may mean searching session logs on this machine; where logs aren't reachable, work from the session the user points at. Use an independent reader when the decision is consequential or the available trace leaves a material self-observation gap, and only when delegation is authorized and available. Otherwise inspect the relevant source artifacts yourself and state the evidence limits; an independent report is not proof of completeness.
 
    Use one compact coverage statement to identify the corpus (with trace/file references
    when available) and inspected scope, sampling or extraction limits, truncated output
@@ -46,6 +46,17 @@ The user has asked for a **retrospective**. You are suggesting improvements to t
    - A defect is fixed and an existing regression covers it: mark the repair already
      landed and cite the regression's execution status. Do not file implementation work
      for that same repair; route distinct remaining work to its current owner.
+
+   Before choosing an intervention, classify what the evidence shows: missing guidance;
+   existing guidance that was not followed; a missing execution path for an existing
+   rule; or an observed syntactic/data-contract defect. Use the relevant skill's judgment
+   criteria for contextual decisions such as ownership or retention. For a demonstrated
+   contract defect, reuse the owning validator or narrowly extend its existing check. When
+   the class is unclear, inspect the failure and current workflow first. Prefer the smallest
+   intervention that closes the evidenced gap; do not turn one incident into a global rule,
+   hook, or policy engine. For review-fix and qualification/debugging loops, use the
+   [convergence reference](references/convergence.md) when repeated rounds or growing scope
+   make progress unclear.
 
 4. Present these candidates to the user, in order of severity.
 

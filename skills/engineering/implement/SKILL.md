@@ -17,6 +17,10 @@ test-first implementation fits the work. For research or reversible prose change
 verify the actual acceptance evidence and applicable project checks; do not invent
 implementation-mirroring tests. TDD re-points the seam for a game when needed.
 
+In an orchestrated review-fix or qualification/debugging loop, use
+[retro's convergence reference](../retro/references/convergence.md) when repeated rounds
+make diagnostic progress, repaired behavior, and preparation churn hard to distinguish.
+
 Plan verification by assertion with the [test-environment ladder](../../../docs/agents/test-environment-ladder.md#select-by-assertion):
 choose the lowest faithful environment, separate cost from criticality, and name the lifecycle gate
 and evidence reuse limits before running commands. Its worked routes cover native/provider boundaries.

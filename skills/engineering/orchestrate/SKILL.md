@@ -175,6 +175,8 @@ claims and file hashes; it is not native persistence or execution proof.
     spec check. Consequential changes get a fresh reviewer using the
     [reviewer brief](references/reviewer-brief.md) and
     [code-review](../code-review/SKILL.md).
+    When repeated review-fix or qualification/debugging rounds make progress unclear,
+    reassess evidence and scope using [retro's convergence reference](../retro/references/convergence.md).
     PASS permits landing; BLOCK returns trigger/outcome findings to the same
     worker. After three BLOCKs redispatch fresh or descope; two rounds without
     acceptance require a human ruling. Record nonblocking findings as tickets.
