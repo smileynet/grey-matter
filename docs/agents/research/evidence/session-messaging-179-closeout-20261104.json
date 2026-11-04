@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "owner": "parent179integration",
+  "scope": "179 shared session messaging; no new native experiment or recurring qualification obligation",
+  "nativeSourceCommit": "d2bf2cc61ae9fe1fc97c8f2adbc349ead9e33ddb",
+  "qualifiedChildren": [
+    "235",
+    "236",
+    "237"
+  ],
+  "nativeEvidence": [
+    "session-messaging-codex-owned-20261104.json",
+    "session-messaging-claude-owned-20261104.json",
+    "session-messaging-kiro-owned-20261104.json"
+  ],
+  "verification": {
+    "runtimeFixtures": {
+      "command": [
+        "node",
+        "--test",
+        "skills/engineering/orchestrate/scripts/session-messages.test.mjs",
+        "skills/engineering/orchestrate/scripts/native-notification.test.mjs",
+        "skills/engineering/orchestrate/scripts/codex-queue.test.mjs",
+        "skills/engineering/orchestrate/scripts/owned-process.test.mjs",
+        "skills/engineering/orchestrate/scripts/claude-stream.test.mjs",
+        "skills/engineering/orchestrate/scripts/kiro-acp.test.mjs"
+      ],
+      "passed": 110,
+      "failed": 0,
+      "skipped": 1,
+      "skip": "Windows cannot exercise SIGTERM-ignore escalation"
+    },
+    "toolGuidance": {
+      "classified": 144,
+      "outcome": "pass"
+    },
+    "ticketValidation": {
+      "outcome": "pass with out-of-scope findings",
+      "warnings": 8,
+      "informational": 18,
+      "errors": 0
+    }
+  },
+  "disposition": {
+    "tracked": "promoted as durable source/reports/accepted captures",
+    "private": "kept by parent179integration until an owner-created durable archive exists and private index references are migrated/removed; no model run required",
+    "unrelated": "preserved, including private unpublished171 ancestry"
+  },
+  "raw": [
+    {
+      "path": ".scratch/t179-final-messaging-tests.log",
+      "bytes": 25644,
+      "sha256": "904619be04cb426f4b25a6d75dd6290af00158582c39632a453b6443e4c6b8f2"
+    },
+    {
+      "path": ".scratch/t179-final-tool-guidance.log",
+      "bytes": 195,
+      "sha256": "7b2688281a61b1fdcb047f4e8cc010ead303eb63967887e125cdb248e16a58a9"
+    },
+    {
+      "path": ".scratch/t179-final-ticket-validation.log",
+      "bytes": 3508,
+      "sha256": "97dded42bc05e03719c9021119e3add132fca93667b03a4aa087598227109b38"
+    },
+    {
+      "path": ".scratch/t179-final-readiness-audit.md",
+      "bytes": 5599,
+      "sha256": "8d04e7ecf36be9fa140d04cb644469de07fbbe0461d6abb6a74ef9334e6540cd"
+    },
+    {
+      "path": ".scratch/t236-v10-native-postflight-review.md",
+      "bytes": 5175,
+      "sha256": "76522198ffb03a1ae605fcb0d95480895ca98a78fe6007e56d155379106c1fa6"
+    },
+    {
+      "path": ".scratch/t236-final-doc-guidance-review.md",
+      "bytes": 2448,
+      "sha256": "63c6fb08632aa6386f6e529d7b81dd15191478efd64bd92d94e0e09acadcba71"
+    }
+  ]
+}
