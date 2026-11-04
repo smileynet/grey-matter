@@ -1,7 +1,7 @@
 ---
 id: "237"
 title: "Implement and qualify owned Kiro ACP handoffs"
-status: open
+status: in_progress
 blocked_by: ["231", "233", "234", "238"]
 priority: high
 validation_criteria:
