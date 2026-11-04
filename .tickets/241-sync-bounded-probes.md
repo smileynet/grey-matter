@@ -1,7 +1,7 @@
 ---
 id: "241"
 title: "Stream critic probe results with a deadline per harness"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Each completed harness result is printed immediately and a harness shares one total timeout across subprocesses."
