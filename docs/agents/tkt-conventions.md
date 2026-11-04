@@ -32,6 +32,13 @@ Physical layout:
 `tkt close <id> --check-all --resolution "..."`.
 
 - Never hand-edit a ticket's status to `done` (skips the close gates).
+- **Amend the existing acceptance checklist.** Put new acceptance checkboxes in the
+  first canonical `## Acceptance criteria` section; keep follow-up explanation in
+  its own section. Resolve `--ac` indices from that checklist and verify the intended
+  checkbox bytes after editing. Observed tkt 0.4.0 (`e755765`) left out-of-range
+  selections unchanged even when another field in the same edit succeeded. Other
+  sections may contain procedural checklists; they are not automatically acceptance
+  criteria. This is an authoring convention, not a new Markdown validator.
 - **`tkt new` seeds a `TBD` body; fill it before the ticket is on the frontier.** Even
   with `--vc` (which sets `validation_criteria` in frontmatter), the ticket *body* is a
   template stub (`## What to build` / `## Acceptance criteria` → `TBD`). An **`open`**
