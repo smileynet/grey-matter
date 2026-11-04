@@ -104,6 +104,39 @@ prerequisite.
 
 ### 6. Verify and report
 
+### Priority and queue review
+
+Use authoritative `tkt query -o json` output for ticket facts. Query the full board with
+`--all-context` so an active tag context cannot hide tickets, then select exact workstream
+membership from each ticket's `tags` array. A scoped query may include untagged tickets:
+do not treat those as members. Report untagged and unrelated tickets separately as excluded
+context, and surface blockers outside the selected workstream as external blockers.
+
+For the selected workstream, compare the stored priority and explicit/adopted queue with
+structural eligibility and `blocked_by` facts. Report open-ticket priority/queue inversions
+as advisory comparisons only; an adopted queue remains the owner's preferred order. Exclude
+backlog, in-progress, done and cancelled tickets from this inversion comparison. Report queued
+tickets before unfinished prerequisites, open tickets behind backlog prerequisites,
+missing priorities, and open tickets whose acceptance criteria are all checked. Quote the
+relevant query output (or a project script's output) for each finding; ticket prose alone
+is not evidence. An adopted queue is planned order, not a dependency graph: preserve it and
+report actual blockers separately. This review is read-only; do not edit ticket state or
+rewrite the queue as a side effect.
+
+For a deterministic report, run [the priority-review helper](scripts/priority-review.mjs)
+from the target repository root with `node "<absolute directory containing this loaded SKILL.md>/scripts/priority-review.mjs" "<exact-tag>" "<queue-id,...>"`.
+It queries all tickets with `tkt query --all-context -o json`, selects exact tag membership,
+and reads only the ticket AC checkbox counts from matching `.tickets` files. Supply an adopted
+queue explicitly when the project has one; omit the last argument when there is no maintained
+queue. Preserve the JSON output as the evidence in the session report. This command is
+read-only and prints JSON containing included IDs, excluded IDs with tags, out-of-scope queue
+entries, external and unknown blockers, and findings. It exits 0 on a completed report and
+nonzero on invalid query data, missing ticket files, or a failed query. Acceptance-criteria
+counts come from checkbox lists in the ticket body sections and are a review signal;
+`tkt close --check-all` remains the closure authority. The supplied queue is reviewed as
+planned order and is never written back. Keep the shell working directory at the target
+repository root; the helper path comes from the installed skill.
+
 Run `tkt validate --brief` (no cycles or dangling edges), then `tkt ready` to inspect the
 current structural frontier. If an adopted queue differs, report its order separately and
 preserve it; do not replace it with the raw frontier sort. Present tickets created or updated,

@@ -15,6 +15,22 @@ Cover, each briefly:
 - **Next steps**: what to do next, concretely.
 - **Open questions / blockers**: what is unresolved or waiting on someone.
 
+For concurrent work, distinguish observed shared-checkout writes from a remote branch
+advance. A dirty tree or commit author does not establish a live session; if no current
+host roster or dispatch binding identifies a writer at this checkout, mark liveness unknown.
+Recommend per-session worktrees for overlapping local edits and upstream reconciliation for
+remote advances. Worktrees do not prevent push races. Name a worktree path only when one
+has actually been selected or created; never invent a placeholder as evidence.
+When useful, run the [orient concurrency helper](../../meta/orient/scripts/classify-checkout-concurrency.mjs)
+from the target repository root with `node "<absolute directory containing installed orient SKILL.md>/scripts/classify-checkout-concurrency.mjs"`, and include its observed classification in the handoff. Keep the shell working directory at the target repository root.
+In Codex desktop, `list_threads({ mode: "history", source: "codex", limit: 50 })` can surface
+active peers and their reported `cwd`; exclude the current thread and follow `nextCursor`
+before claiming full coverage. A matching reported `cwd` indicates possible overlap only:
+it does not establish where tool calls ran or that a peer is writing. For delegated agents,
+pair `list_agents` status with the parent dispatch ledger's checkout/branch binding. If chat
+`cwd` differs from the actual tool working directory, record both and leave liveness unknown
+unless a current dispatch/root binding confirms a writer.
+
 Include a **suggested skills** section naming which skills the next agent should call the Skill tool for.
 
 Do not duplicate content already captured in other artifacts (specs, plans, ADRs, tickets, commits, diffs). Reference them by path, slug, or URL instead; the artifact is the source of truth, the handoff just points at it.

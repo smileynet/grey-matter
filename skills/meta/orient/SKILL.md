@@ -46,6 +46,58 @@ Decide the pick in this order:
 
 ## 2. Clean-session check (fast — only looking for a reason NOT to just start)
 
+### Checkout concurrency
+
+Use the current Git checkout as evidence, not author names or a dirty tree as proof of
+another live agent. A dirty tree proves only that uncommitted changes exist; commit
+authors and recent commits prove only that commits exist. If the host exposes a current
+session roster or dispatch binding, compare its checkout path and branch with `git rev-parse
+--show-toplevel` and `git branch --show-current`. Report a same-checkout writer only when
+that binding identifies an active writer for this exact checkout. Otherwise say session
+liveness is unknown.
+
+In Codex desktop, inspect `list_threads({ mode: "history", source: "codex", limit: 50 })`
+when available. Exclude the current thread ID; compare active peer entries' `hostId` and
+reported `cwd` with the current host and `git rev-parse --show-toplevel`. Follow a returned
+`nextCursor` only when claiming full roster coverage. A matching reported `cwd` shows a
+possible workspace overlap; it does not prove the peer's tool calls ran there or that it is
+writing. Chat `cwd` is declared session context and may differ from the actual tool working
+directory. For delegated agents, use `list_agents` for status and the existing parent
+dispatch ledger for checkout and branch; agent status alone has no path binding.
+
+Classify the Git evidence before choosing a response:
+
+- **Shared-checkout writer established** — pause overlapping edits and move the session to
+  a per-session worktree. Name its absolute path. Reconcile any generated dashboards by
+  regenerating them from the merged source; never hand-merge generated output.
+- **Remote branch advanced** — reconcile/rebase or merge the upstream commits using the
+  project's normal Git workflow before continuing. A worktree isolates local files; it
+  does not prevent two checkouts pushing the same branch.
+- **Liveness unknown** — state that plainly; use the observed local status and upstream
+  relation as clues, not proof of another live writer.
+
+The cheap read-only probe is [the orient concurrency helper](scripts/classify-checkout-concurrency.mjs).
+From the target repository root, run `node "<absolute directory containing this loaded SKILL.md>/scripts/classify-checkout-concurrency.mjs"`.
+It reads those Git facts without fetching. Pass a JSON binding as its optional first argument
+only when the host explicitly supplies a current active writer, for example
+`{"active":true,"writing":true,"checkout":"<absolute path>","branch":"<branch>"}`.
+It makes no changes and exits 0 with JSON fields `classification`, `localChangesObserved`,
+`remoteAdvanceObserved`, `livenessEvidence` and `responses`; invalid binding JSON or Git
+errors exit nonzero. A same-checkout writer and remote advance can both be reported, with
+both responses. The helper treats a supplied binding as caller-attested input, not verified
+host state; independently inspect the current host roster or dispatch record before passing
+it with `writing: true`. A matching active desktop thread `cwd` alone is insufficient; without
+a verified writing/root binding it remains a possible overlap, not a confirmed writer.
+Without a matching binding it returns `liveness-unknown` unless `status -sb` shows a behind
+count. Remote state may be stale because the probe does not fetch. Keep the process working
+directory at the target repository root; the helper's path comes from the installed skill.
+
+**Roster example:** an active peer reports the current repository path as its `cwd`, while
+the current thread is excluded by ID. Report possible overlap, then check the current
+dispatch/root binding; if tool working directory or writing status cannot be established,
+leave writer liveness unknown. A mismatch between chat `cwd` and the actual tool working
+directory is reported as a mismatch, not silently resolved in favor of either value.
+
 These are guardrails, not the agenda. Run them quickly and move on unless one trips:
 
 ```bash
