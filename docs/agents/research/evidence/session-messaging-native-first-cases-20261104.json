@@ -1,0 +1,80 @@
+{
+  "codeCommit": "e9a771681eb1871773399c7dcbb4818b817638eb",
+  "state": "retained",
+  "owner": "parent179integration",
+  "endCondition": "179 final audit and explicit disposition",
+  "cases": {
+    "claude": {
+      "outcome": "failed qualification",
+      "code": "PROTOCOL_ORDER",
+      "replayOrResultObserved": false,
+      "stdoutBytes": 198,
+      "stderrBytes": 0,
+      "cleanup": "observed settled after explicit stop",
+      "billing": "unknown"
+    },
+    "kiro": {
+      "outcome": "failed qualification",
+      "code": "RESULT_NOT_JSON",
+      "observedChunks": 9,
+      "secondInputAttempted": false,
+      "nativeRpcMetadata": "not retained before business parsing; successful response inferred from reviewed control flow",
+      "outputFormatCause": "unknown",
+      "cleanup": "observed settled, exit0 and closed stdio",
+      "servedModel": "unreported"
+    }
+  },
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-native-first-case-evidence.json",
+      "bytes": 6156,
+      "sha256": "c71595a3a94701b436781545cf1ae2788055706e86e74eb0bd8ae9d68b3bb47c"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-native-v5-parent-preflight.json",
+      "bytes": 1880,
+      "sha256": "0bed1890bbea33d87071f242681596b0ff4613425de4cde194c986bb188522a5"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-native-v5-parent-result.json",
+      "bytes": 595,
+      "sha256": "b5756e772f9ee51cdcd4f38fe286675dc3ab415db96dbef9e3d63eba72644b17"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-v5-native-postflight-and-order.md",
+      "bytes": 6863,
+      "sha256": "aea39203bbf4c00b68011502571f7dc94f0cec49f23e7c3f7d11ea16b4bb20f6"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-native-first-case-evidence.json",
+      "bytes": 6568,
+      "sha256": "2c0dfdd85ff431db9fcba2808e775ca51be2bdf750c1338eabd995b233d437b8"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-native-v5-parent-preflight.json",
+      "bytes": 1982,
+      "sha256": "3d6cd26ac5c4f6755da6919d9675144e6dd92ecb5bd9daf39fba4ae841e296d8"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-native-v5-profile-validation.json",
+      "bytes": 898,
+      "sha256": "f9f8fe9e46e62d68ea458fc5dffabfd08c16aa3ecaab2453d430320cd8b176d9"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-native-v5-parent-result.json",
+      "bytes": 458,
+      "sha256": "2321d47d9de5101c45ce69aca91ee28d235472b2c329933c21c71ff2e96346c5"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-v5-native-postflight.md",
+      "bytes": 3675,
+      "sha256": "f2a32371085dc11ccde38722a9a9b7789a84e202379787f134a6af0ae1da76cb"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-profile-command-preflight-v2.json",
+      "bytes": 1943,
+      "sha256": "7cbcb404cb1b2efbd962aa0f7c3715e8419783aa9be74d3dc8fe90a9176f61af"
+    }
+  ],
+  "limits": "First failed native cases remain failed; no original input retry or new-ID repair. Further fresh bounded diagnostics require separate parent admission and independent exact-byte review. No credentials or raw unknown response text promoted."
+}
