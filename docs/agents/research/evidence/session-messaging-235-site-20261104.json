@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "ownerCandidate": "cdc0aace142c79967fb4f2226d585679881487b5",
+  "projectId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e",
+  "siteSourceCommit": "0dd7645b4bf3d1cbf275efa988a5a6caf90eb715",
+  "url": "https://orchestration-findings.sambiggins.chatgpt.site",
+  "deploymentId": "appgdep_6aeb0959665c8191b50aa64a6cf595f5",
+  "status": "succeeded",
+  "versionId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_011c03b3a26c819183f8c0c9675797e2",
+  "publishedAt": "2026-11-04T10:30:56.604365+00:00",
+  "audience": {
+    "mode": "custom",
+    "revision": 1,
+    "owners": 1,
+    "groups": 0,
+    "externalVisitors": 0,
+    "preserved": true
+  },
+  "receiptId": "8297330563640c632194f882023468afe3beb83ad194433b8d4aaafeee21d80c",
+  "preflight": ".scratch/t235-publication-preflight-result.json",
+  "archive": {
+    "bytes": 88737,
+    "sha256": "2cdc508061bfb648a35903f60263f872c854fd2d7724b2082e7230b2c07f5711",
+    "disposition": "recycled after terminal publication success; original path absent"
+  },
+  "verification": "Local laptop/phone captures independently accepted. Terminal native deployment succeeded. Browser handoff queued; no production browser rendering claim.",
+  "owner": "parent179integration",
+  "retainedEvidenceEnd": "179 final audit and explicit disposition"
+}
