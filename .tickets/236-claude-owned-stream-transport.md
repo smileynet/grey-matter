@@ -33,3 +33,10 @@ By: anonymous
 
 <!-- tkt-note:v1 67720-1793784246609810000 -->
 Source startup correction243 is closed and pushed at e9a7716. First actual native Claude input case failed PROTOCOL_ORDER before init/replay/result; original intent remains ambiguous, no delivery or completion claimed. Owned root and child settled afterward. Exact offending record and billing remain unknown. Retained cases and evidence: docs/agents/research/session-messaging-native-qualification-20261104.md (66275ba). A metadata-only wire observer is being reviewed before a distinct bounded diagnostic case; unchanged original input is not retried.
+
+## Note — 2026-11-04
+
+By: anonymous
+
+<!-- tkt-note:v1 93612-1793787704510392000 -->
+Fresh reviewed native v6 on pushed13a source passed lifecycle/init and emitted exact input replay plus assistant/stream records, then protocol-fault UNEXPECTED_RECORD before any accepted provider-result. Top-level EVENT_STREAM_CLOSED is secondary, not root cause. No task completion/reply or final core receipt claimed. Original intent retained; no retry. Owned root102020 stopped(SIGTERM), stdio closed, stderr0; process-tree settlement UNPROVEN because first inspection occurred after adapter auto-stop and both tree reads failed. Raw native report11458B SHA1204c4792de5faf7a15f733f7e893a6525095d6a3bcd061db438465d31fdc199; parent postflight .scratch/t236-v6-native-postflight-review.md. Read-only pinnedSDK event-schema comparison and distinct bounded wire observer revision are in progress, no new provider call admitted yet.
