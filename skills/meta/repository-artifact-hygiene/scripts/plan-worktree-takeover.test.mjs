@@ -7,7 +7,9 @@ import '../../../../scripts/test-git-env.mjs';
 import { planWorktreeTakeover } from './plan-worktree-takeover.mjs';
 
 test('classifies landed, unique, superseded, LFS-breaking and uncertain merge refs without changing refs', () => {
-const root = mkdtempSync(join(resolve('.scratch/t148'), 'fixture-'));
+const fixtureParent = resolve('.scratch/t148');
+mkdirSync(fixtureParent, { recursive: true });
+const root = mkdtempSync(join(fixtureParent, 'fixture-'));
 const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8', env: {
   ...process.env, GIT_AUTHOR_NAME: 'Fixture', GIT_AUTHOR_EMAIL: 'fixture@example.invalid',
   GIT_COMMITTER_NAME: 'Fixture', GIT_COMMITTER_EMAIL: 'fixture@example.invalid'
