@@ -3,6 +3,38 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "2026-11-04-harness-overview-refresh",
+      "state": "confirmed",
+      "label": "Overview refreshed from local evidence",
+      "title": "Use current local commands with clear limits",
+      "value": "Find the observed executable paths and supported command grammar, with older baselines and unverified behavior clearly labelled.",
+      "steps": [
+        "Identify the executable",
+        "Read supported grammar",
+        "Keep limits visible"
+      ],
+      "limit": "Version/help and local path observations only. Runtime tool permissions, skill discovery, Agy’s current version and model behavior remain unqualified.",
+      "details": "The overview records observed Codex 0.166.0, Claude 2.1.316, Kiro 2.37.1 and Crush 0.93.1 plus portable PATH observations. Kiro’s manifest/reference remains at 2.37.0 with the gap explicit. Agy was not executed; 1.4.12 is last-recorded. Five help qualifications establish grammar only. Codex package/copy provenance and Crush global-rules discovery remain unknown, and historical containment failures are preserved. Independent reviews and current parent gates passed; 50 skills were deployed. No model session, permission change or renewed historical experiment occurred.",
+      "tickets": [
+        "166"
+      ],
+      "sources": [
+        {
+          "label": "Current overview",
+          "href": "agents/harnesses.md"
+        },
+        {
+          "label": "Qualification and limits",
+          "href": "agents/research/t166-harness-overview-refresh.md"
+        },
+        {
+          "label": "Independent acceptance and gate evidence",
+          "href": "agents/research/evidence/harness-166-20261104/verification.json"
+        }
+      ],
+      "diagramLabel": "Use current local commands with clear limits"
+    },
+    {
       "id": "2026-11-04-safe-worktree-takeover",
       "state": "confirmed",
       "label": "Advisory takeover workflow shipped",
