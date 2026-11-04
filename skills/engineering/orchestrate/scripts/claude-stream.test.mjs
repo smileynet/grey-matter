@@ -50,7 +50,21 @@ class Fixture {
     for (int i = 0; i + 1 < args.Length; i++) if (args[i] == "--session-id") sid = args[i + 1];
     if (sid == null) { Environment.ExitCode = 13; return; }
     string mode = Environment.GetEnvironmentVariable("FIXTURE_MODE") ?? "init-first";
-    if (mode == "init-after-input") {
+    if (mode == "fault-missing-type") { Console.Out.WriteLine("{}"); Console.Out.Flush(); return; }
+    if (mode == "fault-null") { Console.Out.WriteLine("null"); Console.Out.Flush(); return; }
+    if (mode == "fault-secret-type") {
+      Console.Out.WriteLine("{\\\"type\\\":\\\"private_secret_enum\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"private_secret_key\\\":\\\"private_secret_value\\\"}");
+      Console.Out.Flush(); return;
+    }
+    if (mode == "fault-secret-subtype") {
+      Console.Out.WriteLine("{\\\"type\\\":\\\"system\\\",\\\"subtype\\\":\\\"private_secret_subtype\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"private_secret_key\\\":\\\"private_secret_value\\\"}");
+      Console.Out.Flush(); return;
+    }
+    if (mode == "malformed-after-status") {
+      Console.Out.WriteLine("{\\\"type\\\":\\\"plugin_install\\\",\\\"session_id\\\":\\\"" + sid + "\\\"}");
+      Console.Out.WriteLine("not-json-private-transcript"); Console.Out.Flush(); return;
+    }
+    if (mode == "init-after-input" || mode == "repeat-init-after-input") {
       string wire = Console.ReadLine();
       if (wire == null) return;
       string protocol = StringField(wire, "uuid");
@@ -61,6 +75,7 @@ class Fixture {
       Console.Out.Flush();
       System.Threading.Thread.Sleep(100);
       Console.Out.WriteLine("{\\\"type\\\":\\\"system\\\",\\\"subtype\\\":\\\"init\\\",\\\"uuid\\\":\\\"4c3d1e5f-6071-489a-bcde-f0123456789a\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"model\\\":\\\"synthetic\\\",\\\"claude_code_version\\\":\\\"fixture\\\",\\\"tools\\\":[],\\\"mcp_servers\\\":[],\\\"permissionMode\\\":\\\"dontAsk\\\"}");
+      if (mode == "repeat-init-after-input") Console.Out.WriteLine("{\\\"type\\\":\\\"system\\\",\\\"subtype\\\":\\\"init\\\",\\\"uuid\\\":\\\"4c3d1e5f-6071-489a-bcde-f0123456789a\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"model\\\":\\\"synthetic\\\",\\\"claude_code_version\\\":\\\"fixture\\\",\\\"tools\\\":[],\\\"mcp_servers\\\":[],\\\"permissionMode\\\":\\\"dontAsk\\\"}");
       Console.Out.WriteLine("{\\\"type\\\":\\\"user\\\",\\\"uuid\\\":\\\"" + protocol + "\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"message\\\":{\\\"role\\\":\\\"user\\\",\\\"content\\\":\\\"startup bound input\\\"},\\\"parent_tool_use_id\\\":null,\\\"isReplay\\\":true}");
       Console.Out.WriteLine("{\\\"type\\\":\\\"result\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"subtype\\\":\\\"success\\\",\\\"is_error\\\":false,\\\"result\\\":\\\"done\\\",\\\"user_message_uuid\\\":\\\"" + protocol + "\\\"}");
       Console.Out.Flush();
@@ -412,6 +427,12 @@ test('rejected rate-limit frame stops the owned child and reports only validated
   assert.deepEqual(fault, {
     type: 'protocol-fault', sessionId, code: 'USAGE_LIMIT',
     rateLimit: { status: 'rejected', rateLimitType: 'five_hour', resetsAt: 1770000000 },
+    diagnostic: {
+      normalizedJsonBytes: 250, phaseBefore: 'busy',
+      type: { kind: 'known', value: 'rate_limit_event' }, subtype: { kind: 'absent' },
+      knownKeys: ['rate_limit_info', 'session_id', 'type', 'uuid'], unknownKeyCount: 0,
+      parentToolUseIdPresent: false, parentToolUseIdKind: 'absent', sessionMatches: true,
+    },
   });
   assert.equal(JSON.stringify(fault).includes('must not escape'), false);
   assert.ok(events.some(event => event.type === 'input-replayed'));
@@ -422,6 +443,62 @@ test('rejected rate-limit frame stops the owned child and reports only validated
   await assert.rejects(client.send(input({ protocolUuid: '7f604293-a4b5-4cde-8f01-23456789abcd' })), { code: 'NOT_READY' });
   const exit = await client.processCompletion;
   assert.equal(exit.exitCode, 0);
+});
+
+test('protocol fault diagnostics safely classify decoded records and never attach to malformed frames', { skip: !canCompileLocalFixture && 'already-installed Windows Framework C# compiler unavailable' }, async t => {
+  const fixture = await localWrapperFixture(t);
+  for (const mode of ['fault-missing-type', 'fault-null', 'fault-secret-type', 'fault-secret-subtype', 'malformed-after-status']) {
+    const client = await startClaudeStream({ ...fixture, env: { ...fixture.env, FIXTURE_MODE: mode },
+      limits, sessionId, model: 'synthetic-model' });
+    const observed = (async () => {
+      const values = [];
+      for await (const event of client.events) values.push(event);
+      return values;
+    })();
+    await client.ready.catch(() => {});
+    const events = await observed;
+    const fault = events.find(event => event.type === 'protocol-fault');
+    assert.ok(fault, mode);
+    const serialized = JSON.stringify(events);
+    assert.equal(serialized.includes('private_secret'), false);
+
+    if (mode === 'fault-missing-type') {
+      assert.deepEqual(fault.diagnostic, {
+        normalizedJsonBytes: 2, phaseBefore: 'starting',
+        type: { kind: 'absent' }, subtype: { kind: 'absent' }, knownKeys: [], unknownKeyCount: 0,
+        parentToolUseIdPresent: false, parentToolUseIdKind: 'absent', sessionMatches: false,
+      });
+    } else if (mode === 'fault-null') {
+      assert.deepEqual(fault.diagnostic, {
+        normalizedJsonBytes: 4, phaseBefore: 'starting',
+        type: { kind: 'absent' }, subtype: { kind: 'absent' }, knownKeys: [], unknownKeyCount: 0,
+        parentToolUseIdPresent: false, parentToolUseIdKind: 'absent', sessionMatches: false,
+      });
+    } else if (mode === 'fault-secret-type') {
+      assert.deepEqual(fault.diagnostic.type, {
+        kind: 'unknown',
+        sha256: createHash('sha256').update('private_secret_enum').digest('hex'),
+        utf8Bytes: Buffer.byteLength('private_secret_enum'),
+      });
+      assert.equal(fault.diagnostic.phaseBefore, 'starting');
+      assert.deepEqual(fault.diagnostic.knownKeys, ['session_id', 'type']);
+      assert.equal(fault.diagnostic.unknownKeyCount, 1);
+    } else if (mode === 'fault-secret-subtype') {
+      assert.deepEqual(fault.diagnostic.subtype, {
+        kind: 'unknown',
+        sha256: createHash('sha256').update('private_secret_subtype').digest('hex'),
+        utf8Bytes: Buffer.byteLength('private_secret_subtype'),
+      });
+      assert.equal(fault.diagnostic.type.value, 'system');
+      assert.deepEqual(fault.diagnostic.knownKeys, ['session_id', 'subtype', 'type']);
+      assert.equal(fault.diagnostic.unknownKeyCount, 1);
+    } else {
+      assert.equal(events[0].type, 'status');
+      assert.equal(fault.code, 'MALFORMED_OUTPUT');
+      assert.equal(Object.hasOwn(fault, 'diagnostic'), false);
+      assert.equal(serialized.includes('not-json-private-transcript'), false);
+    }
+  }
 });
 
 test('unsafe or mismatched init keeps a pending first input ambiguous', () => {
@@ -448,6 +525,34 @@ test('failed first write retains its exact identity and never permits another st
   assert.equal(failed.protocolUuid, protocolUuid);
   assert.throws(() => protocol.prepare(input({ protocolUuid: '7f604293-a4b5-4cde-8f01-23456789abcd' }), limits.maxInputBytes),
     error => error.code === 'BUSY');
+});
+
+test('owned wrapper treats identical repeated init as status while its first input is busy', { skip: !canCompileLocalFixture && 'already-installed Windows Framework C# compiler unavailable' }, async t => {
+  const fixture = await localWrapperFixture(t);
+  const client = await startClaudeStream({ ...fixture, env: { ...fixture.env, FIXTURE_MODE: 'repeat-init-after-input' },
+    limits, sessionId, model: 'synthetic-model' });
+  let resolveResult;
+  const resultSeen = new Promise(resolve => { resolveResult = resolve; });
+  const eventsPromise = (async () => {
+    const values = [];
+    for await (const event of client.events) {
+      values.push(event);
+      if (event.type === 'provider-result') resolveResult();
+    }
+    return values;
+  })();
+  assert.equal((await client.send(input({ text: 'startup bound input' }))).type, 'stdin-written');
+  assert.equal((await client.ready).type, 'ready');
+  await resultSeen;
+  await client.stop();
+  const events = await eventsPromise;
+  const readyEvents = events.filter(event => event.type === 'ready');
+  const repeats = events.filter(event => event.type === 'status' && event.subtype === 'system_init_repeated');
+  assert.equal(readyEvents.length, 1);
+  assert.equal(repeats.length, 1);
+  assert.ok(events.findIndex(event => event.type === 'status' && event.subtype === 'system_init_repeated')
+    < events.findIndex(event => event.type === 'input-replayed'));
+  assert.equal(events.some(event => event.type === 'provider-result'), true);
 });
 
 test('owned wrapper can send the first durable input while a local peer awaits stdin before init', { skip: !canCompileLocalFixture && 'already-installed Windows Framework C# compiler unavailable' }, async t => {
@@ -574,6 +679,44 @@ test('refuses initialization with tools, MCP servers or automatic permission mod
     const protocol = createClaudeStreamProtocol(sessionId);
     assert.throws(() => protocol.observe(initRecord(unsafe)), error => error.code === 'UNSAFE_SESSION');
     assert.equal(protocol.phase, 'starting');
+  }
+});
+
+test('identical re-emitted init is status-only and leaves busy/result state unchanged', () => {
+  const protocol = createClaudeStreamProtocol(sessionId);
+  const initial = initRecord({ capabilities: ['interrupt_receipt_v1'] });
+  assert.equal(protocol.observe(initial).type, 'ready');
+  const prepared = protocol.prepare(input(), limits.maxInputBytes);
+  const repeatedWhileBusy = protocol.observe({ ...initial, tools: [...initial.tools], mcp_servers: [...initial.mcp_servers] });
+  assert.deepEqual(repeatedWhileBusy, { type: 'status', sessionId, subtype: 'system_init_repeated' });
+  assert.equal(protocol.phase, 'busy');
+  assert.deepEqual(protocol.current, prepared.identity);
+  assert.throws(() => protocol.prepare(input({ protocolUuid: '7f604293-a4b5-4cde-8f01-23456789abcd' }), limits.maxInputBytes),
+    error => error.code === 'BUSY');
+
+  protocol.observe({ type: 'user', uuid: protocolUuid, session_id: sessionId, isReplay: true,
+    parent_tool_use_id: null, message: { role: 'user', content: 'Review café 😀' } });
+  protocol.observe({ type: 'result', session_id: sessionId, subtype: 'success', is_error: false,
+    result: 'done', user_message_uuid: protocolUuid });
+  assert.equal(protocol.phase, 'ready');
+  assert.equal(protocol.observe(initial).subtype, 'system_init_repeated');
+  assert.equal(protocol.phase, 'ready');
+  assert.equal(protocol.current, null);
+});
+
+test('re-emitted init rejects any changed session metadata without changing protocol state', () => {
+  for (const changed of [
+    { model: 'different-model' },
+    { claude_code_version: 'different-version' },
+    { permissionMode: 'plan' },
+    { capabilities: ['different-capability'] },
+  ]) {
+    const protocol = createClaudeStreamProtocol(sessionId);
+    const initial = initRecord({ capabilities: ['interrupt_receipt_v1'] });
+    protocol.observe(initial);
+    assert.throws(() => protocol.observe({ ...initial, ...changed }), error => error.code === 'PROTOCOL_ORDER');
+    assert.equal(protocol.phase, 'ready');
+    assert.equal(protocol.current, null);
   }
 });
 

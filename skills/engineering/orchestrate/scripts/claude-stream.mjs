@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { startOwnedProcess } from './owned-process.mjs';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
@@ -9,6 +10,31 @@ const MAX_TEXT_BYTES = 4 * 1024 * 1024;
 const MAX_QUEUED_EVENTS = 4096;
 const MAX_QUEUED_EVENT_BYTES = 8 * 1024 * 1024;
 const EMPTY_MCP_CONFIG = '{"mcpServers":{}}';
+const STREAM_TYPES = new Set([
+  'active_goal', 'api_retry', 'assistant', 'auth_status', 'background_tasks_changed', 'commands_changed',
+  'compact_boundary', 'control_cancel_request', 'control_request', 'control_request_progress', 'control_response',
+  'conversation_reset', 'elicitation_complete', 'files_persisted', 'hook_progress', 'hook_response', 'hook_started',
+  'informational', 'local_command_output', 'memory_recall', 'mirror_error', 'model_refusal_fallback',
+  'model_refusal_no_fallback', 'notification', 'permission_denied', 'plugin_install', 'prompt_suggestion',
+  'rate_limit_event', 'result', 'session_state_changed', 'status', 'stream_event', 'system', 'task_notification',
+  'task_progress', 'task_started', 'task_updated', 'thinking_tokens', 'tool_progress', 'tool_use_summary', 'user',
+  'worker_shutting_down', 'command_lifecycle',
+]);
+const STREAM_SUBTYPES = new Set([
+  'api_retry', 'background_tasks_changed', 'commands_changed', 'compact_boundary', 'control_request_progress',
+  'elicitation', 'elicitation_complete', 'error', 'error_during_execution', 'error_max_budget_usd',
+  'error_max_structured_output_retries', 'error_max_turns', 'files_persisted', 'hook_progress', 'hook_response',
+  'hook_started', 'informational', 'init', 'local_command_output', 'memory_recall', 'mirror_error',
+  'model_refusal_fallback', 'model_refusal_no_fallback', 'notification', 'permission_denied', 'plugin_install',
+  'status', 'success', 'session_state_changed', 'task_notification', 'task_progress', 'task_started',
+  'task_updated', 'thinking_tokens', 'tool_progress', 'tool_use_summary', 'worker_shutting_down',
+  'command_lifecycle',
+]);
+const DIAGNOSTIC_KEYS = new Set([
+  'type', 'subtype', 'session_id', 'uuid', 'parent_tool_use_id', 'rate_limit_info', 'message', 'event',
+  'user_message_uuid', 'user_message_uuids', 'isReplay', 'model', 'claude_code_version', 'tools', 'mcp_servers',
+  'permissionMode', 'is_error', 'result', 'request_id', 'capabilities',
+]);
 
 function demand(condition, message, code = 'INVALID_INPUT') {
   if (!condition) throw new ClaudeStreamError(message, code);
@@ -16,6 +42,41 @@ function demand(condition, message, code = 'INVALID_INPUT') {
 
 function isRecord(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function jsonValueType(value) {
+  if (value === null) return 'null';
+  if (Array.isArray(value)) return 'array';
+  return typeof value;
+}
+
+function diagnosticLabel(value, known, present) {
+  if (!present) return { kind: 'absent' };
+  if (typeof value !== 'string') return { kind: 'invalid', valueType: jsonValueType(value) };
+  if (known.has(value)) return { kind: 'known', value };
+  return {
+    kind: 'unknown',
+    sha256: createHash('sha256').update(value, 'utf8').digest('hex'),
+    utf8Bytes: Buffer.byteLength(value, 'utf8'),
+  };
+}
+
+function recordDiagnostic(value, phaseBefore, sessionId) {
+  const object = isRecord(value) ? value : null;
+  const knownKeys = object ? Object.keys(object).filter(key => DIAGNOSTIC_KEYS.has(key)).sort() : [];
+  const unknownKeyCount = object ? Object.keys(object).filter(key => !DIAGNOSTIC_KEYS.has(key)).length : 0;
+  const parentToolUseIdPresent = !!object && Object.hasOwn(object, 'parent_tool_use_id');
+  return {
+    normalizedJsonBytes: Buffer.byteLength(JSON.stringify(value), 'utf8'),
+    phaseBefore,
+    type: diagnosticLabel(object?.type, STREAM_TYPES, !!object && Object.hasOwn(object, 'type')),
+    subtype: diagnosticLabel(object?.subtype, STREAM_SUBTYPES, !!object && Object.hasOwn(object, 'subtype')),
+    knownKeys,
+    unknownKeyCount,
+    parentToolUseIdPresent,
+    parentToolUseIdKind: parentToolUseIdPresent ? jsonValueType(object.parent_tool_use_id) : 'absent',
+    sessionMatches: !!object && object.session_id === sessionId,
+  };
 }
 
 function drainStderr(stream) {
@@ -230,6 +291,7 @@ export function createClaudeStreamProtocol(sessionId) {
   let phase = 'starting';
   let active = null;
   let stopRequested = false;
+  let initializedMetadata = null;
   const used = new Set();
 
   function observe(value) {
@@ -263,17 +325,35 @@ export function createClaudeStreamProtocol(sessionId) {
     if (value.type === 'system') {
       demand(value.session_id === sessionId && typeof value.subtype === 'string', 'system record has no exact session or subtype', 'PROTOCOL_SHAPE');
       if (value.subtype === 'init') {
-        demand(phase === 'starting', 'duplicate or out-of-order init record', 'PROTOCOL_ORDER');
         demand(typeof value.model === 'string' && typeof value.claude_code_version === 'string'
           && Array.isArray(value.tools) && Array.isArray(value.mcp_servers)
           && typeof value.permissionMode === 'string', 'init record is missing documented session metadata', 'PROTOCOL_SHAPE');
         demand(value.tools.every(tool => typeof tool === 'string')
           && value.mcp_servers.every(server => isRecord(server) && typeof server.name === 'string' && typeof server.status === 'string'),
         'init record has malformed tool or MCP server metadata', 'PROTOCOL_SHAPE');
+        demand(value.capabilities === undefined || (Array.isArray(value.capabilities)
+          && value.capabilities.every(capability => typeof capability === 'string')),
+        'init record has malformed capabilities metadata', 'PROTOCOL_SHAPE');
         demand(value.tools.length === 0 && value.mcp_servers.length === 0,
           'Claude session did not start with an empty tool and MCP surface', 'UNSAFE_SESSION');
         demand(!['auto', 'acceptEdits', 'bypassPermissions'].includes(value.permissionMode),
           'Claude session is using an automatic permission mode', 'UNSAFE_SESSION');
+        const metadata = JSON.stringify({
+          sessionId: value.session_id,
+          model: value.model,
+          version: value.claude_code_version,
+          tools: value.tools,
+          mcpServers: value.mcp_servers,
+          permissionMode: value.permissionMode,
+          capabilities: value.capabilities ?? null,
+        });
+        if (initializedMetadata !== null) {
+          demand(phase !== 'closed' && phase !== 'faulted', 'init metadata arrived after process completion or protocol failure', 'PROTOCOL_ORDER');
+          demand(metadata === initializedMetadata, 're-emitted init metadata changed', 'PROTOCOL_ORDER');
+          return { type: 'status', sessionId, subtype: 'system_init_repeated' };
+        }
+        demand(phase === 'starting', 'init metadata arrived outside session startup', 'PROTOCOL_ORDER');
+        initializedMetadata = metadata;
         phase = active ? 'busy' : 'ready';
         return {
           type: 'ready', sessionId, model: value.model, version: value.claude_code_version,
@@ -451,12 +531,16 @@ export async function startClaudeStream(options) {
   }
 
   const pump = (async () => {
+    let failedRecordDiagnostic = null;
     try {
       for await (const record of owned.stdout) {
         if (record.type !== 'record') {
+          failedRecordDiagnostic = null;
           throw new ClaudeStreamError(`Claude stdout ${record.type} record`, 'MALFORMED_OUTPUT', { line: record.line ?? null });
         }
+        failedRecordDiagnostic = recordDiagnostic(record.value, protocol.phase, snapshot.sessionId);
         const event = protocol.observe(record.value);
+        failedRecordDiagnostic = null;
         if (event?.type === 'ready' && !readySettled) {
           readySettled = true;
           resolveReady(event);
@@ -471,6 +555,7 @@ export async function startClaudeStream(options) {
       await owned.stop().catch(() => {});
       const fault = { type: 'protocol-fault', sessionId: snapshot.sessionId, code: error.code ?? 'CLAUDE_STREAM_ERROR' };
       if (error.code === 'USAGE_LIMIT') fault.rateLimit = error.rateLimit;
+      if (failedRecordDiagnostic) fault.diagnostic = failedRecordDiagnostic;
       await publish(fault);
     } finally {
       const exit = await owned.completion;

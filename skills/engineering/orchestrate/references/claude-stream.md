@@ -62,6 +62,16 @@ bootstrap prompt, automatic retry, or second input on that process. `ready` can
 resolve after the first write and validates startup metadata only; it is neither
 an input receipt nor a task result.
 
+Some current CLI paths can emit the same `system/init` metadata again after a
+session control change. The adapter accepts a re-emitted init only when its
+session ID, model, CLI version, permission mode, tool list, MCP server list, and
+capabilities exactly match the originally validated metadata. It emits a
+status-only `system_init_repeated` event; it does not resolve `ready` again,
+change the current phase, acknowledge an input, release the active turn, or
+produce a result. Changed or unsafe metadata faults the protocol. This handles
+the documented producer possibility; it does not identify the cause of the
+earlier native #236 protocol-order failure.
+
 The `events` async iterable reports distinct observations:
 
 - `input-replayed`: Claude echoed the exact UUID, session, text, and
@@ -100,7 +110,16 @@ The `events` async iterable reports distinct observations:
   signal, generation, byte counts, and timestamps.
 - `protocol-fault`: malformed, unexpected, out-of-order, wrong-session, or
   uncorrelated stream data, or a rejected usage-limit status. The adapter stops
-  the owned child and does not retry.
+  the owned child and does not retry. For a decoded JSON record that fails
+  protocol observation, the event includes a bounded `diagnostic` projection:
+  phase before the record, normalized JSON byte count, allowlisted type and
+  subtype labels (unknown labels are represented only by SHA-256 and UTF-8 byte
+  length), a small allowlisted set of present key names, and the count of keys
+  outside that allowlist,
+  parent-tool-use field kind/presence, and a session-match boolean. It never
+  includes raw UUIDs, message text, unknown field names/values, or error text.
+  Malformed or non-record output has no diagnostic because no decoded record
+  exists to describe.
 
 Consume `events` before sending and while the process runs. Its in-memory event
 queue is bounded; a slow or absent consumer backpressures stdout, and process
