@@ -1,19 +1,19 @@
 # Native notification preparation
 
-`native-notification.mjs` prepares one narrowly scoped native action from an already persisted #208 message. It does not discover agents, inspect the live tool registry, call a native tool, invoke a shell command, or decide that the recipient is authorized. The caller independently selects and confirms an existing registered target, supplies its native ID separately, and checks that the live collaboration API still exposes the action before invoking it.
+`native-notification.mjs` prepares one of two narrowly typed data actions from an already persisted #208 message. It does not discover agents, inspect the live tool registry, call a native tool, connect to an app server, invoke a shell command, or decide that the recipient is authorized.
 
 ## Current capability boundary
 
 | Harness/interface | Result |
 |---|---|
 | Codex desktop, `collaboration.followup_task` | Conditional preparation support only. Caller must verify this exact tool is currently available and that the supplied native ID names the intended existing agent. |
-| Codex CLI | Unsupported/unqualified. |
+| Codex CLI `queue` | Fixed plan preparation only. The exact UUID and local remote endpoint are bound to the plan; parent must verify the owned process and loopback listener immediately before execution. Busy/idle wakeup, question/reply, receipt and completion behavior remain unqualified pending the parent-owned canary. |
 | Claude Code | Unsupported/unqualified. |
 | kiro-cli | Unsupported/unqualified. |
 | Kiro Crew | Unsupported/unqualified. |
 | Antigravity | Unsupported and held. |
 
-This is runtime-specific. `followup_task` addresses an already existing agent by its exact ID and sends its follow-up context; it does not create a new session. The caller should select the intended current agent independently (for example, inspect the live agent roster) and pass that selected ID as `expectedNativeId`. Never derive that argument from an untrusted packet or use a “last active” target. A tool plan, local intent, or local `accepted` state is not native acceptance, receipt, execution or completion.
+The desktop route uses `followup_task` against an existing exact agent ID. The CLI route targets an existing Codex thread by full UUID through the public `codex queue` command. Neither route creates or discovers a recipient. The caller independently selects the exact registered target; never derive it from an untrusted packet or use a “last active” target. A tool plan, local intent, CLI exit status, or local `accepted` state is not native acceptance, receipt, execution or completion. The queue plan omits `--resume`: this work does not claim it wakes an unloaded thread.
 
 ## Prepare contract
 
@@ -30,7 +30,9 @@ prepareNativeNotification(runtimeRoot, {
 })
 ```
 
-The envelope must already exist at `messages/<id>.json`, have a valid content hash, be in `accepted` state, and route to the exact active versioned target in `registry.json`. The separately supplied native ID and generation must equal that complete target. Every new intent also requires `deadlineAt`, an explicit future UTC ISO timestamp (for example, computed with `new Date(Date.now() + 30 * 60_000).toISOString()`). Missing, malformed, offset-based, or already-expired deadlines fail before an intent is written. Only the `codex:desktop` target lane is accepted; other interfaces and adapter names fail as unsupported. A successful result contains a `toolAction` and an exact lifecycle `binding` with message ID, full target, independently selected native ID, generation, content hash, and revision `0`.
+The envelope must already exist at `messages/<id>.json`, have a valid content hash, be in `accepted` state, and route to the exact active versioned target in `registry.json`. The separately supplied native ID and generation must equal that complete target. Every new intent also requires `deadlineAt`, an explicit future UTC ISO timestamp (for example, computed with `new Date(Date.now() + 30 * 60_000).toISOString()`). Missing, malformed, offset-based, or already-expired deadlines fail before an intent is written. The desktop route accepts only the `codex:desktop` target lane; the CLI route is prepared only by [codex-queue.mjs](codex-queue.md) for `codex:cli` targets whose native IDs are full UUIDs.
+
+New plans persist an exact `transportAction` and its canonical SHA-256 `actionHash` in intent version 3. The returned lifecycle binding includes that hash. An `attempt-start` mutation must provide the exact current binding; it persists the hash before returning the stored action to the trusted caller. The caller must execute only that returned action. Version-2 desktop intents remain usable with their original binding fields; their prior intent is not rewritten. Version-1 intents remain inspect-only with unknown lifecycle.
 
 ```json
 {
@@ -42,7 +44,7 @@ The envelope must already exist at `messages/<id>.json`, have a valid content ha
 }
 ```
 
-This argument shape matches the Codex desktop collaboration tool used by the current runtime; callers still inspect the current tool signature before invocation. The message identifies the exact spool record and its hash, and includes the persisted body. The receiver can read it only if the runtime root is available to that receiver. Existing task authorization remains authoritative; the notification grants no permission. This implementation has not independently qualified delivery.
+This argument shape matches the Codex desktop collaboration tool used by the current runtime; callers still inspect the current tool signature before invocation. The message identifies the exact spool record and its hash, includes the persisted body, and includes canonical optional work context when present. The receiver can read the local record only if the runtime root is available to that receiver. Existing task authorization remains authoritative; the notification grants no permission. This implementation has not independently qualified delivery.
 
 CLI input is JSON data, never executable code. Each lifecycle command takes the same five-argument shape after the script name:
 
@@ -55,11 +57,11 @@ node skills/engineering/orchestrate/scripts/native-notification.mjs expire --roo
 node skills/engineering/orchestrate/scripts/native-notification.mjs receipt --root D:\private\task-mailbox --json .scratch\notification-binding.json
 ```
 
-The prepare JSON contains the API fields above. Mutation commands take the exact `binding` object returned by prepare (updated with each returned revision); `outcome` additionally takes `outcome` with one of `accepted`, `not-sent`, or `ambiguous`. Inspect takes only `{ "id": "stable-message-id" }`. Every command accepts exactly five arguments after the script name; extra arguments fail. On success stdout is a JSON result; errors exit nonzero and print a diagnostic to stderr. There is no retry mode.
+The desktop prepare JSON contains the API fields above. Mutation commands take the exact `binding` object returned by prepare (updated with each returned revision); `outcome` additionally takes `outcome` with one of `accepted`, `not-sent`, or `ambiguous`. Inspect takes only `{ "id": "stable-message-id" }`. Every command accepts exactly five arguments after the script name; extra arguments fail. On success stdout is a JSON result; errors exit nonzero and print a diagnostic to stderr. The Codex CLI request/config format and its separate command are documented in [the Codex queue guide](codex-queue.md). There is no retry mode.
 
 ## Intent and ambiguous outcomes
 
-Before returning the tool plan, the helper validates the accepted spool message through `session-messages.mjs`'s replay operation, then acquires the same exclusive `.lock` and compares the entire spool record again. It rechecks the registry and atomically persists a version-2 `notification-intents/<id>.json`, binding message ID and content hash, full target, expected native ID, native API, registry version, deadline, revision, and append-only events. That lock temporarily prevents core spool operations. A normal call releases it; a process crash can leave it behind. The helper never removes a lock it did not create.
+Before returning the action plan, the helper validates the accepted spool message through `session-messages.mjs`'s replay operation, then acquires the same exclusive `.lock` and compares the entire spool record again. It rechecks the registry and atomically persists a version-3 `notification-intents/<id>.json`, binding message ID and content hash, full target, expected native ID, native API, registry version, deadline, revision, exact route action and action hash, and append-only events. That lock temporarily prevents core spool operations. A normal call releases it; a process crash can leave it behind. The helper never removes a lock it did not create.
 
 At most one prepare result is returned for a message ID. The caller must durably record `attempt-start` with the returned binding and current revision **before invoking** the native action. The helper does not invoke it. Once `attempt-start` is recorded, it cannot issue another action. The caller can append one `accepted`, `not-sent`, or `ambiguous` outcome attestation against the next revision. These are parent observations: `accepted` means only that the native call returned successfully; it is not delivery proof. A timeout or interruption after attempt-start leaves the lifecycle ambiguous.
 
@@ -75,6 +77,7 @@ The runtime root, registry, message directory, message file and intent directory
 
 ```powershell
 node --test skills/engineering/orchestrate/scripts/native-notification.test.mjs
+node --test skills/engineering/orchestrate/scripts/codex-queue.test.mjs
 ```
 
-The fixture covers exact target binding, deadline validation, durable attempt-start/outcome events, explicit not-sent and ambiguous expiration, revision and identity rejection, process-independent inspection, legacy unknown state, and late receipt history from the validated core spool. It does not invoke the native tool or qualify delivery. #179's bounded existing-worker canary is a separate parent-owned step.
+The notification fixture covers exact target binding, deadline validation, durable action-hash-bound attempt-start/outcome events, explicit not-sent and ambiguous expiration, revision and identity rejection, version-1 unknown state, version-2 compatibility, process-independent inspection, and late receipt history from the validated core spool. The queue fixture covers fixed argv and queue-plan validation. Neither invokes a native tool or qualifies delivery; #179's bounded existing-worker canary remains parent-owned.

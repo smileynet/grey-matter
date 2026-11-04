@@ -109,3 +109,22 @@ Windows skip for SIGTERM-ignore escalation. The skipped POSIX behavior remains
 unverified here. These real local Node child tests do not qualify a native provider.
 [Retained evidence](evidence/session-messaging-238-20261103.json) includes the initial
 failure, corrected results and exact dispatch binding through the #179 audit.
+
+## Fingerprinted fixed CLI plan (#235 source)
+
+Accepted worker candidate `fe1c7777149fbcb936301b738c7f916aa20291d3` adds canonical
+version-3 actions and action fingerprints to preparation and attempt-start, while
+preserving version-2 desktop bindings. The CLI plan selects only an exact existing
+thread UUID, independently configured executable and literal parent-owned loopback
+endpoint. It derives fixed shell-free queue arguments, with no implicit daemon,
+resume or automatic retry. Supplied owner PID/generation remain assertions; the
+executor must verify the same opaque handle, actual OS listener and executable.
+
+Independent review reproduced a changing-read object that could alter argv after
+fingerprint validation. Snapshot-based validation/hash/argument derivation fixes
+that exact counterexample. Final worker and critic suites pass 19 intent and ten
+queue tests; parent integrated checks are separate. The worker's YAML-fixture
+dependency error is infrastructure failure, not a passing check.
+[Source evidence](evidence/session-messaging-235-20261103.json) retains both results.
+The [earlier desktop native case](session-messaging-desktop-20261103.md) does not
+qualify this extension or actual CLI delivery. Native qualification remains open.

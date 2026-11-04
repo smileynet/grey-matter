@@ -1,0 +1,50 @@
+{
+  "candidate": "fe1c7777149fbcb936301b738c7f916aa20291d3",
+  "base": "a0ea8e1c2a2e3279852456d0731b9c188f40e5a8",
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179finalqualificationauditandexplicitdisposition",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-worker-t235-final-checks.log",
+      "bytes": 8935,
+      "sha256": "50bec9e93885bf903469f7aed1d3f5795736e5be4cd48a3d0be1eedb62bf4363"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-worker-t235-reviewfix-final.log",
+      "bytes": 7952,
+      "sha256": "683f34d0a9fa843d9747e2cb718048fb6b53391a8464a2c1d5ba3eccbe6f88d3"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-worker-t235-reviewfix-final2.log",
+      "bytes": 8535,
+      "sha256": "2874444485c6d12bf07fbee078940be0bb1d9ea9281d7b694ef0e5dfdd46acb4"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-independent-review.log",
+      "bytes": 2871,
+      "sha256": "531646cd68b8c58a45df179b7cb8a5ea082053046a8d7120182e54bfe82b7a0d"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-action-fingerprint-proxy-probe.mjs",
+      "bytes": 1028,
+      "sha256": "0e604b0b6a5b061ecfc0da42e4f32a37c076513f3dc213eee83d650203aebceb"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-reviewfix-proxy-output.log",
+      "bytes": 265,
+      "sha256": "ff7937e9ebb910d1adda0e8eee6f71b354fb29350ea92f82356764536aff003d"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-reviewfix-independent.log",
+      "bytes": 2770,
+      "sha256": "32f245142604c0e0bfbce4ba1050bb7eb8258dee5335e68f9c5e9c679bf2319d"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-parent-dispatch-result.json",
+      "bytes": 910,
+      "sha256": "94dde0bd70bdcd1d11a2186484750095b3e5c0974d03673e2149d9e57c9e18c3"
+    }
+  ],
+  "limits": "Source-only qualification. Final19native-intent and10queue deterministic tests pass, not native-provider delivery. Prior action Proxy fingerprint/argv bypass retained and independently reproduced fixed. Parent still must verify same opaque process handle and OS listener, reverify executable immediately before execution and qualify actual CLI input. v2 desktop historical canary is separate. Worker YAML fixture infrastructure error is not a pass."
+}

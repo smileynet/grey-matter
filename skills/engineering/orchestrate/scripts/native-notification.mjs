@@ -1,19 +1,40 @@
 #!/usr/bin/env node
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { closeSync, existsSync, fsyncSync, lstatSync, mkdirSync, openSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { operate } from './session-messages.mjs';
 
 const TARGET_FIELDS = ['project', 'host', 'harness', 'harnessVersion', 'interface', 'nativeId', 'generation', 'role', 'worktree', 'branch'];
-const SUPPORTED = new Set(['codex:desktop']);
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const ACTION_ROUTES = new Set(['desktop-followup', 'codex-cli-queue']);
+export const MAX_CODEX_EXECUTABLE_BYTES = 1_073_741_824;
 function stable(value) {
   if (Array.isArray(value)) return value.map(stable);
   if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort().map(key => [key, stable(value[key])]));
   return value;
 }
 const canonical = value => JSON.stringify(stable(value));
+const fingerprint = value => createHash('sha256').update(canonical(value)).digest('hex');
 function demand(ok, message) { if (!ok) throw new Error(message); }
+function snapshotPlainData(value, label = 'value') {
+  demand(value && typeof value === 'object' && !Array.isArray(value)
+    && [Object.prototype, null].includes(Object.getPrototypeOf(value)), `${label} must be a plain data object`);
+  demand(Reflect.ownKeys(value).every(key => typeof key === 'string'), `${label} cannot contain symbol fields`);
+  const copy = Object.create(null);
+  for (const key of Object.keys(value)) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    demand(descriptor && Object.hasOwn(descriptor, 'value'), `${label}.${key} cannot be an accessor`);
+    const child = descriptor.value;
+    if (child && typeof child === 'object') copy[key] = snapshotPlainData(child, `${label}.${key}`);
+    else {
+      demand(child === null || ['string', 'boolean', 'number'].includes(typeof child)
+        && (typeof child !== 'number' || Number.isFinite(child)), `${label}.${key} must be JSON data`);
+      copy[key] = child;
+    }
+  }
+  return copy;
+}
 function regularJson(path) {
   const stat = lstatSync(path);
   demand(stat.isFile() && !stat.isSymbolicLink(), `Expected a regular non-symlink file: ${path}`);
@@ -63,8 +84,67 @@ function utcDeadline(value) {
   demand(time > Date.now(), 'deadlineAt must be in the future');
   return new Date(time).toISOString();
 }
-function validateVersion2(intent) {
-  demand(intent.intentVersion === 2 && Array.isArray(intent.events) && Number.isSafeInteger(intent.revision)
+function validateTransportAction(action, intent) {
+  demand(action && typeof action === 'object' && !Array.isArray(action) && ACTION_ROUTES.has(action.route), 'Unsupported or malformed transport action route');
+  if (action.route === 'desktop-followup') {
+    demand(canonical(Object.keys(action).sort()) === canonical(['arguments', 'contentHash', 'messageId', 'route', 'target', 'tool'])
+      && intent.nativeApi === 'collaboration.followup_task'
+      && action.tool === 'collaboration.followup_task' && action.messageId === intent.messageId
+      && action.contentHash === intent.contentHash && canonical(action.target) === canonical(intent.target)
+      && action.arguments && canonical(Object.keys(action.arguments).sort()) === canonical(['message', 'target'])
+      && action.arguments.target === intent.expectedNativeId && typeof action.arguments.message === 'string',
+    'Malformed desktop-followup action');
+  } else {
+    demand(canonical(Object.keys(action).sort()) === canonical(['contentHash', 'executable', 'message', 'messageId', 'remote', 'route', 'target', 'threadId'])
+      && intent.nativeApi === 'codex-cli.queue' && intent.target.harness === 'codex' && intent.target.interface === 'cli'
+      && action.messageId === intent.messageId && action.contentHash === intent.contentHash
+      && canonical(action.target) === canonical(intent.target) && action.threadId === intent.expectedNativeId
+      && UUID.test(action.threadId) && typeof action.message === 'string', 'Malformed Codex CLI queue action');
+    const executable = action.executable;
+    demand(executable && canonical(Object.keys(executable).sort()) === canonical(['canonicalPath', 'maxBytes', 'sha256'])
+      && typeof executable.canonicalPath === 'string' && executable.canonicalPath.length > 0
+      && /^[a-f0-9]{64}$/.test(executable.sha256) && Number.isSafeInteger(executable.maxBytes)
+      && executable.maxBytes > 0 && executable.maxBytes <= MAX_CODEX_EXECUTABLE_BYTES, 'Malformed or out-of-policy executable identity');
+    const remote = action.remote;
+    const portText = typeof remote?.endpoint === 'string' ? remote.endpoint.slice(remote.endpoint.lastIndexOf(':') + 1) : '';
+    const endpoint = typeof remote?.endpoint === 'string' && /^ws:\/\/127\.0\.0\.1:[1-9]\d{0,4}$/.test(remote.endpoint)
+      ? new URL(remote.endpoint) : null;
+    demand(remote && canonical(Object.keys(remote).sort()) === canonical(['endpoint', 'owner']) && endpoint
+      && Number(portText) <= 65_535 && endpoint.port === portText && !endpoint.username && !endpoint.password
+      && endpoint.pathname === '/' && !endpoint.search && !endpoint.hash
+      && remote.owner && canonical(Object.keys(remote.owner).sort()) === canonical(['generation', 'pid'])
+      && Number.isSafeInteger(remote.owner.pid) && remote.owner.pid > 0 && UUID.test(remote.owner.generation),
+    'Malformed explicit loopback endpoint ownership binding');
+  }
+  return action;
+}
+
+export function validateCodexQueueTransportAction(action, actionHash) {
+  const snapshot = snapshotPlainData(action, 'Codex CLI queue action');
+  demand(snapshot.route === 'codex-cli-queue', 'Codex CLI queue action is required');
+  validateTransportAction(snapshot, { nativeApi: 'codex-cli.queue', expectedNativeId: snapshot.threadId,
+    target: snapshot.target, messageId: snapshot.messageId, contentHash: snapshot.contentHash });
+  demand(typeof actionHash === 'string' && actionHash === fingerprint(snapshot), 'Codex CLI queue action hash mismatch');
+  return snapshot;
+}
+export const nativeTransportActionHash = value => fingerprint(snapshotPlainData(value, 'Transport action'));
+export function validateNativeNotificationTarget(rawTarget, expectedNativeId, route) {
+  demand(ACTION_ROUTES.has(route), `Unsupported or unqualified notification route: ${route}`);
+  const target = exactTarget(snapshotPlainData(rawTarget, 'Notification target'));
+  demand(typeof expectedNativeId === 'string' && expectedNativeId.length > 0 && target.nativeId === expectedNativeId,
+    'Expected native ID differs from the registered recipient');
+  if (route === 'desktop-followup') {
+    demand(target.harness === 'codex' && target.interface === 'desktop', 'Unsupported desktop notification target');
+  } else {
+    demand(target.harness === 'codex' && target.interface === 'cli' && UUID.test(expectedNativeId),
+      'Codex queue target must have a full UUID native ID');
+  }
+  return target;
+}
+export const validateNotificationDeadline = utcDeadline;
+
+function validateLifecycleIntent(intent) {
+  demand([2, 3].includes(intent.intentVersion) && Array.isArray(intent.events) && Number.isSafeInteger(intent.revision)
     && intent.revision >= 0 && intent.events.length === intent.revision, 'Malformed or unsupported version-2 intent');
   demand(typeof intent.messageId === 'string' && /^[A-Za-z0-9._-]{1,128}$/.test(intent.messageId)
     && typeof intent.contentHash === 'string' && /^[a-f0-9]{64}$/.test(intent.contentHash), 'Malformed intent identity');
@@ -79,6 +159,7 @@ function validateVersion2(intent) {
       && new Date(event.at).toISOString() === event.at, 'Malformed notification lifecycle event');
     if (event.type === 'attempt-start') {
       demand(!attempt && !deadLetter, 'Malformed duplicate or post-expiry attempt');
+      if (intent.intentVersion === 3) demand(event.actionHash === intent.actionHash, 'Attempt-start does not bind its persisted transport action');
       attempt = true;
     } else if (event.type === 'outcome') {
       demand(attempt && !outcome && ['accepted', 'not-sent', 'ambiguous'].includes(event.value)
@@ -96,21 +177,31 @@ function validateVersion2(intent) {
       receipt = true;
     } else demand(false, 'Unknown notification lifecycle event');
   }
+  if (intent.intentVersion === 2) {
+    demand(!Object.hasOwn(intent, 'transportAction') && !Object.hasOwn(intent, 'actionHash'), 'Version-2 intent cannot contain a transport action');
+  } else {
+    validateTransportAction(intent.transportAction, intent);
+    demand(typeof intent.actionHash === 'string' && /^[a-f0-9]{64}$/.test(intent.actionHash)
+      && fingerprint(intent.transportAction) === intent.actionHash, 'Persisted transport action fingerprint mismatch');
+  }
   return intent;
 }
 function loadBoundIntent(root, binding) {
-  demand(binding && typeof binding === 'object' && !Array.isArray(binding)
-    && canonical(Object.keys(binding).sort()) === canonical(['contentHash', 'expectedNativeId', 'generation', 'id', 'revision', 'target']),
-  'Lifecycle binding must contain exactly id, target, expectedNativeId, generation, contentHash, and revision');
+  demand(binding && typeof binding === 'object' && !Array.isArray(binding), 'Lifecycle binding is required');
   const path = intentPath(root, binding.id);
   const intent = regularJson(path);
-  if (intent.intentVersion !== 2) throw new Error('Historical or unsupported intent is inspect-only');
-  validateVersion2(intent);
+  if (![2, 3].includes(intent.intentVersion)) throw new Error('Historical or unsupported intent is inspect-only');
+  validateLifecycleIntent(intent);
   const target = exactTarget(binding.target);
   demand(intent.messageId === binding.id && canonical(intent.target) === canonical(target)
     && intent.expectedNativeId === binding.expectedNativeId && intent.target.nativeId === binding.expectedNativeId
     && intent.target.generation === binding.generation && intent.contentHash === binding.contentHash,
   'Lifecycle binding differs from the persisted intent');
+  const keys = intent.intentVersion === 3
+    ? ['actionHash', 'contentHash', 'expectedNativeId', 'generation', 'id', 'revision', 'target']
+    : ['contentHash', 'expectedNativeId', 'generation', 'id', 'revision', 'target'];
+  demand(canonical(Object.keys(binding).sort()) === canonical(keys), 'Lifecycle binding fields do not match the intent version');
+  demand(intent.intentVersion !== 3 || binding.actionHash === intent.actionHash, 'Lifecycle action hash differs from the persisted plan');
   demand(Number.isSafeInteger(binding.revision) && binding.revision === intent.revision, 'Stale lifecycle revision');
   return { path, intent };
 }
@@ -127,6 +218,13 @@ function recheckUnderIntentLock(root, binding, snapshot) {
   demand(registry.version === 1 && Array.isArray(registry.sessions)
     && registry.sessions.filter(s => canonical(s.target) === canonical(exactTarget(binding.target)) && s.status === 'registered').length === 1,
   'Exact target is no longer the single active registration');
+  const intent = regularJson(intentPath(root, binding.id));
+  if (intent.intentVersion === 3 && intent.transportAction?.route === 'codex-cli-queue') {
+    const matches = registry.sessions.filter(s => s.status === 'registered' && s.target.harness === 'codex'
+      && s.target.interface === 'cli' && s.target.nativeId === binding.expectedNativeId);
+    demand(matches.length === 1 && canonical(matches[0].target) === canonical(exactTarget(binding.target)),
+      'Codex thread UUID is ambiguous across active registered targets');
+  }
 }
 function append(intent, type, fields = {}) {
   const revision = intent.revision + 1;
@@ -167,11 +265,14 @@ function notificationLifecycle(intent) {
 
 /** Persist the attempt boundary before a caller invokes the returned native action. */
 export function startNativeNotificationAttempt(root, binding) {
-  return mutateIntent(root, binding, intent => {
+  let transportAction;
+  const result = mutateIntent(root, binding, intent => {
     demand(!intent.events.some(event => ['attempt-start', 'dead-letter'].includes(event.type)), 'Attempt already started or intent dead-lettered; never issue another action');
     demand(Date.now() < Date.parse(intent.deadlineAt), 'Intent deadline passed; expire it instead of starting an attempt');
-    return append(intent, 'attempt-start');
+    transportAction = intent.intentVersion === 3 ? intent.transportAction : undefined;
+    return append(intent, 'attempt-start', intent.intentVersion === 3 ? { actionHash: intent.actionHash } : {});
   });
+  return transportAction ? { ...result, actionHash: fingerprint(transportAction), transportAction } : result;
 }
 
 /** Record what the parent observed from its native call; this is not delivery proof. */
@@ -223,22 +324,28 @@ export function inspectNativeNotification(rootInput, id) {
   const intent = regularJson(intentPath(root, id));
   demand(intent.messageId === id, 'Intent message ID does not match its file name');
   if (intent.intentVersion === 1) return { result: 'inspected', lifecycle: { status: 'unknown-legacy', revision: null, attemptStarted: null }, intent };
-  validateVersion2(intent);
+  validateLifecycleIntent(intent);
   return { result: 'inspected', lifecycle: notificationLifecycle(intent), intent };
 }
 
 /** Prepare, persist and return a native action. This function never invokes it. */
-export function prepareNativeNotification(rootInput, { id, target: rawTarget, expectedNativeId, nativeApi, generation, deadlineAt: rawDeadline } = {}) {
+export function prepareNativeNotification(rootInput, { id, target: rawTarget, expectedNativeId, nativeApi, generation, deadlineAt: rawDeadline, transport } = {}) {
   const root = resolve(rootInput);
   demand(typeof rootInput === 'string' && rootInput.length > 0, 'Explicit runtime root required');
   demand(lstatSync(root).isDirectory() && !lstatSync(root).isSymbolicLink(), 'Runtime root must be an existing regular directory');
-  const target = exactTarget(rawTarget);
-  demand(typeof expectedNativeId === 'string' && expectedNativeId.length > 0, 'Expected native ID must be supplied independently');
-  demand(target.nativeId === expectedNativeId, 'Expected native ID differs from the registered recipient');
+  const route = transport?.route ?? 'desktop-followup';
+  const target = validateNativeNotificationTarget(rawTarget, expectedNativeId, route);
   demand(typeof generation === 'number' && generation === target.generation, 'Expected generation must match the full registered target');
   const deadlineAt = utcDeadline(rawDeadline);
   const lane = `${target.harness}:${target.interface}`;
-  demand(SUPPORTED.has(lane) && nativeApi === 'collaboration.followup_task', `Unsupported or unqualified notification lane: ${lane}`);
+  if (route === 'desktop-followup') {
+    demand(lane === 'codex:desktop' && nativeApi === 'collaboration.followup_task'
+      && (!transport || canonical(Object.keys(transport).sort()) === canonical(['route'])), `Unsupported or unqualified notification lane: ${lane}`);
+  } else {
+    demand(lane === 'codex:cli' && nativeApi === 'codex-cli.queue' && UUID.test(expectedNativeId)
+      && transport && canonical(Object.keys(transport).sort()) === canonical(['executable', 'remote', 'route']),
+    `Unsupported or unqualified notification lane: ${lane}`);
+  }
   const msg = operate(root, 'replay', { id, target }).message;
   demand(msg.state === 'accepted', 'Message must be accepted before preparation');
   const file = join(root, 'messages', `${id}.json`);
@@ -248,6 +355,12 @@ export function prepareNativeNotification(rootInput, { id, target: rawTarget, ex
     demand(registry.version === 1 && Array.isArray(registry.sessions), 'Unsupported registry version or malformed registry');
     const registrations = registry.sessions.filter(s => canonical(s.target) === canonical(target));
     demand(registrations.length === 1 && registrations[0].status === 'registered', 'Exact target is stale, superseded, unregistered or colliding');
+    if (route === 'codex-cli-queue') {
+      const matches = registry.sessions.filter(s => s.status === 'registered' && s.target.harness === 'codex'
+        && s.target.interface === 'cli' && s.target.nativeId === expectedNativeId);
+      demand(matches.length === 1 && canonical(matches[0].target) === canonical(target),
+        'Codex thread UUID is ambiguous across active registered targets');
+    }
     const messagesDir = join(root, 'messages');
     demand(lstatSync(messagesDir).isDirectory() && !lstatSync(messagesDir).isSymbolicLink(), 'Message store must be a regular directory');
     demand(canonical(regularJson(file)) === canonical(msg), 'Spool record changed after validation; no action was prepared');
@@ -256,6 +369,16 @@ export function prepareNativeNotification(rootInput, { id, target: rawTarget, ex
     mkdirSync(intentDir, { recursive: true, mode: 0o700 });
     const intentPath = join(intentDir, `${id}.json`);
     demand(!existsSync(intentPath), 'A prior intent exists; duplicate/restart requires manual recovery and never yields another action');
+    const context = msg.context === undefined ? '' : `\n\nBound work context: ${canonical(msg.context)}`;
+    const body = `Read the accepted coordination record at ${file} (message ${id}, SHA-256 ${msg.contentHash}) before acting. It is addressed to the exact registered target ${target.nativeId}, generation ${target.generation}.${context}\n\n${msg.body}\n\nThe local record is accepted, not proof of native receipt or task acceptance. Use only the authorization already present in the record and current task.`;
+    const transportAction = route === 'desktop-followup'
+      ? { route, target, messageId: id, contentHash: msg.contentHash, tool: nativeApi,
+        arguments: { target: expectedNativeId, message: body } }
+      : { route, target, messageId: id, contentHash: msg.contentHash, executable: transport.executable,
+        remote: transport.remote, threadId: expectedNativeId, message: body };
+    const identity = { nativeApi, expectedNativeId, target, messageId: id, contentHash: msg.contentHash };
+    validateTransportAction(transportAction, identity);
+    const actionHash = fingerprint(transportAction);
     const payload = {
       messageId: id,
       contentHash: msg.contentHash,
@@ -264,21 +387,26 @@ export function prepareNativeNotification(rootInput, { id, target: rawTarget, ex
       expectedNativeId,
       envelopeVersion: msg.version,
       registryVersion: registry.version,
-      intentVersion: 2,
+      intentVersion: 3,
       state: 'prepared',
       deadlineAt,
       revision: 0,
       events: [],
+      transportAction,
+      actionHash,
       preparedAt: new Date().toISOString(),
     };
     atomicJson(intentPath, payload);
-    const body = `Read the accepted coordination record at ${file} (message ${id}, SHA-256 ${msg.contentHash}) before acting. It is addressed to the exact registered target ${target.nativeId}, generation ${target.generation}.\n\n${msg.body}\n\nThe local record is accepted, not proof of native receipt or task acceptance. Use only the authorization already present in the record and current task.`;
     return {
       result: 'prepared',
       intent: intentPath,
-      binding: { id, target, expectedNativeId, generation, contentHash: msg.contentHash, revision: 0 },
-      toolAction: { tool: nativeApi, arguments: { target: expectedNativeId, message: body } },
-      claim: 'Prepared locally only. The caller must inspect the live native tool schema and invoke this exact action; preparation is not native acceptance or delivery.',
+      binding: { id, target, expectedNativeId, generation, contentHash: msg.contentHash, revision: 0, actionHash },
+      actionHash,
+      transportAction,
+      ...(route === 'desktop-followup' ? { toolAction: { tool: nativeApi, arguments: { target: expectedNativeId, message: body } } } : {}),
+      claim: route === 'desktop-followup'
+        ? 'Prepared locally only. The caller must inspect the live native tool schema and invoke this exact action; preparation is not native acceptance or delivery.'
+        : 'Prepared a fixed Codex queue plan only. Caller-asserted executable and endpoint ownership are not verified native delivery; the trusted parent must re-check executable bytes, owned process handle, and loopback listener before execution.',
     };
   });
 }
@@ -286,7 +414,7 @@ export function prepareNativeNotification(rootInput, { id, target: rawTarget, ex
 export function capabilityMatrix() {
   return {
     'codex:desktop': 'conditional preparation support only; caller must confirm the live collaboration.followup_task tool and independently verify the exact registered existing agent ID',
-    'codex:cli': 'unsupported/unqualified',
+    'codex:cli': 'fixed codex queue plan preparation only; native busy/idle wakeup, receipt and completion behavior remain unqualified pending parent-owned canary',
     claude: 'unsupported/unqualified',
     'kiro-cli': 'unsupported/unqualified',
     'kiro-crew': 'unsupported/unqualified',

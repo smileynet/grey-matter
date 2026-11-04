@@ -61,6 +61,13 @@ one intent and prepares a fixed action; the parent still verifies the live targe
 invokes the native tool and observes its receipt. Unsupported lanes use explicit
 manual reporting rather than a replacement session or blind retry.
 
+For an admitted Codex CLI worker on a parent-owned loopback app server, load the
+[fixed queue-plan contract](references/codex-queue.md). It binds the executable,
+exact thread UUID, endpoint and message into the intent action fingerprint. Before
+execution, verify the same owned process handle/listener and current executable,
+then persist attempt-start and use only its returned action. Preparation and CLI
+success do not establish receipt or idle wakeup; no implicit daemon or retry is used.
+
 When implementing an admitted native adapter with an owned subprocess, use the
 [bounded process contract](references/owned-process.md). Its verified executable,
 opaque child handle and finite stream/stop limits supply process observations;

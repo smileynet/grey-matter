@@ -12,7 +12,11 @@ For a durable message to an existing collaboration agent, use the
 independently selecting the exact live agent and checking the exposed tool schema;
 invoke the returned fixed action separately. A local acceptance/intent is not native
 receipt. The observed bounded case is one idle owned agent on the current desktop
-tool surface; CLI, busy-session and crash behavior remain unqualified. Registry
+tool surface. A [later bounded desktop case](../../../../docs/agents/research/session-messaging-desktop-20261103.md)
+also records a busy clock-wait turn, idle wakeup and correlated question/completion;
+it predates the action-fingerprint extension and does not qualify arbitrary busy
+work or crash recovery. For the separately conditional CLI route, read the
+[fixed queue plan](codex-queue.md); preparation is not native delivery. Registry
 generation and an explicitly unknown version are local metadata, not native identity
 attestation. Completion must return through the existing native parent channel with
 the correlated record; a spool alone cannot wake the parent.

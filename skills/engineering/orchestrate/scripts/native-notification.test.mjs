@@ -6,15 +6,15 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { operate } from './session-messages.mjs';
-import { capabilityMatrix, expireNativeNotification, inspectNativeNotification, prepareNativeNotification, recordNativeNotificationOutcome, recordNativeNotificationReceipt, startNativeNotificationAttempt } from './native-notification.mjs';
+import { capabilityMatrix, expireNativeNotification, inspectNativeNotification, nativeTransportActionHash, prepareNativeNotification, recordNativeNotificationOutcome, recordNativeNotificationReceipt, startNativeNotificationAttempt } from './native-notification.mjs';
 
 const from = { project: 'p', host: 'h', harness: 'codex', harnessVersion: 'observed', interface: 'desktop', nativeId: 'parent-agent', generation: 2, role: 'orchestrator', worktree: 'D:/repo', branch: 'main' };
 const to = { ...from, nativeId: 'worker-existing', role: 'worker', worktree: 'D:/worker', branch: 'codex/task' };
-function fixture(t, target = to) {
+function fixture(t, target = to, context = undefined) {
   const root = mkdtempSync(join(tmpdir(), 'notification-'));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   operate(root, 'init'); operate(root, 'register', { target: from }); operate(root, 'register', { target });
-  operate(root, 'send', { id: 'msg-1', from, to: target, body: 'Complete bounded assignment.' });
+  operate(root, 'send', { id: 'msg-1', from, to: target, body: 'Complete bounded assignment.', ...(context === undefined ? {} : { context }) });
   operate(root, 'accept', { id: 'msg-1', target });
   return root;
 }
@@ -46,10 +46,13 @@ test('prepares exact existing Codex collaboration action from accepted record an
   const intent = JSON.parse(readFileSync(result.intent, 'utf8'));
   assert.equal(intent.target.nativeId, 'worker-existing');
   assert.equal(intent.contentHash, JSON.parse(readFileSync(join(root, 'messages', 'msg-1.json'), 'utf8')).contentHash);
-  assert.equal(intent.intentVersion, 2);
+  assert.equal(intent.intentVersion, 3);
   assert.equal(intent.revision, 0);
   assert.equal(intent.deadlineAt, input.deadlineAt);
   assert.equal(intent.events.length, 0);
+  assert.equal(intent.actionHash, result.actionHash);
+  assert.deepEqual(intent.transportAction, result.transportAction);
+  assert.equal(result.binding.actionHash, result.actionHash);
   assert.equal(operate(root, 'replay', { id: 'msg-1', target: to }).result, 'replay-unchanged');
 });
 
@@ -108,7 +111,7 @@ test('CLI rejects trailing arguments without creating a notification intent', t 
 test('Codex collaboration interface is unsupported by the desktop-only preparer', t => {
   const target = { ...to, interface: 'collaboration' };
   const root = fixture(t, target);
-  assert.throws(() => prepareNativeNotification(root, args(target)), /Unsupported or unqualified/);
+  assert.throws(() => prepareNativeNotification(root, args(target)), /Unsupported.*target|unqualified/);
 });
 
 test('deadline is required, strictly UTC and future before any intent or action exists', t => {
@@ -120,14 +123,17 @@ test('deadline is required, strictly UTC and future before any intent or action 
   assert.equal(existsSync(join(root, 'notification-intents')), false);
 });
 
-test('attempt start is durable before native invocation and result attestations are not receipts', t => {
+test('attempt start is durable and fingerprint-bound before native invocation; attestations are not receipts', t => {
   const root = fixture(t);
   const prepared = prepareNativeNotification(root, args());
   const started = startNativeNotificationAttempt(root, prepared.binding);
   const persisted = JSON.parse(readFileSync(prepared.intent, 'utf8'));
   assert.equal(persisted.revision, 1);
   assert.equal(persisted.events[0].type, 'attempt-start');
+  assert.equal(persisted.events[0].actionHash, prepared.actionHash);
   assert.equal(started.lifecycle.status, 'attempt-ambiguous');
+  assert.equal(started.actionHash, prepared.actionHash);
+  assert.deepEqual(started.transportAction, prepared.transportAction);
   const outcome = recordNativeNotificationOutcome(root, { ...prepared.binding, revision: started.revision }, 'accepted');
   assert.equal(outcome.lifecycle.status, 'outcome-accepted');
   assert.equal(outcome.lifecycle.receipt, null);
@@ -239,4 +245,19 @@ test('historical version-one intent remains inspectable as unknown and cannot be
   assert.equal(inspected.lifecycle.attemptStarted, null);
   assert.throws(() => startNativeNotificationAttempt(root, prepared.binding), /inspect-only/);
   assert.deepEqual(JSON.parse(readFileSync(prepared.intent, 'utf8')), historical);
+});
+
+test('version-two desktop intents retain their lifecycle binding contract', t => {
+  const root = fixture(t);
+  const prepared = prepareNativeNotification(root, args());
+  const intent = JSON.parse(readFileSync(prepared.intent, 'utf8'));
+  intent.intentVersion = 2;
+  delete intent.transportAction;
+  delete intent.actionHash;
+  writeFileSync(prepared.intent, `${JSON.stringify(intent)}\n`);
+  const { actionHash, ...legacyBinding } = prepared.binding;
+  const started = startNativeNotificationAttempt(root, legacyBinding);
+  assert.equal(started.lifecycle.status, 'attempt-ambiguous');
+  assert.equal(Object.hasOwn(started, 'transportAction'), false);
+  assert.equal(JSON.parse(readFileSync(prepared.intent, 'utf8')).events[0].actionHash, undefined);
 });
