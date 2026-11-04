@@ -287,9 +287,13 @@ input within20 seconds and then stopped cleanly with observed descendants absent
 #243 fixes the adapter's readiness-before-first-input sequence before #236 resumes.
 #235's renewed CLI fixture review found that connector discovery
 can start integrations before its model gate; safe prelaunch policy is being
-resolved before native execution. Claude fixture correction and Kiro profile/model
-preflight continue independently. No additional provider model turn is implied by
-source tests or the read-only Kiro model catalog.
+resolved before native execution. #237 completed two core-acknowledged V2 turns
+with observed physical process cleanup; its original update-stream disconnect and
+local-only correction are recorded separately in the
+[qualification](agents/research/session-messaging-kiro-owned-20261104.md).
+Claude's early public lifecycle frame is being handled as inert metadata, with no
+receipt or completion inferred from it. No additional provider model turn is
+implied by source tests or the read-only Kiro model catalog.
 
 ## Orchestration workstream (reconciled 2026-11-03)
 

@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "subject": "Owned Kiro follow-up qualified with separate teardown limits; Claude first-input source shipped, remaining native qualification open",
+  "sources": [
+    "docs/orchestration.html",
+    "docs/orchestration-findings.json",
+    "scripts/assets/orchestration-dashboard.html",
+    "scripts/build-orchestration-dashboard.mjs",
+    "scripts/orchestration-dashboard.test.mjs"
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104/findings-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104/tickets-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104/findings-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104/tickets-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ]
+}

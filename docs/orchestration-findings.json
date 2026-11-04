@@ -3,6 +3,57 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "owned-kiro-followup",
+      "state": "confirmed",
+      "label": "Owned Kiro handoff confirmed",
+      "title": "Continue a task with the same Kiro worker",
+      "value": "Send a follow-up to an owned worker and receive an answer that remembers the first exchange.",
+      "diagramLabel": "Two exchanges with one owned worker",
+      "steps": [
+        "Ask a question",
+        "Keep the same worker",
+        "Receive the follow-up"
+      ],
+      "limit": "Confirmed for one bounded V2 session. Busy queues, reconnect and V3 graceful shutdown remain unqualified.",
+      "details": "Both turns and their replies were acknowledged through the shared message core. The observed process tree settled. The original update stream reported a disconnect during owner stop; a local adapter correction passes fake-peer checks without rerunning the successful task. Served model identity and effective provider tool capacity remain unreported.",
+      "tickets": [
+        "237",
+        "179"
+      ],
+      "sources": [
+        {
+          "label": "Observed handoff and limits",
+          "href": "agents/research/session-messaging-kiro-owned-20261104.md"
+        }
+      ]
+    },
+    {
+      "id": "claude-first-bound-input",
+      "state": "confirmed",
+      "label": "Startup sequencing shipped",
+      "title": "Start Claude with the intended handoff",
+      "value": "The first saved handoff can start an owned worker without waiting for a readiness message that may require input.",
+      "diagramLabel": "First-input startup path",
+      "steps": [
+        "Save the handoff",
+        "Send its bound input",
+        "Wait for a confirmed result"
+      ],
+      "limit": "Startup sequencing is shipped. Native delivery remains in qualification after an early lifecycle event exposed another parser gap.",
+      "details": "The adapter allows one exact bound input while starting, keeps it busy across initialization and blocks another input until a correlated result. Local protocol checks pass. This startup change alone does not prove native delivery or completion.",
+      "tickets": [
+        "243",
+        "236",
+        "179"
+      ],
+      "sources": [
+        {
+          "label": "Native observations and limits",
+          "href": "agents/research/session-messaging-native-qualification-20261104.md"
+        }
+      ]
+    },
+    {
       "id": "owned-handoff-binding",
       "state": "confirmed",
       "label": "Handoff binding shipped",
@@ -1094,6 +1145,10 @@
       "Keep each handoff tied to the right work",
       "Carry the task, candidate and handoff reference together, so a reply stays connected to the work it belongs to."
     ],
+    "237": [
+      "Continue a task with the same Kiro worker",
+      "Send a follow-up to an owned worker and receive an answer that remembers the first exchange."
+    ],
     "238": [
       "Keep worker processes within clear limits",
       "Set a worker’s input, output and lifetime limits, then stop only the process that belongs to that work."
@@ -1103,8 +1158,8 @@
       "Prepare owned-worker handoffs from the same saved message, keeping each input tied to its intended destination."
     ],
     "243": [
-      "Resolve the observed startup wait",
-      "A bounded Claude startup produced no readiness output before input. The first real handoff needs a reviewed startup path."
+      "Start Claude with the intended handoff",
+      "The first saved handoff can start an owned worker without waiting for a readiness message that may require input."
     ]
   },
   "includedTicketIds": [

@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "e2401820a99de8cf9416c268c20cb3e70f874796e87676ca67abcf8afcca5eba",
+  "subject": "Owned Kiro follow-up qualified with separate teardown limits; Claude first-input source shipped, remaining native qualification open",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 57748,
+      "sha256": "7ba5481b75c8281e3163cc6e8a048ccac11d4a688262797688194c6a397f3652"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 313898,
+      "sha256": "95c4e6203f88c496bb43af344245221ee99fb99d0577fb019df0f82a97c15beb"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14145,
+      "sha256": "fe47a7d9ad8c78c5425925fd712403b013032b7d7f744b0a6d309edf946df76f"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1762,
+      "sha256": "2e1d9d64cd8c35663ef930d96187cb530fb4f7bb5827faf32a5c82f6b4871c4f"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5890,
+      "sha256": "16784d51172ccf9f876105e8f473824510e08b58269867c600191e1c9f2b5c03"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104/findings-1280.png",
+      "bytes": 909267,
+      "sha256": "3254eeac16626e219ed741b68829d213516d6d5df9fa43c3a2f749678cd8de23",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104/tickets-1280.png",
+      "bytes": 315684,
+      "sha256": "cdc9955012bd563e18b0abd3330ea9ba70457d871d994e4315c35565b17a7a15",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104/findings-390.png",
+      "bytes": 935603,
+      "sha256": "e15ce23bebff2d5d105ba9cf9cd724954452374181783211c818f3ab167ec7ce",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104/tickets-390.png",
+      "bytes": 293098,
+      "sha256": "16efb710f7c4b8fc909fbad0861edcdf2f4a5f4db4988a21a60b582c0bf14b04",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "f51eb4d2be7b50b2b9a97859e02ff1b7e397af76d6f8e493896ef9b16e0674bc",
+  "id": "5548e69604fefa14e4f93cf4dcdbb78368f9b7d571af66258ceb689a127092f3",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "parent179-independent-critic242",
+    "note": "Independent source/capture and actual12PNG review PASS; .scratch/t237-dashboards-review.md; phone viewport confirms apparent long-image duplication is viewer artifact.",
+    "acceptedAt": "2026-11-04T10:05:45.435Z",
+    "snapshotId": "5548e69604fefa14e4f93cf4dcdbb78368f9b7d571af66258ceb689a127092f3"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "3ade01e59b4d55c1f9659ad204f4c674219787b9ab3581e33c4d784f77253391",
+  "subject": "Owned Kiro follow-up qualified with separate teardown limits; Claude first-input source shipped, remaining native qualification open",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 188425,
+      "sha256": "67f88474b6ee9201441a5b1e08113a685180fb7d315816a3c8ded0d66f5bedd8"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104-status/tab-0-1280.png",
+      "bytes": 80353,
+      "sha256": "f98f7140185edd53a6997dd596bae0d5934b9ea59d53d03c4996f63090edc839",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104-status/tab-1-1280.png",
+      "bytes": 420499,
+      "sha256": "da9d542b4a7f6d328725123742eed0c6535e0bf6cb5c099c6baac81b63d6d10e",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104-status/tab-2-1280.png",
+      "bytes": 26864,
+      "sha256": "4f14bacf58f7672b7b6da31ddaa31dd3eb9533b8f452df20f62c9a6e2aa11337",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104-status/tab-3-1280.png",
+      "bytes": 519588,
+      "sha256": "55cfb3cbce7b2c01676023cddd8e41de3a62ca5724f189a7329fe16f980412b6",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104-status/tab-0-390.png",
+      "bytes": 75281,
+      "sha256": "0081fae54b73b374bd7594dac897f208a3007e35c12b2593011e1192fc606380",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104-status/tab-1-390.png",
+      "bytes": 409216,
+      "sha256": "d6f94e762ab3dff39954ac45962e26b4a5a632710d19ad42a93583fe019f18d8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104-status/tab-2-390.png",
+      "bytes": 21747,
+      "sha256": "0510502ef6e9db09ade338e1d6d30a89649f983f2ab5a98cc8c0bafd5b3ce56d",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t237-20261104-status/tab-3-390.png",
+      "bytes": 483242,
+      "sha256": "c0ba0738e77e1a7965a683f0c903097bcb2cec431bf2ecf971efdcb92e1348c9",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "4a3dbe7d98322635ed221fa81290e6fda1a61589453609870cbe82f42a591936",
+  "id": "3d00543f5e95422e93a86a39dbf14e65ad6a1992b516d0412f8e0236624221f3",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "parent179-independent-critic242",
+    "note": "Independent exactsources/captures/12PNG visualreview PASS; .scratch/t237-dashboards-review.md; dates/counts/history/claims verified.",
+    "acceptedAt": "2026-11-04T10:05:45.634Z",
+    "snapshotId": "3d00543f5e95422e93a86a39dbf14e65ad6a1992b516d0412f8e0236624221f3"
+  }
+}
