@@ -3,6 +3,60 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "owned-claude-followup",
+      "state": "confirmed",
+      "label": "Owned Claude follow-up confirmed",
+      "title": "Continue a task with the same Claude worker",
+      "value": "Send a follow-up and receive an answer that remembers the first exchange.",
+      "diagramLabel": "Keep the exchange in one worker",
+      "steps": [
+        "Send the saved task",
+        "Keep the same worker",
+        "Confirm the follow-up"
+      ],
+      "limit": "Confirmed for a bounded Windows text-worker session. Busy queues, reconnect and attachment to another chat remain unqualified.",
+      "details": "Two correlated turns completed with four core acknowledgments and two confirmed receipts. The observed owned process tree settled. Earlier failed and ambiguous cases remain preserved; this result does not establish served model identity or billing entitlement.",
+      "tickets": [
+        "236",
+        "179"
+      ],
+      "sources": [
+        {
+          "label": "Observed Claude exchange and limits",
+          "href": "agents/research/session-messaging-claude-owned-20261104.md"
+        }
+      ]
+    },
+    {
+      "id": "current-handoff-routes",
+      "state": "confirmed",
+      "label": "Shared handoffs shipped",
+      "title": "Choose a tested worker handoff",
+      "value": "Keep a task with its worker, confirm replies and see when manual reporting is needed.",
+      "diagramLabel": "Choose a handoff route with clear limits",
+      "steps": [
+        "Save the handoff",
+        "Address the same worker",
+        "Confirm the reply"
+      ],
+      "limit": "Bounded Windows exchanges are confirmed for desktop, Claude and Kiro workers. CLI delivery, unavailable permissions and held routes retain manual fallback.",
+      "details": "Shared routing, durable messages and receipt states distinguish a saved task from delivery and completion. Deterministic checks cover duplicate, restart and ambiguous outcomes. Native evidence is bounded to owned cases; it does not establish universal wakeup, foreign attachment, reconnect, exactly-once delivery or cross-platform parity.",
+      "tickets": [
+        "179",
+        "231"
+      ],
+      "sources": [
+        {
+          "label": "Supported routes and remaining limits",
+          "href": "agents/research/session-messaging-outcome-20261104.md"
+        },
+        {
+          "label": "Evidence and limits",
+          "href": "agents/research/session-messaging-interfaces-20261103.md"
+        }
+      ]
+    },
+    {
       "id": "existing-agent-notification",
       "state": "confirmed",
       "label": "Owned desktop follow-up confirmed",
@@ -77,14 +131,18 @@
         "Send its bound input",
         "Wait for a confirmed result"
       ],
-      "limit": "Startup sequencing is shipped. Native delivery remains in qualification after an early lifecycle event exposed another parser gap.",
-      "details": "The adapter allows one exact bound input while starting, keeps it busy across initialization and blocks another input until a correlated result. Local protocol checks pass. This startup change alone does not prove native delivery or completion.",
+      "limit": "The startup path and a bounded two-turn Windows exchange are confirmed. Broader session attachment and reconnect remain unqualified.",
+      "details": "The adapter allows one exact bound input while starting, keeps it busy across initialization and blocks another input until a correlated result. Local protocol checks pass. This startup change alone does not prove native delivery or completion. The later owned-session qualification completed both correlated turns and observed process settlement; earlier failures remain historical evidence.",
       "tickets": [
         "243",
         "236",
         "179"
       ],
       "sources": [
+        {
+          "label": "Completed bounded qualification",
+          "href": "agents/research/session-messaging-claude-owned-20261104.md"
+        },
         {
           "label": "Native observations and limits",
           "href": "agents/research/session-messaging-native-qualification-20261104.md"
@@ -103,7 +161,7 @@
         "Bind its destination",
         "Prepare one input"
       ],
-      "limit": "Native delivery and startup checks remain in progress. A prepared input is not a receipt.",
+      "limit": "Bounded owned Claude and Kiro exchanges are confirmed separately. Preparing an input alone does not prove delivery; held routes retain manual reporting.",
       "details": "The shared intent now binds owned Claude and Kiro input to exact process generation, session and message identity. Independent review and 34 focused checks passed. Actual calls remain parent-owned; no new process, retry, grant or replacement conversation is created by preparation.",
       "tickets": [
         "242",
@@ -113,31 +171,6 @@
         {
           "label": "Evidence and limits",
           "href": "agents/research/session-messaging-implementation-20261103.md#shared-owned-client-intent-binding-242"
-        }
-      ]
-    },
-    {
-      "id": "current-handoff-routes",
-      "state": "confirmed",
-      "label": "Current routes researched",
-      "title": "Choose a handoff route with clear limits",
-      "value": "See which routes can address an existing worker, which need an owned process, and which are held by permissions or security.",
-      "diagramLabel": "Choose a handoff route with clear limits",
-      "steps": [
-        "Check the route",
-        "Check permission",
-        "Qualify delivery"
-      ],
-      "limit": "Version, help and source checks establish interface options. They do not establish live delivery.",
-      "details": "Current official-source survey and fourteen bounded local captures were independently reviewed. Codex queue, owned Claude streams and owned Kiro ACP require separate native qualification. Crew requires a trusted send grant and Gateway caller identity; project profiles cannot supply them. The Antigravity security hold remains.",
-      "tickets": [
-        "231",
-        "179"
-      ],
-      "sources": [
-        {
-          "label": "Evidence and limits",
-          "href": "agents/research/session-messaging-interfaces-20261103.md"
         }
       ]
     },
@@ -1053,8 +1086,8 @@
       "Leave a runnable way to compare model trials on the same fixtures."
     ],
     "179": [
-      "Connect existing workers across supported interfaces",
-      "Shared session messaging keeps its existing tooling owner. Native delivery and unsupported lanes must remain explicit."
+      "Choose a tested worker handoff",
+      "Keep a task with its worker, confirm replies and see when manual reporting is needed."
     ],
     "185": [
       "Understand the shared agent runtime",
@@ -1155,6 +1188,10 @@
     "235": [
       "Continue a saved handoff with the same agent",
       "Send a saved question, then return to the same worker for a follow-up after it becomes idle."
+    ],
+    "236": [
+      "Continue a task with the same Claude worker",
+      "Send a follow-up and receive an answer that remembers the first exchange."
     ],
     "237": [
       "Continue a task with the same Kiro worker",

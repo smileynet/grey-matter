@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "e0a6cf28b2add659f76e0468e948931e6a960ac475cc596a8b83647b81577604",
+  "subject": "Shared messaging closed with bounded owned desktop, Claude and Kiro exchanges; held routes and platform limits explicit",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 195674,
+      "sha256": "5d53c1de58c0a0a71e1d92ee97dc976b3c8b9cbf28e32b39935b9a9dd53b1bb5"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-0-1280.png",
+      "bytes": 78729,
+      "sha256": "5c17fae2ac85f2f32bdcf12b03a5d66115fb07960a09967de8778ebd6e229e02",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-1-1280.png",
+      "bytes": 445434,
+      "sha256": "efa1a12b39ff6fa004945fa4c96e1fa6df6caff6b86c94f1a6351e750d971e2b",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-2-1280.png",
+      "bytes": 26462,
+      "sha256": "22627c3c8e1ebddff6c968286c7c2d2bbbe5ba34dced3e0e98e42edb6854b63d",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-3-1280.png",
+      "bytes": 524124,
+      "sha256": "853bab12591682409bf2afee7a0905f7969fc9333bc72c1e5957a2250ddf9696",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-0-390.png",
+      "bytes": 72297,
+      "sha256": "c653f081ef96ddbc4267eebb0d765726b068c71a70bea93431193b7cd883d8e6",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-1-390.png",
+      "bytes": 433785,
+      "sha256": "15303decb8b190297fda0bd2500693fe0235c1c1e3bd3cd631133abb3b16f6af",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-2-390.png",
+      "bytes": 21541,
+      "sha256": "24aba2ad7e2e6c854995648e0daa7ed507ed6dd1964c1821433d08563769961a",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-3-390.png",
+      "bytes": 480983,
+      "sha256": "251f609d1f1b6474cbb7e28008b90b082e4c705c2f801002c6f6f74398ee7b56",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "3c446823fc8c5859f7a89302f799368e6290f085d2880b0bdcd7c28d14e73769",
+  "id": "244c307dfab6f4295ed53c1e7da851ea12deabb118126729db36e25b9e96179e",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic242",
+    "note": "Reviewed all eight status captures: overview, entries, decisions and plan at 1280px and 390px. Confirmed latest #179 entry, #248/#249 prior entries, 80-entry history, 247-ticket plan, counts and collapsed details. Mobile dependency graph communicates horizontal scrolling; ticket list remains readable. PASS.",
+    "acceptedAt": "2026-11-04T12:22:26.769Z",
+    "snapshotId": "244c307dfab6f4295ed53c1e7da851ea12deabb118126729db36e25b9e96179e"
+  }
+}

@@ -292,11 +292,14 @@ established within current authorization. #237 completed two core-acknowledged V
 with observed physical process cleanup; its original update-stream disconnect and
 local-only correction are recorded separately in the
 [qualification](agents/research/session-messaging-kiro-owned-20261104.md).
-Claude's early public lifecycle frame is handled as inert metadata, with no
-receipt or completion inferred from it. A later native case reached input replay
-and assistant output but stopped on another protocol record before a terminal
-result; #236 remains open. No additional provider model turn is
-implied by source tests or the read-only Kiro model catalog.
+Claude's early public lifecycle frames remain inert metadata. The final owned
+Windows text-worker case completed two correlated turns with core acknowledgments,
+confirmed receipts and observed process settlement; #236 and parent #179 are done.
+Earlier failed/ambiguous cases remain preserved. The
+[bounded outcome](agents/research/session-messaging-outcome-20261104.md) records
+manual fallback, held routes and platform gaps. No recurring model benchmark or
+additional provider turn is required by this closeout. Final dashboard publication
+is parent-owned; supervision ends after that publication settles.
 
 ## Orchestration workstream (reconciled 2026-11-03)
 

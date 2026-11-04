@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "subject": "Shared messaging closed with bounded owned desktop, Claude and Kiro exchanges; held routes and platform limits explicit",
+  "sources": [
+    "docs/orchestration.html",
+    "docs/orchestration-findings.json",
+    "scripts/assets/orchestration-dashboard.html",
+    "scripts/build-orchestration-dashboard.mjs",
+    "scripts/orchestration-dashboard.test.mjs"
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104/findings-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104/tickets-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104/findings-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104/tickets-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ]
+}

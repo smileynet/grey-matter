@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "5ff5d1844befb647abcf7111f859d7321c692467ce8243fe317bab357dea9b13",
+  "subject": "Shared messaging closed with bounded owned desktop, Claude and Kiro exchanges; held routes and platform limits explicit",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 59962,
+      "sha256": "8974fd256d52f45692e619bd33fb649d4d7b07d64f635e1f6d2a8dcf58b37f2f"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 323543,
+      "sha256": "c58bf4425fd4d965f3a73559d473e753cf844d5c4da2d719bb3c15712f6540d8"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14145,
+      "sha256": "fe47a7d9ad8c78c5425925fd712403b013032b7d7f744b0a6d309edf946df76f"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1762,
+      "sha256": "2e1d9d64cd8c35663ef930d96187cb530fb4f7bb5827faf32a5c82f6b4871c4f"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5890,
+      "sha256": "16784d51172ccf9f876105e8f473824510e08b58269867c600191e1c9f2b5c03"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104/findings-1280.png",
+      "bytes": 947422,
+      "sha256": "2d939f4ecf0abdd638e5dc45b75602f1da505b25352197bbb9baa987d3b35d73",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104/tickets-1280.png",
+      "bytes": 293640,
+      "sha256": "d47482238bb0493285e3de40c1950ad17be305dac270a853762e145080e12b7f",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104/findings-390.png",
+      "bytes": 968622,
+      "sha256": "c9696f77d83ac4b9983c80a4e47edef6d19113c4456d4d08cf3c696b6a794ea8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104/tickets-390.png",
+      "bytes": 273046,
+      "sha256": "114b2cd601c50afb4eda2aa0b0f60668c156bc2dbc5cb27428cd242298928357",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "ac1988fe10e45548e64f9d6500e9282d63071be49ed2590166d596d6718c2f5d",
+  "id": "cd5549261805b776ecbcfc1f60e4f9932a6f58df4c64facd81110b90f515ea73",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic242",
+    "note": "Reviewed all four current effort captures at 1280px and 390px. Confirmed updated #242 text now says input preparation does not prove delivery; bounded owned Claude and Kiro exchanges are distinct from unresolved CLI delivery, permissions and held routes. Counts, open/deferred/completed labels and collapsed evidence accord with source. PASS.",
+    "acceptedAt": "2026-11-04T12:22:20.147Z",
+    "snapshotId": "cd5549261805b776ecbcfc1f60e4f9932a6f58df4c64facd81110b90f515ea73"
+  }
+}
