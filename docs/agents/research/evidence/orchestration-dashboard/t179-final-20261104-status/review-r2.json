@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "e0a6cf28b2add659f76e0468e948931e6a960ac475cc596a8b83647b81577604",
+  "subject": "Shared messaging closed with bounded owned desktop, Claude and Kiro exchanges; held routes and platform limits explicit",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 195878,
+      "sha256": "2e7099a95581d46b4162a4a15cfe29b6ea8490ca48ded5ce97802545e75a6e4e"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-0-1280.png",
+      "bytes": 78771,
+      "sha256": "3f283e8ee41cb726b27fa38e18ff1a8faac71c7ce8b3f540872ef056f99f747a",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-1-1280.png",
+      "bytes": 445483,
+      "sha256": "f6b221032a52ea40c5810cd8aa192f164d4af42a8ac92be94fcc1b80906ff9dd",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-2-1280.png",
+      "bytes": 26499,
+      "sha256": "3d23e2fe01c1606e938355a7ac235c0281f1b3ee832a9ee4d6b8ceb8db3d8531",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-3-1280.png",
+      "bytes": 529986,
+      "sha256": "a4ab4ac650cf6a29f0bb22eefd1b7a98cf58fc70bffb502b686ecdd96860ed02",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-0-390.png",
+      "bytes": 72350,
+      "sha256": "65e2dae322f4dcd8656132e0466b2f33f4e2f77dc01343da5222d873a08f3928",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-1-390.png",
+      "bytes": 433847,
+      "sha256": "f7c4bd9c392393155050d6e0afdf6fffbd4fc4e855dce38b91f3390663127008",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-2-390.png",
+      "bytes": 21600,
+      "sha256": "b985a39e77633ff01c4fb14392b7b8e2836306939be53de17f62c9e2d9054b19",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-final-20261104-status/tab-3-390.png",
+      "bytes": 486852,
+      "sha256": "e00cc15a13ff6b6c8aa17d819450b402d356216d4e5f686598fb7e0aa79770f8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "5ae0978a6f60c3e6b7c33a66eeb45344ebc5aaf89a8095aaacb145f7cc3934e2",
+  "id": "a6dc1296af8b9b841059453a03e83f54fa25d396995ac53cac2099e701722049",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "critic242",
+    "note": "Renewed status dashboard review after ticket #251 arrived. Inspected refreshed Plan captures at 1280px and 390px: 248 total tickets, 49 ready, 178 done; #251 appears in the ready list. Previous #179 entry and 80-entry history remain unchanged. Mobile graph still indicates horizontal scrolling. PASS.",
+    "acceptedAt": "2026-11-04T12:24:03.818Z",
+    "snapshotId": "a6dc1296af8b9b841059453a03e83f54fa25d396995ac53cac2099e701722049"
+  }
+}
