@@ -88,6 +88,8 @@ stays out of the way, under folds and links.
    [scope examples](references/review-receipt.md#evidence-limits-and-required-acceptance).
    When recording acceptance, use [review receipts](references/review-receipt.md); a
    rendering-input change requires affected checks, new captures and renewed acceptance.
+   After reconciliation, use the receipt's [input comparison](references/review-receipt.md#reconcile-before-renewing-review)
+   to identify affected declared views and reuse current acceptance for unchanged independent views.
    Closure-only metadata may change only through the receipt's explicit projections. Run
    `node <this skill's directory>/scripts/check-dashboard.mjs <file>` and fix
    every error; clear warnings that are real. Exercise decision selection, text retention across

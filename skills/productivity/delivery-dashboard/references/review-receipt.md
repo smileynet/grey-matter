@@ -11,6 +11,28 @@ Use a review receipt when a project requires critic acceptance of UI work. It bi
 
 A checker pass establishes byte identity and the recorded attestation. Whether the interface communicates clearly remains a critic judgement. A viewport in the manifest is reported capture context, not proof that a browser used it.
 
+## Reconcile before renewing review
+
+After upstream or ticket reconciliation, run `inspect` against each affected view's
+existing manifest and receipt before recapturing. It compares the existing receipt's
+source/capture inventory with current bytes and reports added, removed and changed
+paths, plus manifest scope changes. It writes nothing and creates no new identity.
+
+`reusable: true` means the receipt is accepted for its exact current inputs and
+captures. Reuse that acceptance; unrelated files outside its declared scope do not
+require another review. `reusable: false` exits nonzero: use its changed paths to
+choose affected checks, fresh captures and a new exact-snapshot review. Missing or
+unreadable inputs remain errors, not unchanged evidence. Pending acceptance cannot
+be reused even when no bytes changed.
+
+Declare independently reviewable views in separate manifests and receipts. A
+changed input invalidates every receipt that includes it; a shared stylesheet can
+invalidate several views. Independence is a scope-review judgement, never inferred
+from filenames. Do not trim a manifest after a change to preserve acceptance.
+Required publication checks still validate every receipt and source they depend on.
+Inspection does not discover undeclared dependencies, validate whole-board freshness,
+inspect the rendering, renew acceptance or authorize publication.
+
 ## Record what the evidence says
 
 The receipt binds declared source and capture bytes to one snapshot. In the review note,
@@ -86,8 +108,15 @@ Use Node22+; replace the helper path with this skill's actual directory. These c
 node <skill>/scripts/review-receipt.mjs create <repo-root> review-manifest.json review-receipt.json
 node <skill>/scripts/review-receipt.mjs accept <repo-root> review-manifest.json review-receipt.json --expected-id <inspected-snapshot-id> --reviewer <critic-identity> --note <inspection-result>
 node <skill>/scripts/review-receipt.mjs check <repo-root> review-manifest.json review-receipt.json
+node <skill>/scripts/review-receipt.mjs inspect <repo-root> review-manifest.json review-receipt.json
 ```
 
 `create` writes a pending receipt, not approval. `accept` requires the exact inspected ID and verifies that its scope/source/captures still match. `check` is read-only and requires acceptance for that current snapshot; it exits nonzero on drift or missing acceptance. Successful output names the snapshot ID, source digest, review outcome and file/capture counts. Receipts include relative paths, normalized source digests, capture digests, declared viewports and reviewer identity/note/time.
 
 Retain the small manifest, accepted receipt and useful captures as durable evidence. Treat the reviewer fields as an attestation rather than a signature or authorization to publish. Follow the project's artifact policy when removing temporary attempts.
+
+`inspect` reports the existing `id`, computed `currentId`, `reusable`, `scopeChanged`,
+`reason` and per-path `changes.source`/`changes.captures`. It exits zero only for
+current accepted evidence. Other states return structured diagnostics and exit one;
+invalid/unreadable evidence returns an error. Continue to use `check` for strict
+acceptance and the publication preflight for the packaged source.

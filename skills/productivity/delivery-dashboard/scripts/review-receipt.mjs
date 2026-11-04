@@ -90,9 +90,17 @@ function load(rootPath,manifestPath,receiptPath){
  return {root,receiptFile,manifestDigest:digest(raw),...snapshot(root,manifest,receiptPath)};
 }
 function contentId(value){return digest(JSON.stringify({manifestDigest:value.manifestDigest,subject:value.subject,source:value.source,captures:value.captures,sourceDigest:value.sourceDigest}));}
-function current(root,manifestPath,receiptPath){
+function comparison(root,manifestPath,receiptPath){
  const actual=load(root,manifestPath,receiptPath),record=JSON.parse(readFileSync(actual.receiptFile.full));
  demand(record.version===1&&record.id===contentId(record),'Invalid review receipt identity');
+ demand([record.source,record.captures].every(rows=>Array.isArray(rows)&&rows.every(row=>object(row)&&typeof row.path==='string')),'Invalid review receipt file inventory');
+ return {actual,record};
+}
+function accepted(record){
+ return record.review?.outcome==='accept'&&record.review.snapshotId===record.id&&typeof record.review.reviewer==='string'&&record.review.reviewer.trim().length>0&&typeof record.review.note==='string'&&record.review.note.trim().length>0;
+}
+function current(root,manifestPath,receiptPath){
+ const {actual,record}=comparison(root,manifestPath,receiptPath);
  demand(record.manifestDigest===actual.manifestDigest,'Review scope/projections changed; obtain a new review');
  demand(record.id===contentId(actual),'Reviewed source or captures changed; obtain new captures and review');
  return {actual,record};
@@ -112,13 +120,24 @@ export function acceptReceipt(root,manifestPath,receiptPath,{expectedId,reviewer
 }
 export function checkReceipt(root,manifestPath,receiptPath){
  const {record}=current(root,manifestPath,receiptPath);
- demand(record.review?.outcome==='accept'&&record.review.snapshotId===record.id&&typeof record.review.reviewer==='string'&&record.review.reviewer.trim()&&typeof record.review.note==='string'&&record.review.note.trim(),'Receipt has no acceptance for this snapshot');
+ demand(accepted(record),'Receipt has no acceptance for this snapshot');
  return record;
 }
+export function inspectReceipt(root,manifestPath,receiptPath){
+ const {actual,record}=comparison(root,manifestPath,receiptPath),currentId=contentId(actual);
+ const changes={};
+ for(const field of ['source','captures']){
+  const before=new Map(record[field].map(row=>[row.path,row])),after=new Map(actual[field].map(row=>[row.path,row]));
+  changes[field]={added:[...after.keys()].filter(path=>!before.has(path)).sort(),removed:[...before.keys()].filter(path=>!after.has(path)).sort(),changed:[...after.keys()].filter(path=>before.has(path)&&JSON.stringify(before.get(path))!==JSON.stringify(after.get(path))).sort()};
+ }
+ const scopeChanged=record.manifestDigest!==actual.manifestDigest,reusable=record.id===currentId&&accepted(record);
+ return {id:record.id,currentId,reusable,scopeChanged,reason:scopeChanged?'scope-changed':record.id!==currentId?'content-changed':!accepted(record)?'acceptance-missing':'current-accepted',changes};
+}
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
- try{const [command,root,manifest,receipt,...flags]=process.argv.slice(2);demand(root&&manifest&&receipt,'Usage: review-receipt.mjs create|accept|check ROOT MANIFEST RECEIPT [--expected-id ID --reviewer NAME --note TEXT]');let result;
+ try{const [command,root,manifest,receipt,...flags]=process.argv.slice(2);demand(root&&manifest&&receipt,'Usage: review-receipt.mjs create|accept|check|inspect ROOT MANIFEST RECEIPT [--expected-id ID --reviewer NAME --note TEXT]');let result;
   if(command==='accept'){demand(flags.length===6,'Acceptance needs --expected-id, --reviewer and --note');const options={};for(let i=0;i<flags.length;i+=2){demand(['--expected-id','--reviewer','--note'].includes(flags[i])&&!Object.hasOwn(options,flags[i]),'Unknown or duplicate acceptance option');options[flags[i]]=flags[i+1];}result=acceptReceipt(root,manifest,receipt,{expectedId:options['--expected-id'],reviewer:options['--reviewer'],note:options['--note']});}
-  else{demand(flags.length===0,'Unexpected options');demand(['create','check'].includes(command),'Expected create, accept or check');result=(command==='create'?createReceipt:checkReceipt)(root,manifest,receipt);}
-  console.log(JSON.stringify({id:result.id,sourceDigest:result.sourceDigest,outcome:result.review.outcome,files:result.source.length,captures:result.captures.length}));
+  else{demand(flags.length===0,'Unexpected options');demand(['create','check','inspect'].includes(command),'Expected create, accept, check or inspect');result=({create:createReceipt,check:checkReceipt,inspect:inspectReceipt})[command](root,manifest,receipt);}
+  if(command==='inspect'){console.log(JSON.stringify(result));if(!result.reusable)process.exitCode=1;}
+  else console.log(JSON.stringify({id:result.id,sourceDigest:result.sourceDigest,outcome:result.review.outcome,files:result.source.length,captures:result.captures.length}));
  }catch(error){console.error(error.message);process.exitCode=1;}
 }
