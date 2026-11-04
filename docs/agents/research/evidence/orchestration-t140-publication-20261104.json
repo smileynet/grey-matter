@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "ownerCandidate": "f988c13800aa2047f30f45836c41822bac7a8b03",
+  "projectId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e",
+  "siteSourceCommit": "6cef5f23889f4d7d267b1811787f6bf17a13cfbb",
+  "url": "https://orchestration-findings.sambiggins.chatgpt.site",
+  "deploymentId": "appgdep_6aeb9536cf108191b31ad08122269cab",
+  "status": "succeeded",
+  "versionId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_649a4459cdf481918a48d77c4e61d052",
+  "publishedAt": "2026-11-04T20:27:41.734272+00:00",
+  "audience": {
+    "mode": "custom",
+    "revision": 1,
+    "owners": 1,
+    "groups": 0,
+    "externalVisitors": 0,
+    "preserved": true
+  },
+  "receipts": {
+    "effort": "33d5973e4807e3f63907598ea9325aef896468a6740269b3048ccc2a7cbc7096",
+    "status": "ee21abadc10dc7fddc063c4c4537151613e54f37b895e58ed85a7968573c2e80"
+  },
+  "archive": {
+    "bytes": 107615,
+    "sha256": "cf3dd508b268359564cae71b35999486589518ea4be26489566a8f7b8cfa5889",
+    "disposition": "recycled after terminal publication success; original path absent"
+  },
+  "verification": "Twelve local phone/laptop captures independently accepted; contract has zero errors/warnings. Source/package preflight passed on exact owner candidate. Native private deployment succeeded; production browser rendering not checked.",
+  "limits": "Initial GNU tar packaging failed before archive completion; a fresh attempt with command-local Windows System32 tar completed. Existing unrelated tickets254/255 were added to authored plan only; receipt inspect confirmed unchanged rendered inputs.",
+  "scope": {
+    "closed": [
+      "140"
+    ],
+    "sourceDeliveredTicketStillInProgress": [
+      "141"
+    ],
+    "next": "148",
+    "deferred": "201"
+  },
+  "retention": {
+    "owner": "parent orchestration continuation",
+    "state": "retained",
+    "purpose": "raw fixture, review and publication recovery evidence",
+    "end": "verified durable evidence promotion and queue-settlement disposition; missing historical worker scratch remains unknown, no release"
+  }
+}
