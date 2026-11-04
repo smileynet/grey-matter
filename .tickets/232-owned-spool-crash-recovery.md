@@ -1,7 +1,7 @@
 ---
 id: "232"
 title: "Harden exact session retirement and spool crash recovery"
-status: open
+status: in_progress
 blocked_by: ["208"]
 priority: high
 validation_criteria:
@@ -10,6 +10,7 @@ validation_criteria:
   - "Usage guidance focused checks and independent final-source acceptance are retained"
 tags: ["stream:orchestration", "type:enhancement"]
 parent: "179"
+assignee: "codex"
 ---
 # Harden owned spool recovery and retirement
 
