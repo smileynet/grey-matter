@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "b9f15e32a8bb9be109c5036864853671e21b850d3a01ef5f2760f193a6eee15e",
+  "subject": "Resumed179 foundations231232233234238 shipped; native235236 in progress and237 queued; broader messaging incomplete",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 53673,
+      "sha256": "db6ddfcffb7db44a9b54b420fb4930f24e21f64e9df6a909c18a61fa3abb2395"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 296993,
+      "sha256": "089c7fb32babe213ed830d61ad1fa11544cb080fa02761ec9abd2f0313f66436"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14145,
+      "sha256": "fe47a7d9ad8c78c5425925fd712403b013032b7d7f744b0a6d309edf946df76f"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1762,
+      "sha256": "2e1d9d64cd8c35663ef930d96187cb530fb4f7bb5827faf32a5c82f6b4871c4f"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5890,
+      "sha256": "16784d51172ccf9f876105e8f473824510e08b58269867c600191e1c9f2b5c03"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103/findings-1280.png",
+      "bytes": 858375,
+      "sha256": "a340e08ccf57351c9e754d736d9ee02b8c28d6c53f4bdbba2337b2a5b4ac7649",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103/tickets-1280.png",
+      "bytes": 313304,
+      "sha256": "a5a05073f2d5410af1da5b05f2690a8d08f53d29cee9d2e31ff23b7e2cb4f6dc",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103/findings-390.png",
+      "bytes": 866478,
+      "sha256": "87cfe9cd69685150fd67676651f319ecbe5958b53610e35eb86561be37880b32",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103/tickets-390.png",
+      "bytes": 289883,
+      "sha256": "7407c2835cfebdb303473c4c9ce7b5779e7a45a6dd422af97ded5db027dca59a",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "c380d3cc35a4737c49bc6fe039a15113ae8ff8e63ee0bba1147f2a9cb9f12fb6",
+  "id": "5279e9a83bedef707c378f45d8293167f458f5410573816a43410e7debec46dd",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/critic238_owned_process",
+    "note": "observer: tool; surface: rendered dashboard captures; scenario: inspected findings and ticket tabs at 1280 and 390 widths, including foundation entries, limits, counts, flow, collapse and search; outcome: accepted; limits: static captured local render, no native delivery behavior established.",
+    "acceptedAt": "2026-11-04T05:41:10.162Z",
+    "snapshotId": "5279e9a83bedef707c378f45d8293167f458f5410573816a43410e7debec46dd"
+  }
+}

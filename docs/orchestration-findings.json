@@ -3,6 +3,138 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "current-handoff-routes",
+      "state": "confirmed",
+      "label": "Current routes researched",
+      "title": "Choose a handoff route with clear limits",
+      "value": "See which routes can address an existing worker, which need an owned process, and which are held by permissions or security.",
+      "diagramLabel": "Choose a handoff route with clear limits",
+      "steps": [
+        "Check the route",
+        "Check permission",
+        "Qualify delivery"
+      ],
+      "limit": "Version, help and source checks establish interface options. They do not establish live delivery.",
+      "details": "Current official-source survey and fourteen bounded local captures were independently reviewed. Codex queue, owned Claude streams and owned Kiro ACP require separate native qualification. Crew requires a trusted send grant and Gateway caller identity; project profiles cannot supply them. The Antigravity security hold remains.",
+      "tickets": [
+        "231",
+        "179"
+      ],
+      "sources": [
+        {
+          "label": "Evidence and limits",
+          "href": "agents/research/session-messaging-interfaces-20261103.md"
+        }
+      ]
+    },
+    {
+      "id": "handoff-lifecycle",
+      "state": "confirmed",
+      "label": "Local lifecycle shipped",
+      "title": "See where a handoff stopped",
+      "value": "Separate a prepared handoff, an attempted send and a confirmed local receipt, so an uncertain result does not silently trigger another send.",
+      "diagramLabel": "See where a handoff stopped",
+      "steps": [
+        "Prepare once",
+        "Record the attempt",
+        "Check the receipt",
+        "Retain uncertainty"
+      ],
+      "limit": "Local receipt and send attestations do not prove native task completion. Expiry requires an explicit operator action.",
+      "details": "Deadline-bound intent events preserve unknown legacy state, prevent automatic resend and retain late receipts alongside earlier dead-letter history. Review caught false expiry when a spool receipt already existed; the corrected path and context compatibility pass the integrated 39-test suite. No scheduler or native invocation was added.",
+      "tickets": [
+        "233",
+        "179"
+      ],
+      "sources": [
+        {
+          "label": "Evidence and limits",
+          "href": "agents/research/session-messaging-implementation-20261103.md#notification-lifecycle-233"
+        }
+      ]
+    },
+    {
+      "id": "handoff-context-bound",
+      "state": "confirmed",
+      "label": "Work context shipped",
+      "title": "Keep each handoff tied to the right work",
+      "value": "Carry the task, candidate and handoff reference together, so a reply stays connected to the work it belongs to.",
+      "diagramLabel": "Keep each handoff tied to the right work",
+      "steps": [
+        "Name the work",
+        "Bind the handoff",
+        "Reply in context"
+      ],
+      "limit": "These fields preserve supplied context. They do not verify the referenced file, commit or sender.",
+      "details": "Strict optional context participates in immutable message identity. Replies inherit it when omitted and reject a different ticket. Exact 40/64-character commit identity is required; old message hashes remain unchanged. Independently reviewed source and integrated 39-test suite passed. Native delivery remains separately qualified.",
+      "tickets": [
+        "234",
+        "179"
+      ],
+      "sources": [
+        {
+          "label": "Evidence and limits",
+          "href": "agents/research/session-messaging-implementation-20261103.md#bound-work-context-234"
+        }
+      ]
+    },
+    {
+      "id": "owned-worker-bounds",
+      "state": "confirmed",
+      "label": "Local process controls shipped",
+      "title": "Keep worker processes within clear limits",
+      "value": "Set a worker’s input, output and lifetime limits, then stop only the process that belongs to that work.",
+      "diagramLabel": "Keep worker processes within clear limits",
+      "steps": [
+        "Verify the program",
+        "Set limits",
+        "Track its exit",
+        "Stop only its process"
+      ],
+      "limit": "Provider delivery still needs separate qualification. One platform-specific stop escalation case remains unverified on Windows.",
+      "details": "The shared internal process layer verifies executable identity, freezes startup inputs and preserves unrelated processes. Independent review reproduced a mutation bypass before acceptance; the corrected source passed12tests with0failures and1explicitWindowsSIGTERM escalation skip. Native provider protocols and completion are separate.",
+      "tickets": [
+        "238",
+        "179"
+      ],
+      "sources": [
+        {
+          "label": "Evidence and limits",
+          "href": "agents/research/session-messaging-implementation-20261103.md#owned-process-foundation-238"
+        }
+      ]
+    },
+    {
+      "id": "retire-coordination-route",
+      "state": "confirmed",
+      "label": "Local route retirement shipped",
+      "title": "Close an old handoff route safely",
+      "value": "Close a past coordination route while preserving its message history, so it cannot accidentally receive new work.",
+      "diagramLabel": "Retire the selected route",
+      "steps": [
+        "Select the exact route",
+        "Mark it retired",
+        "Keep its receipts",
+        "Reject stale sends"
+      ],
+      "limit": "This retires the local coordination route. It does not stop the native agent or prove native delivery.",
+      "details": "Exact target/version/generation retirement preserves other registrations and history. Strict input checks prevent malformed reply metadata or a response-kind bypass from poisoning persisted records. Parent and independent critic each passed23focusedtests. Real subprocess exits before/after atomic rename check bounded recovery and ambiguous-lock refusal; they do not prove power-loss safety. Native deadlines and broader messaging qualification remain in progress.",
+      "tickets": [
+        "232",
+        "179"
+      ],
+      "sources": [
+        {
+          "label": "Implementation evidence and limits",
+          "href": "agents/research/session-messaging-implementation-20261103.md"
+        },
+        {
+          "label": "Message and retirement contract",
+          "href": "../skills/engineering/orchestrate/references/session-messages.md"
+        }
+      ]
+    },
+    {
       "id": "existing-agent-notification",
       "state": "partial",
       "label": "Observed with one idle assigned agent",
@@ -920,6 +1052,26 @@
     "210": [
       "Nudge an existing assigned agent",
       "Observed one idle Codex desktop agent receiving a saved handoff and reporting correlated completion. Broader messaging remains partial under its parent."
+    ],
+    "231": [
+      "Choose a handoff route with clear limits",
+      "See which routes can address an existing worker, which need an owned process, and which are held by permissions or security."
+    ],
+    "232": [
+      "Close an old coordination route safely",
+      "Delivered exact local retirement, strict persisted inputs and subprocess crash/restart checks. Native notification remains separate."
+    ],
+    "233": [
+      "See where a handoff stopped",
+      "Separate a prepared handoff, an attempted send and a confirmed local receipt, so an uncertain result does not silently trigger another send."
+    ],
+    "234": [
+      "Keep each handoff tied to the right work",
+      "Carry the task, candidate and handoff reference together, so a reply stays connected to the work it belongs to."
+    ],
+    "238": [
+      "Keep worker processes within clear limits",
+      "Set a worker’s input, output and lifetime limits, then stop only the process that belongs to that work."
     ]
   },
   "includedTicketIds": [

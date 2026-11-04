@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "e8b9056dd66010e1a8f432b78aff6274b00d9f707502af035535b3863a1f1379",
+  "subject": "Resumed179 foundations231232233234238 shipped; native235236 in progress and237 queued; broader messaging incomplete",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 180801,
+      "sha256": "5f1fb637a0f71a4227940cc262f78f845e24f17abecab8082f8584b88cde9363"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103-status/tab-0-1280.png",
+      "bytes": 78030,
+      "sha256": "c517bad95b7f01acb706740e1ec6130a9b2c6e812452754239a7400ca2bd13df",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103-status/tab-1-1280.png",
+      "bytes": 381875,
+      "sha256": "5c2aac03b9545bdcea37d33c944433e690b10be264e0c6c56a0b85c49c000990",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103-status/tab-2-1280.png",
+      "bytes": 26896,
+      "sha256": "4da195749164fc6fa6ef9e479e744c8c9a019449fb14bf760092e9e8e1056410",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103-status/tab-3-1280.png",
+      "bytes": 531737,
+      "sha256": "3da69abd064cdf4722e69ac4b175967368886070563d1fad457d96fd215e3284",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103-status/tab-0-390.png",
+      "bytes": 72666,
+      "sha256": "b7cdf994bd96bb1439a7c43947143b32ed09eb99a8c76f5d8161a9ea7f631ea4",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103-status/tab-1-390.png",
+      "bytes": 371906,
+      "sha256": "f98846bf73930531eebc5ae69b80929ec969096d7c72b72ef3865d0849193684",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103-status/tab-2-390.png",
+      "bytes": 21944,
+      "sha256": "3520b963e1daa95b47d0c15009068f603ed0c548ed201c51d40f02cfc5c13202",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t179-foundations-20261103-status/tab-3-390.png",
+      "bytes": 495082,
+      "sha256": "edac05b9f469c0ad2813d9e9e448c7516b6e45ddf13e0bb60c1f0aa456663d85",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "4c4463ab9128def83fd86972c0a141e08a9358b2990c90c096c6ad635a78c3ef",
+  "id": "62443783d4ab77f82b91e955838da15775a724ecff33808a9109846829dfe9a3",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/critic238_owned_process",
+    "note": "observer: tool; surface: rendered global status captures; scenario: inspected Overview, All entries, Decisions and Plan at 1280 and 390 widths, including 68 entries, 236 tickets, zero asks, collapse, search and flow; outcome: accepted; limits: static local render, no live product interaction or native delivery behavior established.",
+    "acceptedAt": "2026-11-04T05:41:16.561Z",
+    "snapshotId": "62443783d4ab77f82b91e955838da15775a724ecff33808a9109846829dfe9a3"
+  }
+}
