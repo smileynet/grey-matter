@@ -115,11 +115,13 @@ The `events` async iterable reports distinct observations:
   phase before the record, normalized JSON byte count, allowlisted type and
   subtype labels (unknown labels are represented only by SHA-256 and UTF-8 byte
   length), a small allowlisted set of present key names, and the count of keys
-  outside that allowlist,
-  parent-tool-use field kind/presence, and a session-match boolean. It never
+  outside that allowlist, parent-tool-use field kind/presence, and a
+  session-match boolean. It never
   includes raw UUIDs, message text, unknown field names/values, or error text.
-  Malformed or non-record output has no diagnostic because no decoded record
-  exists to describe.
+  Malformed or unparsed stdout frames (including invalid UTF-8 and truncated
+  frames) have no diagnostic and clear any previous decoded-record candidate.
+  Successfully decoded JSON non-object values, including `null`, scalars, and
+  arrays, receive a bounded shape diagnostic without exposing raw contents.
 
 Consume `events` before sending and while the process runs. Its in-memory event
 queue is bounded; a slow or absent consumer backpressures stdout, and process
