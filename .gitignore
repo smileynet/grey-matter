@@ -17,3 +17,6 @@ dist/
 
 # Agent scratch: non-committed, project-local working files (handoffs, notes)
 .scratch/
+
+# Per-machine agent instructions (e.g. which host may push); never shared
+AGENTS.local.md
