@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "subject": "Current bounded desktop exchange delivered; native CLI and exact busy timing unqualified; Claude native qualification remains open",
+  "sources": [
+    "docs/status.html",
+    "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+    "skills/productivity/delivery-dashboard/assets/dashboard-example.html"
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-0-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-1-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-2-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-3-1280.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-0-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-1-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-2-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-3-390.png",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ]
+}

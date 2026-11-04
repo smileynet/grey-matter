@@ -3,6 +3,44 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "existing-agent-notification",
+      "state": "confirmed",
+      "label": "Owned desktop follow-up confirmed",
+      "title": "Continue a saved handoff with the same agent",
+      "value": "Send a saved question, then return to the same worker for a follow-up after it becomes idle.",
+      "diagramLabel": "Keep the exchange in one worker",
+      "steps": [
+        "Save the question",
+        "Receive its reply",
+        "Continue the same worker"
+      ],
+      "limit": "The desktop exchange is confirmed. Exact busy-window timing and native CLI queue delivery remain unqualified; use manual reporting when a route is unavailable.",
+      "details": "The current stored-action format completed a same-target question and idle follow-up with a remembered nonce and validated core receipts. The first target was reported running; retained timing does not establish invocation inside its declared 30-second wait. Native identity/version are unreported and the witness is reconstructed. The separate fixed CLI queue adapter passes local refusal tests, while its native run stays held because the prelaunch integration gate is unresolved within current authorization.",
+      "tickets": [
+        "235",
+        "210",
+        "179"
+      ],
+      "sources": [
+        {
+          "label": "Current desktop qualification and limits",
+          "href": "agents/research/session-messaging-codex-owned-20261104.md"
+        },
+        {
+          "label": "CLI prelaunch research",
+          "href": "agents/research/codex-prelaunch-integration-admission-20261104.md"
+        },
+        {
+          "label": "Delivery evidence and limits",
+          "href": "agents/research/outcome-orchestration-delivery-20261103.md"
+        },
+        {
+          "label": "Notification contract",
+          "href": "../skills/engineering/orchestrate/references/native-notification.md"
+        }
+      ]
+    },
+    {
       "id": "owned-kiro-followup",
       "state": "confirmed",
       "label": "Owned Kiro handoff confirmed",
@@ -207,37 +245,6 @@
         {
           "label": "Message and retirement contract",
           "href": "../skills/engineering/orchestrate/references/session-messages.md"
-        }
-      ]
-    },
-    {
-      "id": "existing-agent-notification",
-      "state": "partial",
-      "label": "Observed with one idle assigned agent",
-      "title": "Pick up a saved handoff in the same agent",
-      "value": "In the tested desktop workflow, the coordinator nudged its existing agent, which handled the handoff and reported completion.",
-      "diagramLabel": "The observed handoff",
-      "steps": [
-        "Save the handoff",
-        "Nudge the exact agent",
-        "Receive its report",
-        "Acknowledge completion"
-      ],
-      "limit": "One idle Codex agent was observed. Busy delivery, crash recovery and other harnesses remain unqualified.",
-      "details": "A once-only local intent is persisted before preparing the native action. The parent independently selected the existing live agent and invoked the tool. The agent returned a correlated completion and native report. Replay kept two records unchanged; another preparation was refused. Source fixtures passed eight cases, and independent evidence review matched the five retained native platform records to their source lines. Message arguments remain opaque in the platform log, so exact plaintext equality is unverified. The broad cross-harness ticket stays partial.",
-      "tickets": [
-        "210",
-        "179",
-        "208"
-      ],
-      "sources": [
-        {
-          "label": "Delivery evidence and limits",
-          "href": "agents/research/outcome-orchestration-delivery-20261103.md"
-        },
-        {
-          "label": "Notification contract",
-          "href": "../skills/engineering/orchestrate/references/native-notification.md"
         }
       ]
     },
@@ -1144,6 +1151,10 @@
     "234": [
       "Keep each handoff tied to the right work",
       "Carry the task, candidate and handoff reference together, so a reply stays connected to the work it belongs to."
+    ],
+    "235": [
+      "Continue a saved handoff with the same agent",
+      "Send a saved question, then return to the same worker for a follow-up after it becomes idle."
     ],
     "237": [
       "Continue a task with the same Kiro worker",

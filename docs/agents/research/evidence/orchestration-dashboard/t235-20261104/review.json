@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "aba5bd173c36f6b7565223a0c0fee3f3156cc4ed495383600fc17528df5898de",
+  "subject": "Current bounded desktop exchange delivered; native CLI and exact busy timing unqualified; Claude native qualification remains open",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 58185,
+      "sha256": "109a64d22fee0454710920882074b78491dd0f4ee043a9f39c3a18e5aedcb220"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 316971,
+      "sha256": "9dca4b61e546813b58298f54f21634afa968760b8190cf20567f7f5f3a5190a5"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14145,
+      "sha256": "fe47a7d9ad8c78c5425925fd712403b013032b7d7f744b0a6d309edf946df76f"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1762,
+      "sha256": "2e1d9d64cd8c35663ef930d96187cb530fb4f7bb5827faf32a5c82f6b4871c4f"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5890,
+      "sha256": "16784d51172ccf9f876105e8f473824510e08b58269867c600191e1c9f2b5c03"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104/findings-1280.png",
+      "bytes": 915830,
+      "sha256": "c4eab03cfbb4b002dcf33273cd97544da6af874c02f0875c74fd6c3091e0d524",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104/tickets-1280.png",
+      "bytes": 307445,
+      "sha256": "0b57e368d6e7a6413c996c0fe86d4e726c40255e70f74eb748d858b5c26fe076",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104/findings-390.png",
+      "bytes": 936909,
+      "sha256": "2fce6e886dfafb5542f807c044d89626b315fafe5d15834b6eda92581c9c60e8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104/tickets-390.png",
+      "bytes": 286138,
+      "sha256": "26d5e297fa27c9a7eff97f224ef75a29ffb6452f66b15f6343a8470515da8c60",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "a84bdcade4f3cd24729814417d31717df95ff3a40ee6cff69ab37a87c89d1c6b",
+  "id": "8297330563640c632194f882023468afe3beb83ad194433b8d4aaafeee21d80c",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "parent179-independent-critic238",
+    "note": "Independent12capture/source review PASS .scratch/t235-dashboards-review.md; narrowdesktop/CLIheld/timinglimits preserved.",
+    "acceptedAt": "2026-11-04T10:27:15.026Z",
+    "snapshotId": "8297330563640c632194f882023468afe3beb83ad194433b8d4aaafeee21d80c"
+  }
+}

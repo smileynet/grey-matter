@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "247cc0e8d63cec5e920b43473f67f71b4aa510c6b1c00af7cae9b1ee0afdc707",
+  "subject": "Current bounded desktop exchange delivered; native CLI and exact busy timing unqualified; Claude native qualification remains open",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 190145,
+      "sha256": "bfb1199c4c4b4e3cec09bea829c13aa522f460554d329012bb4902c6f39ad763"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-0-1280.png",
+      "bytes": 80010,
+      "sha256": "88803e88b97d3e2ef341059089cbdeab54cb4e1ab325889a95c07702a1c1cfbf",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-1-1280.png",
+      "bytes": 425521,
+      "sha256": "6bd2ce5d832e5855342b65800db26a31398b04bcd012824d6ab9d5268fa71fb4",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-2-1280.png",
+      "bytes": 26705,
+      "sha256": "b64a6c79f86861c2c5c9f4026de0534a604819730271ef6a4636de1fc11a5165",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-3-1280.png",
+      "bytes": 513727,
+      "sha256": "f9e034c2314bbacc3b3c9d7bcc191b8a53b1d1f6a5b5606232c8a3f7f4539a41",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-0-390.png",
+      "bytes": 74499,
+      "sha256": "3be1ae98dadd3f633e08859580a7c3ccfb6066cbb9608a8150a5864778b16ff7",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-1-390.png",
+      "bytes": 414588,
+      "sha256": "dcf34f294f7966a06685315886b164ca2ed4d5f472e1bc3ebe159e5ad975ec90",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-2-390.png",
+      "bytes": 21755,
+      "sha256": "6a056420642f56753962753359f2f8cca3d4f841c379b2b8b25bb2c9b3fe70e9",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t235-20261104-status/tab-3-390.png",
+      "bytes": 477681,
+      "sha256": "b69dc683e0157d11340520306e88bb8dc4b78de48b7485d3f25915e403c531e8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "b8d882cb32a8a0393c177b6f89a1fa13f99066dd8073e5034a13ed5c7f00dbaf",
+  "id": "2a8285986ab6681a000133e82eb125a3deda0ecd523d0c1b7d6aed82fd4ccb2c",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "parent179-independent-critic238",
+    "note": "Independent12capture/source review PASS .scratch/t235-dashboards-review.md; history/plan/dates/limits verified.",
+    "acceptedAt": "2026-11-04T10:27:15.226Z",
+    "snapshotId": "2a8285986ab6681a000133e82eb125a3deda0ecd523d0c1b7d6aed82fd4ccb2c"
+  }
+}
