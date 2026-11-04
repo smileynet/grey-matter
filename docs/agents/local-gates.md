@@ -69,8 +69,8 @@ name the skipped id and why in the ticket's close evidence or the commit message
 
 ### Artifact safety and host discovery
 
-The `artifact-hygiene` check runs only disposable, Git-scoped artifact fixtures when
-their inspector or tests change. Keep its staged-source fidelity, read-only behavior,
+The `artifact-hygiene` check runs only disposable, Git-scoped artifact fixtures,
+selected by their source paths or a full-stage trigger. Keep its staged-source fidelity, read-only behavior,
 explicit policy, symlink and incomplete-coverage safety assertions blocking.
 
 Whole-host footprint discovery is on-demand, including at release time. Run
