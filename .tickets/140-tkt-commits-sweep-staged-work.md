@@ -32,3 +32,34 @@ Two sessions shared this checkout. One staged `scripts/gate.mjs` and `.githooks/
 refresh-harnesses-md-versions") contains both files and was pushed. Nothing was lost, but the
 runner landed under an unrelated ticket's message. Workaround until fixed: commit with explicit
 paths (`git commit -- <paths>`) and keep the index empty while another session may run tkt.
+
+## Note — 2026-11-04
+
+By: anonymous
+
+<!-- tkt-note:v1 64840-1793823308855908900 -->
+Current installed tkt 0.4.0 (e755765) was rechecked on 2026-11-04. The
+[reproduction report](../docs/agents/research/tkt-140-staged-mutation-recheck.md)
+is integrated and pushed at2507021. Four ordinary local-only mutations committed
+only their ticket path and preserved the unrelated staged bytes; independent
+Standards and Spec inspection verified the raw records and retained indexes.
+
+Existing upstream owners resolve the historical premises:
+[tkt ticket235](https://github.com/smileynet/tkt/blob/ce6683f073467b2d07607abfbf819bcab62fb7f4/.tickets/235-mutation-hooks-and-deferred-push.md)
+delivered ticket-only commit isolation and deferred push;
+[tkt ticket231](https://github.com/smileynet/tkt/blob/ce6683f073467b2d07607abfbf819bcab62fb7f4/.tickets/231-query-all-frontmatter.md)
+delivered query tags;
+[tkt ticket43](https://github.com/smileynet/tkt/blob/ce6683f073467b2d07607abfbf819bcab62fb7f4/.tickets/43-mutation-latency.md)
+records accepted fetch/push latency. All three upstream tickets are done. No
+duplicate issue is filed for those resolved concerns. The comma claim is
+unreproduced for the tested single quoted new/edit validation arguments; no
+comma-splitting upstream ticket was found, and no speculative defect is filed.
+Repeatable-argument edge cases and network/hook latency remain unmeasured.
+
+Parent pre-merge explicitly selected syntax fixtures:PASS1; actual pre-push
+doc-links/home-path:PASS2 after fetching/rebasing concurrent unrelated upstream
+work. The first push had an infrastructure error from an unknown remote revision,
+not a privacy finding; the corrected current push succeeded. No tracker source or
+global settings change was needed. Retain this worker's owned fixtures/runner/raw
+proof through the authorized queue's settlement and evidence disposition; report
+promoted, old missing worktree evidence is outside this ticket's release scope.
