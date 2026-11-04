@@ -1,7 +1,7 @@
 ---
 id: "232"
 title: "Harden exact session retirement and spool crash recovery"
-status: in_progress
+status: done
 blocked_by: ["208"]
 priority: high
 validation_criteria:
@@ -24,6 +24,15 @@ Inspect existing session-messages.mjs and its contracts. Add a narrowly scoped e
 
 ## Acceptance criteria
 
-- [ ] Exact retirement and input/integrity boundaries are implemented compatibly with the current spool and wrong-owner/generation operations fail closed.
-- [ ] Real subprocess crash/restart tests exercise before/after persistence and preserve duplicates/correlation/unknown files without claiming exactly-once delivery.
-- [ ] Usage reference, focused results and independent exact-commit acceptance are retained; parent wires catalog/skill pointers, runs integrated gates and closes.
+- [x] Exact retirement and input/integrity boundaries are implemented compatibly with the current spool and wrong-owner/generation operations fail closed.
+- [x] Real subprocess crash/restart tests exercise before/after persistence and preserve duplicates/correlation/unknown files without claiming exactly-once delivery.
+- [x] Usage reference, focused results and independent exact-commit acceptance are retained; parent wires catalog/skill pointers, runs integrated gates and closes.
+
+## Resolution (2026-11-04)
+
+done: exactsessionretirement, strictenvelope/CLIboundaries and realspoolcrash/restartfixture delivered ine32a42c. Parent179 remainsinprogress; no nativewake or powerloss safety inferred. Evidence retained through179qualificationaudit; unrelated historicalscratch preserved.
+
+### Verification
+1. ✓ Exact retirement and persisted input boundaries reject wrong ownership or generation — "PASS: exactretirement and strictsend/persisted-input guards in74347e3; independent poison-spool finding fixed, wronghost/generation/retired routes rejected, integratedunchanged e32a42c."
+2. ✓ Real subprocess crash and restart tests prove bounded persisted-record recovery without automatic resend — "PASS: parent and independent focused suites23/23 (15spool8notification); realchildprocess exitsbefore/afterrename with ambiguouslockrefusal, validpersistedbytes, noautoresend. Notpowerloss/nativeproof."
+3. ✓ Usage guidance focused checks and independent final-source acceptance are retained — "PASS: reference/catalog/absoluteeditguidance and independent e32a42c renewal; actualdispatch preflight, premerge1syntaxfixture, prepush5/5, deploy50 noagy/nocrew, pushe32. Rawartifacts keptparent179audit: docs/agents/research/evidence/session-messaging-232-20261103.json."

@@ -222,7 +222,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 210 | Existing-agent Codex notification preparation and bounded native receipt (child of 179) | ✅ done |
 | 179 | Shared inter-harness messaging and wakeups (existing owner) | in_progress |
 | 231 | Current primary-source and installed-interface qualification (child of 179) | in_progress |
-| 232 | Exact session retirement and real spool crash/restart recovery (child of 179) | in_progress |
+| 232 | Exact session retirement and real spool crash/restart recovery (child of 179) | ✅ done |
 | 233 | Bounded native outcome/dead-letter lifecycle (child of 179) | in_progress |
 | 234 | Ticket/candidate/durable-handoff message context (after 232) | open |
 | 205 | Dashboard publication preflight using existing receipts | ✅ done |
