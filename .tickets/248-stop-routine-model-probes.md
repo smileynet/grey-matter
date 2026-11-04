@@ -1,7 +1,7 @@
 ---
 id: "248"
 title: "Remove mandatory live model probes from routine sync"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Routine sync does not invoke live critic-model probes or treat unrun host/platform diagnostics as outstanding deployment requirements."
