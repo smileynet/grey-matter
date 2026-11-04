@@ -1,0 +1,34 @@
+{
+  "candidate": "24721eb7148145d950ccdd695c9858fee5053d44",
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179finalqualificationauditandexplicitdisposition",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/t234-context-verification-final2.log",
+      "bytes": 6822,
+      "sha256": "a21bc046a760efac964832e4281bf017145fcb4e8d93a49cb765f46573a2dd38"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t234-context-oid-reviewfix.log",
+      "bytes": 7059,
+      "sha256": "584bb3f0eba01c20ee5756f4afb35715b90e413c5a5e5a08bc2d6be83144704a"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/proposal19-critic234-oid-final.txt",
+      "bytes": 6761,
+      "sha256": "510655cef037450d7e5ab8bdf4e707c34b73f87acf21e9faecbd6afce8ffb1d0"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t234-v1-golden.json",
+      "bytes": 857,
+      "sha256": "7387f263650a816a8017add44f9c511d520659756709c689badfe5c071e76fb8"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t234-parent-dispatch-result.json",
+      "bytes": 715,
+      "sha256": "7748365e1a33c859cac96f71bea25ba4c694afd15479801abad5c47c40221642"
+    }
+  ],
+  "limits": "Context fields and their hashes are caller claims, not proof of commit/file existence, authorship, authorization or native delivery."
+}

@@ -46,8 +46,10 @@ document new operator commands through its conventions. Script presence grants n
 
 When a scoped task needs a durable local handoff, use the
 [session-message contract](references/session-messages.md) with the exact recorded target
-and generation. Its manual spool does not wake a native session; load the active harness
-reference and confirm supported notification separately. Queued is not delivered.
+and generation. Bind tracked work to its ticket, candidate state and retained handoff
+reference in the message context; those fields do not grant authority. Its manual
+spool does not wake a native session; load the active harness reference and confirm
+supported notification separately. Queued is not delivered.
 Before selecting a native interface, read the
 [current messaging qualification](../../../docs/agents/research/session-messaging-interfaces-20261103.md)
 and recheck its live version, tool schema and caller grant. Documentation or a

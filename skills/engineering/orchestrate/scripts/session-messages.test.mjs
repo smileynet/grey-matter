@@ -12,6 +12,9 @@ function runtime() { const root = mkdtempSync(join(tmpdir(), 'session-messages-'
 function target(nativeId = 'session-a', generation = 1, host = 'host-a') {
   return { project: 'project-a', host, harness: 'codex', harnessVersion: 'not-reported', interface: 'desktop', nativeId, generation, role: 'worker', worktree: 'D:/work/project-a', branch: 'worker/one' };
 }
+function workContext(ticket = '234') {
+  return { ticket, candidate: { kind: 'not-produced' }, handoff: { path: '.scratch/handoff.md', sha256: 'a'.repeat(64) } };
+}
 function setup() {
   const root = runtime(); operate(root, 'init');
   const a = target(); const b = target('session-b');
@@ -63,6 +66,82 @@ test('stable duplicate is idempotent and changed content under same id conflicts
   assert.equal(send(root, a, b).result, 'duplicate');
   assert.throws(() => send(root, a, b, 'm-1', 'changed'), /Message id conflict/);
   assert.equal(operate(root, 'status').messages.length, 1);
+});
+
+test('legacy version 1 hash stays byte-for-byte stable through CLI replay', () => {
+  const { root, a, b } = setup();
+  const path = join(root, 'messages', 'legacy-1.json');
+  const original = { version: 1, id: 'legacy-1', correlationId: 'c-1', replyTo: null, kind: 'message', from: a, to: b,
+    body: 'hello', state: 'queued', createdAt: '2026-01-01T00:00:00.000Z', contentHash: 'a3980a4a8b91a898b8c378f72240d1706a7f59d33312a3d165f07dcc40086037' };
+  writeFileSync(path, `${JSON.stringify(original, null, 2)}\n`);
+  const bytes = readFileSync(path);
+  const cliInput = join(root, 'legacy-replay.json'); writeFileSync(cliInput, JSON.stringify({ id: 'legacy-1', target: b }));
+  const script = fileURLToPath(new URL('./session-messages.mjs', import.meta.url));
+  const replay = JSON.parse(execFileSync(process.execPath, [script, 'replay', '--root', root, '--json', cliInput], { encoding: 'utf8' }));
+  assert.equal(replay.message.contentHash, 'a3980a4a8b91a898b8c378f72240d1706a7f59d33312a3d165f07dcc40086037');
+  assert.equal(Object.hasOwn(replay.message, 'context'), false);
+  assert.deepEqual(readFileSync(path), bytes);
+});
+
+test('context is normalized into immutable identity and duplicate input key order is stable', () => {
+  const { root, a, b } = setup(); const context = workContext();
+  const first = operate(root, 'send', { id: 'context-1', from: a, to: b, body: 'question', context }).message;
+  const reordered = { handoff: { sha256: context.handoff.sha256, path: context.handoff.path }, candidate: { kind: 'not-produced' }, ticket: '234' };
+  assert.equal(operate(root, 'send', { id: 'context-1', from: a, to: b, body: 'question', context: reordered }).result, 'duplicate');
+  assert.throws(() => operate(root, 'send', { id: 'context-1', from: a, to: b, body: 'question', context: { ...context, handoff: { ...context.handoff, sha256: 'b'.repeat(64) } } }), /different content/);
+  const replay = operate(root, 'replay', { id: first.id, target: b });
+  assert.deepEqual(replay.message.context, context);
+});
+
+test('malformed or null context fails before persistence and leaves status healthy', () => {
+  const { root, a, b } = setup();
+  const invalid = [
+    null, [], { ...workContext(), extra: true },
+    { ...workContext(), candidate: { kind: 'not-produced', sha: 'a'.repeat(40) } },
+    { ...workContext(), candidate: { kind: 'commit', sha: 'xyz' } },
+    { ...workContext(), handoff: { ...workContext().handoff, sha256: 'short' } },
+    { ...workContext(), ticket: ` ${'x'.repeat(127)}` }
+  ];
+  for (const [index, context] of invalid.entries()) {
+    assert.throws(() => operate(root, 'send', { id: `invalid-context-${index}`, from: a, to: b, body: 'question', context }));
+    assert.deepEqual(operate(root, 'status').messages, []);
+  }
+});
+
+test('candidate commit identifiers accept only 40- or 64-character hexadecimal Git OIDs', () => {
+  const { root, a, b } = setup(); let accepted = 0;
+  for (let length = 39; length <= 65; length += 1) {
+    const context = { ...workContext(), candidate: { kind: 'commit', sha: 'a'.repeat(length) } };
+    const operation = () => operate(root, 'send', { id: `candidate-length-${length}`, from: a, to: b, body: 'candidate', context });
+    if (length === 40 || length === 64) {
+      assert.equal(operation().result, 'queued'); accepted += 1;
+    } else assert.throws(operation, /exact SHA/);
+    assert.equal(operate(root, 'status').messages.length, accepted);
+  }
+});
+
+test('reply and completion inherit context, allow same-ticket updates, and reject null or cross-ticket context', () => {
+  const { root, a, b } = setup(); const initial = workContext();
+  operate(root, 'send', { id: 'context-parent', correlationId: 'context-correlation', from: a, to: b, body: 'question', context: initial });
+  assert.throws(() => operate(root, 'reply', { id: 'null-context', replyTo: 'context-parent', from: b, to: a, body: 'answer', context: null }), /Context requires/);
+  assert.throws(() => operate(root, 'reply', { id: 'cross-ticket', replyTo: 'context-parent', from: b, to: a, body: 'answer', context: workContext('235') }), /context ticket must match/);
+  assert.equal(operate(root, 'status').messages.length, 1);
+  const updated = { ticket: '234', candidate: { kind: 'commit', sha: 'c'.repeat(40) }, handoff: { path: '.scratch/reviewed-handoff.md', sha256: 'd'.repeat(64) } };
+  const reply = operate(root, 'reply', { id: 'context-reply', replyTo: 'context-parent', from: b, to: a, body: 'answer', context: updated }).message;
+  assert.equal(reply.correlationId, 'context-correlation'); assert.deepEqual(reply.context, updated);
+  const done = operate(root, 'done', { id: 'context-done', replyTo: 'context-reply', from: a, to: b, body: 'completed' }).message;
+  assert.equal(done.correlationId, 'context-correlation'); assert.deepEqual(done.context, updated);
+});
+
+test('persisted context tampering fails replay and status without rewriting the record', () => {
+  const { root, a, b } = setup();
+  operate(root, 'send', { id: 'tamper-context', from: a, to: b, body: 'bound', context: workContext() });
+  const path = join(root, 'messages', 'tamper-context.json'); const original = readFileSync(path, 'utf8');
+  const altered = JSON.parse(original); altered.context.handoff.sha256 = 'e'.repeat(64); writeFileSync(path, JSON.stringify(altered));
+  assert.throws(() => operate(root, 'replay', { id: 'tamper-context', target: b }), /content hash mismatch/);
+  assert.throws(() => operate(root, 'status'), /content hash mismatch/);
+  writeFileSync(path, original);
+  assert.equal(operate(root, 'status').messages[0].context.ticket, '234');
 });
 
 test('receipt lifecycle persists across a new CLI process and wrong target cannot advance it', () => {

@@ -53,3 +53,42 @@ Native qualification is queued in #235 (Codex), #236 (owned Claude stream) and
 #237 (owned Kiro ACP), after the shared lifecycle/context work. The native
 `session-messaging-supervision` monitor is confirmed ACTIVE for the resumed scope;
 it keeps healthy progress quiet and does not stop at a child/batch boundary.
+
+## Bound work context (#234)
+
+Accepted worker candidate `24721eb7148145d950ccdd695c9858fee5053d44` adds optional,
+strictly parsed ticket/candidate/handoff context to the immutable message identity.
+Candidate state is either not-produced or a full 40/64-character Git object ID;
+the parser does not verify that object or referenced file exists. Reply/completion
+context inherits when omitted, rejects explicit null or a different ticket, and
+can carry a new candidate or handoff for the same work.
+
+Parent and independent critic each observed **29/29 focused tests passing**
+(21 spool, eight notification). The pre-change golden v1 hash remains exact,
+including byte-preserving replay through a new CLI process. Review caught an
+initial 40-through-64 length range; the replacement checks every length 39–65,
+admitting only 40 and 64. The real dispatch preflight passed. [Retained context evidence](evidence/session-messaging-234-20261103.json)
+has parent ownership through the #179 audit. These fields are caller assertions,
+not proof of authorship, authorization, file contents, commit existence or native
+delivery.
+
+## Notification lifecycle (#233)
+
+Accepted worker candidate `d7fcaf54dae35ea6945d0a3e49097c67246fbdc4` adds explicit
+deadlines, durable attempt-start and outcome attestations, explicit expiry and
+correlated spool receipts. Outcome acceptance does not establish delivery. Expiry
+records an already available validated receipt before considering a dead letter;
+later receipts preserve earlier dead-letter history. Historical v1 intents remain
+unknown rather than acquiring a guessed attempt history. No scheduler or automatic
+retry is introduced.
+
+Independent review reproduced and blocked false expiry when the spool already
+contained a receipt. The corrected candidate passed 17/17 focused tests and the
+independent real-clock counterexample. Timing assertions now use a controlled
+clock. [Retained lifecycle evidence](evidence/session-messaging-233-20261103.json)
+includes the earlier failures as well as final results.
+
+The parent integrates #233 and #234 together before deployment because canonical
+core validation must recognize context-bearing messages. The combined suite passes
+39/39 tests, including a new preparation-through-receipt cross-module regression.
+These are local protocol checks, not native delivery qualification.

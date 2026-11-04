@@ -20,7 +20,25 @@ function stable(value) {
 function canonical(value) { return JSON.stringify(stable(value)); }
 function digest(value) { return createHash('sha256').update(JSON.stringify(value)).digest('hex'); }
 function immutableMessage(message) {
-  return Object.fromEntries(['version', 'id', 'correlationId', 'replyTo', 'kind', 'from', 'to', 'body'].map(key => [key, message[key]]));
+  return Object.fromEntries(['version', 'id', 'correlationId', 'replyTo', 'kind', 'from', 'to', 'body', 'context'].map(key => [key, message[key]]));
+}
+function parseContext(value) {
+  demand(record(value) && Object.keys(value).length === 3
+    && ['ticket', 'candidate', 'handoff'].every(key => Object.hasOwn(value, key)), 'Context requires exactly ticket, candidate and handoff');
+  demand(typeof value.ticket === 'string' && value.ticket.trim() === value.ticket && value.ticket.length > 0
+    && value.ticket.length <= 128 && !/[\u0000-\u001f]/.test(value.ticket), 'Invalid context ticket');
+  const candidate = value.candidate;
+  demand(record(candidate), 'Context candidate must be a tagged object');
+  if (candidate.kind === 'not-produced') demand(Object.keys(candidate).length === 1, 'Unproduced candidate cannot name a commit');
+  else demand(candidate.kind === 'commit' && Object.keys(candidate).length === 2
+    && typeof candidate.sha === 'string' && /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/i.test(candidate.sha), 'Context commit requires an exact SHA');
+  const handoff = value.handoff;
+  demand(record(handoff) && Object.keys(handoff).length === 2
+    && typeof handoff.path === 'string' && handoff.path.trim() === handoff.path && handoff.path.length > 0
+    && handoff.path.length <= 4096 && !/[\u0000-\u001f]/.test(handoff.path)
+    && typeof handoff.sha256 === 'string' && /^[0-9a-f]{64}$/i.test(handoff.sha256), 'Context handoff requires a path and SHA-256');
+  return { ticket: value.ticket, candidate: candidate.kind === 'commit' ? { kind: 'commit', sha: candidate.sha } : { kind: 'not-produced' },
+    handoff: { path: handoff.path, sha256: handoff.sha256 } };
 }
 function parseTarget(value) {
   demand(record(value) && Object.keys(value).length === TARGET_FIELDS.length
@@ -79,7 +97,8 @@ function sessionFor(registry, raw) {
 function messagePath(paths, id) { demand(/^[A-Za-z0-9._-]{1,128}$/.test(id), 'Invalid message id'); return join(paths.messages, `${id}.json`); }
 function validateMessage(message) {
   demand(record(message) && message.version === VERSION && typeof message.id === 'string' && typeof message.correlationId === 'string', 'Malformed message envelope');
-  demand(Object.keys(message).every(key => ['version', 'id', 'correlationId', 'replyTo', 'kind', 'from', 'to', 'body', 'state', 'createdAt', 'contentHash', 'acceptedAt', 'receivedAt', 'handledAt', 'ackedAt'].includes(key)), 'Message has unsupported fields');
+  demand(Object.keys(message).every(key => ['version', 'id', 'correlationId', 'replyTo', 'kind', 'from', 'to', 'body', 'context', 'state', 'createdAt', 'contentHash', 'acceptedAt', 'receivedAt', 'handledAt', 'ackedAt'].includes(key)), 'Message has unsupported fields');
+  if (message.context !== undefined) parseContext(message.context);
   demand(KIND.includes(message.kind) && typeof message.body === 'string' && Buffer.byteLength(message.body) <= MAX_BODY, 'Invalid kind or body exceeds 16 KiB');
   demand(record(message.from) && record(message.to), 'Message requires exact from and to targets');
   parseTarget(message.from); parseTarget(message.to);
@@ -111,6 +130,7 @@ function normalizeMessage(input, registry) {
   const message = { version: VERSION, id: input.id, correlationId: input.correlationId ?? input.id,
     replyTo: input.replyTo ?? null, kind: input.kind ?? 'message', from, to, body: input.body,
     state: 'queued', createdAt: new Date().toISOString(), contentHash: '' };
+  if (input.context !== undefined) message.context = parseContext(input.context);
   demand(typeof message.correlationId === 'string' && message.correlationId.length > 0, 'correlationId must be a nonempty string');
   demand(message.kind !== 'ack', 'Acknowledgments are control state, not messages; ack loops are forbidden');
   message.contentHash = digest(immutableMessage(message));
@@ -123,8 +143,8 @@ export function operate(root, command, input = {}) {
   demand(record(input), 'Input must be an object');
   const fields = {
     init: [], status: [], register: ['target'], retire: ['target'], poll: ['target'],
-    send: ['id', 'correlationId', 'kind', 'from', 'to', 'body'],
-    reply: ['id', 'correlationId', 'replyTo', 'from', 'to', 'body'], done: ['id', 'correlationId', 'replyTo', 'from', 'to', 'body'],
+    send: ['id', 'correlationId', 'kind', 'from', 'to', 'body', 'context'],
+    reply: ['id', 'correlationId', 'replyTo', 'from', 'to', 'body', 'context'], done: ['id', 'correlationId', 'replyTo', 'from', 'to', 'body', 'context'],
     accept: ['id', 'target'], receive: ['id', 'target'], handle: ['id', 'target'], ack: ['id', 'target'], replay: ['id', 'target']
   }[command];
   demand(Object.keys(input).every(key => fields.includes(key)), `Unsupported input field for ${command}`);
@@ -163,10 +183,11 @@ export function operate(root, command, input = {}) {
         demand(parent, `Unknown replyTo message id: ${input.replyTo}`);
         parent = validateMessage(parent);
       }
-      const message = normalizeMessage({ ...input, correlationId: input.correlationId ?? parent?.correlationId, kind: command === 'send' ? (input.kind ?? 'message') : command }, registry);
+      const message = normalizeMessage({ ...input, context: input.context === undefined ? parent?.context : input.context, correlationId: input.correlationId ?? parent?.correlationId, kind: command === 'send' ? (input.kind ?? 'message') : command }, registry);
       if (command !== 'send') {
         demand(canonical(message.from) === canonical(parent.to) && canonical(message.to) === canonical(parent.from), 'Reply target must reverse the exact parent message route');
         demand(message.correlationId === parent.correlationId, 'Reply correlationId must match its parent');
+        if (parent.context) demand(message.context?.ticket === parent.context.ticket, 'Reply context ticket must match its parent');
         message.replyTo = parent.id; message.contentHash = digest(immutableMessage(message));
       }
       validateMessage(message);

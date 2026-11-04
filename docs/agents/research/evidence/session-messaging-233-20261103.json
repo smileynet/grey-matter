@@ -1,0 +1,44 @@
+{
+  "candidate": "d7fcaf54dae35ea6945d0a3e49097c67246fbdc4",
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179finalqualificationauditandexplicitdisposition",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/t233-deterministic-d7fcaf5.log",
+      "bytes": 14915,
+      "sha256": "462a0acf6acc183d532cef891747bf03034e533ac57771f95c5ec5ccf23f0bcc"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t233-independent-final-review.log",
+      "bytes": 5979,
+      "sha256": "69a6651d3025537811a7554f06ed582db825ecb79dd48eaf2d1aedf5019e8002"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t233-final-independent-review.log",
+      "bytes": 3460,
+      "sha256": "7b08bba8213aa73f91ceb77dcf73cd93c7879ce8667468ca3cc10cbc8706b19b"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t233-expiry-counterexample.log",
+      "bytes": 907,
+      "sha256": "54fd6f711c9e30da4a3c1a3367fbd6c0a3cb7250a36c46e7f2399507afcc8a4e"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t233-expiry-counterexample-review.log",
+      "bytes": 3013,
+      "sha256": "cb4619f58ed06eaa31c2d2826ef97a5ea8eab2b182f9d49136de7c440090c13f"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t233-reviewfix-counterexample-review.log",
+      "bytes": 2435,
+      "sha256": "f4954acb424f74f92985132760b37fa50398f528ccfaffbee950c237d87fdf00"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t233-parent-dispatch-result.json",
+      "bytes": 728,
+      "sha256": "806b413502595b272557fd64697704907654a11ca142ff0b09b46346c6e69f31"
+    }
+  ],
+  "limits": "Lifecycle events are parent attestations or validated local spool receipts, not native delivery proof. Expiry requires explicit invocation; no scheduler or retries. Worker yaml fixture was infrastructure failure, not pass; parent runs prepared checkout gates."
+}

@@ -20,7 +20,7 @@ These results describe this helper's capabilities, not whether another separatel
 
 Every invocation requires `--root PRIVATE_DIR`. Choose a private, caller-owned, task-scoped directory outside the repository and outside shared/global harness configuration. The tool has no default root and creates no root when a command other than `init` is used. `init` creates `registry.json` and `messages/` but preserves all existing files, directories, and unknown data. It does not initialize a task ledger, store credentials, or copy conversation history.
 
-Before using it, confirm that the parent task authorizes the particular local registry/message writes and that the selected session details are accurate. A message written to this spool does not grant its recipient authority. `register`, `send`, lifecycle transitions, and `init` mutate the supplied runtime root. `poll` and `status` only read. `replay` only returns the existing record; it never retries delivery. Native sends, replacement-session creation, settings changes, and implicit “last active” selection are not implemented.
+Before using it, confirm that the parent task authorizes the particular local registry/message writes and that the selected session details are accurate. A message written to this spool does not grant its recipient authority. `register`, `send`, lifecycle transitions, and `init` mutate the supplied runtime root. `poll`, `status` and `replay` leave registry/message records unchanged but create and remove a transient lock, requiring runtime write access. `replay` returns the existing record; it never retries delivery. Native sends, replacement-session creation, settings changes, and implicit “last active” selection are not implemented.
 
 ## Schema and selection
 
@@ -77,7 +77,23 @@ Inputs:
 
 `retire` marks only the exact active registration retired. Wrong host, session ID, harness/interface, or generation fails closed. Historical messages and other registrations are retained; retirement never deletes records. Retired generations cannot route new messages or advance existing ones. Registering a higher generation is explicit; retired history remains retired. JSON inputs accept only the fields listed above, and the CLI accepts no trailing arguments beyond the optional single `--json FILE` pair.
 
-`send` creates only an uncorrelated `message` record; it rejects `replyTo` and response kinds. Use `reply` or `done` to bind a response to an existing parent and enforce its reversed route and correlation. Normalized records are validated before any message file is written.
+`send` creates a standalone `message` record with no `replyTo`; its stable correlation ID defaults to its message ID. It rejects reply metadata and response kinds. Use `reply` or `done` to bind a response to an existing parent and enforce its reversed route and correlation. Normalized records are validated before any message file is written.
+
+## Optional work context
+
+A message may include a strict `context` object, also accepted on `reply` and `done`:
+
+```json
+{
+  "ticket": "234",
+  "candidate": { "kind": "not-produced" },
+  "handoff": { "path": "handoffs/234.md", "sha256": "<64 hexadecimal characters>" }
+}
+```
+
+The object has exactly `ticket`, `candidate` and `handoff`. Ticket identity is a nonempty trimmed string of at most 128 characters. Candidate is exactly `{ "kind": "not-produced" }` or `{ "kind": "commit", "sha": "<40 or 64 hexadecimal characters>" }`. Handoff is exactly a nonempty trimmed path (at most 4096 characters) and a 64-character hexadecimal SHA-256. Context is copied into the immutable content hash, so changing it under an existing message ID is a conflict. Old version 1 messages without context retain their original hash because the absent field is omitted from the hash input.
+
+Replies and done records inherit the parent's context when `context` is omitted. An explicit context may update the candidate and handoff only when its ticket string matches the parent; explicit `null` and cross-ticket context are rejected. This contract validates and binds the supplied claims only: it does not inspect the referenced path, verify that the commit exists, prove handoff authorship, grant authorization, or establish native delivery. Treat the values as caller-provided routing/recovery context.
 
 ## Lifecycle and result interpretation
 
