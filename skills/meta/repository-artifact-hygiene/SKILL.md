@@ -140,6 +140,34 @@ recovery or release. The [lifecycle reference](references/retention-lifecycle.md
 and the conformance route. This rule does not add an approval step: apply existing project/user
 authorization for removal.
 
+## Taking over another agent's work
+
+Use the [takeover procedure](references/worktree-takeover.md) when an assignment
+inherits branches or worktrees. Inventory local and cached remote refs and linked
+worktrees before touching them; classify landed commits with `git cherry`, unique
+commits, explicitly evidenced supersession, and branches whose changed LFS-managed
+files are ordinary blobs. The [read-only takeover plan](scripts/plan-worktree-takeover.mjs)
+prints those observations without merging, fetching, tagging, deleting or retiring
+anything. Treat an unclear comparison or LFS attribute as unknown and inspect it.
+
+Integrate only accepted unique work in feature order. A branch that violates the
+repository's LFS rules needs a reviewed squash and renormalization plan before merge;
+preserve its original ref until the normalized result is verified. Before retiring a
+unique source branch, preserve it under a dated or ticket-scoped `archive/` ref and
+verify the ref resolves to the intended commit. Remote branch removal requires its
+owner's approval. Source integration, ignored-artifact disposition and checkout
+retirement are separate decisions: a named ref can preserve needed unfinished source
+without merging it, and a clean checkout says nothing about ignored or private files.
+Move current inputs to canonical locations and update consumers before retirement.
+
+For a harness-managed checkout, use its supported lifecycle operation and inspect the
+current task/primary binding. If the app refuses because the checkout is primary or
+shared, report the refusal once with the supported handoff needed; retry only after a
+relevant binding or ownership change. Do not force Git removal or repeatedly retry an
+unchanged refusal. Unknown eligibility remains unknown. Keep this procedure advisory
+and harness-portable; app API calls and ownership records belong in that harness's
+reference.
+
 ## At ticket close
 
 Every uncommitted artifact a ticket made gets one of three outcomes before `tkt close`:
