@@ -1,7 +1,7 @@
 ---
 id: "218"
 title: "sync verifies the pulled range, not an empty diff, and survives a Windows vendor check"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
