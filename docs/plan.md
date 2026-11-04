@@ -224,7 +224,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 231 | Current primary-source and installed-interface qualification (child of 179) | ✅ done |
 | 232 | Exact session retirement and real spool crash/restart recovery (child of 179) | ✅ done |
 | 233 | Bounded native outcome/dead-letter lifecycle (child of 179) | ✅ done |
-| 234 | Ticket/candidate/durable-handoff message context (after 232) | in_progress |
+| 234 | Ticket/candidate/durable-handoff message context (after 232) | ✅ done |
 | 235 | Codex public queue adapter and existing-agent busy/idle receipts (after 231/233/234) | open |
 | 236 | Owned Claude streaming handoff transport and receipt fixture (after 231/233/234) | open |
 | 237 | Owned Kiro ACP transport and receipt/teardown fixture (after 231/233/234) | open |
