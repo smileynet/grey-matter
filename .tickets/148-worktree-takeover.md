@@ -1,7 +1,7 @@
 ---
 id: "148"
 title: "Take over another agent's worktrees and branches safely"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -23,12 +23,12 @@ Taking over from Codex meant checking 7 worktrees and 46 branches by hand. Findi
 
 ## Acceptance criteria
 
-- [ ] A skill (or a section of repository-artifact-hygiene) gives the takeover procedure: inventory worktrees and local/remote branches; classify each as landed (`git cherry`), unique, superseded or LFS-breaking; merge unique work in feature order; squash-and-renormalize LFS-breaking branches; tag unique work under `archive/` before deleting; delete remote branches only with the owner's approval.
-- [ ] A helper script produces the classification as a dry-run plan (philippines-trip #206 is the first implementation).
-- [ ] Related: #79, #145.
-- [ ] A clean landed checkout still blocked by an app primary/shared binding is reported once with the supported handoff needed; no guard bypass is recommended.
-- [ ] Scenario review distinguishes source integration, artifact disposition and checkout retirement, including needed unfinished source on a named ref.
-- [ ] Skill guidance stays harness-portable and advisory; exact API calls and app-specific ownership records belong in harness references/projects rather than a new generic cleanup executor.
+- [x] A skill (or a section of repository-artifact-hygiene) gives the takeover procedure: inventory worktrees and local/remote branches; classify each as landed (`git cherry`), unique, superseded or LFS-breaking; merge unique work in feature order; squash-and-renormalize LFS-breaking branches; tag unique work under `archive/` before deleting; delete remote branches only with the owner's approval.
+- [x] A helper script produces the classification as a dry-run plan (philippines-trip #206 is the first implementation).
+- [x] Related: #79, #145.
+- [x] A clean landed checkout still blocked by an app primary/shared binding is reported once with the supported handoff needed; no guard bypass is recommended.
+- [x] Scenario review distinguishes source integration, artifact disposition and checkout retirement, including needed unfinished source on a named ref.
+- [x] Skill guidance stays harness-portable and advisory; exact API calls and app-specific ownership records belong in harness references/projects rather than a new generic cleanup executor.
 
 ## Outcome-driven orchestration coordination
 
@@ -53,3 +53,12 @@ The accepted additions are included in the canonical acceptance checklist above.
 Overlap checked: #145 owns concurrent checkout detection and #180 adoption review;
 #183 completed artifact-owner continuity. This adds supported-lifecycle judgment
 to #148 rather than a parallel worktree-removal ticket.
+
+## Resolution (2026-11-04)
+
+Delivered advisory worktree takeover guidance, read-only classifier, synthetic fixtures and scenario review. Independent Standards and Spec accepted exact final0f4ff32 including fresh-checkout test setup fix and catalog. Promoted compact logs/reviews/verification and receiving custody under docs/agents. Keep worker/parent synthetic fixtures, dispatch/private-ref plan and raw reviews through queue settlement and evidence disposition; installed copies retained as deployment. Missing old ignored evidence remains UNKNOWN under durable custody record; original named source refs remain. No historical/private171 source merged or artifact released, no app guard bypass or remote branch deletion.
+
+### Verification
+1. ✓ Branches classified before any deletion — "PASS: portable takeover procedure and read-only local/cached ref/worktree classifier independently accepted at0f4ff32; focused synthetic classification test1 PASS, syntax10 PASS, catalog155 PASS. No real deletion or live retirement eligibility claim."
+2. ✓ Unique work archived — "PASS: scenarios and guidance require named archive refs for needed unique source before separately authorized removal, preserve ignored evidence independently, and require remote owner approval. Main source and receiving custody record pushed; no archive/delete executor or actual historical disposition added."
+3. ✓ LFS rule enforced on merge — "PASS: target/candidate LFS rules, removed attributes, valid pointers and deleted paths exercised by synthetic test; unique raw blobs flagged, reviewed squash/normalization required before integration. No live LFS payload or merge qualification claimed. Parent pre-merge1/pre-push5 and final docs pre-push2 PASS; deployed50."

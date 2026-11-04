@@ -227,7 +227,7 @@ scheduled for the new session; do not recreate the settled #179 monitor.
 | --- | --- | --- |
 | 145 | Detect shared-checkout concurrency and recommend isolation | ✅ done |
 | 149 | Review priorities, queue inversions and blockers from ticket facts | ✅ done |
-| 148 | Take over worktrees safely and respect harness lifecycle guards | in_progress |
+| 148 | Take over worktrees safely and respect harness lifecycle guards | ✅ done |
 | 140 | Keep unrelated staged changes out of ticket commits | ✅ done |
 | 141 | Review staged and working-tree changes safely | ✅ done |
 | 139 | Validate custom dashboards and authoritative ticket projections | in_progress |
@@ -623,7 +623,7 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 145 | Detect another live session in the same checkout and suggest a worktree | ✅ done |
 | 146 | delivery-dashboard lists only open questions, generated from a structured source | open |
 | 147 | to-questionnaire offers an HTML decision form with recommendations and copy-for-chat | open |
-| 148 | Take over another agent's worktrees and branches safely | in_progress |
+| 148 | Take over another agent's worktrees and branches safely | ✅ done |
 | 149 | reconcile-tickets runs a priority review over workstreams, queue and blockers | ✅ done |
 | 150 | Add an optional product map (jobs, workflows, feature status) to the delivery dashboard | open |
 | 164 | Upgrade path: bring a project up to a new grey-matter release's standards (conformance-audit mode recommended) | open |
