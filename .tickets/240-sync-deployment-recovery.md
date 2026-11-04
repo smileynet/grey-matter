@@ -1,7 +1,7 @@
 ---
 id: "240"
 title: "Preflight packages and resume only unfinished deployment targets"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Linked AGENTS.md reference material remains inert and links resolve; strict Antigravity validation succeeds."
