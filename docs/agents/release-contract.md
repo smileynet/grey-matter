@@ -132,7 +132,7 @@ listing, install a plugin, or publish a crate automatically.
 
 Use the [source conformance report](research/plugin-conformance.md),
 [notice inventory](research/plugin-notice-inventory.md), grey-matter `gate.mjs pre-release`,
-tkt mise run check, version/packaging/recovery fixtures and native validators.
+tkt mise run check:release, version/packaging/recovery fixtures and native validators.
 Each candidate needs native evidence from every supported platform; unavailable
 platforms remain recorded gaps. Install/upgrade tests cover every supported harness,
 including project-only roots. A final audit reconciles all findings and decides

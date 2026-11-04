@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// gate.mjs reference version 4 (grey-matter proposal 18). Projects vendor this file; keep this
+// gate.mjs reference version 5 (grey-matter proposal 18). Projects vendor this file; keep this
 // line so conformance-audit can report drift from the reference.
 //
 // Runs the checks that scripts/gates.json declares for one stage, selected by changed paths.
@@ -129,12 +129,17 @@ function recordMeasurements(file, source, measurements) {
 // every check (unknown history selects more, never less).
 function pushedPaths(input, remote, tips, ranges) {
   const paths = new Set();
+  const published = git("for-each-ref", "--format=%(objectname)", `refs/remotes/${remote ?? "origin"}/`);
   for (const line of input.split(/\r?\n/).filter(Boolean)) {
     const [, localSha, , remoteSha] = line.trim().split(/\s+/);
     if (!localSha || ZERO.test(localSha)) continue;
     tips.add(localSha);
     const range = remoteSha && !ZERO.test(remoteSha) ? [`${remoteSha}..${localSha}`] : [localSha, "--not", `--remotes=${remote ?? "origin"}`];
-    ranges.set(localSha, [...(ranges.get(localSha) ?? []), range]);
+    // Path selection keeps the exact ref range; privacy excludes the remote history
+    // observed now, before another check or concurrent fetch can move tracking refs.
+    const excluded = published && [...new Set([...published, ...(remoteSha && !ZERO.test(remoteSha) ? [remoteSha] : [])])];
+    const privacy = excluded && (excluded.length ? [localSha, "--not", ...excluded] : [localSha]);
+    ranges.set(localSha, privacy ? [...(ranges.get(localSha) ?? []), privacy] : null);
     const files = git("log", "--format=", "--name-only", ...range);
     if (!files) return null;
     for (const f of files) paths.add(f);

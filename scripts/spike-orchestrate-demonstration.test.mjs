@@ -3,7 +3,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { hasTkt, base, fixture, inDir } from "./spike-orchestrate-test-fixtures.mjs";
+import { spawnSync } from "node:child_process";
+import { base, fixture, inDir } from "./spike-orchestrate-test-fixtures.mjs";
+
+const hasTkt = spawnSync("tkt", ["--version"], { timeout: 5000, encoding: "utf8" }).status === 0;
 
 test("create is deterministic, and the frontier holds T1, T2, T3 and T5 with T4 blocked by T1", { skip: !hasTkt }, () => {
   const dir = join(base, "trunk");

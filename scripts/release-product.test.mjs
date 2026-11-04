@@ -64,5 +64,5 @@ test("tkt selects its Cargo authority and full mise gate", () => fixture(({ run,
   git(repo, "add", "."); git(repo, "-c", "core.hooksPath=" + join(repo, "no hooks"), "commit", "-m", "Cargo fixture");
   const sha = git(repo, "rev-parse", "HEAD");
   assert.throws(() => run(), /requested commit/);
-  const result = run({ sha }); assert.equal(result.product, "tkt"); assert.deepEqual(result.commands, [["mise", "run", "check"]]); assert.equal(existsSync(out), false);
+  const result = run({ sha }); assert.equal(result.product, "tkt"); assert.deepEqual(result.commands, [["mise", "run", "check:release"]]); assert.equal(existsSync(out), false);
 }));

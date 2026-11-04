@@ -100,10 +100,14 @@ later commit does not hide it from the public-history guard. Renames preserve ol
 for merges, the guard scans resolution text newly added against all parents. There are no filename exemptions
 that let new leaks enter historical evidence files.
 
-Runner version 4 supplies `GM_GATE_RANGES`: JSON arrays of Git revision arguments for
-the exact tip being checked. Existing refs use the remote tip as their base; new refs
-exclude known commits on the selected remote. Multi-ref pushes carry each tip's own
-ranges. An unknown/invalid range is an execution error, never a clean scan.
+Runner version 5 supplies `GM_GATE_RANGES`: JSON arrays of Git revision arguments for
+the exact tip being checked. Push privacy ranges exclude already-published commits on
+the selected remote for both existing and new refs. Remote tracking tips are pinned to
+commit IDs before checks run; existing refs also exclude their advertised remote tip.
+Merging published historical evidence therefore does not introduce a privacy finding.
+Ordinary check selection still uses each exact ref range, and explicit `--base` checks
+retain their requested range without these exclusions. Multi-ref pushes carry each
+tip's own ranges. An unknown/invalid range is an execution error, never a clean scan.
 
 Standalone `node scripts/check-home-path.mjs --base REF --head REF` checks committed
 changes; without a base it uses the origin/main merge-base, or reachable history if

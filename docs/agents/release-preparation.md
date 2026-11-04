@@ -136,7 +136,7 @@ node scripts/release-product.mjs --repo /path/to/candidate --sha FULL_COMMIT_SHA
 ```
 
 Add `--execute` to run grey-matter's `gate.mjs pre-release` or tkt's
-`mise run check` in a clean checkout at that exact SHA. Install the candidate's
+`mise run check:release` in a clean checkout at that exact SHA. Install the candidate's
 maintainer dependencies first; this command does not install or publish anything.
 Evidence needs a new numbered directory outside the checkout for every invocation.
 Logs, hashes, exit/signal,

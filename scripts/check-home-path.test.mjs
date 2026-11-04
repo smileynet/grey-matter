@@ -77,7 +77,7 @@ test("new refs exclude remote history and deletions add no leak findings", (t) =
   const baseline = f.commit("historical.md", HOME + "\n");
   f.git("update-ref", "refs/remotes/origin/main", baseline);
   const tip = f.commit("new.md", "clean\n");
-  assert.equal(f.check({ ranges: [[tip, "--not", "--remotes=origin"]] }).status, "pass");
+  assert.equal(f.check({ ranges: [[tip, "--not", baseline]] }).status, "pass");
   f.git("rm", "historical.md"); f.git("commit", "-qm", "remove historical file");
   assert.equal(f.check({ base: baseline }).status, "pass");
 });
@@ -90,7 +90,7 @@ test("merging already-published historical paths does not create a new leak", (t
   f.git("update-ref", "refs/remotes/origin/side", published);
   f.git("checkout", "main"); f.commit("work.md", "clean\n");
   f.git("merge", "--no-ff", "-qm", "merge published history", "side");
-  assert.equal(f.check({ ranges: [[f.git("rev-parse", "HEAD"), "--not", "--remotes=origin"]] }).status, "pass");
+  assert.equal(f.check({ ranges: [[f.git("rev-parse", "HEAD"), "--not", f.base, published]] }).status, "pass");
 });
 
 test("novel merge-resolution text is checked against every parent", (t) => {
@@ -109,6 +109,8 @@ test("missing baselines and malformed runner scopes are execution errors", (t) =
   const f = fixture(t);
   assert.throws(() => f.check({ base: "missing-ref" }), /failed/);
   assert.throws(() => f.check({ ranges: null }), /unknown gate revision scope/);
+  assert.throws(() => f.check({ ranges: [] }), /unknown gate revision scope/);
+  assert.throws(() => f.check({ ranges: [[f.base, "--not", "--remotes=origin"]] }), /unknown gate revision scope/);
   mkdirSync(join(f.repo, "scripts"));
   copyFileSync(CHECKER, join(f.repo, "scripts/check-home-path.mjs"));
   const run = spawnSync(process.execPath, [join(f.repo, "scripts/check-home-path.mjs"), "--json"], {

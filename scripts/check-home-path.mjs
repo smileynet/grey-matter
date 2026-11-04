@@ -58,9 +58,9 @@ export function audit({ repo = ROOT, base, head = "HEAD", all = false, home = ho
   }
   // Range metadata crosses the runner/CLI boundary; unknown scope must never pass.
   const sha = "[0-9a-f]{40,64}";
-  if (!Array.isArray(ranges) || ranges.some((r) => !Array.isArray(r) ||
+  if (!Array.isArray(ranges) || !ranges.length || ranges.some((r) => !Array.isArray(r) ||
       !(r.length === 1 && new RegExp(`^${sha}(?:\\.\\.${sha})?$`).test(r[0]) ||
-        r.length === 3 && new RegExp(`^${sha}$`).test(r[0]) && r[1] === "--not" && /^--remotes=.+$/.test(r[2])))) {
+        r.length >= 3 && new RegExp(`^${sha}$`).test(r[0]) && r[1] === "--not" && r.slice(2).every((ref) => new RegExp(`^${sha}$`).test(ref))))) {
     throw new Error("invalid or unknown gate revision scope");
   }
   const commits = [...new Set(ranges.flatMap((r) => git("rev-list", "--reverse", ...r).trim().split("\n").filter(Boolean)))];

@@ -78,6 +78,36 @@ test("privacy gate checks new refs in a multi-ref push independently", () => fix
   assert.match(result.out, /2 commit|at /);
 }));
 
+test("existing-ref privacy excludes published branches without narrowing path selection", () => fixture([check("history", ["historical.md"]), homeCheck], ({ git, commit, run, push, base }) => {
+  installHomeChecker(git);
+  git("checkout", "-qb", "published");
+  const published = commit("historical.md", homedir() + "/old\n");
+  git("update-ref", "refs/remotes/origin/published", published);
+  git("checkout", "main"); commit("notes.md", "unrelated work\n");
+  git("merge", "--no-ff", "published", "-m", "merge published evidence");
+  const tip = git("rev-parse", "HEAD");
+  const result = run(["pre-push", "--stdin", "--remote", "origin"], { input: push(tip, base) });
+  assert.equal(result.status, 0, result.out);
+  assert.ok(ran(result.out, "history"), result.out);
+  const introduced = commit("new.md", homedir() + "/new\n");
+  const blocked = run(["pre-push", "--stdin", "--remote", "origin"], { input: push(introduced, base) });
+  assert.equal(blocked.status, 1, blocked.out);
+  assert.match(blocked.out, /new.md:1/);
+  assert.doesNotMatch(blocked.out, /historical.md:1/);
+}));
+
+test("privacy pins selected-remote history before checks can move tracking refs", () => fixture([
+  check("move-ref", ["new.md"], "require('node:child_process').execFileSync('git', ['update-ref', 'refs/remotes/origin/published', 'HEAD'])"),
+  homeCheck,
+], ({ git, commit, run, push, base }) => {
+  installHomeChecker(git);
+  const tip = commit("new.md", homedir() + "/new\n");
+  git("update-ref", "refs/remotes/other/published", tip);
+  const result = run(["pre-push", "--stdin", "--remote", "origin"], { input: push(tip, base) });
+  assert.equal(result.status, 1, result.out);
+  assert.match(result.out, /new.md:1/);
+}));
+
 test("privacy gate receives the explicit pre-merge base instead of an ambient range", () => fixture([{ ...homeCheck, stage: "pre-merge" }], ({ git, commit, run }) => {
   installHomeChecker(git);
   const before = commit("new.md", "clean\n");
