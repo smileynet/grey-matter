@@ -169,12 +169,11 @@ metadata continue to fault as before.
 
 A later parent-owned fresh-wire observer recorded `rate_limit_event` while the
 session was busy, with the exact session match and an independent event UUID.
-Its redacted evidence (`.scratch/t236-wire-v4-evidence.json`, 10,512 bytes, SHA-256
-`1a43a8eb75d5f43b3ca21e66434ee5da6473887863fb78828b1ac4cbc31aba38`)
-confirms the event family and exact session match; status and reset fields were
-not retained. It does not establish that quota was exhausted or identify the
-earlier #236 failure. The adapter validates against the published schema and
-reports only fields actually present in a future frame.
+See the parent-maintained [native qualification report](../../../../docs/agents/research/session-messaging-native-qualification-20261104.md)
+for the retained diagnostic. Its status and reset fields were not retained, so
+it does not establish that quota was exhausted or identify the earlier #236
+failure. The adapter validates against the published schema and reports only
+fields actually present in a future frame.
 
 The previous local read-only capture recorded Claude Code CLI 2.1.316 and its
 help text in the [#231 interface report](../../../../docs/agents/research/session-messaging-interfaces-20261103.md)
