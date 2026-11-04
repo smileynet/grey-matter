@@ -59,6 +59,12 @@ the `owned-process.mjs` handle. Local child exit/close is separate evidence and 
 not prove the Kiro task's outcome or descendant cleanup. No PID lookup, process-name
 kill, adoption, automatic restart or retry is supported.
 
+An owner-initiated `close()` ends the local updates iterator with `CLOSED` only when the
+owned-process handle reports its exact `stopped` result. Unexpected process exit, remote
+EOF, deadline, abnormal termination and any earlier protocol failure remain
+`DISCONNECTED` or retain the original error. This is a local transport classification;
+it does not assert that Kiro completed graceful provider-side shutdown.
+
 `processCompletion` exposes the close result independently. `completion` waits for
 both process close and bounded stderr collection and rejects when the configured
 stderr stream limit is exceeded. `stderr` is a private `Promise<Buffer>` with raw

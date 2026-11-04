@@ -132,8 +132,10 @@ export async function startKiroAcp(input) {
     onDisconnect: () => { void process.stop().catch(() => {}); },
   });
   const reader = consumeStdout(process, connection);
+  let ownerRequestedClose = false;
   const onExit = processCompletion.then(result => {
-    connection.disconnect(new KiroAcpError('Kiro ACP process closed', 'DISCONNECTED', { process: result }));
+    const code = ownerRequestedClose && result.reason === 'stopped' ? 'CLOSED' : 'DISCONNECTED';
+    connection.disconnect(new KiroAcpError('Kiro ACP process closed', code, { process: result }));
     return result;
   });
 
@@ -211,8 +213,10 @@ export async function startKiroAcp(input) {
         if (closed) result = await onExit;
         else {
           closed = true;
+          ownerRequestedClose = true;
           result = await process.stop();
-          connection.disconnect(new KiroAcpError('Kiro ACP process stopped by its owner', 'CLOSED', { process: result }));
+          const code = result.reason === 'stopped' ? 'CLOSED' : 'DISCONNECTED';
+          connection.disconnect(new KiroAcpError('Kiro ACP process stopped by its owner', code, { process: result }));
         }
         await stderr;
         return result;

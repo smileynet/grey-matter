@@ -27,7 +27,12 @@ class Fixture {
       line = Console.ReadLine();
       if (line == null || !line.Contains("\\\"method\\\":\\\"session/new\\\"")) { Environment.ExitCode = 12; return; }
       Console.Out.WriteLine("{\\\"jsonrpc\\\":\\\"2.0\\\",\\\"id\\\":2,\\\"result\\\":{\\\"sessionId\\\":\\\"${sessionId}\\\"}}"); Console.Out.Flush();
-      while (Console.ReadLine() != null) { }
+      while ((line = Console.ReadLine()) != null) {
+        if (Environment.GetEnvironmentVariable("FIXTURE_EXIT_ON_PROMPT") == "1" && line.Contains("\\\"method\\\":\\\"session/prompt\\\"")) return;
+        if (Environment.GetEnvironmentVariable("FIXTURE_MALFORMED_ON_PROMPT") == "1" && line.Contains("\\\"method\\\":\\\"session/prompt\\\"")) {
+          Console.Out.WriteLine("{malformed"); Console.Out.Flush(); return;
+        }
+      }
       return;
     }
     string sid = null;
@@ -229,7 +234,10 @@ test('starts only after initialize then session/new while eagerly collecting bou
   assert.match(client.generation, /^[0-9a-f-]{36}$/);
   assert.ok(Number.isFinite(Date.parse(client.requestedAt)));
   assert.equal(Object.isFrozen(client), true);
+  const update = assert.rejects(client.updates.next(), { code: 'CLOSED' });
   const processExit = await client.close();
+  await update;
+  assert.deepEqual(await client.close(), processExit);
   const result = await client.completion;
   const diagnostics = await client.stderr;
   assert.equal(processExit.exitCode, 0);
@@ -238,6 +246,37 @@ test('starts only after initialize then session/new while eagerly collecting bou
   assert.ok(Buffer.isBuffer(diagnostics));
   assert.equal(diagnostics.length, stderrBytes);
   assert.equal(diagnostics[0], 'x'.charCodeAt(0));
+});
+
+test('unexpected peer exit remains disconnected and an in-flight prompt stays ambiguous', { skip: !canCompileLocalFixture && 'already-installed Windows Framework C# compiler unavailable' }, async t => {
+  const fixture = await localFixture(t);
+  const client = await startKiroAcp({
+    ...fixture,
+    env: { ...fixture.env, FIXTURE_EXIT_ON_PROMPT: '1' },
+    agent: 'fixture-agent', model: 'fixture-model',
+  });
+  const update = assert.rejects(client.updates.next(), { code: 'DISCONNECTED' });
+  await assert.rejects(client.prompt({ messageId: 'unexpected-exit', messageHash: 'a'.repeat(64), text: 'synthetic' }), { code: 'AMBIGUOUS' });
+  await update;
+  const processExit = await client.processCompletion;
+  assert.equal(processExit.reason, 'exit');
+  assert.equal(processExit.exitCode, 0);
+  assert.deepEqual(await client.close(), processExit);
+});
+
+test('an earlier protocol fault is preserved when owner close follows', { skip: !canCompileLocalFixture && 'already-installed Windows Framework C# compiler unavailable' }, async t => {
+  const fixture = await localFixture(t);
+  const client = await startKiroAcp({
+    ...fixture,
+    env: { ...fixture.env, FIXTURE_MALFORMED_ON_PROMPT: '1' },
+    agent: 'fixture-agent', model: 'fixture-model',
+  });
+  const update = assert.rejects(client.updates.next(), { code: 'MALFORMED_FRAME' });
+  await assert.rejects(client.prompt({ messageId: 'protocol-fault', messageHash: 'b'.repeat(64), text: 'synthetic' }), { code: 'AMBIGUOUS' });
+  await update;
+  const processExit = await client.close();
+  assert.equal(processExit.reason, 'stopped');
+  assert.deepEqual(await client.close(), processExit);
 });
 
 test('stderr exceeding its owned byte limit is a visible startup and cleanup failure', { skip: !canCompileLocalFixture && 'already-installed Windows Framework C# compiler unavailable' }, async t => {
