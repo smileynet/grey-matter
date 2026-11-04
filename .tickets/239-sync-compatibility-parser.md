@@ -1,7 +1,7 @@
 ---
 id: "239"
 title: "Keep compatibility audits distinct from parsing and execution errors"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Built-in help and backtick-separated prose do not create false command findings; genuine unsupported commands and flags still fail."
