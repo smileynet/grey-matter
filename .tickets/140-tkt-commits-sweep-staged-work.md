@@ -1,7 +1,7 @@
 ---
 id: "140"
 title: "Ticket commands must not sweep staged work into ticket commits"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -21,9 +21,9 @@ Field report from philippines-trip, 2026-11-01. `tkt new`, `tkt claim`, `tkt edi
 
 ## Acceptance criteria
 
-- [ ] Reproduce with an unrelated staged file and record the result.
-- [ ] Either tkt commits only the ticket path (e.g. `git commit -- <ticket>`; raise upstream in tkt) or every skill that runs tkt commands (code-review, reconcile-tickets, tkt-core/work, triage) warns to commit or unstage first.
-- [ ] File the tkt-side issues (staged sweep, tags missing from query JSON, comma splitting in --vc, slow publish) upstream and link them here.
+- [x] Reproduce with an unrelated staged file and record the result.
+- [x] Either tkt commits only the ticket path (e.g. `git commit -- <ticket>`; raise upstream in tkt) or every skill that runs tkt commands (code-review, reconcile-tickets, tkt-core/work, triage) warns to commit or unstage first.
+- [x] File the tkt-side issues (staged sweep, tags missing from query JSON, comma splitting in --vc, slow publish) upstream and link them here.
 
 ## Reproduced in grey-matter (2026-11-01)
 
@@ -63,3 +63,11 @@ not a privacy finding; the corrected current push succeeded. No tracker source o
 global settings change was needed. Retain this worker's owned fixtures/runner/raw
 proof through the authorized queue's settlement and evidence disposition; report
 promoted, old missing worktree evidence is outside this ticket's release scope.
+
+## Resolution (2026-11-04)
+
+Verified current installed behavior; historical staged sweep and missing tags are fixed upstream. Promoted reproduction report and independent reviews under docs/agents/research, linked upstream owners without duplicate obsolete issues. Worker-owned fixture repositories, runner and raw proof retained through the authorized queue settlement and evidence disposition. No historical/private evidence released. No tracker source or global setting change needed.
+
+### Verification
+1. ✓ Reproduced with a staged unrelated file — "PASS: installed tkt 0.4.0 e755765 four normal mutation fixtures committed only ticket paths and preserved unrelated staged bytes; raw digest 27f0e45550f1b81861143b60724819edd60b62ae26d356413558925060b86e2e, independent live index review passed."
+2. ✓ Skills warn or tkt commits only the ticket path — "PASS: upstream tkt ticket235 supplies ticket-only commits; current query tags and quoted comma cases passed. Existing tkt tickets235/231/43 linked in dated note; comma unreproduced and network/hook latency unmeasured. Parent pre-merge syntax1 PASS and pre-push doc-links/home-path2 PASS on integrated delivery."

@@ -228,7 +228,7 @@ scheduled for the new session; do not recreate the settled #179 monitor.
 | 145 | Detect shared-checkout concurrency and recommend isolation | ✅ done |
 | 149 | Review priorities, queue inversions and blockers from ticket facts | ✅ done |
 | 148 | Take over worktrees safely and respect harness lifecycle guards | in_progress |
-| 140 | Keep unrelated staged changes out of ticket commits | in_progress |
+| 140 | Keep unrelated staged changes out of ticket commits | ✅ done |
 | 141 | Review staged and working-tree changes safely | in_progress |
 | 139 | Validate custom dashboards and authoritative ticket projections | open |
 | 118 | Show the complete execution queue and current work | open |
@@ -615,7 +615,7 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | --- | --- | --- |
 | 130 | Regress shared user-managed skill duplicates without overwriting local changes | open |
 | 139 | Validate the delivery-dashboard contract on custom dashboard pages | open |
-| 140 | Ticket commands must not sweep staged work into ticket commits | in_progress |
+| 140 | Ticket commands must not sweep staged work into ticket commits | ✅ done |
 | 141 | code-review accepts staged or uncommitted work as its fixed point | in_progress |
 | 142 | Installed plugin lags the repo so orient routes to skills that are not installed | open |
 | 143 | init-project and conformance-audit check cross-harness readiness (Antigravity, Codex) | open |
