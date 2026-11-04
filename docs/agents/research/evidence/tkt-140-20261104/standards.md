@@ -1,5 +1,9 @@
 # Standards review — ticket #140
 
+Publication copy: ephemeral locators are replaced with the durable
+[case report](../../tkt-140-staged-mutation-recheck.md). The original review and
+raw fixture evidence remain privately retained; the verdict is unchanged.
+
 **Verdict: PASS.** No actionable documented-standard violations or app-rubric
 smells found in the fixed candidate `363005aa69301c55cbed3ba79bf3ac467ecc2370`
 (base `c5700c36842598716aa15401e4ba4de94576d62d`). The only committed path is
@@ -33,8 +37,8 @@ other rubric smell is present. This is Standards only, not a judgment that every
 
 Reviewed the exact report, retained `reproduction.json` (SHA-256
 `27f0e45550f1b81861143b60724819edd60b62ae26d356413558925060b86e2e`),
-and `reproduce.mjs`. Fixture folders remain in the assigned worktree's
-`.scratch/t140/fixtures-r5/`; no reproduction or mutation command was rerun.
+and `reproduce.mjs`. Fixture folders remain privately retained in the assigned
+worktree; no reproduction or mutation command was rerun.
 Read-only source/ticket inspection confirmed the upstream references above.
 I did not access external services, change source, Git or tracker state, or
 verify future platform versions. The installed Windows binary is the observed

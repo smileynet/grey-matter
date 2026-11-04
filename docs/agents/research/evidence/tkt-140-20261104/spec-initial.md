@@ -1,5 +1,9 @@
 # Independent Spec review: #140
 
+Publication copy: the ephemeral packet locator is replaced with the durable
+[case report](../../tkt-140-staged-mutation-recheck.md). The original review and
+raw fixture evidence remain privately retained; the verdict is unchanged.
+
 ## Expectations
 
 See `t140-spec-risks.md`, written from the complete ticket before reviewing the
@@ -10,7 +14,7 @@ candidate.
 The exact candidate report at
 `D:/.codex/worktrees/tkt-140-continuation/grey-matter/docs/agents/research/tkt-140-staged-mutation-recheck.md`
 matches candidate `363005aa69301c55cbed3ba79bf3ac467ecc2370`. Its cited raw
-packet is present at `.scratch/t140/reproduction.json`, 35,309 bytes, SHA-256
+packet is privately retained, 35,309 bytes, SHA-256
 `27f0e45550f1b81861143b60724819edd60b62ae26d356413558925060b86e2e`.
 The installed tkt binary hash and version match the report. All four recorded
 fixture mutations exited zero; their commits contain only the ticket path, the
