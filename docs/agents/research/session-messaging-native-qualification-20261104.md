@@ -46,3 +46,24 @@ The [evidence index](evidence/session-messaging-native-first-cases-20261104.json
 binds ten private preflight, result and independent postflight artifacts. They are
 retained by the parent through the final #179 audit. Unknown native response text,
 credentials and unrelated conversations are not included in this document.
+
+## Subsequent diagnosis and Kiro result
+
+A distinct bounded Claude diagnostic retained first-record shape metadata before
+the unchanged parser rejected it. Its type hash matched `command_lifecycle` in
+the exact pinned CLI binary, with a matching session and no retained lifecycle
+state or input correlation. Anthropic's [SDK changelog](https://github.com/anthropics/claude-agent-sdk-typescript/blob/main/CHANGELOG.md#030206)
+documents that family, while the pinned SDK message type union omits its full
+schema and the pinned CLI consumer ignores it. The narrow adapter correction
+treats only this exact session-bound family as opaque status: it cannot establish
+readiness, input receipt or completion, and other unknown frame types still fail.
+Independent local protocol checks pass 17/17. This diagnosis does not repair the
+original ambiguous input or qualify native delivery.
+The [diagnosis evidence index](evidence/session-messaging-claude-lifecycle-20261104.json)
+binds the retained wire observation, public-source excerpts and exact-source reviews.
+
+A separate [Kiro V2 case](session-messaging-kiro-owned-20261104.md) subsequently
+completed both business turns and their core acknowledgments, with observed
+physical process cleanup. Its original update-stream disconnect and local-only
+close-classification correction remain separate from business delivery. Neither
+new finding reclassifies the first failed cases above.

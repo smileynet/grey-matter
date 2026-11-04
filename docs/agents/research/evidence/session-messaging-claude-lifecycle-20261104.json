@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179 final audit and explicit disposition",
+  "candidate": "4573fa27e9464bb5bef79899a1240e2b7e0bfa25",
+  "integrated": "13a1e3c979b6bba3c58a9006dead98a0c88f0374",
+  "observedFamily": "command_lifecycle",
+  "fullWireSchema": "not established; pinned SDKMessage union omits variant",
+  "policy": "ignore exact bounded session-bound known metadata; never readiness/receipt/correlation/completion",
+  "nativeDelivery": "not qualified by diagnostic or local source tests",
+  "raw": [
+    {
+      "path": ".scratch/t236-wire-v3-evidence.json",
+      "bytes": 2564,
+      "sha256": "c982e783d42fc6d13e7ae37174491e2c69d87bf20db61ba52335b5a772ca7aca"
+    },
+    {
+      "path": ".scratch/t236-wire-v3-postflight-review.md",
+      "bytes": 5060,
+      "sha256": "095debc564faad6dc7d113d608740103b2a1cf32608310ac58d3bdcb8c27f175"
+    },
+    {
+      "path": ".scratch/t236-public-enum-lookup.json",
+      "bytes": 872,
+      "sha256": "111662cd76744af30b08c83dd9a5d78dd779c6a5534b994bb336d495be6ece65"
+    },
+    {
+      "path": ".scratch/t236-public-enum-lookup.md",
+      "bytes": 3088,
+      "sha256": "b928d0ceac20c570eee65fadddb57a8c66656c39c4ca55ba7f0d5084bf241f41"
+    },
+    {
+      "path": ".scratch/t236-lifecycle-sdk-schema-evidence.md",
+      "bytes": 1068,
+      "sha256": "c8c8dfbea3cec094f6e44b8ef258857c7863dafd04b23fab2d4670bb26b31d30"
+    },
+    {
+      "path": ".scratch/t236-lifecycle-sdk-schema-excerpt.txt",
+      "bytes": 1042,
+      "sha256": "4543e65e5eb23290b8cdb8be00fa472d5c89fe381f90560caa00ce453598ad1a"
+    },
+    {
+      "path": ".scratch/t236-lifecycle-cli-consumer-excerpt.txt",
+      "bytes": 514,
+      "sha256": "caafcd375ff65238175cabffa71a1ea01b3721a5f8d20e2804aa661abf9c747b"
+    },
+    {
+      "path": ".scratch/t236-lifecycle-evidence.json",
+      "bytes": 2392,
+      "sha256": "edf6acbc88e06a9950a4f76b6551eafe451ede63856df7330b2100b8176d7319"
+    },
+    {
+      "path": ".scratch/t236-lifecycle-checks.log",
+      "bytes": 4759,
+      "sha256": "44743493f97ee2fd1c9f474e35560e613d1d61e572802134d6428ff552f79e8f"
+    },
+    {
+      "path": ".scratch/t236-lifecycle-source-review.md",
+      "bytes": 4683,
+      "sha256": "3d4c40e496dfc9750661c5997e74e0117cdfeedcab5b9574d00f59fe94b731ef"
+    },
+    {
+      "path": ".scratch/t236-parent-lifecycle-dispatch-result.json",
+      "bytes": 720,
+      "sha256": "e45a5e9332f46482347761f9e916fbed756a059512d17b8b84736e8f11e6dc52"
+    },
+    {
+      "path": ".scratch/t236-parent-lifecycle-focused.log",
+      "bytes": 4011,
+      "sha256": "4fe51a97dc686e3793b5bdbf5967e6a2e3d134c5a1f2777885d495eafb1268e9"
+    },
+    {
+      "path": ".scratch/t236-parent-lifecycle-premerge.log",
+      "bytes": 105,
+      "sha256": "96a921f1ff3ad760bac299e528256d545023f2637899da9a7392d7042c2cfa92"
+    },
+    {
+      "path": ".scratch/t236-parent-lifecycle-prepush.log",
+      "bytes": 284,
+      "sha256": "b77e529840827a3cf78fbcef2e5012b2ae07248076c222e93a019f992d7be3d5"
+    }
+  ]
+}
