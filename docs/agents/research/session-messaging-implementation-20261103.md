@@ -128,3 +128,42 @@ dependency error is infrastructure failure, not a passing check.
 [Source evidence](evidence/session-messaging-235-20261103.json) retains both results.
 The [earlier desktop native case](session-messaging-desktop-20261103.md) does not
 qualify this extension or actual CLI delivery. Native qualification remains open.
+
+## Owned provider protocol modules (#236/#237 source)
+
+Independent critics accepted Claude candidate
+`c3a2ff6f0fed1b54f37f6ae995dd393bead5b21d` and Kiro candidate
+`582f3c43aa939032ca39b225632da8a4d532ad74`. Both reuse the verified owned-process
+foundation and keep native model/session observations separate from process exit.
+They provide owned sequential input, not foreign live-chat attachment or busy steering.
+
+Claude's fixed ephemeral invocation disables built-in tools/MCP and requests replay
+acknowledgments; exact session and protocol UUID correlate replay, assistant and
+terminal records. Review caught the missing replay flag before acceptance; the
+corrected six-case synthetic fixture covers that distinction. Kiro negotiates ACP
+protocol 1 and an actual owned session, denies client file/terminal/permission
+requests, and rejects busy or mismatched input. Review reproduced changing prompt
+text and an undefined malformed update; the corrected 12-case suite rejects both.
+
+[Claude source evidence](evidence/session-messaging-236-20261103.json) and
+[Kiro source evidence](evidence/session-messaging-237-20261103.json) retain initial
+findings, corrected checks and exact dispatch bindings. These are source/protocol
+results only. Shared owned-intent binding, real profile/model/receipt qualification
+and independent teardown observations still belong to the parent. No provider
+process or model was launched by either worker or critic. The accepted #189 shutdown
+limitation remains unchanged.
+
+Before deployment, an additional independent startup review blocked both wrappers:
+unread stderr stalled a real local child at 64 KiB, below its configured ceiling,
+before stdout readiness. Corrective candidate
+`5b1f4902e49ab60ea0a593b803d4e346800c6dac` eagerly drains bounded stderr, exposes
+private diagnostics without automatic logging and propagates collection failures
+through completion. Kiro also exposes actual live owned-process identity and no
+longer sends the nonstandard ACP `initialized` notification.
+
+Parent and independent checks use the installed Windows C# compiler to build tiny
+fake peers. Claude's eight and Kiro's fourteen cases pass without skips, including
+2 MiB of stderr before readiness and typed overflow/cleanup behavior. No provider
+executable or model is involved. [Startup evidence](evidence/session-messaging-owned-startup-20261103.json)
+preserves the initial deadlock and corrected results. This corrects the held source
+integration before publication; it does not add native qualification.

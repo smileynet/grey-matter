@@ -1,0 +1,55 @@
+{
+  "candidate": "5b1f4902e49ab60ea0a593b803d4e346800c6dac",
+  "base": "88fa5c0a76ec72de0759bf94936db146f3fad000",
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179finalqualificationauditandexplicitdisposition",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/t179-startup-kept-claude-tests.log",
+      "bytes": 1952,
+      "sha256": "fd332b9a72cb5a4ab654d24c964e7a87a30e83584b7db92daec587e19e41f7f5"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t179-startup-kept-kiro-tests.log",
+      "bytes": 2963,
+      "sha256": "0930eabb52d63868a1a261265dbe871a925880c564a75368a024a7dba9a1c51c"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/critic-stderr-backpressure-repro.mjs",
+      "bytes": 1897,
+      "sha256": "a7f1769879f75dcf8ec3325a56cd1f0b9188008626f65f8a3975d0b35be563f9"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/critic-stderr-backpressure-repro.log",
+      "bytes": 294,
+      "sha256": "70ec23c824f44cdd669c9d1c90bc20db7aef975d9556abe37e1a5034d7e3352c"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/critic-owned-stderr-review-88fa5c0.md",
+      "bytes": 3180,
+      "sha256": "68c12e55988cda12bd92fbdaafb9d2f0762a3c6fa488d6a176fb3c901d7c6826"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/critic179-claude-provider-stderr.log",
+      "bytes": 1955,
+      "sha256": "dc4d9b2719752e054589ea71b7bd0b1c72cd3eb8ae6e0c38d235d50cca825e26"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/critic179-kiro-provider-stderr.log",
+      "bytes": 2963,
+      "sha256": "e4d7068ad68d448102d16d4b4aef96e81d2f70a08f157cfe5c74285dff458cfc"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/critic179-provider-startup-review-5b1f490.md",
+      "bytes": 3354,
+      "sha256": "c5e37023923d66fce2da49f22e9792b1f070d01417ab5f900fad1933fdef2ea5"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t179-startup-parent-dispatch-result.json",
+      "bytes": 888,
+      "sha256": "f892d40dad532182fdebf6a4388230f56ea7f07d4f9f09b6645b2b3b0767790b"
+    }
+  ],
+  "limits": "Synthetic local startup proof only: existing Windows C# compiler built fake peers, no Claude/Kiro executable or model was invoked. Claude8/8 andKiro14/14 passed withzeroWindows skips. Prior unreadstderrdeadlock independently reproduced; fixedeagerdrain reachesstartupafter2MiBstderr andover-limiterrorremainsobservable. Actualnativeprofiles/models/receipts/teardown andsharedintentbridge stillpending.189V3limitationunchanged."
+}

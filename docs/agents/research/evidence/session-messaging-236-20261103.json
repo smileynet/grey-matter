@@ -1,0 +1,45 @@
+{
+  "candidate": "c3a2ff6f0fed1b54f37f6ae995dd393bead5b21d",
+  "base": "97c204197799c1e04e48001eaff629e643b4497f",
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179finalqualificationauditandexplicitdisposition",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-parent-dispatch-result.json",
+      "bytes": 699,
+      "sha256": "d7ef7fff8c734387ed280fac5b923be90823bda8234bbfe947d8444b2ffd1b61"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-kept-worker236-claude-stream-20261103-claude-stream-candidate-checks.log",
+      "bytes": 1457,
+      "sha256": "4842443c59a3979c90328609fb60418c2b5b2f5838e665a125d6b7f65ef4a867"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-kept-worker236-claude-stream-20261103-claude-stream-critic-revision-checks.log",
+      "bytes": 1511,
+      "sha256": "04295bde3082ec8747a69d2aa2e734c172185f238d9a9456bbc0e079415b0e8f"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-kept-worker236-claude-stream-20261103-claude-stream-focused-checks.log",
+      "bytes": 2692,
+      "sha256": "99f74bae208d2cebb9e5ded69692c62c0ce4d38906189737a2215772fe1bae4c"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-kept-worker236-claude-stream-20261103-evidence-index.json",
+      "bytes": 5195,
+      "sha256": "bc4c257109bbbdb9d7bb23bf7016e71fc4a1bb1c84f32b02cb9add8c0dc1444e"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-kept-critic236-claude-stream-renewal-c3a2ff6.md",
+      "bytes": 2204,
+      "sha256": "67f4957e32564d2a37be1dc157b86d150a82b0f4606959355b4257c748d51363"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-kept-critic236-claude-stream-review-a1392392.md",
+      "bytes": 2853,
+      "sha256": "d704d38e14b4ccaa64dba6bf9d94d6045cefd0e40ec1956234ba88968c99cc48"
+    }
+  ],
+  "limits": "Source-only qualification;6synthetic protocol tests, no Claude/provider/model calls. Missing replay flag was independently found and fixed. Native init/model/tools/replay/result/teardown and shared intent binding remain parent work. Ephemeral no-session-persistence; no reconnect/foreign attachment."
+}

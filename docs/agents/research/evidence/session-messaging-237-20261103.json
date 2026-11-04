@@ -1,0 +1,55 @@
+{
+  "candidate": "582f3c43aa939032ca39b225632da8a4d532ad74",
+  "base": "91d3e3ef70d5cdd2b75bf133a11b2aeeca0020cf",
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179finalqualificationauditandexplicitdisposition",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-parent-dispatch-result.json",
+      "bytes": 674,
+      "sha256": "22bd848ac10b9ece65b9a719021e16ee25d49616a872c0525e0799f8e0666305"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-kept-worker237-kiro-acp-node-test.log",
+      "bytes": 2048,
+      "sha256": "82c40b02b1efecb0c6890eb613f2791a1da0a75d3344d19213882aaa44dc42e4"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-kept-worker237-kiro-acp-revision1-malformed-update-probe.log",
+      "bytes": 1289,
+      "sha256": "2971f0c7912849abd8602763369898f45494fefc25a7012737f35d32c359300e"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-kept-worker237-kiro-acp-revision1-node-test.log",
+      "bytes": 2481,
+      "sha256": "e38645b52da389cb828a560050fe5349ea132c3ecdd1386f03d34f98bfe66090"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-kept-worker237-kiro-acp-revision1-prompt-snapshot-probe.log",
+      "bytes": 192,
+      "sha256": "2a61da57afd15a9bc8c12336dc5d88380d0e67b585480fadf9f474eed50a3b26"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-kept-t237-critic-review-revision1-pass.md",
+      "bytes": 2512,
+      "sha256": "75beff7a733e0b58386822b8e28b2c1ebb5c512dcc185136c1152d6c8d9b51b8"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-kept-t237-critic-review-block.md",
+      "bytes": 2296,
+      "sha256": "7a0313a07fe8442135c976450506b9bd34675ea908553308bda10b9b7ebecd63"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-kept-kiro-acp-prompt-snapshot-probe.mjs",
+      "bytes": 542,
+      "sha256": "5e0b5fce7c2e6095f9998c81eab69a290fb38b884ea5e646e7616251403b577c"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t237-kept-kiro-acp-malformed-update-probe.mjs",
+      "bytes": 363,
+      "sha256": "25db82684226e9fd7fc48641386474f0acd3d0673848fabc9d7e533a44d27fb0"
+    }
+  ],
+  "limits": "Source-only qualification;12synthetic protocol tests, no Kiro/provider/model calls. Prompt snapshot and malformed update counterexamples retained/fixed. Actual native profile/auth/negotiation/delivery/cleanup and shared intent binding remain parent work. V2 first route;189shutdown workaround preserved, not resolved."
+}

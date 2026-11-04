@@ -3,6 +3,12 @@
 For native GUI watching or answering, read [GUI watch qualifications](gui-watch.md).
 Agent View is CLI/TUI; distinguish it from the Desktop session sidebar.
 
+For an admitted owned, tool-free CLI qualification, load the
+[stream protocol contract](claude-stream.md). It uses one ephemeral process and
+exact UUID-correlated input/result events; source tests do not establish native
+delivery, disk persistence or shared-intent qualification. It cannot attach to an
+existing user's chat. Keep the manual reporting fallback until qualified.
+
 Source: [ticket 125 results](../../../../docs/agents/research/harness-orchestration-primitives.md#spike-results-claude-code-2026-10-31),
 observed 2026-10-31 on 2.1.316. Inspect live tool schemas before using these names.
 

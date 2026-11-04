@@ -72,6 +72,10 @@ When implementing an admitted native adapter with an owned subprocess, use the
 [bounded process contract](references/owned-process.md). Its verified executable,
 opaque child handle and finite stream/stop limits supply process observations;
 they do not establish a native session receipt or permission to launch a provider.
+The [Claude stream](references/claude-stream.md) and [Kiro ACP](references/kiro-acp.md)
+modules have source/protocol fixtures only. Use them solely for an explicitly
+admitted owned-session qualification; native preflight and shared-intent integration
+remain required. They do not attach to foreign live chats or replace manual fallback.
 
 Before settlement, use the [scenario audit](references/scenario-audit.md) when an
 evidence-backed outcome trace is available. Its consistency result checks recorded

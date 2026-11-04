@@ -1,0 +1,132 @@
+# Owned Claude stream adapter
+
+`scripts/claude-stream.mjs` wraps one Claude Code CLI process owned by the
+orchestrator. It is an internal adapter, not a CLI command, a general process
+runner, or a way to attach to another person's terminal or desktop session.
+
+## Start one disposable session
+
+Call `startClaudeStream({ executable, cwd, env, limits, sessionId, model })` only
+from trusted orchestration code. `executable` is the expected canonical path,
+SHA-256 and byte ceiling used by `owned-process.mjs`; `cwd`, an explicit
+environment map, and all finite process limits are required. The adapter copies
+these values synchronously before the first filesystem await. Its own fixed argv
+is `-p --input-format stream-json --output-format stream-json
+--replay-user-messages --verbose
+--include-partial-messages --session-id <sessionId> --model <model> --restricted
+--tools "" --permission-prompts none --strict-mcp-config --mcp-config
+{"mcpServers":{}} --no-session-persistence`. Caller data cannot change that
+argv. There is no shell, resume, fork, retry, or fallback model.
+
+The session ID is a caller-selected canonical UUID. `ready` resolves only after a
+`system/init` record reports that exact ID and includes Claude's resolved model,
+CLI version, tool list, MCP server list, and permission mode. It rejects if the
+observed built-in tool list or MCP server list is non-empty, or if the session is
+in an automatic permission mode. The parent still checks the exact binary, model
+entitlement, managed policy, and disposable-task preflight before sending any
+task. A version or `system/init` record is not authorization.
+
+`--restricted` is a supported CLI setting that avoids user/project/local settings
+and customizations while retaining managed policy. The empty strict MCP config
+and empty built-in tool list narrow the session surface further. Managed policy
+and account-level model access remain parent preflight concerns. No host settings
+are changed. `--no-session-persistence` keeps this owned process ephemeral: its
+session cannot be resumed from disk, and the adapter does not claim restart,
+reconnect, or transcript persistence. The parent may separately retain only
+bounded, task-owned input, replay, and result evidence.
+
+## Send and observe
+
+After `ready`, call `send({ messageId, messageHash, protocolUuid, sessionId, text })`.
+The adapter snapshots and validates those values before its first await, rejects
+unknown fields, enforces the exact owned session, and permits only one in-flight
+turn. `messageHash` is a SHA-256 hex digest. `protocolUuid` is a canonical UUID
+and is sent as Claude's documented user-message `uuid`; core identity fields stay
+outside the provider wire message. The wire message contains only documented
+user-message fields: `type: "user"`, `uuid`, `session_id`, `message` with
+`role: "user"` and text `content`, `parent_tool_use_id: null`, and
+`client_composed: true`. Text stays on stdin as JSONL data; it never enters argv.
+The `send` return value `stdin-written` means only that the local child pipe
+accepted the encoded line. It does not prove Claude read or processed it.
+
+The `events` async iterable reports distinct observations:
+
+- `input-replayed`: Claude echoed the exact UUID, session, text, and
+  `isReplay: true`. This confirms the provider stream replayed the input; it is
+  not a task result.
+- `input-observed`: matching user content appeared without `isReplay: true`. It
+  is observable input but is not promoted to the replay acknowledgment.
+- `stream-event` and `assistant`: correlated partial and completed response
+  content. The first response frame must carry the submitted user UUID. Later
+  frames without UUID correlation are attached only within that documented
+  sequential response boundary, ending at a correlated result.
+- `provider-result`: a terminal success or error result whose
+  `user_message_uuid` or `user_message_uuids` identifies the submitted UUID.
+  This is separate from process settlement and from parent-native task receipts.
+- `ambiguous-disconnect`: the owned process closed before a matching terminal
+  result. Exit code zero alone never means the task completed.
+- `process-exit`: the exact owned process's close observation, with exit code,
+  signal, generation, byte counts, and timestamps.
+- `protocol-fault`: malformed, unexpected, out-of-order, wrong-session, or
+  uncorrelated stream data. The adapter stops the owned child and does not retry.
+
+Consume `events` before sending and while the process runs. Its in-memory event
+queue is bounded; a slow or absent consumer backpressures stdout, and process
+limits/deadlines still apply. `stop()` closes the input and asks
+`owned-process.mjs` to stop only this child. A stop result describes process
+settlement; it does not retroactively prove a task result. `processCompletion` is the
+lower-level process close observation. `completion` waits for both process close and
+bounded stderr collection; it rejects if the stderr stream limit is exceeded.
+`stderr` is a private `Promise<Buffer>` containing raw child diagnostics. Read it only
+for an authorized investigation, redact before retention, and never use authentication
+strings from it to obtain access.
+
+`createClaudeStreamProtocol(sessionId)` is a pure, data-only boundary for testing
+decoded records and for parent integration. It owns no process and confers no
+authorization. Only `startClaudeStream` binds it to the exact verified child.
+
+## Supported surface and limits
+
+The following first-party pages were checked on 2026-11-03:
+
+- Anthropic's [Streaming Input](https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode)
+  describes persistent input and uses `type: "user"` messages with
+  `message.role: "user"` and `message.content`.
+- The [CLI reference](https://code.claude.com/docs/en/cli-reference) documents
+  print-mode `--input-format stream-json`, `--output-format stream-json`,
+  `--replay-user-messages` (which re-emits stdin user messages to stdout for
+  acknowledgment and requires both stream-json formats),
+  `--include-partial-messages`, `--session-id`, `--model`, `--restricted`,
+  `--tools`, `--permission-prompts`, `--strict-mcp-config`, `--mcp-config`, and
+  `--no-session-persistence`.
+- [Run Claude Code programmatically](https://code.claude.com/docs/en/headless)
+  documents newline-delimited `stream-json` output and describes the final line
+  as a `result` record. It also documents `system/init` session metadata.
+- The [TypeScript Agent SDK reference](https://code.claude.com/docs/en/agent-sdk/typescript)
+  defines `SDKUserMessage`, `SDKUserMessageReplay`, `SDKAssistantMessage`,
+  `SDKResultMessage`, `session_id`, and `user_message_uuid(s)` correlation. Its
+  `user_message_uuid` entry states: “Claude Code echoes a `uuid` only if you set
+  one on the message.”
+
+The previous local read-only capture recorded Claude Code CLI 2.1.316 and its
+help text in the [#231 interface report](../../../../docs/agents/research/session-messaging-interfaces-20261103.md)
+and its evidence manifest; the adapter did not launch that CLI. Documentation
+and help establish interface shape, not current account entitlement or runtime
+qualification. Parent-owned disposable native canaries must verify actual
+startup, empty tool/MCP state, exact replay, correlated result, and shutdown
+before describing live delivery as qualified.
+
+Fixtures check the synthetic protocol contract and, on Windows when the already
+installed Framework C# compiler is present, launch a tiny local fake executable
+through the actual wrapper. It writes 2 MiB to stderr before its startup record,
+exercising the drain and byte-limit paths without launching Claude:
+
+```powershell
+node --test skills/engineering/orchestrate/scripts/claude-stream.test.mjs
+```
+
+The protocol fixture uses the current Node executable through the owned-process
+helper. The wrapper fixture is local synthetic code. Neither makes a Claude process,
+model call, native call, or account/config change, and neither qualifies a Claude
+installation or production worker. The wrapper fixture skips when the compiler is
+not already installed.
