@@ -1,0 +1,1 @@
+PASS tool-script inventory: 155 classified paths (operator 59, fixture/template 17, test 60, module 19); 155 tracked paths found (script extensions, executable modes and 2-byte shebang checks).

@@ -1,0 +1,68 @@
+{
+  "candidate": "0f4ff326557516c274b314218d87cdbbbd687d5f",
+  "checks": [
+    {
+      "command": "node --test skills/meta/repository-artifact-hygiene/scripts/plan-worktree-takeover.test.mjs",
+      "outcome": "pass",
+      "tests": 1,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": "focused-test.log"
+    },
+    {
+      "command": "node --test scripts/skill-syntax.test.mjs",
+      "outcome": "pass",
+      "tests": 10,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": "syntax-test.log"
+    },
+    {
+      "command": "node skills/engineering/orchestrate/scripts/check-tool-guidance.mjs",
+      "outcome": "pass",
+      "paths": 155,
+      "evidence": "catalog.log"
+    },
+    {
+      "command": "node scripts/gate.mjs pre-merge --include skill-syntax-fixtures",
+      "outcome": "pass",
+      "selected": 1
+    },
+    {
+      "command": "git push (pre-push hook)",
+      "outcome": "pass",
+      "selected": 5
+    },
+    {
+      "command": "node scripts/deploy.mjs --no-agy --no-kirocrew",
+      "outcome": "pass",
+      "skills": 50,
+      "rawBytes": 3806,
+      "rawSha256": "99db60c26b976cf4f64343f6ac6890fbaee79d8a8815714f1bdd526579498624"
+    }
+  ],
+  "earlierFailures": [
+    {
+      "outcome": "infrastructure error",
+      "scope": "fresh worker syntax fixtures",
+      "reason": "local yaml dependency absent; parent syntax fixtures passed"
+    },
+    {
+      "outcome": "infrastructure error",
+      "scope": "parent focused fixture setup",
+      "reason": "fixture parent absent; author fixed test setup and passing run replaced it"
+    },
+    {
+      "outcome": "assertion failure",
+      "scope": "catalog contract",
+      "reason": "operator boundary lacked recognized read-only wording; corrected and passing catalog result retained"
+    }
+  ],
+  "limits": "Synthetic local Git fixtures and source review; refs-only assertion, no remote fixture or live artifact/checkout retirement qualification. No real disposition authorized.",
+  "retention": {
+    "owner": "parent orchestration continuation",
+    "state": "retained",
+    "purpose": "private raw reviews, synthetic fixture repositories and deployment recovery",
+    "end": "useful proof promotion and explicit queue-settlement disposition; unknown historical ownership remains protected"
+  }
+}

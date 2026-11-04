@@ -1,0 +1,33 @@
+TAP version 13
+# Switched to a new branch 'landed-copy'
+# Switched to a new branch 'divergent'
+# Switched to branch 'main'
+# Switched to a new branch 'unique'
+# Switched to a new branch 'replacement'
+# Switched to branch 'main'
+# Switched to a new branch 'lfs-raw'
+# Switched to a new branch 'lfs-delete'
+# Switched to branch 'main'
+# Switched to a new branch 'lfs-pointer'
+# Switched to branch 'main'
+# Switched to a new branch 'lfs-rule-removed'
+# Switched to branch 'main'
+# Switched to a new branch 'merge-source'
+# Switched to branch 'main'
+# Switched to a new branch 'merge-only'
+# PASS: patch-equivalent, unique, evidenced superseded, LFS-breaking, and read-only classifications
+# Subtest: classifies landed, unique, superseded, LFS-breaking and uncertain merge refs without changing refs
+ok 1 - classifies landed, unique, superseded, LFS-breaking and uncertain merge refs without changing refs
+  ---
+  duration_ms: 1977.6627
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2068.7991

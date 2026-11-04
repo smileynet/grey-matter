@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: core, host extension and sidecar policy parse together
+ok 1 - core, host extension and sidecar policy parse together
+  ---
+  duration_ms: 9.4152
+  type: 'test'
+  ...
+# Subtest: reject malformed YAML missed by native validator
+ok 2 - reject malformed YAML missed by native validator
+  ---
+  duration_ms: 4.1637
+  type: 'test'
+  ...
+# Subtest: reject duplicate key
+ok 3 - reject duplicate key
+  ---
+  duration_ms: 3.8012
+  type: 'test'
+  ...
+# Subtest: reject description array
+ok 4 - reject description array
+  ---
+  duration_ms: 3.2928
+  type: 'test'
+  ...
+# Subtest: reject unquoted description colon
+ok 5 - reject unquoted description colon
+  ---
+  duration_ms: 3.1058
+  type: 'test'
+  ...
+# Subtest: reject metadata shape
+ok 6 - reject metadata shape
+  ---
+  duration_ms: 3.1064
+  type: 'test'
+  ...
+# Subtest: reject quoted policy boolean
+ok 7 - reject quoted policy boolean
+  ---
+  duration_ms: 4.0543
+  type: 'test'
+  ...
+# Subtest: reject malformed sidecar
+ok 8 - reject malformed sidecar
+  ---
+  duration_ms: 3.6949
+  type: 'test'
+  ...
+# Subtest: reject non-mapping frontmatter
+ok 9 - reject non-mapping frontmatter
+  ---
+  duration_ms: 3.4533
+  type: 'test'
+  ...
+# Subtest: library imports from Node stdin do not resolve the dash marker as a file
+ok 10 - library imports from Node stdin do not resolve the dash marker as a file
+  ---
+  duration_ms: 82.5435
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 203.2986
