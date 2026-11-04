@@ -92,3 +92,20 @@ The parent integrates #233 and #234 together before deployment because canonical
 core validation must recognize context-bearing messages. The combined suite passes
 39/39 tests, including a new preparation-through-receipt cross-module regression.
 These are local protocol checks, not native delivery qualification.
+
+## Owned process foundation (#238)
+
+Accepted worker candidate `a575e340846c9232c9e86ed61ac1b0f5bdcfbc7a` supplies an
+internal process module for the separate native adapters. It verifies a canonical
+executable hash, snapshots validated inputs before asynchronous checks, and owns
+one exact child handle and generation. Required finite bounds cover input, output,
+framing, lifetime and stop; task results remain separate from process exit/close.
+No process adoption, descendant kill, provider call or automatic restart is added.
+
+Independent review reproduced a caller-mutation bypass during asynchronous startup.
+The corrected snapshot implementation passes that same counterexample. Worker and
+critic each observed 12 focused tests passing, zero failures and one explicit
+Windows skip for SIGTERM-ignore escalation. The skipped POSIX behavior remains
+unverified here. These real local Node child tests do not qualify a native provider.
+[Retained evidence](evidence/session-messaging-238-20261103.json) includes the initial
+failure, corrected results and exact dispatch binding through the #179 audit.

@@ -1,0 +1,50 @@
+{
+  "candidate": "a575e340846c9232c9e86ed61ac1b0f5bdcfbc7a",
+  "base": "001c7403cfbc0acc71024418fdce0f947e266bcf",
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179finalqualificationauditandexplicitdisposition",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/worker238-owned-process-20261103/evidence-index.json",
+      "bytes": 3951,
+      "sha256": "10daae6b6526337910f98841cb7ade76207289f446f056ea767d6da196317d64"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker238-owned-process-20261103/owned-process.candidate.test.log",
+      "bytes": 2654,
+      "sha256": "81cc2fc0a8f9732a503449334ed8d66c6f087fa9d4a0697a7e30aeb98a703683"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/worker238-owned-process-20261103/mutable-options-revision-checks.log",
+      "bytes": 3088,
+      "sha256": "06ce5fa9607e6cc0d7784d1b4a543556c5ff8fcb4fa8b3612a2bf236fdb08083"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t238-mutable-input-review.log",
+      "bytes": 431,
+      "sha256": "6f09d06583e64bd0428746d52c24d78fb2f5353cc73d4ca3e07e7e579dfb9668"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t238-mutable-input-review-final.log",
+      "bytes": 433,
+      "sha256": "e713c522d19f7af105c89b9d3d321585a85e62d92332b4a6a0b2267d8146857e"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t238-critic-owned-process-renew.log",
+      "bytes": 2881,
+      "sha256": "506106dac1ef3eddf05897db38c78c398a52b2fc0a52609e8c6ce86d35797b63"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t238-critic-review-renewal.json",
+      "bytes": 1942,
+      "sha256": "92cb785b3b8913672876a09cea50fda007b30a99fb0bbcebf2efb3470b61716e"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t238-parent-dispatch-result.json",
+      "bytes": 700,
+      "sha256": "a2389d84204b8b499e260947932dd604983f50934b4aef75fa776f236aaa1d01"
+    }
+  ],
+  "limits": "Real local Node child fixtures only, no native provider/session proof. Final focused suite12PASS0FAIL1WindowsSIGTERM-ignoreSKIP. Prior options-mutation validation bypass retained and independently reproduced fixed. No process adoption, descendant kill, automatic restart, config or provider calls."
+}

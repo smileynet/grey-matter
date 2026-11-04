@@ -61,6 +61,11 @@ one intent and prepares a fixed action; the parent still verifies the live targe
 invokes the native tool and observes its receipt. Unsupported lanes use explicit
 manual reporting rather than a replacement session or blind retry.
 
+When implementing an admitted native adapter with an owned subprocess, use the
+[bounded process contract](references/owned-process.md). Its verified executable,
+opaque child handle and finite stream/stop limits supply process observations;
+they do not establish a native session receipt or permission to launch a provider.
+
 Before settlement, use the [scenario audit](references/scenario-audit.md) when an
 evidence-backed outcome trace is available. Its consistency result checks recorded
 claims and file hashes; it is not native persistence or execution proof.
