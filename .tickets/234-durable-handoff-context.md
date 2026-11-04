@@ -1,7 +1,7 @@
 ---
 id: "234"
 title: "Bind ticket candidate and durable handoff context to messages"
-status: open
+status: in_progress
 blocked_by: ["232"]
 priority: high
 validation_criteria:
@@ -10,6 +10,7 @@ validation_criteria:
   - "Usage contract independent exact-source review and integrated gates pass"
 tags: ["stream:orchestration", "type:enhancement"]
 parent: "179"
+assignee: "codex"
 ---
 # Bind work context to durable handoffs
 
