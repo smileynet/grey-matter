@@ -1,0 +1,44 @@
+{
+  "ownerCandidate": "e6e866ae838279a8708e638c45e7fe373b8d98e0",
+  "siteSourceCommit": "010e7733171214a5b7b1372b33553a06a0dca51a",
+  "site": {
+    "projectId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e",
+    "deploymentId": "appgdep_6aeae95f68b08191b2bc7b8757956d18",
+    "versionId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_23f2c50603f081918af4e75bd1f1182d",
+    "status": "succeeded",
+    "url": "https://orchestration-findings.sambiggins.chatgpt.site",
+    "updatedAt": "2026-11-04T08:14:29.736143+00:00"
+  },
+  "audience": {
+    "kind": "owner-private",
+    "accessRevision": 1,
+    "allowedOwners": 1,
+    "allowedGroups": 0,
+    "externalVisitors": 0,
+    "preserved": true
+  },
+  "review": {
+    "effortReceipt": "597a873bb3db92e4dd75dedb79b98c142ff3b610cfdfbfdb6a2353ca66768eae",
+    "globalReceipt": "f5eeb7674eb6e3aa4c24e0aa8bf9b39b9ba4990a978b2161a9bc461c992be11f",
+    "captures": 12,
+    "scope": "Shared owned input binding242 shipped; parent179 and native235236237 plus startup correction243 remain in progress"
+  },
+  "preflight": {
+    "result": "pass",
+    "raw": "D:/code/grey-matter/.scratch/t242-publication-preflight-final-result.json",
+    "requiredChecks": ["premerge", "prepush", "dashboard", "effort-browser", "status-browser"],
+    "checksAreAttestations": true
+  },
+  "archive": {
+    "originalPath": "D:/code/grey-matter/.scratch/t242-site-package.tar.gz",
+    "bytes": 85756,
+    "sha256": "c328e1c77b1c4baaa9337b17b1036d5f1f0b1594cd0f3592fc546d9399ed7a5f",
+    "disposition": "Sent to OS recycle after native terminal save/deploy success; original path observed absent"
+  },
+  "retained": {
+    "owner": "parent179integration",
+    "endCondition": "179 final audit and explicit disposition",
+    "scope": "Site checkout, exact source/package metadata, actual check outputs, private probe records and superseded pending receipts. No credentials persisted."
+  },
+  "limits": "Native terminal success verifies deployment, not a production browser render. Local browser interactions and captures were independently reviewed. This record does not qualify native adapters or close179."
+}
