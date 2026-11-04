@@ -44,6 +44,9 @@ Use the existing artifact-hygiene skill for purpose, ownership, useful evidence,
 - [ ] Scenario review distinguishes source inspection, historical test receipts, fresh executions and unverified coverage.
 - [ ] Applicable checks and independent review pass using offline inputs; no live deletion is required.
 
+- [ ] A destructive multi-target job records durable per-target intent and verified outcomes instead of publishing its only receipt after the entire loop.
+- [ ] Offline interruption scenarios cover termination after removal but before receipt persistence, partial removal, ledger write failure and changed target identity; resume revalidates scope and authorization and never reports unverified success.
+
 ## Out of scope
 
 Reimplementing completed Tagalog Helper tickets 211/217/218, resolving that project's legacy identity ticket 212, or adding mandatory global ledgers, hooks or a device campaign.
@@ -70,3 +73,24 @@ Acceptance additions:
 Overlap checked: #97/#181/#183 are completed lifecycle/prune/handoff work; #246
 owns disposition and measured reclaim; #212 owns archival proof. This extension
 adds policy-supersession judgment without reopening or duplicating those repairs.
+
+## Accepted remote Android retro extension · November 4
+
+Sam accepted filing this portable follow-up after Philippines Trip #282 succeeded.
+That one-off job published its applied receipt only after all targets completed;
+no interrupted-deletion failure was observed. The remaining durability gap is
+tracked locally in Philippines Trip #284. Source:
+https://github.com/smileynet/philippines-trip/blob/84cf6935/.memory/reviews/remote-android-retro-followup-2026-11-04.md
+
+Extend the existing interrupted-purge scenarios with a small reusable ledger
+pattern or disclosed example, including durable intent before mutation and a
+verified checkpoint immediately after each target. Bind resume to the same frozen
+scope and authorization, plus fresh target identity, ownership and handle checks.
+A missing target after interruption requires explicit reconciliation, not blind
+retry or automatic success. A ledger failure stops further destructive work.
+Keep mechanical failure-injection checks with any supplied helper/example.
+
+This extends acceptance examples without requiring a mandatory global ledger or
+building a second executor, deletion classifier or authorization policy. Project
+operators retain removal judgment and permission scope. Coordinate with #246 on
+capacity/disposition reporting; do not reopen the completed local cleanup.
