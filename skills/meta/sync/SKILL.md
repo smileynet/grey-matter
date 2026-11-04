@@ -6,217 +6,187 @@ disable-model-invocation: true
 
 # Sync
 
-Tracked script roles, task-specific usage routing and the on-demand inventory update
-procedure live in [orchestrate's tool-script catalog](../../engineering/orchestrate/references/tool-scripts.md).
+Refresh configured sources and their installed skills. Read the
+[release contract](../../../docs/agents/release-contract.md) for development, stable
+and pinned delivery; sync never publishes or promotes a release. Delegate specialized
+checks to their owning scripts/skills, indexed in [the tool-script catalog](../../engineering/orchestrate/references/tool-scripts.md).
 
-The **inbound counterpart of `release`**. Sync pulls the configured source, aligns
-its coupled state and refreshes local skills/plugins. Release handles versioned
-preparation, staging and separately authorized publication.
+## Boundaries
 
-The four couplings it keeps aligned:
+Preserve unrelated edits, foreign installs and local commits. Fast-forward a clean,
+behind-only registered checkout only within the authorized source scope. Divergence,
+conflicting edits or source/channel changes need the owner's decision; never reset,
+auto-merge or auto-rebase them.
 
-1. **Repo ↔ deployed skills.** A pull can add, change, or remove skills; the harness scan
-   roots and cached Codex/Antigravity plugins keep serving the old copies until
-   `deploy.mjs` re-runs.
-2. **Skills ↔ tkt command surface.** The skills inline tkt commands; a tkt upgrade can
-   rename a flag or drop a subcommand and break a skill mid-task.
-3. **Local tickets ↔ upstream tickets.** A pull can collide ticket IDs; `tkt rebase`
-   resolves them (upstream wins).
-4. **Repo invariants.** `gate.mjs pre-merge` checks indexes, links, invocation sidecars and
-   the ticket graph. Its result gates a dependent commit or push that carries the relevant
-   changes; a red result is a follow-up only when no such dependent mutation is planned.
+Carry existing authorization through retries, including CLI upgrades and session-scoped
+footprint exceptions. Follow [artifact hygiene](../repository-artifact-hygiene/SKILL.md#while-you-work)
+for disk checks; sync creates no blanket low-space exemption. Await every command's
+completed result before starting dependent work.
 
-Read the [release contract](../../../docs/agents/release-contract.md) when choosing
-development, stable or pinned sources. Sync refreshes the configured source; it
-does not publish a release or promote stable.
+Required gates protect dependent mutations. Unsupported usage holds the affected
+pack; a failed refresh preserves existing copies. Host-health findings and unrelated
+failures are reported separately. Never turn a baseline failure into a dependent pass.
 
-**Sync is an orchestrator.** It does the pull/deploy *judgement* itself and hands every
-specialized check to the skill or script that owns it — it reimplements none of them.
+## 1. Snapshot and update sources
 
-**Disposition: findings and required gates differ.** Drift, guidance findings and optional
-observations are reported without gating. A required verification result gates only the
-dependent mutation it protects: do not commit, push, publish or deploy work that requires a
-red or unresolved gate. A safe read-only investigation or an independently safe operation may
-continue. The deployer's installer safety does not make an unrelated required gate pass. A
-non-fast-forward pull or failed plugin refresh remains a mechanical stop; preserve existing
-copies when a refresh fails.
+Record the original SHA, dirty paths, selected source/channel and installed counts:
 
-## Steps
+```bash
+git rev-parse HEAD
+git status -sb
+tkt --version
+node scripts/deploy.mjs list
+git fetch
+git log --oneline HEAD..@{upstream}
+```
 
-1. **Snapshot the before-state.** Record what you're about to change against:
+Resolve the selected source before updating. Only after confirming a clean,
+behind-only checkout on that source, run `git pull --ff-only`; an already-current
+checkout needs no pull. Apply the boundaries above to dirty or divergent history.
 
-   ```bash
-   git rev-parse HEAD                        # commit before the pull
-   tkt --version                             # tkt version before
-   node scripts/deploy.mjs list              # per-root installed counts before
-   ```
+**After pulling, re-read this checkout's skills/meta/sync/SKILL.md.** Cached skills can
+name retired commands. Continue with the current workflow while retaining the original
+pre-pull SHA, completed steps and authorization. Do not restart the snapshot.
 
-2. **Pull safely (the one hard gate).** Fetch, show the gap, fast-forward only:
+Resolve active packs from skill-packs.json; inventory-only entries are not update
+targets. Snapshot each authorized checkout before fetching. For tkt:
 
-   ```bash
-   git fetch
-   git status -sb
-   git pull --ff-only
-   ```
+```bash
+git -C /path/to/tkt fetch
+git -C /path/to/tkt status -sb
+git -C /path/to/tkt log --oneline --left-right HEAD...@{upstream}
+git -C /path/to/tkt diff HEAD @{upstream} -- tools/deploy.mjs tools/deployer-vendor.json
+```
 
-   If `--ff-only` refuses (local commits have diverged from upstream), **stop and report**.
-   Do not auto-merge or auto-rebase the user's work — that's their decision, surface it and
-   let them choose. Everything below assumes the pull fast-forwarded.
+Inspect upstream vendor bytes, then fast-forward clean behind-only development
+checkouts when authorized. Otherwise name the held pack and continue independent work.
+Pinned/stable sources keep their selection; never switch them to main to cure drift.
 
-3. **Reconcile tickets if the pull touched `.tickets/`.** If the diff from step 1's HEAD to
-   now changed anything under `.tickets/`:
+## 2. Establish CLI compatibility before ticket operations
 
-   ```bash
-   tkt rebase --dry-run     # show ID collisions (upstream always wins)
-   tkt rebase               # apply if collisions exist
-   tkt validate --brief     # structural health after the rebase
-   ```
+Resolve the native installed tkt executable, not just a mise shim. Compare its full
+version/build hash with the selected checkout; product versions can remain identical
+across incompatible development builds. Identify required commands from pack usage
+and current help, including lifecycle features needed by pulled tickets (such as
+cancel/cancelled). Updating the pack does not update the binary.
 
-   A `tkt rebase` renumber is a repo change tkt owns: **commit it** (`chore(tickets):
-   rebase ids after sync`) so the tree stays clean, matching tkt's own push convention.
-   This step fixes **ID collisions only** — if the board itself needs real grooming
-   (stale WIP, untracked work, re-ordering), that's **`reconcile-tickets`**'s job; name it
-   as a suggested follow-up rather than running it inside sync.
+Run [verify-tkt-usage](../verify-tkt-usage/SKILL.md) for every deploying pack that inlines
+tkt usage, even when the product version is unchanged:
 
-4. **Check tkt compatibility before deploying its pack.** Call **`verify-tkt-usage`** for
-   every tkt pack deployment, even when the installed CLI version is unchanged. It records
-   the CLI executable/version/build, pack commit, commands, working directory and environment
-   identity, then checks the actual CLI help where the capabilities manifest is partial.
-   If the pack uses an unsupported command or flag, stop that pack deployment. Ask the owner
-   to choose a pack release tag compatible with the installed CLI or approve a CLI upgrade;
-   do not infer that updating the pack upgrades the CLI. Report the finding and choice in the
-   final delta (step 7). An unrelated pack may proceed only if its deployment is independent.
+```bash
+node scripts/verify-tkt-usage.mjs --pack /path/to/tkt --tkt /native/path/to/tkt
+node scripts/verify-tkt-usage.mjs --pack /path/to/grey-matter --tkt /native/path/to/tkt
+```
 
-5. **Synchronize owned tools and verify invariants.** Resolve tkt's registered checkout
-   from `skill-packs.json`. Before a tkt vendor repair, fetch its configured upstream and
-   compare history and vendor files:
+Exit 1 means unsupported usage; exit 2 means the audit could not complete. Neither
+proves compatibility. Fix a faulty checker with fixtures rather than treating a patched
+temporary checker as official evidence. Capabilities can be partial; actual help is
+the tiebreaker. Review named prose and enum usage outside the extractor's coverage.
 
-   ```bash
-   git -C /path/to/tkt fetch
-   git -C /path/to/tkt status -sb
-   git -C /path/to/tkt log --oneline --left-right HEAD...@{upstream}
-   git -C /path/to/tkt diff HEAD @{upstream} -- tools/deploy.mjs
-   ```
+If an upgrade is needed and already authorized, run cargo install --path . --locked
+in the selected clean tkt checkout, then bash tools/check-binary-fresh.sh, tkt --version,
+required help probes and both audits again. Otherwise ask once for a CLI upgrade or
+compatible pack release. Hold only dependent packs. Never edit ticket statuses to
+make an old CLI parse them.
 
-   If tkt is behind, inspect the upstream vendor bytes before fast-forwarding. If it is
-   ahead or diverged, compare both versions and ask the tkt owner before dropping or
-   rebasing any local commit; matching vendor bytes do not authorize a history rewrite.
-   The repair command refuses dirty vendor paths, unregistered checkouts, and any
-   ahead/behind history. After owner-approved history alignment and a clean tree, use
-   `node scripts/sync-release-tools.mjs --target /path/to/tkt --deployer` to inspect the
-   deployer vendor, then add `--write` to repair it. The output identifies the owner and
-   records its hash in tkt. If shared release modules changed, use the existing command
-   without `--deployer` to check/sync that owned inventory independently. Keep tkt's
-   private package/lock aligned with canonical development dependencies. A foreign/local
-   edit refusal is a mechanical stop; preserve the files and report it. Run `mise run
-   check` in tkt, then commit/push the owned update. A tkt-only installation runs its own
-   copies and needs no grey-matter checkout. Do not add another deploy inside this step.
+## 3. Reconcile ticket IDs and owned tools
 
-   Run the consistency checker (it owns installer-safety,
-   invocation-policy, doc-consistency, and `tkt validate`):
+For each pulled checkout whose .tickets/ changed, run tkt rebase --dry-run and
+tkt validate --brief. Apply tkt rebase only for collisions (upstream wins), then
+validate again. Commit/push renumbering as chore(tickets): rebase ids after sync.
+Board grooming belongs to reconcile-tickets, a separate follow-up.
 
-   ```bash
-   node scripts/gate.mjs pre-merge
-   ```
+After history alignment, inspect both owned inventories:
 
-   Read the completed result. If it's red or unresolved, record the check and its owner; do
-   not commit or push changes that depend on it. Deployment may proceed only when it is an
-   independent, locally safe refresh and no required verification gate protects that
-   deployment. Otherwise stop before deploy. A green run records the result for the delta.
+```bash
+node scripts/sync-release-tools.mjs --target /path/to/tkt --deployer
+node scripts/sync-release-tools.mjs --target /path/to/tkt
+```
 
-6. **Redeploy to the harnesses.** Push the current skills back out to every owned root and
-   refresh installed plugins through the single deploy command:
+Add --write only for owned drift. Recheck after pulling: upstream may already contain
+the repair. A foreign/local edit refusal stops that repair; preserve the files.
+Keep tkt's private package/lock aligned when canonical dependencies change. Verify
+owned vendor updates with `mise run check` in tkt and the applicable grey-matter
+gates in step 4, then commit/push before deployment.
+Do not deploy separately inside this step.
 
-   ```bash
-   node scripts/deploy.mjs --dry-run   # if step 1 showed a surprising count delta
-   node scripts/deploy.mjs             # verify Claude source, refresh Codex, choose roots, refresh agy once
-   node scripts/deploy.mjs audit       # report unowned dirs and skills a harness sees twice
-   ```
+If cargo, bash or another dependency is unavailable, record the exact failed command
+and owning ticket. Use a documented equivalent only when it checks the same contract;
+otherwise leave the required gate unresolved. Compare against the original source
+when needed to distinguish an existing failure from a regression.
 
-   When step 5 changed both registered packs, replace the install line with
-   `node scripts/deploy.mjs --portfolio skill-packs.json`; it refreshes each active
-   pack once. Do not also run per-pack deploy commands or compatibility wrappers.
+Use GIT_TERMINAL_PROMPT=0 for unattended Git and bound external credential helpers.
+After authentication/push failure, inspect retained commits and fetch/compare upstream
+before retrying the push. Do not repeat ticket mutations or recreate local commits.
 
-   The installer is idempotent: it refreshes changed skills, adds new ones, and prunes
-   skills removed upstream. It picks user-level roots from its harness table so each harness
-   sees each skill once (an installed Claude or Codex plugin counts as the copy), and refreshes
-   the enabled Codex plugin cache and, when `~/.gemini` exists, the Antigravity plugin.
-   For enabled Claude plugins, it verifies the CLI's active `readFromFolder` and
-   `folderVersion` against this checkout before pruning; audit uses that folder,
-   not a historical cache. Reload Claude plugins or start a new chat after edits.
-   A failed, foreign or legacy source observation is a mechanical stop.
-   Codex must use this
-   checkout as its local marketplace; a refresh failure stops deployment before copies are
-   removed. Run this command once; legacy wrappers are alternatives, not additional steps.
-   Report `audit` findings; don't delete unowned dirs without the user.
-   Crush reads **project** roots only, so for it note `node scripts/deploy.mjs --project`
-   inside each project that wants it — sync doesn't chase project roots.
+## 4. Verify the pulled range
 
-   Then probe this machine's agent shell (report-only; it never writes without `--apply`):
+Use the original grey-matter pre-pull SHA, not the new origin/main:
 
-   ```bash
-   node scripts/probe-agent-shell.mjs
-   ```
+```bash
+node scripts/gate.mjs pre-merge --base <pre-pull-sha>
+```
 
-   Each `finding` line carries its fix; carry it into the delta as a follow-up. Run
-   `--apply` only when the user says so: `~/.claude/settings.json` is theirs. See
-   [harnesses](../../../docs/agents/harnesses.md) ("Bash tool shell").
+Read selected paths and completed outcomes. The runner judges committed bytes;
+uncommitted fixes need applicable direct checks, then verification of the committed
+result before push. Zero selected checks prove nothing about excluded paths. Required
+failures hold dependent mutations; independent safe refreshes may proceed only when
+no required deployment gate protects them.
 
-   Then check that critic models can still be pinned and proven here (one tiny call per
-   harness; it reports, never changes anything):
+## 5. Deploy and resume by observed target state
 
-   ```bash
-   node scripts/probe-critic-model.mjs
-   ```
+Preflight compatibility and owned vendor alignment first. Run
+`node scripts/deploy.mjs check` and `node /path/to/tkt/tools/deploy.mjs check` for the
+packs being deployed; these include native checks that installation alone omits.
+For multiple updated packs:
 
-   A `below-ceiling`, `unverified`, `not-authenticated` or `unavailable` line is a follow-up, not a
-   failure. See [harnesses](../../../docs/agents/harnesses.md) ("Critic model").
+```bash
+node scripts/deploy.mjs --portfolio skill-packs.json
+```
 
-   Then refresh the standing rules and check this machine's guidance for rot (read-only):
+For one pack use node scripts/deploy.mjs. Use --dry-run first for surprising counts or
+roots. The deployer validates generated Antigravity packages before installed-target
+writes. Fix packaging at its owner; do not bypass strict warnings or activate linked
+reference documents as rules.
 
-   ```bash
-   node scripts/install-agents-md.mjs
-   node scripts/check-guidance.mjs
-   ```
+After interruption, inspect which pack/root/plugin finished and rerun the same
+authorized command. The installer compares requested and installed bytes, skips
+current targets and repairs changed/missing outputs. Do not force, delete old installs
+or call legacy wrappers to recover. Root ownership, Claude's local source/version and
+Codex's local marketplace must still be verified. Report refused/unfinished targets
+separately from successful ones.
 
-   A refused target (a hand-edited block or a generated file) and each guidance finding are
-   follow-ups for the user; don't `--force` without them.
+```bash
+node scripts/deploy.mjs audit --portfolio skill-packs.json
+```
 
-7. **Report the delta.** One compact summary, most-pressing-first:
+Report unowned directories without deleting them. Crush uses project roots only;
+note node scripts/deploy.mjs --project inside projects that want it, without traversing
+arbitrary projects. Kiro Crew owner/trust refusals retain the deployer's exact owner
+instructions and remain pending, not successful activation.
 
-   - **Commits pulled** (`git log --oneline <before>..HEAD`).
-   - **Skills changed**: added / modified / pruned, the **per-root count** after, and
-     which plugin caches were refreshed.
-   - **tkt**: version before → after, and any **drift** `verify-tkt-usage` found.
-   - **Ticket health**: whether a rebase ran, and `tkt validate` status.
-   - **Repo check**: command and completed outcome, or unresolved gate with owner; distinguish
-     required gates from optional findings.
-   - **Agent shell**: `ok`, `n/a`, or each `probe-agent-shell.mjs` finding with its fix.
-   - **Critic models**: each harness's `probe-critic-model.mjs` line (model it ran on, ceiling, auth).
-   - **Guidance**: standing-rules install result, and each `check-guidance.mjs` finding.
-   - **Follow-ups**: e.g. "run `reconcile-tickets`", "fix the drift in skill X", "`--project`
-     install for Crush in repo Y".
+## 6. Refresh guidance and report host health
 
-   Optionally confirm with one live discovery probe on the primary harness
-   (`kiro-cli chat --no-interactive --trust-all-tools "list the skills available to you"`).
+```bash
+node scripts/install-agents-md.mjs
+node scripts/check-guidance.mjs
+node scripts/probe-agent-shell.mjs
+node scripts/probe-critic-model.mjs --timeout 30
+```
 
-## Notes
+Guidance refusals, shell findings and critic results are independent follow-ups.
+Never force generated/hand-edited guidance, apply shell settings, change model/provider
+defaults or launch hosted checks without relevant authorization. The critic timeout
+is a total budget per harness; text mode prints each completed result immediately.
+Timeout/unavailable/auth failures remain unknown evidence. Retain completed results
+on retry.
 
-- **Requires `git`, `node`, and `tkt`.** The pull and the installer are cross-platform;
-  `tkt` is local.
-- **Not `orient`.** `orient` is bias-to-action onto the frontier at session start; `sync`
-  is a deliberate maintenance pass. If you just pulled, run `sync` *before* `orient` so the
-  board and the deployed skills are current before you pick up work.
-- **Deploy is local.** Steps 1-5 may create ticket-rebase and owned vendor-update commits;
-  step 6 refreshes harness roots/plugins. Commit/push those changes before deployment.
+## Report the delta
 
-## It's working if
-
-- `git pull --ff-only` fast-forwarded (or sync stopped cleanly and told you why it couldn't).
-- Each harness sees the source skill set once, through its plugin or selected owned root,
-  with new skills present and removed ones pruned.
-- Every tkt pack deployment has a `verify-tkt-usage` report, including when the CLI version
-  is unchanged; an incompatible pack is held until the owner chooses a compatible release
-  tag or approves a CLI upgrade.
-- The delta names exactly what changed and what still needs follow-up, including any held
-  pack deployment and the owner's compatibility choice.
+Lead with completed versus held deployments. Include commits pulled per checkout;
+skills added/modified/pruned and per-root counts; plugin refreshed/current status;
+CLI before/after builds and compatibility evidence; ticket rebase/validation; gate
+scope/outcomes; guidance/shell/critic findings with fixes; and retained artifact scope.
+Separate deployment success from host health. Restart chats/reload plugins to load
+refreshed skills. Never claim a held target is current because another succeeded.
+Sync is maintenance; orient picks the next frontier ticket afterward.
