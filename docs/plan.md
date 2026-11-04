@@ -648,7 +648,7 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 222 | Explore design / first-principles / UX review lenses for consequential diffs | open |
 | 223 | Explore a single readiness verdict (gate.mjs verdict) that means every expected check ran and passed | open |
 | 224 | Explore a bounded drive-to-green loop (prepare-pr equivalent) in implement | open |
-| 225 | Explore an over-engineering convergence check for review-fix loops | open |
+| 225 | Explore an over-engineering convergence check for review-fix loops | in_progress |
 | 226 | Explore a smallest-change rule for security findings | open |
 | 227 | Explore a check that the PR body matches the diff on every revision | open |
 | 228 | Explore feature sizing (simple/medium/complex) at triage | open |

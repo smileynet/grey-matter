@@ -1,7 +1,7 @@
 ---
 id: "225"
 title: "Explore an over-engineering convergence check for review-fix loops"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -10,6 +10,7 @@ validation_criteria:
   - "If adopted: one proportionality rule for code fixes (exception: reachable crash, security hole, data loss), referenced, not restated; the orchestrator is the first decision-maker per escalation.md."
   - "Resolution records adopt/adapt/reject."
 tags: ["type:research", "stream:skills-review", "triage:ready-for-agent", "epic:outcome-orchestration"]
+assignee: "codex"
 ---
 
 # Explore an over-engineering convergence check for review-fix loops
