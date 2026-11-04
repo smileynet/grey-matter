@@ -60,19 +60,21 @@ stays out of the way, under folds and links.
    [changelog](../../meta/changelog/SKILL.md) for user value.
 
 5. **Refresh the Plan tab.** Run `node <this skill's directory>/scripts/snapshot-tickets.mjs
-   <file>`. It rewrites only `gm-tickets` from the tkt board, so the Plan tab lists every ticket,
-   open work first, with progress and what comes next. It refuses while a tkt tag context is set,
-   because a scoped snapshot would hide tickets. The shipped flow starts with all remaining work,
+   <file>`. It rewrites only `gm-tickets` from the full tkt board, including Git body identities,
+   so the Plan tab lists every ticket, open work first, with progress and what comes next. It
+   refuses while a tkt tag context is set, because a scoped snapshot would hide tickets. The
+   shipped Plan separates current unfinished work from explicitly labelled, searchable ticket
+   history; terminal tickets remain inspectable but outside current execution flow. The flow starts with all remaining work,
    including deferred tickets; tag-based work-stream views and completed context are optional.
    Configure them through `gm-config.ticketFlow` per the [flow contract](references/dashboard-contract.md#remaining-ticket-flow).
    Set `ticketFlow: false` when a graph does not help the owner's task; keep every ticket in the list.
    If the project has an explicit execution queue, preserve and link to it; the snapshot's frontier
    and dependency graph do not replace that queue or justify adding artificial blockers.
 
-6. **Let the page roll.** The overview shows the newest entry in full and the next four as
-   collapsed rows; the "All entries" tab keeps every entry as a collapsed row with search and
-   filters. Do not delete or merge old entries to shorten the page. The template does the rolling;
-   the changelog still owns release-level history.
+6. **Let the page roll.** The overview shows up to five newest entries; the "All entries" tab
+   keeps every entry, including the overview entries, as a collapsed row with search and filters.
+   Do not delete or merge old entries to shorten the page. The template does the rolling; the
+   changelog still owns release-level history.
 
 7. **Check, open and hand back.** Before selecting UI checks, establish which preview,
    browser, capture and interaction surfaces are permitted and available. Choose checks
@@ -100,7 +102,12 @@ stays out of the way, under folds and links.
    media. Open the page using
    [report-format's open/refresh contract](../../../docs/agents/report-format.md#html-rules) and
    give a direct link. Finish when the page reflects the closed ticket, any ask is visible in
-   "Needs you", the Plan tab matches the board, and the checker passes.
+   "Needs you", the Plan tab matches the board, and the checker passes. After closure and explicit
+   plan sync, run the full comparison before publication:
+   node <skill directory>/scripts/check-dashboard.mjs <file> --repo <project-root> --strict.
+   This compares the full tracker board, maintained plan and generated dashboard without repair;
+   it rejects active tracker context, fact overrides, status/coverage drift and changed ticket
+   bodies. Do not add a closure hook: retain close → sync → refresh → publication.
 
 Before an authorized Site publication, use the read-only
 [publication preflight](references/publication-preflight.md). The parent supplies the
@@ -111,3 +118,13 @@ deployment output.
 The full field list, writing rules, accessibility and size limits are in the
 [dashboard contract](references/dashboard-contract.md). Use this for the evolving status view;
 use changelog for release history and the implementation workflows for building the work.
+
+## Custom dashboards
+
+Copy the shipped template and edit its data blocks, or keep a custom renderer that exposes the
+documented gm-dashboard-contract JSON hook. The checker's structure and limits are in the
+custom-page comparison contract in references/dashboard-contract.md. The hook validates data
+semantics, not the custom page's visible rendering or interaction. The standard snapshot command
+only rewrites gm-tickets; custom pages can refresh hook ticket facts with the documented
+authoritativeProjection adapter, preserving authored Plan ID order. Include --repo for a
+full-board publication verdict.

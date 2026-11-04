@@ -944,11 +944,13 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     });
     var L = $("tickets"), shown = 0, narrowed = tfilter.q || tfilter.state;
     L.textContent = "";
+    var historyLabel = false;
     ORDER.forEach(function (k) {
       var list = g[k].filter(function (t) { return ticketMatches(t, tfilter, tidx); });
       if (!list.length) return;
       shown += list.length;
       var holder = L;
+      if ((k === "done" || k === "cancelled") && !historyLabel) { L.appendChild(el("h3", { class: "group", text: "Ticket history" })); historyLabel = true; }
       if ((k === "done" || k === "cancelled") && !narrowed) { holder = el("details", { class: "row", id: k + "-group" }, [el("summary", { text: STATES[k] + " (" + list.length + ")" })]); L.appendChild(holder); }
       else L.appendChild(el("h3", { class: "group", text: STATES[k] }));
       list.forEach(function (t) { holder.appendChild(ticketRow(t)); });

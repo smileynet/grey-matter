@@ -27,11 +27,12 @@ Everything else (evidence, files, commits, test output, process) is reachable bu
 | Latest | The newest entry in full: headline, summary, up to 3 changes, one visual, a try link. |
 | Earlier | The next four entries as collapsed rows (date, headline, type, "Needs you" marker). |
 | All entries tab | Every entry as a collapsed row, with search, type and area filters, "Needs you" filter, expand and collapse all, and a live count. |
-| Plan tab | The optional remaining-ticket flow comes first, followed by every ticket from the snapshot. Progress (done of total, a bar by state with a legend), "What comes next" (open and in-progress work in layers: a ticket sits one layer after its deepest unfinished blocker), then all tickets grouped Ready (frontier order), In progress, Blocked, Backlog, Done and Cancelled (terminal groups collapsed), with search and state filters. A ticket row shows what it waits on, what it unblocks and the entries that delivered it. |
+| Plan tab | The optional remaining-ticket flow comes first, followed by every ticket from the snapshot. Progress (done of total, a bar by state with a legend), "What comes next" (open and in-progress work in layers: a ticket sits one layer after its deepest unfinished blocker), then all tickets grouped Ready (frontier order), In progress, Blocked and Backlog. An explicit **Ticket history** heading separates the collapsed Done and Cancelled groups. Search and state filters cover both current work and history. A ticket row shows what it waits on, what it unblocks and the entries that delivered it. |
 
-The overview never grows past five entries (`recentCount`). Older entries are not deleted: they
-drop out of the overview and stay in the history tab, so the at-a-glance view stays short and the
-record stays whole. The changelog still owns release-level, durable value language.
+The overview never grows past five entries (`recentCount`, configurable from 1 to 5). Older
+entries drop out of the overview but remain in the searchable All entries history alongside the
+overview entries; the record stays whole. The changelog still owns release-level, durable value
+language.
 
 ## Project decisions
 
@@ -141,8 +142,11 @@ tools are test prerequisites, not dashboard runtime resources; no CDN or network
 
 `gm-tickets` holds `{generated, frontier, tickets}`: the snapshot time, the ids `tkt ready`
 returns in order, and each ticket's `id`, `title`, `status`, `priority`, `blocked_by` and `tags`
-from `tkt query`, plus optional `gate: {kind, reason}` derived from ticket tags/body.
-Current tkt versions omit tags in query output; the snapshot helper fills missing
+from `tkt query`, plus optional `gate: {kind, reason}` derived from ticket tags/body and
+`body_id`, the Git blob identity computed from the current ticket file bytes, including valid
+uncommitted edits (not the Git HEAD version). This catches body changes without a separate
+receipt or freshness registry.
+For CLI versions that omit tags in query output, the snapshot helper fills missing
 tags from the same ticket files' inline/block tag lists without changing CLI-provided tags. Regenerate it after every ticket change rather than editing it; the page stays
 offline, so it shows the board as of `generated`. A blocker missing from the snapshot counts as
 unfinished, so a broken edge never hides work.
@@ -195,13 +199,62 @@ reference to the active record passes without rewriting the dated 2.3.0 history.
 summary prose for words such as “pending.” Use the adopter registry's checker/fixture when present;
 otherwise an adapter may use the optional comparison helper above or record a manual comparison,
 identifying which was done. Neither helper tests nor a manual comparison establish real delivery
-readiness. The shared
-`check-dashboard.mjs` only checks ticket-snapshot freshness against the newest entry date; it
-does not verify an external readiness registry.
+readiness. `check-dashboard.mjs` checks ticket-snapshot freshness against the newest entry date and,
+with `--repo`, ticket/plan/dashboard projection consistency. It does not verify an external
+readiness registry.
 
 The Plan tab's default order follows `gm-tickets.frontier`. If a project maintains a different
 execution queue, preserve and link to that queue; the graph represents ticket status and actual
 dependencies, not preferred order. Never add a `blocked_by` edge solely to force the queue.
+
+## Custom pages and projection comparison
+
+An adopter can either copy the shipped template and edit its `gm-config` and `gm-entries` blocks,
+or keep a custom renderer and declare an `application/json` script with
+`id="gm-dashboard-contract"`. The version 1 hook declares `viewOrder`, `needsYouAskIds`,
+`entries`, `overviewEntryIds`, `historyEntryIds`, `historySearchable`, `tickets`, and
+`plan: {currentIds, historyIds}`. `viewOrder` must be `needs-you`, `overview`, `history`, `plan`;
+the checker derives open asks from entries, limits the overview to the newest five, requires
+searchable history to contain every entry (including entries also shown in the overview), and
+partitions the complete ticket snapshot into unfinished
+current work and terminal history. Preserve authored ticket order within both lists. Done and
+cancelled tickets remain inspectable in history; they cannot appear in current execution flow, and
+unfinished tickets cannot be hidden in history. The hook describes data semantics and cannot prove
+the custom page visibly renders or behaves as declared.
+
+The ordinary `snapshot-tickets.mjs` command rewrites only the template's `gm-tickets` block.
+For a custom hook, a small project-owned refresh adapter can reuse its exported
+`authoritativeProjection(projectRoot)` read seam:
+
+```js
+import { authoritativeProjection } from "./snapshot-tickets.mjs";
+
+contract.tickets = { generated: new Date().toISOString(), ...authoritativeProjection(projectRoot) };
+const safeJson = JSON.stringify(contract).replace(/</g, "\\u003c");
+html = html.replace(contractBlock, (whole, open, body, close) => open + safeJson + close);
+```
+
+The adapter refreshes only tracker-owned ticket facts. Keep authored current/history ID order,
+reclassify IDs when statuses change, and place newly discovered tickets in the intended order;
+the checker rejects missing or misclassified rows. The refreshed custom fixture exercises this
+adapter shape. The full check must still run with `--repo`.
+
+After closure and explicit plan sync, run the same comparison owner for either renderer before
+publication:
+
+```sh
+node <skill directory>/scripts/check-dashboard.mjs <dashboard.html> --repo <project-root> --strict
+```
+
+With `--repo`, the checker queries `tkt query --all-context`, compares the complete ticket set,
+typed facts, frontier and Git body identities with the dashboard snapshot, and runs read-only
+`tkt sync-plan --check --strict --brief` against the maintained Markdown plan. It rejects active
+tag context without clearing it, snapshot omissions/additions, authored fact overrides, stale bodies
+or statuses, and plan status/coverage drift. Explicitly sync the plan and refresh with
+`snapshot-tickets.mjs` as needed; comparison never repairs either projection or adds a closure hook.
+This preserves close → sync → refresh → publication. It proves ticket/plan/dashboard projection
+consistency, not visual rendering, external readiness or the truth of authored prose/order. The
+custom data hook alone is not a full-board verdict; publication checks must include `--repo`.
 
 ## Asks
 
@@ -259,14 +312,15 @@ embedded media grew to 9 to 16 MB and became slow to open and impossible to diff
 ## Checker
 
 ```
-node <skill directory>/scripts/check-dashboard.mjs <dashboard.html> [--strict]
+node <skill directory>/scripts/check-dashboard.mjs <dashboard.html> [--repo <project-root>] [--strict]
 ```
 
 Errors: invalid JSON or fields, duplicate ids, over-long headlines, missing alt text, open asks
 without a recommendation or options, a ticket entry without a visual, a malformed ticket snapshot
 or a frontier naming a ticket that is not open, relative links that do not resolve, remote
 resources, more than 50 KB of embedded media, a file over 400 KB, or broken overview, history or
-plan selection. Warnings (failures under `--strict`): template examples left in; ticket numbers,
+plan selection. With `--repo`, it also fails on incomplete or stale ticket facts/identities and
+maintained-plan status/coverage drift. Warnings (failures under `--strict`): template examples left in; ticket numbers,
 hashes, file paths or refactoring talk in headlines; a snapshot older than the newest entry; and
 ticket ids or blockers missing from the snapshot. Passing proves the contract, not the experience: open the
 page, check each tab at phone and laptop width, and read it as the person would.

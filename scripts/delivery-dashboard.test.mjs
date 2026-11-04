@@ -12,12 +12,13 @@ import vm from "node:vm";
 import { spawnSync } from "node:child_process";
 import { check } from "../skills/productivity/delivery-dashboard/scripts/check-dashboard.mjs";
 import { compareReadinessIdentity } from "../skills/productivity/delivery-dashboard/scripts/readiness-identity.mjs";
-import { snapshot } from "../skills/productivity/delivery-dashboard/scripts/snapshot-tickets.mjs";
+import { authoritativeProjection, snapshot } from "../skills/productivity/delivery-dashboard/scripts/snapshot-tickets.mjs";
 
 const SKILL = resolve(dirname(fileURLToPath(import.meta.url)), "../skills/productivity/delivery-dashboard");
 const TEMPLATE = readFileSync(join(SKILL, "assets/dashboard-template.html"), "utf8");
 const ENTRIES = /(<script type="application\/json" id="gm-entries">)([\s\S]*?)(<\/script>)/;
 const TICKETS = /(<script type="application\/json" id="gm-tickets">)([\s\S]*?)(<\/script>)/;
+const BODY_ID = "a".repeat(40);
 const withTickets = (snap) => (h) => h.replace(TICKETS, `$1${JSON.stringify(snap)}$3`);
 const api = () => {
   const ctx = { window: {} };
@@ -56,6 +57,36 @@ function dashboard(t, entries, edit = (h) => h) {
   writeFileSync(file, html);
   return { dir, file };
 }
+function customDashboard(t, contract) {
+  const dir = mkdtempSync(join(tmpdir(), "gm custom dashboard "));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const file = join(dir, "custom.html");
+  writeFileSync(file, `<html><head><style>:root{color-scheme:dark}</style></head><body><main><input id="history-search" type="search"></main><script type="application/json" id="gm-dashboard-contract">${JSON.stringify(contract)}</script></body></html>`);
+  return { dir, file };
+}
+function customContract() {
+  const entries = [entry(2, { asks: [{ id: "scope", question: "Choose scope", status: "open", recommendation: "small", options: ["small", "large"] }] }), entry(1)];
+  return {
+    version: 1,
+    viewOrder: ["needs-you", "overview", "history", "plan"],
+    needsYouAskIds: ["e2:scope"],
+    entries,
+    overviewEntryIds: ["e2", "e1"],
+    historyEntryIds: ["e2", "e1"],
+    historySearchable: true,
+    tickets: { generated: "2026-09-03T00:00:00Z", frontier: ["work"], tickets: [tk("work", "open"), tk("work-2", "in_progress"), tk("complete", "done")] },
+    plan: { currentIds: ["work-2", "work"], historyIds: ["complete"] },
+  };
+}
+function refreshCustomSnapshot(file, repo, run, now) {
+  const html = readFileSync(file, "utf8");
+  const block = /(<script type="application\/json" id="gm-dashboard-contract">)([\s\S]*?)(<\/script>)/;
+  const match = html.match(block), contract = JSON.parse(match[2]);
+  contract.tickets = { generated: now.toISOString(), ...authoritativeProjection(repo, run) };
+  const safe = JSON.stringify(contract).replace(/</g, "\\u003c");
+  writeFileSync(file, html.replace(block, (whole, open, data, close) => open + safe + close));
+  return contract;
+}
 const run = (file, opts) => check(file, opts);
 
 const decision = { id: "scope", question: "Which scope?", context: "Sets delivery time.", status: "open", options: [{ id: "small", label: "Small", detail: "Ships sooner." }, { id: "large", label: "Large", detail: "More coverage." }], recommended: "small", reason: "Validate early." };
@@ -92,6 +123,26 @@ test("the blank template passes strict mode and shows empty states", () => {
   assert.match(TEMPLATE, /No entries yet/);
 });
 
+test("the CLI rejects a dangling --repo operand instead of doing a local-only check", (t) => {
+  const file = dashboard(t, []).file;
+  const script = join(SKILL, "scripts/check-dashboard.mjs");
+  const local = spawnSync(process.execPath, [script, file], { encoding: "utf8" });
+  assert.equal(local.status, 0, local.stderr);
+  const dangling = spawnSync(process.execPath, [script, file, "--repo"], { encoding: "utf8" });
+  assert.notEqual(dangling.status, 0, dangling.stdout);
+  assert.match(dangling.stderr, /--repo requires a project root/);
+});
+
+test("recentCount cannot raise the overview limit above five", (t) => {
+  const config = (recentCount) => (html) => html.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/, (_, open, close) => open + JSON.stringify({ project: "Test", recentCount }) + close);
+  const result = check(dashboard(t, Array.from({ length: 6 }, (_, i) => entry(i + 1)), config(6)).file);
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join("\n"), /recentCount must be an integer from 1 to 5/);
+  const smaller = check(dashboard(t, Array.from({ length: 4 }, (_, i) => entry(i + 1)), config(3)).file);
+  assert.equal(smaller.ok, true, smaller.errors.join("; "));
+  assert.deepEqual(smaller.stats.logic, { overview: 3, history: 4, total: 4, plan: 0 });
+});
+
 test("the worked example passes strict mode and demonstrates every feature", () => {
   const f = join(SKILL, "assets/dashboard-example.html");
   const html = readFileSync(f, "utf8");
@@ -113,6 +164,215 @@ test("the worked example passes strict mode and demonstrates every feature", () 
   assert.ok(api().planLanes(snap).length >= 3, "the plan shows work in at least three layers");
 });
 
+test("a custom renderer exposes the same ordered, complete dashboard contract", (t) => {
+  const contract = customContract();
+  const authoredOrder = [...contract.plan.currentIds];
+  const result = check(customDashboard(t, contract).file);
+  assert.equal(result.ok, true, result.errors.join("; "));
+  assert.equal(result.stats.entries, 2);
+  assert.equal(result.stats.openAsks, 1);
+  assert.deepEqual(result.stats.logic, { overview: 2, history: 2, total: 2, plan: 2 });
+  assert.deepEqual(contract.plan.currentIds, authoredOrder);
+});
+
+test("a custom ticket adapter refreshes only tracker data before the full comparison", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm custom refreshed board "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets"));
+  const facts = [
+    { id: "work", title: "Fix </script> parsing", status: "open", blocked_by: [], tags: [] },
+    { id: "work-2", title: "Work two", status: "in_progress", blocked_by: [], tags: [] },
+    { id: "complete", title: "Completed work", status: "done", blocked_by: [], tags: [] },
+  ];
+  for (const ticket of facts) {
+    writeFileSync(join(root, ".tickets", ticket.id + "-fixture.md"), "---\nid: " + ticket.id + "\nstatus: " + ticket.status + "\n---\nBody\n");
+  }
+  const run = (cmd, args) => {
+    if (cmd === "git") return Array(facts.length).fill(BODY_ID).join("\n") + "\n";
+    if (args[0] === "query") return facts.map((ticket) => JSON.stringify(ticket)).join("\n") + "\n";
+    if (args[0] === "ready") return JSON.stringify({ id: "work" }) + "\n";
+    if (args[0] === "sync-plan") return "Plan is current\n";
+    throw Error("unexpected command " + cmd + " " + args.join(" "));
+  };
+  const contract = customContract(), authoredOrder = [...contract.plan.currentIds];
+  contract.tickets.tickets[0].status = "done";
+  const file = customDashboard(t, contract).file;
+  const refreshed = refreshCustomSnapshot(file, root, run, new Date("2026-09-03T00:00:00Z"));
+  assert.deepEqual(refreshed.plan.currentIds, authoredOrder);
+  assert.doesNotMatch(readFileSync(file, "utf8"), /Fix <\/script> parsing/);
+  const result = check(file, { repo: root, run });
+  assert.equal(result.ok, true, result.errors.join("; "));
+});
+
+test("custom contract rejects hidden decisions, oversized overview, incomplete history and terminal-plan leaks", (t) => {
+  const cases = [
+    ["Needs you ordering", (c) => { c.viewOrder.reverse(); }, /Needs you must be first/],
+    ["more than five open entries", (c) => { c.overviewEntryIds = Array(6).fill("e2"); }, /overview may show at most five/],
+    ["missing searchable history", (c) => { c.historySearchable = false; }, /searchable history must include every entry/],
+    ["history omits overview entries", (c) => { c.historyEntryIds.pop(); }, /searchable history must include every entry/],
+    ["missing complete ticket snapshot", (c) => { delete c.tickets; c.plan = { currentIds: [], historyIds: [] }; }, /custom contract needs a complete ticket snapshot/],
+    ["completed ticket in current Plan", (c) => { c.plan.currentIds.push("complete"); c.plan.historyIds = []; }, /terminal tickets belong only in Plan history/],
+    ["unfinished ticket hidden in Plan", (c) => { c.plan.currentIds = []; c.plan.historyIds.push("work"); }, /unfinished tickets must remain in the current Plan/],
+  ];
+  for (const [name, change, expected] of cases) {
+    const contract = customContract();
+    change(contract);
+    const result = check(customDashboard(t, contract).file);
+    assert.equal(result.ok, false, name);
+    assert.match(result.errors.join("\n"), expected, name);
+  }
+});
+
+test("a repository comparison rejects authored ticket facts that differ from the full board", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm dashboard board "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets"));
+  writeFileSync(join(root, ".tickets/1-work.md"), "---\nid: 1\ntitle: Work\nstatus: open\n---\nBody\n");
+  const authoritative = { id: "1", title: "Work", status: "open", priority: "medium", blocked_by: [], tags: [] };
+  const run = (cmd, args) => {
+    if (cmd === "git") return BODY_ID + "\n";
+    if (cmd !== "tkt") throw Error(`unexpected command ${cmd}`);
+    if (args[0] === "query") return `${JSON.stringify(authoritative)}\n`;
+    if (args[0] === "ready") return "";
+    if (args[0] === "sync-plan") return "Plan is current\n";
+    throw Error(`unexpected tkt command ${args[0]}`);
+  };
+  const file = dashboard(t, [], withTickets({ generated: "2026-09-02T00:00:00Z", frontier: [], tickets: [{ ...authoritative, status: "done", body_id: BODY_ID }] })).file;
+  const result = check(file, { repo: root, run });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join("\n"), /ticket facts differ from the authoritative board/);
+});
+
+test("a refreshed dashboard passes the full-board and maintained-plan comparison", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm dashboard current board "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets"));
+  const source = "---\nid: 1\ntitle: Work\nstatus: open\n---\nBody\n";
+  writeFileSync(join(root, ".tickets/1-work.md"), source);
+  const ticket = { id: "1", title: "Work", status: "open", priority: "medium", blocked_by: [], tags: [], body_id: BODY_ID };
+  const calls = [];
+  const run = (cmd, args) => {
+    calls.push([cmd, ...args]);
+    if (cmd === "git") return BODY_ID + "\n";
+    if (args[0] === "query") return `${JSON.stringify({ ...ticket, body_id: undefined })}\n`;
+    if (args[0] === "ready") return `${JSON.stringify({ id: "1" })}\n`;
+    if (args[0] === "sync-plan") return "Plan is current\n";
+    throw Error(`unexpected command ${cmd} ${args.join(" ")}`);
+  };
+  const file = dashboard(t, [], withTickets({ generated: "2026-09-02T00:00:00Z", frontier: ["1"], tickets: [ticket] })).file;
+  const result = check(file, { repo: root, run });
+  assert.equal(result.ok, true, result.errors.join("; "));
+  assert.ok(calls.some(([cmd, ...args]) => cmd === "tkt" && args.join(" ") === "query --all-context -o json"));
+  assert.ok(calls.some(([cmd, ...args]) => cmd === "tkt" && args.join(" ") === "sync-plan --check --strict --brief"));
+  assert.equal(calls.filter(([cmd, ...args]) => cmd === "git" && args.includes("hash-object")).length, 1);
+  assert.ok(calls.some(([cmd, ...args]) => cmd === "git" && args.includes("--stdin-paths")));
+});
+
+test("a repository comparison preserves and rejects active tag context", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm dashboard context "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets"));
+  writeFileSync(join(root, ".tickets/.context"), "build\n");
+  const contextPath = join(root, ".tickets/.context");
+  const file = dashboard(t, [], withTickets({ generated: null, frontier: [], tickets: [] })).file;
+  const result = check(file, { repo: root, run: () => { throw Error("must not invoke tkt under active context"); } });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join("\n"), /tag context "build" is set/);
+  assert.equal(readFileSync(contextPath, "utf8"), "build\n");
+});
+
+test("a repository comparison rejects stale body identities and missing board rows", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm dashboard stale "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets"));
+  writeFileSync(join(root, ".tickets/1-work.md"), "---\nid: 1\ntitle: Work\nstatus: open\n---\nBody\n");
+  const ticket = { id: "1", title: "Work", status: "open", priority: "medium", blocked_by: [], tags: [] };
+  const run = (cmd, args) => {
+    if (cmd === "git") return BODY_ID + "\n";
+    if (args[0] === "query") return `${JSON.stringify(ticket)}\n`;
+    if (args[0] === "ready") return `${JSON.stringify({ id: "1" })}\n`;
+    if (args[0] === "sync-plan") return "Plan is current\n";
+    throw Error(`unexpected command ${cmd} ${args.join(" ")}`);
+  };
+  const staleBody = { generated: "2026-09-02T00:00:00Z", frontier: ["1"], tickets: [{ ...ticket, body_id: "b".repeat(40) }] };
+  const noRows = { generated: "2026-09-02T00:00:00Z", frontier: ["1"], tickets: [] };
+  for (const [name, projection] of [["stale body", staleBody], ["missing ticket row", noRows]]) {
+    const result = check(dashboard(t, [], withTickets(projection)).file, { repo: root, run });
+    assert.equal(result.ok, false, name);
+    assert.match(result.errors.join("\n"), /ticket facts differ from the authoritative board/, name);
+  }
+});
+
+test("a failed maintained-plan check makes the full comparison fail", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm dashboard plan drift "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets"));
+  writeFileSync(join(root, ".tickets/1-work.md"), "---\nid: 1\ntitle: Work\nstatus: open\n---\nBody\n");
+  const ticket = { id: "1", title: "Work", status: "open", priority: "medium", blocked_by: [], tags: [] };
+  const run = (cmd, args) => {
+    if (cmd === "git") return BODY_ID + "\n";
+    if (args[0] === "query") return `${JSON.stringify(ticket)}\n`;
+    if (args[0] === "ready") return `${JSON.stringify({ id: "1" })}\n`;
+    if (args[0] === "sync-plan") throw Error("plan says open, tracker says done");
+    throw Error(`unexpected command ${cmd} ${args.join(" ")}`);
+  };
+  const projection = { generated: "2026-09-02T00:00:00Z", frontier: ["1"], tickets: [{ ...ticket, body_id: BODY_ID }] };
+  const result = check(dashboard(t, [], withTickets(projection)).file, { repo: root, run });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join("\n"), /plan says open, tracker says done/);
+});
+
+test("a requested full comparison requires a valid ticket snapshot", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm dashboard no snapshot "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets"));
+  const file = dashboard(t, [], (html) => html.replace(TICKETS, "")).file;
+  const result = check(file, { repo: root, run: () => { throw Error("must not query with no snapshot"); } });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join("\n"), /full-board comparison requires a valid ticket snapshot/);
+});
+
+test("a malformed tracker markdown file cannot disappear from a complete-board read", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm dashboard malformed ticket "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets"));
+  writeFileSync(join(root, ".tickets/140-broken.md"), "Ticket body without frontmatter\n");
+  const file = dashboard(t, [], withTickets({ generated: null, frontier: [], tickets: [] })).file;
+  const run = (cmd, args) => {
+    if (args[0] === "query" || args[0] === "ready" || args[0] === "sync-plan") return "";
+    throw Error(`unexpected command ${cmd} ${args.join(" ")}`);
+  };
+  const result = check(file, { repo: root, run });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join("\n"), /ticket file 140-broken\.md is missing YAML frontmatter/);
+});
+
+test("a ticket-shaped frontmatter document without an id cannot be treated as non-ticket Markdown", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm dashboard ticket missing id "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets"));
+  writeFileSync(join(root, ".tickets/140-no-id.md"), "---\ntitle: Missing identifier\nstatus: open\n---\nBody\n");
+  const file = dashboard(t, [], withTickets({ generated: null, frontier: [], tickets: [] })).file;
+  const result = check(file, { repo: root, run: () => { throw Error("must not query after malformed ticket source"); } });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join("\n"), /ticket file 140-no-id\.md has no id in YAML frontmatter/);
+});
+
+test("README.md is the supported non-ticket Markdown file in .tickets", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm dashboard ticket readme "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets"));
+  writeFileSync(join(root, ".tickets/README.md"), "Local tracker notes without a ticket ID.\n");
+  const file = dashboard(t, [], withTickets({ generated: null, frontier: [], tickets: [] })).file;
+  const run = (cmd, args) => {
+    if (cmd === "tkt" && args[0] === "sync-plan") return "pass\n";
+    if (args[0] === "query" || args[0] === "ready") return "";
+    throw Error(`unexpected command ${cmd} ${args.join(" ")}`);
+  };
+  const result = check(file, { repo: root, run });
+  assert.equal(result.ok, true, result.errors.join("; "));
+});
+
 test("plan groups put open work first and layer it by unfinished blockers", () => {
   const { planGroups, planLanes, ticketMatches } = api();
   const snap = { frontier: ["4", "2"], tickets: [tk("1", "done"), tk("2", "open", ["1"]), tk("3", "open", ["2"]), tk("4", "open"), tk("5", "in_progress"), tk("6", "backlog"), tk("7", "open", ["6"]), tk("8", "open", ["99"])] };
@@ -127,16 +387,18 @@ test("plan groups put open work first and layer it by unfinished blockers", () =
 test("snapshot-tickets rewrites only the ticket block, escapes markup and refuses a scoped board", (t) => {
   const { file } = dashboard(t, [entry(1)]);
   const before = readFileSync(file, "utf8");
-  const replies = { query: [{ id: "1", title: "Fix </script> parsing", status: "open", blocked_by: [], agents: [] }], ready: [{ id: "1" }] };
-  const run = (cmd, args) => cmd === "tkt" ? replies[args[0]].map((x) => JSON.stringify(x)).join("\n") + "\n" : "";
+  const replies = { query: [{ id: "1", title: "Fix </script> parsing", status: "open", blocked_by: [], agents: [] }], ready: [{ id: "1" }], "sync-plan": [] };
+  mkdirSync(join(dirname(file), ".tickets"), { recursive: true });
+  writeFileSync(join(dirname(file), ".tickets/1-fixture.md"), "---\nid: 1\ntitle: Fixture\nstatus: open\n---\nBody\n");
+  const run = (cmd, args) => cmd === "tkt" ? replies[args[0]].map((x) => JSON.stringify(x)).join("\n") + "\n" : BODY_ID + "\n";
   assert.deepEqual(snapshot(file, { repo: dirname(file), run, now: new Date("2026-09-02T00:00:00Z") }), { tickets: 1, frontier: 1 });
   const after = readFileSync(file, "utf8");
   assert.equal(after.replace(TICKETS, ""), before.replace(TICKETS, ""));
   assert.doesNotMatch(after.match(TICKETS)[2], /<\/script>/);
   const snap = JSON.parse(after.match(TICKETS)[2]);
-  assert.deepEqual(snap.tickets, [{ id: "1", title: "Fix </script> parsing", status: "open", blocked_by: [] }]);
+  assert.deepEqual(snap.tickets, [{ id: "1", title: "Fix </script> parsing", status: "open", blocked_by: [], tags: [], body_id: BODY_ID }]);
   assert.equal(check(file).ok, true);
-  mkdirSync(join(dirname(file), ".tickets"));
+  mkdirSync(join(dirname(file), ".tickets"), { recursive: true });
   writeFileSync(join(dirname(file), ".tickets/.context"), "backend\n");
   assert.throws(() => snapshot(file, { repo: dirname(file), run }), /tag context "backend"/);
 });
@@ -145,6 +407,7 @@ test("the template and the example share the same renderer", () => {
   const code = (h) => h.match(/<script>([\s\S]*?)<\/script>/g).pop();
   const example = readFileSync(join(SKILL, "assets/dashboard-example.html"), "utf8");
   assert.equal(code(example), code(TEMPLATE));
+  assert.match(code(TEMPLATE), /text: "Ticket history"/);
   const style = (h) => h.match(/<style>([\s\S]*?)<\/style>/)[1];
   assert.equal(style(example), style(TEMPLATE));
 });
@@ -343,7 +606,7 @@ test("snapshot retains real ticket tags when the CLI omits them", (t) => {
   const d = flowDashboard(t, []); mkdirSync(join(d.dir, ".tickets"));
   writeFileSync(join(d.dir, ".tickets/one-a.md"), '---\nid: "one"\ntags: ["build", "review"]\n---\n');
   writeFileSync(join(d.dir, ".tickets/two-b.md"), '---\nid: "two"\ntags:\n  - "design"\n  - later\n---\n');
-  const run = (cmd, args) => args[0] === "query" ? [tk("one", "open"), tk("two", "backlog")].map((ticket) => JSON.stringify(ticket)).join("\n") : JSON.stringify({ id: "one" });
+  const run = (cmd, args) => cmd === "git" ? [BODY_ID, BODY_ID].join("\n") + "\n" : args[0] === "query" ? [tk("one", "open"), tk("two", "backlog")].map((ticket) => JSON.stringify(ticket)).join("\n") : JSON.stringify({ id: "one" });
   snapshot(d.file, { repo: d.dir, run }); const snap = JSON.parse(readFileSync(d.file, "utf8").match(TICKETS)[2]);
   assert.deepEqual(snap.tickets.map((ticket) => ticket.tags), [["build", "review"], ["design", "later"]]);
 });
@@ -371,7 +634,7 @@ test("snapshot derives planning gates from ticket notes and rejects ambiguous ga
   const d = flowDashboard(t, []); mkdirSync(join(d.dir, ".tickets"));
   const ticket = join(d.dir, ".tickets/one-a.md");
   writeFileSync(ticket, '---\nid: "one"\ntags: ["build", "gate:decision"]\n---\n\n## Planning gate\n\nChoose the close policy.\n');
-  const run = (cmd, args) => args[0] === "query" ? JSON.stringify(tk("one", "open")) : JSON.stringify({ id: "one" });
+  const run = (cmd, args) => cmd === "git" ? BODY_ID + "\n" : args[0] === "query" ? JSON.stringify(tk("one", "open")) : JSON.stringify({ id: "one" });
   snapshot(d.file, { repo: d.dir, run });
   const snap = JSON.parse(readFileSync(d.file, "utf8").match(TICKETS)[2]);
   assert.deepEqual(snap.tickets[0].gate, { kind: "decision", reason: "Choose the close policy." });

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "ticket": 139,
+  "date": "2026-11-04",
+  "retention": {
+    "owner": "/root/tkt_140",
+    "endCondition": "Retain private raw records through parent-confirmed queue settlement; then dispose of or promote artifacts under repository-artifact-hygiene."
+  },
+  "records": [
+    {
+      "command": "node --test scripts/delivery-dashboard.test.mjs after standards-review fixes",
+      "outcome": "pass",
+      "counts": { "passed": 56, "failed": 0, "skipped": 0 },
+      "rawFile": "contract-tests-standards-fix-01.log",
+      "bytes": 11074,
+      "sha256": "B2B06D2766EB0BAC05E9651D42A4E3066F414CC4636F3D1FA428260FBF2B3BBE"
+    },
+    {
+      "command": "node --test scripts/delivery-dashboard.test.mjs",
+      "outcome": "pass",
+      "counts": { "passed": 55, "failed": 0, "skipped": 0 },
+      "rawFile": "contract-tests-adapter-final.log",
+      "bytes": 10844,
+      "sha256": "635D053F2D9BD4B9A5D290DB6682E5054668DB136CBC4CC74756372C2FFB6DDA"
+    },
+    {
+      "command": "node skills/productivity/delivery-dashboard/scripts/snapshot-tickets.mjs --repo <this-checkout>",
+      "outcome": "pass",
+      "counts": { "tickets": 252, "frontier": 42 },
+      "rawFile": "snapshot-adapter-final.log",
+      "bytes": 31,
+      "sha256": "39F2FFD4A43639C54DF65BF2D7E180957B8B27EBEB2BFE29C6F6B6F3A6535B09"
+    },
+    {
+      "command": "node skills/productivity/delivery-dashboard/scripts/check-dashboard.mjs <scratch-dashboard> --repo <this-checkout> --strict",
+      "outcome": "pass",
+      "counts": { "tickets": 252, "errors": 0, "warnings": 0 },
+      "rawFile": "check-adapter-final.log",
+      "bytes": 262,
+      "sha256": "9B19C3FDB360755FCA4535C34A03E0A23E711C82DC74A440BBA8D509D6FF9451"
+    },
+    {
+      "command": "tkt sync-plan --check --strict --brief",
+      "outcome": "pass",
+      "summary": "pass (0 finding(s))",
+      "rawFile": "plan-final.log",
+      "bytes": 21,
+      "sha256": "72D84E393A272E9BB31F9F9E267469B1DFE0F0C47E7E7450CCE2499A8EA7BA20"
+    },
+    {
+      "command": "Isolated fixture matrix using installed tkt 0.4.0 (e755765), importing scripts/test-git-env.mjs before child calls; no remote configured",
+      "outcome": "pass with intentional rejections",
+      "counts": { "commands": 16, "passed": 12, "expectedRejections": 4 },
+      "expectedRejections": [ "stale plan/status", "stale dashboard facts/frontier", "missing unfinished plan row", "active tag context" ],
+      "rawFile": "fixture-results-batched.json",
+      "bytes": 12240,
+      "sha256": "47861603A5082E1EEE9B0BA075B7639C587BAD5BA27ABA890D2BC7473F6CCC75"
+    },
+    {
+      "command": "node --test scripts/delivery-dashboard-browser.test.mjs",
+      "outcome": "infrastructure error; exit 1 before tests; Playwright module unavailable; tests not executed",
+      "rawFile": "browser-tests.log",
+      "bytes": 1796,
+      "sha256": "27CAF8C1900BD2EA57B4F249A92FA46D8268422F4901187E2E7E8F237C96199B"
+    },
+    {
+      "command": "252-ticket per-file Git hash baseline and batched hash implementation benchmark",
+      "outcome": "pass",
+      "measurementsSeconds": { "perFileSnapshot": 6.001, "perFileCheck": 5.903, "batchSnapshot": 0.406, "batchCheck": 0.52 },
+      "rawFile": "performance.txt",
+      "bytes": 435,
+      "sha256": "1AB6CF9DCD32E059EF06EF67B789870195A1D07C960914C44D6A53BA8A934BF2"
+    },
+    {
+      "command": "Initial isolated fixture attempt before stdout/stderr propagation was fixed",
+      "outcome": "failed attempt; not counted as verification pass",
+      "rawFile": "fixture-run.log",
+      "bytes": 1069,
+      "sha256": "2E2666FE96F519D4369E4CCD6E6918B1CDAD9CCFF5D8FD40F56A64C4B23477F6"
+    },
+    {
+      "command": "Intermediate batched test run with two mocks returning the wrong hash-list count",
+      "outcome": "failed attempt; mocks corrected before final passing run",
+      "rawFile": "contract-tests-batched-final.log",
+      "bytes": 12789,
+      "sha256": "D0886F38055CFF739E52169D79952D48B23D8144D62AAF43FBF1B8C5A60D6C00"
+    },
+    {
+      "command": "Generated live dashboard metadata; content not promoted",
+      "outcome": "retained privately; metadata only",
+      "rawFile": "dashboard.html",
+      "bytes": 118819,
+      "sha256": "676C3474CF30CF5C4A2CF9717B538E81574924C345F0ABAA2B56DBBA43F08F84"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // check-dashboard.mjs: read-only contract check for a delivery-dashboard HTML file.
-// Usage: node check-dashboard.mjs <dashboard.html> [--strict]
+// Usage: node check-dashboard.mjs <dashboard.html> [--repo DIR] [--strict]
 // JSON on stdout: { ok, errors, warnings, stats }. Exit 0 = no errors, 1 = errors, 2 = unreadable input.
 // --strict also fails on warnings (template examples left in, sausage-making words in headlines).
 // It parses the data blocks and runs the page's own selection logic; it renders nothing and
@@ -9,6 +9,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
+import { execFileSync } from "node:child_process";
+import { authoritativeProjection } from "./snapshot-tickets.mjs";
 
 const KINDS = ["shipped", "progress", "decision", "blocked", "learning"];
 const RUNGS = ["wireframe", "mocked", "live"];
@@ -25,7 +27,7 @@ const SAUSAGE = [
   [/\b(refactor\w*|lint\w*|typecheck\w*|merge conflict|dependency bump)\b/i, "internal mechanics"],
 ];
 
-export function check(path, { strict = false } = {}) {
+export function check(path, { strict = false, repo, run = execFileSync } = {}) {
   const errors = [], warnings = [];
   let openAsks = 0, examples = 0, tickets = 0, logic = null;
   const err = (m) => errors.push(m), warn = (m) => warnings.push(m);
@@ -38,11 +40,18 @@ export function check(path, { strict = false } = {}) {
     if (!m) { (optional ? warn : err)(`missing <script type="application/json" id="${id}"> block`); return null; }
     try { return JSON.parse(m[1]); } catch (e) { err(`${id} is not valid JSON: ${e.message}`); return null; }
   };
-  const cfg = block("gm-config");
-  const entries = block("gm-entries");
-  const snap = block("gm-tickets", true);
-  if (!Array.isArray(entries)) { err("gm-entries must be a JSON array"); return finish(); }
-  if (cfg && cfg.recentCount !== undefined && !(Number.isInteger(cfg.recentCount) && cfg.recentCount >= 1 && cfg.recentCount <= 10)) err("recentCount must be an integer from 1 to 10");
+  const customMatch = html.match(/<script type="application\/json" id="gm-dashboard-contract">([\s\S]*?)<\/script>/);
+  let custom = null;
+  if (customMatch) {
+    try { custom = JSON.parse(customMatch[1]); }
+    catch (error) { err(`gm-dashboard-contract is not valid JSON: ${error.message}`); }
+  }
+  const cfg = custom ? { recentCount: 5 } : block("gm-config");
+  const entries = custom ? custom.entries : block("gm-entries");
+  const snap = custom ? custom.tickets : block("gm-tickets", true);
+  if (!Array.isArray(entries)) { err(custom ? "custom contract entries must be a JSON array" : "gm-entries must be a JSON array"); return finish(); }
+  if (custom && (!snap || !Array.isArray(snap.tickets) || !Array.isArray(snap.frontier))) err("custom contract needs a complete ticket snapshot");
+  if (cfg && cfg.recentCount !== undefined && !(Number.isInteger(cfg.recentCount) && cfg.recentCount >= 1 && cfg.recentCount <= 5)) err("recentCount must be an integer from 1 to 5");
 
   if (cfg && cfg.ticketFlow !== undefined && cfg.ticketFlow !== false) {
     const flow = cfg.ticketFlow;
@@ -176,6 +185,56 @@ export function check(path, { strict = false } = {}) {
     }
   }
 
+  if (repo) {
+    if (!snap || !Array.isArray(snap.tickets) || !Array.isArray(snap.frontier)) err("full-board comparison requires a valid ticket snapshot");
+    else try {
+      const board = authoritativeProjection(resolve(repo), run);
+      run("tkt", ["sync-plan", "--check", "--strict", "--brief"], { cwd: resolve(repo), encoding: "utf8", env: { ...process.env, TKT_ADVICE: "0" } });
+      const fields = ["title", "status", "priority", "blocked_by", "tags", "gate", "body_id"];
+      const expected = new Map(board.tickets.map((ticket) => [ticket.id, ticket]));
+      const actual = new Map(snap.tickets.map((ticket) => [ticket.id, ticket]));
+      const mismatches = [];
+      for (const id of new Set([...expected.keys(), ...actual.keys()])) {
+        const source = expected.get(id), projection = actual.get(id);
+        if (!source || !projection) { mismatches.push(id); continue; }
+        if (fields.some((field) => JSON.stringify(source[field]) !== JSON.stringify(projection[field]))) mismatches.push(id);
+      }
+      if (mismatches.length) err(`dashboard ticket facts differ from the authoritative board (missing, extra or stale rows: ${mismatches.join(", ")})`);
+      if (JSON.stringify(snap.frontier) !== JSON.stringify(board.frontier)) err("dashboard frontier differs from the authoritative board");
+    } catch (error) {
+      const output = [error.stderr, error.stdout].map((value) => Buffer.isBuffer(value) ? value.toString() : value)
+        .filter((value) => typeof value === "string" && value.trim()).join("\n").trim();
+      err(`authoritative board/plan comparison failed: ${output || error.message}`);
+    }
+  }
+
+  if (custom) {
+    if (custom.version !== 1) err("custom contract version must be 1");
+    const expectedViews = ["needs-you", "overview", "history", "plan"];
+    if (!Array.isArray(custom.viewOrder) || JSON.stringify(custom.viewOrder) !== JSON.stringify(expectedViews)) err("Needs you must be first, followed by overview, history and plan");
+    const equalIds = (actual, expected) => Array.isArray(actual) && JSON.stringify(actual) === JSON.stringify(expected);
+    const askIds = entries.flatMap((entry) => entry && Array.isArray(entry.asks) ? entry.asks.filter((ask) => ask.status === "open").map((ask) => `${entry.id}:${ask.id}`) : []);
+    if (!equalIds(custom.needsYouAskIds, askIds)) err("Needs you must include every open ask in entry order");
+    const ids = entries.map((entry) => entry && entry.id);
+    const overview = custom.overviewEntryIds;
+    if (!Array.isArray(overview) || overview.length > 5 || !equalIds(overview, ids.slice(0, overview.length))) err("overview may show at most five newest entries, in order");
+    if (custom.historySearchable !== true || !equalIds(custom.historyEntryIds, ids)) err("searchable history must include every entry, including the overview entries");
+    const plan = custom.plan, tickets = snap && Array.isArray(snap.tickets) ? snap.tickets : [];
+    if (!plan || typeof plan !== "object" || Array.isArray(plan) || !Array.isArray(plan.currentIds) || !Array.isArray(plan.historyIds)) err("custom plan needs currentIds and historyIds lists");
+    else {
+      const expectedCurrent = tickets.filter((ticket) => !["done", "cancelled"].includes(ticket.status)).map((ticket) => ticket.id);
+      const expectedHistory = tickets.filter((ticket) => ["done", "cancelled"].includes(ticket.status)).map((ticket) => ticket.id);
+      const uniqueSet = (values) => new Set(values).size === values.length;
+      if (!uniqueSet(plan.currentIds) || !uniqueSet(plan.historyIds) || plan.currentIds.some((id) => plan.historyIds.includes(id))) err("custom plan ids must be unique and appear in one view");
+      const sameSet = (actual, expected) => actual.length === expected.length && actual.every((id) => expected.includes(id));
+      if (!sameSet(plan.currentIds, expectedCurrent)) err("unfinished tickets must remain in the current Plan, in authored order");
+      if (!sameSet(plan.historyIds, expectedHistory)) err("terminal tickets belong only in Plan history");
+    }
+    logic = { overview: Array.isArray(custom.overviewEntryIds) ? custom.overviewEntryIds.length : 0,
+      history: Array.isArray(custom.historyEntryIds) ? custom.historyEntryIds.length : 0,
+      total: entries.length, plan: Array.isArray(custom.plan?.currentIds) ? custom.plan.currentIds.length : 0 };
+  }
+
   if (examples) warn(`${examples} template example entr${examples === 1 ? "y" : "ies"} still present; delete them`);
   const sorted = entries.map((e) => e && e.date).filter(Boolean);
   if (sorted.some((d, i) => i && d > sorted[i - 1])) warn("entries are not newest first; the page sorts them, but keep the block ordered for clean diffs");
@@ -186,8 +245,9 @@ export function check(path, { strict = false } = {}) {
   const dataBytes = [...html.matchAll(/data:[a-z/+.-]+;base64,[A-Za-z0-9+/=]+/g)].reduce((n, m) => n + m[0].length, 0);
   if (dataBytes > MAX_DATA_URI) err(`${Math.round(dataBytes / 1024)} KB of embedded base64 media; link files instead (limit ${MAX_DATA_URI / 1024} KB)`);
   if (!/color-scheme:\s*dark/.test(html)) err("dark color-scheme missing");
-  if (!/role="tablist"/.test(html) || !/id="q"/.test(html)) err("history tab with search is missing");
+  if (!custom && (!/role="tablist"/.test(html) || !/id="q"/.test(html))) err("history tab with search is missing");
 
+  if (!custom) {
   // The page's own selection logic: the overview shows the newest 5 and nothing is lost from history.
   const script = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).pop();
 
@@ -216,6 +276,7 @@ export function check(path, { strict = false } = {}) {
       }
     } catch (e) { err(`page script failed to load: ${e.message}`); }
   } else err("page script missing");
+  }
 
   return finish();
   function finish() {
@@ -229,8 +290,13 @@ export function check(path, { strict = false } = {}) {
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   const file = args.find((a) => !a.startsWith("--"));
-  if (!file || !existsSync(file)) { console.error("usage: check-dashboard.mjs <dashboard.html> [--strict]"); process.exit(2); }
-  const r = check(file, { strict: args.includes("--strict") });
+  const repoAt = args.indexOf("--repo");
+  if (!file || !existsSync(file)) { console.error("usage: check-dashboard.mjs <dashboard.html> [--repo DIR] [--strict]"); process.exit(2); }
+  if (repoAt >= 0 && (!args[repoAt + 1] || args[repoAt + 1].startsWith("--"))) {
+    console.error("--repo requires a project root");
+    process.exit(2);
+  }
+  const r = check(file, { strict: args.includes("--strict"), repo: repoAt >= 0 ? args[repoAt + 1] : undefined });
   console.log(JSON.stringify(r, null, 2));
   process.exit(r.ok ? 0 : 1);
 }
