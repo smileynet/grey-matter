@@ -51,7 +51,7 @@ function collectUsage(pack) {
         sources.push(...commandLine.split(/→/).map((value) => value.trim()).filter((value) => /^tkt(?:\.exe)?\s/i.test(value)));
       }
       for (const source of sources) {
-        const tokens = source.trim().replace(/[.,;:]$/, "").split(/\s+/).slice(1);
+        const tokens = source.trim().replace(/\s+#.*$/, "").replace(/[.,;:]$/, "").split(/\s+/).slice(1);
         let at = 0;
         while (tokens[at]?.startsWith("-")) {
           const flag = tokens[at++].split("=", 1)[0]; noteGlobal(flag, file);
@@ -139,7 +139,7 @@ export function verifyTktUsage({ pack, tkt = "tkt", prefix = [], cache = join(he
   function getHelp(args) {
     const key = JSON.stringify(args);
     if (!helpCache.has(key)) {
-      const result = run(executable, prefix, [...args, "--help"], cwd, env);
+      const result = run(executable, prefix, args[0] === "help" ? args : [...args, "--help"], cwd, env);
       helpCache.set(key, { result, flags: helpFlags(result.stdout) });
     }
     return helpCache.get(key);
@@ -152,6 +152,9 @@ export function verifyTktUsage({ pack, tkt = "tkt", prefix = [], cache = join(he
   const manifestCommands = capabilities?.commands ?? {};
   for (const command of [...new Set(usage.commands.map((entry) => entry.command))]) {
     const { result, flags } = getHelp([command]);
+    if (result.status !== 0 && !/unrecognized subcommand|unknown (?:command|subcommand)|invalid (?:command|subcommand)/i.test(result.stderr + result.stdout)) {
+      throw new Error(`tkt ${command} help probe failed: ${result.stderr.trim() || `exit ${result.status}`}`);
+    }
     if (!manifestCommands[command] && (result.status !== 0 || !/Usage:\s+tkt(?:\.exe)?\s+/i.test(result.stdout))) {
       const sources = usage.commands.filter((entry) => entry.command === command).flatMap((entry) => entry.sources);
       findings.push(`${[...new Set(sources)].join(", ")}: command ${command} is not supported by ${version}`); continue;
@@ -165,7 +168,7 @@ export function verifyTktUsage({ pack, tkt = "tkt", prefix = [], cache = join(he
       }
     }
   }
-  const result = { version, buildHash, executable, executableHash, packCommit: identity.packCommit, commandsChecked: usage.commands.length, findings, reused: false, capabilitiesAvailable: Boolean(capabilities) };
+  const result = { status: findings.length ? "fail" : "pass", version, buildHash, executable, executableHash, packCommit: identity.packCommit, commandsChecked: usage.commands.length, findings, reused: false, capabilitiesAvailable: Boolean(capabilities) };
   saveCache(cache, { identity, result });
   return result;
 }
@@ -174,5 +177,5 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     const result = verifyTktUsage(parseArgs(process.argv.slice(2)));
     console.log(json(result));
     process.exitCode = result.findings.length ? 1 : 0;
-  } catch (error) { console.error(error.message); process.exitCode = 2; }
+  } catch (error) { console.log(json({ status: "error", errors: [error.message] })); console.error(error.message); process.exitCode = 2; }
 }
