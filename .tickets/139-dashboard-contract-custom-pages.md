@@ -71,3 +71,15 @@ source/receipt integrity; this addition covers the remaining ticket/plan project
 - [ ] Authored ticket-fact overrides and scoped board queries cannot produce a passing full-board verdict.
 - [ ] Checks preserve authored ordering and historical namespaces, report drift without automatic repair, and support the tracker's close-before-refresh workflow.
 - [ ] Delivery/reconciliation guidance points to the maintained comparison owner and names coverage limits; applicable fixtures and repository gates pass.
+
+## Accepted orchestration retro amendment (2026-11-04)
+
+Sam approved applying and implementing these retro proposals after #179. After
+upstream reconciliation, compare declared rendering inputs before renewing review.
+Reuse a current accepted receipt for unchanged sources and captures; changed inputs
+require affected checks, captures and renewed review. Reuse existing receipt IDs,
+not another hash system. This does not waive required visual acceptance or prove
+freshness of the whole board.
+
+- [ ] A non-rendering change preserves an accepted receipt; a rendering-input change invalidates affected acceptance.
+- [ ] Guidance identifies affected views and preserves acceptance for unchanged independently scoped views.

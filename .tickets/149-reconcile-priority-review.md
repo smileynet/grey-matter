@@ -29,3 +29,13 @@ A prioritization review needed the same ad-hoc script three times to group ticke
 ## Outcome-driven orchestration coordination
 
 Proposal 19 approved. Retain priority/queue review ownership. Respect the new explicit outcome contract and scope revisions; planned order is separate from structural dependencies, and #201 remains deferred.
+
+## Accepted orchestration retro amendment (2026-11-04)
+
+Sam approved applying and implementing these retro proposals after #179. Verify
+exact tag membership when selecting an execution queue; scoped tkt queries also
+include untagged tickets. Retain excluded tickets as visible context rather than
+silently admitting them or hiding external blockers. Query full-board facts without
+changing the owner's stored context.
+
+- [ ] A fixture containing tagged, untagged and unrelated tickets admits only the declared workstream and reports excluded context separately.

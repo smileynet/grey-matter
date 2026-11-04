@@ -25,3 +25,13 @@ Field report from philippines-trip, 2026-11-01. Two or three sessions (Claude, C
 ## Outcome-driven orchestration coordination
 
 Proposal 19 approved. This ticket retains concurrent-checkout detection; #204 owns the new dispatch/review binding preflight. Reuse its identity inputs when available rather than creating another registry. Do not treat detection as a repository-wide lock.
+
+## Accepted orchestration retro amendment (2026-11-04)
+
+Sam approved applying and implementing these retro proposals after #179.
+Distinguish evidence of a shared-checkout writer from another checkout pushing
+the same remote branch. Recommend per-session isolation for shared local writes
+and upstream reconciliation for remote advances. Worktrees do not prevent push races.
+
+- [ ] Fixtures distinguish shared-checkout evidence, remote-ahead evidence and unknown session liveness.
+- [ ] Guidance gives the appropriate response without presenting a worktree as a remote lock.

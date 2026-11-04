@@ -203,11 +203,18 @@ its four remaining follow-ups. Broader #149/#146/#164 retain their original scop
 
 The proposal's core delivery is complete. Select this proposal and its related
 follow-ups with `epic:outcome-orchestration`; each ticket retains its single
-existing `stream:` area tag. The epic includes 19 delivered tickets and the nine
-remaining tickets below. The earlier 37-ticket spike history remains under
+existing `stream:` area tag. The original reconciliation covered 19 delivered
+tickets and the nine remaining tickets below; the accepted retro amendment also
+includes #225 and #251. The earlier 37-ticket spike history remains under
 `stream:orchestration`; that stream alone does not select this follow-up queue.
 
-**Next session only:** execute this queue after the current session's retro and
+**Scope revision, 2026-11-04:** the user subsequently authorized applying and
+implementing the retro amendments on #225/#251/#145/#139/#149 now. That bounded
+implementation supersedes deferral for those five tickets only; other queue work
+and #201 remain deferred to their recorded activation. Each original ticket keeps
+its full acceptance criteria; an amendment alone does not close a broader owner.
+
+**Other queue work, next session only:** execute after the current session's retro and
 wrap-session. This reconciliation does not claim or start implementation. Separate
 #250 completed in another thread during reconciliation and is outside this queue. No monitor is
 scheduled for the new session; do not recreate the settled #179 monitor.

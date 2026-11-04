@@ -8,7 +8,7 @@ validation_criteria:
   - "Contextual judgment and observable contract failures route to proportional interventions"
   - "Independent offline scenarios cover ambiguous dependency and malformed data and an unwired check"
   - "Portable guidance passes applicable documentation and syntax stages"
-tags: ["stream:skills-review", "kind:enhancement"]
+tags: ["stream:skills-review", "kind:enhancement", "epic:outcome-orchestration"]
 ---
 # Choose skill guidance or mechanical checks proportionally
 
@@ -52,3 +52,13 @@ explores convergence signals inside review-fix loops, not retro's initial choice
 of intervention. #247 owns cleanup-specific judgment examples; reference rather
 than duplicate them. This ticket changes retro guidance, not live cleanup or
 global execution permissions.
+
+## Accepted orchestration retro amendment (2026-11-04)
+
+Sam approved applying and implementing these retro proposals after #179.
+Distinguish missing guidance, guidance present but not followed, missing execution
+paths, and actual syntactic/data-contract defects before choosing an intervention.
+Use the worker-wake admission as an evidence-limited example, not proof that a
+mechanism is missing. Reference the existing harness rule rather than duplicate it.
+
+- [ ] Offline examples route each failure class proportionately; an already-documented instruction does not automatically produce another rule or validator.

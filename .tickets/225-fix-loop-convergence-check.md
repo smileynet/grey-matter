@@ -9,7 +9,7 @@ validation_criteria:
   - "Define a cheap signal (lines added per round, new files/flags/abstractions per round) and test it on those sessions; does it flag the bad cases without false alarms?"
   - "If adopted: one proportionality rule for code fixes (exception: reachable crash, security hole, data loss), referenced, not restated; the orchestrator is the first decision-maker per escalation.md."
   - "Resolution records adopt/adapt/reject."
-tags: ["type:research", "stream:skills-review", "triage:ready-for-agent"]
+tags: ["type:research", "stream:skills-review", "triage:ready-for-agent", "epic:outcome-orchestration"]
 ---
 
 # Explore an over-engineering convergence check for review-fix loops
@@ -39,3 +39,16 @@ This is a **hypothesis from prior art**, not a decided change. Before editing an
 - [ ] Resolution records adopt/adapt/reject.
 
 Related: #152, #224, retro skill.
+
+## Accepted orchestration retro amendment (2026-11-04)
+
+Sam approved applying and implementing these retro proposals after #179. Include
+qualification/debugging loops alongside review-fix loops. At reassessment,
+distinguish new diagnostic information, repaired behavior and repeated preparation
+without progress. Replay this session and a legitimately complex repair so useful
+reassessment does not become an arbitrary retry cap. The parent's missed-wake
+admission lacks an exact independently proved prior-idle/tool-call sequence.
+#251 owns initial intervention choice; this ticket owns progress inside a loop.
+
+- [ ] Qualification/debugging examples distinguish diagnostic progress, repaired behavior and preparation churn.
+- [ ] Before/after replay includes necessary multi-step repair without prescribing a global retry limit.
