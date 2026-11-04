@@ -1,7 +1,7 @@
 ---
 id: "252"
 title: "Keep mandatory gates scoped to durable safety checks"
-status: in_progress
+status: done
 blocked_by: []
 tags: ["stream:test-verification"]
 ---
@@ -9,7 +9,11 @@ Intent: owner authorized implementing the mandatory-gate review recommendations.
 
 ## Acceptance criteria
 
-- [ ] Native installed-tool validation is on-demand; static manifest checks remain blocking.
-- [ ] Experimental fixture and model-specific scenarios are separately runnable on-demand; safety cases remain blocking.
-- [ ] Known changes select affected checks; unknown ranges and explicit releases retain conservative coverage.
-- [ ] Required checks pass and changes are committed, pushed and locally redeployed.
+- [x] Native installed-tool validation is on-demand; static manifest checks remain blocking.
+- [x] Experimental fixture and model-specific scenarios are separately runnable on-demand; safety cases remain blocking.
+- [x] Known changes select affected checks; unknown ranges and explicit releases retain conservative coverage.
+- [x] Required checks pass and changes are committed, pushed and locally redeployed.
+
+## Resolution (2026-11-04)
+
+done: cheap scoped safety remains blocking; native Claude, model expectations and spike demonstrations are on-demand. Manifest edits no longer fan out unrelated merge suites; unknown ranges and release checks remain conservative. Updated dashboard and policy; tkt native-test follow-up parked as tkt ticket262. No full release or cross-platform matrix claimed.
