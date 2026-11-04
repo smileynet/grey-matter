@@ -664,3 +664,4 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 247 | Review cleanup plans against changing ownership and protected descendants | open |
 | 250 | Scope the home-path gate to introduced leaks instead of historical evidence | ✅ done |
 | 251 | Choose skill judgment or existing checks before adding retro mechanisms | ✅ done |
+| 253 | Review findings: published history and cleanup gate isolation | open |
