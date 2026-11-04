@@ -1,7 +1,7 @@
 ---
 id: "140"
 title: "Ticket commands must not sweep staged work into ticket commits"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
