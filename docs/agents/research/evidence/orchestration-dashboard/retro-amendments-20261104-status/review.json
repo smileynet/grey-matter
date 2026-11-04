@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "bd9f1022069e55011e9a4912715c28e3012a91e3768e003220dc7cd04483684d",
+  "subject": "Five accepted retro amendments delivered;225251145149done;139amendmentdone with broader original criteria open;remainingqueue preserved",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 205005,
+      "sha256": "6d99e4674f74c804444c20cf44d2715b35b3e8fbac89c3db8c33f376d3306505"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104-status/tab-0-1280.png",
+      "bytes": 81960,
+      "sha256": "d0a7723fb1dd6dcd048eee316208e62e74a090ecd4f809d3e8a1a9aba37c3443",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104-status/tab-1-1280.png",
+      "bytes": 480631,
+      "sha256": "167ae7b901505f827dece8927445b68e921767a9a9f91d9a7fc282c17f56b46d",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104-status/tab-2-1280.png",
+      "bytes": 26582,
+      "sha256": "9cacea4b722c082a79645ff965c28c283a18a8e5caf0f2fe1f154d5a718aab0b",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104-status/tab-3-1280.png",
+      "bytes": 482741,
+      "sha256": "4ab9c7c08f4cabfb2de0cf8107388e93bd2c1ea5a2575bbb6e80ff65db2c1ed6",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104-status/tab-0-390.png",
+      "bytes": 76800,
+      "sha256": "5565a065fd59e69e0dab258a72f3461636255f3333d3e97144cbcbffe965e565",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104-status/tab-1-390.png",
+      "bytes": 466998,
+      "sha256": "eb7c818df9bf2774d7a8a7df51abac0c6c7df77af092004901dd3dc4d6a7a49d",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104-status/tab-2-390.png",
+      "bytes": 21606,
+      "sha256": "0962961c3e9f398cc6274282bacfe8fedd2fb7cf358ffd644bdf327d9eae6640",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104-status/tab-3-390.png",
+      "bytes": 459945,
+      "sha256": "1ebc215b9db8d245894ba69eba5fbf1664a92fdafb70522c233d6566c094202a",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "6a4f571a3fb272c344561ecdfa1c6d8fe1d029e066b8606330a4dc7adfb3300e",
+  "id": "1491088f2b45a41015830b5cc539d86e8980379d27d8163649e9da32951a61c6",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "retro_amendments_critic",
+    "note": "Inspected all four status tabs at 1280px and 390px. Overview, history, decisions and plan remain readable; the plan shows seven orchestration nodes with #148 next in the proposed sequence, while the default test-verification scope is preserved in source. Global entries and 249-ticket plan remain visible; ticket details are collapsed and the horizontal plan diagram is intentionally swipeable at phone width. Strict dashboard contract reports zero errors and warnings; browser logs pass at both widths. Visual review does not establish whole-board projection freshness beyond the declared source snapshot or publication.",
+    "acceptedAt": "2026-11-04T19:30:57.301Z",
+    "snapshotId": "1491088f2b45a41015830b5cc539d86e8980379d27d8163649e9da32951a61c6"
+  }
+}

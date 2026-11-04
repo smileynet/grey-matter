@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "a67362922cb64c139f6ca9dbe999f0bee0303908123d30e9cb4765ef23fec543",
+  "subject": "Five accepted retro amendments delivered;225251145149done;139amendmentdone with broader original criteria open;remainingqueue preserved",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 66780,
+      "sha256": "96dc7a2b2f5e3ba0ece2570d37defab6ef82a3c6a2392bca390b8704da457d75"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 372914,
+      "sha256": "bf9c01fc568e8ad22dbd0e7d760be253b9fa7abc4bb67dcb5271ab4c80061867"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14145,
+      "sha256": "fe47a7d9ad8c78c5425925fd712403b013032b7d7f744b0a6d309edf946df76f"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1762,
+      "sha256": "2e1d9d64cd8c35663ef930d96187cb530fb4f7bb5827faf32a5c82f6b4871c4f"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5890,
+      "sha256": "16784d51172ccf9f876105e8f473824510e08b58269867c600191e1c9f2b5c03"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104/findings-1280.png",
+      "bytes": 1052799,
+      "sha256": "253581c402beb2073fd4f018579fcb8cee3edb2d65dc7be0ba53672d6371e38b",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104/tickets-1280.png",
+      "bytes": 380836,
+      "sha256": "8d83d032fb57e8f86b9779c068e7ef3fc89b53085ef385cf5a4f6157304f3298",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104/findings-390.png",
+      "bytes": 1096785,
+      "sha256": "b5ff8f67c67e720aec4dbf7c2135ff4c2d56076ad5bc5659fc627f78403d28a9",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/retro-amendments-20261104/tickets-390.png",
+      "bytes": 354625,
+      "sha256": "449e868ffc7a3cfee61c01d615d0cb6d5c5931527e576945c031975678314891",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "15d27908e4572dd3c2b73d3f362f82ddee31b562061d763415df8726f1372b02",
+  "id": "78f491fb5c3fe5f449237d2a253d98c1b95072fccd0847200c8e02cbae9af689",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "retro_amendments_critic",
+    "note": "Inspected findings and ticket-log captures at 1280px and 390px. The findings page reports 38 findings, 6 open tickets, 1 deferred, 58 completed, and 1 cancelled; the cards keep limits visible and label possibilities as unproven. Ticket details are collapsed. #225, #251, #145 and #149 show shipped; #139 remains open for its broader custom-page and whole-board criteria, with only its receipt amendment delivered. Browser logs passed at both widths; visual review does not establish whole-board freshness or publication.",
+    "acceptedAt": "2026-11-04T19:30:49.533Z",
+    "snapshotId": "78f491fb5c3fe5f449237d2a253d98c1b95072fccd0847200c8e02cbae9af689"
+  }
+}

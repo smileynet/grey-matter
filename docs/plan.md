@@ -201,7 +201,11 @@ its four remaining follow-ups. Broader #149/#146/#164 retain their original scop
 
 ## Orchestration follow-up queue (reconciled 2026-11-04)
 
-The proposal's core delivery is complete. Select this proposal and its related
+The proposal's core delivery and the five accepted retro amendments are complete.
+Four amendment owners (#225/#251/#145/#149) are done; #139's receipt comparison is
+delivered while its original custom-hook and full-board projection criteria remain
+open. [Acceptance and verification](agents/research/retro-amendments-delivery-20261104.md)
+records independent review and the evidence limits. Select this proposal and its related
 follow-ups with `epic:outcome-orchestration`; each ticket retains its single
 existing `stream:` area tag. The original reconciliation covered 19 delivered
 tickets and the nine remaining tickets below; the accepted retro amendment also
@@ -231,8 +235,9 @@ scheduled for the new session; do not recreate the settled #179 monitor.
 | 166 | Refresh the broader harness overview from current evidence | open |
 | 201 | Deferred Kiro shutdown investigation after higher-priority work | backlog |
 
-Start with #145 and #149; parallel execution is conditional on verified disjoint
-writes and an available independent critic slot. Then follow the table order.
+The next unfinished pick is #148: #145 and #149 completed in the accepted retro
+batch. Follow the table order among unfinished tickets. Parallel execution remains
+conditional on verified disjoint writes and an available independent critic slot.
 These are scheduling preferences, not new `blocked_by` edges: #148 may reuse
 #145's identity inputs, and #141 can use its documented staged-work workaround
 while #140 is unresolved. Dashboard owners #139 and #118 run serially because

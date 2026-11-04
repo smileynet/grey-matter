@@ -3,6 +3,126 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "convergence-reassessment",
+      "state": "confirmed",
+      "label": "Reassessment guidance shipped",
+      "title": "Tell a necessary repair from a stalled loop",
+      "value": "Review what changed in evidence and behavior before repeating preparation or adding more machinery.",
+      "steps": [
+        "Compare the evidence",
+        "Identify repaired behavior",
+        "Reassess repeated preparation"
+      ],
+      "limit": "Qualitative guidance, assessed on retained cases. No automatic retry cap or measured speed improvement is claimed.",
+      "details": "A necessary multi-step repair can grow while closing a real gap; preparation can stall without changing code. The orchestrator makes the first proportionality decision and retains the existing escalation boundary.",
+      "tickets": [
+        "225"
+      ],
+      "sources": [
+        {
+          "label": "Case comparison and evidence limits",
+          "href": "agents/research/retro-intervention-and-convergence-20261104.md"
+        }
+      ],
+      "diagramLabel": "Tell a necessary repair from a stalled loop"
+    },
+    {
+      "id": "retro-intervention-choice",
+      "state": "confirmed",
+      "label": "Proportionate intervention guidance shipped",
+      "title": "Choose a fix that matches the failure",
+      "value": "Separate a missing decision rule from a skipped instruction, a missing workflow step or a broken data contract.",
+      "steps": [
+        "Establish the failure",
+        "Check existing guidance",
+        "Choose a proportionate fix"
+      ],
+      "limit": "Offline case assessment supports the guidance. An uncertain report remains uncertain; it does not justify another rule or validator.",
+      "details": "Contextual choices stay in the covering skill. Demonstrated data or syntax failures reuse the owning check; missing execution paths reuse an existing command. Existing guidance that was not followed is distinct from missing guidance.",
+      "tickets": [
+        "251"
+      ],
+      "sources": [
+        {
+          "label": "Intervention cases and limits",
+          "href": "agents/research/retro-intervention-and-convergence-20261104.md"
+        }
+      ],
+      "diagramLabel": "Choose a fix that matches the failure"
+    },
+    {
+      "id": "concurrent-writer-response",
+      "state": "confirmed",
+      "label": "Read-only coordination helper shipped",
+      "title": "Choose when to isolate work or reconcile updates",
+      "value": "Distinguish overlapping local work from updates pushed by another checkout.",
+      "steps": [
+        "Inspect local evidence",
+        "Inspect tracked upstream state",
+        "Isolate or reconcile"
+      ],
+      "limit": "Git state does not prove that an agent is live. Writer bindings are caller attestations; worktrees do not prevent remote push races.",
+      "details": "The read-only helper reports local changes, cached upstream advances and explicitly supplied writer evidence separately. It creates no lock, registry or background process and preserves unknown liveness.",
+      "tickets": [
+        "145"
+      ],
+      "sources": [
+        {
+          "label": "Coordination guidance and command",
+          "href": "../skills/meta/orient/SKILL.md"
+        }
+      ],
+      "diagramLabel": "Choose when to isolate work or reconcile updates"
+    },
+    {
+      "id": "exact-scope-priority-review",
+      "state": "confirmed",
+      "label": "Fact-based queue review shipped",
+      "title": "Keep unrelated tickets out of an execution queue",
+      "value": "Check exact workstream membership and report prerequisites or priorities that need attention.",
+      "steps": [
+        "Select the exact tag",
+        "Review ticket facts",
+        "Preserve the adopted order"
+      ],
+      "limit": "Findings are advisory. Excluded work and external blockers remain visible; the helper does not change tickets or rewrite the queue.",
+      "details": "Full-board facts are filtered by exact tag rather than assuming a scoped query excludes untagged tickets. The review surfaces queue and backlog blockers, priority concerns and completed-looking criteria while preserving tracker authority.",
+      "tickets": [
+        "149"
+      ],
+      "sources": [
+        {
+          "label": "Queue review guidance and command",
+          "href": "../skills/meta/reconcile-tickets/SKILL.md"
+        }
+      ],
+      "diagramLabel": "Keep unrelated tickets out of an execution queue"
+    },
+    {
+      "id": "review-input-comparison",
+      "state": "confirmed",
+      "label": "Receipt comparison shipped; broader checks open",
+      "title": "Reuse reviews that still match the page",
+      "value": "See which declared inputs changed before repeating captures and review.",
+      "steps": [
+        "Compare existing inputs",
+        "Reuse unchanged acceptance",
+        "Review affected views"
+      ],
+      "limit": "Receipts cover declared inputs and captures. Custom-dashboard hooks and whole-board freshness checks remain unfinished.",
+      "details": "Read-only inspection preserves current accepted receipts for independently scoped views. Changed rendering inputs, captures or scope invalidate affected acceptance; shared inputs can invalidate several views. Pending or malformed evidence is never reusable.",
+      "tickets": [
+        "139"
+      ],
+      "sources": [
+        {
+          "label": "Input comparison and review boundaries",
+          "href": "../skills/productivity/delivery-dashboard/references/review-receipt.md#reconcile-before-renewing-review"
+        }
+      ],
+      "diagramLabel": "Reuse reviews that still match the page"
+    },
+    {
       "id": "owned-claude-followup",
       "state": "confirmed",
       "label": "Owned Claude follow-up confirmed",
@@ -1017,6 +1137,18 @@
       "Antigravity baseline",
       "Establish worker isolation, messaging and permission limitations."
     ],
+    "139": [
+      "Reuse reviews that still match the page",
+      "See which declared inputs changed before repeating captures and review."
+    ],
+    "145": [
+      "Choose when to isolate work or reconcile updates",
+      "Distinguish overlapping local work from updates pushed by another checkout."
+    ],
+    "149": [
+      "Keep unrelated tickets out of an execution queue",
+      "Check exact workstream membership and report prerequisites or priorities that need attention."
+    ],
     "154": [
       "Stop the tested risky deletion",
       "Qualify a restrictive policy and its escalation behavior."
@@ -1169,6 +1301,10 @@
       "Nudge an existing assigned agent",
       "Observed one idle Codex desktop agent receiving a saved handoff and reporting correlated completion. Broader messaging remains partial under its parent."
     ],
+    "225": [
+      "Tell a necessary repair from a stalled loop",
+      "Review what changed in evidence and behavior before repeating preparation or adding more machinery."
+    ],
     "231": [
       "Choose a handoff route with clear limits",
       "See which routes can address an existing worker, which need an owned process, and which are held by permissions or security."
@@ -1208,10 +1344,42 @@
     "243": [
       "Start Claude with the intended handoff",
       "The first saved handoff can start an owned worker without waiting for a readiness message that may require input."
+    ],
+    "251": [
+      "Choose a fix that matches the failure",
+      "Separate a missing decision rule from a skipped instruction, a missing workflow step or a broken data contract."
     ]
   },
   "includedTicketIds": [
     "179",
-    "208"
+    "208",
+    "118",
+    "139",
+    "140",
+    "141",
+    "145",
+    "148",
+    "149",
+    "166",
+    "201",
+    "202",
+    "203",
+    "204",
+    "205",
+    "206",
+    "207",
+    "210",
+    "225",
+    "231",
+    "232",
+    "233",
+    "234",
+    "235",
+    "236",
+    "237",
+    "238",
+    "242",
+    "243",
+    "251"
   ]
 }
