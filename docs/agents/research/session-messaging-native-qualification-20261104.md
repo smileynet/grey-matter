@@ -67,3 +67,32 @@ completed both business turns and their core acknowledgments, with observed
 physical process cleanup. Its original update-stream disconnect and local-only
 close-classification correction remain separate from business delivery. Neither
 new finding reclassifies the first failed cases above.
+
+## Later Claude cases: receipt is not completion
+
+After the lifecycle correction, a fresh business case reached initialization,
+an exact input replay and assistant output. It stopped before an accepted terminal
+result with `UNEXPECTED_RECORD`; the helper's `EVENT_STREAM_CLOSED` was secondary.
+No reply, task completion or final shared-core receipt is claimed. Its rejected
+record was not retained, so that case's underlying record type remains unknown.
+The root process stopped with closed stdio, but tree inspection began too late
+and failed; historical descendant settlement remains unproved. A later read-only
+current parent-PID graph was empty, which does not repair that missing baseline.
+
+A distinct wire diagnostic then observed `rate_limit_event` in the selected busy
+session immediately before the unchanged parser rejected it. This proves another
+unsupported event family in that diagnostic, not the exact cause of the earlier
+business failure. Its payload was withheld: no usage exhaustion, limit or reset
+time is inferred. The diagnostic recorded a validated receive receipt only,
+without handling, reply or completion. This run captured root and child identities
+at launch and before stop; both were absent afterward, with exit zero and closed
+stdio.
+
+The pinned public SDK distinguishes `allowed`, `allowed_warning` and `rejected`
+rate-limit states. Supporting that family must preserve normal nonterminal status
+without clearing the active input. Under this project's provider policy an actual
+rejected limit requires stopping and reporting the available limit/reset metadata,
+with no retry or provider switch. Native Claude completion remains open in #236.
+
+The [later-case evidence index](evidence/session-messaging-claude-native-progress-20261104.json)
+binds both cases, independent postflights and the read-only cleanup follow-up.

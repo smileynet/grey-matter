@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179 final audit and explicit disposition",
+  "sourceCommit": "13a1e3c979b6bba3c58a9006dead98a0c88f0374",
+  "businessCase": {
+    "outcome": "incomplete; exact replay and assistant output without accepted terminal result",
+    "primaryFault": "UNEXPECTED_RECORD",
+    "secondaryHelperFault": "EVENT_STREAM_CLOSED",
+    "rejectedRecord": "not retained; type unknown",
+    "treeSettlement": "unproved: no launch baseline; later empty current parent graph is not historical proof"
+  },
+  "wireCase": {
+    "outcome": "incomplete; validated receive receipt only",
+    "observedRejectedFamily": "rate_limit_event",
+    "payloadStatusLimitReset": "not retained; no usage exhaustion inferred",
+    "treeSettlement": "observed root and child absent after owned stop"
+  },
+  "nativeInputCount": {
+    "claude": 4,
+    "kiro": 3
+  },
+  "raw": [
+    {
+      "path": ".scratch/t236-native-v6-evidence.json",
+      "bytes": 11458,
+      "sha256": "1204c4792de5faf7a15f733f7e893a6525095d6a3bcd061db438465d31fdc199"
+    },
+    {
+      "path": ".scratch/t236-native-v6-live-admission.json",
+      "bytes": 276,
+      "sha256": "7d3437fbc1eac6258f6722293fa26b265cc990dd9daaf544a75247d46c0781ad"
+    },
+    {
+      "path": ".scratch/t236-native-v6-parent-preflight.json",
+      "bytes": 2083,
+      "sha256": "a392a589b0550e34c786ec1c1349f332b4f908617385e29e81130ce76231ca3a"
+    },
+    {
+      "path": ".scratch/t236-native-v6-parent-result.json",
+      "bytes": 601,
+      "sha256": "d468ff978ee176118d776797257dc0e88011d0a3ed8fb0755a466c70d5a3b7dc"
+    },
+    {
+      "path": ".scratch/t236-v6-native-postflight-review.md",
+      "bytes": 3883,
+      "sha256": "fd680f9bea0d6afe51b947139d826705df8956c698140aaa5d10ea1a1e126d45"
+    },
+    {
+      "path": ".scratch/t236-v6-current-parent-graph-followup.json",
+      "bytes": 374,
+      "sha256": "66fea9260f447956e2268b8a65ec5d041a9086996e7cdf9ebc991ea7551aa309"
+    },
+    {
+      "path": ".scratch/t236-wire-v4-evidence.json",
+      "bytes": 10512,
+      "sha256": "1a43a8eb75d5f43b3ca21e66434ee5da6473887863fb78828b1ac4cbc31aba38"
+    },
+    {
+      "path": ".scratch/t236-wire-v4-live-admission.json",
+      "bytes": 452,
+      "sha256": "83b60c694b3b89a5534a42fb7265ff8d57cab1bc89588cf1ae8bc8c69612cfd9"
+    },
+    {
+      "path": ".scratch/t236-wire-v4-parent-preflight.json",
+      "bytes": 2260,
+      "sha256": "a49643385720e8faa7bd6dc0856cf152b5a5ebb245f3b813e1a5d8fa45dfd774"
+    },
+    {
+      "path": ".scratch/t236-wire-v4-parent-result.json",
+      "bytes": 378,
+      "sha256": "060cf590d7983d6adcd4f39675451ac9fc6129e1298370e4eae31f3405afa1f8"
+    },
+    {
+      "path": ".scratch/t236-wire-v4-pair-review.md",
+      "bytes": 3149,
+      "sha256": "089ec9df81839a1f6ab71faf31b1826d5a722981ef61101116ba85e7eede61fc"
+    },
+    {
+      "path": ".scratch/t236-wire-v4-postflight-review.md",
+      "bytes": 2919,
+      "sha256": "8d85f404b7be592dd0c43b6a4a44ba1831fc5d7f91d397fe49c420b57e494c06"
+    },
+    {
+      "path": ".scratch/t236-public-message-compatibility.md",
+      "bytes": 8015,
+      "sha256": "c32d0bad17b0cf7cd4896efdd5fb1414207e1a3ea60b8237e5d9fb1f9bc47a1d"
+    },
+    {
+      "path": ".scratch/t236-public-message-compatibility-index.json",
+      "bytes": 1857,
+      "sha256": "2e3fe11ffc455e4f42d94fdc85511f70f9d0e74a6e9e849d597912cfaf77e523"
+    }
+  ]
+}
