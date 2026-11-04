@@ -1,0 +1,50 @@
+{
+  "ownerCandidate": "170eca7a6997e3f8ea63908eeeada2daed82e822",
+  "siteSourceCommit": "c86b6fec361c62b5b67b4f031b618348f7ef9794",
+  "site": {
+    "projectId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e",
+    "deploymentId": "appgdep_6aeac66074b08191a5b621fbd982b37a",
+    "versionId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_80ab40752c8c81919baac201964f2f6d",
+    "status": "succeeded",
+    "url": "https://orchestration-findings.sambiggins.chatgpt.site",
+    "updatedAt": "2026-11-04T05:45:11.577616+00:00"
+  },
+  "audience": {
+    "kind": "owner-private",
+    "accessRevision": 1,
+    "allowedOwners": 1,
+    "allowedGroups": 0,
+    "externalVisitors": 0,
+    "preserved": true
+  },
+  "review": {
+    "effortReceipt": "5279e9a83bedef707c378f45d8293167f458f5410573816a43410e7debec46dd",
+    "globalReceipt": "62443783d4ab77f82b91e955838da15775a724ecff33808a9109846829dfe9a3",
+    "captures": 12,
+    "scope": "Interim foundations231232233234238; parent179 and native235236237 remain unfinished"
+  },
+  "preflight": {
+    "result": "pass",
+    "raw": "D:/code/grey-matter/.scratch/t179-foundations-publication-preflight-result.json",
+    "requiredChecks": [
+      "premerge",
+      "prepush",
+      "dashboard",
+      "effort-browser",
+      "status-browser"
+    ],
+    "checksAreAttestations": true
+  },
+  "archive": {
+    "originalPath": "D:/code/grey-matter/.scratch/t179-foundations-site-20261103.tar.gz",
+    "bytes": 82581,
+    "sha256": "9cc243fa462615263fb61f9a79cf4a7c355a54653b7ace25512e32a23ea26813",
+    "disposition": "OS recycle requested after native terminal save/deploy success; original path observed absent"
+  },
+  "retained": {
+    "owner": "parent179integration",
+    "endCondition": "179 final audit and explicit disposition",
+    "scope": "Site checkout, source-opening/package metadata, exact command output, raw review and private fixture records; no credentials persisted"
+  },
+  "limits": "Native terminal result verifies deployment. Browser handoff is separate and does not prove a production browser render. This record does not qualify remaining adapters or close179."
+}
