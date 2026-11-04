@@ -9,7 +9,7 @@ validation_criteria:
   - "Identity and replay regressions and existing desktop CLI compatibility pass"
   - "Agent guidance and tool coverage and repository gates pass"
   - "Independent exact-commit review and parent integration evidence are retained"
-tags: ["stream:tooling", "kind:enhancement"]
+tags: ["stream:orchestration", "kind:enhancement"]
 parent: "179"
 assignee: "codex"
 ---
