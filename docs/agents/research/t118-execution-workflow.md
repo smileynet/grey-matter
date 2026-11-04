@@ -30,7 +30,7 @@ report.
 
 | Check | Result |
 | --- | --- |
-| `node --test scripts/delivery-dashboard.test.mjs` | Pass, 62/62. Raw log SHA-256: `FE5E5E5FA84B4320F25980F62B5AD7A477ABD5E8886ACDE3598B4E36A80A1347`. |
+| `node --test scripts/delivery-dashboard.test.mjs` | Pass, 63/63, including CLI and API regressions for claim preflight with policy off. Raw log SHA-256: `331BFEFFE2E80DB7C8278B428F3735F7170B2A99AD6A9934CC7F5B8955130DB5`. |
 | `node --test scripts/delivery-dashboard-browser.test.mjs` with local Playwright and Chrome | Pass, 7/7 at 1280px and 390px; includes ticket-detail keyboard navigation, offline-after-load state, a 150% graph zoom with internal scrolling, and unscheduled-ticket separation. Raw log SHA-256: `C2C0F73AEE078107E35D760153EBD8C8EAD8129D18E2EE8302A0A9EB4D81AAD`. |
 | `node --check` on both dashboard tests and both dashboard scripts | Pass. |
 | `git diff --check` | Pass. |
@@ -43,7 +43,7 @@ Local headless captures use synthetic data. Laptop screenshot SHA-256:
 `3E0B8BF85452778955BAFCFC4115F1B2BEC678BDE7000C307185C1A7069438EE`; 150% zoom phone:
 `26D645A68037819F14412D2C34A5D7E88694BAD1A01FA9C4EA9F539059D37A63`. These captures prove the renderer against local fixtures, not the deployed Site, actual user data, physical phones or a user-visible app surface. Parent-owned live dashboard integration and pre-merge gate remain separate.
 
-Earlier failing attempts remain as separate raw logs in the retained ticket-scoped worker evidence family; they exposed and corrected test fixture assumptions, the zoom-control placement, and narrow-width overflow. An intermediate browser run (`browser-9.log`) passed 6/6 before graph zoom controls were added; the final `browser-final-2.log` run passed 7/7 with those controls and supersedes that coverage. The final passing logs above do not erase the earlier records. The 637 KB evidence family includes the attempts, browser captures and small helper scripts; it remains retained under ticket #118 for parent integration and final evidence disposition.
+Earlier failing attempts remain as separate raw logs in the retained ticket-scoped worker evidence family; they exposed and corrected test fixture assumptions, the zoom-control placement, and narrow-width overflow. An intermediate browser run (`browser-9.log`) passed 6/6 before graph zoom controls were added; the final `browser-final-2.log` run passed 7/7 with those controls and supersedes that coverage. The final passing logs above do not erase the earlier records. The 678 KB evidence family includes the attempts, browser captures and small helper scripts; it remains retained under ticket #118 for parent integration and final evidence disposition.
 
 Failure classifications: `unit-1.log` did not parse due to a malformed new test fixture; `unit-2.log`
 and `unit-final.log` each had one fixture expectation failure (missing execution-order metadata,
@@ -53,4 +53,9 @@ half-width effective viewport, separately from actual graph zoom controls. `brow
 `browser-9.log` captured the inherited Plan-panel overflow and its narrow-layout iterations;
 `baseline-viewport.log` confirmed the 223px/195px overflow existed at base. `browser-10.log` timed
 out because zoom controls were inside a collapsed details element; `browser-11.log` had a test click
-count that reached 140% while expecting 150%. Those issues were corrected before the final 7/7 run.
+count that reached 140% while expecting 150%. `claim-bypass-red.log` confirmed the CLI returned exit
+0 and the API returned `ok:true` for a claim with execution policy off; its SHA-256 is
+`1D0DBC8F16B0820EF832F98C46B93C383A1B9A1557A583FD11B7A718D600692E`. The preflight guard now runs
+before mode-specific checks. `claim-bypass-green.log` had one test expectation mismatch after the
+guard correctly reported policy-off; `claim-bypass-green-2.log` is the final 63/63 run, SHA-256
+`331BFEFFE2E80DB7C8278B428F3735F7170B2A99AD6A9934CC7F5B8955130DB5`.

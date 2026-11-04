@@ -137,6 +137,24 @@ test("the CLI rejects a dangling --repo operand instead of doing a local-only ch
   const orphanOwner = spawnSync(process.execPath, [script, file, "--agent", "worker"], { encoding: "utf8" });
   assert.equal(orphanOwner.status, 2);
   assert.match(orphanOwner.stderr, /--agent requires --claim/);
+  const claimWithoutRepo = spawnSync(process.execPath, [script, join(SKILL, "assets/dashboard-template.html"), "--claim", "definitely-missing"], { encoding: "utf8" });
+  assert.equal(claimWithoutRepo.status, 1, "claim preflight must not pass when execution policy is off and no repository is checked");
+  const claimResult = JSON.parse(claimWithoutRepo.stdout);
+  assert.equal(claimResult.ok, false);
+  assert.match(claimResult.errors.join("\n"), /--claim requires --repo/);
+  assert.match(claimResult.errors.join("\n"), /executionPolicy\.mode serial or parallel/);
+});
+
+test("API claim preflight rejects off policy even with an empty full-board snapshot", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm dashboard claim policy "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets")); mkdirSync(join(root, "docs"));
+  writeFileSync(join(root, "docs/plan.md"), "| ID | Work | Status |\n| --- | --- | --- |\n");
+  const run = (cmd, args) => args[0] === "sync-plan" ? "Plan is current\n" : "";
+  const file = dashboard(t, [], withTickets({ generated: null, frontier: [], executionOrder: [], tickets: [] })).file;
+  const result = check(file, { repo: root, claim: "definitely-missing", run });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join("\n"), /executionPolicy\.mode serial or parallel/);
 });
 
 test("recentCount cannot raise the overview limit above five", (t) => {

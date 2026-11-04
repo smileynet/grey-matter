@@ -75,6 +75,11 @@ export function check(path, { strict = false, repo, claim, agent, run = execFile
 
   const policy = cfg && Object.hasOwn(cfg, "executionPolicy") ? cfg.executionPolicy : { mode: "off" };
   if (!policy || typeof policy !== "object" || Array.isArray(policy) || !["off", "serial", "parallel"].includes(policy.mode)) err("executionPolicy.mode must be off, serial or parallel");
+  if (claim !== undefined) {
+    if (!repo) err("--claim requires --repo so the full tracker and plan are checked");
+    if (!policy || !["serial", "parallel"].includes(policy.mode)) err("--claim requires executionPolicy.mode serial or parallel");
+    if (!snap || !Array.isArray(snap.tickets) || !Array.isArray(snap.executionOrder)) err("--claim requires a complete ticket snapshot with executionOrder");
+  }
 
   const ids = new Set();
   if (cfg && cfg.decisions !== undefined) {
@@ -228,8 +233,6 @@ export function check(path, { strict = false, repo, claim, agent, run = execFile
       if (new Set(owners).size !== owners.length) err("parallel execution requires distinct assignees for in-progress tickets");
     }
     if (claim !== undefined) {
-      if (!repo) err("--claim requires --repo so the full tracker and plan are checked");
-      if (policy.mode === "off") err("--claim requires executionPolicy.mode serial or parallel");
       const requested = ticketsById.get(String(claim));
       if (!requested) err(`--claim ${claim} is missing from the ticket snapshot`);
       else {
