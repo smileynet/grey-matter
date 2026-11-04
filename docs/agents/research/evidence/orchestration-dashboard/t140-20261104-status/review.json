@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "3af29e0e511ea7a6326c42ef56a91c975630f3f6f5023d060419d9dee5a88362",
+  "subject": "Queue delivery t140-20261104: current closed work and all remaining work retained",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 208333,
+      "sha256": "466fd610e964b4f109ae1142415a37a1fdc4165e7d01a75332b3e53daf5c78a1"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104-status/tab-0-1280.png",
+      "bytes": 85121,
+      "sha256": "e1db7627a2d64bcf34f4254ea5803a9027c578ae5907bdcc9c11a8d2af589411",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104-status/tab-1-1280.png",
+      "bytes": 90091,
+      "sha256": "03e0ebe4cc2ee6f8fde9102d8dc7a953c9c6f48b7ea0df864b299448a1d910a1",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104-status/tab-2-1280.png",
+      "bytes": 52935,
+      "sha256": "ed965d072908677174b85ae44b2db084efa7253590911da32bb7087c2bd96f13",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104-status/tab-3-1280.png",
+      "bytes": 486617,
+      "sha256": "718f81e05dbaa65b632edc6b1786b01d05ee3413acd5d329cc3d4b82a2c663ef",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104-status/tab-0-390.png",
+      "bytes": 81063,
+      "sha256": "f0e9da854cc71cefde17a5fa191314f5590e6b5235a14bc27ff92dcd98e3f7f8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104-status/tab-1-390.png",
+      "bytes": 64405,
+      "sha256": "5de843849c582dd51d7688ed113a07097b3707c312d5012809a792a09ec502d0",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104-status/tab-2-390.png",
+      "bytes": 57738,
+      "sha256": "c63e9dd3fd042142ad571ca38ba6740bc7115635497e7a08100fb48172a34a40",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104-status/tab-3-390.png",
+      "bytes": 463029,
+      "sha256": "970cf54125be79b79f0fcd372d5aae9ebb740e05bfc0789157c72d19c15a70db",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "1047a8b765bcda41f2565e8d2f7808e804c7e20e4ac4d71204daae315ccf9b6a",
+  "id": "ee21abadc10dc7fddc063c4c4537151613e54f37b895e58ed85a7968573c2e80",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "queue_critic",
+    "note": "Independent critic inspected all eight bound phone/laptop status captures and matched current source/capture hashes; no page overflow, scopes and historical limits preserved. Local rendering only.",
+    "acceptedAt": "2026-11-04T20:21:00.341Z",
+    "snapshotId": "ee21abadc10dc7fddc063c4c4537151613e54f37b895e58ed85a7968573c2e80"
+  }
+}

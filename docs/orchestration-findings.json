@@ -3,6 +3,34 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "2026-11-04-ticket-index-isolation",
+      "state": "confirmed",
+      "label": "Installed behavior verified",
+      "title": "Keep staged work separate from ticket updates",
+      "value": "The installed tracker preserves staged implementation work when updating tickets. The historical sweep is fixed upstream.",
+      "steps": [
+        "Stage implementation",
+        "Update the ticket",
+        "Keep implementation staged"
+      ],
+      "limit": "Windows installed build and local-only synthetic fixtures. Network/hook latency and other argument forms remain unmeasured.",
+      "details": "Observed on installed tkt 0.4.0 (e755765): four ordinary local-only mutation fixtures committed only their ticket paths and kept the unrelated file staged. Independent reviewers checked the retained fixture indexes and commits. Query tags and tested single quoted comma arguments worked. No network/hook latency or other platform behavior is claimed. The workflow diagram represents the tested fixture behavior, not production application delivery.",
+      "tickets": [
+        "140"
+      ],
+      "sources": [
+        {
+          "label": "Reproduction and upstream fixes",
+          "href": "agents/research/tkt-140-staged-mutation-recheck.md"
+        },
+        {
+          "label": "Independent acceptance",
+          "href": "agents/research/evidence/tkt-140-20261104/spec-final.md"
+        }
+      ],
+      "diagramLabel": "Keep staged work separate from ticket updates"
+    },
+    {
       "id": "convergence-reassessment",
       "state": "confirmed",
       "label": "Reassessment guidance shipped",

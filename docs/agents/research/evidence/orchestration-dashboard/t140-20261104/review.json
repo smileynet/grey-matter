@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "35cfc1a656f495dccedde72d192f52126a5778405129c52367607ed2c61153c6",
+  "subject": "Queue delivery t140-20261104: current closed work and all remaining work retained",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 68282,
+      "sha256": "470ed519ad584d0bdd686081cbf226d1c4aad7f69737f62974bec9d0eae13b88"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 377439,
+      "sha256": "a3066d4558ad1402ae74857af046de1e3814ac14697d82de009c619c8d4d1917"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14145,
+      "sha256": "fe47a7d9ad8c78c5425925fd712403b013032b7d7f744b0a6d309edf946df76f"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1762,
+      "sha256": "2e1d9d64cd8c35663ef930d96187cb530fb4f7bb5827faf32a5c82f6b4871c4f"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5890,
+      "sha256": "16784d51172ccf9f876105e8f473824510e08b58269867c600191e1c9f2b5c03"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104/findings-1280.png",
+      "bytes": 1080694,
+      "sha256": "4376647799980c281d93b4f05f7b9bfb7d62fd6396de29bb56c36f2a586070ce",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104/tickets-1280.png",
+      "bytes": 375884,
+      "sha256": "89c14b757db0e0dd0bf680436356d0e1b3957ff0917a394cf81d79bc15f79d9f",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104/findings-390.png",
+      "bytes": 1123561,
+      "sha256": "5d6d7e6967cf0ce74ac0e51550fa3c222b8c74a6c57cf1608c68152d11a7bfcf",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t140-20261104/tickets-390.png",
+      "bytes": 349740,
+      "sha256": "29d358daf498f81e9898689f3da0b385fd795bb1c0fc948df61a2c093c79107f",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "29ba1162dc946de6254163446b55d34e0e53638538aa134a8d7acdb36053f27c",
+  "id": "33d5973e4807e3f63907598ea9325aef896468a6740269b3048ccc2a7cbc7096",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "queue_critic",
+    "note": "Independent critic inspected all four bound phone/laptop effort captures and matched current source/capture hashes; outcome and fixture limits accurate. Local rendering only.",
+    "acceptedAt": "2026-11-04T20:21:00.158Z",
+    "snapshotId": "33d5973e4807e3f63907598ea9325aef896468a6740269b3048ccc2a7cbc7096"
+  }
+}
