@@ -221,7 +221,7 @@ scheduled for the new session; do not recreate the settled #179 monitor.
 
 | ID | Work | Status |
 | --- | --- | --- |
-| 145 | Detect shared-checkout concurrency and recommend isolation | open |
+| 145 | Detect shared-checkout concurrency and recommend isolation | in_progress |
 | 149 | Review priorities, queue inversions and blockers from ticket facts | open |
 | 148 | Take over worktrees safely and respect harness lifecycle guards | open |
 | 140 | Keep unrelated staged changes out of ticket commits | open |
@@ -615,7 +615,7 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 142 | Installed plugin lags the repo so orient routes to skills that are not installed | open |
 | 143 | init-project and conformance-audit check cross-harness readiness (Antigravity, Codex) | open |
 | 144 | Artifact hygiene rewrites relative links and screens privacy and copyright when promoting scratch | open |
-| 145 | Detect another live session in the same checkout and suggest a worktree | open |
+| 145 | Detect another live session in the same checkout and suggest a worktree | in_progress |
 | 146 | delivery-dashboard lists only open questions, generated from a structured source | open |
 | 147 | to-questionnaire offers an HTML decision form with recommendations and copy-for-chat | open |
 | 148 | Take over another agent's worktrees and branches safely | open |
