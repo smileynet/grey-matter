@@ -76,3 +76,14 @@ lineage rather than a blocker on adoption. No Mac/OneDrive deferral is revoked, 
 failure is explained by a green rerun, and no new platform pass or cleanup is claimed.
 See the [delivery/adoption record](../docs/agents/research/test-verification-delivery-20261102.md)
 and [plan](../docs/plan.md#independent-verification-follow-ups).
+
+## Note — 2026-11-04
+
+By: codex
+
+<!-- tkt-note:v1 2823-1793792332603104000 -->
+Accepted Tagalog Helper storage retro follow-up, 2026-11-04: extend this existing scan-runtime investigation rather than file a duplicate. During the adopter audit the inspector was terminated after about 69 seconds with no output; this is an observation, not proof that lsof caused it. Current source makes --summary format a completed full inspect(), and --path adds to the default repository roots. Fresh --help probe in the retro returned exit 2, Unknown option: --help.
+
+Additional accepted scope (mechanical): bounded footprint discovery, explicit CLI scope and useful partial output. Add independently checkable acceptance scenarios: (1) --help exits 0 without Git discovery or a filesystem census; (2) an explicit exclusive-scope mode visits only supplied roots, with additive --path semantics documented; (3) time/entry budgets and cancellation yield structured partial coverage plus a stop reason; (4) incomplete scans cannot emit deletion/slim/prune recommendations; (5) structure-first discovery is cheaper than full dependency inspection, while exact chosen targets still receive fresh pre-mutation revalidation. Measure current behavior before attributing a cause. Keep owned-process termination and avoid machine-wide kill patterns.
+
+Read skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs and scripts/inspect-footprint.test.mjs. Coordinate macOS/APFS observations with local ticket 131 and Windows suite performance with local ticket 217; retain their distinct evidence. Historical source: https://github.com/smileynet/tagalog-helper/blob/ee4ecc8/docs/storage-retro-fixes-review.html . This filing executes no tests or cleanup, proves no upstream regression pass, and leaves the existing deliberately deferred status unchanged.
