@@ -76,10 +76,10 @@ adds policy-supersession judgment without reopening or duplicating those repairs
 
 ## Accepted remote Android retro extension · November 4
 
-Sam accepted filing this portable follow-up after Philippines Trip ticket 282 succeeded.
+Sam accepted filing this portable follow-up after Philippines Trip work item (282) succeeded.
 That one-off job published its applied receipt only after all targets completed;
 no interrupted-deletion failure was observed. The remaining durability gap is
-tracked locally in Philippines Trip ticket 284. Source:
+tracked locally in Philippines Trip work item (284). Source:
 https://github.com/smileynet/philippines-trip/blob/84cf6935/.memory/reviews/remote-android-retro-followup-2026-11-04.md
 
 Extend the existing interrupted-purge scenarios with a small reusable ledger

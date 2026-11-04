@@ -13,7 +13,7 @@ tags: ["stream:tooling", "kind:enhancement"]
 ## Intent source
 
 Sam requested filing the reusable remote Android retrospective recommendations on November 4.
-Philippines Trip preserved approximately2.1GiB of an obsolete integration checkout because browser QA imported its Playwright installation. Its ticket 274 now owns transfer and verified retirement. Source:
+Philippines Trip preserved approximately2.1GiB of an obsolete integration checkout because browser QA imported its Playwright installation. Its work item (274) now owns transfer and verified retirement. Source:
 https://github.com/smileynet/philippines-trip/blob/84cf6935/.memory/reviews/remote-android-retro-followup-2026-11-04.md
 
 ## Read first
@@ -37,4 +37,4 @@ Extend existing artifact-hygiene guidance with a disclosed shared-tooling handof
 
 ## Limits
 
-This is reusable guidance and declared-dependency validation, not implementing Philippines Trip ticket 274, a global environment provisioner or an automatic cleanup engine. #247 owns cleanup acceptance scenarios; #144 owns promotion/link rewriting. Preserve private inputs and existing authorization boundaries.
+This is reusable guidance and declared-dependency validation, not implementing Philippines Trip work item (274), a global environment provisioner or an automatic cleanup engine. #247 owns cleanup acceptance scenarios; #144 owns promotion/link rewriting. Preserve private inputs and existing authorization boundaries.

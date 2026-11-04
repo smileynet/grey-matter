@@ -13,7 +13,7 @@ tags: ["stream:test-verification", "kind:enhancement"]
 ## Intent source
 
 Sam requested filing the reusable remote Android retrospective recommendations on November 4.
-During Philippines Trip ticket 278, native methods completed before aggregate checks exposed host prerequisites. Those defects were repaired; remaining ordering work is local ticket 285. Source:
+During Philippines Trip work item (278), native methods completed before aggregate checks exposed host prerequisites. Those defects were repaired; remaining ordering work is local work item (285). Source:
 https://github.com/smileynet/philippines-trip/blob/84cf6935/.memory/reviews/remote-android-retro-followup-2026-11-04.md
 
 ## Read first
