@@ -37,17 +37,30 @@ bounded, task-owned input, replay, and result evidence.
 
 ## Send and observe
 
-After `ready`, call `send({ messageId, messageHash, protocolUuid, sessionId, text })`.
-The adapter snapshots and validates those values before its first await, rejects
-unknown fields, enforces the exact owned session, and permits only one in-flight
-turn. `messageHash` is a SHA-256 hex digest. `protocolUuid` is a canonical UUID
+The parent may call `send({ messageId, messageHash, protocolUuid, sessionId, text })`
+while startup is pending, but only for the first actual, already accepted and
+durably attempt-started message bound to this exact owned session. The adapter
+snapshots and validates those values before its first await, rejects unknown
+fields, enforces the exact owned session, and permits only one in-flight turn.
+This input stays pending until init validates the exact session and metadata;
+init then moves the session to busy, so a second message cannot enter before the
+first correlated terminal result. The init-first sequence remains supported.
+For startup-first order, persist the shared notification `attempt-start`, convert
+that exact stored action for the already-held client, call `send` once, then
+await `ready` to validate the post-input init metadata.
+`messageHash` is a SHA-256 hex digest. `protocolUuid` is a canonical UUID
 and is sent as Claude's documented user-message `uuid`; core identity fields stay
 outside the provider wire message. The wire message contains only documented
 user-message fields: `type: "user"`, `uuid`, `session_id`, `message` with
 `role: "user"` and text `content`, `parent_tool_use_id: null`, and
 `client_composed: true`. Text stays on stdin as JSONL data; it never enters argv.
 The `send` return value `stdin-written` means only that the local child pipe
-accepted the encoded line. It does not prove Claude read or processed it.
+accepted the encoded line. It does not prove Claude read or processed it. An
+unsafe or mismatched init, failed write, or disconnect with that startup input
+pending leaves delivery ambiguous and requires parent recovery; there is no
+bootstrap prompt, automatic retry, or second input on that process. `ready` can
+resolve after the first write and validates startup metadata only; it is neither
+an input receipt nor a task result.
 
 The `events` async iterable reports distinct observations:
 

@@ -229,7 +229,7 @@ export function createClaudeStreamProtocol(sessionId) {
           'Claude session did not start with an empty tool and MCP surface', 'UNSAFE_SESSION');
         demand(!['auto', 'acceptEdits', 'bypassPermissions'].includes(value.permissionMode),
           'Claude session is using an automatic permission mode', 'UNSAFE_SESSION');
-        phase = 'ready';
+        phase = active ? 'busy' : 'ready';
         return {
           type: 'ready', sessionId, model: value.model, version: value.claude_code_version,
           tools: [...value.tools], mcpServers: value.mcp_servers.map(server => ({ ...server })),
@@ -250,7 +250,9 @@ export function createClaudeStreamProtocol(sessionId) {
       return { type: 'status', sessionId, subtype: value.type, uuid: value.uuid ?? null };
     }
 
-    if (phase === 'starting') throw new ClaudeStreamError('session record arrived before system/init', 'PROTOCOL_ORDER');
+    if (phase === 'starting' && !(value.type === 'user' && active !== null)) {
+      throw new ClaudeStreamError('session record arrived before system/init', 'PROTOCOL_ORDER');
+    }
     demand(phase !== 'closed' && phase !== 'faulted', 'record arrived after process completion', 'PROTOCOL_ORDER');
 
     if (value.type === 'user') {
@@ -317,10 +319,11 @@ export function createClaudeStreamProtocol(sessionId) {
     const snapshot = snapshotMessage(input, sessionId, maxInputBytes);
     demand(!used.has(snapshot.identity.protocolUuid), 'protocolUuid has already been used', 'DUPLICATE_INPUT');
     demand(active === null, 'one turn is already in flight', 'BUSY');
-    demand(phase === 'ready' && !stopRequested, 'owned Claude session is not accepting input', 'NOT_READY');
+    demand((phase === 'ready' || phase === 'starting') && !stopRequested,
+      'owned Claude session is not accepting input', 'NOT_READY');
     used.add(snapshot.identity.protocolUuid);
     active = { ...snapshot, responseBound: false, replayed: false };
-    phase = 'busy';
+    if (phase === 'ready') phase = 'busy';
     return { identity: snapshot.identity, line: snapshot.line };
   }
 

@@ -32,6 +32,15 @@ const canCompileLocalFixture = process.platform === 'win32' && existsSync(compil
 const stderrBytes = 2 * 1024 * 1024;
 const csharpFixture = `using System;
 class Fixture {
+  static string StringField(string json, string name) {
+    string quote = ((char)34).ToString();
+    string marker = quote + name + quote + ":" + quote;
+    int start = json.IndexOf(marker, StringComparison.Ordinal);
+    if (start < 0) return null;
+    start += marker.Length;
+    int end = json.IndexOf((char)34, start);
+    return end < 0 ? null : json.Substring(start, end - start);
+  }
   static void Main(string[] args) {
     int remaining = Int32.Parse(Environment.GetEnvironmentVariable("FIXTURE_STDERR_BYTES") ?? "0");
     string block = new string('x', 8192);
@@ -40,6 +49,29 @@ class Fixture {
     string sid = null;
     for (int i = 0; i + 1 < args.Length; i++) if (args[i] == "--session-id") sid = args[i + 1];
     if (sid == null) { Environment.ExitCode = 13; return; }
+    string mode = Environment.GetEnvironmentVariable("FIXTURE_MODE") ?? "init-first";
+    if (mode == "init-after-input") {
+      string wire = Console.ReadLine();
+      if (wire == null) return;
+      string protocol = StringField(wire, "uuid");
+      string messageSession = StringField(wire, "session_id");
+      string text = StringField(wire, "content");
+      if (protocol == null || messageSession != sid || text != "startup bound input") { Environment.ExitCode = 14; return; }
+      Console.Out.WriteLine("{\\\"type\\\":\\\"system\\\",\\\"subtype\\\":\\\"init\\\",\\\"uuid\\\":\\\"4c3d1e5f-6071-489a-bcde-f0123456789a\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"model\\\":\\\"synthetic\\\",\\\"claude_code_version\\\":\\\"fixture\\\",\\\"tools\\\":[],\\\"mcp_servers\\\":[],\\\"permissionMode\\\":\\\"dontAsk\\\"}");
+      Console.Out.WriteLine("{\\\"type\\\":\\\"user\\\",\\\"uuid\\\":\\\"" + protocol + "\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"message\\\":{\\\"role\\\":\\\"user\\\",\\\"content\\\":\\\"startup bound input\\\"},\\\"parent_tool_use_id\\\":null,\\\"isReplay\\\":true}");
+      Console.Out.WriteLine("{\\\"type\\\":\\\"result\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"subtype\\\":\\\"success\\\",\\\"is_error\\\":false,\\\"result\\\":\\\"done\\\",\\\"user_message_uuid\\\":\\\"" + protocol + "\\\"}");
+      Console.Out.Flush();
+      while (Console.ReadLine() != null) { }
+      return;
+    }
+    if (mode == "exit-after-input") { Console.ReadLine(); return; }
+    if (mode == "closed-input") {
+      Console.OpenStandardInput().Close();
+      Console.Out.WriteLine("{\\\"type\\\":\\\"plugin_install\\\",\\\"session_id\\\":\\\"" + sid + "\\\"}");
+      Console.Out.Flush();
+      System.Threading.Thread.Sleep(500);
+      return;
+    }
     Console.Out.WriteLine("{\\\"type\\\":\\\"system\\\",\\\"subtype\\\":\\\"init\\\",\\\"uuid\\\":\\\"4c3d1e5f-6071-489a-bcde-f0123456789a\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"model\\\":\\\"synthetic\\\",\\\"claude_code_version\\\":\\\"fixture\\\",\\\"tools\\\":[],\\\"mcp_servers\\\":[],\\\"permissionMode\\\":\\\"dontAsk\\\"}"); Console.Out.Flush();
     while (Console.ReadLine() != null) { }
   }
@@ -183,6 +215,121 @@ test('maps one streamed turn through exact replay, response correlation, result 
   assert.equal(events[4].isError, false);
   assert.equal(events[5].exitCode, 0);
   assert.throws(() => protocol.prepare(input(), limits.maxInputBytes), error => error.code === 'DUPLICATE_INPUT');
+});
+
+test('accepts one bound input before init and remains busy when initialization arrives', () => {
+  const protocol = createClaudeStreamProtocol(sessionId);
+  const source = input({ text: 'startup bound input' });
+  const prepared = protocol.prepare(source, limits.maxInputBytes);
+  assert.equal(protocol.phase, 'starting');
+  assert.equal(protocol.current.messageId, source.messageId);
+  assert.throws(() => protocol.prepare(input({ protocolUuid: '7f604293-a4b5-4cde-8f01-23456789abcd' }), limits.maxInputBytes),
+    error => error.code === 'BUSY');
+  assert.equal(protocol.observe(initRecord()).type, 'ready');
+  assert.equal(protocol.phase, 'busy');
+  assert.equal(protocol.observe({ type: 'user', uuid: protocolUuid, session_id: sessionId,
+    message: { role: 'user', content: 'startup bound input' }, parent_tool_use_id: null, isReplay: true }).type,
+  'input-replayed');
+  const result = protocol.observe({ type: 'result', session_id: sessionId, subtype: 'success', is_error: false,
+    result: 'done', user_message_uuid: protocolUuid });
+  assert.equal(result.messageId, source.messageId);
+  assert.equal(protocol.phase, 'ready');
+  assert.deepEqual(prepared.identity, { messageId: source.messageId, messageHash: source.messageHash,
+    protocolUuid, sessionId });
+});
+
+test('unsafe or mismatched init keeps a pending first input ambiguous', () => {
+  for (const record of [
+    initRecord({ session_id: '7f604293-a4b5-4cde-8f01-23456789abcd' }),
+    initRecord({ tools: ['Read'] }),
+  ]) {
+    const protocol = createClaudeStreamProtocol(sessionId);
+    protocol.prepare(input({ text: 'startup bound input' }), limits.maxInputBytes);
+    assert.throws(() => protocol.observe(record));
+    const events = protocol.finish({ pid: 123, generation: 'fixture-generation', reason: 'exit', exitCode: 0, signal: null,
+      startedAt: null, exitedAt: null, closedAt: null, stdoutBytes: 0, stderrBytes: 0, error: null });
+    assert.deepEqual(events.slice(0, 2).map(event => event.type), ['startup-failed', 'ambiguous-disconnect']);
+    assert.equal(events[1].protocolUuid, protocolUuid);
+  }
+});
+
+test('failed first write retains its exact identity and never permits another startup input', () => {
+  const protocol = createClaudeStreamProtocol(sessionId);
+  protocol.prepare(input({ text: 'startup bound input' }), limits.maxInputBytes);
+  const failed = protocol.writeFailure({ code: 'EARLY_EXIT' });
+  assert.equal(failed.type, 'write-failed-ambiguous');
+  assert.equal(failed.messageId, 'message-core-1');
+  assert.equal(failed.protocolUuid, protocolUuid);
+  assert.throws(() => protocol.prepare(input({ protocolUuid: '7f604293-a4b5-4cde-8f01-23456789abcd' }), limits.maxInputBytes),
+    error => error.code === 'BUSY');
+});
+
+test('owned wrapper can send the first durable input while a local peer awaits stdin before init', { skip: !canCompileLocalFixture && 'already-installed Windows Framework C# compiler unavailable' }, async t => {
+  const fixture = await localWrapperFixture(t);
+  const client = await startClaudeStream({ ...fixture, env: { ...fixture.env, FIXTURE_MODE: 'init-after-input' },
+    limits, sessionId, model: 'synthetic-model' });
+  let resolveResult;
+  const resultSeen = new Promise(resolve => { resolveResult = resolve; });
+  const observed = (async () => {
+    const events = [];
+    for await (const event of client.events) {
+      events.push(event);
+      if (event.type === 'provider-result') resolveResult(event);
+    }
+    return events;
+  })();
+  const sent = await client.send(input({ text: 'startup bound input' }));
+  assert.equal(sent.type, 'stdin-written');
+  assert.equal(sent.messageId, 'message-core-1');
+  assert.equal((await client.ready).type, 'ready');
+  const result = await resultSeen;
+  assert.equal(result.protocolUuid, protocolUuid);
+  assert.equal(result.isError, false);
+  const exit = await client.stop();
+  assert.equal(exit.exitCode, 0);
+  const events = await observed;
+  assert.deepEqual(events.map(event => event.type), ['ready', 'input-replayed', 'provider-result', 'process-exit']);
+});
+
+test('disconnect after first startup input retains the pending message as ambiguous', { skip: !canCompileLocalFixture && 'already-installed Windows Framework C# compiler unavailable' }, async t => {
+  const fixture = await localWrapperFixture(t);
+  const client = await startClaudeStream({ ...fixture, env: { ...fixture.env, FIXTURE_MODE: 'exit-after-input' },
+    limits, sessionId, model: 'synthetic-model' });
+  const observed = (async () => {
+    const events = [];
+    for await (const event of client.events) events.push(event);
+    return events;
+  })();
+  const sent = await client.send(input({ text: 'startup bound input' }));
+  assert.equal(sent.type, 'stdin-written');
+  await assert.rejects(client.ready, { code: 'STARTUP_EXIT' });
+  await client.processCompletion;
+  const events = await observed;
+  assert.ok(events.some(event => event.type === 'startup-failed'));
+  const ambiguous = events.find(event => event.type === 'ambiguous-disconnect');
+  assert.equal(ambiguous.messageId, 'message-core-1');
+  assert.equal(ambiguous.protocolUuid, protocolUuid);
+});
+
+test('a failed first startup write is reported with its bound identity', { skip: !canCompileLocalFixture && 'already-installed Windows Framework C# compiler unavailable' }, async t => {
+  const fixture = await localWrapperFixture(t);
+  const client = await startClaudeStream({ ...fixture, env: { ...fixture.env, FIXTURE_MODE: 'closed-input' },
+    limits, sessionId, model: 'synthetic-model' });
+  const iterator = client.events[Symbol.asyncIterator]();
+  const startup = await iterator.next();
+  assert.equal(startup.value.type, 'status');
+  assert.equal(startup.value.subtype, 'plugin_install');
+  try {
+    await assert.rejects(client.send(input({ text: 'x'.repeat(700_000) })), error =>
+      ['EARLY_EXIT', 'WRITE_ERROR'].includes(error.code));
+    const failed = await iterator.next();
+    assert.equal(failed.value.type, 'write-failed-ambiguous');
+    assert.equal(failed.value.messageId, 'message-core-1');
+    assert.equal(failed.value.protocolUuid, protocolUuid);
+  } finally {
+    await client.stop().catch(() => {});
+    await iterator.return();
+  }
 });
 
 test('a synthetic input echo without the fixed replay flag is not an acknowledgment', () => {

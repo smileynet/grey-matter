@@ -1,0 +1,60 @@
+{
+  "candidate": "f051384e9f2d5786e6f37d6329d36049b611c89a",
+  "base": "12008722cec33b47c02b2adf26c12b290efac116",
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179 final audit and explicit disposition",
+  "nativeObservation": {
+    "sourceCommit": "ea671807d68c34a74338fd6dde4bd2f5268d2a66",
+    "outcome": "timeout",
+    "criterion": "init before any stdin within20seconds",
+    "stdoutBytes": 0,
+    "stderrBytes": 0,
+    "cleanup": "observed root and child absent after stop; exit0 and stdio closed",
+    "inputWritten": false,
+    "modelTurnAttempted": false
+  },
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/critic243-first-input-review.md",
+      "bytes": 2366,
+      "sha256": "8cc3acc2bf8b8303cfc9250f40bde4a338d9e714ef395dbceaaeb293a69eeaf0"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t243-parent-dispatch-result.json",
+      "bytes": 884,
+      "sha256": "3830e4b499a422f9a861c20484d1ad23d3505eea22869cfc14cfc76f4f9265ab"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t243-kept-source-focused.log",
+      "bytes": 3810,
+      "sha256": "a5832edee7464118b661283ec25e88101d91a3667c5f1c08a9f6a7ad6ae3bbb0"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-init-only-native-evidence.json",
+      "bytes": 2365,
+      "sha256": "b9d44e96c7e99e50f433393efe59c429fc67eb454e811c251503b627a3e07b07"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-init-only-parent-preflight.json",
+      "bytes": 1032,
+      "sha256": "a6613fcc4f33a38548f1695af3a48968ae889316f98fe5c8be23653845312a69"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-init-only.mjs",
+      "bytes": 5186,
+      "sha256": "8c98c00987706c0fd4de2ec1a886d0e766c0cf6a803821ae9d2d2f52ea715b03"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-init-only-critic-review-8c98c00.md",
+      "bytes": 2263,
+      "sha256": "039cd0cf1a3c9e599ef591f820f9d20850205e3c5d3106e7861ff4a092ac32e4"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t236-init-only-postflight-review.md",
+      "bytes": 3476,
+      "sha256": "cf871414fb85b3a4fbf8a8e9a30de0027783cb9a6f5b0a06d6bfd57c1ed52c15"
+    }
+  ],
+  "limits": "Observed startup timeout is one bounded native initialization-only case, not proof init always requires input. Corrective source passes14 local protocol/fake-peer tests, no native model or first-input success claim. Parent native qualification remains236."
+}

@@ -184,3 +184,21 @@ notification and ten CLI queue cases without skips. The earlier finding, correct
 checks and exact-source review are retained in the [binding evidence index](evidence/session-messaging-242-20261103.json).
 These are data/lifecycle results; native receipt and teardown qualification remain
 separate work under #235–237.
+
+## First bound Claude input during startup (#243)
+
+A parent-owned initialization-only run of Claude 2.1.316 emitted no stdout or
+stderr during a 20-second wait before input. The exact observed root and child
+were absent after bounded stop; exit 0 and stdio closure were recorded separately.
+This fails that startup criterion for the recorded case. It does not prove that
+init always requires input, and no model turn was attempted.
+
+Independent review accepted corrective source
+`f051384e9f2d5786e6f37d6329d36049b611c89a`. The first actual shared-bound message
+may now enter the already-owned process during startup. Its identity remains
+active through validated init, replay and result; a second input is refused until
+the first turn ends. No dummy bootstrap or automatic retry is added. Fourteen
+local tests pass, including a fake peer that waits for stdin before emitting init.
+The [startup evidence index](evidence/session-messaging-243-20261104.json) retains
+the native timeout, independent postflight and source correction. Native first-input
+delivery remains unqualified until the parent canary under #236 completes.
