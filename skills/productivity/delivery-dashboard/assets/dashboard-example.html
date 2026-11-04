@@ -70,7 +70,7 @@ details.row .body{padding:0 0 14px}
 .count{color:var(--muted);font-size:14px;margin:0 0 10px}
 .more{margin-top:10px}
 .stack{display:flex;height:14px;border:1px solid var(--line);border-radius:99px;overflow:hidden;background:var(--bg)}
-.stack i{display:block;height:100%}.s-done{background:var(--blue2)}.s-in_progress{background:var(--cyan)}.s-ready{background:var(--ok)}.s-blocked{background:var(--bad)}.s-backlog{background:#3a4a6a}.s-cancelled{background:#667085}
+.stack i{display:block;height:100%}.s-done{background:var(--blue2)}.s-in_progress{background:var(--cyan)}.s-ready{background:var(--ok)}.s-blocked{background:#7f8fb0}.s-backlog{background:#3a4a6a}.s-cancelled{background:#667085}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted);margin:8px 0 0}
 .lanes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 .lane{border:1px solid var(--line);border-radius:12px;padding:12px;background:#0e1830}
@@ -82,8 +82,33 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:no-preference){.card,details.row{transition:border-color .15s}}
 @media (max-width:560px){.card{padding:16px}details.row .when{min-width:0}}
-#ticket-flow{margin-top:0}.flow-options>summary,.flow-readable>summary{cursor:pointer;min-height:44px;padding:8px 0}.flow-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:8px 0}.flow-controls label{display:flex;align-items:center;gap:8px;min-height:44px;max-width:100%;min-width:0}.flow-controls select{font:inherit;padding:10px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;min-width:0;max-width:100%}.flow-counts,.flow-notice{font-size:14px;color:var(--muted)}.flow-notice{border-left:3px solid var(--blue);padding:10px}.flow-scroll{max-height:820px;overflow:auto;border:1px solid var(--line);padding:16px;margin:16px 0}.flow-canvas{position:relative;width:max-content;min-width:100%;padding:12px 24px}.flow-layers{display:flex;flex-direction:column;gap:42px;position:relative;z-index:1}.flow-layer{display:grid;grid-template-columns:repeat(3,240px);gap:16px}.flow-layer h3{grid-column:1/-1;font-size:14px;margin:0;color:var(--muted)}.flow-node{font:14px/1.45 system-ui;text-align:left;white-space:normal;overflow-wrap:anywhere;background:var(--panel);color:var(--text);border:2px solid var(--line);border-radius:8px;padding:12px;min-height:110px;cursor:pointer}.flow-node strong,.flow-node span,.flow-node small{display:block}.flow-node span,.flow-node small{margin-top:7px}.flow-node small{color:var(--muted);font-size:12px}.flow-node[data-state=ready]{border-color:var(--ok)}.flow-node[data-state=in_progress]{border-color:var(--cyan)}.flow-node[data-state=backlog]{border-style:dashed}.flow-node[data-state=blocked]{border-color:var(--bad)}.flow-node[data-related=unrelated]{opacity:.55}.flow-node[data-related=before],.flow-node[data-related=after]{border-color:var(--blue)}.flow-node[aria-pressed=true]{outline:3px solid var(--ask);outline-offset:3px}.flow-links{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:visible}.flow-links path{fill:none;stroke:var(--muted);stroke-width:2}.flow-links .flow-arrow{fill:var(--muted);stroke:none}.flow-links path[data-satisfied=true]{stroke-dasharray:5 5}.flow-links path[data-related=true]{stroke:var(--blue);stroke-width:3}.flow-detail{border-left:3px solid var(--blue);padding:12px 16px;background:var(--panel);margin:16px 0}.flow-detail h3{margin:0 0 8px}.flow-detail p{margin:8px 0}.flow-readable li{margin:8px 0}@media(max-width:560px){.flow-scroll{max-height:620px;padding:10px}.flow-canvas{padding:10px 16px}}
-.flow-node[data-gate=decision],.flow-node[data-gate=evidence]{border-color:var(--ask)}
+#ticket-flow{margin-top:0}.flow-options>summary,.flow-readable>summary{cursor:pointer;min-height:44px;padding:8px 0}.flow-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:8px 0}.flow-controls label{display:flex;align-items:center;gap:8px;min-height:44px;max-width:100%;min-width:0}.flow-controls select{font:inherit;padding:10px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;min-width:0;max-width:100%}
+.flow-counts,.flow-notice{font-size:14px;color:var(--muted)}.flow-notice{border-left:3px solid var(--blue);padding:10px}
+.flow-node,.flow-pick{--c:var(--line)}
+:is(.flow-node,.flow-pick)[data-state=ready],.fl-ready{--c:var(--ok)}:is(.flow-node,.flow-pick)[data-state=in_progress],.fl-in_progress{--c:var(--cyan)}.flow-node[data-state=blocked],.fl-blocked{--c:#7f8fb0}.flow-node[data-state=backlog],.fl-backlog{--c:#56688c}.flow-node[data-state=done],.fl-done{--c:var(--blue2)}.flow-node[data-state=cancelled]{--c:#667085}.flow-node[data-gate=decision],.flow-node[data-gate=evidence],.fl-decision{--c:var(--ask)}
+.flow-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:4px 0 0}.flow-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}.flow-legend .fl-backlog{background:none;border:2px dashed var(--c)}
+.flow-brief{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;margin:14px 0}.flow-brief>div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}.flow-brief h3{margin:0 0 6px;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}.flow-brief .meta{margin:6px 0 0}
+.flow-pick{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;font:inherit;font-size:14px;color:var(--text);background:none;border:0;border-left:3px solid var(--c);border-radius:6px;padding:8px 10px;margin:4px 0;min-height:44px;cursor:pointer}.flow-pick:hover{background:var(--panel2)}.flow-pick b{color:var(--c);font-variant-numeric:tabular-nums;flex:0 0 auto}.flow-pick span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.flow-pick em{margin-left:auto;font-style:normal;color:var(--muted);font-size:12.5px;white-space:nowrap}
+.flow-chain ol{display:flex;flex-wrap:wrap;gap:6px 4px;list-style:none;margin:6px 0 0;padding:0}.flow-chain li{display:flex;align-items:center;gap:4px}.flow-chain li+li::before{content:"→";color:var(--cyan)}.flow-chain button{font:inherit;font-size:13px;font-variant-numeric:tabular-nums;color:var(--text);background:#0e1830;border:1px solid var(--cyan);border-radius:99px;padding:2px 12px;min-height:32px;cursor:pointer}.flow-chain button:hover{background:var(--panel2)}
+.flow-scroll{max-height:760px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0;background:radial-gradient(circle at 1px 1px,#1a2742 1px,transparent 0) 0 0/22px 22px,var(--bg)}
+.flow-canvas{position:relative;min-width:100%}.flow-links{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.flow-col{position:absolute;top:12px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}.flow-col small{margin-left:8px;text-transform:none;letter-spacing:0;font-weight:400}
+.flow-band{position:absolute;left:0;right:0;height:30px;display:flex;align-items:center;gap:8px;padding:0 18px;border-top:1px solid var(--line);font-size:13.5px;font-weight:600}.flow-band small{color:var(--muted);font-weight:400}
+.flow-node{position:absolute;display:flex;flex-direction:column;gap:4px;font:13px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left;color:var(--text);background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:10px;padding:8px 10px;cursor:pointer;overflow:hidden;z-index:1;transition:opacity .15s,border-color .15s,box-shadow .15s}
+.flow-node[data-state=ready],.flow-node[data-state=in_progress]{background:linear-gradient(90deg,color-mix(in srgb,var(--c) 14%,var(--panel)),var(--panel) 70%)}
+.flow-node[data-state=backlog]{border-style:dashed;border-left-style:solid;opacity:.78}.flow-node[data-state=done],.flow-node[data-state=cancelled]{opacity:.6}
+.flow-node[data-critical=true]{border-color:color-mix(in srgb,var(--cyan) 55%,var(--line));border-left-color:var(--c)}
+.flow-node:hover{border-color:var(--blue);border-left-color:var(--c)}
+.fn-top{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:12px}.fn-id{color:var(--muted);font-variant-numeric:tabular-nums}.fn-state{color:var(--c);white-space:nowrap;font-weight:600}
+.fn-title{font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.fn-foot{margin-top:auto;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fn-foot b{color:var(--text)}
+.flow-links path{fill:none;stroke:#465a80;stroke-width:1.6;transition:opacity .15s}.flow-links .flow-arrow{stroke:none}.fa-base{fill:#465a80}.fa-live{fill:var(--ok)}.fa-critical{fill:var(--cyan)}.fa-related{fill:var(--blue)}
+.flow-links path[data-live=true]{stroke:var(--ok);opacity:.85}.flow-links path[data-critical=true]{stroke:var(--cyan);stroke-width:2.4}.flow-links path[data-satisfied=true]{stroke-dasharray:4 5}.flow-links path[data-related=true]{stroke:var(--blue);stroke-width:3;opacity:1}
+.flow-canvas[data-preview] .flow-node[data-near=false]{opacity:.3}.flow-canvas[data-preview] path[data-near=false]{opacity:.1}
+.flow-canvas[data-selected] path[data-related=false]{opacity:.18}.flow-node[data-related=unrelated]{opacity:.35}.flow-node[data-related=before],.flow-node[data-related=after]{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue);border-left-color:var(--c)}.flow-node[aria-pressed=true]{outline:3px solid var(--ask);outline-offset:2px}
+.flow-detail{border-left:3px solid var(--blue);padding:12px 16px;background:var(--panel);margin:16px 0}.flow-detail h3{margin:0 0 8px}.flow-detail p{margin:8px 0}.flow-readable li{margin:8px 0}
+@media(max-width:560px){.flow-scroll{max-height:620px}}
+@media(prefers-reduced-motion:reduce){.flow-node,.flow-links path{transition:none}}
 .decision-card{margin:0 0 18px;min-width:0}
 .decision-card h3{font-size:20px;line-height:1.35;margin:0 0 8px;font-weight:650;overflow-wrap:anywhere}
 .decision-context{color:var(--muted);margin:0 0 18px}
@@ -847,13 +872,25 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     form.appendChild(el("label", {}, [completed, document.createTextNode("Include done/cancelled context")]));
     form.appendChild(el("label", {}, [deferred, document.createTextNode("Include deferred work")]));
     controls.appendChild(form); root.appendChild(controls);
-    root.appendChild(el("p", { class: "meta", text: "Swipe or scroll sideways inside the diagram to see more tickets. Arrows show ticket prerequisites. Decision and evidence gates come from ticket planning notes. Unblocked means these recorded gates are clear; machine and access eligibility remain separate. Deferred work stays deferred." }));
-    var notice = el("p", { class: "flow-notice", role: "status" }), summary = el("p", { class: "flow-counts" }), scroll = el("div", { class: "flow-scroll", tabindex: "0", role: "region", "aria-label": "Ticket dependency flow; scroll to follow branches" });
-    var canvas = el("div", { class: "flow-canvas" }), layers = el("div", { class: "flow-layers" }), svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "flow-links"); svg.setAttribute("aria-hidden", "true");
-    canvas.appendChild(svg); canvas.appendChild(layers); scroll.appendChild(canvas);
+    root.appendChild(el("p", { class: "meta", text: "Read left to right: a ticket sits one step after its last unfinished prerequisite, and lines run from a prerequisite to the work it unlocks. Green lines leave work that can start now; the cyan path is the longest remaining chain. Select a ticket to trace it. Decision and evidence gates come from ticket planning notes; machine and access eligibility remain separate. Deferred work stays deferred." }));
+    var notice = el("p", { class: "flow-notice", role: "status" }), summary = el("p", { class: "flow-counts" });
+    var legend = el("p", { class: "flow-legend", "aria-hidden": "true" });
+    [["ready", "Can start"], ["in_progress", "In progress"], ["decision", "Needs a decision or evidence"], ["blocked", "Waiting on tickets"], ["backlog", "Deferred"], ["done", "Done"]].forEach(function (s) { legend.appendChild(el("span", {}, [el("i", { class: "fl-" + s[0] }), document.createTextNode(s[1])])); });
+    var brief = el("div", { class: "flow-brief" }), scroll = el("div", { class: "flow-scroll", tabindex: "0", role: "region", "aria-label": "Ticket dependency flow; scroll to follow branches" });
+    var canvas = el("div", { class: "flow-canvas" }), svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "flow-links"); svg.setAttribute("aria-hidden", "true");
+    scroll.appendChild(canvas);
     var detail = el("div", { class: "flow-detail", "aria-live": "polite" }), readable = el("details", { class: "flow-readable" }, [el("summary", { text: "Read the visible prerequisite list" })]), list = el("ul"); readable.appendChild(list);
-    root.appendChild(notice); root.appendChild(summary); root.appendChild(scroll); root.appendChild(detail); root.appendChild(readable);
-    var model, selected = null, buttons = Object.create(null), words = { ready: "Unblocked", in_progress: "In progress", blocked: "Waiting on tickets", decision: "Decision needed", evidence: "Evidence needed", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
+    root.appendChild(notice); root.appendChild(summary); root.appendChild(legend); root.appendChild(brief); root.appendChild(scroll); root.appendChild(detail); root.appendChild(readable);
+    var model, selected = null, buttons = Object.create(null), paths = [], pos = Object.create(null), critical = Object.create(null), unlocks = Object.create(null);
+    var words = { ready: "Unblocked", in_progress: "In progress", blocked: "Waiting on tickets", decision: "Decision needed", evidence: "Evidence needed", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
+    var short = { ready: "Can start", in_progress: "In progress", blocked: "Waiting", decision: "Decision", evidence: "Evidence", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
+    var glyph = { ready: "○", in_progress: "◐", blocked: "▲", decision: "◆", evidence: "◆", backlog: "…", done: "●", cancelled: "×" };
+    var rank = { in_progress: 0, ready: 1, decision: 2, evidence: 3, blocked: 4, backlog: 5, done: 6, cancelled: 7 };
+    // Layout in px: node box, column/row gaps, outer padding, column header and lane label heights.
+    var W = 196, H = 96, GX = 48, GY = 14, PAD = 18, HEAD = 44, LANE = 34;
+    function svgEl(tag, attrs) { var n = document.createElementNS(svg.namespaceURI, tag); Object.keys(attrs).forEach(function (k) { n.setAttribute(k, attrs[k]); }); return n; }
+    function frontierAt(t) { var f = snap.frontier || [], i = f.indexOf(t.id); return i < 0 ? f.length : i; }
+    function byState(a, b) { return rank[flowState(a, model.index)] - rank[flowState(b, model.index)] || frontierAt(a) - frontierAt(b) || byId(a, b); }
     function choose(id) {
       selected = id; var t = model.index[id], r = model.relations(id), deps = t.blocked_by || [];
       detail.textContent = ""; detail.appendChild(el("h3", { text: id + " · " + t.title }));
@@ -867,19 +904,54 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       detail.appendChild(el("p", { text: "No dependency path to: " + (model.visible.filter(function (t) { return t.id !== id && r.before.indexOf(t.id) < 0 && r.after.indexOf(t.id) < 0; }).map(function (t) { return t.id; }).join(", ") || "none in this view") + ". Shared files and external access can still constrain parallel work." }));
       detail.appendChild(el("a", { href: "#t-" + id, text: "Open ticket details" }));
       Object.keys(buttons).forEach(function (key) { var b = buttons[key]; b.setAttribute("aria-pressed", String(key === id)); b.dataset.related = key === id ? "selected" : r.before.indexOf(key) >= 0 ? "before" : r.after.indexOf(key) >= 0 ? "after" : "unrelated"; });
-      draw();
+      canvas.dataset.selected = "true"; drawEdges();
     }
-    function draw() {
-      svg.textContent = ""; var box = canvas.getBoundingClientRect(); if (!box.width || !box.height) return;
-      svg.setAttribute("width", String(canvas.scrollWidth)); svg.setAttribute("height", String(canvas.scrollHeight));
-      var defs = document.createElementNS(svg.namespaceURI, "defs"), marker = document.createElementNS(svg.namespaceURI, "marker"), arrow = document.createElementNS(svg.namespaceURI, "path");
-      marker.id = "gm-flow-arrow"; marker.setAttribute("viewBox", "0 0 10 10"); marker.setAttribute("refX", "10"); marker.setAttribute("refY", "5"); marker.setAttribute("markerWidth", "7"); marker.setAttribute("markerHeight", "7"); marker.setAttribute("orient", "auto"); arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 z"); arrow.setAttribute("class", "flow-arrow"); marker.appendChild(arrow); defs.appendChild(marker); svg.appendChild(defs);
-      var related = selected ? model.relations(selected) : null;
-      model.edges.forEach(function (edge, edgeIndex) {
-        var a = buttons[edge.from].getBoundingClientRect(), b = buttons[edge.to].getBoundingClientRect(), x1 = a.left + a.width / 2 - box.left, y1 = a.bottom - box.top, x2 = b.left + b.width / 2 - box.left, y2 = b.top - box.top, path = document.createElementNS(svg.namespaceURI, "path");
-        var lane = 6 + (edgeIndex % 3) * 5;
-        path.setAttribute("d", "M" + x1 + "," + y1 + " L" + x1 + "," + (y1 + 8) + " L" + lane + "," + (y1 + 8) + " L" + lane + "," + (y2 - 8) + " L" + x2 + "," + (y2 - 8) + " L" + x2 + "," + y2); path.setAttribute("marker-end", "url(#gm-flow-arrow)"); path.dataset.from = edge.from; path.dataset.to = edge.to; path.dataset.satisfied = String(edge.satisfied); path.dataset.related = String(Boolean(related && ((related.before.indexOf(edge.from) >= 0 && (related.before.indexOf(edge.to) >= 0 || edge.to === selected)) || ((edge.from === selected || related.after.indexOf(edge.from) >= 0) && related.after.indexOf(edge.to) >= 0)))); svg.appendChild(path);
+    function reveal(id) { var b = buttons[id]; if (!b) return; choose(id); b.scrollIntoView({ block: "nearest", inline: "center" }); b.focus({ preventScroll: true }); }
+    function preview(id) {
+      var near = Object.create(null);
+      if (id) { var r = model.relations(id); near[id] = true; r.before.concat(r.after).forEach(function (k) { near[k] = true; }); canvas.dataset.preview = "true"; } else delete canvas.dataset.preview;
+      Object.keys(buttons).forEach(function (key) { buttons[key].dataset.near = String(!id || Boolean(near[key])); });
+      paths.forEach(function (p) { p.dataset.near = String(!id || Boolean(near[p.dataset.from] && near[p.dataset.to])); });
+    }
+    function drawEdges() {
+      svg.textContent = ""; paths = [];
+      var defs = svgEl("defs", {});
+      ["base", "live", "critical", "related"].forEach(function (kind) {
+        var marker = svgEl("marker", { id: "gm-flow-arrow-" + kind, viewBox: "0 0 10 10", refX: "9", refY: "5", markerWidth: "7", markerHeight: "7", orient: "auto" });
+        marker.appendChild(svgEl("path", { d: "M 0 0 L 10 5 L 0 10 z", class: "flow-arrow fa-" + kind })); defs.appendChild(marker);
       });
+      svg.appendChild(defs);
+      var related = selected ? model.relations(selected) : null;
+      model.edges.forEach(function (edge) {
+        var a = pos[edge.from], b = pos[edge.to], x1 = a.x + W, y1 = a.y + H / 2, x2 = b.x - 2, y2 = b.y + H / 2, c = Math.max(28, (x2 - x1) / 2);
+        var path = svgEl("path", { d: "M" + x1 + "," + y1 + " C" + (x1 + c) + "," + y1 + " " + (x2 - c) + "," + y2 + " " + x2 + "," + y2 });
+        var isRelated = Boolean(related && ((related.before.indexOf(edge.from) >= 0 && (related.before.indexOf(edge.to) >= 0 || edge.to === selected)) || ((edge.from === selected || related.after.indexOf(edge.from) >= 0) && related.after.indexOf(edge.to) >= 0)));
+        var source = flowState(model.index[edge.from], model.index), live = !edge.satisfied && (source === "ready" || source === "in_progress"), onChain = Boolean(critical[edge.from] && critical[edge.to]);
+        path.dataset.from = edge.from; path.dataset.to = edge.to; path.dataset.satisfied = String(edge.satisfied); path.dataset.related = String(isRelated);
+        path.dataset.live = String(live); path.dataset.critical = String(onChain);
+        path.setAttribute("marker-end", "url(#gm-flow-arrow-" + (isRelated ? "related" : onChain ? "critical" : live ? "live" : "base") + ")");
+        svg.appendChild(path); paths.push(path);
+      });
+    }
+    function renderBrief(chain) {
+      brief.textContent = "";
+      var starts = model.visible.filter(function (t) { var s = flowState(t, model.index); return s === "in_progress" || s === "ready"; });
+      starts.sort(function (a, b) { return (flowState(a, model.index) === "in_progress" ? 0 : 1) - (flowState(b, model.index) === "in_progress" ? 0 : 1) || unlocks[b.id] - unlocks[a.id] || frontierAt(a) - frontierAt(b) || byId(a, b); });
+      var next = el("div", { class: "flow-start" }, [el("h3", { text: "Start here" })]);
+      if (!starts.length) next.appendChild(el("p", { class: "meta", text: "Nothing in this view can start yet; follow the chain to its first unfinished prerequisite." }));
+      starts.slice(0, 4).forEach(function (t) {
+        var s = flowState(t, model.index), pick = el("button", { type: "button", class: "flow-pick", "data-state": s }, [el("b", { text: t.id }), el("span", { text: t.title }), el("em", { text: s === "in_progress" ? "in progress" : unlocks[t.id] ? "unlocks " + unlocks[t.id] : "unlocks none" })]);
+        pick.addEventListener("click", function () { reveal(t.id); }); next.appendChild(pick);
+      });
+      if (starts.length > 4) next.appendChild(el("p", { class: "meta", text: "+" + (starts.length - 4) + " more can start" }));
+      var path = el("div", { class: "flow-chain" }, [el("h3", { text: chain.length > 1 ? "Longest remaining chain · " + chain.length + " steps" : "Longest remaining chain" })]);
+      if (chain.length > 1) {
+        var ol = el("ol");
+        chain.forEach(function (id) { var b = el("button", { type: "button", title: model.index[id].title, text: id }); b.addEventListener("click", function () { reveal(id); }); ol.appendChild(el("li", {}, [b])); });
+        path.appendChild(ol);
+        path.appendChild(el("p", { class: "meta", text: "At least " + chain.length + " tickets must finish one after another; everything else can run alongside." }));
+      } else path.appendChild(el("p", { class: "meta", text: "No chained work: every remaining ticket in this view can run in parallel." }));
+      brief.appendChild(next); brief.appendChild(path);
     }
     function render() {
       try { model = ticketFlow(snap, { scope: scope.value, scopes: settings.scopes, completed: completed.checked, deferred: deferred.checked }); }
@@ -888,28 +960,67 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       notice.textContent = model.fallback ? "That stream has no visible remaining work; showing all remaining work." : model.elsewhere ? model.elsewhere + " unfinished tickets are outside this view. Choose All remaining work to see them." : "";
       notice.hidden = !notice.textContent;
       summary.textContent = ["ready", "in_progress", "blocked", "decision", "evidence", "backlog", "done", "cancelled"].map(function (state) { return model.readiness[state] + " " + words[state].toLowerCase(); }).join(" · ") + " · " + model.visible.length + " shown. Select a ticket to inspect its dependency path.";
-      layers.textContent = ""; list.textContent = ""; buttons = Object.create(null);
-      var columns = arrangement.value === "workstreams" ? model.groups : model.layers.map(function (items, depth) { return { label: depth ? "Dependency depth " + depth : "No visible ticket prerequisites", tickets: items }; });
-      columns.forEach(function (column) {
-        var layer = el("div", { class: "flow-layer" }, [el("h3", { text: column.label + " · " + column.tickets.length })]);
-        var items = column.tickets;
-        items.forEach(function (t) {
-          var state = ticketState(t, model.index), readiness = flowState(t, model.index), gate = planningGate(t), button = el("button", { type: "button", class: "flow-node", "aria-pressed": "false" }, [el("strong", { text: t.id + " · " + t.title }), el("span", { text: SGLYPH[state] + " " + words[readiness] })]); button.dataset.ticket = t.id; button.dataset.state = state;
-          if (gate) { button.dataset.gate = gate.kind; button.appendChild(el("small", { class: "flow-notice", text: words[gate.kind] + ": " + gate.reason })); }
-          var deps = t.blocked_by || [], done = deps.filter(function (id) { return model.index[id] && model.index[id].status === "done"; }), waiting = waitingOn(t, model.index);
-          if (waiting.length) button.appendChild(el("small", { text: "Needs: " + waiting.join(", ") }));
-          if (done.length) button.appendChild(el("small", { text: "Completed: " + done.join(", ") }));
-          if (!deps.length) button.appendChild(el("small", { text: "No ticket prerequisites" }));
-          button.addEventListener("click", function () { choose(t.id); }); buttons[t.id] = button; layer.appendChild(button);
-          list.appendChild(el("li", { text: t.id + " · " + t.title + " — " + (deps.length ? "prerequisites " + deps.join(", ") : "no prerequisites") + " · " + words[readiness] + (gate ? " · " + words[gate.kind] + ": " + gate.reason : "") }));
-        }); layers.appendChild(layer);
+      canvas.textContent = ""; list.textContent = ""; buttons = Object.create(null); pos = Object.create(null); critical = Object.create(null); unlocks = Object.create(null);
+      delete canvas.dataset.selected; delete canvas.dataset.preview;
+      var idx = model.index, inView = Object.create(null), depthOf = Object.create(null);
+      model.visible.forEach(function (t) { inView[t.id] = true; unlocks[t.id] = model.relations(t.id).after.filter(function (k) { return idx[k] && !terminal(idx[k]); }).length; });
+      model.layers.forEach(function (items, d) { items.forEach(function (t) { depthOf[t.id] = d; }); });
+      function prereqs(id) { return (idx[id].blocked_by || []).filter(function (p) { return inView[p]; }); }
+      var longest = Object.create(null), via = Object.create(null), end = null;
+      function reach(id) {
+        if (longest[id] !== undefined) return longest[id];
+        if (terminal(idx[id])) return (longest[id] = 0);
+        var best = 0; via[id] = null;
+        prereqs(id).forEach(function (p) { var l = reach(p); if (l > best) { best = l; via[id] = p; } });
+        return (longest[id] = best + 1);
+      }
+      model.visible.forEach(function (t) { if (reach(t.id) > (end ? longest[end] : 0)) end = t.id; });
+      var chain = []; for (var at = end; at; at = via[at]) chain.unshift(at);
+      if (chain.length > 1) chain.forEach(function (id) { critical[id] = true; });
+      renderBrief(chain);
+      if (!model.visible.length) { canvas.style.width = ""; canvas.style.height = ""; canvas.appendChild(el("p", { class: "none", text: "No tickets in this view." })); detail.textContent = ""; return; }
+      var columns = Math.max(1, model.layers.length), byLane = arrangement.value === "workstreams", lanes = byLane ? model.groups : [{ label: null, tickets: model.visible }], y = HEAD;
+      lanes.forEach(function (lane, laneIndex) {
+        if (byLane) { var band = el("div", { class: "flow-band" }, [el("span", { text: lane.label }), el("small", { text: lane.tickets.length + " ticket" + (lane.tickets.length === 1 ? "" : "s") })]); band.style.top = y + "px"; if (laneIndex % 2) band.dataset.alt = "true"; canvas.appendChild(band); y += LANE; }
+        var start = y, bottom = y, byColumn = [];
+        lane.tickets.forEach(function (t) { var d = depthOf[t.id]; (byColumn[d] = byColumn[d] || []).push(t); });
+        for (var d = 0; d < columns; d++) {
+          var items = byColumn[d] || [], want = Object.create(null), cursor = start;
+          // Pull each ticket level with the average of its already-placed prerequisites so lines stay short and flat.
+          items.forEach(function (t) { var ys = prereqs(t.id).filter(function (p) { return pos[p]; }).map(function (p) { return pos[p].y; }); want[t.id] = ys.length ? ys.reduce(function (s, v) { return s + v; }, 0) / ys.length : Infinity; });
+          items.sort(function (a, b) { return want[a.id] - want[b.id] || byState(a, b); });
+          items.forEach(function (t) { var top = Math.max(cursor, isFinite(want[t.id]) ? want[t.id] : cursor); pos[t.id] = { x: PAD + d * (W + GX), y: top }; cursor = top + H + GY; bottom = Math.max(bottom, cursor); });
+        }
+        y = bottom + (byLane ? 10 : 0);
       });
+      var width = PAD * 2 + columns * (W + GX) - GX, height = y - GY + PAD;
+      canvas.style.width = width + "px"; canvas.style.height = height + "px"; svg.setAttribute("width", String(width)); svg.setAttribute("height", String(height));
+      canvas.appendChild(svg);
+      for (var c = 0; c < columns; c++) {
+        var count = model.layers[c] ? model.layers[c].length : 0, head = el("div", { class: "flow-col" }, [document.createTextNode("Step " + (c + 1)), el("small", { text: c ? count + " ticket" + (count === 1 ? "" : "s") : "no prerequisites in view" })]);
+        head.style.left = (PAD + c * (W + GX)) + "px"; head.style.width = W + "px"; canvas.appendChild(head);
+      }
+      model.visible.slice().sort(function (a, b) { return pos[a.id].x - pos[b.id].x || pos[a.id].y - pos[b.id].y; }).forEach(function (t) {
+        var state = ticketState(t, idx), readiness = flowState(t, idx), gate = planningGate(t), deps = t.blocked_by || [], waiting = waitingOn(t, idx), p = pos[t.id];
+        var foot = el("small", { class: "fn-foot" });
+        if (unlocks[t.id]) { foot.appendChild(document.createTextNode("Unlocks ")); foot.appendChild(el("b", { text: String(unlocks[t.id]) })); foot.appendChild(document.createTextNode(" · ")); }
+        foot.appendChild(document.createTextNode(waiting.length ? "Needs " + waiting.join(", ") : deps.length ? "Prerequisites done" : "No prerequisites"));
+        var button = el("button", { type: "button", class: "flow-node", "aria-pressed": "false", title: t.title, "aria-label": t.id + " · " + t.title + ". " + words[readiness] + (waiting.length ? "; needs " + waiting.join(", ") : "") + (unlocks[t.id] ? "; unlocks " + unlocks[t.id] : "") + (critical[t.id] ? "; on the longest remaining chain" : "") }, [
+          el("span", { class: "fn-top" }, [el("b", { class: "fn-id", text: t.id }), el("span", { class: "fn-state", text: glyph[readiness] + " " + short[readiness] })]),
+          el("strong", { class: "fn-title", text: t.title }), foot]);
+        button.dataset.ticket = t.id; button.dataset.state = state; if (gate) button.dataset.gate = gate.kind; if (critical[t.id]) button.dataset.critical = "true";
+        button.style.left = p.x + "px"; button.style.top = p.y + "px"; button.style.width = W + "px"; button.style.height = H + "px";
+        button.addEventListener("click", function () { choose(t.id); });
+        button.addEventListener("mouseenter", function () { preview(t.id); }); button.addEventListener("mouseleave", function () { preview(null); });
+        button.addEventListener("focus", function () { preview(t.id); }); button.addEventListener("blur", function () { preview(null); });
+        buttons[t.id] = button; canvas.appendChild(button);
+        list.appendChild(el("li", { text: t.id + " · " + t.title + " — " + (deps.length ? "prerequisites " + deps.join(", ") : "no prerequisites") + " · " + words[readiness] + (gate ? " · " + words[gate.kind] + ": " + gate.reason : "") }));
+      });
+      drawEdges();
       if (selected && buttons[selected]) choose(selected); else { selected = null; detail.textContent = "Select a ticket above. Its prerequisites and downstream work will be highlighted."; }
-      if (!model.visible.length) layers.appendChild(el("p", { class: "none", text: "No tickets in this view." }));
-      requestAnimationFrame(draw);
     }
     [scope, completed, deferred, arrangement].forEach(function (control) { control.addEventListener("change", render); });
-    new ResizeObserver(draw).observe(canvas); render();
+    render();
   }
 
   function ticketRow(t) {

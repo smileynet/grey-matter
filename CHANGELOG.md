@@ -6,6 +6,9 @@ aims to follow Semantic Versioning (pre-1.0: breaking changes bump the minor).
 
 ## [Unreleased]
 
+### Changed
+- The `delivery-dashboard` Plan tab's ticket flow now reads left to right as steps, with one line from each prerequisite to the work it unlocks, instead of wrapped rows joined by a shared rail. Cards are compact and show what each ticket unlocks; waiting work is slate rather than red. Above the graph, "Start here" ranks what can start by how much it unlocks, and "Longest remaining chain" names the critical path, which is also highlighted in the graph. Work streams become horizontal lanes. Existing dashboards pick this up when their renderer is refreshed from the template.
+
 ### Removed
 - The model-tier spike harnesses for tickets 168-171 (13 scripts, their fixtures and four Windows-only gates) and the `windows-only.mjs` stopgap. The findings stay in `docs/agents/research/`; `model-tier-spikes-rerun.md` pins the last commit with the code and says how to rerun each spike.
 - The commit and push gates. The Claude plugin no longer installs a push hook (it ran in every project that installed grey-matter), and the Git pre-commit and pre-push hooks and their installer are gone. Proposal 18 rebuilds verification as three stages: pre-push, pre-merge and pre-release.

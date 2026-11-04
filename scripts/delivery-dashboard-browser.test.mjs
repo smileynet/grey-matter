@@ -43,6 +43,14 @@ for(const width of [1280,390]){
    await page.waitForFunction(()=>document.querySelectorAll('.flow-links path[data-from]').length===2);
    assert.deepEqual((await page.locator('.flow-links path[data-from]').evaluateAll(nodes=>nodes.map(n=>n.dataset.from+'>'+n.dataset.to))).sort(),['active>finish','start>active']);
    assert.match(await page.locator('.flow-counts').innerText(),/2 unblocked · 1 in progress · 1 waiting on tickets · 0 decision needed · 0 evidence needed · 1 deferred · 0 done · 0 cancelled · 5 shown/);
+   assert.deepEqual(await page.locator('.flow-chain button').allInnerTexts(),['start','active','finish']);
+   assert.deepEqual((await page.locator('.flow-node[data-critical=true]').evaluateAll(ns=>ns.map(n=>n.dataset.ticket))).sort(),['active','finish','start']);
+   assert.deepEqual(await page.locator('.flow-start .flow-pick b').allInnerTexts(),['active','start','parallel']);
+   assert.match(await page.locator('.flow-pick[data-state=ready]').first().innerText(),/unlocks 2/);
+   const lefts=await page.evaluate(()=>['start','active','finish'].map(id=>document.querySelector('.flow-node[data-ticket='+id+']').offsetLeft));
+   assert.ok(lefts[0]<lefts[1]&&lefts[1]<lefts[2],'each step sits in a later column: '+lefts);
+   assert.equal(await page.locator('.flow-links path[data-critical=true]').count(),2);
+   await page.locator('.flow-chain button',{hasText:'finish'}).click();assert.equal(await page.locator('.flow-node[data-ticket=finish]').getAttribute('aria-pressed'),'true');
    const start=page.locator('.flow-node[data-ticket=start]');await start.focus();await page.keyboard.press('Enter');
    assert.equal(await start.getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.flow-node[data-ticket=finish]').getAttribute('data-related'),'after');assert.equal(await page.locator('.flow-node[data-ticket=parallel]').getAttribute('data-related'),'unrelated');
    assert.match(await page.locator('.flow-detail').innerText(),/base \(done\)/);assert.equal(await page.locator('.flow-links path[data-related=true]').count(),2);
