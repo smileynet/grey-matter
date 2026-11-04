@@ -1,7 +1,7 @@
 ---
 id: "235"
 title: "Qualify Codex queue and busy existing-agent handoffs"
-status: open
+status: in_progress
 blocked_by: ["231", "233", "234"]
 priority: high
 validation_criteria:
