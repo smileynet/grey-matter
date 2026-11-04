@@ -19,10 +19,16 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 
 ### kiro-cli (primary)
 
-- Binary `kiro-cli`, probed 2.31.0. Skills exposed via the Skill tool.
+- Binary `kiro-cli`; `kiro-cli --version` reported 2.37.1 on this Windows host on
+  2026-11-04. The tracked manifest records 2.37.0 from 2026-11-01; the installed version
+  has advanced since that baseline. Skills are exposed via the Skill tool. For flags, use
+  [the local CLI reference](./harness-surfaces/kiro.md); its full grammar remains at 2.37.0 and
+  has not been refreshed against 2.37.1.
 - **User root**: `~/.kiro/skills/`. **Install**: `node scripts/deploy.mjs` (it is
   in the harness table) or `--root ~/.kiro/skills`.
-- **Test (non-interactive)**: `kiro-cli chat --no-interactive --trust-all-tools "<prompt>"`.
+- **Test (non-interactive)**: `kiro-cli chat --no-interactive "<prompt>"`, with configured
+  permissions and no auto-approved tools; a probe needing approval may not complete headlessly.
+  Qualification in this refresh ran `kiro-cli chat --help` only; no model session was started.
 - **Invocation filter**: consistent with honoring `disable-model-invocation` (not cleanly
   isolated; see codex for the clean case).
 - **Agent-config gotchas** (`~/.kiro/agents/*.json`): `tools` must list `@builtin` and every
@@ -58,22 +64,21 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 
 
 - Binary `codex`; `codex --version` reported `codex-cli 0.166.0` on this Windows host on
-  2026-11-02. `--help` and `exec --help` confirm `-m/--model`, `exec` and its JSON mode.
+  2026-11-04. The PATH executable resolves to the Bun installation at `~/.bun/bin/codex.exe`.
+  `--help` and `exec --help` confirm `-m/--model`, `exec` and its JSON mode.
   Auto-scans its root. Uses the `agents/openai.yaml` sidecar for invocation policy.
 - **User root**: `~/.codex/skills/`. **Install**: default set, or `--root ~/.codex/skills`.
-- **Windows launch and Bun install pitfall.** Node's `spawnSync` does not launch a PATH
-  `.cmd` shim directly. The critic probe resolves the `codex` application with Windows
-  PowerShell, then passes its argv as JSON data for array invocation; it does not construct
-  PowerShell source from argument text. A `.cmd` is still parsed by `cmd.exe`, so the probe
-  first accepts only model IDs matching `[A-Za-z0-9][A-Za-z0-9._/-]*` and rejects invalid IDs
-  before any launcher call. This supports the Bun global `.cmd` launcher without copying a
-  `codex.exe` that goes stale on upgrade. In the observed Bun 1.3.12 link failure,
-  `codex.bunx` was left empty and a copied native executable was only a temporary workaround.
-  Check `codex --version` after repairing/reinstalling the global package; do not keep the
-  copied binary as the install.
-- **Test**: `codex exec --dangerously-bypass-approvals-and-sandbox -C <dir> "<prompt>"`
-  (needs the bypass or it hangs on approval). For direct Windows process launch of a `.cmd`
-  Codex shim, use the PowerShell application path exercised by `probe-critic-model.mjs`.
+- **Windows launch.** The current PATH command resolved to Bun's `~/.bun/bin/codex.exe`;
+  `codex --version` returned 0.166.0. The manifest's first candidate is the vendored package
+  binary, so the path differs while the version agrees. Node's `spawnSync` does not launch a
+  PATH `.cmd` shim directly. The critic probe resolves the `codex` application with Windows
+  PowerShell, then passes argv as JSON data for array invocation; it does not construct
+  PowerShell source from argument text. It accepts only model IDs matching
+  `[A-Za-z0-9][A-Za-z0-9._/-]*` before launcher invocation.
+- **Test**: `codex exec --sandbox read-only -C <dir> "<prompt>"`. Qualification in this
+  refresh ran `codex exec --help` only; no model session was started. For direct Windows
+  process launch of a `.cmd` Codex shim, use the PowerShell application path exercised by
+  `probe-critic-model.mjs`.
 - **Invocation filter**: **honored, cleanly isolated**, a skill with
   `policy.allow_implicit_invocation: false` is absent from the model's catalog.
 - **Shell** (probed live 2026-10-26 in the Codex app; source read on 0.147): the account's
@@ -89,12 +94,15 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 
 ### Claude Code (ancillary)
 
-- Binary `claude`, probed 2.1.303. Auto-discovers its root; also `--plugin-dir` + the
+- Binary `claude.exe`; `claude.exe --version` reported 2.1.316 on this Windows host on
+  2026-11-04. Bash examples use `claude.exe` because the bare `claude` wrapper requires zsh.
+  Auto-discovers its root; also `--plugin-dir` + the
   `/skill-name` slash command.
 - **User root**: `~/.claude/skills/`. **Project**: `.claude/skills/`, `.agents/skills/`.
   **Install**: default set, or `--root ~/.claude/skills`, or `--project`.
-- **Test**: `claude -p "<prompt>" --allowedTools Read` (a plain `-p` works;
-  `--plugin-dir` + piped stdin can hang, use a direct `-p` prompt).
+- **Test**: `claude.exe -p "<prompt>" --allowedTools Read`. Qualification in this refresh ran
+  `claude.exe --help` only; no model session was started. `--plugin-dir` with piped stdin can
+  hang, so use a direct `-p` prompt.
 - Confirmed references/ load on demand; install is flat (bucket nesting is repo-only).
 - **Bash tool shell.** The Bash tool runs the login shell (zsh on macOS), not bash, with
   the aliases, functions and options sourced from `~/.zshrc` applied to every command
@@ -118,9 +126,9 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   (`/grey-matter:code-review`, `/tkt:tkt-core`), so they no longer shadow Claude's bundled
   `/code-review`. Using both install paths would list each skill twice, so `deploy.mjs`
   skips Claude-read roots while the plugin is installed (`--allow-dual` overrides).
-  **Test locally**: `claude --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`
+  **Test locally**: `claude.exe --plugin-dir ../tkt --plugin-dir . plugin details grey-matter`
   lists the components without a model call.
-- **Local source verification** (CLI 2.1.310): `claude plugin list --json` reports
+- **Local source verification** (CLI 2.1.310): `claude.exe plugin list --json` reports
   `readFromFolder` and `folderVersion` for enabled directory-marketplace plugins.
   Default deploy verifies this checkout/version once per pack before pruning copies.
   Audit reads that active folder; the old `installPath` cache can remain stale.
@@ -129,9 +137,11 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 
 ### agy (ancillary, Google Antigravity CLI)
 
-- Binary `agy`. `--print` is non-interactive; `--disable-slash-commands` covers "skill
-  expansion".
-- **Global install is PLUGIN-driven, not a bare-dir scan.** On the probed **agy 1.1.14**,
+- The last recorded version is 1.4.12 (`versions.json`, 2026-11-01); it was not re-probed
+  in this refresh because Agy execution is on hold. Prior behavior below is version-labeled
+  evidence, not a claim that the installed CLI was checked today. `--print` is non-interactive;
+  `--disable-slash-commands` covers "skill expansion" in the recorded reference.
+- **Prior global-install probe (agy 1.1.14):** skill discovery was PLUGIN-driven, not a bare-dir scan.
   `agy` surfaces skills only from plugins registered in `~/.gemini/config/plugins/` (each
   has a top-level `plugin.json` + a `skills/` subdir of SKILL.md dirs). Copying skill dirs
   into `~/.gemini/antigravity-cli/skills/` or a project `.agents/skills/` did **nothing**
@@ -144,16 +154,16 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   `agy plugin list --json` (shows `grey-matter` + its skill count) or by asking agy to
   list its skills. `sync` already runs this deployment; do not deploy a second time.
 - **Manifest and resources**: the [vendor schema](https://antigravity.google/schemas/v1/plugin.json)
-  supports extra skill roots, but agy 1.4.5 includes nested directory names in command
-  namespaces. Engine 1.3.1 keeps flat `skills/<name>` directories and projects Markdown
+  supports extra skill roots, but the prior agy 1.4.5 probe includes nested directory names in command
+  namespaces. The Engine 1.3.1 used in that probe keeps flat `skills/<name>` directories and projects Markdown
   resource links to their packaged locations, including transitive linked documents.
   Missing or escaping targets fail before output replacement. Isolated native installs
   verify 44 grey-matter and four tkt skills with `plugin:skill` names. Candidate tests
   also cover runtime commands and dynamic resources. See the [source audit](research/agy-plugin-conformance.md).
-- **Test**: `agy --dangerously-skip-permissions --print "<prompt>"` from any dir (global
-  once installed). Gotcha: `-p` grabs the next token as its prompt, put flags first and
-  the prompt last, or use `-p='...'`.
-- **Invocation policy (agy 1.4.5)**: `/skills` lists human-only skills with
+- **Test**: no current test command was qualified in this refresh. The previous example used
+  a permission bypass; it is withdrawn. Revisit after the Agy execution hold is lifted, using
+  the permission controls supported by the then-installed version.
+- **Invocation policy (prior agy 1.4.5 probe)**: `/skills` lists human-only skills with
   `model_invocable: false`. Their metadata is excluded from model context, while explicit
   `/grey-matter:<skill>` expands the body. A loopback capture and removed-policy control
   verify this behavior; the published frontmatter reference still omits the field.
@@ -173,11 +183,14 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 
 ### Crush (ancillary, Charm)
 
-- Binary `crush`. Native skills, **no config needed**. Default roots: `.agents/skills`,
+- Binary `crush`; `crush --version` reported v0.93.1 on this Windows host on 2026-11-04,
+  matching `versions.json` (0.93.1 recorded 2026-11-01). Native skills, **no config needed**.
+  Default roots: `.agents/skills`,
   `.crush/skills`, `.claude/skills`, `.cursor/skills`.
 - **Project root**: `.agents/skills/` (confirmed live). **Install**: `--project`.
-- **Test**: `crush run --cwd <dir> --quiet "<prompt>"`. Gotcha: `--yolo` is rejected under
-  `run` in the probed build; read-only prompts run without it.
+- **Test**: `crush run --cwd <dir> --quiet "<prompt>"`. Qualification in this refresh ran
+  `crush run --help` only; no model session was started. This help omits `--yolo`, and an earlier
+  invocation rejected it under `run`; ordinary permissions apply.
 - **Shell**: an embedded POSIX/bash-style interpreter (`mvdan.cc/sh`,
   [source](https://github.com/charmbracelet/crush/blob/main/internal/shell/run.go)), not the
   login shell, and no rc files: the zsh traps don't apply.
@@ -213,8 +226,8 @@ not deployment gaps. Its deterministic fake-CLI tests remain scoped regression c
 
 | Harness | Ceiling | Pin with | Effort | Model of record | Needs |
 | --- | --- | --- | --- | --- | --- |
-| Claude Code | `opus` (Claude Opus 5.5) | Subagent: the `Agent` tool's `model` parameter. CLI: `--model opus` and `--agents` JSON with `model:` | `effort` parameter or `--effort high` (Opus defaults to `medium`) | In-session: the subagent transcript's `model` and `effort`. CLI: `modelUsage` in `--output-format json` | Logged in (`claude auth login`) |
-| Codex | `gpt-6.1-sol` | `codex exec -m gpt-6.1-sol -c model_reasoning_effort=high -s read-only` with the whole packet in the prompt (default); `--dangerously-bypass-approvals-and-sandbox` instead of `-s read-only` only when the critic must read files or use tools. Or a `~/.codex/agents/*.toml` file with `model` and `model_reasoning_effort` | `high` | The rollout's `turn_context` (`model`, `effort`); not written with `--ephemeral`. A spawned agent has its own rollout | Logged in; model availability depends on plan, client and workspace |
+| Claude Code | `opus` (Claude Opus 5.5) | Subagent: the `Agent` tool's `model` parameter. CLI: `--model opus` and `--agents` JSON with `model:` | `effort` parameter or `--effort high` (Opus defaults to `medium`) | In-session: the subagent transcript's `model` and `effort`. CLI: `modelUsage` in `--output-format json` | Logged in (`claude.exe auth login`) |
+| Codex | `gpt-6.1-sol` | `codex exec -m gpt-6.1-sol -c model_reasoning_effort=high -s read-only` with the whole packet in the prompt, or a `~/.codex/agents/*.toml` file with `model` and `model_reasoning_effort` | `high` | The rollout's `turn_context` (`model`, `effort`); not written with `--ephemeral`. A spawned agent has its own rollout | Logged in; model availability depends on plan, client and workspace |
 | Kiro CLI | Strongest Claude in `--list-models` (Opus 4.5 on 2.16.0) | `--model <id>` on a top-level `kiro-cli chat --no-interactive` call. Subagents cannot take a model | `--effort high` | None. Record "requested, unverified" | Logged in |
 | opencode | `zai-coding-plan/glm-5.3` (owner's z.ai subscription) | `-m provider/model --variant high`, or `model:` in an agent file; a `-m` flag outranks the file | `--variant` | `opencode export <sessionID>`: `providerID`, `modelID`, `variant` per message; a subagent's model in the `task` tool metadata | A provider with a live key |
 
@@ -240,16 +253,11 @@ Rules, with the evidence for each in the spike results:
 - **A missing model fails loudly everywhere tested.** Kiro lists the available models; Claude Code
   and Codex name the model; opencode says only "Unexpected server error".
 - **Read-only.** Use the harness's own restriction (Claude Code `--tools Read,Grep,Glob`, an
-  opencode agent with write, edit and bash off and `permission.edit: deny`, Kiro `--trust-tools=fs_read`).
-  **Codex (owner's rule, 2026-10-27):** default to `-s read-only` with the whole packet in the prompt;
-  otherwise prefer no sandbox (`--dangerously-bypass-approvals-and-sandbox`). `-s read-only` was
-  enforced on randomserver in forced attempts: a patch was rejected by policy ("writing is blocked
-  by read-only sandbox") and a shell write failed because bubblewrap cannot start there (Ubuntu
-  24.04 blocks unprivileged user namespaces; "RTM_NEWADDR: Operation not permitted"). Shell
-  commands never work under the sandbox here, so a critic that must read a file needs the bypass
-  flag. With the bypass flag nothing enforces read-only (the patch tool wrote outside the repo):
-  put the read-only instruction first, run from a clean tree, check `git status --porcelain` after
-  the call, and treat a changed tree as a failed review. Details and the other options tested
+  opencode agent with write, edit and bash off and `permission.edit: deny`, Kiro's narrowly scoped
+  `--trust-tools` option, or Codex `-s read-only`). In the recorded Codex environment, shell
+  commands could not start under the read-only sandbox (Ubuntu 24.04 blocks unprivileged user
+  namespaces); a critic that needs shell access must not run there under that setup. The forced
+  write attempt confirms the sandbox rejected patching. Details and the other options tested
   (tool removal, `--worktree`) are in
   [codex-containment-spike](./research/codex-containment-spike-20261027.md).
 - **Time-limit every critic call** with an outer `timeout`. A pinned opencode subagent told to reply
@@ -266,7 +274,7 @@ images, each under 10 MB); Claude Code takes a path, a paste, or a drag; Codex t
 `codex exec -i <file>`.
 
 - If an image has dropped out of context (compaction), re-ask in a fresh headless run
-  (`kiro-cli chat --no-interactive`, `claude -p`, `codex exec -i`) rather than describing it
+  (`kiro-cli chat --no-interactive`, `claude.exe -p`, `codex exec -i`) rather than describing it
   from memory.
 - Pre-resize to the model's long-edge tier (1568 px standard; 2576 px on high-res Claude
   models), and stay at or under 2000 px per image when sending more than 20.
@@ -284,7 +292,7 @@ harness's global instructions file:
 | codex | `~/.codex/AGENTS.md` | Codex docs: global, merged with repo AGENTS.md |
 | Claude Code | `~/.claude/CLAUDE.md` | Claude Code memory docs (user memory) |
 | OpenCode | `~/.config/opencode/AGENTS.md` | OpenCode rules docs |
-| agy, Crush | not installed | no verified user-level rules path yet; project AGENTS.md still applies |
+| agy, Crush | installed | no verified user-level rules path; project AGENTS.md still applies |
 
 The installer owns only a marked block (`<!-- grey-matter:begin global rev=… -->` to
 `<!-- grey-matter:end global -->`), so the user's own rules can share the file. It appends the
