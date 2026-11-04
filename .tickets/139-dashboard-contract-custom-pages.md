@@ -92,3 +92,10 @@ By: codex
 
 <!-- tkt-note:v1 64320-1793818218521580200 -->
 Accepted retro amendment delivered in 2569dfb: read-only receipt inspect compares existing identity, declared source/capture membership and scope; current accepted independent view reusable, changed/shared input invalidates affected receipts. Exact independent review accepted; receipt fixtures19/19 PASS, publication regressions10/10 PASS, parent premerge3/3 and actual prepush6/6 PASS. Real effort receipt remained current; separate changed status page correctly returned stale with only docs/status.html changed. This is scoped evidence, not browser or whole-board proof. Amendment AC8-9 checked. Original custom data-hook, whole-board projection and related AC1-7 remain unmet/pending; ticket returned open, never falsely closed. No global hooks, new hash system or partial-manifest waiver. New raw check/review logs retained parent-owned through accepted-amendment batch/wrap disposition; tracked source and guidance promoted.
+
+## Note — 2026-11-04
+
+By: codex
+
+<!-- tkt-note:v1 61056-1793820136037938100 -->
+Verification bookkeeping correction: native edit --ac only addresses the canonical Acceptance criteria section; the earlier note said amendment8-9 checked before those extra-section bytes changed. The accepted requirements are now centralized in that section: original7 remain unchecked, only the two evidenced receipt-comparison amendment criteria are checked. No original requirement was waived or status closed. Proof remains2569dfb plus docs/agents/research/retro-amendments-delivery-20261104.md; tracker display now matches actual bytes.
