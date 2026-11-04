@@ -1,7 +1,7 @@
 ---
 id: "243"
 title: "Allow the first bound Claude input during owned stream startup"
-status: open
+status: in_progress
 blocked_by: ["242"]
 priority: high
 validation_criteria:
@@ -10,6 +10,7 @@ validation_criteria:
   - "Independent review guidance integrated gates and deployment are evidenced"
 tags: ["stream:orchestration", "kind:bug"]
 parent: "179"
+assignee: "codex"
 ---
 # Support a first bound Claude input during startup
 
