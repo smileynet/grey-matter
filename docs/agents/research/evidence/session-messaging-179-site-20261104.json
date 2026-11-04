@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "ownerCandidate": "35226fac9707d0ed06242ab22c91bcc8abde9278",
+  "projectId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e",
+  "siteSourceCommit": "4e3c00bcd556c396efdd4586f2dbfc53ba87e440",
+  "url": "https://orchestration-findings.sambiggins.chatgpt.site",
+  "deploymentId": "appgdep_6aeb2446fc8881919beb13d44280df23",
+  "status": "succeeded",
+  "versionId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_e43f22d6c0848191a316477b7203f7ca",
+  "publishedAt": "2026-11-04T12:25:49.744184+00:00",
+  "audience": {
+    "mode": "custom",
+    "revision": 1,
+    "owners": 1,
+    "groups": 0,
+    "externalVisitors": 0,
+    "preserved": true
+  },
+  "receiptId": "cd5549261805b776ecbcfc1f60e4f9932a6f58df4c64facd81110b90f515ea73",
+  "statusReceiptId": "a6dc1296af8b9b841059453a03e83f54fa25d396995ac53cac2099e701722049",
+  "preflight": ".scratch/t179-publication-preflight-result.json",
+  "archive": {
+    "bytes": 90384,
+    "sha256": "afc45f18591d600d56993f466ab31b146e91ebaa41e4c82ef704b73a29906a32",
+    "disposition": "recycled after terminal publication success; original path absent; digest verified from retained recycle copy"
+  },
+  "verification": "Local laptop/phone captures independently accepted. Terminal native deployment succeeded. Browser handoff queued; no production browser rendering claim.",
+  "owner": "parent179integration",
+  "retainedEvidenceEnd": "Keep private source, raw cases and review records until owner-created durable evidence archive exists and private references are migrated/removed; no new model run required."
+}
