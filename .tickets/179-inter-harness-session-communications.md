@@ -1,7 +1,7 @@
 ---
 id: "179"
 title: "Implement inter-harness session messaging and wakeups"
-status: in_progress
+status: done
 blocked_by: ["208"]
 priority: high
 validation_criteria:
@@ -48,13 +48,13 @@ Primary interface docs: [Codex queue](https://learn.chatgpt.com/docs/cli/referen
 
 ## Acceptance criteria
 
-- [ ] Versioned envelope/session schemas and a narrow shared send/receive/status interface are implemented with explicit routing and acknowledgment states.
-- [ ] Each named harness/interface has a current primary-source and observed capability record, with a tested adapter where supported or precise unsupported/partial result and fallback; no invented existing-session attachment.
-- [ ] Disposable fixture proves exact existing-target delivery, question/reply and completion receipts, busy/idle behavior where supported, and refusal of wrong/missing host/session without creating a replacement.
-- [ ] Regressions cover duplicate IDs, ack loops, crash before/after send, restart/replay, busy/stale targets, permissions denied, timeouts, changed runtime ownership and ambiguous receipt; partial/unsupported cases cannot produce a pass.
-- [ ] Installation/stop/uninstall preserve unrelated settings, agents, data and approvals, with evidence-backed rollback and no leaked credentials/transcripts.
-- [ ] Orchestrate and harness references use the implementation and documented fallback, preserving tkt authority, reviewer gates and existing authorization.
-- [ ] Portable fixture/commands run on supported macOS/Windows environments or declare an observed platform gap; required repository gates and skill syntax checks pass. No live user conversation is used without explicit authorization.
+- [x] Versioned envelope/session schemas and a narrow shared send/receive/status interface are implemented with explicit routing and acknowledgment states.
+- [x] Each named harness/interface has a current primary-source and observed capability record, with a tested adapter where supported or precise unsupported/partial result and fallback; no invented existing-session attachment.
+- [x] Disposable fixture proves exact existing-target delivery, question/reply and completion receipts, busy/idle behavior where supported, and refusal of wrong/missing host/session without creating a replacement.
+- [x] Regressions cover duplicate IDs, ack loops, crash before/after send, restart/replay, busy/stale targets, permissions denied, timeouts, changed runtime ownership and ambiguous receipt; partial/unsupported cases cannot produce a pass.
+- [x] Installation/stop/uninstall preserve unrelated settings, agents, data and approvals, with evidence-backed rollback and no leaked credentials/transcripts.
+- [x] Orchestrate and harness references use the implementation and documented fallback, preserving tkt authority, reviewer gates and existing authorization.
+- [x] Portable fixture/commands run on supported macOS/Windows environments or declare an observed platform gap; required repository gates and skill syntax checks pass. No live user conversation is used without explicit authorization.
 
 ## Delivery sequence
 
@@ -81,3 +81,16 @@ identity. Continue those criteria through separately scoped work; do not close
 this parent from a child receipt.
 
 Proposal 19 implementation approved 2026-11-03. Retain this ticket as shared message/session interface owner; coordinate #202 outcome contracts and #204 dispatch bindings. Durable spool/fixtures may proceed independently; no native Agy action, real user conversation or global configuration change is authorized by this note. Unsupported/unqualified adapters stay explicit; deterministic delivery does not prove native wakeup.
+
+## Resolution (2026-11-04)
+
+done: bounded shared session messaging and owned Windows handoffs shipped; independent exact-evidence review accepted all seven criteria. Durable outcome and evidence index: docs/agents/research/session-messaging-outcome-20261104.md and docs/agents/research/evidence/session-messaging-179-closeout-20261104.json. Promoted implementation, qualification reports and indices; keep parent-owned raw cases, source snapshots and review helpers for this acceptance until an owner-created durable evidence archive exists and private index references are migrated or removed. No new model run is required. Successful Site package archives are recycled after publication. Unrelated work and private unpublished #171 ancestry remain preserved. Held routes retain manual fallback; no universal wakeup, foreign attachment, reconnect, exactly-once or cross-platform native claim. Final dashboard refresh and private Site publication follow this closure.
+
+### Verification
+1. ✓ Versioned message and session contracts are implemented — "Versioned registry, envelope, routing and receipt interface shipped in #208/#232/#234; mapped in docs/agents/research/session-messaging-outcome-20261104.md."
+2. ✓ Each named harness has an evidence-backed adapter or explicit unsupported result — "Current interface survey and #235/#236/#237 qualifications record supported, held and partial routes with manual fallback; independent final review PASS."
+3. ✓ Existing session delivery and completion receipts are proved — "Owned Codex desktop, Claude two-turn and Kiro V2 exchanges have exact-target replies and receipts; wrong-target refusal tests pass. Busy timing, foreign attachment and CLI native delivery remain explicitly unqualified."
+4. ✓ Duplicate and restart and failure behavior have regression coverage — "Final six-module fixture command: node --test skills/engineering/orchestrate/scripts/session-messages.test.mjs skills/engineering/orchestrate/scripts/native-notification.test.mjs skills/engineering/orchestrate/scripts/codex-queue.test.mjs skills/engineering/orchestrate/scripts/owned-process.test.mjs skills/engineering/orchestrate/scripts/claude-stream.test.mjs skills/engineering/orchestrate/scripts/kiro-acp.test.mjs; 110 pass, zero fail, one Windows SIGTERM escalation skip."
+5. ✓ Permissions and owned configuration survive installation and cleanup — "Owned launch and cleanup records distinguish delivery from physical settlement; no persistent bridge, daemon, hook, global grant or host setting installed. Historical unknown cleanup remains unknown."
+6. ✓ Orchestrate and harness references use the shared interface — "Orchestrate and harness references shipped and deployed with shared messaging contracts, parent integration and tkt authority; tool-script inventory PASS 144/144 classified paths."
+7. ✓ Portable documented fixture and required repository gates pass — "Current candidate 1718329: pre-merge plus skill-syntax-fixtures PASS; actual pre-push doc-links and home-path PASS. Fixture result 110 pass/1 Windows skip; macOS/Linux native gap declared. Tracker validation pass with 8 warnings,18 info,0 errors."

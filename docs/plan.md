@@ -220,7 +220,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 204 | Dispatch checkout and review-evidence preflight | ✅ done |
 | 208 | Durable session/message foundation and recovery fixture (child of 179) | ✅ done |
 | 210 | Existing-agent Codex notification preparation and bounded native receipt (child of 179) | ✅ done |
-| 179 | Shared inter-harness messaging and wakeups (existing owner) | in_progress |
+| 179 | Shared inter-harness messaging and wakeups (existing owner) | ✅ done |
 | 231 | Current primary-source and installed-interface qualification (child of 179) | ✅ done |
 | 232 | Exact session retirement and real spool crash/restart recovery (child of 179) | ✅ done |
 | 233 | Bounded native outcome/dead-letter lifecycle (child of 179) | ✅ done |
@@ -567,7 +567,7 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 150 | Add an optional product map (jobs, workflows, feature status) to the delivery dashboard | open |
 | 164 | Upgrade path: bring a project up to a new grey-matter release's standards (conformance-audit mode recommended) | open |
 | 166 | Refresh harnesses.md to the installed harness versions (first harness-changelog review) | open |
-| 179 | Implement inter-harness session messaging and wakeups | in_progress |
+| 179 | Implement inter-harness session messaging and wakeups | ✅ done |
 | 180 | Review philippines-trip's worktree rules and audit script for adoption | open |
 | 181 | Add a scratch-prune recipe to repository-artifact-hygiene | ✅ done |
 | 182 | Detect footprint growth outside repository scratch | ✅ done |
