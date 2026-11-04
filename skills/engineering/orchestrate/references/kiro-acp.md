@@ -5,6 +5,13 @@ transport, not a task dispatcher or command runner. The parent orchestrator rema
 responsible for authorization, task identity, native delivery, evidence retention and
 deciding what a returned task result means.
 
+The [owned V2 qualification](../../../../docs/agents/research/session-messaging-kiro-owned-20261104.md)
+records two core-acknowledged turns on CLI 2.37.1 with requested Haiku 4.5 and an
+observed settled process tree. Its original update stream ended `DISCONNECTED`;
+the owner-close classification correction has local fake-peer proof only. Recheck
+the exact binary, model, private profile and capabilities before another native
+launch. This evidence does not admit busy queueing, reconnect or foreign attachment.
+
 ## Entry point
 
 `startKiroAcp({ executable, cwd, env, limits, agent, model })` verifies and starts a
