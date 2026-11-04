@@ -3,6 +3,34 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "2026-11-04-custom-dashboard-contract",
+      "state": "confirmed",
+      "label": "Custom data and full-board freshness checked",
+      "title": "Catch stale plans and custom dashboard data before publication",
+      "value": "Check a custom dashboard's declared data and compare refreshed views with the complete tracker and maintained plan.",
+      "steps": [
+        "Declare the custom data hook",
+        "Compare the complete board",
+        "Inspect the rendered view"
+      ],
+      "limit": "Declared data semantics and local rendering only. A passing hook does not establish arbitrary custom DOM, LAN reachability or production browser behavior.",
+      "details": "The checker accepts the shipped template or a documented renderer-independent JSON hook. A full-board check rejects stale bodies, missing tickets, fact overrides and active tracker contexts without repairing them. Explicit plan sync and snapshot refresh follow closure. Terminal tickets remain inspectable in labelled history. Independent Standards and Spec reviews passed; parent tests passed56 contract,6 browser and29 receipt/publication cases, with current gates passing. The actual local Plan was inspected at phone and laptop widths;50 skills were deployed. The custom hook proves declared data semantics, not arbitrary custom DOM or LAN/production behavior. Failed setup and capture attempts remain separately recorded.",
+      "tickets": [
+        "139"
+      ],
+      "sources": [
+        {
+          "label": "Contract scenarios",
+          "href": "agents/research/t139-dashboard-projection-scenarios.md"
+        },
+        {
+          "label": "Integrated acceptance",
+          "href": "agents/research/evidence/dashboard-139-20261104/parent-verification.md"
+        }
+      ],
+      "diagramLabel": "Catch stale plans and custom dashboard data before publication"
+    },
+    {
       "id": "2026-11-04-harness-overview-refresh",
       "state": "confirmed",
       "label": "Overview refreshed from local evidence",
