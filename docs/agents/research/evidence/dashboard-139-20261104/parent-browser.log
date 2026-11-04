@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: decision choices, notes and clipboard fallback at 1280
+ok 1 - decision choices, notes and clipboard fallback at 1280
+  ---
+  duration_ms: 630.6143
+  type: 'test'
+  ...
+# Subtest: decision choices, notes and clipboard fallback at 390
+ok 2 - decision choices, notes and clipboard fallback at 390
+  ---
+  duration_ms: 516.9916
+  type: 'test'
+  ...
+# Subtest: remaining flow, filters, keyboard selection and complete status accounting at 1280
+ok 3 - remaining flow, filters, keyboard selection and complete status accounting at 1280
+  ---
+  duration_ms: 400.2277
+  type: 'test'
+  ...
+# Subtest: remaining flow, filters, keyboard selection and complete status accounting at 390
+ok 4 - remaining flow, filters, keyboard selection and complete status accounting at 390
+  ---
+  duration_ms: 421.9903
+  type: 'test'
+  ...
+# Subtest: flow can be disabled without dropping the existing ticket list
+ok 5 - flow can be disabled without dropping the existing ticket list
+  ---
+  duration_ms: 143.1709
+  type: 'test'
+  ...
+# Subtest: prototype-like ticket IDs remain selectable after a flow redraw
+ok 6 - prototype-like ticket IDs remain selectable after a flow redraw
+  ---
+  duration_ms: 334.7131
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3059.3829

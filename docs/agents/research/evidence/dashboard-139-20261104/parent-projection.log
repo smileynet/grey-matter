@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "errors": [],
+  "warnings": [],
+  "stats": {
+    "entries": 92,
+    "tickets": 252,
+    "openAsks": 0,
+    "bytes": 227081,
+    "logic": {
+      "overview": 5,
+      "history": 92,
+      "total": 92,
+      "plan": 252
+    }
+  }
+}

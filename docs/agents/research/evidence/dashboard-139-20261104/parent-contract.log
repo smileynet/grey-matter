@@ -1,0 +1,346 @@
+TAP version 13
+# Subtest: cancelled tickets stay distinct terminal context and never satisfy prerequisites
+ok 1 - cancelled tickets stay distinct terminal context and never satisfy prerequisites
+  ---
+  duration_ms: 41.767
+  type: 'test'
+  ...
+# Subtest: decision checker accepts valid choices and rejects malformed decisions
+ok 2 - decision checker accepts valid choices and rejects malformed decisions
+  ---
+  duration_ms: 271.9446
+  type: 'test'
+  ...
+# Subtest: export includes pending selections and alternative text while preserving status
+ok 3 - export includes pending selections and alternative text while preserving status
+  ---
+  duration_ms: 0.7265
+  type: 'test'
+  ...
+# Subtest: clipboard reports success and falls back on absent or rejected access
+ok 4 - clipboard reports success and falls back on absent or rejected access
+  ---
+  duration_ms: 1.2899
+  type: 'test'
+  ...
+# Subtest: the blank template passes strict mode and shows empty states
+ok 5 - the blank template passes strict mode and shows empty states
+  ---
+  duration_ms: 1.2831
+  type: 'test'
+  ...
+# Subtest: the CLI rejects a dangling --repo operand instead of doing a local-only check
+ok 6 - the CLI rejects a dangling --repo operand instead of doing a local-only check
+  ---
+  duration_ms: 95.6735
+  type: 'test'
+  ...
+# Subtest: recentCount cannot raise the overview limit above five
+ok 7 - recentCount cannot raise the overview limit above five
+  ---
+  duration_ms: 73.7359
+  type: 'test'
+  ...
+# Subtest: the worked example passes strict mode and demonstrates every feature
+ok 8 - the worked example passes strict mode and demonstrates every feature
+  ---
+  duration_ms: 9.4768
+  type: 'test'
+  ...
+# Subtest: a custom renderer exposes the same ordered, complete dashboard contract
+ok 9 - a custom renderer exposes the same ordered, complete dashboard contract
+  ---
+  duration_ms: 2.7794
+  type: 'test'
+  ...
+# Subtest: a custom ticket adapter refreshes only tracker data before the full comparison
+ok 10 - a custom ticket adapter refreshes only tracker data before the full comparison
+  ---
+  duration_ms: 10.8763
+  type: 'test'
+  ...
+# Subtest: custom contract rejects hidden decisions, oversized overview, incomplete history and terminal-plan leaks
+ok 11 - custom contract rejects hidden decisions, oversized overview, incomplete history and terminal-plan leaks
+  ---
+  duration_ms: 25.2905
+  type: 'test'
+  ...
+# Subtest: a repository comparison rejects authored ticket facts that differ from the full board
+ok 12 - a repository comparison rejects authored ticket facts that differ from the full board
+  ---
+  duration_ms: 41.0071
+  type: 'test'
+  ...
+# Subtest: a refreshed dashboard passes the full-board and maintained-plan comparison
+ok 13 - a refreshed dashboard passes the full-board and maintained-plan comparison
+  ---
+  duration_ms: 40.939
+  type: 'test'
+  ...
+# Subtest: a repository comparison preserves and rejects active tag context
+ok 14 - a repository comparison preserves and rejects active tag context
+  ---
+  duration_ms: 39.141
+  type: 'test'
+  ...
+# Subtest: a repository comparison rejects stale body identities and missing board rows
+ok 15 - a repository comparison rejects stale body identities and missing board rows
+  ---
+  duration_ms: 78.578
+  type: 'test'
+  ...
+# Subtest: a failed maintained-plan check makes the full comparison fail
+ok 16 - a failed maintained-plan check makes the full comparison fail
+  ---
+  duration_ms: 35.222
+  type: 'test'
+  ...
+# Subtest: a requested full comparison requires a valid ticket snapshot
+ok 17 - a requested full comparison requires a valid ticket snapshot
+  ---
+  duration_ms: 32.9974
+  type: 'test'
+  ...
+# Subtest: a malformed tracker markdown file cannot disappear from a complete-board read
+ok 18 - a malformed tracker markdown file cannot disappear from a complete-board read
+  ---
+  duration_ms: 36.2717
+  type: 'test'
+  ...
+# Subtest: a ticket-shaped frontmatter document without an id cannot be treated as non-ticket Markdown
+ok 19 - a ticket-shaped frontmatter document without an id cannot be treated as non-ticket Markdown
+  ---
+  duration_ms: 37.7608
+  type: 'test'
+  ...
+# Subtest: README.md is the supported non-ticket Markdown file in .tickets
+ok 20 - README.md is the supported non-ticket Markdown file in .tickets
+  ---
+  duration_ms: 37.339
+  type: 'test'
+  ...
+# Subtest: plan groups put open work first and layer it by unfinished blockers
+ok 21 - plan groups put open work first and layer it by unfinished blockers
+  ---
+  duration_ms: 0.8653
+  type: 'test'
+  ...
+# Subtest: snapshot-tickets rewrites only the ticket block, escapes markup and refuses a scoped board
+ok 22 - snapshot-tickets rewrites only the ticket block, escapes markup and refuses a scoped board
+  ---
+  duration_ms: 75.5795
+  type: 'test'
+  ...
+# Subtest: the template and the example share the same renderer
+ok 23 - the template and the example share the same renderer
+  ---
+  duration_ms: 0.4306
+  type: 'test'
+  ...
+# Subtest: the overview keeps five entries and the history keeps all of them
+ok 24 - the overview keeps five entries and the history keeps all of them
+  ---
+  duration_ms: 43.1583
+  type: 'test'
+  ...
+# Subtest: search and filters narrow entries; an open ask is findable
+ok 25 - search and filters narrow entries; an open ask is findable
+  ---
+  duration_ms: 0.9019
+  type: 'test'
+  ...
+# Subtest: rejects duplicate ids
+ok 26 - rejects duplicate ids
+  ---
+  duration_ms: 40.4431
+  type: 'test'
+  ...
+# Subtest: rejects a long headline
+ok 27 - rejects a long headline
+  ---
+  duration_ms: 46.723
+  type: 'test'
+  ...
+# Subtest: rejects too many changes
+ok 28 - rejects too many changes
+  ---
+  duration_ms: 44.5533
+  type: 'test'
+  ...
+# Subtest: rejects an image without alt text
+ok 29 - rejects an image without alt text
+  ---
+  duration_ms: 42.951
+  type: 'test'
+  ...
+# Subtest: rejects a missing local image
+ok 30 - rejects a missing local image
+  ---
+  duration_ms: 41.0782
+  type: 'test'
+  ...
+# Subtest: rejects an open ask without a recommendation
+ok 31 - rejects an open ask without a recommendation
+  ---
+  duration_ms: 39.6244
+  type: 'test'
+  ...
+# Subtest: rejects a recommendation outside the options
+ok 32 - rejects a recommendation outside the options
+  ---
+  duration_ms: 40.94
+  type: 'test'
+  ...
+# Subtest: rejects an unsafe link
+ok 33 - rejects an unsafe link
+  ---
+  duration_ms: 40.3912
+  type: 'test'
+  ...
+# Subtest: rejects a bad kind
+ok 34 - rejects a bad kind
+  ---
+  duration_ms: 40.1982
+  type: 'test'
+  ...
+# Subtest: rejects a bad date
+ok 35 - rejects a bad date
+  ---
+  duration_ms: 40.1493
+  type: 'test'
+  ...
+# Subtest: rejects a ticket entry without a visual
+ok 36 - rejects a ticket entry without a visual
+  ---
+  duration_ms: 38.6046
+  type: 'test'
+  ...
+# Subtest: rejects a ticket with an unknown status
+ok 37 - rejects a ticket with an unknown status
+  ---
+  duration_ms: 39.1406
+  type: 'test'
+  ...
+# Subtest: rejects a frontier naming a closed ticket
+ok 38 - rejects a frontier naming a closed ticket
+  ---
+  duration_ms: 37.7454
+  type: 'test'
+  ...
+# Subtest: rejects a ticket block missing its arrays
+ok 39 - rejects a ticket block missing its arrays
+  ---
+  duration_ms: 34.5701
+  type: 'test'
+  ...
+# Subtest: rejects remote scripts, remote images and embedded media bloat
+ok 40 - rejects remote scripts, remote images and embedded media bloat
+  ---
+  duration_ms: 116.7634
+  type: 'test'
+  ...
+# Subtest: accepts a relative image that exists and resolves it from the dashboard's folder
+ok 41 - accepts a relative image that exists and resolves it from the dashboard's folder
+  ---
+  duration_ms: 40.6004
+  type: 'test'
+  ...
+# Subtest: warns when a headline carries process detail
+ok 42 - warns when a headline carries process detail
+  ---
+  duration_ms: 83.7018
+  type: 'test'
+  ...
+# Subtest: readiness summary identity rejects an old build and accepts repair
+ok 43 - readiness summary identity rejects an old build and accepts repair
+  ---
+  duration_ms: 0.3057
+  type: 'test'
+  ...
+# Subtest: readiness identity fails closed for missing, malformed, extra and different audience IDs
+ok 44 - readiness identity fails closed for missing, malformed, extra and different audience IDs
+  ---
+  duration_ms: 0.1085
+  type: 'test'
+  ...
+# Subtest: strict rejects a stale ticket snapshot, then accepts its repair and dated history
+ok 45 - strict rejects a stale ticket snapshot, then accepts its repair and dated history
+  ---
+  duration_ms: 78.9771
+  type: 'test'
+  ...
+# Subtest: the checker never modifies the dashboard
+ok 46 - the checker never modifies the dashboard
+  ---
+  duration_ms: 39.2645
+  type: 'test'
+  ...
+# Subtest: malformed data blocks produce errors, not a crash
+ok 47 - malformed data blocks produce errors, not a crash
+  ---
+  duration_ms: 38.5517
+  type: 'test'
+  ...
+# Subtest: remaining flow includes deferred work, complete counts and every visible edge
+ok 48 - remaining flow includes deferred work, complete counts and every visible edge
+  ---
+  duration_ms: 1.3855
+  type: 'test'
+  ...
+# Subtest: a completed configured stream falls back without hiding work elsewhere
+ok 49 - a completed configured stream falls back without hiding work elsewhere
+  ---
+  duration_ms: 0.914
+  type: 'test'
+  ...
+# Subtest: flow keeps a missing prerequisite visible as waiting and rejects cycles
+ok 50 - flow keeps a missing prerequisite visible as waiting and rejects cycles
+  ---
+  duration_ms: 0.7726
+  type: 'test'
+  ...
+# Subtest: checker rejects malformed flow configuration and malformed tags
+ok 51 - checker rejects malformed flow configuration and malformed tags
+  ---
+  duration_ms: 9.4615
+  type: 'test'
+  ...
+# Subtest: snapshot retains real ticket tags when the CLI omits them
+ok 52 - snapshot retains real ticket tags when the CLI omits them
+  ---
+  duration_ms: 2.7385
+  type: 'test'
+  ...
+# Subtest: planning gates stay separate from lifecycle, dependencies and deferred work
+ok 53 - planning gates stay separate from lifecycle, dependencies and deferred work
+  ---
+  duration_ms: 1.1151
+  type: 'test'
+  ...
+# Subtest: snapshot derives planning gates from ticket notes and rejects ambiguous gates before writing
+ok 54 - snapshot derives planning gates from ticket notes and rejects ambiguous gates before writing
+  ---
+  duration_ms: 3.7462
+  type: 'test'
+  ...
+# Subtest: checker rejects malformed planning-gate data
+ok 55 - checker rejects malformed planning-gate data
+  ---
+  duration_ms: 5.4945
+  type: 'test'
+  ...
+# Subtest: checker and snapshot CLIs run as commands
+ok 56 - checker and snapshot CLIs run as commands
+  ---
+  duration_ms: 99.5134
+  type: 'test'
+  ...
+1..56
+# tests 56
+# suites 0
+# pass 56
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2200.0594

@@ -1,0 +1,25 @@
+{
+  "candidate": "0d3ad9a11e258cc17b92153a449c7b23bec650a2",
+  "records": [
+    {
+      "path": "parent-contract.log",
+      "sha256": "4a8f3589f58c24d2c16d9f59325c32c9f5fbc67e8aa07e9be0b05f725a7598e4"
+    },
+    {
+      "path": "parent-browser.log",
+      "sha256": "5a41a2db91e094181c294c518943c3fa3a5dc34544d45f99c87fc3fd54e54a57"
+    },
+    {
+      "path": "parent-receipts.log",
+      "sha256": "63c168a8c76634e2e064235623f3941a2971f112f56844f45f70e33d3e5f2da1"
+    },
+    {
+      "path": "parent-projection.log",
+      "sha256": "78f7f08153136d3e77f0fea8afec6af3504d784acbf9ccb6b88e20f6a97ac2f4"
+    },
+    {
+      "path": "parent-premerge.log",
+      "sha256": "86c72b7a952697d7b0e3882eaddc06fbd82cd8e683cb477928229cd1722e0ea5"
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: inspection reuses current acceptance after an unrelated change without rewriting it
+ok 1 - inspection reuses current acceptance after an unrelated change without rewriting it
+  ---
+  duration_ms: 28.3292
+  type: 'test'
+  ...
+# Subtest: independently scoped view retains acceptance when another view changes
+ok 2 - independently scoped view retains acceptance when another view changes
+  ---
+  duration_ms: 24.1894
+  type: 'test'
+  ...
+# Subtest: a shared rendering input invalidates both independently recorded views
+ok 3 - a shared rendering input invalidates both independently recorded views
+  ---
+  duration_ms: 39.4152
+  type: 'test'
+  ...
+# Subtest: inspection reports directory membership, capture and scope changes separately
+ok 4 - inspection reports directory membership, capture and scope changes separately
+  ---
+  duration_ms: 22.5097
+  type: 'test'
+  ...
+# Subtest: inspection never treats a pending receipt as reusable and CLI fails closed
+ok 5 - inspection never treats a pending receipt as reusable and CLI fails closed
+  ---
+  duration_ms: 166.7275
+  type: 'test'
+  ...
+# Subtest: cancelled lifecycle is known but cancellation prose is still reviewed source
+ok 6 - cancelled lifecycle is known but cancellation prose is still reviewed source
+  ---
+  duration_ms: 18.377
+  type: 'test'
+  ...
+# Subtest: pending snapshot needs explicit acceptance of its exact inspected ID
+ok 7 - pending snapshot needs explicit acceptance of its exact inspected ID
+  ---
+  duration_ms: 18.2952
+  type: 'test'
+  ...
+# Subtest: rendering change invalidates acceptance: ui/app.css
+ok 8 - rendering change invalidates acceptance: ui/app.css
+  ---
+  duration_ms: 19.8017
+  type: 'test'
+  ...
+# Subtest: rendering change invalidates acceptance: ui/app.mjs
+ok 9 - rendering change invalidates acceptance: ui/app.mjs
+  ---
+  duration_ms: 17.0172
+  type: 'test'
+  ...
+# Subtest: new source directory member invalidates old acceptance
+ok 10 - new source directory member invalidates old acceptance
+  ---
+  duration_ms: 14.1235
+  type: 'test'
+  ...
+# Subtest: removed directory member invalidates acceptance
+ok 11 - removed directory member invalidates acceptance
+  ---
+  duration_ms: 14.1086
+  type: 'test'
+  ...
+# Subtest: capture mutation invalidates acceptance; recapture plus renewed review accepts new source
+ok 12 - capture mutation invalidates acceptance; recapture plus renewed review accepts new source
+  ---
+  duration_ms: 27.926
+  type: 'test'
+  ...
+# Subtest: declared lifecycle updates preserve acceptance without hiding source code
+ok 13 - declared lifecycle updates preserve acceptance without hiding source code
+  ---
+  duration_ms: 37.1975
+  type: 'test'
+  ...
+# Subtest: ticket requirements and graph edges remain part of reviewed source
+ok 14 - ticket requirements and graph edges remain part of reviewed source
+  ---
+  duration_ms: 38.9855
+  type: 'test'
+  ...
+# Subtest: undeclared metadata changes fail and expanding the manifest invalidates approval
+ok 15 - undeclared metadata changes fail and expanding the manifest invalidates approval
+  ---
+  duration_ms: 23.5643
+  type: 'test'
+  ...
+# Subtest: arbitrary exclusions and executable-file projections are rejected
+ok 16 - arbitrary exclusions and executable-file projections are rejected
+  ---
+  duration_ms: 16.2403
+  type: 'test'
+  ...
+# Subtest: escaping paths and source/parent symlinks are rejected
+ok 17 - escaping paths and source/parent symlinks are rejected
+  ---
+  duration_ms: 17.5501
+  type: 'test'
+  ...
+# Subtest: receipt cannot include itself or silently overwrite an existing acceptance
+ok 18 - receipt cannot include itself or silently overwrite an existing acceptance
+  ---
+  duration_ms: 11.3453
+  type: 'test'
+  ...
+# Subtest: read-only CLI check from unrelated cwd preserves source and record bytes
+ok 19 - read-only CLI check from unrelated cwd preserves source and record bytes
+  ---
+  duration_ms: 121.0541
+  type: 'test'
+  ...
+# Subtest: accepts the expected candidate, current receipt, passing check attestation and source-matched package
+ok 20 - accepts the expected candidate, current receipt, passing check attestation and source-matched package
+  ---
+  duration_ms: 569.2213
+  type: 'test'
+  ...
+# Subtest: rejects a stale receipt when a reviewed rendering input changes
+ok 21 - rejects a stale receipt when a reviewed rendering input changes
+  ---
+  duration_ms: 447.2436
+  type: 'test'
+  ...
+# Subtest: rejects a failed required check bound to the same candidate and output bytes
+ok 22 - rejects a failed required check bound to the same candidate and output bytes
+  ---
+  duration_ms: 502.5593
+  type: 'test'
+  ...
+# Subtest: rejects packaged assets whose bytes differ from the committed site source
+ok 23 - rejects packaged assets whose bytes differ from the committed site source
+  ---
+  duration_ms: 469.7626
+  type: 'test'
+  ...
+# Subtest: rejects unexpected files in the packaged asset directory
+ok 24 - rejects unexpected files in the packaged asset directory
+  ---
+  duration_ms: 443.7605
+  type: 'test'
+  ...
+# Subtest: accepts only the fixed orchestration dashboard link transform over committed source
+ok 25 - accepts only the fixed orchestration dashboard link transform over committed source
+  ---
+  duration_ms: 557.5422
+  type: 'test'
+  ...
+# Subtest: rejects a transformed payload with a tampered link
+ok 26 - rejects a transformed payload with a tampered link
+  ---
+  duration_ms: 461.6318
+  type: 'test'
+  ...
+# Subtest: rejects unknown transform kinds and arbitrary transform arguments
+ok 27 - rejects unknown transform kinds and arbitrary transform arguments
+  ---
+  duration_ms: 378.132
+  type: 'test'
+  ...
+# Subtest: rejects a packet or expected identity changed after parent binding
+ok 28 - rejects a packet or expected identity changed after parent binding
+  ---
+  duration_ms: 427.9016
+  type: 'test'
+  ...
+# Subtest: CLI emits a bounded result for the exact parent identity and rejects command fields
+ok 29 - CLI emits a bounded result for the exact parent identity and rejects command fields
+  ---
+  duration_ms: 625.1364
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5078.7006
