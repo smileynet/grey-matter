@@ -3,6 +3,62 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "2026-11-04-safe-worktree-takeover",
+      "state": "confirmed",
+      "label": "Advisory takeover workflow shipped",
+      "title": "Keep unfinished work safe during a takeover",
+      "value": "Inspect inherited branches and checkouts, preserve needed source and evidence, and respect the app’s supported handoff.",
+      "steps": [
+        "Inspect the source",
+        "Preserve work and evidence",
+        "Use the supported handoff"
+      ],
+      "limit": "Source review and synthetic local Git fixtures. No live checkout retirement, ignored/private evidence inventory, remote LFS recovery or branch disposition was qualified.",
+      "details": "An advisory procedure and read-only helper inventory local/cached refs and registered worktrees. Synthetic fixtures cover patch equivalence, unique and superseded source, uncertain merge history, target/candidate LFS rules and pointer/deletion cases. Source integration, evidence disposition and checkout retirement remain separate decisions. Both review axes accepted the final integrated source; focused and syntax checks passed, and 50 skills were deployed. The diagram describes the delivered workflow, not a performed retirement. Two historical checkouts disappeared during the session; original source refs remain, but their ignored-evidence recovery is unknown and no release is inferred.",
+      "tickets": [
+        "148"
+      ],
+      "sources": [
+        {
+          "label": "Takeover scenarios and limits",
+          "href": "agents/research/t148-worktree-takeover-scenarios.md"
+        },
+        {
+          "label": "Independent verification",
+          "href": "agents/research/evidence/takeover-148-20261104/verification.json"
+        },
+        {
+          "label": "Receiving evidence custody",
+          "href": "agents/handoffs/orchestration-custody-20261104.md"
+        }
+      ],
+      "diagramLabel": "Keep unfinished work safe during a takeover"
+    },
+    {
+      "id": "2026-11-04-uncommitted-review-targets",
+      "state": "confirmed",
+      "label": "Review targets shipped",
+      "title": "Review work before making a commit",
+      "value": "Choose staged changes or tracked working files for review, with both reviewers inspecting the same captured version.",
+      "steps": [
+        "Choose the target",
+        "Capture matching bytes",
+        "Keep staged work intact"
+      ],
+      "limit": "Actual staged documentation review and tracker isolation observed. Working-tree modes are documented; no claim of a live application review or simultaneous reviewer dispatch.",
+      "details": "The skill documents commit ranges, index-only, unstaged tracked and all tracked uncommitted modes, validates a nonempty target, separates untracked coverage, and checks reviewed bytes again before the verdict. Two independent contexts accepted an actual staged documentation patch; axes ran sequentially under capacity. A real tracker closure preserved that reviewed staged patch. Five push checks and syntax fixtures passed, and 50 skills were deployed. No production application behavior or simultaneous reviewer dispatch is claimed.",
+      "tickets": [
+        "141"
+      ],
+      "sources": [
+        {
+          "label": "Staged review and evidence limits",
+          "href": "agents/research/staged-review-20261104.md"
+        }
+      ],
+      "diagramLabel": "Review work before making a commit"
+    },
+    {
       "id": "2026-11-04-ticket-index-isolation",
       "state": "confirmed",
       "label": "Installed behavior verified",
