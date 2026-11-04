@@ -1,0 +1,2 @@
+gate pre-merge: 1 of 20 check(s) selected (2 changed path(s))
+  [ok  ]    0.3s  skill-syntax-fixtures

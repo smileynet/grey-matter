@@ -1,0 +1,22 @@
+[
+  {
+    "name": "codex",
+    "source": "~/.bun/bin/codex.exe",
+    "commandType": "Application"
+  },
+  {
+    "name": "claude.exe",
+    "source": "~/.local/bin/claude.exe",
+    "commandType": "Application"
+  },
+  {
+    "name": "kiro-cli",
+    "source": "%LOCALAPPDATA%/Kiro-Cli/kiro-cli.exe",
+    "commandType": "Application"
+  },
+  {
+    "name": "crush",
+    "source": "%LOCALAPPDATA%/Microsoft/WinGet/Links/crush.exe",
+    "commandType": "Application"
+  }
+]

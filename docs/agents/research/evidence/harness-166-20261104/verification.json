@@ -1,0 +1,109 @@
+{
+  "candidate": "b1b677ff1264f81c7440d5435b70d030c04756d0",
+  "workerCandidate": "6c2a78396e4df54f87f2e12c0a509dd406261186",
+  "checks": [
+    {
+      "command": "node scripts/gate.mjs pre-merge --include skill-syntax-fixtures",
+      "outcome": "pass",
+      "selected": 1,
+      "evidence": "premerge.log"
+    },
+    {
+      "command": "node scripts/gate.mjs pre-push",
+      "outcome": "pass",
+      "selected": 2,
+      "evidence": "prepush.log"
+    },
+    {
+      "command": "node scripts/deploy.mjs --no-agy --no-kirocrew",
+      "outcome": "pass",
+      "skills": 50,
+      "rawBytes": 3806,
+      "rawSha256": "99db60c26b976cf4f64343f6ac6890fbaee79d8a8815714f1bdd526579498624"
+    }
+  ],
+  "observedVersions": {
+    "codex": "0.166.0",
+    "claude": "2.1.316",
+    "kiro": "2.37.1",
+    "crush": "0.93.1",
+    "agy": "not probed; last recorded 1.4.12"
+  },
+  "pathObservation": "path-observations.json",
+  "rawEvidence": [
+    {
+      "name": "docs-consistency-postcommit.log",
+      "sha256": "65163fdc7150dd8cf0cb6a88cfe9e5b6b5a7a029aa99a8927556536398829b76",
+      "bytes": 187
+    },
+    {
+      "name": "crush-version.log",
+      "sha256": "64315ff6c4780e2f5dc1b2655688915368ff39cdc796d31667b2cf087b8261ee",
+      "bytes": 23
+    },
+    {
+      "name": "skill-syntax.log",
+      "sha256": "b92553bd6d7fd30dd05432941a9b8a2efee99a0c8d60b5e5244f8ee83f15d742",
+      "bytes": 1457
+    },
+    {
+      "name": "crush-run-help.log",
+      "sha256": "1792bd40eef71ebda61da8a1c2083fa823e338f40d2a162b874c88be3c298e7f",
+      "bytes": 2995
+    },
+    {
+      "name": "claude-plugin-help.log",
+      "sha256": "e206aea5fac94b2600cc70996116cc872aebf522e3c9d4b07d74b80646349951",
+      "bytes": 3760
+    },
+    {
+      "name": "claude-help.log",
+      "sha256": "c32fb74292c66107a6908bd126750c26525159797df0202762ac2f3ad89cfabf",
+      "bytes": 22657
+    },
+    {
+      "name": "codex-exec-help.log",
+      "sha256": "ff5a00d7f3926a45d9b58ec703a45d6972b1664c0fa465156c48577bb4ceeaf4",
+      "bytes": 4449
+    },
+    {
+      "name": "kiro-chat-help.log",
+      "sha256": "fa5668530fe7a01eb016d3d25529c12573ffdb6ee3e7d1c065dff3b5a0b181ee",
+      "bytes": 4284
+    },
+    {
+      "name": "kiro-version.log",
+      "sha256": "bfe2ba554af7e40b48c48890945ab19ad394f421499228e0b7145e07013bed48",
+      "bytes": 17
+    },
+    {
+      "name": "codex-version.log",
+      "sha256": "93a00d60fa70e4e5bf01279fb6b88988261621e198cbf22fec64d2c37251fe30",
+      "bytes": 19
+    },
+    {
+      "name": "claude-version.log",
+      "sha256": "205a07aa96d60916385f8805c761e3bba82e451ad84472fdfdd79e095d8adb7f",
+      "bytes": 23
+    }
+  ],
+  "earlierFailures": [
+    {
+      "outcome": "infrastructure error",
+      "scope": "worker syntax fixtures",
+      "reason": "yaml dependency absent; parent integrated fixture gate passed"
+    },
+    {
+      "outcome": "infrastructure error",
+      "scope": "worker handoff packet",
+      "reason": "ad-hoc schema rejected; parent canonical packet independently bound recorded base and passed all 14 hashes"
+    }
+  ],
+  "limits": "Help qualifies grammar, not model/tool permissions or skill discovery. Kiro manifest/reference remains 2.37.0 with an explicit live-version gap; Agy execution hold respected; Codex package/copy provenance and Crush global rules path unknown.",
+  "retention": {
+    "owner": "parent orchestration continuation",
+    "state": "retained",
+    "purpose": "raw help/version/deployment and independent review recovery",
+    "end": "useful evidence promotion and explicit queue-settlement disposition; old148 private evidence remains independently protected"
+  }
+}
