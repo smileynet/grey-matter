@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "796e40b4549ec7da8c4d73022f3c97c33fc69e34a60cfab3a079d4a3b400ccef",
+  "subject": "Owned-worker shared handoff binding242 shipped; native qualification remains open and observed Claude startup gap tracked243",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 55220,
+      "sha256": "f87901700a9b6aeb06bd3e396e280737e0bf636140bb7297e9f311446400242a"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 307075,
+      "sha256": "ffa92773ffb3a2c412641d838b505ac9ac389d66bbd4a4db9e770f5a62ff52dd"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14145,
+      "sha256": "fe47a7d9ad8c78c5425925fd712403b013032b7d7f744b0a6d309edf946df76f"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1762,
+      "sha256": "2e1d9d64cd8c35663ef930d96187cb530fb4f7bb5827faf32a5c82f6b4871c4f"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5890,
+      "sha256": "16784d51172ccf9f876105e8f473824510e08b58269867c600191e1c9f2b5c03"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103/findings-1280.png",
+      "bytes": 863311,
+      "sha256": "b9f2069e01b656669d201eb0b243b24bd2c2adaaae5856a2be256112dffc71c5",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103/tickets-1280.png",
+      "bytes": 325039,
+      "sha256": "db8576e2cba4b484d3ebe8054dfa79a7671a11490e79bd3a8a8f9157974683ab",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103/findings-390.png",
+      "bytes": 885869,
+      "sha256": "f23a07f5aa5b475da9f3f38c87f0857f9120dcfaaf3ffef350000e05eb60fa73",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103/tickets-390.png",
+      "bytes": 301248,
+      "sha256": "e3df81211fb14378d47ae3ca4de39544fb4b9dbfaa238caf2a9d07a228824527",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "1677d5ecf8eb403dc5f24972024e92978d42c6b9a85666b067f9dfaa8801113c",
+  "id": "597a873bb3db92e4dd75dedb79b98c142ff3b610cfdfbfdb6a2353ca66768eae",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/critic242_binding",
+    "note": "Independent critic viewed all four actual effort captures and verified unchanged source/capture hashes on renewal. Two tabs, collapsed tickets, correct243-to236 dependency and queue, honest native limitations. Review53653F6E52C8221D2B4E2E5DBC39E0AFC392E9CC2783540C2BD3B7F1DF7B72AB.",
+    "acceptedAt": "2026-11-04T08:10:06.881Z",
+    "snapshotId": "597a873bb3db92e4dd75dedb79b98c142ff3b610cfdfbfdb6a2353ca66768eae"
+  }
+}

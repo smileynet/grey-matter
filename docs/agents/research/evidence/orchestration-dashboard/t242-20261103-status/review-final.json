@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "manifestDigest": "4d651e318f927b3474fa3f77388fb76444861b55052105ffc95e72b3beff0e5a",
+  "subject": "Owned-worker shared handoff binding242 shipped; native qualification remains open and observed Claude startup gap tracked243",
+  "source": [
+    {
+      "path": "docs/status.html",
+      "projection": null,
+      "bytes": 186152,
+      "sha256": "7833145f068e85fd519d9a63f4c6b27c75a6a0a9433944e36db70ea589aa2d43"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-example.html",
+      "projection": null,
+      "bytes": 66982,
+      "sha256": "d777fbcf9e3addd68d847ee7bd9b64890445d4f5be112d711bf06e867bf942de"
+    },
+    {
+      "path": "skills/productivity/delivery-dashboard/assets/dashboard-template.html",
+      "projection": null,
+      "bytes": 56915,
+      "sha256": "5c59926118bf6084503d93bcbbe16cda55c893f6a601df53bb8694efdbf77829"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103-status/tab-0-1280.png",
+      "bytes": 80040,
+      "sha256": "cfb5720e05ca0aa164d162b532c3b1c490050ec6f49301abdac03f93818ef22d",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103-status/tab-1-1280.png",
+      "bytes": 409772,
+      "sha256": "a5153733260f73739db5efe3912d51ad18737825db399ac6edd29a406b81c62f",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103-status/tab-2-1280.png",
+      "bytes": 26478,
+      "sha256": "34a09ce289cb76f3a491f39fd1b1b1e43e06f008ac71c06d3d0db9782d91bc5a",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103-status/tab-3-1280.png",
+      "bytes": 530272,
+      "sha256": "7d856d205a0d5a726b8fd7e124bc3be0b41e19638288d7b8c75f4cf5cc307925",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103-status/tab-0-390.png",
+      "bytes": 75300,
+      "sha256": "81dee339f5073bd8b2d916f122310fc6c720d126e5dc7699f4cd390b4e35a93c",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103-status/tab-1-390.png",
+      "bytes": 399148,
+      "sha256": "2cc1aefa6bd79bf8f672b33684d7892e53e48c89d583f2899429d5aa4a89c6f4",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103-status/tab-2-390.png",
+      "bytes": 21509,
+      "sha256": "3f381752999072e759ecbab53f9bea545c9509f215e59e3f98d554795d349ed5",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t242-20261103-status/tab-3-390.png",
+      "bytes": 493215,
+      "sha256": "0e6b009f366cd1622ee0b43922f140502d4f7d21e2590d80df93d1772ea87cf8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "e8538afcc81e47ff54a1a659e7d9c233b0e6c155257f663257277a24ee215914",
+  "id": "f5eeb7674eb6e3aa4c24e0aa8bf9b39b9ba4990a978b2161a9bc461c992be11f",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/critic242_binding",
+    "note": "Independent critic re-viewed all eight refreshed global captures, corrected2026-11-04 date readable at both widths; four tabs, low-complexity entry and unchanged content preserved. Verified all source/capture hashes. Review53653F6E52C8221D2B4E2E5DBC39E0AFC392E9CC2783540C2BD3B7F1DF7B72AB.",
+    "acceptedAt": "2026-11-04T08:10:07.072Z",
+    "snapshotId": "f5eeb7674eb6e3aa4c24e0aa8bf9b39b9ba4990a978b2161a9bc461c992be11f"
+  }
+}

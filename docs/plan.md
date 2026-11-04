@@ -227,7 +227,8 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 234 | Ticket/candidate/durable-handoff message context (after 232) | ✅ done |
 | 235 | Codex public queue adapter and existing-agent busy/idle receipts (after 231/233/234) | in_progress |
 | 242 | Shared intent binding for owned provider clients (after 238; native prerequisite for 236/237) | ✅ done |
-| 236 | Owned Claude streaming handoff transport and receipt fixture (after 231/233/234/238/242) | in_progress |
+| 243 | First actual bound Claude input during startup (after 242; observed startup gap) | in_progress |
+| 236 | Owned Claude streaming handoff transport and receipt fixture (after 231/233/234/238/242/243) | in_progress |
 | 237 | Owned Kiro ACP transport and receipt/teardown fixture (after 231/233/234/238/242) | in_progress |
 | 238 | Shared bounded owned-process stream module (after 231; required by 236/237) | ✅ done |
 | 205 | Dashboard publication preflight using existing receipts | ✅ done |
@@ -244,7 +245,8 @@ flowchart LR
   A208 --> A210[210 Existing-agent Codex notification]
   A208 --> A207
   A238[238 Owned process streams] --> A242[242 Owned provider intent binding]
-  A242 --> A236[236 Claude native qualification]
+  A242 --> A243[243 First bound Claude input]
+  A243 --> A236[236 Claude native qualification]
   A242 --> A237[237 Kiro native qualification]
   A203[203 Tool usage guidance]
   A206[206 Reference corrections]
@@ -279,8 +281,11 @@ preserves the security/permission boundaries and stays quiet on unchanged progre
 It remains until the whole authorized #179 outcome settles or the user stops it.
 
 Provider protocol source and startup corrections are integrated at `ea671807`.
-#242 supplies their remaining shared-intent binding; its completion does not prove
-native receipt. #235's renewed CLI fixture review found that connector discovery
+#242 shipped their shared-intent binding; its completion does not prove native
+receipt. The native Claude initialization-only probe emitted no output before
+input within20 seconds and then stopped cleanly with observed descendants absent.
+#243 fixes the adapter's readiness-before-first-input sequence before #236 resumes.
+#235's renewed CLI fixture review found that connector discovery
 can start integrations before its model gate; safe prelaunch policy is being
 resolved before native execution. Claude fixture correction and Kiro profile/model
 preflight continue independently. No additional provider model turn is implied by

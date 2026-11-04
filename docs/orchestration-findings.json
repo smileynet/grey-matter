@@ -3,6 +3,31 @@
   "intro": "See tested capabilities, their limits, and the work still ahead.",
   "findings": [
     {
+      "id": "owned-handoff-binding",
+      "state": "confirmed",
+      "label": "Handoff binding shipped",
+      "title": "Keep a handoff tied to the right worker",
+      "value": "Prepare owned-worker handoffs from the same saved message, keeping each input tied to its intended destination.",
+      "diagramLabel": "Prepare a handoff for its intended worker",
+      "steps": [
+        "Save the message",
+        "Bind its destination",
+        "Prepare one input"
+      ],
+      "limit": "Native delivery and startup checks remain in progress. A prepared input is not a receipt.",
+      "details": "The shared intent now binds owned Claude and Kiro input to exact process generation, session and message identity. Independent review and 34 focused checks passed. Actual calls remain parent-owned; no new process, retry, grant or replacement conversation is created by preparation.",
+      "tickets": [
+        "242",
+        "179"
+      ],
+      "sources": [
+        {
+          "label": "Evidence and limits",
+          "href": "agents/research/session-messaging-implementation-20261103.md#shared-owned-client-intent-binding-242"
+        }
+      ]
+    },
+    {
       "id": "current-handoff-routes",
       "state": "confirmed",
       "label": "Current routes researched",
@@ -1072,6 +1097,14 @@
     "238": [
       "Keep worker processes within clear limits",
       "Set a worker’s input, output and lifetime limits, then stop only the process that belongs to that work."
+    ],
+    "242": [
+      "Keep a handoff tied to the right worker",
+      "Prepare owned-worker handoffs from the same saved message, keeping each input tied to its intended destination."
+    ],
+    "243": [
+      "Resolve the observed startup wait",
+      "A bounded Claude startup produced no readiness output before input. The first real handoff needs a reviewed startup path."
     ]
   },
   "includedTicketIds": [
