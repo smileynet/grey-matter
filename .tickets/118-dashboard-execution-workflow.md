@@ -1,7 +1,7 @@
 ---
 id: "118"
 title: "Show a complete visual execution queue with one active ticket in serial mode"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Template and worked example show all unfinished tickets in a connected dependency diagram with stable execution order"
@@ -9,6 +9,7 @@ validation_criteria:
   - "Phone/laptop and offline dashboard checks plus node scripts/gate.mjs pre-merge pass"
 tags: ["stream:tooling","kind:enhancement","epic:outcome-orchestration"]
 priority: low
+assignee: "codex-orchestration-118"
 ---
 
 # Show a complete visual execution queue with one active ticket in serial mode
