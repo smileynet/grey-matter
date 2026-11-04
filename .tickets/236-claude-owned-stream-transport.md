@@ -2,7 +2,7 @@
 id: "236"
 title: "Implement and qualify owned Claude streaming handoffs"
 status: open
-blocked_by: ["231", "233", "234"]
+blocked_by: ["231", "233", "234", "238"]
 priority: high
 validation_criteria:
   - "Owned transport binds exact process session and bounded shared handoff semantics"
