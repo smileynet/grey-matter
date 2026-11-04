@@ -1,7 +1,7 @@
 ---
 id: "233"
 title: "Record bounded native outcomes and notification dead letters"
-status: open
+status: in_progress
 blocked_by: ["210"]
 priority: high
 validation_criteria:
@@ -10,6 +10,7 @@ validation_criteria:
   - "Agent usage contract and independent exact-source acceptance pass"
 tags: ["stream:orchestration", "type:enhancement"]
 parent: "179"
+assignee: "codex"
 ---
 # Bound native notification outcomes and expiration
 
