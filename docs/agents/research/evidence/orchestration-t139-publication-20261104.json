@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "ownerCandidate": "7dd15ef52b0cd0e7083e4d1db969ed7d693562c0",
+  "projectId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e",
+  "siteSourceCommit": "9268d30db3f2bbdee1c6fe7eae3035461bb88cd0",
+  "url": "https://orchestration-findings.sambiggins.chatgpt.site",
+  "deploymentId": "appgdep_6aebaa23586c81919640ac458da5131a",
+  "status": "succeeded",
+  "versionId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_44f9426313488191b9099ae31b94e15e",
+  "publishedAt": "2026-11-04T21:56:58.451735+00:00",
+  "audience": {"mode":"custom","revision":1,"owners":1,"groups":0,"externalVisitors":0,"preserved":true},
+  "receipts": {
+    "effort":"191a01d2c2eb3c95c0a975954fb39282a70b3f505bfff41b9a7b636ed2ede0d0",
+    "status":"43a2b4739498234f393fd3b4871de32c3ab906f2216e08a178102495234b4f71"
+  },
+  "archive": {"bytes":111255,"sha256":"dd83b54c4b5f0d9aeb37159aa474b1af66fb3ccc1bdf5e88d88d6abb0d883b6e","disposition":"sent to OS Recycle Bin after terminal success; original absent; no reclaimed-space claim"},
+  "verification":"Both exact views independently accepted; all12 capture files inspected with tall-image viewer downscaling limits. Parent phone/laptop local interactions passed. Current-source publication preflight included strict full252-ticket/maintained-plan comparison with zero errors or warnings. Native private deployment succeeded. Open-in-Codex queued; no production browser or LAN claim.",
+  "correction":"First visual review blocked an older139 entry still marked In progress. Corrected row and historical wording, refreshed global captures, obtained independent acceptance. Unchanged effort inputs/captures reused. Rejected/intermediate captures privately retained, not published as accepted evidence.",
+  "scope":{"closed":["148","140","141","166","139"],"active":["118"],"deferred":"201"},
+  "retention":{"owner":"parent orchestration continuation","state":"retained","purpose":"raw fixture/review/publication recovery through authorized queue settlement","end":"useful proof promotion and explicit disposition; missing historical ignored evidence remains unknown, no release"}
+}
