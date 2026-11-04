@@ -184,6 +184,7 @@ Rows below are generated inventory entries with one explicit reason each. Operat
 | `scripts/delivery-dashboard-browser.test.mjs` | test | Test harness or test case, not a supported operator CLI. |  |
 | `scripts/delivery-dashboard.test.mjs` | test | Test harness or test case, not a supported operator CLI. |  |
 | `scripts/deploy-validation.test.mjs` | test | Test harness or test case, not a supported operator CLI. |  |
+| `scripts/deploy-native.test.mjs` | test | On-demand installed Claude validator integration, not a blocking gate. |  |
 | `scripts/deploy.mjs` | operator | Runs a maintained repository task; this entrypoint's exact contract and boundary are described in the operator table above. | [operator guidance](tool-scripts.md#operator-usage-guidance) |
 | `scripts/deploy.test.mjs` | test | Test harness or test case, not a supported operator CLI. |  |
 | `scripts/gate.mjs` | operator | Runs a maintained repository task; this entrypoint's exact contract and boundary are described in the operator table above. | [operator guidance](tool-scripts.md#operator-usage-guidance) |
@@ -202,6 +203,8 @@ Rows below are generated inventory entries with one explicit reason each. Operat
 | `scripts/probe-codex-shared.mjs` | operator | Runs a maintained repository task; this entrypoint's exact contract and boundary are described in the operator table above. | [operator guidance](tool-scripts.md#operator-usage-guidance) |
 | `scripts/probe-critic-model.mjs` | operator | Runs a maintained repository task; this entrypoint's exact contract and boundary are described in the operator table above. | [operator guidance](tool-scripts.md#operator-usage-guidance) |
 | `scripts/probe-critic-model.test.mjs` | test | Test harness or test case, not a supported operator CLI. |  |
+| `scripts/probe-critic-model-expectations.test.mjs` | test | On-demand fake model expectation scenarios, not a blocking gate. |  |
+| `scripts/probe-critic-model-fixtures.mjs` | module | Shared fake executable fixtures; imported by tests, not an operator CLI. |  |
 | `scripts/probe-invocation-policy.mjs` | operator | Runs a maintained repository task; this entrypoint's exact contract and boundary are described in the operator table above. | [operator guidance](tool-scripts.md#operator-usage-guidance) |
 | `scripts/release-artifacts.mjs` | operator | Runs a maintained repository task; this entrypoint's exact contract and boundary are described in the operator table above. | [operator guidance](tool-scripts.md#operator-usage-guidance) |
 | `scripts/release-artifacts.test.mjs` | test | Test harness or test case, not a supported operator CLI. |  |
@@ -251,6 +254,8 @@ Rows below are generated inventory entries with one explicit reason each. Operat
 | `scripts/spike-model-tier-implementation-t167.mjs` | operator | Runs a maintained repository task; this entrypoint's exact contract and boundary are described in the operator table above. | [operator guidance](tool-scripts.md#operator-usage-guidance) |
 | `scripts/spike-orchestrate-fixture.mjs` | operator | Runs a maintained repository task; this entrypoint's exact contract and boundary are described in the operator table above. | [operator guidance](tool-scripts.md#operator-usage-guidance) |
 | `scripts/spike-orchestrate-fixture.test.mjs` | test | Test harness or test case, not a supported operator CLI. |  |
+| `scripts/spike-orchestrate-demonstration.test.mjs` | test | On-demand experimental fixture demonstrations, not a blocking gate. |  |
+| `scripts/spike-orchestrate-test-fixtures.mjs` | module | Shared disposable sandbox fixtures; imported by tests, not an operator CLI. |  |
 | `scripts/static-checks.test.mjs` | test | Test harness or test case, not a supported operator CLI. |  |
 | `scripts/survey-repos.test.mjs` | test | Test harness or test case, not a supported operator CLI. |  |
 | `scripts/sync-release-tools.mjs` | operator | Runs a maintained repository task; this entrypoint's exact contract and boundary are described in the operator table above. | [operator guidance](tool-scripts.md#operator-usage-guidance) |

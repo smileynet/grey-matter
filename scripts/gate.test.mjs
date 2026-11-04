@@ -278,6 +278,25 @@ test("a full trigger, or a range Git cannot resolve, selects every check", () =>
   assert.match(unknown.out, /2 of 2 check.*range unknown/);
 }, { fullTriggers: ["package.json"] }));
 
+const projectManifest = JSON.parse(readFileSync(new URL("./gates.json", import.meta.url), "utf8"));
+for (const [path, expected] of [
+  ["scripts/gates.json", ["gate-runner"]],
+  ["scripts/gate.mjs", ["gate-runner"]],
+  [".githooks/pre-push", ["gate-runner"]],
+  ["package.json", ["skill-syntax-fixtures", "release-units"]],
+  ["package-lock.json", ["skill-syntax-fixtures", "release-units"]],
+]) test(`project dependency scope limits pre-merge checks for ${path}`, () => {
+  const checks = projectManifest.checks.filter((c) => c.stage === "pre-merge").map((c) => ({ ...c, run: ["node", "-e", pass] }));
+  fixture(checks, ({ git, commit, run, base }) => {
+    const body = path === "scripts/gate.mjs" ? readFileSync(GATE, "utf8") + "\n// fixture change\n"
+      : path === "scripts/gates.json" ? readFileSync(join(git("rev-parse", "--show-toplevel"), path), "utf8") + "\n" : "{}\n";
+    commit(path, body);
+    const result = run(["pre-merge", "--base", base]);
+    assert.equal(result.status, 0, result.out);
+    assert.deepEqual(checks.filter((c) => ran(result.out, c.id)).map((c) => c.id), expected, result.out);
+  }, { fullTriggers: projectManifest.full_triggers });
+});
+
 test("pre-merge diffs against --base, and --include runs a check from another stage", () => fixture([check("a", ["a/"], pass, { stage: "pre-merge" }), check("late", ["z/"], pass, { stage: "pre-release" })], ({ commit, run, base }) => {
   commit("a/x");
   const r = run(["pre-merge", "--base", base, "--include", "late"]);

@@ -69,6 +69,15 @@ name the skipped id and why in the ticket's close evidence or the commit message
 
 ### Artifact safety and host discovery
 
+Native Claude validator integration, critic model-ceiling/version/availability
+expectations and orchestration fixture demonstrations are also on-demand. Their suites
+are respectively `scripts/deploy-native.test.mjs`,
+`scripts/probe-critic-model-expectations.test.mjs` and
+`scripts/spike-orchestrate-demonstration.test.mjs`; run them with `node --test FILE`.
+Static manifests, launcher arguments, deadlines, streaming, evidence truthfulness,
+sandbox refusal and cleanup ownership remain blocking in their source-scoped suites.
+The offline deployer and release publication safety suites remain release requirements.
+
 The `artifact-hygiene` check runs only disposable, Git-scoped artifact fixtures,
 selected by their source paths or a full-stage trigger. Keep its staged-source fidelity, read-only behavior,
 explicit policy, symlink and incomplete-coverage safety assertions blocking.
@@ -115,7 +124,10 @@ A check enters a stage only with all of:
 
 1. **Catches** one named failure that has happened, often enough to earn its time.
 2. **Scope**: repo-relative path prefixes (`assets/saves/`, `scripts/deploy`). Out of scope, it does
-   not run. Dependency pins and the gate's own files go in `full_triggers`, which run the whole stage.
+   not run. Put dependency pins in the scopes of checks that consume them. Reserve
+   `full_triggers` for shared infrastructure that affects every check; a gate-manifest
+   edit selects runner validation, not every unrelated suite. Unknown ranges still
+   select the whole stage, and pre-release selects all mandatory checks.
 3. **Measured** on this host, dated, inside the stage budget.
 4. **Bounded by the runner**: the runner owns the timeout and kills the process tree; stdin closed,
    `CI=true`, a fresh temp dir. Killed is `timeout`; a missing tool is `infrastructure error`;

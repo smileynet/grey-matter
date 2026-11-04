@@ -1,6 +1,9 @@
 {
-  "full_triggers": ["package.json", "package-lock.json", "scripts/gates.json", "scripts/gate.mjs", "scripts/test-git-env.mjs", "scripts/test-git.config", ".githooks/pre-push"],
+  "full_triggers": ["scripts/test-git-env.mjs", "scripts/test-git.config"],
   "not_gated": {
+    "scripts/probe-critic-model-expectations.test.mjs": "on-demand model-ceiling, version and availability expectations; durable launch, deadline and evidence safety remain blocking",
+    "scripts/spike-orchestrate-demonstration.test.mjs": "on-demand experimental frontier and nested npm demonstrations; sandbox and cleanup safety remain blocking",
+    "scripts/deploy-native.test.mjs": "on-demand native host integration; requires installed harness CLIs and is not a mandatory push, merge or release check",
     "scripts/inspect-footprint.test.mjs": "on-demand host integration suite; invokes whole-host open-file discovery and platform tools, so it is not a push, merge or release requirement (ticket 175)",
     "scripts/spike-model-eval.test.mjs": "completed model-tier experiment; retained only for explicitly requested historical reruns, not maintenance or release verification",
     "scripts/orchestration-dashboard.test.mjs": "needs Playwright Core and an installed Chrome; run manually whenever the orchestration dashboard renderer or data changes",
@@ -21,7 +24,7 @@
       "id": "skill-syntax",
       "stage": "pre-push",
       "catches": "malformed SKILL.md YAML or wrong core types, which harnesses reject on load",
-      "scope": ["skills/", "scripts/check-skill-syntax.mjs"],
+      "scope": ["skills/", "scripts/check-skill-syntax.mjs", "package.json", "package-lock.json"],
       "run": ["node", "scripts/check-skill-syntax.mjs"],
       "timeout_s": 10,
       "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
@@ -84,7 +87,7 @@
       "id": "gate-runner",
       "stage": "pre-merge",
       "catches": "a gate.mjs change that mis-selects checks, lets a hung check pass, or leaks its process tree",
-      "scope": ["scripts/gate", ".githooks/"],
+      "scope": ["scripts/gate.mjs", "scripts/gate.test.mjs", "scripts/gates.json", ".githooks/pre-push"],
       "run": ["node", "--test", "scripts/gate.test.mjs"],
       "timeout_s": 120,
       "measured": { "s": 16.7, "date": "2026-11-01", "host": "win" }
@@ -102,7 +105,7 @@
       "id": "skill-syntax-fixtures",
       "stage": "pre-merge",
       "catches": "a YAML checker change that accepts malformed frontmatter native validation misses",
-      "scope": ["scripts/check-skill-syntax", "scripts/skill-syntax"],
+      "scope": ["scripts/check-skill-syntax", "scripts/skill-syntax", "package.json", "package-lock.json"],
       "run": ["node", "--test", "--test-timeout=60000", "scripts/skill-syntax.test.mjs"],
       "timeout_s": 60,
       "measured": { "s": 0.5, "date": "2026-11-01", "host": "win" }
@@ -182,8 +185,8 @@
     {
       "id": "critic-model-probe",
       "stage": "pre-merge",
-      "catches": "the critic model probe's Windows .cmd launch, safe model-ID boundary, documented Terra version floor and Sol availability diagnostic",
-      "scope": ["scripts/probe-critic-model"],
+      "catches": "the critic probe weakening launch argument safety, shared deadlines, streaming or evidence and sandbox truthfulness",
+      "scope": ["scripts/probe-critic-model.mjs", "scripts/probe-critic-model.test.mjs", "scripts/probe-critic-model-fixtures.mjs"],
       "run": ["node", "--test", "--test-timeout=60000", "scripts/probe-critic-model.test.mjs"],
       "timeout_s": 60,
       "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
@@ -192,7 +195,7 @@
       "id": "orchestrate-spike-fixture",
       "stage": "pre-merge",
       "catches": "the orchestrate spike fixture escaping its sandbox or misreporting a run",
-      "scope": ["scripts/spike-orchestrate-fixture"],
+      "scope": ["scripts/spike-orchestrate-fixture.mjs", "scripts/spike-orchestrate-fixture.test.mjs", "scripts/spike-orchestrate-test-fixtures.mjs"],
       "run": ["node", "--test", "--test-timeout=60000", "scripts/spike-orchestrate-fixture.test.mjs"],
       "timeout_s": 60,
       "measured": { "s": 3.3, "date": "2026-11-01", "host": "win" }
@@ -237,7 +240,7 @@
       "id": "release-units",
       "stage": "pre-merge",
       "catches": "a release helper that publishes with the wrong credentials, version, registry or artifact set",
-      "scope": ["scripts/release"],
+      "scope": ["scripts/release", "package.json", "package-lock.json"],
       "run": ["node", "--test", "--test-timeout=60000", "scripts/release-cargo-credentials.test.mjs", "scripts/release-cargo-upload.test.mjs", "scripts/release-ci-artifacts.test.mjs", "scripts/release-github.test.mjs", "scripts/release-publish.test.mjs", "scripts/release-registry.test.mjs", "scripts/release-tkt-publication.test.mjs", "scripts/release-version.test.mjs"],
       "timeout_s": 120,
       "measured": { "s": 0.3, "date": "2026-11-01", "host": "win" }
@@ -255,7 +258,7 @@
       "id": "deployer",
       "stage": "pre-release",
       "catches": "deploy.mjs writing outside the skill roots it owns, duplicating roots, or refreshing a plugin wrongly",
-      "scope": ["scripts/deploy"],
+      "scope": ["scripts/deploy", "package.json", "package-lock.json"],
       "run": ["node", "--test", "--test-timeout=300000", "scripts/deploy.test.mjs", "scripts/deploy-validation.test.mjs"],
       "timeout_s": 600,
       "measured": { "s": 91.9, "date": "2026-11-01", "host": "win" }
@@ -264,7 +267,7 @@
       "id": "release-integration",
       "stage": "pre-release",
       "catches": "the release flow tagging, pushing, verifying or publishing the wrong candidate in a real Git repository",
-      "scope": ["scripts/release"],
+      "scope": ["scripts/release", "package.json", "package-lock.json"],
       "run": ["node", "--test", "--test-concurrency=1", "--test-timeout=300000", "scripts/release-artifacts.test.mjs", "scripts/release-development.test.mjs", "scripts/release-entrypoints.test.mjs", "scripts/release-git.test.mjs", "scripts/release-native.test.mjs", "scripts/release-product.test.mjs", "scripts/release-verify.test.mjs", "scripts/release.test.mjs"],
       "timeout_s": 900,
       "measured": { "s": 145.9, "date": "2026-11-01", "host": "win" }

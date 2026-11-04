@@ -16,6 +16,9 @@ plugin when `~/.gemini` exists, and the Kiro Crew app when `~/.kiro/crew` exists
 and takes `--dry-run`/`list`/`uninstall`/`--root`/`--project`. It also has `check` (the
 manifests match disk and tags; native manifest/content warnings fail via `--strict`) and `audit` (unowned dirs, and skills a harness sees twice).
 `install-skills.mjs` and `build-agy-plugin.mjs` forward to it.
+The pre-push manifest check uses `check --static`: repository consistency only,
+without invoking the installed Claude validator. Native validation belongs to explicit
+deployment/compatibility checks; its host-dependent fixture is on-demand.
 Use `node scripts/deploy.mjs check --profile directory` to also reject native catalog
 blockers and warnings, including a missing icon. The profile applies to the plugin,
 while its marketplace still receives strict manifest validation. When Claude is absent,
