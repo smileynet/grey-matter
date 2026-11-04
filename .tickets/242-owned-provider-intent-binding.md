@@ -1,7 +1,7 @@
 ---
 id: "242"
 title: "Bind owned provider clients to shared notification intents"
-status: open
+status: in_progress
 blocked_by: ["238"]
 priority: high
 validation_criteria:
@@ -11,6 +11,7 @@ validation_criteria:
   - "Independent exact-commit review and parent integration evidence are retained"
 tags: ["stream:tooling", "kind:enhancement"]
 parent: "179"
+assignee: "codex"
 ---
 # Bind owned Claude and Kiro clients to shared message intents
 
