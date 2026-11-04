@@ -1,7 +1,7 @@
 ---
 id: "250"
 title: "Scope the home-path gate to introduced leaks instead of historical evidence"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Reproduce and confirm the existing full-tree failure on unchanged historical files before selecting a scoped fix."
