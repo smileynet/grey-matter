@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179 final audit and explicit disposition",
+  "sourceCommit": "32a0d0212c79174eaa84aa2a7da4805ef6ae1e5e",
+  "outcome": "first correlated task/core acknowledgments passed; second input ambiguous before replay/result",
+  "primaryFault": "PROTOCOL_ORDER",
+  "rejectedRecordTypeSubtype": "not retained; cause unknown",
+  "rateLimit": "allowed; no exhaustion, billing or entitlement claim",
+  "cleanup": {
+    "observed": "launch root and child absent in both cleanup snapshots; stopped and closed stdio",
+    "originalComputedSettled": null,
+    "limit": "original helper did not use its recorded launch baseline"
+  },
+  "attemptedNativeInputsThroughCase": {
+    "claude": 6,
+    "kiro": 3,
+    "note": "attempts include unacknowledged writes; not billing or model-admission counts"
+  },
+  "raw": [
+    {
+      "path": ".scratch/t236-native-v8-evidence.json",
+      "bytes": 17687,
+      "sha256": "7f852922ec4667e733fa546e6e7df43306848e9e14bfb5e1c0f8796ac538ec87"
+    },
+    {
+      "path": ".scratch/t236-native-v8-live-admission.json",
+      "bytes": 276,
+      "sha256": "fe6705aaa43a8941b2f0181f0262391ae2d8bdc8df449fe88ade2490f463eeb3"
+    },
+    {
+      "path": ".scratch/t236-native-v8-parent-preflight.json",
+      "bytes": 2127,
+      "sha256": "4fa566e2dd9792fab65545320cfcd7fe174907f35e28952c8dfa27a7d0be6606"
+    },
+    {
+      "path": ".scratch/t236-native-v8-parent-result.json",
+      "bytes": 596,
+      "sha256": "bc6ed7149ef5ca4885982957d8972a02baa7cc09ca1def8cdc8ee7016d32592d"
+    },
+    {
+      "path": ".scratch/t236-native-v8-helper-review.md",
+      "bytes": 3221,
+      "sha256": "22f42bbf02f843647c8f07f0fa3145e349982d1c4776e90de777c3782e91a7fb"
+    },
+    {
+      "path": ".scratch/t236-native-v8-parent-pair-review.md",
+      "bytes": 2999,
+      "sha256": "9272b35ae7301412fe7fabe7f6eb3683a819fe03c29289e6e3551ae5c3761e08"
+    },
+    {
+      "path": ".scratch/t236-v8-native-postflight-review.md",
+      "bytes": 3642,
+      "sha256": "e74de19303291ffd1ad3dbe2a0e9ea7e2dec6980020d4044954d8c3dd7660269"
+    },
+    {
+      "path": ".scratch/t236-parent-rate-focused.log",
+      "bytes": 5444,
+      "sha256": "97b746a505284f36fc14a69cd6a43ad495ac185ee16f01c5aa49ee877ead0503"
+    },
+    {
+      "path": ".scratch/t236-parent-rate-premerge-r2.log",
+      "bytes": 104,
+      "sha256": "e8fdfedfb4e021bba7f202cc72b5697c3655a5f6289d2c53439e0375f23ccf54"
+    },
+    {
+      "path": ".scratch/t236-parent-rate-push-r2.log",
+      "bytes": 367,
+      "sha256": "f2bf040ff10fe786b53a0bf615f2500fddbe11abbf9000d69f0df3ecbc2c60da"
+    },
+    {
+      "path": ".scratch/t236-parent-rate-deploy-r2.log",
+      "bytes": 3806,
+      "sha256": "99db60c26b976cf4f64343f6ac6890fbaee79d8a8815714f1bdd526579498624"
+    },
+    {
+      "path": ".scratch/t236-rate-limit-source-review-r2.md",
+      "bytes": 2706,
+      "sha256": "e6805999acb603a63750953895f17d1df41249e1a873f369d573d9599bb2e07f"
+    },
+    {
+      "path": ".scratch/t236-parent-rate-dispatch-result-r2.json",
+      "bytes": 893,
+      "sha256": "3bbafee44401ff2f43d902d21031020eda8b0fd268330ef0377fc7ad51b08f0c"
+    }
+  ]
+}

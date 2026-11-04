@@ -96,3 +96,29 @@ with no retry or provider switch. Native Claude completion remains open in #236.
 
 The [later-case evidence index](evidence/session-messaging-claude-native-progress-20261104.json)
 binds both cases, independent postflights and the read-only cleanup follow-up.
+
+### One correlated turn completed; the follow-up remains unqualified
+
+With rate-limit metadata support shipped, the next fresh business case completed
+its first input: the correlated success result contained the expected answer and
+eight-digit string nonce. The question and its reply were acknowledged by the
+core; the persisted intent reached revision 3 with a validated receipt. The helper's
+embedded revision-1 lifecycle snapshot was stale, so the independent review checked
+the persisted records instead.
+
+The second input ended with `PROTOCOL_ORDER` before replay or result. Its intent
+remains ambiguous and was not retried. The rejected record's type/subtype was not
+retained; repeated initialization is a hypothesis, not an observed cause of this
+failure. The observed rate-limit event was `allowed`, not an exhausted-limit report;
+its raw reset value does not establish billing or account entitlement.
+
+Launch observations identified the owned root and child; both later cleanup
+snapshots were empty and stop resolved with closed stdio. The helper nevertheless
+recorded `settled: null` because it required the root in the cleanup-before snapshot.
+Keep that original computed value separate from the observed disappearance of
+the identities captured at launch. The next fixture must use its launch baseline
+and preserve redacted fault shape without exposing message contents.
+
+The [turn-progress index](evidence/session-messaging-claude-turn-progress-20261104.json)
+binds this case and its independent review. Claude's two-turn qualification and
+the parent outcome remain open.
