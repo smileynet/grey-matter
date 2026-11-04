@@ -1,7 +1,7 @@
 ---
 id: "231"
 title: "Qualify current existing-session messaging interfaces"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
@@ -10,6 +10,7 @@ validation_criteria:
   - "Independent exact-commit review and relevant repository checks pass"
 tags: ["stream:orchestration", "type:research"]
 parent: "179"
+assignee: "codex"
 ---
 # Qualify the remaining messaging interfaces
 
