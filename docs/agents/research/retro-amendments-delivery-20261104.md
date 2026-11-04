@@ -66,3 +66,25 @@ unpublished #171 ancestry and unrelated work were neither integrated nor removed
 The final delivery/dashboard refresh follows tracker closure so its statuses and
 scope are current. It does not close the remaining #139 requirements or other
 follow-up queue tickets. The batch monitor ends only after that delivery settles.
+
+## Published delivery
+
+The [private effort dashboard](https://orchestration-findings.sambiggins.chatgpt.site)
+published successfully on 2026-11-04. Its
+[publication provenance](evidence/retro-amendments-publication-20261104.json) binds
+the reviewed owner candidate, actual Site source and terminal deployment result.
+[Visual acceptance](evidence/retro-amendments-20261104/dashboard-review.md) covers
+twelve phone/laptop captures: 38 findings and 66 effort tickets, with all seven
+remaining effort tickets visible; the delivery dashboard retains all 249 tickets
+and 87 entries. Those are dated snapshots, not a permanent count guarantee.
+
+The existing default delivery flow scope was preserved; an optional orchestration
+scope includes the proposal's epic and earlier spike stream. #225/#251/#145/#149
+are closed; #139 remains open with its two amendment criteria checked and original
+seven pending. The next unfinished queue item is #148, for the later session.
+
+An initial browser launch ended before a page existed. That infrastructure error
+was retained separately; the subsequent completed capture runs and independent
+review establish the reported local rendering results. The owned 106,215-byte
+publication archive was hashed and recycled only after terminal success.
+The production browser handoff was queued; no production rendering check is claimed.

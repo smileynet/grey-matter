@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "ownerCandidate": "20f29f2bc50387cd7b10edf45369b2e3090f83b7",
+  "projectId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e",
+  "siteSourceCommit": "217ab71584a67be2e2ff43e27b31ff697faa3c7d",
+  "url": "https://orchestration-findings.sambiggins.chatgpt.site",
+  "deploymentId": "appgdep_6aeb889af9b88191a4c40b1bf5a68433",
+  "status": "succeeded",
+  "versionId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_a01d4b4a7f288191bc979be983cbc9a5",
+  "publishedAt": "2026-11-04T19:33:53.969578+00:00",
+  "audience": {
+    "mode": "custom",
+    "revision": 1,
+    "owners": 1,
+    "groups": 0,
+    "externalVisitors": 0,
+    "preserved": true
+  },
+  "receipts": {
+    "effort": "78f491fb5c3fe5f449237d2a253d98c1b95072fccd0847200c8e02cbae9af689",
+    "status": "1491088f2b45a41015830b5cc539d86e8980379d27d8163649e9da32951a61c6"
+  },
+  "preflight": ".scratch/retro-amendments-publication-preflight-result.json",
+  "archive": {
+    "bytes": 106215,
+    "sha256": "5eb4becb8ba6718f7b4d0244e26ca64f08be4085c8451cc5124b27fa72211e65",
+    "disposition": "recycled after terminal publication success; original path absent"
+  },
+  "verification": "Twelve local laptop/phone captures independently inspected at original resolution and accepted. Strict contract has zero errors/warnings. Terminal native deployment succeeded. Browser handoff queued; no production browser-rendering claim. Initial effort-capture browser launch failed before a page existed; retained as infrastructure error, separate from the subsequent completed fresh capture.",
+  "scope": {
+    "closed": [
+      "225",
+      "251",
+      "145",
+      "149"
+    ],
+    "amendmentDeliveredButBroaderTicketOpen": [
+      "139"
+    ],
+    "nextSession": "148",
+    "deferred": "201"
+  },
+  "retention": {
+    "owner": "parent retro-amendment integration",
+    "newBatchRaw": "kept through current wrap disposition; compact durable reviews and source/check summaries promoted before any owned scratch recycling",
+    "historical": "pre-existing worktree/native/private171 evidence preserved under earlier archive/reference conditions"
+  }
+}
