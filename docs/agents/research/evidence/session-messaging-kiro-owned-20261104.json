@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179 final audit and explicit disposition",
+  "nativeSourceCommit": "e9a771681eb1871773399c7dcbb4818b817638eb",
+  "localCloseCandidate": "b70520f8e76b4fff17756c7015f2777a6110525b",
+  "integratedCloseCommit": "455f606",
+  "delivery": "two core-acknowledged turns passed",
+  "physicalCleanup": "observed root and child absent; exit0 and closed stdio",
+  "nativeUpdateStream": "DISCONNECTED; original outcome retained",
+  "localCloseRegression": "separate fake-peer proof, no native rerun",
+  "requestedModel": "claude-haiku-4.5",
+  "servedModel": "unreported",
+  "raw": [
+    {
+      "path": ".scratch/t237-native-v7-evidence.json",
+      "bytes": 8836,
+      "sha256": "b404c67c313e5df2064480b1d2053c19b1c5befac6105ab74887cfd407204824"
+    },
+    {
+      "path": ".scratch/t237-native-v7-parent-preflight.json",
+      "bytes": 2461,
+      "sha256": "c75471685c1e02393959f4e8da7ccd7c4da672698a5b342752c942f29503b0ae"
+    },
+    {
+      "path": ".scratch/t237-native-v7-parent-result.json",
+      "bytes": 483,
+      "sha256": "125099908cdffdd15abffb87c5024fecc03271bf0601184cc014ca43fe527e1f"
+    },
+    {
+      "path": ".scratch/t237-v7-native-postflight-review.md",
+      "bytes": 5090,
+      "sha256": "7f3f03364d5bd1f72913099a27145749dfb3d7bd10f44ed88a16cbc31ca4d3b0"
+    },
+    {
+      "path": ".scratch/t237-native-v7-and-parent-critic-review.md",
+      "bytes": 3628,
+      "sha256": "be197db5f92ac06b105cf653a3b03693b2220d5f65c23d6db86b58f77b258531"
+    },
+    {
+      "path": ".scratch/t237-owned-close-source-review.md",
+      "bytes": 4520,
+      "sha256": "d3f6de78985e0919c40f1a19a7e37279c79b291d82735fd1526c6bf18440f33c"
+    },
+    {
+      "path": ".scratch/t237-parent-dispatch-result.json",
+      "bytes": 713,
+      "sha256": "832e3cc67d44202098ea0ed301e456744355783a5eef6a1c8355143ed40f67a7"
+    },
+    {
+      "path": ".scratch/t237-parent-focused.log",
+      "bytes": 3405,
+      "sha256": "3d5cbb2ebcd20c39b8e417e743bad023fa777c31a18b9dbcf7fff067ef217f36"
+    },
+    {
+      "path": ".scratch/t237-parent-premerge.log",
+      "bytes": 104,
+      "sha256": "e33ff2dd1fa234cb2ce997fd591102a96e21e3b36e85f59da21a85ac5dce51b8"
+    },
+    {
+      "path": ".scratch/t237-parent-prepush.log",
+      "bytes": 313,
+      "sha256": "5ed064276b9f584f46b8822f2f6d6085cf9e9c207fd0f6bf03655d1a15b2cbcf"
+    },
+    {
+      "path": ".scratch/t237-parent-deploy.log",
+      "bytes": 3806,
+      "sha256": "99db60c26b976cf4f64343f6ac6890fbaee79d8a8815714f1bdd526579498624"
+    }
+  ]
+}
