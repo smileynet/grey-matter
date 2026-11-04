@@ -229,7 +229,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 242 | Shared intent binding for owned provider clients (after 238; native prerequisite for 236/237) | ✅ done |
 | 243 | First actual bound Claude input during startup (after 242; observed startup gap) | ✅ done |
 | 236 | Owned Claude streaming handoff transport and receipt fixture (after 231/233/234/238/242/243) | in_progress |
-| 237 | Owned Kiro ACP transport and receipt/teardown fixture (after 231/233/234/238/242) | in_progress |
+| 237 | Owned Kiro ACP transport and receipt/teardown fixture (after 231/233/234/238/242) | ✅ done |
 | 238 | Shared bounded owned-process stream module (after 231; required by 236/237) | ✅ done |
 | 205 | Dashboard publication preflight using existing receipts | ✅ done |
 | 206 | Correct observed operational reference drift | ✅ done |
