@@ -26,3 +26,10 @@ Reuse the project's existing ACP protocol work where sound. Implement a bounded 
 - [ ] Exact negotiated ACP session messaging and bounded failure/stop semantics are implemented through the shared interface, preserving the known shutdown workaround.
 - [ ] Protocol fault tests and parent-owned native follow-up/question/completion evidence distinguish actual terminal results, busy gaps, persistence and teardown outcomes.
 - [ ] Independent final source/raw-evidence review, agent usage/catalog guidance and parent integrated checks pass, with owned artifacts retained or disposed explicitly.
+
+## Note — 2026-11-04
+
+By: anonymous
+
+<!-- tkt-note:v1 102288-1793784337441310500 -->
+First native V2 ACP case remains incomplete / RESULT_NOT_JSON; second input was not attempted. Nine message-chunk updates arrived in the selected session, and owned root/child settled with exit0 and closed stdio. Failed response text and raw RPC metadata were not retained before parsing, so format cause and served model remain unknown; RPC success is control-flow inference. Original intent remains ambiguous. Evidence/limits: docs/agents/research/session-messaging-native-qualification-20261104.md (66275ba). A separately admitted fresh case adds pre-parse response shape/RPC evidence and accepts plain JSON or one whole JSON fence without changing bridge permissions or retrying the original intent.
