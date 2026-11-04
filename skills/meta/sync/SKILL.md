@@ -171,22 +171,29 @@ instructions and remain pending, not successful activation.
 node scripts/install-agents-md.mjs
 node scripts/check-guidance.mjs
 node scripts/probe-agent-shell.mjs
-node scripts/probe-critic-model.mjs --timeout 30
 ```
 
-Guidance refusals, shell findings and critic results are independent follow-ups.
+Guidance refusals and shell findings are independent follow-ups.
 Never force generated/hand-edited guidance, apply shell settings, change model/provider
-defaults or launch hosted checks without relevant authorization. The critic timeout
-is a total budget per harness; text mode prints each completed result immediately.
-Timeout/unavailable/auth failures remain unknown evidence. Retain completed results
-on retry.
+defaults or launch hosted checks without relevant authorization.
+
+Live model qualification is not part of sync. Run the critic-model diagnostic only
+when the user explicitly requests it; its model calls and forced-write probe are not
+authorized by a routine sync or a harness upgrade. An unrun diagnostic is not an
+outstanding deployment requirement. Keep its offline regression tests scoped to
+changes to the diagnostic itself.
+
+Other-platform native matrices belong to release-candidate qualification, not local
+maintenance. Report platform-specific fixture skips as coverage limits without turning
+them into a requirement to obtain another host before finishing sync.
 
 ## Report the delta
 
 Lead with completed versus held deployments. Include commits pulled per checkout;
 skills added/modified/pruned and per-root counts; plugin refreshed/current status;
 CLI before/after builds and compatibility evidence; ticket rebase/validation; gate
-scope/outcomes; guidance/shell/critic findings with fixes; and retained artifact scope.
+scope/outcomes; guidance/shell findings and any explicitly requested diagnostic results;
+and retained artifact scope.
 Separate deployment success from host health. Restart chats/reload plugins to load
 refreshed skills. Never claim a held target is current because another succeeded.
 Sync is maintenance; orient picks the next frontier ticket afterward.

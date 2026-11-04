@@ -205,8 +205,11 @@ Review critics (the dashboard copy and results critics, proposal 13) run on the 
 harness offers, with the model and effort pinned on the spawn. **Verified 2026-10-27** on
 randomserver by the spike in [critic-model-spike](./research/critic-model-spike-20261027.md);
 model facts are from [critic-model-selection](./research/critic-model-selection-20261027.md)
-(official vendor documentation). Recheck when a model ships, or run
-`node scripts/probe-critic-model.mjs` (`sync` does).
+(official vendor documentation). The retained diagnostic is available as
+`node scripts/probe-critic-model.mjs --timeout 30` when the user explicitly requests
+model qualification. It makes live model calls and a Codex forced-write attempt;
+routine sync and harness upgrades do not run or require it. Unrun diagnostics are
+not deployment gaps. Its deterministic fake-CLI tests remain scoped regression coverage.
 
 | Harness | Ceiling | Pin with | Effort | Model of record | Needs |
 | --- | --- | --- | --- | --- | --- |

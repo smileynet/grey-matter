@@ -1,6 +1,7 @@
 {
   "full_triggers": ["package.json", "package-lock.json", "scripts/gates.json", "scripts/gate.mjs", "scripts/test-git-env.mjs", "scripts/test-git.config", ".githooks/pre-push"],
   "not_gated": {
+    "scripts/spike-model-eval.test.mjs": "completed model-tier experiment; retained only for explicitly requested historical reruns, not maintenance or release verification",
     "scripts/orchestration-dashboard.test.mjs": "needs Playwright Core and an installed Chrome; run manually whenever the orchestration dashboard renderer or data changes",
     "scripts/check-guidance.mjs": "reads this host's installed guidance files, not the repository; the sync skill runs it",
     "scripts/delivery-dashboard-browser.test.mjs": "needs Playwright and a Chrome binary (CHROME_BIN); run it by hand before a release that changes the dashboard template"
@@ -248,15 +249,6 @@
       "run": ["node", "--test", "scripts/verify-tkt-usage.test.mjs"],
       "timeout_s": 30,
       "measured": { "s": 3.5, "date": "2026-11-02", "host": "win" }
-    },
-    {
-      "id": "model-eval-fixtures",
-      "stage": "pre-merge",
-      "catches": "a model evaluation that accepts staged or committed out-of-scope edits, zero tests, malformed output or a failed native turn",
-      "scope": ["scripts/spike-model-eval", "scripts/fixtures/model-eval/", "scripts/spike-orchestrate-fixture.mjs"],
-      "run": ["node", "--test", "scripts/spike-model-eval.test.mjs"],
-      "timeout_s": 40,
-      "measured": { "s": 26.6, "date": "2026-11-03", "host": "win" }
     },
     {
       "id": "deployer",
