@@ -2,7 +2,7 @@
 id: "237"
 title: "Implement and qualify owned Kiro ACP handoffs"
 status: in_progress
-blocked_by: ["231", "233", "234", "238"]
+blocked_by: ["231", "233", "234", "238", "242"]
 priority: high
 validation_criteria:
   - "Negotiated exact ACP session and bounded failure stop semantics preserve the shutdown workaround"
