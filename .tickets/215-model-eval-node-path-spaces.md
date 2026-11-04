@@ -1,7 +1,7 @@
 ---
 id: "215"
 title: "spike-model-eval controller breaks when node.exe lives under a path with spaces"
-status: open
+status: cancelled
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -22,3 +22,9 @@ Fix: invoke node through an argv array with `shell: false` (preferred), or quote
 
 - [ ] The controller npm-test invocation runs node via an argv array (or properly quoted) so `C:\Program Files\nodejs\node.exe` works
 - [ ] `node --test scripts/spike-model-eval.test.mjs` passes on Windows with the default Node install path
+
+## Cancellation
+
+- Reason: obsolete
+- Note: Owner directed removal of permanent obligations inherited from temporary spikes. Ticket249 removes model-eval-fixtures from maintenance/release gates; the historical runner remains only for explicitly requested reproduction. This Windows-only spike repair is no longer required maintenance. No fix or Windows validation is claimed.
+- Date: 2026-11-04
