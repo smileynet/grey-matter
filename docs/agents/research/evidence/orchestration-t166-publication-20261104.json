@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "ownerCandidate": "9b9926d8aa1596ac80b2bb838aa67ba1caf394d7",
+  "projectId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e",
+  "siteSourceCommit": "5d0c62ab9a0268788be24259be55fad348cdfad6",
+  "url": "https://orchestration-findings.sambiggins.chatgpt.site",
+  "deploymentId": "appgdep_6aeb9f0b9e708191bf626588dbde5361",
+  "status": "succeeded",
+  "versionId": "appgprj_6ae8c6a5462481918dbcf580c7fa764e~appgver_02a99c8620308191a529acd2708daa74",
+  "publishedAt": "2026-11-04T21:09:38.252351+00:00",
+  "audience": {
+    "mode": "custom",
+    "revision": 1,
+    "owners": 1,
+    "groups": 0,
+    "externalVisitors": 0,
+    "preserved": true
+  },
+  "receipts": {
+    "effort": "7ff840c64b07129052eb0a360362972af0e98ffd1b7a5d16f7486851c214431b",
+    "status": "8df045087b90451969c5f3f3170bd2e2e10205922dffeb9ba2e5ec31ec267d03"
+  },
+  "archive": {
+    "bytes": 110365,
+    "sha256": "49ab1332591e4ab3fb2fbd570c0528fefb30e172c19a45db7b40f72a9dbef3ea",
+    "disposition": "recycled after terminal publication success; original path absent"
+  },
+  "verification": "Twelve local phone/laptop captures independently accepted at original resolution; strict contract zero errors/warnings. Current-source publication preflight and terminal owner-private deployment passed. No production browser rendering claim.",
+  "scope": {
+    "closed": [
+      "148",
+      "140",
+      "141",
+      "166"
+    ],
+    "active": [
+      "139"
+    ],
+    "next": "118 after139",
+    "deferred": "201"
+  },
+  "retention": {
+    "owner": "parent orchestration continuation",
+    "state": "retained",
+    "purpose": "new raw fixture/review/publication recovery through authorized queue settlement",
+    "end": "useful proof promotion and explicit disposition; missing historical ignored evidence remains unknown, no release"
+  }
+}
