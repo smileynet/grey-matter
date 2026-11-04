@@ -230,7 +230,7 @@ scheduled for the new session; do not recreate the settled #179 monitor.
 | 148 | Take over worktrees safely and respect harness lifecycle guards | ✅ done |
 | 140 | Keep unrelated staged changes out of ticket commits | ✅ done |
 | 141 | Review staged and working-tree changes safely | ✅ done |
-| 139 | Validate custom dashboards and authoritative ticket projections | in_progress |
+| 139 | Validate custom dashboards and authoritative ticket projections | ✅ done |
 | 118 | Show the complete execution queue and current work | open |
 | 166 | Refresh the broader harness overview from current evidence | ✅ done |
 | 201 | Deferred Kiro shutdown investigation after higher-priority work | backlog |
@@ -614,7 +614,7 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | ID | Work | Status |
 | --- | --- | --- |
 | 130 | Regress shared user-managed skill duplicates without overwriting local changes | open |
-| 139 | Validate the delivery-dashboard contract on custom dashboard pages | in_progress |
+| 139 | Validate the delivery-dashboard contract on custom dashboard pages | ✅ done |
 | 140 | Ticket commands must not sweep staged work into ticket commits | ✅ done |
 | 141 | code-review accepts staged or uncommitted work as its fixed point | ✅ done |
 | 142 | Installed plugin lags the repo so orient routes to skills that are not installed | open |

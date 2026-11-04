@@ -1,7 +1,7 @@
 ---
 id: "139"
 title: "Validate the delivery-dashboard contract on custom dashboard pages"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -34,14 +34,14 @@ A data hook (for example `window.deliveryDashboard` or a JSON file the page decl
 
 ## Acceptance criteria
 
-- [ ] The checker passes on the template and on a fixture custom page exposing the hook, and fails each contract rule on a seeded fixture.
-- [ ] The skill documents the hook and the migration choice.
-- [ ] `node scripts/gate.mjs pre-merge` passes.
+- [x] The checker passes on the template and on a fixture custom page exposing the hook, and fails each contract rule on a seeded fixture.
+- [x] The skill documents the hook and the migration choice.
+- [x] `node scripts/gate.mjs pre-merge` passes.
 
-- [ ] Seeded closed-ticket/stale-plan, missing-row and stale-generated-data scenarios fail; explicitly refreshed template and supported custom projections pass.
-- [ ] Authored ticket-fact overrides and scoped board queries cannot produce a passing full-board verdict.
-- [ ] Checks preserve authored ordering and historical namespaces, report drift without automatic repair, and support the tracker's close-before-refresh workflow.
-- [ ] Delivery/reconciliation guidance points to the maintained comparison owner and names coverage limits; applicable fixtures and repository gates pass.
+- [x] Seeded closed-ticket/stale-plan, missing-row and stale-generated-data scenarios fail; explicitly refreshed template and supported custom projections pass.
+- [x] Authored ticket-fact overrides and scoped board queries cannot produce a passing full-board verdict.
+- [x] Checks preserve authored ordering and historical namespaces, report drift without automatic repair, and support the tracker's close-before-refresh workflow.
+- [x] Delivery/reconciliation guidance points to the maintained comparison owner and names coverage limits; applicable fixtures and repository gates pass.
 - [x] A non-rendering change preserves an accepted receipt; a rendering-input change invalidates affected acceptance.
 - [x] Guidance identifies affected views and preserves acceptance for unchanged independently scoped views.
 
@@ -98,3 +98,13 @@ By: codex
 
 <!-- tkt-note:v1 61056-1793820136037938100 -->
 Verification bookkeeping correction: native edit --ac only addresses the canonical Acceptance criteria section; the earlier note said amendment8-9 checked before those extra-section bytes changed. The accepted requirements are now centralized in that section: original7 remain unchecked, only the two evidenced receipt-comparison amendment criteria are checked. No original requirement was waived or status closed. Proof remains2569dfb plus docs/agents/research/retro-amendments-delivery-20261104.md; tracker display now matches actual bytes.
+
+## Resolution (2026-11-04)
+
+done: custom dashboard data-hook validation and full-board projection comparison shipped, independently reviewed, integrated and deployed50 skills. Gates and actual local rendering passed; raw failures/captures retained through queue settlement. Custom hook is data evidence, not arbitrary DOM proof; no LAN or production browser claim.
+
+### Verification
+1. ✓ check-dashboard.mjs validates the contract against a custom page through a documented data hook, not only the shipped template. — "Template and renderer-independent custom hook fixtures pass; seeded contract violations rejected; integrated focused suite56/56, evidence470cdd6."
+2. ✓ The contract checks: Needs you first, at most five recent entries open, older entries in a searchable history, a plan tab of unfinished work, and completed tickets only in history. — "Skill and contract document JSON hook, migration choice, custom authoritativeProjection refresh and DOM coverage limits in12cb6c0."
+3. ✓ A migration note explains how a custom dashboard either adopts the template or exposes the data hook. — "Template and actual live Plan separate unfinished flow from labelled collapsed terminal history; parent actual1280/390 rendering and6/6 browser cases pass."
+4. ✓ Post-closure checks compare the complete authoritative board with maintained current-looking plan and dashboard projections before publication — "Complete252-ticket native query/source inventory/body identities and read-only maintained-plan comparison pass after explicit refresh; stale/missing/context/fact-override fixtures fail as intended. Premerge2/2, prepush6/6; receipt suites29/29. Source0d3ad9a, durable parent-verification.md in dashboard-139-20261104."
