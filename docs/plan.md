@@ -223,7 +223,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 179 | Shared inter-harness messaging and wakeups (existing owner) | in_progress |
 | 231 | Current primary-source and installed-interface qualification (child of 179) | ✅ done |
 | 232 | Exact session retirement and real spool crash/restart recovery (child of 179) | ✅ done |
-| 233 | Bounded native outcome/dead-letter lifecycle (child of 179) | in_progress |
+| 233 | Bounded native outcome/dead-letter lifecycle (child of 179) | ✅ done |
 | 234 | Ticket/candidate/durable-handoff message context (after 232) | in_progress |
 | 235 | Codex public queue adapter and existing-agent busy/idle receipts (after 231/233/234) | open |
 | 236 | Owned Claude streaming handoff transport and receipt fixture (after 231/233/234) | open |
