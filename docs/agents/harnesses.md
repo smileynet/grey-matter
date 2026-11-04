@@ -26,9 +26,10 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   has not been refreshed against 2.37.1.
 - **User root**: `~/.kiro/skills/`. **Install**: `node scripts/deploy.mjs` (it is
   in the harness table) or `--root ~/.kiro/skills`.
-- **Test (non-interactive)**: `kiro-cli chat --no-interactive "<prompt>"`, with configured
-  permissions and no auto-approved tools; a probe needing approval may not complete headlessly.
-  Qualification in this refresh ran `kiro-cli chat --help` only; no model session was started.
+- **Test (non-interactive)**: `kiro-cli chat --no-interactive "<prompt>"`, using the existing
+  configured permissions and adding no trust-all or bypass flags. Existing profile settings may
+  already approve tools. Qualification in this refresh ran `kiro-cli chat --help` only; it proves
+  command grammar, not runtime permission behavior, and no model session was started.
 - **Invocation filter**: consistent with honoring `disable-model-invocation` (not cleanly
   isolated; see codex for the clean case).
 - **Agent-config gotchas** (`~/.kiro/agents/*.json`): `tools` must list `@builtin` and every
@@ -64,13 +65,15 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 
 
 - Binary `codex`; `codex --version` reported `codex-cli 0.166.0` on this Windows host on
-  2026-11-04. The PATH executable resolves to the Bun installation at `~/.bun/bin/codex.exe`.
+  2026-11-04. `Get-Command` resolved PATH to `~/.bun/bin/codex.exe`; this path observation
+  does not establish whether the file is package-managed or a copied executable.
   `--help` and `exec --help` confirm `-m/--model`, `exec` and its JSON mode.
   Auto-scans its root. Uses the `agents/openai.yaml` sidecar for invocation policy.
 - **User root**: `~/.codex/skills/`. **Install**: default set, or `--root ~/.codex/skills`.
-- **Windows launch.** The current PATH command resolved to Bun's `~/.bun/bin/codex.exe`;
+- **Windows launch.** The current PATH command resolved to `~/.bun/bin/codex.exe`;
   `codex --version` returned 0.166.0. The manifest's first candidate is the vendored package
-  binary, so the path differs while the version agrees. Node's `spawnSync` does not launch a
+  binary, so the path differs while the version agrees. This observation does not establish
+  whether the PATH file is package-managed or copied. Node's `spawnSync` does not launch a
   PATH `.cmd` shim directly. The critic probe resolves the `codex` application with Windows
   PowerShell, then passes argv as JSON data for array invocation; it does not construct
   PowerShell source from argument text. It accepts only model IDs matching
@@ -256,9 +259,12 @@ Rules, with the evidence for each in the spike results:
   opencode agent with write, edit and bash off and `permission.edit: deny`, Kiro's narrowly scoped
   `--trust-tools` option, or Codex `-s read-only`). In the recorded Codex environment, shell
   commands could not start under the read-only sandbox (Ubuntu 24.04 blocks unprivileged user
-  namespaces); a critic that needs shell access must not run there under that setup. The forced
-  write attempt confirms the sandbox rejected patching. Details and the other options tested
-  (tool removal, `--worktree`) are in
+  namespaces; the attempted shell write failed with `RTM_NEWADDR: Operation not permitted`. A
+  critic that needs shell access must not run there under that setup. On randomserver, the
+  sandbox rejected a forced patch attempt with "writing is blocked by read-only sandbox". A
+  separate experiment that disabled sandbox/approval controls was not read-only and
+  wrote outside the repository; it is not a fallback. Details and the other options tested (tool
+  removal, `--worktree`) are in
   [codex-containment-spike](./research/codex-containment-spike-20261027.md).
 - **Time-limit every critic call** with an outer `timeout`. A pinned opencode subagent told to reply
   "OK" made 26 read-only calls and ran past 150 s.

@@ -8,7 +8,7 @@ and labels Agy's manifest value as last-recorded because its execution hold rema
 
 | Harness | Command output | Current executable path (portable) | Manifest comparison |
 | --- | --- | --- | --- |
-| Codex | `codex-cli 0.166.0` | `~/.bun/bin/codex.exe` | `versions.json` records 0.166.0; its first probe candidate is the vendored package binary, while PATH resolved to the Bun executable. |
+| Codex | `codex-cli 0.166.0` | `~/.bun/bin/codex.exe` | `versions.json` records 0.166.0; its first probe candidate is the vendored package binary, while PATH resolved to this file. Package-managed versus copied provenance is unknown. |
 | Claude Code | `2.1.316 (Claude Code)` | `~/.local/bin/claude.exe` | Matches 2.1.316. |
 | Kiro CLI | `kiro-cli 2.37.1` | `%LOCALAPPDATA%/Kiro-Cli/kiro-cli.exe` | Installed version is 2.37.1; `versions.json` still records 2.37.0 from 2026-11-01. The overview calls out this gap; the manifest/reference baseline was not rewritten from a version-only probe. |
 | Agy | Not run | Not probed | 1.4.12 is the manifest's last-recorded value (2026-11-01), not a current observation. Execution hold respected. |
@@ -24,7 +24,7 @@ agent, review, or native model invocation was started.
 | `codex exec --help` | Exit 0; help printed sandbox options, including `read-only`. |
 | `claude.exe --help` | Exit 0; help printed `--print` and `--allowedTools`. |
 | `claude.exe plugin --help` | Exit 0; help printed the `details` subcommand used by the local component-listing example. |
-| `kiro-cli chat --help` | Exit 0; help printed `--no-interactive` and scoped `--trust-tools`. |
+| `kiro-cli chat --help` | Exit 0; help printed `--no-interactive` and scoped `--trust-tools`. Existing profile settings may already approve tools; no runtime permission behavior was inferred. |
 | `crush run --help` | Exit 0; help printed `--cwd`, `--quiet`, and `--yolo` was absent. |
 
 Raw output hashes were returned in the worker dispatch packet. Agy help and version commands
