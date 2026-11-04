@@ -1,7 +1,7 @@
 ---
 id: "253"
 title: "Review findings: published history and cleanup gate isolation"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
