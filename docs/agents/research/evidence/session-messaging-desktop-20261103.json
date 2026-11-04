@@ -1,0 +1,92 @@
+{
+  "source": "6115e4acce0c872f53033fafe8d2ad0ecabe9d0c",
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179finalqualificationauditandexplicitdisposition",
+  "runtime": {
+    "rootVariable": "LOCALAPPDATA",
+    "relativePath": "Temp/grey-matter-179-desktop-cDyTGy"
+  },
+  "failedRuntime": {
+    "rootVariable": "LOCALAPPDATA",
+    "relativePath": "Temp/grey-matter-179-desktop-QNeaRq"
+  },
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-r2-native-witness.json",
+      "bytes": 2628,
+      "sha256": "b49f25e037cd2647b495e86cd1b262f9d6c65a8b5d098a285445a89d87962ddc"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-r2-state.json",
+      "bytes": 5668,
+      "sha256": "d10d2789f01ce125d1bff013836f6dafe5eec1ecf3d953b22eb01466978fddde"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-r2-busy-action.log",
+      "bytes": 1049,
+      "sha256": "84300f782cedd012ccac9a876dd0c016fda14746b7fbe244c01665fac6678f00"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-r2-idle-action.log",
+      "bytes": 925,
+      "sha256": "2332c0a3c77e7e702c5361546ba79767c060a456c4984db3b1e116e871cb50f5"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-r2-question.log",
+      "bytes": 1164,
+      "sha256": "805dd11ee0cb3c8f61e0e0e2311cf74cc0d970fde9f27fe9709ddbb824bd6d06"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-r2-done.log",
+      "bytes": 1141,
+      "sha256": "d070ce41e52a7bacf193c9c14624f515cb32959230fc0df3cff108396274c988"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-postflight-review.log",
+      "bytes": 3631,
+      "sha256": "45e43ad68032bb13a13392e3c137ff6376735e27e875606a0f74e7fcb596c7fc"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-postflight-hashes.txt",
+      "bytes": 2617,
+      "sha256": "a8137a128b46122206c9a82456cda4ad0c7ffe44ddd9d0c07e0081d95de145d6"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-first-failure.json",
+      "bytes": 1207,
+      "sha256": "be66994d7f427c728fb2faa1169da2198439b7d88fa52bfbbe95ce5af56f9bd3"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-first-expiry.json",
+      "bytes": 593,
+      "sha256": "8cdc0495b9ee85f18070c07174d0e5f2ac54164753cd93fde828202edd102609"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-receiver-check.log",
+      "bytes": 716,
+      "sha256": "2ae0044c7d3beb760a1bc419ee5d8d948ebda3bf6d9fc047ab5eed7ed4477021"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-r2-plan.md",
+      "bytes": 1436,
+      "sha256": "18803e9e8212da8ee5485899e6b23c323c83deb89758851637103923153bde26"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-r2.mjs",
+      "bytes": 5191,
+      "sha256": "ab53a2139a448060a5789dea213e1bd1bfcd99de768663ff6f6dc7995010e74f"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-receiver.mjs",
+      "bytes": 2087,
+      "sha256": "3cd95deef5cbbe350da184d91240e253ccfb5ad3e068b5110d0ef76739a13493"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t235-desktop-busy-marker.mjs",
+      "bytes": 403,
+      "sha256": "bb9443e9e9ae76ab021e0edc6cc83dcf96ef16ea2cb04b7b1754d67372c69cc3"
+    }
+  ],
+  "limits": "One bounded busy clock-wait and idle wakeup/question/completion case. Parent-reconstructed native witness is not an authenticated event export. Version unknown, generation local. Failed first case retained/expired ambiguous, never resent. No CLI, action-fingerprint extension, crash, disconnect, global installation or other-provider proof."
+}
