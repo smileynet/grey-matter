@@ -101,3 +101,10 @@ artifact safety fixtures, scoped to their implementation and tests, with a 30-se
 Historical timing and causal hypotheses above remain observations, not resolved defects.
 The broader configurable-budget, scope, help and partial-output work remains deferred in
 this ticket; no new host scan, cleanup or platform pass is claimed by this policy change.
+
+## Note — 2026-11-04
+
+By: anonymous
+
+<!-- tkt-note:v1 22964-1793816476565458000 -->
+Owner-requested gate change shipped in dd7a87a and 26e8110: whole-host inspect-footprint tests are on-demand in not_gated at every stage; retained artifact-hygiene fixtures cover disposable Git-scoped safety with a 30-second bound. Fresh evidence: node --test scripts/repository-artifact-hygiene.test.mjs passed 23/23, no skips, 4.3 seconds; node scripts/gate.mjs pre-merge --base HEAD^ on dd7a87a passed all 20 selected checks without SKIP, artifact-hygiene 5.2 seconds; actual push passed all 7 pre-push checks. Docs consistency, coverage (44 gated/5 reasoned exclusions), and diff checks passed. No whole-host scan or causal macOS validation was run. Broader scanner work remains deliberately deferred.
