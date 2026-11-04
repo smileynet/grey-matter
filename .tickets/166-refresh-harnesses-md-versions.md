@@ -1,7 +1,7 @@
 ---
 id: "166"
 title: "Refresh harnesses.md to the installed harness versions (first harness-changelog review)"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
