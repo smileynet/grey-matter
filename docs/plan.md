@@ -228,7 +228,7 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 235 | Codex public queue adapter and existing-agent busy/idle receipts (after 231/233/234) | in_progress |
 | 236 | Owned Claude streaming handoff transport and receipt fixture (after 231/233/234) | open |
 | 237 | Owned Kiro ACP transport and receipt/teardown fixture (after 231/233/234) | open |
-| 238 | Shared bounded owned-process stream module (after 231; required by 236/237) | in_progress |
+| 238 | Shared bounded owned-process stream module (after 231; required by 236/237) | ✅ done |
 | 205 | Dashboard publication preflight using existing receipts | ✅ done |
 | 206 | Correct observed operational reference drift | ✅ done |
 | 207 | Outcome-coordinator failure and continuation fixtures | ✅ done |
