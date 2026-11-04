@@ -1,7 +1,7 @@
 ---
 id: "139"
 title: "Validate the delivery-dashboard contract on custom dashboard pages"
-status: in_progress
+status: open
 blocked_by: []
 priority: medium
 validation_criteria:
