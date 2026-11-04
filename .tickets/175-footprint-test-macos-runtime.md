@@ -6,7 +6,7 @@ blocked_by: []
 validation_criteria:
   - "On macOS, time `node --test scripts/inspect-footprint.test.mjs` and one `lsof -Fn -w` call; record both."
   - "If the file still exceeds its 120 s runner timeout, record which call is slow and either narrow the scan (for example `lsof +D <repo>`) or move the spawned CLI tests to pass `--open` data."
-  - "`node scripts/gate.mjs pre-merge --include artifact-hygiene` passes on macOS."
+  - "When host diagnosis is explicitly requested, record its bounded result separately; the whole-host suite is not a push, merge or release gate."
 tags: ["stream:test-verification"]
 ---
 
@@ -26,7 +26,7 @@ whole-file Node deadline. Measure the current manifest, not the original 60 s No
 
 - [ ] On macOS, time `node --test scripts/inspect-footprint.test.mjs` and one `lsof -Fn -w` call; record both.
 - [ ] If the file still exceeds its 120 s runner timeout, record which call is slow and either narrow the scan (for example `lsof +D <repo>`) or move the spawned CLI tests to pass `--open` data.
-- [ ] `node scripts/gate.mjs pre-merge --include artifact-hygiene` passes on macOS.
+- [ ] When host diagnosis is explicitly requested, record its bounded result separately; the whole-host suite is not a push, merge or release gate.
 
 ## Workstream reconciliation 2026-11-02
 
@@ -91,3 +91,13 @@ Read skills/meta/repository-artifact-hygiene/scripts/inspect-footprint.mjs and s
 ### Owner refinement — 2026-11-04
 
 Sam clarified that the accepted retro work must generalize and use agent skills for judgement. Scan limits, progress, scope and CLI behavior are mechanical facts; the hygiene skill owns which families merit investigation and what they mean. Keep budgets configurable and examples portable, preserve incomplete-result protection, and avoid a hard-coded cache taxonomy, automatic disposal classifier or new mandatory gate.
+
+### Owner decision: on-demand host evidence — 2026-11-04
+
+The owner requested that whole-host artifact scanning stop blocking delivery.
+`scripts/inspect-footprint.test.mjs` is now explicitly on-demand in `scripts/gates.json`,
+including releases. The `artifact-hygiene` gate retains only cheap disposable Git-scoped
+artifact safety fixtures, scoped to their implementation and tests, with a 30-second bound.
+Historical timing and causal hypotheses above remain observations, not resolved defects.
+The broader configurable-budget, scope, help and partial-output work remains deferred in
+this ticket; no new host scan, cleanup or platform pass is claimed by this policy change.

@@ -1,6 +1,7 @@
 {
   "full_triggers": ["package.json", "package-lock.json", "scripts/gates.json", "scripts/gate.mjs", "scripts/test-git-env.mjs", "scripts/test-git.config", ".githooks/pre-push"],
   "not_gated": {
+    "scripts/inspect-footprint.test.mjs": "on-demand host integration suite; invokes whole-host open-file discovery and platform tools, so it is not a push, merge or release requirement (ticket 175)",
     "scripts/spike-model-eval.test.mjs": "completed model-tier experiment; retained only for explicitly requested historical reruns, not maintenance or release verification",
     "scripts/orchestration-dashboard.test.mjs": "needs Playwright Core and an installed Chrome; run manually whenever the orchestration dashboard renderer or data changes",
     "scripts/check-guidance.mjs": "reads this host's installed guidance files, not the repository; the sync skill runs it",
@@ -145,10 +146,10 @@
     {
       "id": "artifact-hygiene",
       "stage": "pre-merge",
-      "catches": "the artifact and footprint inspectors misclassifying a folder, or hanging (ticket 151)",
-      "scope": ["scripts/repository-artifact-hygiene", "scripts/inspect-footprint", "scripts/scratch-citations-baseline.json", "skills/meta/repository-artifact-hygiene/scripts/"],
-      "run": ["node", "--test", "scripts/repository-artifact-hygiene.test.mjs", "scripts/inspect-footprint.test.mjs"],
-      "timeout_s": 120,
+      "catches": "the Git-scoped artifact inspector changing repository bytes, misreading staged content or weakening explicit policy and incomplete-coverage protection",
+      "scope": ["scripts/repository-artifact-hygiene", "skills/meta/repository-artifact-hygiene/scripts/inspect-artifacts.mjs"],
+      "run": ["node", "--test", "scripts/repository-artifact-hygiene.test.mjs"],
+      "timeout_s": 30,
       "measured": { "s": 9.0, "date": "2026-11-01", "host": "win" }
     },
     {

@@ -67,6 +67,21 @@ establish this for asynchronous tool calls.
 `SKIP=<id>` is for a failure shown to exist already on `origin/main`, not one the push introduces;
 name the skipped id and why in the ticket's close evidence or the commit message.
 
+### Artifact safety and host discovery
+
+The `artifact-hygiene` check runs only disposable, Git-scoped artifact fixtures when
+their inspector or tests change. Keep its staged-source fidelity, read-only behavior,
+explicit policy, symlink and incomplete-coverage safety assertions blocking.
+
+Whole-host footprint discovery is on-demand, including at release time. Run
+`node --test scripts/inspect-footprint.test.mjs` only when host integration evidence
+is requested; it invokes platform tools and machine-wide open-file discovery.
+It is listed in `not_gated`, so no `SKIP` override is needed for normal delivery.
+This does not establish a macOS runtime pass or resolve the scan-runtime cause.
+Ticket 175 retains the deferred scanner improvements and host diagnosis.
+An actual cleanup still needs fresh target-specific preservation evidence under the
+artifact-hygiene skill; optional scan results do not authorize deletion.
+
 ### Home-path privacy check
 
 Keep one cheap blocking check for home paths in added text from the outgoing commits.
