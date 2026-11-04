@@ -8,7 +8,7 @@ validation_criteria:
   - "Actual wrong root/base/candidate and missing ownership/evidence bindings are rejected by read-only preflight."
   - "Orchestration guidance names commands, packet inputs and output limits without claiming semantic overlap or reviewer independence is mechanically proved."
   - "Regression fixtures, independent exact-candidate review and relevant repository checks pass with artifact disposition."
-tags: ["stream:orchestration", "type:chore"]
+tags: ["stream:orchestration","type:chore","epic:outcome-orchestration"]
 assignee: "codex"
 ---
 # Validate dispatch checkout and review evidence bindings before acceptance

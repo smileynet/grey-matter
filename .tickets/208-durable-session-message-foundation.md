@@ -8,7 +8,7 @@ validation_criteria:
   - "Versioned session/message contracts reject wrong or stale existing targets and preserve state without credentials or ticket-ledger duplication."
   - "Deterministic receipt, duplicate/conflict/restart and failure cases pass while unqualified native lanes remain explicit."
   - "Skill usage guidance, script inventory, independent review, current checks and artifact disposition are complete."
-tags: ["stream:tooling", "kind:enhancement"]
+tags: ["stream:tooling","kind:enhancement","epic:outcome-orchestration"]
 parent: "179"
 assignee: "codex"
 ---

@@ -8,7 +8,7 @@ validation_criteria:
   - "Stale receipt, changed render input and mismatched packaged source cannot pass preflight; existing receipt implementation is reused."
   - "Guidance specifies preflight before authorized publication, exact commands and limits, preserving audience/credentials and requiring actual deployment results."
   - "Meaningful rejection fixtures, current dashboard checks, independent review and required repository stages pass."
-tags: ["stream:orchestration", "type:chore"]
+tags: ["stream:orchestration","type:chore","epic:outcome-orchestration"]
 assignee: "codex"
 ---
 # Reject stale review receipts and source mismatch before dashboard publication

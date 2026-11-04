@@ -8,7 +8,7 @@ validation_criteria:
   - "First actual bound input preserves exact identity and busy refusal across init"
   - "Both startup orders and mismatched unsafe or failed startup regressions pass"
   - "Independent review guidance integrated gates and deployment are evidenced"
-tags: ["stream:orchestration", "kind:bug"]
+tags: ["stream:orchestration","kind:bug","epic:outcome-orchestration"]
 parent: "179"
 assignee: "codex"
 ---

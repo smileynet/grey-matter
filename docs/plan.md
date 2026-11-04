@@ -87,14 +87,14 @@ Approved 2026-10-29 from the
 review (ticket 101). The versions are proposed; the staged 0.2.0 / 0.5.0 pair publishes
 first, and only on the owner's word. Ticket ids are per repo.
 
-| Theme | grey-matter tickets | tkt tickets |
-| --- | --- | --- |
-| A. Native epics, owners and labels | 04 | 193–200 |
-| B. Agents can trust what tkt reports | 98 | 138, 127, 143, 144, 151, 153, 176, 177 |
-| C. Safe setup and ticket lifecycle | 82, 85, 88, 97 (artifact cleanup at close) | 190, 163, 164, 165, 145, 202, 66, 159, 227 (cancelled status, ADR 0004), 229 (cleanup in tkt-work) |
-| D. A dashboard that checks itself | 90, 92, 109 (already on main: 100) | |
-| E. Workflow guidance (ticket 101) | 102, 103, 104, 105, 106, 107, 108 | 177 (evidence limits) |
-| Small fixes | 20, 44 | |
+| Theme | grey-matter tickets | tkt tickets | Scope |
+| --- | --- | --- | --- |
+| A. Native epics, owners and labels | 04 | 193–200 | Planned release |
+| B. Agents can trust what tkt reports | 98 | 138, 127, 143, 144, 151, 153, 176, 177 | Planned release |
+| C. Safe setup and ticket lifecycle | 82, 85, 88, 97 (artifact cleanup at close) | 190, 163, 164, 165, 145, 202, 66, 159, 227 (cancelled status, ADR 0004), 229 (cleanup in tkt-work) | Planned release |
+| D. A dashboard that checks itself | 90, 92, 109 (already on main: 100) | | Planned release |
+| E. Workflow guidance (ticket 101) | 102, 103, 104, 105, 106, 107, 108 | 177 (evidence limits) | Planned release |
+| Small fixes | 20, 44 | | Planned release |
 
 Already on main for these versions: grey `bca9a2a` and `734c5ee`, tkt `752b14c` and
 `dd559e5`. Land tkt 138 before theme A's fields so they declare themselves in the
@@ -199,6 +199,51 @@ its four remaining follow-ups. Broader #149/#146/#164 retain their original scop
 | 197 | Dashboard evidence limits without unsolicited review tasks | ✅ done |
 | 198 | Source identity and currency before adopter findings | ✅ done |
 
+## Orchestration follow-up queue (reconciled 2026-11-04)
+
+The proposal's core delivery is complete. Select this proposal and its related
+follow-ups with `epic:outcome-orchestration`; each ticket retains its single
+existing `stream:` area tag. The epic includes 19 delivered tickets and the nine
+remaining tickets below. The earlier 37-ticket spike history remains under
+`stream:orchestration`; that stream alone does not select this follow-up queue.
+
+**Next session only:** execute this queue after the current session's retro and
+wrap-session. This reconciliation does not claim or start implementation. Existing
+#250 is owned by another active thread and is outside this queue. No monitor is
+scheduled for the new session; do not recreate the settled #179 monitor.
+
+| ID | Work | Status |
+| --- | --- | --- |
+| 145 | Detect shared-checkout concurrency and recommend isolation | open |
+| 149 | Review priorities, queue inversions and blockers from ticket facts | open |
+| 148 | Take over worktrees safely and respect harness lifecycle guards | open |
+| 140 | Keep unrelated staged changes out of ticket commits | open |
+| 141 | Review staged and working-tree changes safely | open |
+| 139 | Validate custom dashboards and authoritative ticket projections | open |
+| 118 | Show the complete execution queue and current work | open |
+| 166 | Refresh the broader harness overview from current evidence | open |
+| 201 | Deferred Kiro shutdown investigation after higher-priority work | backlog |
+
+Start with #145 and #149; parallel execution is conditional on verified disjoint
+writes and an available independent critic slot. Then follow the table order.
+These are scheduling preferences, not new `blocked_by` edges: #148 may reuse
+#145's identity inputs, and #141 can use its documented staged-work workaround
+while #140 is unresolved. Dashboard owners #139 and #118 run serially because
+their likely write sets overlap. Keep #201 parked until explicitly scheduled;
+its prerequisite #189 is already done. Do not repeat completed model experiments
+or reopen #179 to broaden its accepted native limits.
+
+Pickup: read this queue and each ticket's full current criteria, then inspect
+current claims before admission. A scoped tkt query also includes untagged tickets;
+use the exact-tag filter below to establish this queue's membership. Do not claim
+untagged #150/#211 or another session's #250 through an inclusive context view.
+tkt's priority/ID-sorted frontier does not replace the authored queue above.
+
+```powershell
+tkt query --all-context | ConvertFrom-Json |
+  Where-Object { $_.tags -contains 'epic:outcome-orchestration' }
+```
+
 ## Outcome-driven orchestration delivery (authorized 2026-11-03)
 
 User approved [proposal 19](agents/proposals/19-outcome-driven-orchestration.md), including implementation, ticket reconciliation and agent skill guidance for all tool scripts. This is a new delivery cycle after the bounded spike outcome; #201 stays low-priority backlog until higher-priority work is finished. Completed/cancelled probes are not restarted.
@@ -278,7 +323,8 @@ Native monitor `session-messaging-supervision` was created ACTIVE for this resum
 #179 scope, every ten minutes, following the user's standing check-in request.
 Its saved prompt follows the live tracker/bindings, nudges stale active sessions,
 preserves the security/permission boundaries and stays quiet on unchanged progress.
-It remains until the whole authorized #179 outcome settles or the user stops it.
+The whole #179 outcome settled and this monitor was deleted after terminal private
+Site publication on 2026-11-04. Its prior ACTIVE state is historical, not current.
 
 Provider protocol source and startup corrections are integrated at `ea671807`.
 #242 shipped their shared-intent binding; its completion does not prove native
@@ -584,3 +630,25 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | ID | Work | Status |
 |---:|---|---|
 | 211 | Ship only what skills need in the Kiro Crew app and agy plugin (65 MB today) | open |
+| 212 | Preflight archive proof formats and recovery consumers before transfer | open |
+| 213 | Gate fixtures fail on Windows without Developer Mode: symlinkSync EPERM | open |
+| 215 | spike-model-eval controller breaks when node.exe lives under a path with spaces | cancelled (obsolete) |
+| 216 | Temp-dir cleanup EPERM on Windows flakes gate checks and crashes probe-critic-model | open |
+| 217 | artifact-hygiene check takes 240s vs 9s measured and times out the 120s gate | open |
+| 219 | Install a tkt build that supports cancel/cancelled on this Windows machine | open |
+| 220 | check-guidance flags conditional and optional paths as dead-path errors | open |
+| 221 | Explore severity tiers and an evidence bar for blocking code-review findings | open |
+| 222 | Explore design / first-principles / UX review lenses for consequential diffs | open |
+| 223 | Explore a single readiness verdict (gate.mjs verdict) that means every expected check ran and passed | open |
+| 224 | Explore a bounded drive-to-green loop (prepare-pr equivalent) in implement | open |
+| 225 | Explore an over-engineering convergence check for review-fix loops | open |
+| 226 | Explore a smallest-change rule for security findings | open |
+| 227 | Explore a check that the PR body matches the diff on every revision | open |
+| 228 | Explore feature sizing (simple/medium/complex) at triage | open |
+| 229 | Explore running the pre-merge gate in GitHub CI with fast checks first | open |
+| 230 | Deployer suite takes 21 min on Windows vs 92s measured and times out its 600s gate | open |
+| 245 | Account for unknown bytes before declaring footprint cleanup complete | open |
+| 246 | Distinguish Trash removal from observed space recovery | open |
+| 247 | Review cleanup plans against changing ownership and protected descendants | open |
+| 250 | Scope the home-path gate to introduced leaks instead of historical evidence | in_progress |
+| 251 | Choose skill judgment or existing checks before adding retro mechanisms | open |

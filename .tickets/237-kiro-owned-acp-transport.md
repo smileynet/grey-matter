@@ -8,7 +8,7 @@ validation_criteria:
   - "Negotiated exact ACP session and bounded failure stop semantics preserve the shutdown workaround"
   - "Protocol fault tests and owned native handoff receipts separate delivery and teardown"
   - "Independent evidence review usage guidance current gates and artifact disposition pass"
-tags: ["stream:orchestration", "type:enhancement"]
+tags: ["stream:orchestration","kind:enhancement","epic:outcome-orchestration"]
 parent: "179"
 ---
 # Own a Kiro ACP messaging transport

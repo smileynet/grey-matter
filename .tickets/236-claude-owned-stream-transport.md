@@ -8,7 +8,7 @@ validation_criteria:
   - "Owned transport binds exact process session and bounded shared handoff semantics"
   - "Protocol faults and native question completion receipts are evidenced with precise limits"
   - "Independent review guidance current gates and artifact disposition pass"
-tags: ["stream:orchestration", "type:enhancement"]
+tags: ["stream:orchestration","kind:enhancement","epic:outcome-orchestration"]
 parent: "179"
 ---
 # Own a Claude streaming worker transport

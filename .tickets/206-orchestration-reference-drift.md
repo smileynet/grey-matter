@@ -8,7 +8,7 @@ validation_criteria:
   - "Each observed contradiction is reproduced from current primary files/help and corrected with version/scope evidence."
   - "Operational references, role guidance and historical proposal status agree without reviving completed tickets or modifying held harness settings."
   - "Independent content review, syntax/invocation/docs checks as applicable and repository stages pass; guidance deployment is recorded."
-tags: ["stream:orchestration", "type:chore"]
+tags: ["stream:orchestration","type:chore","epic:outcome-orchestration"]
 assignee: "codex"
 ---
 # Reconcile operational reference drift found in the orchestration review

@@ -8,7 +8,7 @@ validation_criteria:
   - "Branches classified before any deletion"
   - "Unique work archived"
   - "LFS rule enforced on merge"
-tags: ["stream:tooling", "type:enhancement"]
+tags: ["stream:tooling","kind:enhancement","epic:outcome-orchestration"]
 ---
 
 # Take over another agent's worktrees and branches safely

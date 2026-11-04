@@ -8,7 +8,7 @@ validation_criteria:
   - "Outcome contract and loop handle completion, blocked/deferred frontier, scope revision, user pause and provider exhaustion without broadening authority."
   - "Claude/Codex invocation policy, skill index and role briefs agree; independent review accepts exact final source."
   - "Relevant syntax/invocation/docs checks and repository stages have classified outcomes; guidance is deployed with Agy excluded."
-tags: ["stream:orchestration", "type:chore"]
+tags: ["stream:orchestration","type:chore","epic:outcome-orchestration"]
 assignee: "codex"
 ---
 # Evolve orchestrate into an authorized outcome-driven session skill

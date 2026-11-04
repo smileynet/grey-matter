@@ -9,6 +9,7 @@ validation_criteria:
   - "The contract checks: Needs you first, at most five recent entries open, older entries in a searchable history, a plan tab of unfinished work, and completed tickets only in history."
   - "A migration note explains how a custom dashboard either adopts the template or exposes the data hook."
   - "Post-closure checks compare the complete authoritative board with maintained current-looking plan and dashboard projections before publication"
+tags: ["stream:tooling","epic:outcome-orchestration"]
 ---
 
 # Validate the delivery-dashboard contract on custom dashboard pages

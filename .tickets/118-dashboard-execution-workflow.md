@@ -7,7 +7,7 @@ validation_criteria:
   - "Template and worked example show all unfinished tickets in a connected dependency diagram with stable execution order"
   - "Seeded serial-WIP, owner, ordering, snapshot, and visual-evidence failures are rejected"
   - "Phone/laptop and offline dashboard checks plus node scripts/gate.mjs pre-merge pass"
-tags: ["stream:tooling", "kind:enhancement"]
+tags: ["stream:tooling","kind:enhancement","epic:outcome-orchestration"]
 priority: low
 ---
 

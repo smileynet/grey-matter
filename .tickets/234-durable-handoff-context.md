@@ -8,7 +8,7 @@ validation_criteria:
   - "Validated structured context is immutable-hash bound while old message identity is preserved"
   - "Request reply completion and replay tests reject malformed or altered context"
   - "Usage contract independent exact-source review and integrated gates pass"
-tags: ["stream:orchestration", "type:enhancement"]
+tags: ["stream:orchestration","kind:enhancement","epic:outcome-orchestration"]
 parent: "179"
 assignee: "codex"
 ---

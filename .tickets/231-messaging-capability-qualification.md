@@ -8,7 +8,7 @@ validation_criteria:
   - "All named interfaces have current primary citations and bounded observed evidence"
   - "Supported adapters and held or unqualified gaps are actionable and precisely distinguished"
   - "Independent exact-commit review and relevant repository checks pass"
-tags: ["stream:orchestration", "type:research"]
+tags: ["stream:orchestration","type:research","epic:outcome-orchestration"]
 parent: "179"
 assignee: "codex"
 ---

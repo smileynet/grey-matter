@@ -7,7 +7,7 @@ priority: medium
 validation_criteria:
   - "orient or handoff detects a concurrent session"
   - "Guidance names the worktree path"
-tags: ["stream:tooling"]
+tags: ["stream:tooling","epic:outcome-orchestration"]
 ---
 
 # Detect another live session in the same checkout and suggest a worktree

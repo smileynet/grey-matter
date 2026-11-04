@@ -8,7 +8,7 @@ validation_criteria:
   - "Meaningful injected coordinator errors are rejected and successful continuation/recovery scenarios produce explicit evidence."
   - "Fixture guidance distinguishes deterministic guarantees from unrun native persistence/delivery and current unsupported/security-held lanes."
   - "Independent review of final fixture/source, measured targeted tests and required repository checks pass with artifact disposition."
-tags: ["stream:orchestration", "type:chore"]
+tags: ["stream:orchestration","type:chore","epic:outcome-orchestration"]
 assignee: "codex"
 ---
 # Exercise outcome coordinator continuation and failure recovery scenarios

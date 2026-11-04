@@ -3,7 +3,12 @@ id: "166"
 title: "Refresh harnesses.md to the installed harness versions (first harness-changelog review)"
 status: open
 blocked_by: []
-tags: ["stream:tooling"]
+priority: medium
+validation_criteria:
+  - "Harness overview versions and paths agree with current observed identities or state an explicit evidence limit"
+  - "Changed command examples are verified without model calls or bypassing security holds"
+  - "Documentation checks and applicable repository gates pass"
+tags: ["stream:tooling","epic:outcome-orchestration"]
 ---
 
 # Refresh harnesses.md to the installed harness versions (first harness-changelog review)

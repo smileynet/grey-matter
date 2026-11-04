@@ -8,7 +8,7 @@ validation_criteria:
   - "Exact retirement and persisted input boundaries reject wrong ownership or generation"
   - "Real subprocess crash and restart tests prove bounded persisted-record recovery without automatic resend"
   - "Usage guidance focused checks and independent final-source acceptance are retained"
-tags: ["stream:orchestration", "type:enhancement"]
+tags: ["stream:orchestration","kind:enhancement","epic:outcome-orchestration"]
 parent: "179"
 assignee: "codex"
 ---

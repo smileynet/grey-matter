@@ -8,7 +8,7 @@ validation_criteria:
   - "Owned process API binds verified identity explicit limits and exact stop handle"
   - "Real local child fixtures cover framing output bounds errors and deterministic stop"
   - "Agent guidance independent final-source review and integrated checks pass"
-tags: ["stream:orchestration", "type:enhancement"]
+tags: ["stream:orchestration","kind:enhancement","epic:outcome-orchestration"]
 parent: "179"
 assignee: "codex"
 ---

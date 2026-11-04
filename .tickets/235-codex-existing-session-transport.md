@@ -8,7 +8,7 @@ validation_criteria:
   - "Fixed public queue adapter preserves exact target and shared bounded intent identity"
   - "Owned native busy idle question and completion receipts are independently evidenced"
   - "Regression review guidance and current integrated checks pass"
-tags: ["stream:orchestration", "type:enhancement"]
+tags: ["stream:orchestration","kind:enhancement","epic:outcome-orchestration"]
 parent: "179"
 ---
 # Qualify Codex existing-session input through the shared interface

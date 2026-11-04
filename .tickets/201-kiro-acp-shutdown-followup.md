@@ -8,7 +8,7 @@ validation_criteria:
   - "Root-cause findings distinguish primary evidence from hypotheses and justify any new experiment."
   - "Any shutdown remedy is independently qualified against completed/cancelled/reload and descendant evidence, or its remaining limit is explicit."
   - "Workflow guidance, plan and dashboards are current; checks and artifact disposition are recorded."
-tags: ["stream:orchestration", "type:research"]
+tags: ["stream:orchestration","type:research","epic:outcome-orchestration"]
 ---
 # Research and resolve Kiro ACP shutdown after other work
 

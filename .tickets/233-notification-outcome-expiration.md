@@ -8,7 +8,7 @@ validation_criteria:
   - "Exact bound lifecycle and deadlines distinguish attestations receipts ambiguity and dead letters"
   - "Failure restart legacy and wrong-binding tests reject false delivery and resend"
   - "Agent usage contract and independent exact-source acceptance pass"
-tags: ["stream:orchestration", "type:enhancement"]
+tags: ["stream:orchestration","kind:enhancement","epic:outcome-orchestration"]
 parent: "179"
 assignee: "codex"
 ---

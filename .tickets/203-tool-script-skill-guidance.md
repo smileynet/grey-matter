@@ -8,7 +8,7 @@ validation_criteria:
   - "Complete tracked-script inventory classifies all in-scope files and reports genuinely undocumented entrypoints without running them."
   - "All operator scripts have reachable task-specific skill guidance with invocation, authorization, result interpretation and lifecycle; held spike tools remain held."
   - "Coverage checker rejects missing/stale guidance and new unclassified scripts in meaningful fixtures; independent critic and relevant repository checks pass."
-tags: ["stream:orchestration", "type:chore"]
+tags: ["stream:orchestration","type:chore","epic:outcome-orchestration"]
 assignee: "codex"
 ---
 # Give every tracked tool script task-specific agent skill usage guidance

@@ -7,7 +7,7 @@ priority: medium
 validation_criteria:
   - "Review flags inversions and stuck tickets"
   - "Facts come from tool output"
-tags: ["stream:tooling", "type:enhancement"]
+tags: ["stream:tooling","kind:enhancement","epic:outcome-orchestration"]
 ---
 
 # reconcile-tickets runs a priority review over workstreams, queue and blockers

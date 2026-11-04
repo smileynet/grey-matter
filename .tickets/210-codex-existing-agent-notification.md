@@ -8,7 +8,7 @@ validation_criteria:
   - "Exact target and durable once-only preparation pass focused tests and independent source review"
   - "Owned existing-agent native receipt and correlated completion evidence with explicit limits"
   - "Skill guidance inventory gates deployment and artifact disposition verified"
-tags: ["stream:orchestration", "type:chore"]
+tags: ["stream:orchestration","type:chore","epic:outcome-orchestration"]
 parent: "179"
 assignee: "codex"
 ---

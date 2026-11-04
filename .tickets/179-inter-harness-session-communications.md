@@ -12,7 +12,7 @@ validation_criteria:
   - "Permissions and owned configuration survive installation and cleanup"
   - "Orchestrate and harness references use the shared interface"
   - "Portable documented fixture and required repository gates pass"
-tags: ["stream:tooling", "kind:enhancement"]
+tags: ["stream:tooling","kind:enhancement","epic:outcome-orchestration"]
 assignee: "codex"
 ---
 
