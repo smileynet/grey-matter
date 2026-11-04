@@ -1,7 +1,7 @@
 ---
 id: "141"
 title: "code-review accepts staged or uncommitted work as its fixed point"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
