@@ -42,6 +42,21 @@ test('requires exact registered target, and rejects stale generations before enq
   assert.equal(operate(root, 'status').messages[0].from.harnessVersion, '1.2.3');
 });
 
+test('retirement is exact, preserves other sessions and message history, and blocks retired routes', () => {
+  const { root, a, b } = setup(); const prior = send(root, a, b, 'before-retire').message;
+  assert.throws(() => operate(root, 'retire', { target: { ...b, host: 'wrong-host' } }), /not registered/);
+  assert.throws(() => operate(root, 'retire', { target: { ...b, generation: 2 } }), /not registered/);
+  assert.equal(operate(root, 'retire', { target: b }).result, 'retired');
+  assert.throws(() => operate(root, 'accept', { id: 'before-retire', target: b }), /not active/);
+  const script = fileURLToPath(new URL('./session-messages.mjs', import.meta.url));
+  const state = JSON.parse(execFileSync(process.execPath, [script, 'status', '--root', root], { encoding: 'utf8' }));
+  assert.deepEqual(state.sessions.map(s => s.status), ['registered', 'retired']);
+  assert.deepEqual(state.messages[0], prior);
+  assert.throws(() => send(root, a, b), /not active/);
+  assert.equal(operate(root, 'register', { target: { ...b, generation: 2 } }).result, 'registered');
+  assert.equal(operate(root, 'status').sessions[1].status, 'retired');
+});
+
 test('stable duplicate is idempotent and changed content under same id conflicts', () => {
   const { root, a, b } = setup();
   assert.equal(send(root, a, b).result, 'queued');
@@ -71,7 +86,7 @@ test('out-of-order transitions and acknowledgment loops are rejected; repeats ar
   assert.throws(() => operate(root, 'receive', { id: 'm-1', target: b }), /expected accepted/);
   operate(root, 'accept', { id: 'm-1', target: b });
   assert.equal(operate(root, 'accept', { id: 'm-1', target: b }).result, 'duplicate');
-  assert.throws(() => operate(root, 'send', { id: 'ack-1', kind: 'ack', from: b, to: a, body: 'ack' }), /kind must be/);
+  assert.throws(() => operate(root, 'send', { id: 'ack-1', kind: 'ack', from: b, to: a, body: 'ack' }), /send only creates message records/);
   operate(root, 'receive', { id: 'm-1', target: b });
   operate(root, 'handle', { id: 'm-1', target: b });
   assert.equal(operate(root, 'ack', { id: 'm-1', target: b }).message.state, 'acked');
@@ -115,6 +130,81 @@ test('CLI requires an explicit root and emits a machine-readable init receipt', 
   const output = execFileSync(process.execPath, [script, 'init', '--root', root], { encoding: 'utf8' });
   assert.equal(JSON.parse(output).result, 'initialized');
   assert.throws(() => execFileSync(process.execPath, [script, 'status'], { stdio: 'ignore' }));
+  assert.throws(() => execFileSync(process.execPath, [script, 'status', '--root', root, '--unexpected'], { stdio: 'ignore' }));
+  assert.throws(() => execFileSync(process.execPath, [script, 'status', '--root', root, '--json', join(root, 'empty.json'), '--unexpected'], { stdio: 'ignore' }));
+});
+
+test('CLI and persisted data reject unknown input fields and filename identity drift', () => {
+  const { root, a, b } = setup();
+  assert.throws(() => operate(root, 'send', { id: 'm-x', from: a, to: b, body: 'hi', trusted: true }), /Unsupported input field/);
+  const script = fileURLToPath(new URL('./session-messages.mjs', import.meta.url));
+  const input = join(root, 'input.json'); writeFileSync(input, JSON.stringify({ id: 'm-x', from: a, to: b, body: 'hi', unexpected: 1 }));
+  assert.throws(() => execFileSync(process.execPath, [script, 'send', '--root', root, '--json', input], { stdio: 'ignore' }));
+  send(root, a, b, 'real-id');
+  const original = join(root, 'messages', 'real-id.json'); const wrongName = join(root, 'messages', 'other-name.json');
+  writeFileSync(wrongName, readFileSync(original));
+  assert.throws(() => operate(root, 'status'), /does not match persisted filename/);
+});
+
+test('send rejects reply metadata and response kinds before persistence, leaving the spool readable', () => {
+  const { root, a, b } = setup();
+  for (const [id, extra] of [
+    ['bad-number', { replyTo: 17 }], ['bad-object', { replyTo: { id: 'parent' } }],
+    ['bad-array', { replyTo: ['parent'] }], ['bad-string', { replyTo: 'parent' }],
+    ['bad-reply-kind', { kind: 'reply' }], ['bad-done-kind', { kind: 'done' }]
+  ]) {
+    assert.throws(() => operate(root, 'send', { id, from: a, to: b, body: 'invalid', ...extra }));
+    assert.deepEqual(operate(root, 'status').messages, []);
+  }
+  const script = fileURLToPath(new URL('./session-messages.mjs', import.meta.url));
+  const input = join(root, 'invalid-send.json');
+  writeFileSync(input, JSON.stringify({ id: 'cli-bad-reply', from: a, to: b, body: 'invalid', replyTo: 17 }));
+  assert.throws(() => execFileSync(process.execPath, [script, 'send', '--root', root, '--json', input], { stdio: 'ignore' }));
+  assert.deepEqual(operate(root, 'status').messages, []);
+  assert.equal(send(root, a, b, 'valid-after-rejections').result, 'queued');
+  assert.equal(operate(root, 'status').messages.length, 1);
+});
+
+test('subprocess crashes around atomic message rename leave ambiguous locks and never auto-resend', () => {
+  const script = fileURLToPath(new URL('./session-messages.mjs', import.meta.url));
+  const fixture = `const fs = require('node:fs'); const { syncBuiltinESMExports } = require('node:module'); const rename = fs.renameSync; fs.renameSync = function(source, target) { if (String(target).endsWith('m-crash.json') && process.env.CRASH_AT === 'before') process.exit(81); const result = rename.call(this, source, target); if (String(target).endsWith('m-crash.json') && process.env.CRASH_AT === 'after') process.exit(82); return result; }; syncBuiltinESMExports();`;
+  for (const phase of ['before', 'after']) {
+    const { root, a, b } = setup();
+    const keep = join(root, 'unowned.txt'); writeFileSync(keep, 'keep me');
+    const input = join(root, 'crash-input.json'); writeFileSync(input, JSON.stringify({ id: 'm-crash', correlationId: 'corr-crash', from: a, to: b, body: `persist-${phase}` }));
+    const preload = join(root, 'fault.cjs'); writeFileSync(preload, fixture);
+    const child = execFileSync;
+    let exitCode;
+    try { child(process.execPath, ['--require', preload, script, 'send', '--root', root, '--json', input], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, CRASH_AT: phase } }); }
+    catch (error) { exitCode = error.status; }
+    assert.equal(exitCode, phase === 'before' ? 81 : 82);
+    const recordPath = join(root, 'messages', 'm-crash.json');
+    assert.equal(existsSync(recordPath), phase === 'after');
+    const messageFiles = readdirSync(join(root, 'messages'));
+    if (phase === 'before') {
+      const staged = messageFiles.find(name => name.endsWith('.tmp'));
+      assert.ok(staged, 'pre-rename crash should leave its staged file for inspection');
+      assert.equal(JSON.parse(readFileSync(join(root, 'messages', staged), 'utf8')).body, 'persist-before');
+    }
+    const lock = join(root, '.lock'); assert.equal(existsSync(lock), true);
+    assert.throws(() => execFileSync(process.execPath, [script, 'status', '--root', root], { stdio: 'ignore' }));
+    assert.equal(existsSync(lock), true, 'restart must leave the ambiguous lock untouched');
+    if (phase === 'after') {
+      const persisted = JSON.parse(readFileSync(recordPath, 'utf8'));
+      assert.equal(persisted.id, 'm-crash'); assert.equal(persisted.correlationId, 'corr-crash'); assert.equal(persisted.state, 'queued');
+    }
+    // This fixture owns the runtime and performs the documented manual recovery step.
+    rmSync(lock);
+    if (phase === 'after') {
+      const duplicate = operate(root, 'send', { id: 'm-crash', correlationId: 'corr-crash', from: a, to: b, body: 'persist-after' });
+      assert.equal(duplicate.result, 'duplicate');
+      assert.equal(operate(root, 'status').messages.length, 1);
+    } else {
+      assert.deepEqual(operate(root, 'status').messages, []);
+      assert.equal(operate(root, 'send', { id: 'm-crash', correlationId: 'corr-crash', from: a, to: b, body: 'persist-before' }).result, 'queued');
+    }
+    assert.equal(readFileSync(keep, 'utf8'), 'keep me');
+  }
 });
 
 test('runtime path permission failure is surfaced', () => {

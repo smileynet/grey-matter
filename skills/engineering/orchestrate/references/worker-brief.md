@@ -19,8 +19,10 @@ Read project guidance, glossary, ADRs and the ticket's referenced inputs.
 Preflight branches, PRs and tracker: already covered or disproven premise means
 STANDDOWN with evidence; an unresolved design call means PROPOSAL before building.
 
-Work only in the assigned worktree. Where the harness creates it in the worker,
-create the specified branch from the named base SHA before editing.
+Work only in the assigned worktree. Use absolute edit paths under that root: a patch
+tool's default directory can differ from a shell call's explicit working directory.
+Where the harness creates the worktree in the worker, create the specified branch
+from the named base SHA before editing.
 Verify `git rev-parse --show-toplevel`, the worktree registration and base SHA.
 If isolation, claim authorization or a required tool is unavailable, report
 BLOCKED before source edits. Permission denial is not authorization to edit an

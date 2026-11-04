@@ -1,0 +1,34 @@
+{
+  "candidate": "74347e3b99facf67756f62c18a2b568f6546d859",
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179finalqualificationauditandexplicitdisposition",
+  "raw": [
+    {
+      "path": "D:/code/grey-matter/.scratch/t232-session-recovery-checks-final.log",
+      "bytes": 5163,
+      "sha256": "59c1286db0423f614e114f3cd344da41742dd7b56e4a3e7e52de557e2f7370cc"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t232-session-recovery-reviewfix-final.log",
+      "bytes": 5426,
+      "sha256": "91f2aa1881aac880c444e3e9ef9714a88f2b5321952c2a2d01a4e06de6aaf7e6"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t232-independent-review.log",
+      "bytes": 2763,
+      "sha256": "292abb2bf9f0795c05b041d2339f1e57d94b44a7d2d25385c08657c6c297f3b9"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t232-independent-focused-checks.log",
+      "bytes": 5319,
+      "sha256": "8be26b1e78b9c313b2a1500b29b26473446ac34b88276adc7377862eb345caeb"
+    },
+    {
+      "path": "D:/code/grey-matter/.scratch/t232-independent-reviewfix.log",
+      "bytes": 3121,
+      "sha256": "15ce7d8ae3a24afc94083e72a4ee29ff65ae9e8885c8136cd1d3ef47383b0b28"
+    }
+  ],
+  "limits": "Filesystem rename-boundary subprocess exits prove bounded code-path behavior, not power loss or native delivery."
+}

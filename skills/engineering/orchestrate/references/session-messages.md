@@ -24,7 +24,7 @@ Before using it, confirm that the parent task authorizes the particular local re
 
 ## Schema and selection
 
-`registry.json` is `{ "version": 1, "sessions": [...] }`. Each session has a `target`, status (`registered` or `superseded`), and registration timestamp. A target contains exactly:
+`registry.json` is `{ "version": 1, "sessions": [...] }`. Each session has a `target`, status (`registered`, `superseded` or `retired`), and registration timestamp. A target contains exactly:
 
 ```json
 {
@@ -52,6 +52,7 @@ The CLI accepts exactly `COMMAND --root PRIVATE_DIR` and optional `--json INPUT.
 ```powershell
 node skills/engineering/orchestrate/scripts/session-messages.mjs init --root D:\private\task-mailbox
 node skills/engineering/orchestrate/scripts/session-messages.mjs register --root D:\private\task-mailbox --json .scratch\session.json
+node skills/engineering/orchestrate/scripts/session-messages.mjs retire --root D:\private\task-mailbox --json .scratch\target.json
 node skills/engineering/orchestrate/scripts/session-messages.mjs send --root D:\private\task-mailbox --json .scratch\message.json
 node skills/engineering/orchestrate/scripts/session-messages.mjs accept --root D:\private\task-mailbox --json .scratch\targeted-message.json
 node skills/engineering/orchestrate/scripts/session-messages.mjs poll --root D:\private\task-mailbox --json .scratch\target.json
@@ -67,11 +68,16 @@ node skills/engineering/orchestrate/scripts/session-messages.mjs status --root D
 Inputs:
 
 - `register`: `{ "target": TARGET }`.
+- `retire`: `{ "target": TARGET }`, the complete exact active registration.
 - `send`: `{ "id": "stable-id", "correlationId": "thread-id", "from": TARGET, "to": TARGET, "body": "...", "kind": "message" }`. `kind` and `correlationId` can be omitted; defaults are `message` and the stable ID.
 - `reply` / `done`: same fields, plus required `replyTo` naming an existing parent. Correlation defaults to the parent's correlation ID and must match it.
 - `poll`: `{ "target": TARGET }`.
 - `accept`, `receive`, `handle`, `ack`, `replay`: `{ "id": "stable-id", "target": TARGET }`.
 - `init` and `status`: no JSON input.
+
+`retire` marks only the exact active registration retired. Wrong host, session ID, harness/interface, or generation fails closed. Historical messages and other registrations are retained; retirement never deletes records. Retired generations cannot route new messages or advance existing ones. Registering a higher generation is explicit; retired history remains retired. JSON inputs accept only the fields listed above, and the CLI accepts no trailing arguments beyond the optional single `--json FILE` pair.
+
+`send` creates only an uncorrelated `message` record; it rejects `replyTo` and response kinds. Use `reply` or `done` to bind a response to an existing parent and enforce its reversed route and correlation. Normalized records are validated before any message file is written.
 
 ## Lifecycle and result interpretation
 
@@ -82,6 +88,8 @@ Each successful command prints a JSON object. For sends, `result: queued` means 
 ## Concurrency, failure, and retention
 
 The helper takes an exclusive `.lock`, writes JSON to a same-directory temporary file, flushes it, and renames it into place. A lock left by a crash is ambiguous. The tool deliberately refuses to remove it: inspect the named private runtime, process ownership and task state, then recover it manually under the parent task's authorization. Do not delete a lock merely because it is old. A timeout, permission error, malformed record, or ambiguous return is not success and does not trigger a delivery retry. Keep the root and records only for the owning coordination task's recovery/review window; after that, disposition them using the parent task's artifact-retention decision. The helper does not delete the root or any unknown files.
+
+After an interrupted write, preserve the runtime and inspect the lock, target record and same-directory temporary files. Only after ownership and process state establish that the lock belongs to the interrupted operation may the parent authorize manual lock removal. A missing target record means persistence was not observed; it does not prove no external action occurred. A persisted `queued` record may be inspected or explicitly resent with the same ID and exact content after manual recovery; the helper itself never retries. A matching record returns `duplicate`. Do not create a new ID to resolve ambiguity. The fixture exits a child process immediately before and after the message-file rename: it proves local persistence, lock refusal and same-ID spool deduplication only, not delivery or exactly-once handling.
 
 Verification fixture:
 

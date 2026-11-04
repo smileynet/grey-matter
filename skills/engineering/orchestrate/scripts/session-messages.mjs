@@ -41,7 +41,9 @@ function readJson(path) {
 function validateRegistry(value) {
   demand(record(value) && value.version === VERSION && Array.isArray(value.sessions), 'Unsupported or malformed registry version');
   for (const session of value.sessions) {
-    demand(record(session) && session.target && ['registered', 'superseded'].includes(session.status), 'Malformed session record');
+    demand(record(session) && Object.keys(session).every(key => ['target', 'status', 'registeredAt'].includes(key))
+      && session.target && ['registered', 'superseded', 'retired'].includes(session.status)
+      && typeof session.registeredAt === 'string' && Number.isFinite(Date.parse(session.registeredAt)), 'Malformed session record');
     parseTarget(session.target);
   }
   return value;
@@ -93,7 +95,11 @@ function validateMessage(message) {
 }
 function listMessages(paths) {
   if (!existsSync(paths.messages)) return [];
-  return readdirSync(paths.messages).filter(n => n.endsWith('.json')).map(n => validateMessage(readJson(join(paths.messages, n))));
+  return readdirSync(paths.messages).filter(n => n.endsWith('.json')).map(n => {
+    const message = validateMessage(readJson(join(paths.messages, n)));
+    demand(`${message.id}.json` === n, `Message id does not match persisted filename: ${n}`);
+    return message;
+  });
 }
 function normalizeMessage(input, registry) {
   demand(record(input) && typeof input.id === 'string' && typeof input.body === 'string', 'Input requires id and body');
@@ -113,7 +119,15 @@ function normalizeMessage(input, registry) {
 
 export function operate(root, command, input = {}) {
   const paths = rootPaths(root);
-  demand(['init', 'register', 'send', 'accept', 'poll', 'receive', 'handle', 'reply', 'done', 'ack', 'replay', 'status'].includes(command), 'Unknown command');
+  demand(['init', 'register', 'retire', 'send', 'accept', 'poll', 'receive', 'handle', 'reply', 'done', 'ack', 'replay', 'status'].includes(command), 'Unknown command');
+  demand(record(input), 'Input must be an object');
+  const fields = {
+    init: [], status: [], register: ['target'], retire: ['target'], poll: ['target'],
+    send: ['id', 'correlationId', 'kind', 'from', 'to', 'body'],
+    reply: ['id', 'correlationId', 'replyTo', 'from', 'to', 'body'], done: ['id', 'correlationId', 'replyTo', 'from', 'to', 'body'],
+    accept: ['id', 'target'], receive: ['id', 'target'], handle: ['id', 'target'], ack: ['id', 'target'], replay: ['id', 'target']
+  }[command];
+  demand(Object.keys(input).every(key => fields.includes(key)), `Unsupported input field for ${command}`);
   if (command === 'init') {
     mkdirSync(paths.base, { recursive: true, mode: 0o700 });
     mkdirSync(paths.messages, { recursive: true, mode: 0o700 });
@@ -131,12 +145,18 @@ export function operate(root, command, input = {}) {
         && s.target.interface === target.interface && s.target.nativeId === target.nativeId;
       const prior = registry.sessions.filter(sameNativeIdentity);
       demand(prior.every(s => target.generation > s.target.generation), 'Generation must increase for a reused native session identity');
-      for (const session of prior) session.status = 'superseded';
+      for (const session of prior) if (session.status === 'registered') session.status = 'superseded';
       registry.sessions.push({ target, status: 'registered', registeredAt: new Date().toISOString() }); save(paths, registry);
       return { result: 'registered', target };
     }
+    if (command === 'retire') {
+      const entry = sessionFor(registry, input.target);
+      entry.status = 'retired'; save(paths, registry);
+      return { result: 'retired', target: entry.target };
+    }
     if (command === 'send' || command === 'reply' || command === 'done') {
       let parent;
+      if (command === 'send') demand(input.kind === undefined || input.kind === 'message', 'send only creates message records; use reply or done for correlated responses');
       if (command !== 'send') {
         demand(typeof input.replyTo === 'string' && input.replyTo.length > 0, `${command} requires replyTo`);
         parent = readJson(messagePath(paths, input.replyTo));
@@ -149,6 +169,7 @@ export function operate(root, command, input = {}) {
         demand(message.correlationId === parent.correlationId, 'Reply correlationId must match its parent');
         message.replyTo = parent.id; message.contentHash = digest(immutableMessage(message));
       }
+      validateMessage(message);
       const path = messagePath(paths, message.id); const existing = readJson(path);
       if (existing) {
         demand(existing.contentHash === message.contentHash, `Message id conflict: ${message.id} already has different content`);
@@ -181,8 +202,10 @@ function cli(argv) {
   const [command, ...rest] = argv;
   demand(typeof command === 'string' && rest[0] === '--root' && typeof rest[1] === 'string', 'Usage: session-messages.mjs COMMAND --root PRIVATE_DIR [--json FILE]');
   const root = rest[1]; let input = {};
-  if (rest[2] === '--json' && rest[3]) input = JSON.parse(readFileSync(resolve(rest[3]), 'utf8'));
-  else demand(rest.length === 2, 'Unexpected arguments');
+  if (rest.length === 2) input = {};
+  else if (rest.length === 4 && rest[2] === '--json' && rest[3]) input = JSON.parse(readFileSync(resolve(rest[3]), 'utf8'));
+  else demand(false, 'Unexpected arguments; use exactly --root PRIVATE_DIR and optional --json FILE');
+  demand(record(input), 'JSON input must be an object');
   const output = operate(root, command, input);
   process.stdout.write(`${JSON.stringify(output, null, 2)}\n`);
 }
