@@ -215,6 +215,15 @@ export function createClaudeStreamProtocol(sessionId) {
       demand(value.session_id === sessionId, 'record belongs to a different session', 'SESSION_MISMATCH');
     }
 
+    if (value.type === 'command_lifecycle') {
+      demand(value.session_id === sessionId, 'command lifecycle record has no exact session', 'SESSION_MISMATCH');
+      demand(typeof value.uuid === 'string' && UUID.test(value.uuid),
+        'command lifecycle record has no valid event UUID', 'PROTOCOL_SHAPE');
+      demand(phase !== 'closed' && phase !== 'faulted',
+        'command lifecycle record arrived after process completion', 'PROTOCOL_ORDER');
+      return { type: 'status', sessionId, subtype: 'command_lifecycle', uuid: value.uuid };
+    }
+
     if (value.type === 'system') {
       demand(value.session_id === sessionId && typeof value.subtype === 'string', 'system record has no exact session or subtype', 'PROTOCOL_SHAPE');
       if (value.subtype === 'init') {

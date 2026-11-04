@@ -57,6 +57,9 @@ class Fixture {
       string messageSession = StringField(wire, "session_id");
       string text = StringField(wire, "content");
       if (protocol == null || messageSession != sid || text != "startup bound input") { Environment.ExitCode = 14; return; }
+      Console.Out.WriteLine("{\\\"type\\\":\\\"command_lifecycle\\\",\\\"uuid\\\":\\\"7f604293-a4b5-4cde-8f01-23456789abcd\\\",\\\"session_id\\\":\\\"" + sid + "\\\"}");
+      Console.Out.Flush();
+      System.Threading.Thread.Sleep(100);
       Console.Out.WriteLine("{\\\"type\\\":\\\"system\\\",\\\"subtype\\\":\\\"init\\\",\\\"uuid\\\":\\\"4c3d1e5f-6071-489a-bcde-f0123456789a\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"model\\\":\\\"synthetic\\\",\\\"claude_code_version\\\":\\\"fixture\\\",\\\"tools\\\":[],\\\"mcp_servers\\\":[],\\\"permissionMode\\\":\\\"dontAsk\\\"}");
       Console.Out.WriteLine("{\\\"type\\\":\\\"user\\\",\\\"uuid\\\":\\\"" + protocol + "\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"message\\\":{\\\"role\\\":\\\"user\\\",\\\"content\\\":\\\"startup bound input\\\"},\\\"parent_tool_use_id\\\":null,\\\"isReplay\\\":true}");
       Console.Out.WriteLine("{\\\"type\\\":\\\"result\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"subtype\\\":\\\"success\\\",\\\"is_error\\\":false,\\\"result\\\":\\\"done\\\",\\\"user_message_uuid\\\":\\\"" + protocol + "\\\"}");
@@ -238,6 +241,57 @@ test('accepts one bound input before init and remains busy when initialization a
     protocolUuid, sessionId });
 });
 
+test('treats command lifecycle frames as inert status before init and during an active input', () => {
+  const protocol = createClaudeStreamProtocol(sessionId);
+  const eventUuid = '7f604293-a4b5-4cde-8f01-23456789abcd';
+  const lifecycle = state => ({ type: 'command_lifecycle', session_id: sessionId, uuid: eventUuid, ...(state === undefined ? {} : { state }) });
+  const status = { type: 'status', sessionId, subtype: 'command_lifecycle', uuid: eventUuid };
+
+  assert.deepEqual(protocol.observe(lifecycle('future-state')), status);
+  assert.equal(protocol.phase, 'starting');
+  assert.equal(protocol.current, null);
+  assert.deepEqual(protocol.observe(initRecord()).type, 'ready');
+
+  const source = input();
+  protocol.prepare(source, limits.maxInputBytes);
+  assert.deepEqual(protocol.observe(lifecycle('completed')), status);
+  assert.deepEqual(protocol.observe(lifecycle()), status);
+  assert.equal(protocol.phase, 'busy');
+  assert.deepEqual(protocol.current, { messageId: source.messageId, messageHash: source.messageHash, protocolUuid, sessionId });
+  assert.throws(() => protocol.prepare(input({ protocolUuid: eventUuid }), limits.maxInputBytes), error => error.code === 'BUSY');
+
+  assert.equal(protocol.observe({ type: 'user', uuid: protocolUuid, session_id: sessionId,
+    message: { role: 'user', content: source.text }, parent_tool_use_id: null, isReplay: true }).type, 'input-replayed');
+  assert.equal(protocol.phase, 'busy');
+  const result = protocol.observe({ type: 'result', session_id: sessionId, subtype: 'success', is_error: false,
+    result: 'done', user_message_uuid: protocolUuid });
+  assert.equal(result.type, 'provider-result');
+  assert.equal(protocol.phase, 'ready');
+  assert.deepEqual(protocol.observe(lifecycle('anything')), status);
+  assert.equal(protocol.phase, 'ready');
+  assert.equal(protocol.prepare(input({ protocolUuid: eventUuid }), limits.maxInputBytes).identity.protocolUuid, eventUuid);
+});
+
+test('requires a lifecycle frame to carry the exact session and a valid independent event UUID', () => {
+  for (const record of [
+    { type: 'command_lifecycle', uuid: '7f604293-a4b5-4cde-8f01-23456789abcd' },
+    { type: 'command_lifecycle', session_id: '7f604293-a4b5-4cde-8f01-23456789abcd', uuid: '7f604293-a4b5-4cde-8f01-23456789abcd' },
+  ]) {
+    assert.throws(() => createClaudeStreamProtocol(sessionId).observe(record), error => error.code === 'SESSION_MISMATCH');
+  }
+  for (const uuid of [undefined, 'not-a-uuid']) {
+    assert.throws(() => createClaudeStreamProtocol(sessionId).observe({ type: 'command_lifecycle', session_id: sessionId, uuid }),
+      error => error.code === 'PROTOCOL_SHAPE');
+  }
+});
+
+test('keeps other unknown record types as protocol errors', () => {
+  const protocol = createClaudeStreamProtocol(sessionId);
+  protocol.observe(initRecord());
+  assert.throws(() => protocol.observe({ type: 'command_lifecycle_future', session_id: sessionId,
+    uuid: '7f604293-a4b5-4cde-8f01-23456789abcd' }), error => error.code === 'UNEXPECTED_RECORD');
+});
+
 test('unsafe or mismatched init keeps a pending first input ambiguous', () => {
   for (const record of [
     initRecord({ session_id: '7f604293-a4b5-4cde-8f01-23456789abcd' }),
@@ -269,11 +323,20 @@ test('owned wrapper can send the first durable input while a local peer awaits s
   const client = await startClaudeStream({ ...fixture, env: { ...fixture.env, FIXTURE_MODE: 'init-after-input' },
     limits, sessionId, model: 'synthetic-model' });
   let resolveResult;
+  let resolveLifecycle;
   const resultSeen = new Promise(resolve => { resolveResult = resolve; });
+  const lifecycleSeen = new Promise(resolve => { resolveLifecycle = resolve; });
+  let readySettled = false;
+  let processSettled = false;
+  let completionSettled = false;
+  client.ready.then(() => { readySettled = true; }, () => { readySettled = true; });
+  client.processCompletion.then(() => { processSettled = true; }, () => { processSettled = true; });
+  client.completion.then(() => { completionSettled = true; }, () => { completionSettled = true; });
   const observed = (async () => {
     const events = [];
     for await (const event of client.events) {
       events.push(event);
+      if (event.type === 'status' && event.subtype === 'command_lifecycle') resolveLifecycle(event);
       if (event.type === 'provider-result') resolveResult(event);
     }
     return events;
@@ -281,6 +344,10 @@ test('owned wrapper can send the first durable input while a local peer awaits s
   const sent = await client.send(input({ text: 'startup bound input' }));
   assert.equal(sent.type, 'stdin-written');
   assert.equal(sent.messageId, 'message-core-1');
+  assert.deepEqual(await lifecycleSeen, { type: 'status', sessionId, subtype: 'command_lifecycle', uuid: '7f604293-a4b5-4cde-8f01-23456789abcd' });
+  assert.equal(readySettled, false);
+  assert.equal(processSettled, false);
+  assert.equal(completionSettled, false);
   assert.equal((await client.ready).type, 'ready');
   const result = await resultSeen;
   assert.equal(result.protocolUuid, protocolUuid);
@@ -288,7 +355,8 @@ test('owned wrapper can send the first durable input while a local peer awaits s
   const exit = await client.stop();
   assert.equal(exit.exitCode, 0);
   const events = await observed;
-  assert.deepEqual(events.map(event => event.type), ['ready', 'input-replayed', 'provider-result', 'process-exit']);
+  assert.deepEqual(events.map(event => event.type), ['status', 'ready', 'input-replayed', 'provider-result', 'process-exit']);
+  assert.deepEqual(events[0], { type: 'status', sessionId, subtype: 'command_lifecycle', uuid: '7f604293-a4b5-4cde-8f01-23456789abcd' });
 });
 
 test('disconnect after first startup input retains the pending message as ambiguous', { skip: !canCompileLocalFixture && 'already-installed Windows Framework C# compiler unavailable' }, async t => {

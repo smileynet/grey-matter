@@ -69,6 +69,12 @@ The `events` async iterable reports distinct observations:
   not a task result.
 - `input-observed`: matching user content appeared without `isReplay: true`. It
   is observable input but is not promoted to the replay acknowledgment.
+- `status` with subtype `command_lifecycle`: a scheduling metadata frame with
+  its own event UUID. The adapter validates the exact current session and event
+  UUID, then ignores all other fields. The adapter does not use this status as
+  input acknowledgment or correlation, and it cannot change readiness, release
+  the active turn, or count as a result, even if the opaque frame contains
+  lifecycle-looking values.
 - `stream-event` and `assistant`: correlated partial and completed response
   content. The first response frame must carry the submitted user UUID. Later
   frames without UUID correlation are attached only within that documented
@@ -120,6 +126,25 @@ The following first-party pages were checked on 2026-11-03:
   `SDKResultMessage`, `session_id`, and `user_message_uuid(s)` correlation. Its
   `user_message_uuid` entry states: “Claude Code echoes a `uuid` only if you set
   one on the message.”
+- Anthropic's [TypeScript Agent SDK changelog](https://github.com/anthropics/claude-agent-sdk-typescript/blob/main/CHANGELOG.md#030206)
+  says SDK 0.3.206 added `command_lifecycle` frames to stream-json and SDK
+  sessions and describes their lifecycle states; 0.3.238 adds `refused`. The
+  pinned public [`sdk.d.ts` for 0.3.316](https://unpkg.com/@anthropic-ai/claude-agent-sdk@0.3.316/sdk.d.ts)
+  omits this frame from its `SDKMessage` union, so this adapter does not claim
+  full schema support or interpret lifecycle fields.
+
+The parent-retained, redacted first-record observation for the pinned Claude
+Code 2.1.316 executable identified `command_lifecycle` before `system/init`.
+The official SDK changelog and versioned declaration were checked on 2026-11-04.
+The exact pinned executable SHA-256 was
+`e896a9d8da519353a49bf69ca4a695ba7e09067752687c675b3969041e632d52`; its
+consumer switch at byte offset `319927613` ignores the event. The retained
+observation showed the event UUID differed from the input UUID; the raw frame
+and two unneeded field names were not retained. The adapter accepts only the
+exact `type`, exact session ID, and a canonical UUID for the event itself, and
+projects those to a status observation. It does not read, correlate, validate,
+or act on other frame fields. Unknown event types and malformed/wrong-session
+metadata continue to fault as before.
 
 The previous local read-only capture recorded Claude Code CLI 2.1.316 and its
 help text in the [#231 interface report](../../../../docs/agents/research/session-messaging-interfaces-20261103.md)
