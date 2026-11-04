@@ -1,7 +1,7 @@
 ---
 id: "225"
 title: "Explore an over-engineering convergence check for review-fix loops"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 validation_criteria:
@@ -34,10 +34,10 @@ This is a **hypothesis from prior art**, not a decided change. Before editing an
 
 ## Acceptance criteria
 
-- [ ] Check whether implement + #152's rule already prevent this in practice: look at 2-3 past multi-round sessions for diff growth.
-- [ ] Define a cheap signal (lines added per round, new files/flags/abstractions per round) and test it on those sessions; does it flag the bad cases without false alarms?
-- [ ] If adopted: one proportionality rule for code fixes (exception: reachable crash, security hole, data loss), referenced, not restated; the orchestrator is the first decision-maker per escalation.md.
-- [ ] Resolution records adopt/adapt/reject.
+- [x] Check whether implement + #152's rule already prevent this in practice: look at 2-3 past multi-round sessions for diff growth.
+- [x] Define a cheap signal (lines added per round, new files/flags/abstractions per round) and test it on those sessions; does it flag the bad cases without false alarms?
+- [x] If adopted: one proportionality rule for code fixes (exception: reachable crash, security hole, data loss), referenced, not restated; the orchestrator is the first decision-maker per escalation.md.
+- [x] Resolution records adopt/adapt/reject.
 
 Related: #152, #224, retro skill.
 
@@ -53,3 +53,13 @@ admission lacks an exact independently proved prior-idle/tool-call sequence.
 
 - [ ] Qualification/debugging examples distinguish diagnostic progress, repaired behavior and preparation churn.
 - [ ] Before/after replay includes necessary multi-step repair without prescribing a global retry limit.
+
+## Resolution (2026-11-04)
+
+done: ADAPT convergence guidance for review and qualification/debug loops; reject numeric diff/round thresholds as a qualified gate. Independent offline comparison supports bounded written guidance, not a live behavior or speed improvement claim. Source, case report and independent review promoted in docs/agents/research/retro-amendments-delivery-20261104.md and linked evidence. Parent-owned new raw logs/packets/preparation helpers kept through this batch wrap disposition; promote useful proof before recycling owned scratch. Existing reused-worktree evidence and private171 ancestry remain protected. No model probe/provider switch/global hook added.
+
+### Verification
+1. ✓ Check whether implement + #152's rule already prevent this in practice: look at 2-3 past multi-round sessions for diff growth. — "Compared current implement/local-gates guidance and three retained orchestration sequences; source/case report docs/agents/research/retro-intervention-and-convergence-20261104.md and independent full-criteria review evidence/retro-amendments-20261104/225-251-review.md."
+2. ✓ Define a cheap signal (lines added per round, new files/flags/abstractions per round) and test it on those sessions; does it flag the bad cases without false alarms? — "Independent offline before/after written-guidance application distinguishes diagnostic progress, repaired behavior and preparation churn. Necessary complex Claude repair is a counterexample to raw size thresholds; no live prompt trial, measured speedup or historical session reexecution is claimed."
+3. ✓ If adopted: one proportionality rule for code fixes (exception: reachable crash, security hole, data loss), referenced, not restated; the orchestrator is the first decision-maker per escalation.md. — "One convergence reference linked from retro, implement and orchestrate; first proportionality decision stays with parent/escalation. No numeric growth/round cap, no new validator/global hook; crash/security/data-loss complete-repair boundary preserved."
+4. ✓ Resolution records adopt/adapt/reject. — "Research decision ADAPT qualitative reassessment and REJECT a qualified numeric validator. Final reviewed worker5e7d225 integrated51c1c0c; current explicit syntax fixture gate, docs/invocation and actual push checks PASS; deployed50skills. Durable full verification and disposition docs/agents/research/retro-amendments-delivery-20261104.md."
