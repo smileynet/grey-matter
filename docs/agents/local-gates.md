@@ -67,6 +67,27 @@ establish this for asynchronous tool calls.
 `SKIP=<id>` is for a failure shown to exist already on `origin/main`, not one the push introduces;
 name the skipped id and why in the ticket's close evidence or the commit message.
 
+### Home-path privacy check
+
+Keep one cheap blocking check for home paths in added text from the outgoing commits.
+Historical paths in unchanged lines do not block unrelated work, including edits elsewhere
+in the same file. The check examines each commit, so removing a newly introduced leak in a
+later commit does not hide it from the public-history guard. Renames preserve old evidence;
+for merges, the guard scans resolution text newly added against all parents. There are no filename exemptions
+that let new leaks enter historical evidence files.
+
+Runner version 4 supplies `GM_GATE_RANGES`: JSON arrays of Git revision arguments for
+the exact tip being checked. Existing refs use the remote tip as their base; new refs
+exclude known commits on the selected remote. Multi-ref pushes carry each tip's own
+ranges. An unknown/invalid range is an execution error, never a clean scan.
+
+Standalone `node scripts/check-home-path.mjs --base REF --head REF` checks committed
+changes; without a base it uses the origin/main merge-base, or reachable history if
+there is no remote baseline. `--all` is a whole-tree inventory at the selected head, not a push
+requirement. The old test asserting that this machine's entire checkout is clean is
+retired. Disposable-history fixtures stay in the existing source-scoped pre-merge suite;
+do not add another pre-push suite or a native-platform requirement for this guard.
+
 **Pre-commit is not a stage.** On trunk a commit integrates only when pushed, so pre-push judges
 everything a pre-commit check could. A Git pre-commit hook fires on every `tkt new`, `claim` and
 `close` and judges a staged index that can hold another session's work. A project may keep one

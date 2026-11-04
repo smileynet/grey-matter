@@ -4,7 +4,7 @@ import "./test-git-env.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { spawn, spawnSync } from "node:child_process";
 import { once } from "node:events";
@@ -43,6 +43,50 @@ function fixture(checks, fn, { fullTriggers = [] } = {}) {
 
 const check = (id, scope, body = pass, extra = {}) => ({ id, stage: "pre-push", catches: `${id} failure`, scope, run: ["node", "-e", body], timeout_s: 10, ...extra });
 const ran = (out, id) => new RegExp(`\\] +[\\d.]+s  ${id}\\b`).test(out);
+
+const homeCheck = { ...check("home-path", [""]), run: ["node", "scripts/check-home-path.mjs"], always: true };
+function installHomeChecker(git) {
+  copyFileSync(new URL("./check-home-path.mjs", import.meta.url), join(git("rev-parse", "--show-toplevel"), "scripts/check-home-path.mjs"));
+}
+
+test("privacy gate uses the pushed base and rejects leaks removed before the tip", () => fixture([homeCheck], ({ git, commit, run, push }) => {
+  installHomeChecker(git);
+  const historical = commit("evidence.md", homedir() + "/old\n");
+  git("update-ref", "refs/remotes/origin/main", historical);
+  const clean = commit("notes.md", "unrelated work\n");
+  const first = run(["pre-push", "--stdin", "--remote", "origin"], { input: push(clean, historical) });
+  assert.equal(first.status, 0, first.out);
+  const leaked = commit("new.md", homedir() + "/new\n");
+  const scrubbed = commit("new.md", "no path at the tip\n");
+  const blocked = run(["pre-push", "--stdin", "--remote", "origin"], { input: push(scrubbed, historical) });
+  assert.equal(blocked.status, 1, blocked.out);
+  assert.ok(blocked.out.includes(leaked.slice(0, 12)), blocked.out);
+  assert.match(blocked.out, /new.md:1/);
+}));
+
+test("privacy gate checks new refs in a multi-ref push independently", () => fixture([homeCheck], ({ git, commit, run, push }) => {
+  installHomeChecker(git);
+  const baseline = commit("evidence.md", homedir() + "/old\n");
+  git("update-ref", "refs/remotes/origin/main", baseline);
+  git("checkout", "-qb", "topic");
+  const topic = commit("topic.md", homedir() + "/new\n");
+  git("checkout", "main");
+  const main = commit("notes.md", "clean\n");
+  const result = run(["pre-push", "--stdin", "--remote", "origin"], { input: push(main, baseline) + push(topic, ZERO, "refs/heads/topic") });
+  assert.equal(result.status, 1, result.out);
+  assert.match(result.out, /topic.md:1/);
+  assert.match(result.out, /2 commit|at /);
+}));
+
+test("privacy gate receives the explicit pre-merge base instead of an ambient range", () => fixture([{ ...homeCheck, stage: "pre-merge" }], ({ git, commit, run }) => {
+  installHomeChecker(git);
+  const before = commit("new.md", "clean\n");
+  const tip = commit("new.md", homedir() + "/new\n");
+  git("update-ref", "refs/remotes/origin/main", tip);
+  const result = run(["pre-merge", "--base", before]);
+  assert.equal(result.status, 1, result.out);
+  assert.match(result.out, /new.md:1/);
+}));
 
 function recordDependentMutation(result, marker, command) {
   if (result.status === 0) writeFileSync(marker, JSON.stringify({ command, outcome: "pass", output: result.out }));

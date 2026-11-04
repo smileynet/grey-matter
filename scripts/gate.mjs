@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// gate.mjs reference version 3 (grey-matter proposal 18). Projects vendor this file; keep this
+// gate.mjs reference version 4 (grey-matter proposal 18). Projects vendor this file; keep this
 // line so conformance-audit can report drift from the reference.
 //
 // Runs the checks that scripts/gates.json declares for one stage, selected by changed paths.
@@ -15,6 +15,7 @@
 //   --record  update only passed checks' measured objects, preserving other manifest bytes.
 // Checks run in a detached worktree of the commit being judged (each pushed tip, else HEAD), so
 // uncommitted files, including another session's in a shared checkout, never pass or block them.
+// GM_GATE_RANGES carries that tip's exact Git revision arguments as JSON; null means unknown.
 // Exit: 0 every selected check passed; 1 a check failed, timed out or could not run; 2 usage.
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync, lstatSync, mkdtempSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
@@ -126,13 +127,14 @@ function recordMeasurements(file, source, measurements) {
 
 // Paths changed by what is being published; null when the range cannot be known, which selects
 // every check (unknown history selects more, never less).
-function pushedPaths(input, remote, tips) {
+function pushedPaths(input, remote, tips, ranges) {
   const paths = new Set();
   for (const line of input.split(/\r?\n/).filter(Boolean)) {
     const [, localSha, , remoteSha] = line.trim().split(/\s+/);
     if (!localSha || ZERO.test(localSha)) continue;
     tips.add(localSha);
     const range = remoteSha && !ZERO.test(remoteSha) ? [`${remoteSha}..${localSha}`] : [localSha, "--not", `--remotes=${remote ?? "origin"}`];
+    ranges.set(localSha, [...(ranges.get(localSha) ?? []), range]);
     const files = git("log", "--format=", "--name-only", ...range);
     if (!files) return null;
     for (const f of files) paths.add(f);
@@ -140,8 +142,10 @@ function pushedPaths(input, remote, tips) {
   return [...paths];
 }
 
-function branchPaths(base) {
-  const start = base ?? git("merge-base", "HEAD", "origin/main")?.[0];
+function branchPaths(base, ranges) {
+  const tip = git("rev-parse", "HEAD")?.[0] ?? "HEAD";
+  const start = base ? git("rev-parse", "--verify", `${base}^{commit}`)?.[0] : git("merge-base", "HEAD", "origin/main")?.[0];
+  ranges.set(tip, start ? [[`${start}..${tip}`]] : null);
   return start ? git("diff", "--name-only", start, "HEAD") : null;
 }
 
@@ -171,11 +175,12 @@ async function inSnapshot(sha, fn) {
   }
 }
 
-function runCheck(check, cwd) {
+function runCheck(check, cwd, ranges) {
   if (!cwd) return Promise.resolve({ outcome: "infrastructure error", seconds: 0, output: "could not check out the commit being judged" });
   return new Promise((done) => {
     const temp = mkdtempSync(join(tmpdir(), "gate-"));
-    const env = { ...process.env, CI: "true", GIT_TERMINAL_PROMPT: "0", TMPDIR: temp, TEMP: temp, TMP: temp };
+    const env = { ...process.env, CI: "true", GIT_TERMINAL_PROMPT: "0", TMPDIR: temp, TEMP: temp, TMP: temp,
+      GM_GATE_RANGES: JSON.stringify(ranges) };
     const started = performance.now();
     const [cmd, ...args] = check.run;
     const child = spawn(cmd === "node" ? process.execPath : cmd, args, {
@@ -213,12 +218,13 @@ if (unknown.length) usage(`--include names no check: ${unknown.join(", ")}`);
 
 let paths = null, source = "every check in the stage";
 const tips = new Set();
+const ranges = new Map();
 if (opts.stage !== "pre-release") {
-  paths = opts.stdin ? pushedPaths(await readStdin(), opts.remote, tips) : branchPaths(opts.base);
+  paths = opts.stdin ? pushedPaths(await readStdin(), opts.remote, tips, ranges) : branchPaths(opts.base, ranges);
   if (paths === null) source = "range unknown: every check in the stage";
   else if (paths.some((p) => fullTriggers.includes(p))) { source = "a full trigger changed: every check in the stage"; paths = null; }
   else source = `${paths.length} changed path(s)`;
-}
+} else branchPaths(opts.base, ranges);
 // A release judges the whole product, so pre-release takes every stage's checks.
 const inStage = checks.filter((c) => opts.stage === "pre-release" || c.stage === opts.stage);
 const selected = checks.filter((c) => opts.include.includes(c.id) || (inStage.includes(c) &&
@@ -238,7 +244,7 @@ for (const tip of toRun.length ? tips : []) {
   if (tips.size > 1) console.log(`  at ${tip.slice(0, 12)}`);
   await inSnapshot(tip, async (cwd) => {
     for (const check of toRun) {
-      const r = await runCheck(check, cwd);
+      const r = await runCheck(check, cwd, ranges.get(tip) ?? null);
       const ok = r.outcome === "pass";
       if (opts.record) {
         const previous = measurements.get(check.id);
