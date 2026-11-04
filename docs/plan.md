@@ -221,6 +221,8 @@ Existing #179 retains shared communication ownership in stream:tooling; #145/#14
 | 208 | Durable session/message foundation and recovery fixture (child of 179) | ✅ done |
 | 210 | Existing-agent Codex notification preparation and bounded native receipt (child of 179) | ✅ done |
 | 179 | Shared inter-harness messaging and wakeups (existing owner) | in_progress |
+| 231 | Current primary-source and installed-interface qualification (child of 179) | in_progress |
+| 232 | Exact session retirement and real spool crash/restart recovery (child of 179) | in_progress |
 | 205 | Dashboard publication preflight using existing receipts | ✅ done |
 | 206 | Correct observed operational reference drift | ✅ done |
 | 207 | Outcome-coordinator failure and continuation fixtures | ✅ done |
@@ -246,6 +248,19 @@ adapter results. Security-held lanes are not reopened by creating this child.
 #210 records one bounded receipt on the current existing-agent Codex collaboration path. Its bounded
 receipt does not close #179's broader cross-harness, busy-session, crash-recovery or
 installation/cleanup criteria. Unsupported and security-held lanes remain explicit.
+
+### Messaging continuation (user resumed #179, 2026-11-03)
+
+Outcome: finish #179's remaining acceptance criteria using the existing spool and
+native adapters, preserving the ticket as the authority. First qualify each current
+interface (#231) and harden exact retirement/crash recovery (#232) in parallel, with
+disjoint ownership and independent review. Continue to native question/reply,
+busy/idle receipts, notification failure/timeout/dead-letter behavior and scoped
+installation/cleanup evidence; child completion alone does not finish the parent.
+No user conversation, global setting change, provider fallback or Antigravity
+execution is admitted by assumption. The recorded native security-hook hold stays
+explicit until its supported scope is cleared. The parent owns final native canaries,
+integration, current gates, push/close and both dashboard updates/publication.
 
 ## Orchestration workstream (reconciled 2026-11-03)
 
