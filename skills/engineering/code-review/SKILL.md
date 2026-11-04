@@ -1,9 +1,9 @@
 ---
 name: code-review
-description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes: Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and files findings as tickets. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\"."
+description: "Review a commit range, staged changes or working-tree changes along two axes: Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and files findings as tickets. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\"."
 ---
 
-Two-axis review of the diff between `HEAD` and a fixed point the user supplies:
+Two-axis review of the user's selected commit range, index or working tree:
 
 - **Standards**: does the code conform to this repo's documented coding standards?
 - **Spec**: does the code faithfully implement the originating issue / spec?
@@ -12,13 +12,36 @@ Both axes run as **parallel sub-agents** so they don't pollute each other's cont
 
 ## Process
 
-### 1. Pin the fixed point
+### 1. Pin the review target
 
-Whatever the user said is the fixed point (a commit SHA, branch name, tag, `main`, `HEAD~5`, etc.). If they didn't specify one, ask for it.
+Resolve an explicit request for staged or uncommitted work from these modes. Ask
+only when the requested target is ambiguous (for example, both staged and unstaged
+changes exist and the user did not select which).
 
-Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so the comparison is against the merge-base). Also note the list of commits via `git log <fixed-point>..HEAD --oneline`.
+| Target | Diff command | Compared states |
+|---|---|---|
+| Commit range | `git diff --no-ext-diff --no-textconv <fixed-point>...HEAD` | Merge-base to HEAD; resolve both refs to full SHAs first. |
+| Staged | `git diff --no-ext-diff --no-textconv --cached HEAD` | HEAD to index. |
+| Working tree | `git diff --no-ext-diff --no-textconv` | Index to tracked working files; staged changes are excluded. |
+| All tracked uncommitted | `git diff --no-ext-diff --no-textconv HEAD` | HEAD to tracked working files, including staged changes. |
 
-Before going further, confirm the fixed point resolves (`git rev-parse <fixed-point>`) and the diff is non-empty. A bad ref or empty diff should fail here, not inside two parallel sub-agents.
+Record the repository root, mode, full HEAD SHA, resolved range endpoints when
+applicable and path exclusions. Validate refs and a nonempty selected diff before
+dispatch. For a range, also record `git log <fixed-point>..HEAD --oneline`.
+List untracked paths separately with `git ls-files --others --exclude-standard`:
+these commands omit them. Include requested untracked files explicitly in the
+review packet without staging them, or state the coverage limit.
+
+Capture the selected binary-capable patch (`--binary --full-index`) and the
+relevant file contents in project scratch once, then give both reviewers that
+same frozen packet. Keep private contents within the project's access boundary.
+Read staged contents from the index (`git show :path`), range contents from the
+resolved commits and working-tree contents from disk; a file can have different
+staged and unstaged versions. Include the matching comparison-side contents.
+Bind it to the source states and file hashes; do not make a commit just to review
+uncommitted work. Before accepting the reports, recapture the selected diff and
+compare its bytes and included file hashes. Changed reviewed inputs require a
+new review of the affected scope; unrelated edits do not expand the target.
 
 ### 2. Identify the spec source
 
@@ -43,13 +66,13 @@ Issue both sub-agent calls together, in the foreground, and aggregate the report
 
 **Standards sub-agent prompt** should include:
 
-- The full diff command and commit list.
+- The pinned target mode, captured diff command/packet and commit list when applicable.
 - The list of standards-source files you found in step 3, **plus the chosen rubric from step 3** pasted in full (the sub-agent has no other access to it).
 - The brief: "Report, per file/hunk where relevant, (a) every place the diff violates a documented standard: cite the standard (file + the rule); and (b) any baseline smell you spot: name it and quote the hunk. Distinguish hard violations from judgement calls: documented-standard breaches can be hard, but baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. Under 400 words."
 
 **Spec sub-agent prompt** should include:
 
-- The diff command and commit list.
+- The pinned target mode, captured diff command/packet and commit list when applicable.
 - The path or fetched contents of the spec.
 - Any tickets the diff closes (their acceptance criteria and resolution), so closures are checked too.
 - The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong; (d) any closed ticket whose acceptance criteria the diff doesn't actually meet. Quote the spec line or AC for each finding. Under 400 words."
@@ -59,6 +82,17 @@ If the spec is missing, skip the Spec sub-agent and note this in the final repor
 For a high-stakes diff, an optional **cross-family second opinion** runs the Standards brief through a different model family's CLI: [references/cross-family.md](references/cross-family.md).
 
 ### 5. File findings as tickets
+
+Protect the review target before running a ticket mutation. Inspect the installed
+tracker's documented commit behavior and verify its ticket-only commit isolation
+in a disposable repository when that behavior is unknown. With verified isolation,
+leave unrelated staged work in place and inspect the resulting ticket commit and
+index afterward. Otherwise file through a clean separate checkout of the same
+board, using the frozen review packet and explicit source-state references. Keep
+the review checkout's staged/unstaged bytes intact; do not commit or unstage the
+implementation merely to file findings. A read-only critic returns proposed
+findings to the authorized parent for filing. Rerun step 1's input comparison
+before the final verdict, since a tracker mutation may advance HEAD.
 
 Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings, because the two axes are deliberately separate (see _Why two axes_).
 
