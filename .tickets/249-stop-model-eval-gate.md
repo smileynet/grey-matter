@@ -1,7 +1,7 @@
 ---
 id: "249"
 title: "Stop gating maintenance on completed model-evaluation experiments"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "The historical model-evaluation fixture suite is not selected by routine or release gates and coverage checking explains its on-demand status."
