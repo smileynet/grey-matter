@@ -70,6 +70,10 @@ stays out of the way, under folds and links.
    Set `ticketFlow: false` when a graph does not help the owner's task; keep every ticket in the list.
    If the project has an explicit execution queue, preserve and link to it; the snapshot's frontier
    and dependency graph do not replace that queue or justify adding artificial blockers.
+   The snapshot projects ticket IDs from `docs/plan.md`'s ordered tables, keeping each ID's first
+   position across status changes. For a project that opts into serial or parallel execution,
+   configure `gm-config.executionPolicy.mode` and use the read-only checker gate before a claim
+   and after each tracker status change; the default is `off`.
 
 6. **Let the page roll.** The overview shows up to five newest entries; the "All entries" tab
    keeps every entry, including the overview entries, as a collapsed row with search and filters.
@@ -96,7 +100,10 @@ stays out of the way, under folds and links.
    `node <this skill's directory>/scripts/check-dashboard.mjs <file>` and fix
    every error; clear warnings that are real. Exercise decision selection, text retention across
    tabs, copied output and clipboard fallback. Then open all tabs at phone and laptop width and
-   read the page as the owner would. Follow one dependency chain, compare visible nodes/edges and status counts with the board, and check that selected streams do not hide remaining work elsewhere. Read [report-format.md](../../../docs/agents/report-format.md)
+   read the page as the owner would. Follow one dependency chain, distinguish its real prerequisite
+   arrows from the numbered suggested sequence, exercise graph zoom and internal scrolling by
+   keyboard, and compare visible nodes and status counts with the board. Check that selected streams
+   do not hide remaining work elsewhere. Read [report-format.md](../../../docs/agents/report-format.md)
    for the HTML rules, and use
    [repository-artifact-hygiene](../../meta/repository-artifact-hygiene/SKILL.md) before adding
    media. Open the page using
@@ -108,6 +115,12 @@ stays out of the way, under folds and links.
    This compares the full tracker board, maintained plan and generated dashboard without repair;
    it rejects active tracker context, fact overrides, status/coverage drift and changed ticket
    bodies. Do not add a closure hook: retain close → sync → refresh → publication.
+   With `executionPolicy.mode: "serial"`, the full comparison rejects more than one in-progress
+   ticket. Before a claim, add `--claim ID`; in parallel mode also add `--agent OWNER`. The gate
+   checks sequence, real prerequisites and planning gates. It is advice, not a reservation: run
+   the native tracker claim immediately afterward and rerun the comparison after any state change.
+   Parallel mode requires every active ticket to have a distinct native `assignee`; `agents` lists
+   helper eligibility and never count as ownership. Check again after claiming.
 
 Before an authorized Site publication, use the read-only
 [publication preflight](references/publication-preflight.md). The parent supplies the

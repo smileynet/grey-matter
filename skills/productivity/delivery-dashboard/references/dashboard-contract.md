@@ -132,17 +132,20 @@ Gates record work constraints; they are not dashboard-feedback requests.
 Selecting a ticket highlights its transitive prerequisites and dependents, lists unfinished and
 completed prerequisites (including missing snapshot references), and links to its ticket row.
 The readable prerequisite list and glyph/text states supplement arrows and colour. The diagram
-scrolls internally on small screens; the document must not overflow. Inspect a whole chain at
-laptop/phone widths; DOM membership alone does not prove that its path is understandable.
+scrolls internally on small screens. Its zoom group has keyboard-accessible in, out and reset
+buttons; zoom changes the graph inside that scroll region. A separate suggested-order rail uses
+numbered links and sequence arrows. Dependency arrows remain actual `blocked_by` edges; independent
+tickets are never joined by invented prerequisites. The document must not overflow. Inspect a
+whole chain at laptop/phone widths; DOM membership alone does not prove that its path is understandable.
 
 When changing this renderer, run both the ordinary contract fixtures and the explicit local browser
 gate: `node --test scripts/delivery-dashboard-browser.test.mjs`, with local `PLAYWRIGHT_MODULE` and
 `CHROME_BIN` set when not using the Node installation's Playwright and system Chromium. Browser
 tools are test prerequisites, not dashboard runtime resources; no CDN or network fallback is used.
 
-`gm-tickets` holds `{generated, frontier, tickets}`: the snapshot time, the ids `tkt ready`
-returns in order, and each ticket's `id`, `title`, `status`, `priority`, `blocked_by` and `tags`
-from `tkt query`, plus optional `gate: {kind, reason}` derived from ticket tags/body and
+`gm-tickets` holds `{generated, frontier, executionOrder, tickets}`: the snapshot time, ids `tkt ready`
+returns in order, the first-occurrence ticket ID sequence from ordered `docs/plan.md` tables, and each ticket's
+`id`, `title`, `status`, `priority`, `blocked_by`, `tags` and native `assignee` from `tkt query`, plus optional `gate: {kind, reason}` derived from ticket tags/body and
 `body_id`, the Git blob identity computed from the current ticket file bytes, including valid
 uncommitted edits (not the Git HEAD version). This catches body changes without a separate
 receipt or freshness registry.
@@ -203,9 +206,30 @@ readiness. `check-dashboard.mjs` checks ticket-snapshot freshness against the ne
 with `--repo`, ticket/plan/dashboard projection consistency. It does not verify an external
 readiness registry.
 
-The Plan tab's default order follows `gm-tickets.frontier`. If a project maintains a different
-execution queue, preserve and link to that queue; the graph represents ticket status and actual
-dependencies, not preferred order. Never add a `blocked_by` edge solely to force the queue.
+The Plan tab's execution numbers follow `gm-tickets.executionOrder`, a first-occurrence projection
+of ticket IDs from ordered tables in the maintained `docs/plan.md`. Status changes never renumber
+the queue. Duplicate appearances keep the first position. Every unfinished ticket remains in the
+graph and list; any ticket absent from the authored order is labeled Unscheduled. Prerequisites
+override the suggested order when selecting the next eligible ticket, while the graph contains
+only real `blocked_by` edges. Backlog remains visible and deferred, never selected as next.
+
+## Execution policy
+
+`gm-config.executionPolicy` opts a project into `serial` or `parallel` claim admission. Omit it or
+set `{ "mode": "off" }` to preserve the project's existing workflow. The policy is project-local;
+it adds no Git hook or automatic claim. The full-board checker validates current state after each
+tracker change. Serial mode requires at most one in-progress ticket. Parallel mode requires every
+in-progress ticket to have a distinct nonempty native `assignee`; `agents` is eligibility metadata,
+not ownership.
+
+Before a claim, run the checker with `--repo <project-root> --strict --claim ID`. Parallel mode
+also takes `--agent OWNER` and checks that owner is not already assigned to an active ticket. The
+preflight requires the requested ticket to be open, sequenced, free of unresolved planning gates
+and actual unfinished or missing prerequisites, and next among eligible ordered tickets. It is a
+read-only recommendation, not an atomic reservation: make the native `tkt claim ID` immediately
+afterward, then refresh the snapshot and rerun the full comparison after the claim or any other
+status change. If state changed between the check and claim, rerun the preflight. Backlog and
+unsequenced work are never silently selected or admitted under an enabled policy.
 
 ## Custom pages and projection comparison
 
@@ -312,7 +336,7 @@ embedded media grew to 9 to 16 MB and became slow to open and impossible to diff
 ## Checker
 
 ```
-node <skill directory>/scripts/check-dashboard.mjs <dashboard.html> [--repo <project-root>] [--strict]
+node <skill directory>/scripts/check-dashboard.mjs <dashboard.html> [--repo <project-root>] [--strict] [--claim ID [--agent OWNER]]
 ```
 
 Errors: invalid JSON or fields, duplicate ids, over-long headlines, missing alt text, open asks

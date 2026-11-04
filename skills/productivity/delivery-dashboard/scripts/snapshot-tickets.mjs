@@ -9,7 +9,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const BLOCK = /(<script type="application\/json" id="gm-tickets">)[\s\S]*?(<\/script>)/;
-const FIELDS = ["id", "title", "status", "priority", "blocked_by", "tags", "gate", "body_id"];
+const FIELDS = ["id", "title", "status", "priority", "blocked_by", "tags", "gate", "assignee", "body_id"];
 
 const lines = (text) => text.split("\n").filter((l) => l.trim()).map((l) => JSON.parse(l));
 
@@ -82,7 +82,26 @@ export function authoritativeProjection(repo, run = execFileSync) {
   });
   if (tickets.length !== metadata.size || tickets.some((ticket) => !metadata.has(ticket.id))) throw new Error("tkt query and .tickets files do not contain the same complete board");
   const frontier = lines(tkt(["ready", "-o", "json"])).map((ticket) => ticket.id);
-  return { tickets, frontier };
+  return { tickets, frontier, executionOrder: authoredExecutionOrder(repo) };
+}
+
+export function authoredExecutionOrder(repo) {
+  const planPath = join(repo, "docs", "plan.md");
+  if (!existsSync(planPath)) return [];
+  const plan = readFileSync(planPath, "utf8");
+  const ids = [];
+  const seen = new Set();
+  let inTicketTable = false;
+  for (const line of plan.split(/\r?\n/)) {
+    if (/^\|\s*ID\s*\|\s*Work\s*\|\s*Status\s*\|\s*$/i.test(line)) { inTicketTable = true; continue; }
+    if (!inTicketTable) continue;
+    if (/^\|\s*:?-{3,}\s*\|/.test(line)) continue;
+    const match = line.match(/^\|\s*([^|]+?)\s*\|/);
+    if (!match) { inTicketTable = false; continue; }
+    const id = match[1].trim();
+    if (id && !seen.has(id)) { seen.add(id); ids.push(id); }
+  }
+  return ids;
 }
 
 export function snapshot(file, { repo, run = execFileSync, now = new Date() } = {}) {

@@ -12,7 +12,7 @@ import vm from "node:vm";
 import { spawnSync } from "node:child_process";
 import { check } from "../skills/productivity/delivery-dashboard/scripts/check-dashboard.mjs";
 import { compareReadinessIdentity } from "../skills/productivity/delivery-dashboard/scripts/readiness-identity.mjs";
-import { authoritativeProjection, snapshot } from "../skills/productivity/delivery-dashboard/scripts/snapshot-tickets.mjs";
+import { authoredExecutionOrder, authoritativeProjection, snapshot } from "../skills/productivity/delivery-dashboard/scripts/snapshot-tickets.mjs";
 
 const SKILL = resolve(dirname(fileURLToPath(import.meta.url)), "../skills/productivity/delivery-dashboard");
 const TEMPLATE = readFileSync(join(SKILL, "assets/dashboard-template.html"), "utf8");
@@ -131,6 +131,12 @@ test("the CLI rejects a dangling --repo operand instead of doing a local-only ch
   const dangling = spawnSync(process.execPath, [script, file, "--repo"], { encoding: "utf8" });
   assert.notEqual(dangling.status, 0, dangling.stdout);
   assert.match(dangling.stderr, /--repo requires a project root/);
+  const missingClaim = spawnSync(process.execPath, [script, file, "--claim"], { encoding: "utf8" });
+  assert.equal(missingClaim.status, 2);
+  assert.match(missingClaim.stderr, /--claim requires a ticket ID/);
+  const orphanOwner = spawnSync(process.execPath, [script, file, "--agent", "worker"], { encoding: "utf8" });
+  assert.equal(orphanOwner.status, 2);
+  assert.match(orphanOwner.stderr, /--agent requires --claim/);
 });
 
 test("recentCount cannot raise the overview limit above five", (t) => {
@@ -179,9 +185,10 @@ test("a custom ticket adapter refreshes only tracker data before the full compar
   const root = mkdtempSync(join(tmpdir(), "gm custom refreshed board "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, ".tickets"));
+  mkdirSync(join(root, "docs")); writeFileSync(join(root, "docs/plan.md"), "| ID | Work | Status |\n| --- | --- | --- |\n| work-2 | Work two | in_progress |\n| work | Work | open |\n| complete | Done | done |\n");
   const facts = [
     { id: "work", title: "Fix </script> parsing", status: "open", blocked_by: [], tags: [] },
-    { id: "work-2", title: "Work two", status: "in_progress", blocked_by: [], tags: [] },
+    { id: "work-2", title: "Work two", status: "in_progress", blocked_by: [], tags: [], assignee: "worker-two" },
     { id: "complete", title: "Completed work", status: "done", blocked_by: [], tags: [] },
   ];
   for (const ticket of facts) {
@@ -199,6 +206,7 @@ test("a custom ticket adapter refreshes only tracker data before the full compar
   const file = customDashboard(t, contract).file;
   const refreshed = refreshCustomSnapshot(file, root, run, new Date("2026-09-03T00:00:00Z"));
   assert.deepEqual(refreshed.plan.currentIds, authoredOrder);
+  assert.equal(refreshed.tickets.tickets.find((ticket) => ticket.id === "work-2").assignee, "worker-two");
   assert.doesNotMatch(readFileSync(file, "utf8"), /Fix <\/script> parsing/);
   const result = check(file, { repo: root, run });
   assert.equal(result.ok, true, result.errors.join("; "));
@@ -227,6 +235,7 @@ test("a repository comparison rejects authored ticket facts that differ from the
   const root = mkdtempSync(join(tmpdir(), "gm dashboard board "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, ".tickets"));
+  mkdirSync(join(root, "docs")); writeFileSync(join(root, "docs/plan.md"), "| ID | Work | Status |\n| --- | --- | --- |\n| 1 | Work | open |\n");
   writeFileSync(join(root, ".tickets/1-work.md"), "---\nid: 1\ntitle: Work\nstatus: open\n---\nBody\n");
   const authoritative = { id: "1", title: "Work", status: "open", priority: "medium", blocked_by: [], tags: [] };
   const run = (cmd, args) => {
@@ -237,7 +246,7 @@ test("a repository comparison rejects authored ticket facts that differ from the
     if (args[0] === "sync-plan") return "Plan is current\n";
     throw Error(`unexpected tkt command ${args[0]}`);
   };
-  const file = dashboard(t, [], withTickets({ generated: "2026-09-02T00:00:00Z", frontier: [], tickets: [{ ...authoritative, status: "done", body_id: BODY_ID }] })).file;
+  const file = dashboard(t, [], withTickets({ generated: "2026-09-02T00:00:00Z", frontier: [], executionOrder: ["1"], tickets: [{ ...authoritative, status: "done", body_id: BODY_ID }] })).file;
   const result = check(file, { repo: root, run });
   assert.equal(result.ok, false);
   assert.match(result.errors.join("\n"), /ticket facts differ from the authoritative board/);
@@ -247,6 +256,7 @@ test("a refreshed dashboard passes the full-board and maintained-plan comparison
   const root = mkdtempSync(join(tmpdir(), "gm dashboard current board "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, ".tickets"));
+  mkdirSync(join(root, "docs")); writeFileSync(join(root, "docs/plan.md"), "| ID | Work | Status |\n| --- | --- | --- |\n| 1 | Work | open |\n");
   const source = "---\nid: 1\ntitle: Work\nstatus: open\n---\nBody\n";
   writeFileSync(join(root, ".tickets/1-work.md"), source);
   const ticket = { id: "1", title: "Work", status: "open", priority: "medium", blocked_by: [], tags: [], body_id: BODY_ID };
@@ -259,7 +269,7 @@ test("a refreshed dashboard passes the full-board and maintained-plan comparison
     if (args[0] === "sync-plan") return "Plan is current\n";
     throw Error(`unexpected command ${cmd} ${args.join(" ")}`);
   };
-  const file = dashboard(t, [], withTickets({ generated: "2026-09-02T00:00:00Z", frontier: ["1"], tickets: [ticket] })).file;
+  const file = dashboard(t, [], withTickets({ generated: "2026-09-02T00:00:00Z", frontier: ["1"], executionOrder: ["1"], tickets: [ticket] })).file;
   const result = check(file, { repo: root, run });
   assert.equal(result.ok, true, result.errors.join("; "));
   assert.ok(calls.some(([cmd, ...args]) => cmd === "tkt" && args.join(" ") === "query --all-context -o json"));
@@ -268,10 +278,28 @@ test("a refreshed dashboard passes the full-board and maintained-plan comparison
   assert.ok(calls.some(([cmd, ...args]) => cmd === "git" && args.includes("--stdin-paths")));
 });
 
+test("serial claim preflight checks the full board and accepts its first eligible planned ticket", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm dashboard serial claim "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, ".tickets")); mkdirSync(join(root, "docs"));
+  writeFileSync(join(root, "docs/plan.md"), "| ID | Work | Status |\n| --- | --- | --- |\n| candidate | Candidate | open |\n| later | Later | open |\n");
+  for (const id of ["candidate", "later"]) writeFileSync(join(root, `.tickets/${id}.md`), `---\nid: ${id}\nstatus: open\n---\nBody\n`);
+  const facts = [{ ...tk("candidate", "open"), priority: "medium", tags: [] }, { ...tk("later", "open"), priority: "medium", tags: [] }];
+  const run = (cmd, args) => cmd === "git" ? [BODY_ID, BODY_ID].join("\n") + "\n" : args[0] === "query" ? facts.map((ticket) => JSON.stringify(ticket)).join("\n") + "\n" : args[0] === "ready" ? facts.map((ticket) => JSON.stringify({ id: ticket.id })).join("\n") + "\n" : "Plan is current\n";
+  const config = (html) => html.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/, "$1" + JSON.stringify({ project: "Test", executionPolicy: { mode: "serial" } }) + "$2");
+  const snapshotData = { generated: "2026-09-02T00:00:00Z", frontier: ["candidate", "later"], executionOrder: ["candidate", "later"], tickets: facts.map((ticket) => ({ ...ticket, body_id: BODY_ID })) };
+  const file = dashboard(t, [], (html) => withTickets(snapshotData)(config(html))).file;
+  const result = check(file, { repo: root, claim: "candidate", run });
+  assert.equal(result.ok, true, result.errors.join("; "));
+  const stale = check(file, { repo: root, claim: "later", run });
+  assert.match(stale.errors.join("\n"), /not next; the first eligible planned ticket is candidate/);
+});
+
 test("a repository comparison preserves and rejects active tag context", (t) => {
   const root = mkdtempSync(join(tmpdir(), "gm dashboard context "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, ".tickets"));
+  mkdirSync(join(root, "docs")); writeFileSync(join(root, "docs/plan.md"), "| ID | Work | Status |\n| --- | --- | --- |\n");
   writeFileSync(join(root, ".tickets/.context"), "build\n");
   const contextPath = join(root, ".tickets/.context");
   const file = dashboard(t, [], withTickets({ generated: null, frontier: [], tickets: [] })).file;
@@ -285,6 +313,7 @@ test("a repository comparison rejects stale body identities and missing board ro
   const root = mkdtempSync(join(tmpdir(), "gm dashboard stale "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, ".tickets"));
+  mkdirSync(join(root, "docs")); writeFileSync(join(root, "docs/plan.md"), "| ID | Work | Status |\n| --- | --- | --- |\n| 1 | Work | open |\n");
   writeFileSync(join(root, ".tickets/1-work.md"), "---\nid: 1\ntitle: Work\nstatus: open\n---\nBody\n");
   const ticket = { id: "1", title: "Work", status: "open", priority: "medium", blocked_by: [], tags: [] };
   const run = (cmd, args) => {
@@ -294,8 +323,8 @@ test("a repository comparison rejects stale body identities and missing board ro
     if (args[0] === "sync-plan") return "Plan is current\n";
     throw Error(`unexpected command ${cmd} ${args.join(" ")}`);
   };
-  const staleBody = { generated: "2026-09-02T00:00:00Z", frontier: ["1"], tickets: [{ ...ticket, body_id: "b".repeat(40) }] };
-  const noRows = { generated: "2026-09-02T00:00:00Z", frontier: ["1"], tickets: [] };
+  const staleBody = { generated: "2026-09-02T00:00:00Z", frontier: ["1"], executionOrder: ["1"], tickets: [{ ...ticket, body_id: "b".repeat(40) }] };
+  const noRows = { generated: "2026-09-02T00:00:00Z", frontier: ["1"], executionOrder: ["1"], tickets: [] };
   for (const [name, projection] of [["stale body", staleBody], ["missing ticket row", noRows]]) {
     const result = check(dashboard(t, [], withTickets(projection)).file, { repo: root, run });
     assert.equal(result.ok, false, name);
@@ -307,6 +336,7 @@ test("a failed maintained-plan check makes the full comparison fail", (t) => {
   const root = mkdtempSync(join(tmpdir(), "gm dashboard plan drift "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, ".tickets"));
+  mkdirSync(join(root, "docs")); writeFileSync(join(root, "docs/plan.md"), "| ID | Work | Status |\n| --- | --- | --- |\n| 1 | Work | open |\n");
   writeFileSync(join(root, ".tickets/1-work.md"), "---\nid: 1\ntitle: Work\nstatus: open\n---\nBody\n");
   const ticket = { id: "1", title: "Work", status: "open", priority: "medium", blocked_by: [], tags: [] };
   const run = (cmd, args) => {
@@ -316,7 +346,7 @@ test("a failed maintained-plan check makes the full comparison fail", (t) => {
     if (args[0] === "sync-plan") throw Error("plan says open, tracker says done");
     throw Error(`unexpected command ${cmd} ${args.join(" ")}`);
   };
-  const projection = { generated: "2026-09-02T00:00:00Z", frontier: ["1"], tickets: [{ ...ticket, body_id: BODY_ID }] };
+  const projection = { generated: "2026-09-02T00:00:00Z", frontier: ["1"], executionOrder: ["1"], tickets: [{ ...ticket, body_id: BODY_ID }] };
   const result = check(dashboard(t, [], withTickets(projection)).file, { repo: root, run });
   assert.equal(result.ok, false);
   assert.match(result.errors.join("\n"), /plan says open, tracker says done/);
@@ -362,8 +392,9 @@ test("README.md is the supported non-ticket Markdown file in .tickets", (t) => {
   const root = mkdtempSync(join(tmpdir(), "gm dashboard ticket readme "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, ".tickets"));
+  mkdirSync(join(root, "docs")); writeFileSync(join(root, "docs/plan.md"), "| ID | Work | Status |\n| --- | --- | --- |\n");
   writeFileSync(join(root, ".tickets/README.md"), "Local tracker notes without a ticket ID.\n");
-  const file = dashboard(t, [], withTickets({ generated: null, frontier: [], tickets: [] })).file;
+  const file = dashboard(t, [], withTickets({ generated: null, frontier: [], executionOrder: [], tickets: [] })).file;
   const run = (cmd, args) => {
     if (cmd === "tkt" && args[0] === "sync-plan") return "pass\n";
     if (args[0] === "query" || args[0] === "ready") return "";
@@ -371,6 +402,55 @@ test("README.md is the supported non-ticket Markdown file in .tickets", (t) => {
   };
   const result = check(file, { repo: root, run });
   assert.equal(result.ok, true, result.errors.join("; "));
+});
+
+test("authored order deduplicates repeated plan rows without status-based renumbering", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "gm plan order "));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, "docs"));
+  writeFileSync(join(root, "docs/plan.md"), "intro\n| ID | Work | Status |\n| --- | --- | --- |\n| 4 | Fourth | open |\n| 2 | Second | done |\n\nMore prose\n| ID | Work | Status |\n| --- | --- | --- |\n| 2 | Repeated | open |\n| 8 | Eighth | backlog |\n");
+  assert.deepEqual(authoredExecutionOrder(root), ["4", "2", "8"]);
+  const snap = { executionOrder: authoredExecutionOrder(root), tickets: [tk("4", "open"), tk("2", "done"), tk("8", "backlog")] };
+  snap.tickets[0].status = "done";
+  assert.deepEqual(api().executionSummary(snap).order, ["4", "2", "8"]);
+});
+
+test("execution projection keeps dependencies separate and chooses the first eligible sequenced ticket", () => {
+  const snap = { executionOrder: ["child", "prereq", "later"], tickets: [tk("child", "open", ["prereq"]), tk("prereq", "open"), tk("later", "open")] };
+  const flow = api().ticketFlow(snap);
+  assert.equal(flow.execution.next, "prereq");
+  assert.deepEqual(Array.from(flow.edges, (edge) => [edge.from, edge.to]), [["prereq", "child"]]);
+  assert.deepEqual(Array.from(flow.layers[0], (ticket) => ticket.id), ["prereq", "later"]);
+});
+
+test("opt-in serial policy rejects multiple active tickets and invalid claims", (t) => {
+  const config = (mode) => (html) => html.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/, "$1" + JSON.stringify({ project: "Test", executionPolicy: { mode } }) + "$2");
+  const snap = { generated: null, frontier: ["one", "two"], executionOrder: ["one", "two", "later"], tickets: [tk("one", "in_progress"), tk("two", "in_progress"), tk("later", "backlog")] };
+  const result = check(dashboard(t, [], (html) => withTickets(snap)(config("serial")(html))).file);
+  assert.match(result.errors.join("\n"), /serial execution allows one in-progress ticket/);
+  const claim = check(dashboard(t, [], (html) => withTickets({ ...snap, tickets: [tk("one", "open"), tk("two", "open", ["one"]), tk("later", "backlog")] })(config("serial")(html))).file, { claim: "two" });
+  assert.match(claim.errors.join("\n"), /--claim requires --repo/);
+  assert.match(claim.errors.join("\n"), /unfinished or missing prerequisites/);
+  assert.match(claim.errors.join("\n"), /not next/);
+});
+
+test("opt-in parallel policy requires distinct named active owners", (t) => {
+  const config = (html) => html.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/, "$1" + JSON.stringify({ project: "Test", executionPolicy: { mode: "parallel" } }) + "$2");
+  for (const [tickets, expected] of [
+    [[{ ...tk("one", "in_progress") }, { ...tk("two", "in_progress"), assignee: "worker" }], /distinct nonempty assignee/],
+    [[{ ...tk("one", "in_progress"), assignee: "worker" }, { ...tk("two", "in_progress"), assignee: "worker" }], /distinct assignees/],
+  ]) {
+    const result = check(dashboard(t, [], (html) => withTickets({ generated: null, frontier: [], executionOrder: ["one", "two"], tickets })(config(html))).file);
+    assert.match(result.errors.join("\n"), expected);
+  }
+  const passes = check(dashboard(t, [], (html) => withTickets({ generated: null, frontier: [], executionOrder: ["one", "two"], tickets: [{ ...tk("one", "in_progress"), assignee: "alpha" }, { ...tk("two", "in_progress"), assignee: "beta" }] })(config(html))).file);
+  assert.deepEqual(passes.errors, []);
+});
+
+test("incomplete dependency graphs are rejected while cycles fail flow projection", (t) => {
+  const missing = check(dashboard(t, [], withTickets({ generated: null, frontier: [], tickets: [tk("child", "open", ["missing"])] })).file);
+  assert.match(missing.errors.join("\n"), /blocker missing is not in the snapshot/);
+  assert.throws(() => api().ticketFlow({ tickets: [tk("a", "open", ["b"]), tk("b", "open", ["a"])] }), /cycle/);
 });
 
 test("plan groups put open work first and layer it by unfinished blockers", () => {

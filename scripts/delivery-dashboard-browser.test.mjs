@@ -9,7 +9,7 @@ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||pathToFileURL(resol
 const browser=await chromium.launch({executablePath:process.env.CHROME_BIN||'/usr/bin/google-chrome',args:['--no-sandbox']});
 test.after(()=>browser.close());
 const ticket=(id,status,blocked_by=[],tags=[])=>({id,title:'Fixture work '+id,status,blocked_by,tags});
-const snap={generated:'2026-10-31T00:00:00Z',frontier:['start','parallel'],tickets:[ticket('base','done',[],['archive']),ticket('start','open',['base'],['build']),ticket('active','in_progress',['start'],['build']),ticket('finish','open',['active'],['build']),ticket('later','backlog',[],['future']),ticket('parallel','open',[],['other'])]};
+const snap={generated:'2026-10-31T00:00:00Z',frontier:['start','parallel'],executionOrder:['base','start','active','finish','parallel','later'],tickets:[ticket('base','done',[],['archive']),ticket('start','open',['base'],['build']),ticket('active','in_progress',['start'],['build']),ticket('finish','open',['active'],['build']),ticket('later','backlog',[],['future']),ticket('parallel','open',[],['other'])]};
 function html(config={},snapshot=snap){return template.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/,'$1'+JSON.stringify({project:'Synthetic flow fixture',ticketFlow:{defaultScope:'archive',scopes:[{id:'archive',label:'Completed stream',tags:['archive']},{id:'build',label:'Build stream',tags:['build']}]},...config})+'$2').replace(/(<script type="application\/json" id="gm-tickets">)[\s\S]*?(<\/script>)/,'$1'+JSON.stringify(snapshot)+'$2');}
 async function pageFor(width,config,snapshot){const context=await browser.newContext({viewport:{width,height:1000}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('**/*',route=>route.fulfill({contentType:'text/html',body:html(config,snapshot)}));await page.goto('http://dashboard.invalid/#plan');return {context,page,errors};}
 for (const width of [1280,390]) test('decision choices, notes and clipboard fallback at '+width, async()=>{
@@ -42,7 +42,17 @@ for(const width of [1280,390]){
    assert.deepEqual((await page.locator('.flow-node').evaluateAll(nodes=>nodes.map(n=>n.dataset.ticket))).sort(),['active','finish','later','parallel','start']);
    await page.waitForFunction(()=>document.querySelectorAll('.flow-links path[data-from]').length===2);
    assert.deepEqual((await page.locator('.flow-links path[data-from]').evaluateAll(nodes=>nodes.map(n=>n.dataset.from+'>'+n.dataset.to))).sort(),['active>finish','start>active']);
-   assert.match(await page.locator('.flow-counts').innerText(),/2 unblocked · 1 in progress · 1 waiting on tickets · 0 decision needed · 0 evidence needed · 1 deferred · 0 done · 0 cancelled · 5 shown/);
+   assert.match(await page.locator('.flow-counts').innerText(),/Current: active · Suggested next: start · 2 unblocked · 1 in progress · 1 waiting on tickets · 0 decision needed · 0 evidence needed · 1 deferred · 0 done · 0 cancelled · 5 shown/);
+   assert.match(await page.locator('#execution-order-heading').innerText(),/Suggested execution sequence/);
+   assert.deepEqual(await page.locator('.execution-rail a').evaluateAll(nodes=>nodes.map(n=>n.textContent.trim())),['2. start · Fixture work start','3. active · Fixture work active','4. finish · Fixture work finish','5. parallel · Fixture work parallel','6. later · Fixture work later']);
+   assert.equal(await page.locator('.flow-links path[data-from]').count(),2,'only blocked_by prerequisites create graph arrows');
+   await page.getByRole('button',{name:'Zoom dependency diagram in'}).click();await page.waitForFunction(()=>document.querySelector('.flow-zoom output').textContent==='110%');
+   await page.getByRole('button',{name:'Zoom dependency diagram in'}).click();await page.getByRole('button',{name:'Zoom dependency diagram in'}).click();await page.getByRole('button',{name:'Zoom dependency diagram in'}).click();await page.getByRole('button',{name:'Zoom dependency diagram in'}).click();
+   await page.waitForFunction(()=>document.querySelector('.flow-zoom output').textContent==='150%');
+   assert.equal(await page.locator('.flow-scroll').evaluate(node=>node.scrollWidth>node.clientWidth),true,'zoomed graph scrolls inside its labeled region');
+   if(process.env.DASHBOARD_CAPTURE_DIR){mkdirSync(process.env.DASHBOARD_CAPTURE_DIR,{recursive:true});await page.screenshot({path:resolve(process.env.DASHBOARD_CAPTURE_DIR,'remaining-flow-zoom-'+width+'.png'),fullPage:true});}
+   await page.locator('.flow-scroll').evaluate(node=>node.scrollLeft=node.scrollWidth);assert.equal(await page.locator('.flow-scroll').evaluate(node=>node.scrollLeft>0),true);
+   await page.getByRole('button',{name:'Reset'}).click();await page.waitForFunction(()=>document.querySelector('.flow-zoom output').textContent==='100%');
    const start=page.locator('.flow-node[data-ticket=start]');await start.focus();await page.keyboard.press('Enter');
    assert.equal(await start.getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.flow-node[data-ticket=finish]').getAttribute('data-related'),'after');assert.equal(await page.locator('.flow-node[data-ticket=parallel]').getAttribute('data-related'),'unrelated');
    assert.match(await page.locator('.flow-detail').innerText(),/base \(done\)/);assert.equal(await page.locator('.flow-links path[data-related=true]').count(),2);
@@ -53,12 +63,34 @@ for(const width of [1280,390]){
    await page.locator('#flow-scope').selectOption('build');assert.equal(await page.locator('.flow-node').count(),3);assert.match(await page.locator('.flow-notice').innerText(),/2 unfinished tickets are outside/);
    await page.locator('#flow-scope').selectOption('all');await page.locator('.flow-options > summary').click();
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+   await page.setViewportSize({width:Math.floor(width/2),height:1000});
+   const narrowLayout=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth,boxes:['#flow-content','.execution-order','.execution-rail','#plan'].map(s=>{const n=document.querySelector(s),r=n.getBoundingClientRect();return[s,r.left,r.right,n.clientWidth,n.scrollWidth,getComputedStyle(n).overflowX]}),children:[...document.querySelector('#plan').children].map(n=>[n.id,n.className,n.getBoundingClientRect().right,n.clientWidth,n.scrollWidth])}));assert.equal(narrowLayout.width<=narrowLayout.viewport,true,'page reflows without document overflow at a half-width viewport (200% zoom equivalent): '+JSON.stringify(narrowLayout));
+   await page.setViewportSize({width,height:1000});
+   await context.setOffline(true);assert.match(await page.locator('#execution-order-heading').innerText(),/Suggested execution sequence/);
+   await page.locator('.execution-rail a[href="#t-start"]').focus();await page.keyboard.press('Enter');await page.locator('#t-start').waitFor({state:'visible'});
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
    assert.deepEqual(errors,[]);
    if(process.env.DASHBOARD_CAPTURE_DIR){mkdirSync(process.env.DASHBOARD_CAPTURE_DIR,{recursive:true});await page.screenshot({path:resolve(process.env.DASHBOARD_CAPTURE_DIR,'remaining-flow-'+width+'.png'),fullPage:true});}
   }finally{await context.close();}
  });
 }
 test('flow can be disabled without dropping the existing ticket list',async()=>{const {context,page,errors}=await pageFor(390,{ticketFlow:false});try{assert.equal(await page.locator('#ticket-flow').isVisible(),false);assert.equal(await page.locator('#t-start').count(),1);assert.equal(await page.locator('#plan-lanes').isVisible(),true);assert.deepEqual(errors,[]);}finally{await context.close();}});
+
+test('suggested order stays separate from dependencies and remains keyboard/offline usable',async()=>{
+ const snapshot={generated:'2026-11-04T00:00:00Z',frontier:['queued','unplanned'],executionOrder:['queued'],tickets:[ticket('queued','open'),ticket('unplanned','open'),ticket('deferred','backlog')]};
+ const {context,page,errors}=await pageFor(390,{ticketFlow:{defaultScope:'all',scopes:[]}},snapshot);
+ try{
+  assert.deepEqual(await page.locator('.execution-rail a').evaluateAll(nodes=>nodes.map(n=>n.textContent.trim())),['1. queued · Fixture work queued']);
+  assert.deepEqual(await page.locator('.execution-unscheduled li a').evaluateAll(nodes=>nodes.map(n=>n.textContent.trim())),['unplanned · Fixture work unplanned','deferred · Fixture work deferred']);
+  assert.equal(await page.locator('.flow-node').count(),3);assert.equal(await page.locator('.flow-links path[data-from]').count(),0);
+  assert.match(await page.locator('.flow-counts').innerText(),/Suggested next: queued/);
+  await page.locator('.execution-rail a[href="#t-queued"]').focus();await page.keyboard.press('Enter');await page.locator('#t-queued').waitFor({state:'visible'});
+  await context.setOffline(true);await page.getByRole('button',{name:'Zoom dependency diagram in'}).click();
+  await page.waitForFunction(()=>document.querySelector('.flow-zoom output').textContent==='110%');
+  assert.match(await page.locator('#execution-order-heading').innerText(),/Suggested execution sequence/);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);assert.deepEqual(errors,[]);
+ }finally{await context.close();}
+});
 
 if(process.env.DASHBOARD_CONSUMER_SNAPSHOT){
  const source=readFileSync(process.env.DASHBOARD_CONSUMER_SNAPSHOT,'utf8');
