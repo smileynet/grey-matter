@@ -75,6 +75,18 @@ The `events` async iterable reports distinct observations:
   input acknowledgment or correlation, and it cannot change readiness, release
   the active turn, or count as a result, even if the opaque frame contains
   lifecycle-looking values.
+- `status` with subtype `rate_limit_event`: validated rate-limit state metadata.
+  `allowed` and `allowed_warning` are informational only; they do not prove
+  input receipt, change readiness, release the active turn, or count as a
+  result. The status carries only the documented `status`, optional
+  `rateLimitType`, and optional raw numeric `resetsAt` fields. The adapter does
+  not infer a unit or forward unknown payload fields. A `rejected` status is a
+  hard stop: the adapter faults the protocol before returning from observation,
+  stops this owned process, and emits `protocol-fault` with the validated limit
+  details. It never retries, switches providers, or sends another input. If an
+  input was already active, process settlement remains an ambiguous disconnect;
+  any earlier result remains separate evidence. Report the observed reset value
+  as supplied, or report that no reset value was supplied.
 - `stream-event` and `assistant`: correlated partial and completed response
   content. The first response frame must carry the submitted user UUID. Later
   frames without UUID correlation are attached only within that documented
@@ -87,7 +99,8 @@ The `events` async iterable reports distinct observations:
 - `process-exit`: the exact owned process's close observation, with exit code,
   signal, generation, byte counts, and timestamps.
 - `protocol-fault`: malformed, unexpected, out-of-order, wrong-session, or
-  uncorrelated stream data. The adapter stops the owned child and does not retry.
+  uncorrelated stream data, or a rejected usage-limit status. The adapter stops
+  the owned child and does not retry.
 
 Consume `events` before sending and while the process runs. Its in-memory event
 queue is bounded; a slow or absent consumer backpressures stdout, and process
@@ -126,6 +139,14 @@ The following first-party pages were checked on 2026-11-03:
   `SDKResultMessage`, `session_id`, and `user_message_uuid(s)` correlation. Its
   `user_message_uuid` entry states: “Claude Code echoes a `uuid` only if you set
   one on the message.”
+- The pinned public [`sdk.d.ts` for 0.3.316](https://unpkg.com/@anthropic-ai/claude-agent-sdk@0.3.316/sdk.d.ts)
+  defines `rate_limit_event` as a same-session UUID frame with a
+  `rate_limit_info` object. The SDK's documented `status` values are
+  `allowed`, `allowed_warning`, and `rejected`; `rateLimitType` and `resetsAt`
+  are optional fields. The declaration does not specify reset units. This
+  adapter treats `rejected` as the project's hard-stop condition even though
+  SDK/CLI behavior can include waiting or retries; project policy takes
+  precedence and no provider retry is attempted.
 - Anthropic's [TypeScript Agent SDK changelog](https://github.com/anthropics/claude-agent-sdk-typescript/blob/main/CHANGELOG.md#030206)
   says SDK 0.3.206 added `command_lifecycle` frames to stream-json and SDK
   sessions and describes their lifecycle states; 0.3.238 adds `refused`. The
@@ -145,6 +166,15 @@ exact `type`, exact session ID, and a canonical UUID for the event itself, and
 projects those to a status observation. It does not read, correlate, validate,
 or act on other frame fields. Unknown event types and malformed/wrong-session
 metadata continue to fault as before.
+
+A later parent-owned fresh-wire observer recorded `rate_limit_event` while the
+session was busy, with the exact session match and an independent event UUID.
+Its redacted evidence (`.scratch/t236-wire-v4-evidence.json`, 10,512 bytes, SHA-256
+`1a43a8eb75d5f43b3ca21e66434ee5da6473887863fb78828b1ac4cbc31aba38`)
+confirms the event family and exact session match; status and reset fields were
+not retained. It does not establish that quota was exhausted or identify the
+earlier #236 failure. The adapter validates against the published schema and
+reports only fields actually present in a future frame.
 
 The previous local read-only capture recorded Claude Code CLI 2.1.316 and its
 help text in the [#231 interface report](../../../../docs/agents/research/session-messaging-interfaces-20261103.md)

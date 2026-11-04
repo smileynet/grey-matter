@@ -2,6 +2,7 @@ import { startOwnedProcess } from './owned-process.mjs';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const MODEL = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
+const RATE_LIMIT_TYPES = ['five_hour', 'seven_day', 'seven_day_opus', 'seven_day_sonnet', 'seven_day_overage_included', 'overage'];
 const START_KEYS = ['executable', 'cwd', 'env', 'limits', 'sessionId', 'model'];
 const MESSAGE_KEYS = ['messageId', 'messageHash', 'protocolUuid', 'sessionId', 'text'];
 const MAX_TEXT_BYTES = 4 * 1024 * 1024;
@@ -120,6 +121,29 @@ function matchesInput(record, protocolUuid) {
   return Array.isArray(record.user_message_uuids) && record.user_message_uuids.includes(protocolUuid);
 }
 
+function rateLimitMetadata(record, expectedSessionId) {
+  demand(record.session_id === expectedSessionId, 'rate-limit record has no exact session', 'SESSION_MISMATCH');
+  demand(typeof record.uuid === 'string' && UUID.test(record.uuid),
+    'rate-limit record has no valid event UUID', 'PROTOCOL_SHAPE');
+  demand(isRecord(record.rate_limit_info), 'rate-limit record has no information object', 'PROTOCOL_SHAPE');
+  const info = record.rate_limit_info;
+  demand(['allowed', 'allowed_warning', 'rejected'].includes(info.status),
+    'rate-limit record has an unknown status', 'PROTOCOL_SHAPE');
+  const result = { status: info.status };
+  if (Object.hasOwn(info, 'rateLimitType')) {
+    demand(typeof info.rateLimitType === 'string' && RATE_LIMIT_TYPES.includes(info.rateLimitType),
+      'rate-limit record has an unknown rateLimitType', 'PROTOCOL_SHAPE');
+    result.rateLimitType = info.rateLimitType;
+  }
+  if (Object.hasOwn(info, 'resetsAt')) {
+    demand(typeof info.resetsAt === 'number' && Number.isFinite(info.resetsAt)
+      && Math.abs(info.resetsAt) <= Number.MAX_SAFE_INTEGER,
+    'rate-limit record has an invalid resetsAt number', 'PROTOCOL_SHAPE');
+    result.resetsAt = info.resetsAt;
+  }
+  return result;
+}
+
 function assertCorrelated(record, active, allowBoundContinuation) {
   const hasExact = record.user_message_uuid !== undefined || record.user_message_uuids !== undefined;
   if (hasExact) {
@@ -222,6 +246,18 @@ export function createClaudeStreamProtocol(sessionId) {
       demand(phase !== 'closed' && phase !== 'faulted',
         'command lifecycle record arrived after process completion', 'PROTOCOL_ORDER');
       return { type: 'status', sessionId, subtype: 'command_lifecycle', uuid: value.uuid };
+    }
+
+    if (value.type === 'rate_limit_event') {
+      const rateLimit = rateLimitMetadata(value, sessionId);
+      demand(phase !== 'closed' && phase !== 'faulted',
+        'rate-limit record arrived after process completion or protocol failure', 'PROTOCOL_ORDER');
+      if (rateLimit.status === 'rejected') {
+        phase = 'faulted';
+        stopRequested = true;
+        throw new ClaudeStreamError('Claude reported a rejected usage limit', 'USAGE_LIMIT', { rateLimit });
+      }
+      return { type: 'status', sessionId, subtype: 'rate_limit_event', uuid: value.uuid, rateLimit };
     }
 
     if (value.type === 'system') {
@@ -433,7 +469,9 @@ export async function startClaudeStream(options) {
         rejectReady(new ClaudeStreamError('Claude stream failed before session initialization', error.code ?? 'STARTUP_ERROR'));
       }
       await owned.stop().catch(() => {});
-      await publish({ type: 'protocol-fault', sessionId: snapshot.sessionId, code: error.code ?? 'CLAUDE_STREAM_ERROR' });
+      const fault = { type: 'protocol-fault', sessionId: snapshot.sessionId, code: error.code ?? 'CLAUDE_STREAM_ERROR' };
+      if (error.code === 'USAGE_LIMIT') fault.rateLimit = error.rateLimit;
+      await publish(fault);
     } finally {
       const exit = await owned.completion;
       try { await stderr; }

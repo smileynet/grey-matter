@@ -67,6 +67,21 @@ class Fixture {
       while (Console.ReadLine() != null) { }
       return;
     }
+    if (mode == "rate-limit-after-input") {
+      Console.Out.WriteLine("{\\\"type\\\":\\\"system\\\",\\\"subtype\\\":\\\"init\\\",\\\"uuid\\\":\\\"4c3d1e5f-6071-489a-bcde-f0123456789a\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"model\\\":\\\"synthetic\\\",\\\"claude_code_version\\\":\\\"fixture\\\",\\\"tools\\\":[],\\\"mcp_servers\\\":[],\\\"permissionMode\\\":\\\"dontAsk\\\"}");
+      Console.Out.Flush();
+      string wire = Console.ReadLine();
+      if (wire == null) return;
+      string protocol = StringField(wire, "uuid");
+      string messageSession = StringField(wire, "session_id");
+      if (protocol == null || messageSession != sid) { Environment.ExitCode = 15; return; }
+      Console.Out.WriteLine("{\\\"type\\\":\\\"user\\\",\\\"uuid\\\":\\\"" + protocol + "\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"message\\\":{\\\"role\\\":\\\"user\\\",\\\"content\\\":\\\"rate limit probe\\\"},\\\"parent_tool_use_id\\\":null,\\\"isReplay\\\":true}");
+      Console.Out.WriteLine("{\\\"type\\\":\\\"assistant\\\",\\\"uuid\\\":\\\"5d4e2f60-7182-49ab-cdef-0123456789ab\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"parent_tool_use_id\\\":null,\\\"user_message_uuid\\\":\\\"" + protocol + "\\\",\\\"message\\\":{\\\"id\\\":\\\"assistant-message-1\\\",\\\"content\\\":[{\\\"type\\\":\\\"text\\\",\\\"text\\\":\\\"working\\\"}]}}");
+      Console.Out.WriteLine("{\\\"type\\\":\\\"rate_limit_event\\\",\\\"uuid\\\":\\\"7f604293-a4b5-4cde-8f01-23456789abcd\\\",\\\"session_id\\\":\\\"" + sid + "\\\",\\\"rate_limit_info\\\":{\\\"status\\\":\\\"rejected\\\",\\\"resetsAt\\\":1770000000,\\\"rateLimitType\\\":\\\"five_hour\\\",\\\"private_detail\\\":\\\"must not escape\\\"}}");
+      Console.Out.Flush();
+      while (Console.ReadLine() != null) { }
+      return;
+    }
     if (mode == "exit-after-input") { Console.ReadLine(); return; }
     if (mode == "closed-input") {
       Console.OpenStandardInput().Close();
@@ -290,6 +305,123 @@ test('keeps other unknown record types as protocol errors', () => {
   protocol.observe(initRecord());
   assert.throws(() => protocol.observe({ type: 'command_lifecycle_future', session_id: sessionId,
     uuid: '7f604293-a4b5-4cde-8f01-23456789abcd' }), error => error.code === 'UNEXPECTED_RECORD');
+});
+
+test('keeps allowed rate-limit metadata nonterminal and projects only documented fields', () => {
+  const protocol = createClaudeStreamProtocol(sessionId);
+  protocol.observe(initRecord());
+  const source = input();
+  protocol.prepare(source, limits.maxInputBytes);
+  const status = protocol.observe({
+    type: 'rate_limit_event', session_id: sessionId,
+    uuid: '7f604293-a4b5-4cde-8f01-23456789abcd',
+    rate_limit_info: {
+      status: 'allowed_warning', rateLimitType: 'seven_day', resetsAt: 1770000000,
+      private_detail: 'must not escape',
+    },
+  });
+  assert.deepEqual(status, {
+    type: 'status', sessionId, subtype: 'rate_limit_event',
+    uuid: '7f604293-a4b5-4cde-8f01-23456789abcd',
+    rateLimit: { status: 'allowed_warning', rateLimitType: 'seven_day', resetsAt: 1770000000 },
+  });
+  assert.equal(protocol.phase, 'busy');
+  assert.deepEqual(protocol.current, { messageId: source.messageId, messageHash: source.messageHash, protocolUuid, sessionId });
+  assert.throws(() => protocol.prepare(input({ protocolUuid: '7f604293-a4b5-4cde-8f01-23456789abcd' }), limits.maxInputBytes),
+    error => error.code === 'BUSY');
+  const result = protocol.observe({ type: 'result', session_id: sessionId, subtype: 'success', is_error: false,
+    result: 'done', user_message_uuid: protocolUuid });
+  assert.equal(result.type, 'provider-result');
+  assert.equal(protocol.phase, 'ready');
+});
+
+test('rate-limit events before init do not initialize the session', () => {
+  const protocol = createClaudeStreamProtocol(sessionId);
+  const status = protocol.observe({ type: 'rate_limit_event', session_id: sessionId,
+    uuid: '7f604293-a4b5-4cde-8f01-23456789abcd', rate_limit_info: { status: 'allowed' } });
+  assert.deepEqual(status.rateLimit, { status: 'allowed' });
+  assert.equal(protocol.phase, 'starting');
+  assert.equal(protocol.current, null);
+  assert.equal(protocol.observe(initRecord()).type, 'ready');
+});
+
+test('rejected rate-limit event faults before returning and retains active input ambiguity', () => {
+  const protocol = createClaudeStreamProtocol(sessionId);
+  protocol.observe(initRecord());
+  const source = input();
+  protocol.prepare(source, limits.maxInputBytes);
+  assert.throws(() => protocol.observe({
+    type: 'rate_limit_event', session_id: sessionId,
+    uuid: '7f604293-a4b5-4cde-8f01-23456789abcd',
+    rate_limit_info: { status: 'rejected', rateLimitType: 'five_hour', resetsAt: 1770000000, private_detail: 'hidden' },
+  }), error => {
+    assert.equal(error.code, 'USAGE_LIMIT');
+    assert.deepEqual(error.rateLimit, { status: 'rejected', rateLimitType: 'five_hour', resetsAt: 1770000000 });
+    assert.equal(error.message.includes('hidden'), false);
+    return true;
+  });
+  assert.equal(protocol.phase, 'faulted');
+  assert.deepEqual(protocol.current, { messageId: source.messageId, messageHash: source.messageHash, protocolUuid, sessionId });
+  assert.throws(() => protocol.prepare(input({ protocolUuid: '7f604293-a4b5-4cde-8f01-23456789abcd' }), limits.maxInputBytes),
+    error => error.code === 'BUSY');
+  const disconnect = protocol.finish({ pid: 123, generation: 'fixture-generation', reason: 'exit', exitCode: 0, signal: null,
+    startedAt: null, exitedAt: null, closedAt: null, stdoutBytes: 0, stderrBytes: 0, error: null });
+  assert.equal(disconnect[0].type, 'ambiguous-disconnect');
+  assert.equal(disconnect[0].messageId, source.messageId);
+});
+
+test('rejected rate-limit event without an active input still permanently closes the protocol for new sends', () => {
+  const protocol = createClaudeStreamProtocol(sessionId);
+  protocol.observe(initRecord());
+  assert.throws(() => protocol.observe({ type: 'rate_limit_event', session_id: sessionId,
+    uuid: '7f604293-a4b5-4cde-8f01-23456789abcd', rate_limit_info: { status: 'rejected' } }),
+  error => error.code === 'USAGE_LIMIT');
+  assert.equal(protocol.phase, 'faulted');
+  assert.throws(() => protocol.prepare(input(), limits.maxInputBytes), error => error.code === 'NOT_READY');
+});
+
+test('validates rate-limit session, UUID, status, info and documented option types', () => {
+  const records = [
+    { session_id: '7f604293-a4b5-4cde-8f01-23456789abcd', uuid: '7f604293-a4b5-4cde-8f01-23456789abcd', rate_limit_info: { status: 'allowed' } },
+    { session_id: sessionId, uuid: 'bad-uuid', rate_limit_info: { status: 'allowed' } },
+    { session_id: sessionId, uuid: '7f604293-a4b5-4cde-8f01-23456789abcd', rate_limit_info: null },
+    { session_id: sessionId, uuid: '7f604293-a4b5-4cde-8f01-23456789abcd', rate_limit_info: { status: 'unknown' } },
+    { session_id: sessionId, uuid: '7f604293-a4b5-4cde-8f01-23456789abcd', rate_limit_info: { status: 'allowed', resetsAt: 'later' } },
+    { session_id: sessionId, uuid: '7f604293-a4b5-4cde-8f01-23456789abcd', rate_limit_info: { status: 'allowed', rateLimitType: 'unknown' } },
+  ];
+  for (const record of records) {
+    const protocol = createClaudeStreamProtocol(sessionId);
+    assert.throws(() => protocol.observe({ type: 'rate_limit_event', ...record }),
+      error => ['SESSION_MISMATCH', 'PROTOCOL_SHAPE'].includes(error.code));
+  }
+});
+
+test('rejected rate-limit frame stops the owned child and reports only validated limit details', { skip: !canCompileLocalFixture && 'already-installed Windows Framework C# compiler unavailable' }, async t => {
+  const fixture = await localWrapperFixture(t);
+  const client = await startClaudeStream({ ...fixture, env: { ...fixture.env, FIXTURE_MODE: 'rate-limit-after-input' },
+    limits, sessionId, model: 'synthetic-model' });
+  const observed = (async () => {
+    const events = [];
+    for await (const event of client.events) events.push(event);
+    return events;
+  })();
+  assert.equal((await client.ready).type, 'ready');
+  assert.equal((await client.send(input({ text: 'rate limit probe' }))).type, 'stdin-written');
+  const events = await observed;
+  const fault = events.find(event => event.type === 'protocol-fault');
+  assert.deepEqual(fault, {
+    type: 'protocol-fault', sessionId, code: 'USAGE_LIMIT',
+    rateLimit: { status: 'rejected', rateLimitType: 'five_hour', resetsAt: 1770000000 },
+  });
+  assert.equal(JSON.stringify(fault).includes('must not escape'), false);
+  assert.ok(events.some(event => event.type === 'input-replayed'));
+  assert.ok(events.some(event => event.type === 'assistant'));
+  assert.ok(events.some(event => event.type === 'ambiguous-disconnect'));
+  assert.ok(events.some(event => event.type === 'process-exit'));
+  assert.equal(events.some(event => event.type === 'provider-result'), false);
+  await assert.rejects(client.send(input({ protocolUuid: '7f604293-a4b5-4cde-8f01-23456789abcd' })), { code: 'NOT_READY' });
+  const exit = await client.processCompletion;
+  assert.equal(exit.exitCode, 0);
 });
 
 test('unsafe or mismatched init keeps a pending first input ambiguous', () => {
