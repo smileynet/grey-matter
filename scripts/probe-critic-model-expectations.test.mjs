@@ -60,4 +60,3 @@ test("Codex .cmd Sol unsupported response explains the unresolved model availabi
   assert.match(r.note, /plan, client and workspace/i);
   assert.doesNotMatch(r.note, /HTTP 400|status\\":400/);
 });
-

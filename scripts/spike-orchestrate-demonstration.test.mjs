@@ -26,4 +26,3 @@ test("npm test passes fresh and fails after mutating a.js", { skip: !hasTkt }, (
   writeFileSync(join(dir, "src/a.js"), "export const add = (x, y) => x - y;\n");
   assert.notEqual(inDir(dir, "npm", ["test"]).status, 0);
 });
-
