@@ -45,6 +45,8 @@ classification and the local-gates admission contract.
 - [x] Independent offline examples include an ambiguous retention dependency, malformed registry data and an already-correct rule with a missing execution path.
 - [x] Examples avoid mandatory project-specific schemas, capacities, archive destinations, retention periods or new global gates; applicable syntax/documentation stages pass.
 
+- [x] Offline examples route each failure class proportionately; an already-documented instruction does not automatically produce another rule or validator.
+
 ## Overlap and limits
 
 Queried all ticket metadata and inspected related open bodies before filing. #117
@@ -62,7 +64,6 @@ paths, and actual syntactic/data-contract defects before choosing an interventio
 Use the worker-wake admission as an evidence-limited example, not proof that a
 mechanism is missing. Reference the existing harness rule rather than duplicate it.
 
-- [ ] Offline examples route each failure class proportionately; an already-documented instruction does not automatically produce another rule or validator.
 
 ## Resolution (2026-11-04)
 

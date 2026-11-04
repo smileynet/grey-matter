@@ -41,6 +41,9 @@ This is a **hypothesis from prior art**, not a decided change. Before editing an
 
 Related: #152, #224, retro skill.
 
+- [x] Qualification/debugging examples distinguish diagnostic progress, repaired behavior and preparation churn.
+- [x] Before/after replay includes necessary multi-step repair without prescribing a global retry limit.
+
 ## Accepted orchestration retro amendment (2026-11-04)
 
 Sam approved applying and implementing these retro proposals after #179. Include
@@ -51,8 +54,6 @@ reassessment does not become an arbitrary retry cap. The parent's missed-wake
 admission lacks an exact independently proved prior-idle/tool-call sequence.
 #251 owns initial intervention choice; this ticket owns progress inside a loop.
 
-- [ ] Qualification/debugging examples distinguish diagnostic progress, repaired behavior and preparation churn.
-- [ ] Before/after replay includes necessary multi-step repair without prescribing a global retry limit.
 
 ## Resolution (2026-11-04)
 

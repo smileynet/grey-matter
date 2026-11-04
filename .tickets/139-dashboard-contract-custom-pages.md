@@ -39,6 +39,13 @@ A data hook (for example `window.deliveryDashboard` or a JSON file the page decl
 - [ ] The skill documents the hook and the migration choice.
 - [ ] `node scripts/gate.mjs pre-merge` passes.
 
+- [ ] Seeded closed-ticket/stale-plan, missing-row and stale-generated-data scenarios fail; explicitly refreshed template and supported custom projections pass.
+- [ ] Authored ticket-fact overrides and scoped board queries cannot produce a passing full-board verdict.
+- [ ] Checks preserve authored ordering and historical namespaces, report drift without automatic repair, and support the tracker's close-before-refresh workflow.
+- [ ] Delivery/reconciliation guidance points to the maintained comparison owner and names coverage limits; applicable fixtures and repository gates pass.
+- [x] A non-rendering change preserves an accepted receipt; a rendering-input change invalidates affected acceptance.
+- [x] Guidance identifies affected views and preserves acceptance for unchanged independently scoped views.
+
 ## Outcome-driven orchestration coordination
 
 Proposal 19 approved. Retain custom-dashboard contract ownership; #205 publication preflight should accept existing supported receipt inputs without forcing custom pages into the shipped renderer.
@@ -68,10 +75,6 @@ refresh or valid review receipt alone does not establish ticket-projection fresh
 Closed #116 supplies current-build/readiness identity and #205 supplies publication
 source/receipt integrity; this addition covers the remaining ticket/plan projection gap.
 
-- [ ] Seeded closed-ticket/stale-plan, missing-row and stale-generated-data scenarios fail; explicitly refreshed template and supported custom projections pass.
-- [ ] Authored ticket-fact overrides and scoped board queries cannot produce a passing full-board verdict.
-- [ ] Checks preserve authored ordering and historical namespaces, report drift without automatic repair, and support the tracker's close-before-refresh workflow.
-- [ ] Delivery/reconciliation guidance points to the maintained comparison owner and names coverage limits; applicable fixtures and repository gates pass.
 
 ## Accepted orchestration retro amendment (2026-11-04)
 
@@ -82,8 +85,6 @@ require affected checks, captures and renewed review. Reuse existing receipt IDs
 not another hash system. This does not waive required visual acceptance or prove
 freshness of the whole board.
 
-- [ ] A non-rendering change preserves an accepted receipt; a rendering-input change invalidates affected acceptance.
-- [ ] Guidance identifies affected views and preserves acceptance for unchanged independently scoped views.
 
 ## Note — 2026-11-04
 
