@@ -71,4 +71,11 @@ Before execution, persist `attempt-start` using the returned exact lifecycle bin
 
 `codex-queue.test.mjs` exercises fixed argv, exact UUID/target binding, executable hash and size mismatches, endpoint and arbitrary-argument rejection, pre-execution action-hash binding, caller-input snapshotting during asynchronous hashing, and optional context identity. These are local deterministic fixtures only. They do not start Codex or prove endpoint ownership, queue behavior, busy/idle wakeups, receipt, or completion. Those require the separately authorized parent-owned native canary.
 
-The shared route enum currently permits only `desktop-followup` and `codex-cli-queue`. Claude Code and Kiro routes remain unselectable until separately researched and qualified; this guide makes no capability claim for them.
+Native CLI queue delivery remains unqualified: the proposed app-server preflight
+could start configured integrations before its model gate, and no safe prelaunch
+inventory/disable path was established within current authorization. Preserve the
+hold and use explicit manual reporting. See the [pinned prelaunch research](../../../../docs/agents/research/codex-prelaunch-integration-admission-20261104.md).
+
+The shared module also has separate owned Claude and Kiro routes; their contracts
+and qualification limits live in [owned input conversion](native-notification.md#existing-owned-client-handoff).
+This CLI guide does not admit those routes or assert native delivery for them.

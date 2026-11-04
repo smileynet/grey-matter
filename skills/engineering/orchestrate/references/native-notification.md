@@ -48,7 +48,7 @@ New plans persist an exact `transportAction` and its canonical SHA-256 `actionHa
 }
 ```
 
-This argument shape matches the Codex desktop collaboration tool used by the current runtime; callers still inspect the current tool signature before invocation. The message identifies the exact spool record and its hash, includes the persisted body, and includes canonical optional work context when present. The receiver can read the local record only if the runtime root is available to that receiver. Existing task authorization remains authoritative; the notification grants no permission. This implementation has not independently qualified delivery.
+This argument shape matches the Codex desktop collaboration tool used by the current runtime; callers still inspect the current tool signature before invocation. The message identifies the exact spool record and its hash, includes the persisted body, and includes canonical optional work context when present. The receiver can read the local record only if the runtime root is available to that receiver. Existing task authorization remains authoritative; the notification grants no permission. The [bounded desktop case](../../../../docs/agents/research/session-messaging-codex-owned-20261104.md) records native question/completion and its timing/identity limits; it is not a general delivery guarantee.
 
 CLI input is JSON data, never executable code. Each lifecycle command takes the same five-argument shape after the script name:
 

@@ -10,12 +10,15 @@ For a durable message to an existing collaboration agent, use the
 [local message contract](session-messages.md) and
 [desktop notification preparation](native-notification.md). Prepare only after
 independently selecting the exact live agent and checking the exposed tool schema;
-invoke the returned fixed action separately. A local acceptance/intent is not native
+persist attempt-start and invoke only its returned stored action. A local acceptance/intent is not native
 receipt. The observed bounded case is one idle owned agent on the current desktop
 tool surface. A [later bounded desktop case](../../../../docs/agents/research/session-messaging-desktop-20261103.md)
 also records a busy clock-wait turn, idle wakeup and correlated question/completion;
 it predates the action-fingerprint extension and does not qualify arbitrary busy
-work or crash recovery. For the separately conditional CLI route, read the
+work or crash recovery. The [version-3 case](../../../../docs/agents/research/session-messaging-codex-owned-20261104.md)
+records a running-roster observation, correlated question and idle follow-up with
+the current stored action. Its exact 30-second clock-hold timing remains unproved.
+For the separately conditional CLI route, read the
 [fixed queue plan](codex-queue.md); preparation is not native delivery. Registry
 generation and an explicitly unknown version are local metadata, not native identity
 attestation. Completion must return through the existing native parent channel with

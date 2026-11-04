@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "owner": "parent179integration",
+  "state": "retained",
+  "endCondition": "179 final audit and explicit disposition",
+  "candidate": "fd1fb7aa4701ece894ba689d217899bc21ec8b57",
+  "desktop": {
+    "target": "/root/canary235_v3",
+    "outcome": "same-target question and idle follow-up with remembered nonce; first roster observed running",
+    "exact30SecondWait": "unproved: marker-to-return upper bound37.440seconds; no exported exact invocation timestamp",
+    "identity": "local generation1 and unreported version; witness reconstructed, not authenticated export"
+  },
+  "cli": {
+    "outcome": "native unqualified, prelaunch integration gate held; no app-server or model launched",
+    "sourceEvidence": "docs/agents/research/evidence/session-messaging-235-20261103.json"
+  },
+  "raw": [
+    {
+      "path": ".scratch/t235-desktop-v3.mjs",
+      "bytes": 5341,
+      "sha256": "3a39f924a529233e66f0a91e102ac7469c33ff6d62a10e9e736794a4c6ed338e"
+    },
+    {
+      "path": ".scratch/t235-desktop-receiver.mjs",
+      "bytes": 2087,
+      "sha256": "3cd95deef5cbbe350da184d91240e253ccfb5ad3e068b5110d0ef76739a13493"
+    },
+    {
+      "path": ".scratch/t235-desktop-busy-marker.mjs",
+      "bytes": 403,
+      "sha256": "bb9443e9e9ae76ab021e0edc6cc83dcf96ef16ea2cb04b7b1754d67372c69cc3"
+    },
+    {
+      "path": ".scratch/t235-desktop-v3-state.json",
+      "bytes": 5641,
+      "sha256": "e02accb58446d8b4c2147b065fcf3f792b1e31a05e5e7158788091ed1657e0e1"
+    },
+    {
+      "path": ".scratch/t235-desktop-v3-native-witness.json",
+      "bytes": 2386,
+      "sha256": "03a8d72b8a36ab627915f914a2856e4da3548d02380261dffdb4b1b575799c57"
+    },
+    {
+      "path": ".scratch/t235-desktop-v3-preflight-review.md",
+      "bytes": 3988,
+      "sha256": "35b218cb60e48a82b9783907aee76f9db1d5015508a3e53b2abfea5949997f46"
+    },
+    {
+      "path": ".scratch/t235-desktop-v3-postflight-review.md",
+      "bytes": 5772,
+      "sha256": "a698ba4dd5272e33a470b41fca60abc6cdd8ca78ed18f489f861b9f78406bed0"
+    },
+    {
+      "path": ".scratch/t235-guidance-claim-review.md",
+      "bytes": 4302,
+      "sha256": "9e3a4d0eb7b6da5a7ea45c794562ba334f1b87ee88d99059446289a8bf0cdcb5"
+    },
+    {
+      "path": ".scratch/t235-parent-current-focused.log",
+      "bytes": 13260,
+      "sha256": "3e2e7ad95c151a656ba13c29c84a726e076463a216dcbab9836aa61fed84cd5a"
+    },
+    {
+      "path": "docs/agents/research/codex-prelaunch-integration-admission-20261104.md",
+      "bytes": 4662,
+      "sha256": "318d5fc2c4a91be9edca9b96007010819070774a1bee1d0f66ff2c934c0ec741"
+    },
+    {
+      "path": "docs/agents/research/session-messaging-codex-owned-20261104.md",
+      "bytes": 3576,
+      "sha256": "bf901eb063208df36c0b60c8e39ab86fe8e4d422858294cc1a3f5be235faf922"
+    },
+    {
+      "path": "skills/engineering/orchestrate/references/codex-queue.md",
+      "bytes": 5955,
+      "sha256": "59d8c53fa2444b234ae1f2e706f693a70f9886503985a3aef19f49dd490b2f74"
+    },
+    {
+      "path": "skills/engineering/orchestrate/references/harness-codex.md",
+      "bytes": 4380,
+      "sha256": "3d1b56000e2718cd37c82bc6eb7021cd62fc743beed7f5cc525c922466b6e745"
+    },
+    {
+      "path": "skills/engineering/orchestrate/references/native-notification.md",
+      "bytes": 13984,
+      "sha256": "b42bb71eec5b84cc6d516e54e0d4b973aab8508a4c95e51724d348611bb11a41"
+    }
+  ],
+  "nativeSpool": {
+    "runtimeLocator": ".scratch/t235-desktop-v3-state.json#/root",
+    "files": [
+      {
+        "path": "registry.json",
+        "bytes": 938,
+        "sha256": "85690992fb7c771c55bd3e9cb91812c358c1eb2cd85df832caa9a8160ffc97bd"
+      },
+      {
+        "path": "busy.json",
+        "bytes": 81,
+        "sha256": "c9fdc3777c960d5b6aacf1cf1d45fd24962d207c49e0ea71b267740e6e418273"
+      },
+      {
+        "path": "question-observation.json",
+        "bytes": 1690,
+        "sha256": "38ccb210fdf15fd80132028f09660548cdb927567cb3d5e0adec4378bb4c16fa"
+      },
+      {
+        "path": "completion-observation.json",
+        "bytes": 1673,
+        "sha256": "eee0b0f31d74ecaaf74bd0d5daa507555fe135e06a145b15ef3df60394f54e9d"
+      },
+      {
+        "path": "messages/desktop-busy-1.json",
+        "bytes": 1800,
+        "sha256": "e5c4fd8a5c787aed41d5b2bbe01b5e45370026ab329405569ed6484aba32a6a7"
+      },
+      {
+        "path": "messages/desktop-done-1.json",
+        "bytes": 1458,
+        "sha256": "3322948490cc268479a3ed0c715f9f19d5b22d957f1a3426a5fb9667ab501788"
+      },
+      {
+        "path": "messages/desktop-idle-reply-1.json",
+        "bytes": 1684,
+        "sha256": "26d5aaabf279d7fe4fac59720e5b6f28560d89656bddcd195d2f1e234b353aa5"
+      },
+      {
+        "path": "messages/desktop-question-1.json",
+        "bytes": 1481,
+        "sha256": "f452a8f707b2b02981d7cbc4fbd96935158b0a3a92702e9231375a81bd223540"
+      },
+      {
+        "path": "notification-intents/desktop-busy-1.json",
+        "bytes": 3888,
+        "sha256": "c297f3beb80e57d08e906d25ad138668192ea4c46f0fb15985a554adc7932ab3"
+      },
+      {
+        "path": "notification-intents/desktop-idle-reply-1.json",
+        "bytes": 3782,
+        "sha256": "3ff53fe0542c63257b30459a38b6254cf5f8fa6c3911f1e09f6d7c49c0de0932"
+      }
+    ]
+  }
+}
