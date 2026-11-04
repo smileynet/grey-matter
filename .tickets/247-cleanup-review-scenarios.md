@@ -30,6 +30,10 @@ Judgement improvement: reviewers of a project's destructive artifact plan recogn
 
 Mechanical checks belong in the owning project's tools. The reviewer should verify applicable evidence, its exact scope and execution status. Keep this focused on cleanup acceptance; local tickets 115 and 184 already own positive preservation evidence and fresh dependency observations.
 
+## Judgement and portability
+
+Use the existing artifact-hygiene skill for purpose, ownership, useful evidence, retention and acceptance decisions. Tools supply measured facts, coverage and changed-input observations; they do not infer disposability from names, age, size, ticket status or a complete scan. Keep examples portable across build systems and storage layouts. Incident-specific formats are scenario inputs, not a required global taxonomy or policy engine. Prefer a short skill/reference improvement over new automation when the decision requires context.
+
 ## Acceptance criteria
 
 - [ ] A disposable parent containing protected app/data payloads is rejected or narrowed with explicit evidence.

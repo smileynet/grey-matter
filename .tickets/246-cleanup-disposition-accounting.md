@@ -29,6 +29,10 @@ Judgement improvement with structured reporting support: distinguish a request f
 
 Report moved bytes, purged target counts, remaining batches and observed same-volume free-space before/after separately. Explain that APFS clones, open files and concurrent writers prevent exclusive physical attribution from du or a volume delta. Prefer a short branch and disclosed examples in the existing hygiene owner, not more global instructions.
 
+## Judgement and portability
+
+Use the existing artifact-hygiene skill for purpose, ownership, useful evidence, retention and acceptance decisions. Tools supply measured facts, coverage and changed-input observations; they do not infer disposability from names, age, size, ticket status or a complete scan. Keep examples portable across build systems and storage layouts. Incident-specific formats are scenario inputs, not a required global taxonomy or policy engine. Prefer a short skill/reference improvement over new automation when the decision requires context.
+
 ## Acceptance criteria
 
 - [ ] Guidance identifies the cleanup goal and supported disposition before executing approved targets.

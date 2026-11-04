@@ -29,6 +29,10 @@ Mechanical improvement: users can see which bytes were classified, remain unknow
 
 Coordinate bounded traversal with local ticket 175 and APFS host evidence with local ticket 131. Neither a category nor a complete census grants deletion authority. Keep author-owned classification and existing preservation/recheck requirements. Do not add a second cleanup executor or machine-wide scan.
 
+## Judgement and portability
+
+Use the existing artifact-hygiene skill for purpose, ownership, useful evidence, retention and acceptance decisions. Tools supply measured facts, coverage and changed-input observations; they do not infer disposability from names, age, size, ticket status or a complete scan. Keep examples portable across build systems and storage layouts. Incident-specific formats are scenario inputs, not a required global taxonomy or policy engine. Prefer a short skill/reference improvement over new automation when the decision requires context.
+
 ## Acceptance criteria
 
 - [ ] A fixture with an unfamiliar large cache child exposes it in the residual breakdown.
