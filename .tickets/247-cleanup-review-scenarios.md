@@ -47,3 +47,26 @@ Use the existing artifact-hygiene skill for purpose, ownership, useful evidence,
 ## Out of scope
 
 Reimplementing completed Tagalog Helper tickets 211/217/218, resolving that project's legacy identity ticket 212, or adding mandatory global ledgers, hooks or a device campaign.
+
+## Accepted Philippines skill follow-up · November 4
+
+Sam requested upstream tickets after implementing the local artifact-retirement
+skill, explicitly preferring agent judgment when uncertain. Extend the existing
+hygiene scenario work rather than add a second cleanup/retention policy engine.
+Source: https://github.com/smileynet/philippines-trip/blob/main/.memory/reviews/retro-followup-2026-11-04.md
+
+Add a policy-change scenario: a prior promise retains release history through an
+archive review, then the owner explicitly changes the project to retaining only
+active inputs. Reassess actual current consumers under the latest scoped intent;
+old citations alone do not perpetuate the hold. Preserve private originals, live
+data and uncertain dependencies while resolving the particular uncertainty.
+Archive when recovery is wanted, rather than as a substitute for this decision.
+
+Acceptance additions:
+- [ ] The existing hygiene skill/reference distinguishes current consumers, desired recovery material and obsolete evidence after an explicit policy change.
+- [ ] Offline scenario review contrasts disposable preproduction data, a production recovery bundle and an actively consumed research dataset; neither always-archive nor always-delete is accepted.
+- [ ] Project paths, preproduction policy, archive hosts, capacities and approval schemas remain local; no automated disposal classifier or global retention period is introduced.
+
+Overlap checked: #97/#181/#183 are completed lifecycle/prune/handoff work; #246
+owns disposition and measured reclaim; #212 owns archival proof. This extension
+adds policy-supersession judgment without reopening or duplicating those repairs.

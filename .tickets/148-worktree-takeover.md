@@ -30,3 +30,26 @@ Taking over from Codex meant checking 7 worktrees and 46 branches by hand. Findi
 ## Outcome-driven orchestration coordination
 
 Proposal 19 approved. Retain safe takeover ownership; consume #204 binding/evidence inputs where useful. Preserve all unrelated worktrees and private draft ancestry; a clean or old worktree is not disposal authorization.
+
+## Accepted harness-managed handoff follow-up · November 4
+
+Sam requested this extension after Philippines cleanup hit app lifecycle guards.
+Source: https://github.com/smileynet/philippines-trip/blob/main/.memory/reviews/retro-followup-2026-11-04.md
+
+Extend the covering takeover/orchestration skill: distinguish preserving needed
+source from disposing of ignored artifacts and retiring the checkout. A named
+Git ref can preserve needed unfinished source without merging unverified code.
+Move current inputs to canonical locations and update consumers before retirement.
+For harness-managed workspaces consult the supported lifecycle and task bindings;
+a primary/shared-checkout refusal is a handoff blocker, not a reason to force Git
+removal or repeatedly retry unchanged state. Retry after a relevant binding or
+ownership change, using the supported route. Unknown eligibility stays unknown.
+
+Acceptance additions:
+- [ ] A clean landed checkout still blocked by an app primary/shared binding is reported once with the supported handoff needed; no guard bypass is recommended.
+- [ ] Scenario review distinguishes source integration, artifact disposition and checkout retirement, including needed unfinished source on a named ref.
+- [ ] Skill guidance stays harness-portable and advisory; exact API calls and app-specific ownership records belong in harness references/projects rather than a new generic cleanup executor.
+
+Overlap checked: #145 owns concurrent checkout detection and #180 adoption review;
+#183 completed artifact-owner continuity. This adds supported-lifecycle judgment
+to #148 rather than a parallel worktree-removal ticket.
