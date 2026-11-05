@@ -1,12 +1,13 @@
 ---
 id: "260"
 title: "Apply evidence-first spikes and visual critic guidance"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Shared guidance and workflow entry points implement all three acceptance criteria"
   - "Applicable gates and deployment pass"
 tags: ["stream:tooling"]
+assignee: "codex"
 ---
 ## Intent
 
