@@ -1,11 +1,12 @@
 ---
 id: "258"
 title: "Make unfinished tickets easier to scan in the Plan"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Browser and contract checks pass for the updated Plan"
 tags: ["stream:tooling"]
+assignee: "codex"
 ---
 ## Intent
 
