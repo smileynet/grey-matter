@@ -1,12 +1,13 @@
 ---
 id: "259"
 title: "Address the dashboard UX and visual review"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Six review findings are addressed in the template, example, and live dashboard"
   - "Dashboard contract and browser checks pass"
 tags: ["stream:tooling"]
+assignee: "codex"
 ---
 ## Intent
 
