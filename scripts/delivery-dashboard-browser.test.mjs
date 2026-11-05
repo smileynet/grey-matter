@@ -17,6 +17,7 @@ for (const width of [1280,390]) test('decision choices, notes and clipboard fall
  const {context,page,errors}=await pageFor(width,{decisions:[decision,{...decision,id:'old',status:'answered',answer:'Confirmed in chat.'}]});
  try {
   await page.locator('#tab-overview').click(); await page.locator('#needs a[href="#decision-scope"]').click(); await page.locator('#decisions').waitFor({state:'visible'});
+  assert.equal(await page.locator('#decision-instructions').isVisible(),true);
   assert.equal(await page.locator('#decision-scope-small').isChecked(),true);
   await page.locator('#decision-scope-large').check(); await page.locator('#decision-notes-scope').fill('Alternative with conditions');
   await page.locator('#tab-plan').click(); await page.locator('#tab-decisions').click(); await page.locator('#decisions').waitFor({state:'visible'});
@@ -43,12 +44,16 @@ for(const width of [1280,390]){
     'Unfinished work','In progress (1)','Open · can start (2)','Open · waiting (1)','Deferred (1)','Ticket history',
    ]);
    assert.equal(await page.locator('#done-group').getAttribute('open'),null);
+   const activeFilter=page.getByRole('button',{name:'In progress 1',exact:true});
+   await activeFilter.focus(); await page.keyboard.press('Enter');
+   assert.equal(await activeFilter.evaluate(button=>document.activeElement===button),true);
+   await page.keyboard.press('Enter');
    assert.equal(await page.locator('#flow-scope').inputValue(),'all');
    assert.match(await page.locator('.flow-notice').innerText(),/showing all remaining work/);
    assert.deepEqual((await page.locator('.flow-node').evaluateAll(nodes=>nodes.map(n=>n.dataset.ticket))).sort(),['active','finish','later','parallel','start']);
    await page.waitForFunction(()=>document.querySelectorAll('.flow-links path[data-from]').length===2);
    assert.deepEqual((await page.locator('.flow-links path[data-from]').evaluateAll(nodes=>nodes.map(n=>n.dataset.from+'>'+n.dataset.to))).sort(),['active>finish','start>active']);
-   assert.match(await page.locator('.flow-counts').innerText(),/2 unblocked · 1 in progress · 1 waiting on tickets · 0 decision needed · 0 evidence needed · 1 deferred · 0 done · 0 cancelled · 5 shown/);
+   assert.match(await page.locator('.flow-counts').innerText(),/2 unblocked · 1 in progress · 1 waiting on tickets · 1 deferred · 5 shown/);
    assert.deepEqual(await page.locator('.flow-chain button').allInnerTexts(),['start','active','finish']);
    assert.deepEqual((await page.locator('.flow-node[data-critical=true]').evaluateAll(ns=>ns.map(n=>n.dataset.ticket))).sort(),['active','finish','start']);
    assert.deepEqual(await page.locator('.flow-start .flow-pick b').allInnerTexts(),['active','start','parallel']);
@@ -60,6 +65,8 @@ for(const width of [1280,390]){
    const start=page.locator('.flow-node[data-ticket=start]');await start.focus();await page.keyboard.press('Enter');
    assert.equal(await start.getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.flow-node[data-ticket=finish]').getAttribute('data-related'),'after');assert.equal(await page.locator('.flow-node[data-ticket=parallel]').getAttribute('data-related'),'unrelated');
    assert.match(await page.locator('.flow-detail').innerText(),/base \(done\)/);assert.equal(await page.locator('.flow-links path[data-related=true]').count(),2);
+   const detail=await page.locator('.flow-detail').boundingBox(), graph=await page.locator('.flow-scroll').boundingBox();
+   assert.ok(width>760 ? detail.x>=graph.x+graph.width : detail.y<graph.y);
    await page.locator('.flow-options > summary').click();await page.locator('#flow-completed').check();await page.locator('.flow-node[data-ticket=base]').waitFor();assert.equal(await page.locator('.flow-node[data-ticket=base]').getAttribute('data-related'),'before');
    await page.locator('#flow-scope').selectOption('archive');assert.equal(await page.locator('.flow-node').count(),1);assert.match(await page.locator('.flow-notice').innerText(),/5 unfinished tickets are outside/);
    await page.locator('#flow-completed').uncheck();assert.equal(await page.locator('#flow-scope').inputValue(),'all');assert.equal(await page.locator('.flow-node').count(),5);

@@ -304,6 +304,7 @@ Pick the visual that answers the person's question fastest:
 | --- | --- |
 | How far along is it? | `progress` (done of total) |
 | Where are we in the journey? | `steps` (done, now, next) |
+| What order should I read these in? | `steps` with `mode: "sequence"`, a caption, and items with labels only |
 | Did the change help? | `metrics` (2 to 4 tiles) or `compare` (before and after) |
 | What does it look like? | `image` of a real capture, labelled with its fidelity |
 

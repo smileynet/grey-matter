@@ -137,7 +137,10 @@ export function check(path, { strict = false, repo, run = execFileSync } = {}) {
       if (v.type === "image") { if (!v.alt) err(`${at}: image needs alt text`); srcOk(v.src, `${at} visual`); }
       if (v.type === "compare") for (const s of [v.before, v.after]) { if (!s || !s.alt) err(`${at}: compare images need alt text`); else srcOk(s.src, `${at} visual`); }
       if (v.type === "progress" && !(Number.isFinite(v.done) && Number.isFinite(v.total) && v.total >= 0 && v.done >= 0 && v.done <= v.total)) err(`${at}: progress needs numeric done <= total`);
-      if (v.type === "steps" && !(Array.isArray(v.items) && v.items.every((s) => s.label && ["done", "now", "next"].includes(s.state)))) err(`${at}: steps need label and state done|now|next`);
+      if (v.type === "steps" && !(
+        (v.mode === undefined || v.mode === "sequence") && Array.isArray(v.items) &&
+        v.items.every((step) => step?.label && (v.mode === "sequence" ? step.state === undefined : ["done", "now", "next"].includes(step.state)))
+      )) err(`${at}: steps need labels and states done|now|next, or labels alone in sequence mode`);
       if (v.type === "metrics" && !(Array.isArray(v.items) && v.items.every((m) => m.label && m.value !== undefined))) err(`${at}: metrics need label and value`);
     }
     if (e.tickets !== undefined) {

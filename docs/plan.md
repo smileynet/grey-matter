@@ -670,3 +670,4 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 256 | Projects can add their own tab to the status dashboard without editing the renderer | open |
 | 257 | Adopt four-round critic reassessment | ✅ done |
 | 258 | Make unfinished tickets easier to scan in the Plan | ✅ done |
+| 259 | Address the dashboard UX and visual review | in_progress |

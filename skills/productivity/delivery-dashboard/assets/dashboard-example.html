@@ -97,7 +97,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 :is(.flow-node,.flow-pick)[data-state=ready],.fl-ready{--c:var(--ok)}:is(.flow-node,.flow-pick)[data-state=in_progress],.fl-in_progress{--c:var(--cyan)}.flow-node[data-state=blocked],.fl-blocked{--c:#7f8fb0}.flow-node[data-state=backlog],.fl-backlog{--c:#56688c}.flow-node[data-state=done],.fl-done{--c:var(--blue2)}.flow-node[data-state=cancelled]{--c:#667085}.flow-node[data-gate=decision],.flow-node[data-gate=evidence],.fl-decision{--c:var(--ask)}
 .flow-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:4px 0 0}.flow-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}.flow-legend .fl-backlog{background:none;border:2px dashed var(--c)}
 .flow-brief{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;margin:14px 0}.flow-brief>div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}.flow-brief h3{margin:0 0 6px;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}.flow-brief .meta{margin:6px 0 0}
-.flow-pick{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;font:inherit;font-size:14px;color:var(--text);background:none;border:0;border-left:3px solid var(--c);border-radius:6px;padding:8px 10px;margin:4px 0;min-height:44px;cursor:pointer}.flow-pick:hover{background:var(--panel2)}.flow-pick b{color:var(--c);font-variant-numeric:tabular-nums;flex:0 0 auto}.flow-pick span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.flow-pick em{margin-left:auto;font-style:normal;color:var(--muted);font-size:12.5px;white-space:nowrap}
+.flow-pick{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;font:inherit;font-size:14px;color:var(--text);background:none;border:0;border-left:3px solid var(--c);border-radius:6px;padding:8px 10px;margin:4px 0;min-height:44px;cursor:pointer}.flow-pick:hover{background:var(--panel2)}.flow-pick b{color:var(--c);font-variant-numeric:tabular-nums;flex:0 0 auto}.flow-pick span{min-width:0;overflow-wrap:anywhere}.flow-pick em{margin-left:auto;font-style:normal;color:var(--muted);font-size:12.5px;white-space:nowrap}
 .flow-chain ol{display:flex;flex-wrap:wrap;gap:6px 4px;list-style:none;margin:6px 0 0;padding:0}.flow-chain li{display:flex;align-items:center;gap:4px}.flow-chain li+li::before{content:"→";color:var(--cyan)}.flow-chain button{font:inherit;font-size:13px;font-variant-numeric:tabular-nums;color:var(--text);background:#0e1830;border:1px solid var(--cyan);border-radius:99px;padding:2px 12px;min-height:32px;cursor:pointer}.flow-chain button:hover{background:var(--panel2)}
 .flow-scroll{max-height:760px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0;background:radial-gradient(circle at 1px 1px,#1a2742 1px,transparent 0) 0 0/22px 22px,var(--bg)}
 .flow-canvas{position:relative;min-width:100%}.flow-links{position:absolute;inset:0;pointer-events:none;overflow:visible}
@@ -115,6 +115,11 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 .flow-links path[data-live=true]{stroke:var(--ok);opacity:.85}.flow-links path[data-critical=true]{stroke:var(--cyan);stroke-width:2.4}.flow-links path[data-satisfied=true]{stroke-dasharray:4 5}.flow-links path[data-related=true]{stroke:var(--blue);stroke-width:3;opacity:1}
 .flow-canvas[data-preview] .flow-node[data-near=false]{opacity:.3}.flow-canvas[data-preview] path[data-near=false]{opacity:.1}
 .flow-canvas[data-selected] path[data-related=false]{opacity:.18}.flow-node[data-related=unrelated]{opacity:.35}.flow-node[data-related=before],.flow-node[data-related=after]{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue);border-left-color:var(--c)}.flow-node[aria-pressed=true]{outline:3px solid var(--ask);outline-offset:2px}
+.history-filters{margin:0 0 14px}.history-filters>summary{min-height:44px}
+.flow-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.flow-heading label{color:var(--muted);font-size:14px}.flow-heading select{max-width:100%}
+.flow-stage{min-width:0}
+@media(min-width:760px){.flow-stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(225px,28%);gap:14px;align-items:start}.flow-stage .flow-detail{grid-column:2;grid-row:1;position:sticky;top:12px}.flow-stage .flow-scroll{grid-column:1;grid-row:1;min-width:0}}
 .flow-detail{border-left:3px solid var(--blue);padding:12px 16px;background:var(--panel);margin:16px 0}.flow-detail h3{margin:0 0 8px}.flow-detail p{margin:8px 0}.flow-readable li{margin:8px 0}
 @media(max-width:560px){.flow-scroll{max-height:620px}}
 @media(prefers-reduced-motion:reduce){.flow-node,.flow-links path{transition:none}}
@@ -159,18 +164,22 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   <div class="tools">
     <input type="search" id="q" placeholder="Search all entries" aria-label="Search all entries">
     <button type="button" id="f-needs" aria-pressed="false">Needs you</button>
+  </div>
+  <p class="count" id="count" aria-live="polite"></p>
+  <details class="history-filters"><summary>Filters and display options</summary>
+  <div class="tools">
     <button type="button" id="expand">Expand all</button>
     <button type="button" id="collapse">Collapse all</button>
   </div>
   <div class="tools" id="kinds" aria-label="Filter by type"></div>
   <div class="tools" id="streams" aria-label="Filter by area"></div>
-  <p class="count" id="count" aria-live="polite"></p>
+  </details>
   <div id="list"></div>
 </main>
 
 <main id="decisions" role="tabpanel" aria-labelledby="tab-decisions" hidden>
   <h2>Decisions</h2>
-  <p>Recommendations are draft selections. Change a choice or add another answer, then copy your answers into chat. Decisions are recorded only after you submit them in chat.</p>
+  <p id="decision-instructions" hidden>Recommendations are draft selections. Change a choice or add another answer, then copy your answers into chat. Decisions are recorded only after you submit them in chat.</p>
   <div id="decision-list"></div>
   <div id="decision-export" class="card decision-export" hidden>
     <button type="button" id="copy-decisions">Copy answers for chat</button>
@@ -182,7 +191,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 
 <main id="plan" role="tabpanel" aria-labelledby="tab-plan" hidden>
   <p class="more"><a href="#tickets-h">Browse unfinished tickets</a></p>
-  <section id="ticket-flow" aria-labelledby="flow-h"><h2 id="flow-h">Remaining ticket flow</h2><div id="flow-content"></div></section>
+  <section id="ticket-flow" aria-labelledby="flow-h"><div class="flow-heading"><h2 id="flow-h">Remaining ticket flow</h2></div><div id="flow-content"></div></section>
   <section aria-labelledby="progress-h"><h2 id="progress-h">Progress</h2><div id="plan-progress"></div></section>
   <section aria-labelledby="order-h"><h2 id="order-h">What comes next</h2><div id="plan-lanes"></div></section>
   <section aria-labelledby="tickets-h"><h2 id="tickets-h">Ticket list</h2>
@@ -655,8 +664,10 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       var fill = el("i"); fill.style.width = pct + "%"; bar.appendChild(fill); f.appendChild(bar);
     } else if (v.type === "steps") {
       var ol = el("ol", { class: "steps" });
-      v.items.forEach(function (s) {
-        ol.appendChild(el("li", { class: s.state }, [document.createTextNode(s.label), el("small", { text: { done: "Done", now: "Now", next: "Next" }[s.state] || "" })]));
+      v.items.forEach(function (s, index) {
+        var step = el("li", { class: s.state || "", text: (s.state ? "" : (index + 1) + ". ") + s.label });
+        if (s.state) step.appendChild(el("small", { text: { done: "Done", now: "Now", next: "Next" }[s.state] }));
+        ol.appendChild(step);
       });
       f.appendChild(ol);
     } else if (v.type === "metrics") {
@@ -751,6 +762,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       root.parentNode.appendChild(history);
     }
     $("decisions-count").textContent = decisions.length ? "(" + decisions.length + ")" : "";
+    $("decision-instructions").hidden = !decisions.length;
     if (!decisions.length) { root.appendChild(el("p", { class: "none", text: "No decisions are waiting for your input." })); return; }
     decisions.forEach(function (d) {
       var titleId = "decision-title-" + d.id;
@@ -806,10 +818,10 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   var filter = { q: "", kind: "", stream: "", needs: false };
   function renderChips(id, values, key, labels) {
     var box = $(id); box.textContent = "";
-    values.forEach(function (v) {
+    values.forEach(function (v, index) {
       var b = el("button", { type: "button", "aria-pressed": String(filter[key] === v), text: labels ? labels[v] : v });
       if (filter[key] === v) b.className = "on";
-      b.addEventListener("click", function () { filter[key] = filter[key] === v ? "" : v; renderHistory(); });
+      b.addEventListener("click", function () { filter[key] = filter[key] === v ? "" : v; renderHistory(); box.children[index].focus({ preventScroll: true }); });
       box.appendChild(b);
     });
   }
@@ -866,13 +878,13 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     var settings = cfg.ticketFlow || {};
     section.hidden = cfg.ticketFlow === false || settings.enabled === false;
     if (section.hidden) return;
-    var root = $("flow-content"), controls = el("details", { class: "flow-options" }, [el("summary", { text: "Filter ticket flow" })]);
+    var root = $("flow-content"), controls = el("details", { class: "flow-options" }, [el("summary", { text: "Graph options and guide" })]);
     root.textContent = "";
     var form = el("div", { class: "flow-controls" }), scope = el("select", { id: "flow-scope", "aria-label": "Ticket flow work stream" });
     scope.appendChild(el("option", { value: "all", text: "All remaining work" }));
     (settings.scopes || []).forEach(function (s) { scope.appendChild(el("option", { value: s.id, text: s.label })); });
     scope.value = settings.defaultScope || "all";
-    form.appendChild(el("label", { text: "Work stream " }, [scope]));
+    $("flow-h").parentNode.appendChild(el("label", { text: "Work stream " }, [scope]));
     var arrangement = el("select", { "aria-label": "Arrange ticket graph" });
     arrangement.appendChild(el("option", { value: "dependencies", text: "Dependency depth" }));
     arrangement.appendChild(el("option", { value: "workstreams", text: "Work streams" }));
@@ -881,8 +893,8 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     var completed = el("input", { type: "checkbox", id: "flow-completed" }), deferred = el("input", { type: "checkbox", id: "flow-deferred" }); deferred.checked = true;
     form.appendChild(el("label", {}, [completed, document.createTextNode("Include done/cancelled context")]));
     form.appendChild(el("label", {}, [deferred, document.createTextNode("Include deferred work")]));
-    controls.appendChild(form); root.appendChild(controls);
-    root.appendChild(el("p", { class: "meta", text: "Read left to right: a ticket sits one step after its last unfinished prerequisite, and lines run from a prerequisite to the work it unlocks. Green lines leave work that can start now; the cyan path is the longest remaining chain. Select a ticket to trace it. Decision and evidence gates come from ticket planning notes; machine and access eligibility remain separate. Deferred work stays deferred." }));
+    controls.appendChild(form);
+    controls.appendChild(el("p", { class: "meta", text: "Read left to right: a ticket sits one step after its last unfinished prerequisite, and lines run from a prerequisite to the work it unlocks. Green lines leave work that can start now; the cyan path is the longest remaining chain. Select a ticket to trace it. Decision and evidence gates come from ticket planning notes; machine and access eligibility remain separate. Deferred work stays deferred." }));
     var notice = el("p", { class: "flow-notice", role: "status" }), summary = el("p", { class: "flow-counts" });
     var legend = el("p", { class: "flow-legend", "aria-hidden": "true" });
     [["ready", "Can start"], ["in_progress", "In progress"], ["decision", "Needs a decision or evidence"], ["blocked", "Waiting on tickets"], ["backlog", "Deferred"], ["done", "Done"]].forEach(function (s) { legend.appendChild(el("span", {}, [el("i", { class: "fl-" + s[0] }), document.createTextNode(s[1])])); });
@@ -890,7 +902,10 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     var canvas = el("div", { class: "flow-canvas" }), svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "flow-links"); svg.setAttribute("aria-hidden", "true");
     scroll.appendChild(canvas);
     var detail = el("div", { class: "flow-detail", "aria-live": "polite" }), readable = el("details", { class: "flow-readable" }, [el("summary", { text: "Read the visible prerequisite list" })]), list = el("ul"); readable.appendChild(list);
-    root.appendChild(notice); root.appendChild(summary); root.appendChild(legend); root.appendChild(brief); root.appendChild(scroll); root.appendChild(detail); root.appendChild(readable);
+    controls.appendChild(legend);
+    root.appendChild(notice); root.appendChild(brief); root.appendChild(summary);
+    root.appendChild(el("div", { class: "flow-stage" }, [detail, scroll]));
+    root.appendChild(controls); root.appendChild(readable);
     var model, selected = null, buttons = Object.create(null), paths = [], pos = Object.create(null), critical = Object.create(null), unlocks = Object.create(null);
     var words = { ready: "Unblocked", in_progress: "In progress", blocked: "Waiting on tickets", decision: "Decision needed", evidence: "Evidence needed", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
     var short = { ready: "Can start", in_progress: "In progress", blocked: "Waiting", decision: "Decision", evidence: "Evidence", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
@@ -959,9 +974,9 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
         var ol = el("ol");
         chain.forEach(function (id) { var b = el("button", { type: "button", title: model.index[id].title, text: id }); b.addEventListener("click", function () { reveal(id); }); ol.appendChild(el("li", {}, [b])); });
         path.appendChild(ol);
-        path.appendChild(el("p", { class: "meta", text: "At least " + chain.length + " tickets must finish one after another; everything else can run alongside." }));
-      } else path.appendChild(el("p", { class: "meta", text: "No chained work: every remaining ticket in this view can run in parallel." }));
-      brief.appendChild(next); brief.appendChild(path);
+        path.appendChild(el("p", { class: "meta", text: "At least " + chain.length + " tickets form this prerequisite chain." }));
+      }
+      brief.appendChild(next); if (chain.length > 1) brief.appendChild(path);
     }
     function render() {
       try { model = ticketFlow(snap, { scope: scope.value, scopes: settings.scopes, completed: completed.checked, deferred: deferred.checked }); }
@@ -969,7 +984,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       scope.value = model.scope;
       notice.textContent = model.fallback ? "That stream has no visible remaining work; showing all remaining work." : model.elsewhere ? model.elsewhere + " unfinished tickets are outside this view. Choose All remaining work to see them." : "";
       notice.hidden = !notice.textContent;
-      summary.textContent = ["ready", "in_progress", "blocked", "decision", "evidence", "backlog", "done", "cancelled"].map(function (state) { return model.readiness[state] + " " + words[state].toLowerCase(); }).join(" · ") + " · " + model.visible.length + " shown. Select a ticket to inspect its dependency path.";
+      summary.textContent = ["ready", "in_progress", "blocked", "decision", "evidence", "backlog", "done", "cancelled"].filter(function (state) { return model.readiness[state] > 0; }).map(function (state) { return model.readiness[state] + " " + words[state].toLowerCase(); }).concat(model.visible.length + " shown").join(" · ") + ". Select a ticket to inspect its dependency path.";
       canvas.textContent = ""; list.textContent = ""; buttons = Object.create(null); pos = Object.create(null); critical = Object.create(null); unlocks = Object.create(null);
       delete canvas.dataset.selected; delete canvas.dataset.preview;
       var idx = model.index, inView = Object.create(null), depthOf = Object.create(null);
@@ -1060,7 +1075,8 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       if (!g[k].length) return;
       var b = el("button", { type: "button", "aria-pressed": String(tfilter.state === k), text: STATES[k] + " " + g[k].length });
       if (tfilter.state === k) b.className = "on";
-      b.addEventListener("click", function () { tfilter.state = tfilter.state === k ? "" : k; renderTickets(); });
+      var index = box.children.length;
+      b.addEventListener("click", function () { tfilter.state = tfilter.state === k ? "" : k; renderTickets(); box.children[index].focus({ preventScroll: true }); });
       box.appendChild(b);
     });
     var L = $("tickets"), shown = 0, narrowed = tfilter.q || tfilter.state;
