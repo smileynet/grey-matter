@@ -668,4 +668,4 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 254 | Keep shared tooling environments out of disposable run directories | open |
 | 255 | Order cheap prerequisites before expensive resource allocation | open |
 | 256 | Projects can add their own tab to the status dashboard without editing the renderer | open |
-| 257 | Adopt four-round critic reassessment | in_progress |
+| 257 | Adopt four-round critic reassessment | ✅ done |
