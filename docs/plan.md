@@ -669,4 +669,4 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 255 | Order cheap prerequisites before expensive resource allocation | open |
 | 256 | Projects can add their own tab to the status dashboard without editing the renderer | open |
 | 257 | Adopt four-round critic reassessment | ✅ done |
-| 258 | Make unfinished tickets easier to scan in the Plan | in_progress |
+| 258 | Make unfinished tickets easier to scan in the Plan | ✅ done |
