@@ -37,6 +37,12 @@ for(const width of [1280,390]){
   try{
    await page.locator('.flow-node').first().waitFor();
    assert.equal(await page.locator('#plan > section').first().getAttribute('id'),'ticket-flow');
+   await page.getByRole('link',{name:'Browse unfinished tickets'}).click();
+   await page.waitForURL('**/#tickets-h');
+   assert.deepEqual(await page.locator('#tickets > h3').allInnerTexts(),[
+    'Unfinished work','In progress (1)','Open · can start (2)','Open · waiting (1)','Deferred (1)','Ticket history',
+   ]);
+   assert.equal(await page.locator('#done-group').getAttribute('open'),null);
    assert.equal(await page.locator('#flow-scope').inputValue(),'all');
    assert.match(await page.locator('.flow-notice').innerText(),/showing all remaining work/);
    assert.deepEqual((await page.locator('.flow-node').evaluateAll(nodes=>nodes.map(n=>n.dataset.ticket))).sort(),['active','finish','later','parallel','start']);

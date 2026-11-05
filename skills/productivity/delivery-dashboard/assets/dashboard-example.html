@@ -78,6 +78,15 @@ details.row .body{padding:0 0 14px}
 .lane ol{margin:0;padding-left:20px;font-size:14px}.lane li{margin:4px 0}
 .tid{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
 .legend .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+#tickets .group{text-transform:none;letter-spacing:0;font-size:14px}
+.ticket-section-title{font-size:19px;margin:24px 0 10px;font-weight:650}
+.ticket-row[data-status="in_progress"]{--ticket-tone:#78e1ba}
+.ticket-row[data-status="ready"]{--ticket-tone:#a4c6ff}
+.ticket-row[data-status="blocked"]{--ticket-tone:#d8b5ff}
+.ticket-row[data-status="backlog"]{--ticket-tone:#f0a9c1}
+details.ticket-row{border-inline-start:3px solid var(--ticket-tone,var(--line))}
+details.ticket-row>summary .when{min-width:3ch}
+details.ticket-row>summary .chip{color:var(--ticket-tone,var(--muted));border-color:var(--line)}
 h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;font-weight:600}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:no-preference){.card,details.row{transition:border-color .15s}}
@@ -172,10 +181,11 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 </main>
 
 <main id="plan" role="tabpanel" aria-labelledby="tab-plan" hidden>
+  <p class="more"><a href="#tickets-h">Browse unfinished tickets</a></p>
   <section id="ticket-flow" aria-labelledby="flow-h"><h2 id="flow-h">Remaining ticket flow</h2><div id="flow-content"></div></section>
   <section aria-labelledby="progress-h"><h2 id="progress-h">Progress</h2><div id="plan-progress"></div></section>
   <section aria-labelledby="order-h"><h2 id="order-h">What comes next</h2><div id="plan-lanes"></div></section>
-  <section aria-labelledby="tickets-h"><h2 id="tickets-h">All tickets</h2>
+  <section aria-labelledby="tickets-h"><h2 id="tickets-h">Ticket list</h2>
     <div class="tools">
       <input type="search" id="tq" placeholder="Search tickets" aria-label="Search tickets">
     </div>
@@ -492,9 +502,9 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   }
   function safeHref(h) { return /^(https?:|#|[^:]*$)/i.test(h || "") ? h : "#"; }
 
-  var STATES = { ready: "Ready", in_progress: "In progress", blocked: "Blocked", backlog: "Backlog", done: "Done", cancelled: "Cancelled" };
+  var STATES = { ready: "Open · can start", in_progress: "In progress", blocked: "Open · waiting", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
   var SGLYPH = { ready: "○", in_progress: "◐", blocked: "▲", backlog: "…", done: "●", cancelled: "×" };
-  var ORDER = ["ready", "in_progress", "blocked", "backlog", "done", "cancelled"];
+  var ORDER = ["in_progress", "ready", "blocked", "backlog", "done", "cancelled"];
   function ticketIndex(snap) { var m = Object.create(null); (snap.tickets || []).forEach(function (t) { m[t.id] = t; }); return m; }
   function terminal(t) { return t.status === "done" || t.status === "cancelled"; }
   // A blocker missing from the snapshot counts as unfinished, so a broken edge never hides work.
@@ -988,7 +998,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
           var items = byColumn[d] || [], want = Object.create(null), cursor = start;
           // Pull each ticket level with the average of its already-placed prerequisites so lines stay short and flat.
           items.forEach(function (t) { var ys = prereqs(t.id).filter(function (p) { return pos[p]; }).map(function (p) { return pos[p].y; }); want[t.id] = ys.length ? ys.reduce(function (s, v) { return s + v; }, 0) / ys.length : Infinity; });
-          items.sort(function (a, b) { return want[a.id] - want[b.id] || byState(a, b); });
+          items.sort(function (a, b) { return rank[flowState(a, idx)] - rank[flowState(b, idx)] || want[a.id] - want[b.id] || byState(a, b); });
           items.forEach(function (t) { var top = Math.max(cursor, isFinite(want[t.id]) ? want[t.id] : cursor); pos[t.id] = { x: PAD + d * (W + GX), y: top }; cursor = top + H + GY; bottom = Math.max(bottom, cursor); });
         }
         y = bottom + (byLane ? 10 : 0);
@@ -1040,7 +1050,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       b.appendChild(p);
     }
     if (!b.childNodes.length) b.appendChild(el("p", { class: "meta", text: "No dependencies or delivery entries." }));
-    return el("details", { class: "row", id: "t-" + t.id }, [s, b]);
+    return el("details", { class: "row ticket-row", "data-status": st, id: "t-" + t.id }, [s, b]);
   }
   var tfilter = { q: "", state: "" };
   function renderTickets() {
@@ -1055,15 +1065,18 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     });
     var L = $("tickets"), shown = 0, narrowed = tfilter.q || tfilter.state;
     L.textContent = "";
+    if (!narrowed && ORDER.slice(0, 4).some(function (k) { return g[k].length; })) {
+      L.appendChild(el("h3", { class: "ticket-section-title", text: "Unfinished work" }));
+    }
     var historyLabel = false;
     ORDER.forEach(function (k) {
       var list = g[k].filter(function (t) { return ticketMatches(t, tfilter, tidx); });
       if (!list.length) return;
       shown += list.length;
       var holder = L;
-      if ((k === "done" || k === "cancelled") && !historyLabel) { L.appendChild(el("h3", { class: "group", text: "Ticket history" })); historyLabel = true; }
+      if ((k === "done" || k === "cancelled") && !historyLabel) { L.appendChild(el("h3", { class: "ticket-section-title", text: "Ticket history" })); historyLabel = true; }
       if ((k === "done" || k === "cancelled") && !narrowed) { holder = el("details", { class: "row", id: k + "-group" }, [el("summary", { text: STATES[k] + " (" + list.length + ")" })]); L.appendChild(holder); }
-      else L.appendChild(el("h3", { class: "group", text: STATES[k] }));
+      else L.appendChild(el("h3", { class: "group", text: STATES[k] + " (" + list.length + ")" }));
       list.forEach(function (t) { holder.appendChild(ticketRow(t)); });
     });
     $("tcount").textContent = shown === total ? total + " tickets" : shown + " of " + total + " tickets";
@@ -1088,6 +1101,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     var h = decodeURIComponent(location.hash.slice(1));
     if (h.indexOf("decision-") === 0) { show("decisions", h); return; }
     if (h.indexOf("e-") === 0) { show("history", h); return; }
+    if (h === "tickets-h") { show("plan", h); return; }
     if (h.indexOf("t-") === 0) { show("plan", h); return; }
     show(TABS.indexOf(h) >= 0 ? h : "overview");
   }
