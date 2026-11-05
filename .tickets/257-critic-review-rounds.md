@@ -1,12 +1,13 @@
 ---
 id: "257"
 title: "Adopt four-round critic reassessment"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Shared convergence guidance and critic entry points implement proposal 21"
   - "Applicable repository gates pass and updated skills deploy"
 tags: ["stream:tooling"]
+assignee: "codex"
 ---
 ## Intent
 
