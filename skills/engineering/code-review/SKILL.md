@@ -14,6 +14,9 @@ Both axes run as **parallel sub-agents** so they don't pollute each other's cont
 
 ### 1. Pin the review target
 
+For repeated review of revised candidates, apply the
+[shared critic round budget and reassessment](../retro/references/convergence.md#critic-review-budget).
+
 Resolve an explicit request for staged or uncommitted work from these modes. Ask
 only when the requested target is ambiguous (for example, both staged and unstaged
 changes exist and the user did not select which).

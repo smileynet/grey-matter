@@ -1,6 +1,6 @@
 # Four rounds before reassessing critic feedback
 
-Status: proposed, 2026-11-05.
+Status: adopted under ticket 257, 2026-11-05.
 
 Where guidance recommends critics, default to four review rounds unless the user
 or the owning workflow specifies another budget. One round is a verdict on one

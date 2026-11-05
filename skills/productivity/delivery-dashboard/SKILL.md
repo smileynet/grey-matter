@@ -81,7 +81,8 @@ stays out of the way, under folds and links.
    from those capabilities; record blocked or unavailable checks with their limits and
    leave them unverified. Do not try another route to bypass a blocked protocol. Before
    closing UI work, inspect the actual laptop/phone rendering when a permitted surface
-   is available and bind required critic acceptance to its source and captures. If a
+   is available and bind required critic acceptance to its source and captures.
+   For repeated critic review, apply the [shared round budget and reassessment](../../engineering/retro/references/convergence.md#critic-review-budget). If a
    capture or review required by the project or ticket is unavailable, leave that
    acceptance pending; a human report may be recorded separately but does not substitute
    for tool-observed rendering. A routine status/content update does not create a new
