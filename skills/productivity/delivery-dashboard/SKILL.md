@@ -82,6 +82,7 @@ stays out of the way, under folds and links.
    leave them unverified. Do not try another route to bypass a blocked protocol. Before
    closing UI work, inspect the actual laptop/phone rendering when a permitted surface
    is available and bind required critic acceptance to its source and captures.
+   For visual critics, preflight [Playwright or the harness browser and image reader](../../engineering/code-review/references/visual-critics.md).
    For repeated critic review, apply the [shared round budget and reassessment](../../engineering/retro/references/convergence.md#critic-review-budget). If a
    capture or review required by the project or ticket is unavailable, leave that
    acceptance pending; a human report may be recorded separately but does not substitute

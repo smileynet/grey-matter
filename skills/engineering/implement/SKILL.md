@@ -12,6 +12,9 @@ Under Kiro Crew, read [ticket-state mirroring](../../../docs/agents/kirocrew-tic
 and apply its optional updates after claim/resume, when waiting on the human and
 after a successful close. Other harnesses skip this reference.
 
+Before production edits, route consequential unresolved assumptions through the
+[technical spike decision rule](../prototype/references/technical-spikes.md).
+
 For behavior changes, call the Skill tool with "tdd" at the pre-agreed seams when
 test-first implementation fits the work. For research or reversible prose changes,
 verify the actual acceptance evidence and applicable project checks; do not invent

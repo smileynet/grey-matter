@@ -85,6 +85,11 @@ claims and file hashes; it is not native persistence or execution proof.
 
 ## Orient and admit
 
+Use the [technical spike decision rule](../prototype/references/technical-spikes.md)
+before admitting production work with a consequential unresolved premise. Assign
+the deciding observation as separate exploration when it determines admission.
+Carry the evidence into the worker brief and continue independent tickets.
+
 1. Read project guidance, glossary, ADRs, `tkt ready` and in-progress tickets.
    Check free space before creating worktrees or running checks, following
    [artifact hygiene](../../meta/repository-artifact-hygiene/SKILL.md).

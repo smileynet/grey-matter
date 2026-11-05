@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, explore what a UI should look like, or find whether a game mechanic is fun.
+description: Build a throwaway prototype to answer a design or technical feasibility question. Use for state models, UI, game feel, or a consequential premise that a bounded experiment can settle.
 ---
 
 # Prototype
@@ -10,6 +10,10 @@ A prototype is **throwaway code that answers a question**. The question decides 
 **Throwaway from the outset, always.** Decide up front whether you're building something to *learn from and discard* (a prototype) or something to *keep and grow* (an evolutionary slice, a walking skeleton, a tracer bullet). This skill is only ever the first kind. The classic failure is a throwaway silently becoming production; everything below guards against it.
 
 ## Pick a branch
+
+For a question about feasibility in the real environment, use
+[technical spikes](references/technical-spikes.md) for the decision, probe,
+and evidence. The remaining branches cover interactive prototypes.
 
 Identify which question is being answered, using the user's prompt, the surrounding code, or by asking if the user is around:
 

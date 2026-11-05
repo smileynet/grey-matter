@@ -14,6 +14,10 @@ This skill takes the current conversation context and codebase understanding and
 
 Check with the user that these seams match their expectations.
 
+Use the [technical spike decision rule](../prototype/references/technical-spikes.md)
+for an unresolved premise that could change the build. Record the deciding
+question and its evidence in the spec or owning ticket.
+
 3. Write the spec using the template below, then publish it: write the spec as a doc under `docs/` and record it on the tracker ticket as its spec-slug (see the issue-tracker doc). Mark it `triage:ready-for-agent` (the asserted "brief is complete" tag, distinct from `tkt ready`); no additional triage needed.
 
 For stateful changes or changes that own a resource, make acceptance criteria name who may read, close, replace, retry, cancel or retain it, and the required terminal behavior. Choose only the ownership actions and terminal states relevant to the contract; reversible edits do not need an integration campaign.

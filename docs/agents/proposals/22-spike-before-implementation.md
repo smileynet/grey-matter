@@ -1,6 +1,6 @@
 # Resolve consequential unknowns before implementation
 
-Status: proposed, 2026-11-05.
+Status: adopted under ticket 260, 2026-11-05.
 
 Screened 417 tracked Markdown files, including all 50 skills, their references,
 the `AGENTS.md` and `CLAUDE.md` files, and `docs/agents/`. The scan looked for

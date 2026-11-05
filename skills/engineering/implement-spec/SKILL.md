@@ -21,7 +21,8 @@ Communicate between agents sparsely, via **context pointers** (spec-slug, ticket
 
 2. (optional) Use an **exploration subagent** for any codebase or external-doc exploration the tickets need. It saves markdown notes where all later subagents can read them (shared location per above), so implementers focus on implementation, not exploration.
 
-3. Create the integration branch off the base branch.
+3. Resolve any build-changing premise with the [technical spike decision rule](../prototype/references/technical-spikes.md),
+   then create the integration branch off the base branch.
 
 4. For each ready ticket, run an **implementer subagent** in its own worktree on its own branch. Each one:
    - confirms its worktree is based on the **integration branch** tip before starting, and resets onto it if not;

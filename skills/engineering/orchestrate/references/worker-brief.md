@@ -7,6 +7,7 @@ Skill-tool call to it.
 - Ticket path: <absolute path; read it rather than pasted ticket text>
 - Observable outcome: <what the person or caller can now see/do>
 - Load-bearing assumption to verify first: <assumption + primary-source check>
+- Deciding evidence, if the premise required a [spike](../../prototype/references/technical-spikes.md): <ticket link and observed result>
 - Main checkout (read-only to this worker): <path>
 - Assigned worktree / branch / base SHA: <path / branch / SHA>
 - Owned files and shared-resource lease: <expected set; device id if any>
