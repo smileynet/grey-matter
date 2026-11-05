@@ -671,4 +671,4 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 257 | Adopt four-round critic reassessment | ✅ done |
 | 258 | Make unfinished tickets easier to scan in the Plan | ✅ done |
 | 259 | Address the dashboard UX and visual review | ✅ done |
-| 260 | Apply evidence-first spikes and visual critic guidance | in_progress |
+| 260 | Apply evidence-first spikes and visual critic guidance | ✅ done |
