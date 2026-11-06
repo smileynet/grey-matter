@@ -27,14 +27,38 @@ Required gates protect dependent mutations. Unsupported usage holds the affected
 pack; a failed refresh preserves existing copies. Host-health findings and unrelated
 failures are reported separately. Never turn a baseline failure into a dependent pass.
 
-## 1. Snapshot and update sources
+## 1. Update tkt first
+
+Ticket operations, usage audits, vendored-tool checks and the deployer all depend on
+the tkt checkout and binary. A stale tkt makes pulled tickets unparseable and fails
+deploy preflight on vendor drift, so update it before touching grey-matter. Running
+sync authorizes this for a clean, behind-only development checkout on its selected
+source (path from skill-packs.json):
+
+```bash
+tkt --version
+git -C /path/to/tkt fetch
+git -C /path/to/tkt status -sb
+git -C /path/to/tkt log --oneline --left-right HEAD...@{upstream}
+git -C /path/to/tkt diff HEAD @{upstream} -- tools/deploy.mjs tools/deployer-vendor.json
+git -C /path/to/tkt pull --ff-only
+```
+
+Then, in that checkout, run `cargo install --path . --locked` (minutes; run it in the
+background and await completion), `bash tools/check-binary-fresh.sh` and
+`tkt --version`. Record the before/after builds. Reinstall even when the product
+version is unchanged: development builds share versions. Pinned/stable sources keep
+their selection; never switch them to main to cure drift. A dirty or divergent tkt
+checkout, or a failed build, holds the tkt pack and every check that needs the new
+CLI; name it and continue independent work.
+
+## 2. Snapshot and update grey-matter
 
 Record the original SHA, dirty paths, selected source/channel and installed counts:
 
 ```bash
 git rev-parse HEAD
 git status -sb
-tkt --version
 node scripts/deploy.mjs list
 git fetch
 git log --oneline HEAD..@{upstream}
@@ -48,27 +72,17 @@ checkout needs no pull. Apply the boundaries above to dirty or divergent history
 name retired commands. Continue with the current workflow while retaining the original
 pre-pull SHA, completed steps and authorization. Do not restart the snapshot.
 
-Resolve active packs from skill-packs.json; inventory-only entries are not update
-targets. Snapshot each authorized checkout before fetching. For tkt:
+Resolve other active packs from skill-packs.json; inventory-only entries are not
+update targets. Snapshot each authorized checkout before fetching, then fast-forward
+clean behind-only development checkouts. Otherwise name the held pack and continue.
 
-```bash
-git -C /path/to/tkt fetch
-git -C /path/to/tkt status -sb
-git -C /path/to/tkt log --oneline --left-right HEAD...@{upstream}
-git -C /path/to/tkt diff HEAD @{upstream} -- tools/deploy.mjs tools/deployer-vendor.json
-```
-
-Inspect upstream vendor bytes, then fast-forward clean behind-only development
-checkouts when authorized. Otherwise name the held pack and continue independent work.
-Pinned/stable sources keep their selection; never switch them to main to cure drift.
-
-## 2. Establish CLI compatibility before ticket operations
+## 3. Confirm CLI compatibility before ticket operations
 
 Resolve the native installed tkt executable, not just a mise shim. Compare its full
 version/build hash with the selected checkout; product versions can remain identical
 across incompatible development builds. Identify required commands from pack usage
 and current help, including lifecycle features needed by pulled tickets (such as
-cancel/cancelled). Updating the pack does not update the binary.
+cancel/cancelled). Updating the pack does not update the binary; step 1 does both.
 
 Run [verify-tkt-usage](../verify-tkt-usage/SKILL.md) for every deploying pack that inlines
 tkt usage, even when the product version is unchanged:
@@ -83,13 +97,11 @@ proves compatibility. Fix a faulty checker with fixtures rather than treating a 
 temporary checker as official evidence. Capabilities can be partial; actual help is
 the tiebreaker. Review named prose and enum usage outside the extractor's coverage.
 
-If an upgrade is needed and already authorized, run cargo install --path . --locked
-in the selected clean tkt checkout, then bash tools/check-binary-fresh.sh, tkt --version,
-required help probes and both audits again. Otherwise ask once for a CLI upgrade or
-compatible pack release. Hold only dependent packs. Never edit ticket statuses to
-make an old CLI parse them.
+If usage is still unsupported after step 1, the selected tkt source itself lacks the
+feature: ask once for a compatible tkt or pack release. Hold only dependent packs.
+Never edit ticket statuses to make an old CLI parse them.
 
-## 3. Reconcile ticket IDs and owned tools
+## 4. Reconcile ticket IDs and owned tools
 
 For each pulled checkout whose .tickets/ changed, run tkt rebase --dry-run and
 tkt validate --brief. Apply tkt rebase only for collisions (upstream wins), then
@@ -107,7 +119,7 @@ Add --write only for owned drift. Recheck after pulling: upstream may already co
 the repair. A foreign/local edit refusal stops that repair; preserve the files.
 Keep tkt's private package/lock aligned when canonical dependencies change. Verify
 owned vendor updates with `mise run check` in tkt and the applicable grey-matter
-gates in step 4, then commit/push before deployment.
+gates in step 5, then commit/push before deployment.
 Do not deploy separately inside this step.
 
 If cargo, bash or another dependency is unavailable, record the exact failed command
@@ -119,7 +131,7 @@ Use GIT_TERMINAL_PROMPT=0 for unattended Git and bound external credential helpe
 After authentication/push failure, inspect retained commits and fetch/compare upstream
 before retrying the push. Do not repeat ticket mutations or recreate local commits.
 
-## 4. Verify the pulled range
+## 5. Verify the pulled range
 
 Use the original grey-matter pre-pull SHA, not the new origin/main:
 
@@ -133,7 +145,7 @@ result before push. Zero selected checks prove nothing about excluded paths. Req
 failures hold dependent mutations; independent safe refreshes may proceed only when
 no required deployment gate protects them.
 
-## 5. Deploy and resume by observed target state
+## 6. Deploy and resume by observed target state
 
 Preflight compatibility and owned vendor alignment first. Run
 `node scripts/deploy.mjs check` and `node /path/to/tkt/tools/deploy.mjs check` for the
@@ -165,7 +177,7 @@ note node scripts/deploy.mjs --project inside projects that want it, without tra
 arbitrary projects. Kiro Crew owner/trust refusals retain the deployer's exact owner
 instructions and remain pending, not successful activation.
 
-## 6. Refresh guidance and report host health
+## 7. Refresh guidance and report host health
 
 ```bash
 node scripts/install-agents-md.mjs
