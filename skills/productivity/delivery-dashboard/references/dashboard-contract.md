@@ -355,7 +355,9 @@ embedded media grew to 9 to 16 MB and became slow to open and impossible to diff
 ## Look and accessibility
 
 - Dark theme with blue tones, set through `color-scheme: dark` and the CSS variables at the top of
-  the template. Amber is reserved for things that need the person; red only for blocked.
+  the template. In the ticket flow, sapphire marks open, emerald marks in progress, amethyst marks
+  blocked by prerequisites, and garnet marks deferred work; the legend and text labels repeat each
+  state. Citrine marks a planning gate, and amber is reserved for selection or an intervention.
 - Status is always text plus a glyph, never colour alone. Body text keeps at least 4.5:1 contrast.
 - Tabs, search, filters and rows work by keyboard; targets are at least 44 px; reduced-motion safe.
 - Readable at phone width. No horizontal scroll in the body.

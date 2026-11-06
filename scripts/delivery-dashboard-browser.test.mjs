@@ -16,6 +16,7 @@ const routeFixture={generated:'2026-11-05T00:00:00Z',frontier:['T1','T5'],execut
  ticket('T1','open'),ticket('T2','open',['T1']),ticket('T3','in_progress',['T2']),ticket('T4','open',['T3']),
  ticket('T5','open'),ticket('T6','backlog'),ticket('T7','open',['T4']),ticket('T8','open',['T5','T7']),
 ]};
+routeFixture.tickets[4].gate={kind:'decision',reason:'Choose the route.'};
 for(const width of [1280,390])test('Focus, Route and DAG retain independent selection at '+width,async()=>{
  const {context,page,errors}=await pageFor(width,{ticketFlow:{defaultScope:'all',scopes:[],view:'focus'}},routeFixture);
  try{
@@ -25,9 +26,16 @@ for(const width of [1280,390])test('Focus, Route and DAG retain independent sele
   assert.equal(await page.locator('.flow-focus-view').isVisible(),true);
   assert.equal(await page.locator('.flow-node[data-ticket=T3]').getAttribute('aria-pressed'),'true');
   await page.locator('#flow-focus-ticket').selectOption('T5');
-  assert.equal(await page.locator('.focus-ticket-card h3').innerText(),'Fixture work T5');
+  assert.equal(await page.locator('.flow-detail h3').innerText(),'T5 · Fixture work T5');
+  assert.deepEqual(await page.locator('.flow-detail').evaluate(node=>{const style=getComputedStyle(node);return [style.borderLeftColor,style.borderTopColor,style.borderTopStyle,style.outlineColor];}),['rgb(102, 169, 255)','rgb(220, 184, 95)','double','rgb(255, 200, 87)']);
+  for(const [id,color] of [['T3','rgb(84, 201, 154)'],['T2','rgb(169, 139, 232)'],['T6','rgb(226, 122, 145)']]){await page.locator('#flow-focus-ticket').selectOption(id);assert.equal(await page.locator('.flow-detail').evaluate(node=>getComputedStyle(node).borderLeftColor),color);}
+  await page.locator('#flow-focus-ticket').selectOption('T5');
   assert.deepEqual(await page.locator('.focus-neighbors').allInnerTexts().then(rows=>rows.map(text=>text.includes('T8'))),[false,true]);
   assert.match(await page.locator('.flow-detail').innerText(),/No dependency path to:/);
+  assert.deepEqual(await page.locator('.flow-focus-view').evaluate(node=>Array.from(node.children).slice(0,2).map(child=>child.className)),['flow-detail','focus-neighbors']);
+  await page.getByRole('button',{name:/T8 · Fixture work T8/}).click();
+  assert.equal(await page.evaluate(()=>document.activeElement.id),'flow-focus-ticket');
+  await page.locator('#flow-focus-ticket').selectOption('T5');
   await page.locator('#flow-view').selectOption('route');
   await page.locator('#flow-content[data-view=route]').waitFor();
   assert.equal(await page.locator('.flow-scroll').isHidden(),true);
@@ -35,12 +43,21 @@ for(const width of [1280,390])test('Focus, Route and DAG retain independent sele
   assert.equal(await page.locator('.route-ticket').count(),8);
   assert.deepEqual(await page.locator('.route-ticket').evaluateAll(nodes=>nodes.map(n=>n.dataset.ticket)),['T1','T2','T3','T4','T5','T7','T6','T8']);
   assert.equal(await page.locator('.route-ticket[data-ticket=T5]').getAttribute('aria-pressed'),'true');
+  assert.deepEqual(await page.locator('.route-ticket[data-ticket=T5]').evaluate(node=>{const style=getComputedStyle(node);return [style.borderLeftColor,style.borderTopColor,style.borderTopStyle];}),['rgb(102, 169, 255)','rgb(220, 184, 95)','double']);
+  assert.deepEqual(await page.locator('.route-ticket').evaluateAll(nodes=>['T1','T2','T3','T6'].map(id=>getComputedStyle(nodes.find(node=>node.dataset.ticket===id)).borderLeftColor)),['rgb(102, 169, 255)','rgb(169, 139, 232)','rgb(84, 201, 154)','rgb(226, 122, 145)']);
+  assert.ok(await page.locator('.flow-detail').evaluate(node=>node.getBoundingClientRect().top<document.querySelector('.flow-route').getBoundingClientRect().top));
+  assert.match(await page.locator('.flow-detail').innerText(),/No dependency path to: 6 other visible ticket/);
+  await page.locator('.route-ticket[data-ticket=T2]').click();
+  assert.equal(await page.evaluate(()=>document.activeElement.dataset.ticket),'T2');
+  await page.locator('.route-ticket[data-ticket=T5]').click();
   assert.match(await page.locator('.route-ticket[data-ticket=T8]').innerText(),/Prerequisites: T5, T7/);
   assert.match(await page.locator('.flow-edge-legend').innerText(),/Prerequisite[\s\S]*Suggested sequence/);
   await page.locator('#flow-view').selectOption('dag');
   await page.locator('#flow-content[data-view=dag]').waitFor();
   assert.equal(await page.locator('.flow-scroll').isVisible(),true);
   assert.equal(await page.locator('.flow-zoom-tools').isVisible(),true);
+  assert.deepEqual(await page.locator('.flow-node').evaluateAll(nodes=>['T1','T2','T3','T6'].map(id=>{const style=getComputedStyle(nodes.find(node=>node.dataset.ticket===id));return style.borderLeftColor;})),['rgb(102, 169, 255)','rgb(169, 139, 232)','rgb(84, 201, 154)','rgb(226, 122, 145)']);
+  assert.equal(await page.locator('.flow-node[data-ticket=T5]').evaluate(node=>getComputedStyle(node).borderTopColor),'rgb(220, 184, 95)');
   const baseScroll=await page.locator('.flow-scroll').evaluate(node=>node.scrollWidth);
   for(let i=0;i<5;i++)await page.getByRole('button',{name:'Zoom in'}).click();
   assert.equal(await page.locator('.flow-zoom-tools [aria-live=polite]').innerText(),'150%');
@@ -156,7 +173,7 @@ if(process.env.DASHBOARD_CONSUMER_SNAPSHOT){
    if(process.env.DASHBOARD_CAPTURE_DIR)await page.screenshot({path:resolve(process.env.DASHBOARD_CAPTURE_DIR,'consumer-route-'+width+'.png'),fullPage:true});
    await page.locator('#flow-view').selectOption('focus');
    await page.locator('#flow-focus-ticket').selectOption(expected[expected.length-1].id);
-   assert.equal(await page.locator('.focus-ticket-card').count(),1);
+   assert.equal(await page.locator('.flow-focus-view .flow-detail').count(),1);
    if(process.env.DASHBOARD_CAPTURE_DIR)await page.screenshot({path:resolve(process.env.DASHBOARD_CAPTURE_DIR,'consumer-focus-'+width+'.png'),fullPage:true});
    const overflow=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth,elements:Array.from(document.body.querySelectorAll('*')).filter(node=>node.getBoundingClientRect().right>innerWidth+1).slice(0,8).map(node=>({tag:node.tagName,id:node.id,className:node.className,right:node.getBoundingClientRect().right,width:node.getBoundingClientRect().width}))}));
    assert.ok(overflow.width<=overflow.viewport,JSON.stringify(overflow));assert.deepEqual(errors,[]);
