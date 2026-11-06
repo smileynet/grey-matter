@@ -95,7 +95,8 @@ export function authoredExecutionOrder(repo) {
   for (const line of plan.split(/\r?\n/)) {
     if (/^\|\s*ID\s*\|\s*Work\s*\|\s*Status\s*\|\s*$/i.test(line)) { inTicketTable = true; continue; }
     if (!inTicketTable) continue;
-    if (/^\|\s*:?-{3,}\s*\|/.test(line)) continue;
+    const cells = line.trim().replace(/^\||\|$/g, "").split("|").map((cell) => cell.trim());
+    if (cells.length > 0 && cells.every((cell) => /^:?-{3,}:?$/.test(cell))) continue;
     const match = line.match(/^\|\s*([^|]+?)\s*\|/);
     if (!match) { inTicketTable = false; continue; }
     const id = match[1].trim();

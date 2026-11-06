@@ -426,7 +426,7 @@ test("authored order deduplicates repeated plan rows without status-based renumb
   const root = mkdtempSync(join(tmpdir(), "gm plan order "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, "docs"));
-  writeFileSync(join(root, "docs/plan.md"), "intro\n| ID | Work | Status |\n| --- | --- | --- |\n| 4 | Fourth | open |\n| 2 | Second | done |\n\nMore prose\n| ID | Work | Status |\n| --- | --- | --- |\n| 2 | Repeated | open |\n| 8 | Eighth | backlog |\n");
+  writeFileSync(join(root, "docs/plan.md"), "intro\n| ID | Work | Status |\n| ---: | --- | --- |\n| 4 | Fourth | open |\n| 2 | Second | done |\n\nMore prose\n| ID | Work | Status |\n| ---: | --- | --- |\n| 2 | Repeated | open |\n| 8 | Eighth | backlog |\n");
   assert.deepEqual(authoredExecutionOrder(root), ["4", "2", "8"]);
   const snap = { executionOrder: authoredExecutionOrder(root), tickets: [tk("4", "open"), tk("2", "done"), tk("8", "backlog")] };
   snap.tickets[0].status = "done";
