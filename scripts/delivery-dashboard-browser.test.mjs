@@ -33,8 +33,8 @@ for(const width of [1280,390])test('Focus, Route and DAG retain independent sele
   assert.deepEqual(await page.locator('.focus-neighbors').allInnerTexts().then(rows=>rows.map(text=>text.includes('T8'))),[false,true]);
   assert.match(await page.locator('.flow-detail').innerText(),/No dependency path to:/);
   assert.deepEqual(await page.locator('.flow-focus-view').evaluate(node=>Array.from(node.children).slice(0,2).map(child=>child.className)),['flow-detail','focus-neighbors']);
-  await page.getByRole('button',{name:/T8 · Fixture work T8/}).click();
-  assert.equal(await page.evaluate(()=>document.activeElement.id),'flow-focus-ticket');
+  await page.getByRole('button',{name:/T8 · Fixture work T8/}).focus();await page.keyboard.press('Enter');
+  assert.deepEqual(await page.evaluate(()=>{const node=document.activeElement,rect=node.getBoundingClientRect();return {tag:node.tagName,text:node.textContent,visible:rect.top>=0&&rect.bottom<=window.innerHeight};}),{tag:'H3',text:'T8 · Fixture work T8',visible:true});
   await page.locator('#flow-focus-ticket').selectOption('T5');
   await page.locator('#flow-view').selectOption('route');
   await page.locator('#flow-content[data-view=route]').waitFor();
@@ -48,6 +48,8 @@ for(const width of [1280,390])test('Focus, Route and DAG retain independent sele
   assert.ok(await page.locator('.flow-detail').evaluate(node=>node.getBoundingClientRect().top<document.querySelector('.flow-route').getBoundingClientRect().top));
   assert.match(await page.locator('.flow-detail').innerText(),/No dependency path to: 6 other visible ticket/);
   await page.locator('.route-ticket[data-ticket=T2]').click();
+  assert.deepEqual(await page.evaluate(()=>{const node=document.activeElement,rect=node.getBoundingClientRect();return {tag:node.tagName,text:node.textContent,visible:rect.top>=0&&rect.bottom<=window.innerHeight};}),{tag:'H3',text:'T2 · Fixture work T2',visible:true});
+  await page.locator('.flow-return-ticket').click();
   assert.equal(await page.evaluate(()=>document.activeElement.dataset.ticket),'T2');
   await page.locator('.route-ticket[data-ticket=T5]').click();
   assert.match(await page.locator('.route-ticket[data-ticket=T8]').innerText(),/Prerequisites: T5, T7/);
@@ -175,6 +177,11 @@ if(process.env.DASHBOARD_CONSUMER_SNAPSHOT){
    await page.locator('#flow-focus-ticket').selectOption(expected[expected.length-1].id);
    assert.equal(await page.locator('.flow-focus-view .flow-detail').count(),1);
    if(process.env.DASHBOARD_CAPTURE_DIR)await page.screenshot({path:resolve(process.env.DASHBOARD_CAPTURE_DIR,'consumer-focus-'+width+'.png'),fullPage:true});
+   await page.locator('#flow-view').selectOption('route');
+   const late=page.locator('.route-ticket').last(), lateId=await late.getAttribute('data-ticket');
+   await late.focus();await page.keyboard.press('Enter');
+   assert.deepEqual(await page.evaluate(()=>{const node=document.activeElement,rect=node.getBoundingClientRect();return {tag:node.tagName,text:node.textContent,visible:rect.top>=0&&rect.bottom<=window.innerHeight};}),{tag:'H3',text:lateId+' · '+consumer.tickets.find(t=>t.id===lateId).title,visible:true});
+   await page.locator('.flow-return-ticket').click();assert.equal(await page.evaluate(()=>document.activeElement.dataset.ticket),lateId);
    const overflow=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth,elements:Array.from(document.body.querySelectorAll('*')).filter(node=>node.getBoundingClientRect().right>innerWidth+1).slice(0,8).map(node=>({tag:node.tagName,id:node.id,className:node.className,right:node.getBoundingClientRect().right,width:node.getBoundingClientRect().width}))}));
    assert.ok(overflow.width<=overflow.viewport,JSON.stringify(overflow));assert.deepEqual(errors,[]);
    if(process.env.DASHBOARD_CAPTURE_DIR)await page.screenshot({path:resolve(process.env.DASHBOARD_CAPTURE_DIR,'consumer-flow-'+width+'.png'),fullPage:true});

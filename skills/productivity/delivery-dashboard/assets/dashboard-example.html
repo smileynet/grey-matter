@@ -127,7 +127,8 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 .flow-heading label{color:var(--muted);font-size:14px}.flow-heading select{max-width:100%}
 .flow-stage{min-width:0}
 @media(min-width:760px){.flow-stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(225px,28%);gap:14px;align-items:start}.flow-stage .flow-detail{grid-column:2;grid-row:1;position:sticky;top:12px}.flow-stage .flow-scroll{grid-column:1;grid-row:1;min-width:0}}
-.flow-detail{--detail-tone:var(--gem-sapphire);border-left:4px solid var(--detail-tone);padding:12px 16px;background:var(--panel);margin:16px 0;outline:3px solid var(--ask);outline-offset:1px}.flow-detail[data-state=in_progress]{--detail-tone:var(--gem-emerald)}.flow-detail[data-state=blocked]{--detail-tone:var(--gem-amethyst)}.flow-detail[data-state=backlog]{--detail-tone:var(--gem-garnet)}.flow-detail[data-gate]{border-top:3px double var(--gem-citrine)}.flow-detail h3{margin:0 0 8px}.flow-detail p{margin:8px 0}.flow-readable li{margin:8px 0}
+.flow-detail{--detail-tone:var(--gem-sapphire);border-left:4px solid var(--detail-tone);padding:12px 16px;background:var(--panel);margin:16px 0;outline:3px solid var(--ask);outline-offset:1px}.flow-detail[data-state=in_progress]{--detail-tone:var(--gem-emerald)}.flow-detail[data-state=blocked]{--detail-tone:var(--gem-amethyst)}.flow-detail[data-state=backlog]{--detail-tone:var(--gem-garnet)}.flow-detail[data-gate]{border-top:3px double var(--gem-citrine)}.flow-detail h3{margin:0 0 8px}.flow-detail h3:focus{outline:2px solid var(--ask);outline-offset:3px}.flow-detail p{margin:8px 0}.flow-readable li{margin:8px 0}
+.flow-return-ticket{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;font:inherit;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:8px;cursor:pointer}.flow-return-ticket:focus-visible{outline:3px solid var(--ask);outline-offset:2px}
 @media(max-width:560px){.flow-scroll{max-height:620px}}
 @media(prefers-reduced-motion:reduce){.flow-node,.flow-links path{transition:none}}
 .decision-card{margin:0 0 18px;min-width:0}
@@ -957,7 +958,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       focusSelect.value = id;
       detail.dataset.state = ticketState(t, model.index);
       if (planningGate(t)) detail.dataset.gate = planningGate(t).kind; else delete detail.dataset.gate;
-      detail.textContent = ""; detail.appendChild(el("h3", { text: id + " · " + t.title }));
+      detail.textContent = ""; detail.appendChild(el("h3", { tabindex: "-1", text: id + " · " + t.title }));
       detail.appendChild(el("p", { text: "Current" + (id === model.execution.current ? " · active ticket" : " · no active work marker") + (id === model.execution.next ? " · next eligible" : "") }));
       var gate = planningGate(t);
       if (gate) detail.appendChild(el("p", { class: "flow-notice", text: words[gate.kind] + ": " + gate.reason }));
@@ -979,10 +980,9 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       var b = buttons[id]; if (!b) return;
       choose(id);
       if (view.value === "route") {
-        detail.scrollIntoView({ block: "start" });
-        Array.from(routeView.querySelectorAll(".route-ticket")).find(function (button) { return button.dataset.ticket === id; })?.focus({ preventScroll: true });
+        detail.scrollIntoView({ block: "start" }); detail.querySelector("h3").focus({ preventScroll: true });
       } else if (view.value === "focus") {
-        detail.scrollIntoView({ block: "start" }); focusSelect.focus({ preventScroll: true });
+        detail.scrollIntoView({ block: "start" }); detail.querySelector("h3").focus({ preventScroll: true });
       } else { b.scrollIntoView({ block: "nearest", inline: "center" }); b.focus({ preventScroll: true }); }
     }
     function setZoom(value) {
@@ -1038,7 +1038,15 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
         });
         var unsequencedCount = routeIds.filter(function (id) { return !authoredIds.has(id) && (model.execution.hasAuthoredOrder || !frontierIds.has(id)); }).length;
         routeView.appendChild(el("p", { class: "meta", text: model.execution.hasAuthoredOrder ? "Suggested plan sequence, compactly listed. " + unsequencedCount + " unsequenced ticket(s) remain visible. " : "This snapshot has no authored plan order; native frontier items are marked F and other tickets are unsequenced. " + unsequencedCount + " unsequenced ticket(s) remain visible. " + "Ticket dependencies remain separately labelled on each step; prerequisites decide when a ticket can start." }));
-        if (selected) routeView.appendChild(detail);
+        if (selected) {
+          routeView.appendChild(detail);
+          var returnToRoute = el("button", { type: "button", class: "flow-return-ticket", text: "Return to selected route item" });
+          returnToRoute.addEventListener("click", function () {
+            var button = Array.from(route.querySelectorAll(".route-ticket")).find(function (candidate) { return candidate.dataset.ticket === selected; });
+            if (button) { button.scrollIntoView({ block: "center" }); button.focus({ preventScroll: true }); }
+          });
+          detail.appendChild(returnToRoute);
+        }
         routeView.appendChild(route);
       }
     }
