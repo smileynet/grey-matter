@@ -647,7 +647,7 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 215 | spike-model-eval controller breaks when node.exe lives under a path with spaces | cancelled (obsolete) |
 | 216 | Temp-dir cleanup EPERM on Windows flakes gate checks and crashes probe-critic-model | open |
 | 217 | artifact-hygiene check takes 240s vs 9s measured and times out the 120s gate | open |
-| 219 | Install a tkt build that supports cancel/cancelled on this Windows machine | open |
+| 219 | Install a tkt build that supports cancel/cancelled on this Windows machine | ✅ done |
 | 220 | check-guidance flags conditional and optional paths as dead-path errors | open |
 | 221 | Explore severity tiers and an evidence bar for blocking code-review findings | open |
 | 222 | Explore design / first-principles / UX review lenses for consequential diffs | open |

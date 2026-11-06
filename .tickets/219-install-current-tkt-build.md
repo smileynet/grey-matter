@@ -1,7 +1,7 @@
 ---
 id: "219"
 title: "Install a tkt build that supports cancel/cancelled on this Windows machine"
-status: open
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -20,5 +20,13 @@ Human step: `cargo` is not on PATH here (only `tkt.exe` is in `~/.cargo/bin`). E
 
 ## Acceptance criteria
 
-- [ ] `tkt --version` reports a build that includes the cancel command (898ceb5 or later); `tkt cancel --help` succeeds
-- [ ] `tkt validate --brief` has no unparseable error for ticket 172
+- [x] `tkt --version` reports a build that includes the cancel command (898ceb5 or later); `tkt cancel --help` succeeds
+- [x] `tkt validate --brief` has no unparseable error for ticket 172
+
+## Resolution (2026-11-06)
+
+done: installed tkt 0.4.0 (9a10d3a) from ../tkt, which parses cancelled tickets. sync (2b207dd) now updates the tkt checkout and reinstalls the binary as its first step, so any machine that runs sync, including the one this ticket first described, gets a cancel-capable build.
+
+### Verification
+1. ✓ tkt --version reports a build that includes the cancel command (898ceb5 or later); tkt cancel --help succeeds — "tkt --version: tkt 0.4.0 (9a10d3a), installed via cargo install --path ../tkt --locked on 2026-11-06; git merge-base --is-ancestor 898ceb5 9a10d3a succeeds; tkt cancel --help prints usage"
+2. ✓ tkt validate --brief has no unparseable error for ticket 172 — "tkt validate --brief: pass (24 findings, none unparseable; 172 and 215 parse)"
