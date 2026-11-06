@@ -25,16 +25,40 @@ an atomic reservation. Run the native claim immediately after a passing prefligh
 recheck after tracker changes. No Git hook, claim mutation, second owner registry or new dependency
 edge was added.
 
-The source branch preserves the original #118 commits and merges current main at `b87eeced`; the
-live `docs/status.html` remains parent-owned. Its saved snapshot is currently missing `executionOrder`,
-so parent integration must refresh `gm-tickets` before publishing the updated Route view.
+The source branch preserved the original #118 commits and merged current main at `b87eeced`.
+Integration adopted the reviewed renderer in `docs/status.html` and refreshed `gm-tickets` from the
+maintained board. The repository dashboard keeps execution policy off by default.
 
 ## Verification
 
-The read-only snapshot from current main contained 257 tickets, 61 unfinished tickets, 41 frontier
-IDs and 172 authored plan IDs; no unfinished ticket was absent from the authored order. The saved
-`docs/status.html` projection still has an empty `executionOrder`, so the parent-owned refresh is
-required before publication. No ticket identities were copied into this report.
+Before ticket closure, the refreshed projection contained 257 tickets, 61 unfinished tickets, 41
+frontier IDs and 171 authored plan IDs. The parent strict check caught a Markdown alignment divider
+in the initial projection. The parser repair and exact fixture removed that spurious ID. No
+unfinished ticket was absent from the authored order.
+
+## Integrated review
+
+The independent Playwright critic reviewed `da3e59a37a02d4629e19f44999055b65163ce47d` at
+1280px and 390px on the current board and worked example. The critic reproduced hidden Route
+details and offscreen keyboard focus after Focus-neighbor and late Route selection. The reviewed
+repair places selection details first and moves focus to their visible heading. Route provides a
+return control that restores visible focus to the selected row. The critic also verified graph
+selection, zoom and reset, status colors and viewport bounds. The exact-pin review, captures and
+regression logs remain local under the ticket's retained worker evidence. These browser viewport
+checks cover the file dashboard and worked example.
+
+The layout probe used the current full board at phone width to test whether Route could stay
+readable with 61 unfinished tickets. The one-column-per-ticket layout was replaced with compact
+rows and the Focus picker was constrained to the viewport. The remaining confirmed issues had
+direct repairs and browser regressions.
+
+| Integrated check | Result |
+| --- | --- |
+| `node --test --test-timeout=20000 scripts/delivery-dashboard.test.mjs scripts/delivery-dashboard-browser.test.mjs` with local Playwright, Chrome and the current dashboard | Pass, 75/75. Includes the full board at both widths, offline view switching and the late Route row focus regression. |
+| `node skills/productivity/delivery-dashboard/scripts/check-dashboard.mjs docs/status.html --repo . --strict` | Pass, 257 tickets and zero errors or warnings. |
+| `node scripts/gate.mjs pre-merge --include skill-syntax-fixtures` | Pass, dashboard contract and syntax fixtures. |
+
+## Earlier worker evidence
 
 | Check | Result |
 | --- | --- |
