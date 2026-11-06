@@ -231,7 +231,7 @@ scheduled for the new session; do not recreate the settled #179 monitor.
 | 140 | Keep unrelated staged changes out of ticket commits | ✅ done |
 | 141 | Review staged and working-tree changes safely | ✅ done |
 | 139 | Validate custom dashboards and authoritative ticket projections | ✅ done |
-| 118 | Show the complete execution queue and current work | in_progress |
+| 118 | Show the complete execution queue and current work | ✅ done |
 | 166 | Refresh the broader harness overview from current evidence | ✅ done |
 | 201 | Deferred Kiro shutdown investigation after higher-priority work | backlog |
 
@@ -575,7 +575,7 @@ are in the order to take them. Release themes above still say what ships in 0.3.
 | 92 | Wave 3, dashboard checks itself (theme D): fix the gaps the critic model spike found | open |
 | 90 | Wave 3: build the dashboard copy and results critics (after 92) | open |
 | 109 | Wave 3: delivery-dashboard understands tkt's cancelled status (ships with tkt 227) | open |
-| 118 | Wave 4: show a complete visual execution queue with one active ticket in serial mode | in_progress |
+| 118 | Wave 4: show a complete visual execution queue with one active ticket in serial mode | ✅ done |
 | 87 | Owner decision: setup-repo links shadow handoff and grill-me in Kiro | open |
 | 89 | Owner approval per repo: adopt the dashboard template in three other repos | open |
 | 94 | Low: Kiro hook runs check-repo before an agent push | ✅ done |
