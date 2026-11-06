@@ -430,7 +430,7 @@ test("authored order deduplicates repeated plan rows without status-based renumb
   assert.deepEqual(authoredExecutionOrder(root), ["4", "2", "8"]);
   const snap = { executionOrder: authoredExecutionOrder(root), tickets: [tk("4", "open"), tk("2", "done"), tk("8", "backlog")] };
   snap.tickets[0].status = "done";
-  assert.deepEqual(api().executionSummary(snap).order, ["4", "2", "8"]);
+  assert.deepEqual(Array.from(api().executionSummary(snap).order), ["4", "2", "8"]);
 });
 
 test("execution projection keeps dependencies separate and chooses the first eligible sequenced ticket", () => {
@@ -438,18 +438,41 @@ test("execution projection keeps dependencies separate and chooses the first eli
   const flow = api().ticketFlow(snap);
   assert.equal(flow.execution.next, "prereq");
   assert.deepEqual(Array.from(flow.edges, (edge) => [edge.from, edge.to]), [["prereq", "child"]]);
-  assert.deepEqual(Array.from(flow.layers[0], (ticket) => ticket.id), ["prereq", "later"]);
+  assert.deepEqual(Array.from(flow.layers[0], (ticket) => ticket.id), ["later", "prereq"]);
+  assert.deepEqual(Array.from(flow.execution.route), ["prereq", "child", "later"]);
 });
 
 test("opt-in serial policy rejects multiple active tickets and invalid claims", (t) => {
   const config = (mode) => (html) => html.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/, "$1" + JSON.stringify({ project: "Test", executionPolicy: { mode } }) + "$2");
-  const snap = { generated: null, frontier: ["one", "two"], executionOrder: ["one", "two", "later"], tickets: [tk("one", "in_progress"), tk("two", "in_progress"), tk("later", "backlog")] };
+  const snap = { generated: null, frontier: [], executionOrder: ["one", "two", "later"], tickets: [tk("one", "in_progress"), tk("two", "in_progress"), tk("later", "backlog")] };
   const result = check(dashboard(t, [], (html) => withTickets(snap)(config("serial")(html))).file);
   assert.match(result.errors.join("\n"), /serial execution allows one in-progress ticket/);
-  const claim = check(dashboard(t, [], (html) => withTickets({ ...snap, tickets: [tk("one", "open"), tk("two", "open", ["one"]), tk("later", "backlog")] })(config("serial")(html))).file, { claim: "two" });
+  const claim = check(dashboard(t, [], (html) => withTickets({ ...snap, frontier: ["one", "two"], tickets: [tk("one", "open"), tk("two", "open", ["one"]), tk("later", "backlog")] })(config("serial")(html))).file, { claim: "two" });
   assert.match(claim.errors.join("\n"), /--claim requires --repo/);
   assert.match(claim.errors.join("\n"), /unfinished or missing prerequisites/);
   assert.match(claim.errors.join("\n"), /not next/);
+});
+
+test("execution policy reports malformed snapshots without throwing", (t) => {
+  const config = (html) => html.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/, "$1" + JSON.stringify({ project: "Test", executionPolicy: { mode: "serial" } }) + "$2");
+  const cases = [
+    [{ generated: null, frontier: [], executionOrder: ["one"], tickets: [null] }, /ticket #0: id required/],
+    [{ generated: null, frontier: [], executionOrder: ["one"], tickets: [tk("one", "open", "bad")] }, /blocked_by must be a list/],
+    [{ generated: null, frontier: [null], executionOrder: ["one"], tickets: [tk("one", "open")] }, /frontier lists null/],
+    [{ generated: null, frontier: [], executionOrder: ["one"], tickets: [{ id: "one", status: "unknown", blocked_by: [] }] }, /status must be one of/],
+  ];
+  for (const [snapshot, expected] of cases) {
+    const file = dashboard(t, [], (html) => withTickets(snapshot)(config(html))).file;
+    const result = check(file);
+    assert.equal(result.ok, false);
+    assert.match(result.errors.join("\n"), expected);
+    assert.match(result.errors.join("\n"), /structurally valid ticket snapshot/);
+    assert.doesNotMatch(result.errors.join("\n"), /page script failed to load/);
+    const claim = check(file, { claim: "one" });
+    assert.equal(claim.ok, false);
+    assert.match(claim.errors.join("\n"), /structurally valid ticket snapshot/);
+    assert.doesNotMatch(claim.errors.join("\n"), /page script failed to load/);
+  }
 });
 
 test("opt-in parallel policy requires distinct named active owners", (t) => {
@@ -485,17 +508,24 @@ test("plan groups put open work first and layer it by unfinished blockers", () =
 test("snapshot-tickets rewrites only the ticket block, escapes markup and refuses a scoped board", (t) => {
   const { file } = dashboard(t, [entry(1)]);
   const before = readFileSync(file, "utf8");
-  const replies = { query: [{ id: "1", title: "Fix </script> parsing", status: "open", blocked_by: [], agents: [] }], ready: [{ id: "1" }], "sync-plan": [] };
+  const replies = { query: [{ id: "1", title: "Fix </script> parsing", status: "open", blocked_by: [], agents: [], assignee: "worker-one" }], ready: [{ id: "1" }], "sync-plan": [] };
   mkdirSync(join(dirname(file), ".tickets"), { recursive: true });
   writeFileSync(join(dirname(file), ".tickets/1-fixture.md"), "---\nid: 1\ntitle: Fixture\nstatus: open\n---\nBody\n");
   const run = (cmd, args) => cmd === "tkt" ? replies[args[0]].map((x) => JSON.stringify(x)).join("\n") + "\n" : BODY_ID + "\n";
-  assert.deepEqual(snapshot(file, { repo: dirname(file), run, now: new Date("2026-09-02T00:00:00Z") }), { tickets: 1, frontier: 1 });
+  assert.deepEqual(snapshot(file, { repo: dirname(file), run, now: new Date("2026-09-02T00:00:00Z") }), { tickets: 1, frontier: 1, executionOrder: 0 });
   const after = readFileSync(file, "utf8");
   assert.equal(after.replace(TICKETS, ""), before.replace(TICKETS, ""));
   assert.doesNotMatch(after.match(TICKETS)[2], /<\/script>/);
   const snap = JSON.parse(after.match(TICKETS)[2]);
   assert.deepEqual(snap.tickets, [{ id: "1", title: "Fix </script> parsing", status: "open", blocked_by: [], tags: [], body_id: BODY_ID }]);
+  assert.deepEqual(snap.executionOrder, []);
   assert.equal(check(file).ok, true);
+  const parallelFile = dashboard(t, [], (html) => html.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/, "$1" + JSON.stringify({ project: "Test", executionPolicy: { mode: "parallel" } }) + "$2"));
+  mkdirSync(join(dirname(parallelFile.file), ".tickets"), { recursive: true });
+  writeFileSync(join(dirname(parallelFile.file), ".tickets/1-fixture.md"), "---\nid: 1\ntitle: Fixture\nstatus: in_progress\n---\nBody\n");
+  snapshot(parallelFile.file, { repo: dirname(parallelFile.file), run });
+  const parallel = JSON.parse(readFileSync(parallelFile.file, "utf8").match(TICKETS)[2]);
+  assert.equal(parallel.tickets[0].assignee, "worker-one");
   mkdirSync(join(dirname(file), ".tickets"), { recursive: true });
   writeFileSync(join(dirname(file), ".tickets/.context"), "backend\n");
   assert.throws(() => snapshot(file, { repo: dirname(file), run }), /tag context "backend"/);
@@ -691,7 +721,7 @@ function flowDashboard(t, entries, edit = (html) => html) {
 }
 
 test("checker rejects malformed flow configuration and malformed tags", (t) => {
-  for (const config of [{ scopes: [{ id: "all", label: "Duplicate", tags: ["x"] }] }, { scopes: [{ id: "build", label: "Build", tags: [] }] }, { defaultScope: "missing" }, { groupBy: "invented" }]) {
+  for (const config of [{ scopes: [{ id: "all", label: "Duplicate", tags: ["x"] }] }, { scopes: [{ id: "build", label: "Build", tags: [] }] }, { defaultScope: "missing" }, { groupBy: "invented" }, { view: "invented" }]) {
     const d = flowDashboard(t, [], (html) => html.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/, "$1" + JSON.stringify({ project: "Fixture", ticketFlow: config }) + "$2"));
     assert.equal(check(d.file).ok, false);
   }

@@ -109,11 +109,14 @@ export function snapshot(file, { repo, run = execFileSync, now = new Date() } = 
   if (!BLOCK.test(html)) throw new Error(`no gm-tickets block in ${file}; copy it from the template`);
   const cwd = repo || run("git", ["-C", dirname(resolve(file)), "rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim();
   // tkt filters query and ready by tag context; a scoped snapshot would silently drop tickets.
-  const { tickets, frontier } = authoritativeProjection(cwd, run);
-  const data = { generated: now.toISOString(), frontier, tickets };
+  const { tickets, frontier, executionOrder } = authoritativeProjection(cwd, run);
+  const configBlock = html.match(/<script type="application\/json" id="gm-config">([\s\S]*?)<\/script>/);
+  const config = configBlock ? JSON.parse(configBlock[1]) : {};
+  if (config?.executionPolicy?.mode !== "parallel") tickets.forEach((ticket) => { delete ticket.assignee; });
+  const data = { generated: now.toISOString(), frontier, executionOrder, tickets };
   // Ticket titles are outside text: escape "<" so a title cannot close the script element.
   writeFileSync(file, html.replace(BLOCK, (_, open, close) => `${open}\n${JSON.stringify(data).replace(/</g, "\\u003c")}\n${close}`));
-  return { tickets: tickets.length, frontier: frontier.length };
+  return { tickets: tickets.length, frontier: frontier.length, executionOrder: executionOrder.length };
 }
 
 // fileURLToPath, not URL.pathname: on Windows the pathname is /D:/..., so the CLI never ran.

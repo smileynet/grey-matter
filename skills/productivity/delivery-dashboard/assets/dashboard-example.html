@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark">
 <title>Project status</title>
 <style>
-:root{color-scheme:dark;--bg:#0a1120;--panel:#111b2f;--panel2:#162540;--line:#27395a;--text:#e8eef9;--muted:#a3b3cf;--blue:#6aaeff;--blue2:#3b82e0;--cyan:#56d4f0;--ask:#ffc857;--bad:#ff8b8b;--ok:#7fe0b0;--r:14px}
+:root{color-scheme:dark;--bg:#0a1120;--panel:#111b2f;--panel2:#162540;--line:#27395a;--text:#e8eef9;--muted:#a3b3cf;--blue:#6aaeff;--blue2:#3b82e0;--cyan:#56d4f0;--ask:#ffc857;--bad:#ff8b8b;--ok:#7fe0b0;--gem-emerald:#54c99a;--gem-sapphire:#66a9ff;--gem-ruby:#e27a91;--gem-amethyst:#a98be8;--gem-citrine:#dcb85f;--r:14px}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{background:var(--bg)}
@@ -92,14 +92,19 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 @media (prefers-reduced-motion:no-preference){.card,details.row{transition:border-color .15s}}
 @media (max-width:560px){.card{padding:16px}details.row .when{min-width:0}}
 #ticket-flow{margin-top:0}.flow-options>summary,.flow-readable>summary{cursor:pointer;min-height:44px;padding:8px 0}.flow-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:8px 0}.flow-controls label{display:flex;align-items:center;gap:8px;min-height:44px;max-width:100%;min-width:0}.flow-controls select{font:inherit;padding:10px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;min-width:0;max-width:100%}
+.flow-view-controls{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:8px 0;min-width:0;max-width:100%}.flow-view-controls label{display:flex;align-items:center;gap:8px;min-height:44px;min-width:0;max-width:100%;color:var(--muted)}.flow-view-controls select{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px;width:auto;min-width:0;max-width:min(65vw,360px);min-height:44px}.flow-view-controls #flow-view{width:110px}.flow-view-controls #flow-focus-ticket{width:220px;max-width:calc(100vw - 140px)}
+.flow-zoom-tools{display:flex;align-items:center;gap:6px}.flow-zoom-tools button{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:8px;min-height:44px;min-width:44px;cursor:pointer}.flow-zoom-tools button:disabled{opacity:.5;cursor:default}
 .flow-counts,.flow-notice{font-size:14px;color:var(--muted)}.flow-notice{border-left:3px solid var(--blue);padding:10px}
 .flow-node,.flow-pick{--c:var(--line)}
-:is(.flow-node,.flow-pick)[data-state=ready],.fl-ready{--c:var(--ok)}:is(.flow-node,.flow-pick)[data-state=in_progress],.fl-in_progress{--c:var(--cyan)}.flow-node[data-state=blocked],.fl-blocked{--c:#7f8fb0}.flow-node[data-state=backlog],.fl-backlog{--c:#56688c}.flow-node[data-state=done],.fl-done{--c:var(--blue2)}.flow-node[data-state=cancelled]{--c:#667085}.flow-node[data-gate=decision],.flow-node[data-gate=evidence],.fl-decision{--c:var(--ask)}
+:is(.flow-node,.flow-pick)[data-state=ready],.fl-ready{--c:var(--gem-emerald)}:is(.flow-node,.flow-pick)[data-state=in_progress],.fl-in_progress{--c:var(--gem-sapphire)}.flow-node[data-state=blocked],.fl-blocked{--c:var(--gem-ruby)}.flow-node[data-state=backlog],.fl-backlog{--c:var(--gem-amethyst)}.flow-node[data-state=done],.fl-done{--c:var(--blue2)}.flow-node[data-state=cancelled]{--c:#667085}.flow-node[data-gate=decision],.flow-node[data-gate=evidence],.fl-decision{--c:var(--gem-citrine)}
 .flow-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:4px 0 0}.flow-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}.flow-legend .fl-backlog{background:none;border:2px dashed var(--c)}
+.flow-edge-legend{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:13px;margin:6px 0}.flow-edge-legend span{display:flex;align-items:center;gap:7px}.edge-sample{display:inline-block;width:24px;border-top:2px solid var(--muted)}.edge-sample.sequence{border-top:2px dashed var(--gem-amethyst)}.flow-links path[data-kind=sequence]{stroke:var(--gem-amethyst);stroke-dasharray:3 5;stroke-width:2}.fa-sequence{fill:var(--gem-amethyst)}
 .flow-brief{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;margin:14px 0}.flow-brief>div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}.flow-brief h3{margin:0 0 6px;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}.flow-brief .meta{margin:6px 0 0}
+.flow-focus-view{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;margin:12px 0}.focus-ticket-card,.focus-neighbors{border:1px solid var(--line);border-left:4px solid var(--gem-sapphire);border-radius:12px;background:var(--panel);padding:14px;min-width:0}.focus-ticket-card{grid-column:1/-1}.focus-ticket-card[data-state=ready]{border-left-color:var(--gem-emerald)}.focus-ticket-card[data-state=blocked]{border-left-color:var(--gem-ruby)}.focus-ticket-card[data-state=backlog]{border-left-color:var(--gem-amethyst)}.focus-ticket-card h3{font-size:20px;overflow-wrap:anywhere}.focus-ticket-meta{display:flex;justify-content:space-between;gap:12px}.focus-neighbors h3{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}.focus-neighbors ul{list-style:none;margin:0;padding:0}.focus-neighbors li+li{margin-top:6px}.focus-neighbor{width:100%;min-height:44px;text-align:left;font:inherit;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px;overflow-wrap:anywhere;cursor:pointer}.focus-neighbor:hover,.route-ticket:hover{border-color:var(--blue)}
+.flow-route{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:8px;list-style:none;margin:12px 0;padding:0;counter-reset:route}.flow-route li{min-width:0}.route-ticket{--c:var(--line);display:flex;align-items:center;gap:10px;width:100%;min-height:58px;text-align:left;color:var(--text);background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:9px;padding:8px;cursor:pointer}.route-ticket[data-state=ready]{--c:var(--gem-emerald)}.route-ticket[data-state=in_progress]{--c:var(--gem-sapphire)}.route-ticket[data-state=blocked]{--c:var(--gem-ruby)}.route-ticket[data-state=backlog]{--c:var(--gem-amethyst)}.route-ticket[data-state=done]{--c:var(--blue2)}.route-ticket[aria-pressed=true]{outline:3px solid var(--ask);outline-offset:1px}.route-order{display:grid;place-items:center;flex:0 0 28px;height:28px;border:1px dashed var(--gem-amethyst);border-radius:50%;color:var(--gem-amethyst);font-variant-numeric:tabular-nums;font-weight:700}.route-body{display:grid;gap:2px;min-width:0}.route-body span,.route-body small{overflow-wrap:anywhere}.route-body small{color:var(--muted)}
 .flow-pick{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;font:inherit;font-size:14px;color:var(--text);background:none;border:0;border-left:3px solid var(--c);border-radius:6px;padding:8px 10px;margin:4px 0;min-height:44px;cursor:pointer}.flow-pick:hover{background:var(--panel2)}.flow-pick b{color:var(--c);font-variant-numeric:tabular-nums;flex:0 0 auto}.flow-pick span{min-width:0;overflow-wrap:anywhere}.flow-pick em{margin-left:auto;font-style:normal;color:var(--muted);font-size:12.5px;white-space:nowrap}
 .flow-chain ol{display:flex;flex-wrap:wrap;gap:6px 4px;list-style:none;margin:6px 0 0;padding:0}.flow-chain li{display:flex;align-items:center;gap:4px}.flow-chain li+li::before{content:"→";color:var(--cyan)}.flow-chain button{font:inherit;font-size:13px;font-variant-numeric:tabular-nums;color:var(--text);background:#0e1830;border:1px solid var(--cyan);border-radius:99px;padding:2px 12px;min-height:32px;cursor:pointer}.flow-chain button:hover{background:var(--panel2)}
-.flow-scroll{max-height:760px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0;background:radial-gradient(circle at 1px 1px,#1a2742 1px,transparent 0) 0 0/22px 22px,var(--bg)}
+.flow-scroll{max-height:760px;min-width:0;max-width:100%;overflow:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0;background:radial-gradient(circle at 1px 1px,#1a2742 1px,transparent 0) 0 0/22px 22px,var(--bg)}
 .flow-canvas{position:relative;min-width:100%}.flow-links{position:absolute;inset:0;pointer-events:none;overflow:visible}
 .flow-col{position:absolute;top:12px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}.flow-col small{margin-left:8px;text-transform:none;letter-spacing:0;font-weight:400}
 .flow-band{position:absolute;left:0;right:0;height:30px;display:flex;align-items:center;gap:8px;padding:0 18px;border-top:1px solid var(--line);font-size:13.5px;font-weight:600}.flow-band small{color:var(--muted);font-weight:400}
@@ -115,6 +120,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 .flow-links path[data-live=true]{stroke:var(--ok);opacity:.85}.flow-links path[data-critical=true]{stroke:var(--cyan);stroke-width:2.4}.flow-links path[data-satisfied=true]{stroke-dasharray:4 5}.flow-links path[data-related=true]{stroke:var(--blue);stroke-width:3;opacity:1}
 .flow-canvas[data-preview] .flow-node[data-near=false]{opacity:.3}.flow-canvas[data-preview] path[data-near=false]{opacity:.1}
 .flow-canvas[data-selected] path[data-related=false]{opacity:.18}.flow-node[data-related=unrelated]{opacity:.35}.flow-node[data-related=before],.flow-node[data-related=after]{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue);border-left-color:var(--c)}.flow-node[aria-pressed=true]{outline:3px solid var(--ask);outline-offset:2px}
+#flow-content[data-view=focus] .flow-node[data-related=unrelated]{opacity:.13}#flow-content[data-view=focus] .flow-node[aria-pressed=true]{transform:translateY(-2px);box-shadow:0 0 0 2px var(--gem-sapphire)}#flow-content[data-view=route] .flow-col{color:var(--gem-amethyst)}
 .history-filters{margin:0 0 14px}.history-filters>summary{min-height:44px}
 .flow-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .flow-heading label{color:var(--muted);font-size:14px}.flow-heading select{max-width:100%}
@@ -552,6 +558,23 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     });
     return lanes.filter(Boolean);
   }
+  function executionSummary(snap) {
+    var all = snap.tickets || [], index = ticketIndex(snap), byOrder = [], seen = Object.create(null), hasAuthoredOrder = Array.isArray(snap.executionOrder);
+    (hasAuthoredOrder ? snap.executionOrder : (snap.frontier || [])).forEach(function (id) { if (index[id] && !seen[id]) { seen[id] = true; byOrder.push(id); } });
+    all.slice().sort(byId).forEach(function (ticket) { if (!seen[ticket.id]) { seen[ticket.id] = true; byOrder.push(ticket.id); } });
+    var unfinished = byOrder.map(function (id) { return index[id]; }).filter(function (ticket) { return ticket && !terminal(ticket); });
+    var pending = unfinished.slice(), route = [], placed = Object.create(null);
+    while (pending.length) {
+      var at = pending.findIndex(function (ticket) { return (ticket.blocked_by || []).every(function (id) { var blocker = index[id]; return !blocker || blocker.status === "done" || terminal(blocker) || placed[id]; }); });
+      if (at < 0) at = 0;
+      var next = pending.splice(at, 1)[0]; route.push(next.id); placed[next.id] = true;
+    }
+    var frontier = Array.isArray(snap.frontier) ? snap.frontier : all.filter(function (ticket) { return ticket.status === "open"; }).map(function (ticket) { return ticket.id; });
+    var eligible = route.map(function (id) { return index[id]; }).find(function (ticket) {
+      return ticket.status === "open" && frontier.indexOf(ticket.id) >= 0 && !ticket.gate && (ticket.blocked_by || []).every(function (id) { return index[id] && index[id].status === "done"; });
+    });
+    return { order: byOrder, route: route, hasAuthoredOrder: hasAuthoredOrder, current: unfinished.find(function (ticket) { return ticket.status === "in_progress"; })?.id || null, next: eligible ? eligible.id : null };
+  }
   function ticketFlow(snap, options) {
     options = options || {};
     var idx = ticketIndex(snap), all = snap.tickets || [], scopes = options.scopes || [], scope = options.scope || "all";
@@ -595,7 +618,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     groups.push(other); groups = groups.filter(function (g) { return g.tickets.length; });
     var rank = { in_progress: 0, ready: 1, decision: 2, evidence: 3, blocked: 4, backlog: 5, done: 6, cancelled: 7 };
     groups.forEach(function (g) { g.tickets.sort(function (a, b) { var state = rank[flowState(a, idx)] - rank[flowState(b, idx)]; if (state) return state; var f = snap.frontier || [], ai = f.indexOf(a.id), bi = f.indexOf(b.id); return (ai < 0 ? f.length : ai) - (bi < 0 ? f.length : bi) || byId(a, b); }); });
-    return { index: idx, visible: visible, layers: layers, groups: groups, edges: edges, counts: counts, readiness: readiness, scope: scope, fallback: fallback, elsewhere: all.filter(function (t) { return !terminal(t) && !ids[t.id]; }).length, relations: relations };
+    return { index: idx, visible: visible, layers: layers, groups: groups, edges: edges, counts: counts, readiness: readiness, scope: scope, fallback: fallback, elsewhere: all.filter(function (t) { return !terminal(t) && !ids[t.id]; }).length, relations: relations, execution: executionSummary(snap) };
   }
 
   function ticketMatches(t, f, idx) {
@@ -622,7 +645,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     }).catch(function () { return false; });
   }
 
-  var api = { decisionReply: decisionReply, copyDecisionText: copyDecisionText, sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref, planGroups: planGroups, planLanes: planLanes, ticketMatches: ticketMatches, ticketFlow: ticketFlow, flowState: flowState };
+  var api = { decisionReply: decisionReply, copyDecisionText: copyDecisionText, sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref, planGroups: planGroups, planLanes: planLanes, ticketMatches: ticketMatches, ticketFlow: ticketFlow, executionSummary: executionSummary, flowState: flowState };
   if (typeof window !== "undefined") window.GMDashboard = api;
   if (typeof document === "undefined" || !document.getElementById("gm-entries")) return;
 
@@ -880,7 +903,16 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     if (section.hidden) return;
     var root = $("flow-content"), controls = el("details", { class: "flow-options" }, [el("summary", { text: "Graph options and guide" })]);
     root.textContent = "";
-    var form = el("div", { class: "flow-controls" }), scope = el("select", { id: "flow-scope", "aria-label": "Ticket flow work stream" });
+    var form = el("div", { class: "flow-controls" }), viewTools = el("div", { class: "flow-view-controls" }), view = el("select", { id: "flow-view", "aria-label": "Ticket flow view" });
+    [["focus", "Focus"], ["route", "Route"], ["dag", "DAG"]].forEach(function (option) { view.appendChild(el("option", { value: option[0], text: option[1] })); });
+    view.value = settings.view || "dag";
+    viewTools.appendChild(el("label", { text: "View " }, [view]));
+    var focusSelect = el("select", { id: "flow-focus-ticket", "aria-label": "Choose any ticket to focus" });
+    viewTools.appendChild(el("label", { text: "Focus ticket " }, [focusSelect]));
+    var zoomTools = el("div", { class: "flow-zoom-tools", role: "group", "aria-label": "DAG zoom controls" });
+    var zoomOut = el("button", { type: "button", "aria-label": "Zoom out", text: "−" }), zoomIn = el("button", { type: "button", "aria-label": "Zoom in", text: "+" }), zoomReset = el("button", { type: "button", text: "Reset" }), zoomStatus = el("span", { class: "meta", "aria-live": "polite", text: "100%" });
+    zoomTools.appendChild(zoomOut); zoomTools.appendChild(zoomStatus); zoomTools.appendChild(zoomIn); zoomTools.appendChild(zoomReset); viewTools.appendChild(zoomTools);
+    var scope = el("select", { id: "flow-scope", "aria-label": "Ticket flow work stream" });
     scope.appendChild(el("option", { value: "all", text: "All remaining work" }));
     (settings.scopes || []).forEach(function (s) { scope.appendChild(el("option", { value: s.id, text: s.label })); });
     scope.value = settings.defaultScope || "all";
@@ -894,19 +926,22 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     form.appendChild(el("label", {}, [completed, document.createTextNode("Include done/cancelled context")]));
     form.appendChild(el("label", {}, [deferred, document.createTextNode("Include deferred work")]));
     controls.appendChild(form);
-    controls.appendChild(el("p", { class: "meta", text: "Read left to right: a ticket sits one step after its last unfinished prerequisite, and lines run from a prerequisite to the work it unlocks. Green lines leave work that can start now; the cyan path is the longest remaining chain. Select a ticket to trace it. Decision and evidence gates come from ticket planning notes; machine and access eligibility remain separate. Deferred work stays deferred." }));
+    controls.appendChild(el("p", { class: "meta", text: "Focus keeps one selected ticket and its connected work in view. Route follows the suggested sequence while solid arrows preserve actual prerequisites. DAG shows prerequisite edges only. Status colors use gem tones with text labels; selection stays on the same ticket when you change views. Execution order is guidance; prerequisites still control readiness." }));
     var notice = el("p", { class: "flow-notice", role: "status" }), summary = el("p", { class: "flow-counts" });
     var legend = el("p", { class: "flow-legend", "aria-hidden": "true" });
     [["ready", "Can start"], ["in_progress", "In progress"], ["decision", "Needs a decision or evidence"], ["blocked", "Waiting on tickets"], ["backlog", "Deferred"], ["done", "Done"]].forEach(function (s) { legend.appendChild(el("span", {}, [el("i", { class: "fl-" + s[0] }), document.createTextNode(s[1])])); });
     var brief = el("div", { class: "flow-brief" }), scroll = el("div", { class: "flow-scroll", tabindex: "0", role: "region", "aria-label": "Ticket dependency flow; scroll to follow branches" });
     var canvas = el("div", { class: "flow-canvas" }), svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "flow-links"); svg.setAttribute("aria-hidden", "true");
     scroll.appendChild(canvas);
+    var focusView = el("div", { class: "flow-focus-view", hidden: true }), routeView = el("div", { class: "flow-route-view", hidden: true });
     var detail = el("div", { class: "flow-detail", "aria-live": "polite" }), readable = el("details", { class: "flow-readable" }, [el("summary", { text: "Read the visible prerequisite list" })]), list = el("ul"); readable.appendChild(list);
     controls.appendChild(legend);
-    root.appendChild(notice); root.appendChild(brief); root.appendChild(summary);
+    var edgeLegend = el("p", { class: "flow-edge-legend" }, [el("span", {}, [el("i", { class: "edge-sample dependency" }), document.createTextNode("Prerequisite")]), el("span", {}, [el("i", { class: "edge-sample sequence" }), document.createTextNode("Suggested sequence")])]);
+    root.appendChild(notice); root.appendChild(brief); root.appendChild(summary); root.appendChild(viewTools); root.appendChild(edgeLegend);
+    root.appendChild(focusView); root.appendChild(routeView);
     root.appendChild(el("div", { class: "flow-stage" }, [detail, scroll]));
     root.appendChild(controls); root.appendChild(readable);
-    var model, selected = null, buttons = Object.create(null), paths = [], pos = Object.create(null), critical = Object.create(null), unlocks = Object.create(null);
+    var model, selected = null, buttons = Object.create(null), paths = [], pos = Object.create(null), critical = Object.create(null), unlocks = Object.create(null), routeIds = [], zoom = 1;
     var words = { ready: "Unblocked", in_progress: "In progress", blocked: "Waiting on tickets", decision: "Decision needed", evidence: "Evidence needed", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
     var short = { ready: "Can start", in_progress: "In progress", blocked: "Waiting", decision: "Decision", evidence: "Evidence", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
     var glyph = { ready: "○", in_progress: "◐", blocked: "▲", decision: "◆", evidence: "◆", backlog: "…", done: "●", cancelled: "×" };
@@ -918,6 +953,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     function byState(a, b) { return rank[flowState(a, model.index)] - rank[flowState(b, model.index)] || frontierAt(a) - frontierAt(b) || byId(a, b); }
     function choose(id) {
       selected = id; var t = model.index[id], r = model.relations(id), deps = t.blocked_by || [];
+      focusSelect.value = id;
       detail.textContent = ""; detail.appendChild(el("h3", { text: id + " · " + t.title }));
       var gate = planningGate(t);
       if (gate) detail.appendChild(el("p", { class: "flow-notice", text: words[gate.kind] + ": " + gate.reason }));
@@ -929,9 +965,74 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       detail.appendChild(el("p", { text: "No dependency path to: " + (model.visible.filter(function (t) { return t.id !== id && r.before.indexOf(t.id) < 0 && r.after.indexOf(t.id) < 0; }).map(function (t) { return t.id; }).join(", ") || "none in this view") + ". Shared files and external access can still constrain parallel work." }));
       detail.appendChild(el("a", { href: "#t-" + id, text: "Open ticket details" }));
       Object.keys(buttons).forEach(function (key) { var b = buttons[key]; b.setAttribute("aria-pressed", String(key === id)); b.dataset.related = key === id ? "selected" : r.before.indexOf(key) >= 0 ? "before" : r.after.indexOf(key) >= 0 ? "after" : "unrelated"; });
-      canvas.dataset.selected = "true"; drawEdges();
+      canvas.dataset.selected = "true"; drawEdges(); renderViews();
     }
-    function reveal(id) { var b = buttons[id]; if (!b) return; choose(id); b.scrollIntoView({ block: "nearest", inline: "center" }); b.focus({ preventScroll: true }); }
+    function reveal(id) {
+      if (!model.index[id]) return;
+      var ticket = model.index[id];
+      if (!buttons[id]) { scope.value = "all"; if (terminal(ticket)) completed.checked = true; render(); }
+      var b = buttons[id]; if (!b) return;
+      choose(id); b.scrollIntoView({ block: "nearest", inline: "center" }); b.focus({ preventScroll: true });
+    }
+    function setZoom(value) {
+      zoom = Math.max(0.7, Math.min(1.5, Math.round(value * 10) / 10));
+      canvas.style.transform = "scale(" + zoom + ")"; canvas.style.transformOrigin = "top left";
+      zoomStatus.textContent = Math.round(zoom * 100) + "%";
+      zoomOut.disabled = zoom <= 0.7; zoomIn.disabled = zoom >= 1.5;
+    }
+    function renderViews() {
+      var focusMode = view.value === "focus", routeMode = view.value === "route";
+      focusView.hidden = !focusMode; routeView.hidden = !routeMode; scroll.hidden = focusMode || routeMode;
+      zoomTools.hidden = view.value !== "dag";
+      focusSelect.value = selected || "";
+      focusView.textContent = ""; routeView.textContent = "";
+      if (focusMode) {
+        var ticket = selected && model.index[selected];
+        if (!ticket) focusView.appendChild(el("p", { class: "none", text: "Choose a ticket to focus on its direct prerequisites and dependent work." }));
+        else {
+          var state = flowState(ticket, model.index), card = el("article", { class: "focus-ticket-card", "data-state": ticketState(ticket, model.index) }, [
+            el("div", { class: "focus-ticket-meta" }, [el("b", { text: ticket.id }), el("span", { class: "fn-state", text: glyph[state] + " " + short[state] })]),
+            el("h3", { text: ticket.title }),
+            el("p", { text: "Current" + (ticket.id === model.execution.current ? " · active ticket" : "") + (ticket.id === model.execution.next ? " · next eligible" : "") })
+          ]);
+          focusView.appendChild(card);
+          var parents = (ticket.blocked_by || []).map(function (id) { return model.index[id]; }).filter(Boolean);
+          var children = model.visible.filter(function (candidate) { return (candidate.blocked_by || []).indexOf(ticket.id) >= 0; });
+          [["Immediate prerequisites", parents], ["Immediate dependent work", children]].forEach(function (group) {
+            var section = el("section", { class: "focus-neighbors" }, [el("h3", { text: group[0] })]);
+            if (!group[1].length) section.appendChild(el("p", { class: "meta", text: "None" }));
+            else {
+              var list = el("ul"); group[1].forEach(function (neighbor) {
+                var button = el("button", { type: "button", class: "focus-neighbor", text: neighbor.id + " · " + neighbor.title + " · " + words[flowState(neighbor, model.index)] });
+                button.addEventListener("click", function () { reveal(neighbor.id); }); list.appendChild(el("li", {}, [button]));
+              });
+              section.appendChild(list);
+            }
+            focusView.appendChild(section);
+          });
+        }
+      }
+      if (routeMode) {
+        var route = el("ol", { class: "flow-route", "aria-label": "Suggested execution sequence" });
+        var authoredIds = new Set(snap.executionOrder || []), frontierIds = new Set(snap.frontier || []), sequencePosition = 0, frontierPosition = 0;
+        routeIds.forEach(function (id, index) {
+          var ticket = model.index[id], state = flowState(ticket, model.index), parents = ticket.blocked_by || [];
+          var sequenced = authoredIds.has(id), frontierStep = !model.execution.hasAuthoredOrder && frontierIds.has(id);
+          var step = sequenced ? String(++sequencePosition) : frontierStep ? "F" + (++frontierPosition) : "—";
+          var button = el("button", { type: "button", class: "route-ticket", "aria-pressed": String(id === selected), "data-state": ticketState(ticket, model.index) }, [
+            el("span", { class: "route-order", text: step }),
+            el("span", { class: "route-body" }, [el("b", { text: id + " · " + short[state] }), el("span", { text: ticket.title }), el("small", { text: (sequenced ? "Plan sequence" : frontierStep ? "Native frontier" : "Unsequenced") + " · Prerequisites: " + (parents.join(", ") || "none") })])
+          ]);
+          button.dataset.sequenced = String(sequenced || frontierStep);
+          button.dataset.ticket = id;
+          button.addEventListener("click", function () { reveal(id); });
+          route.appendChild(el("li", {}, [button]));
+        });
+        var unsequencedCount = routeIds.filter(function (id) { return !authoredIds.has(id) && (model.execution.hasAuthoredOrder || !frontierIds.has(id)); }).length;
+        routeView.appendChild(el("p", { class: "meta", text: model.execution.hasAuthoredOrder ? "Suggested plan sequence, compactly listed. " + unsequencedCount + " unsequenced ticket(s) remain visible. " : "This snapshot has no authored plan order; native frontier items are marked F and other tickets are unsequenced. " + unsequencedCount + " unsequenced ticket(s) remain visible. " + "Ticket dependencies remain separately labelled on each step; prerequisites decide when a ticket can start." }));
+        routeView.appendChild(route);
+      }
+    }
     function preview(id) {
       var near = Object.create(null);
       if (id) { var r = model.relations(id); near[id] = true; r.before.concat(r.after).forEach(function (k) { near[k] = true; }); canvas.dataset.preview = "true"; } else delete canvas.dataset.preview;
@@ -941,7 +1042,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     function drawEdges() {
       svg.textContent = ""; paths = [];
       var defs = svgEl("defs", {});
-      ["base", "live", "critical", "related"].forEach(function (kind) {
+      ["base", "live", "critical", "related", "sequence"].forEach(function (kind) {
         var marker = svgEl("marker", { id: "gm-flow-arrow-" + kind, viewBox: "0 0 10 10", refX: "9", refY: "5", markerWidth: "7", markerHeight: "7", orient: "auto" });
         marker.appendChild(svgEl("path", { d: "M 0 0 L 10 5 L 0 10 z", class: "flow-arrow fa-" + kind })); defs.appendChild(marker);
       });
@@ -957,6 +1058,16 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
         path.setAttribute("marker-end", "url(#gm-flow-arrow-" + (isRelated ? "related" : onChain ? "critical" : live ? "live" : "base") + ")");
         svg.appendChild(path); paths.push(path);
       });
+      if (view.value === "route") {
+        var route = routeIds.filter(function (id) { return pos[id]; });
+        route.slice(1).forEach(function (id, index) {
+          var from = route[index], to = id;
+          if (model.edges.some(function (edge) { return edge.from === from && edge.to === to; })) return;
+          var a = pos[from], b = pos[to], x1 = a.x + W, y1 = a.y + H / 2, x2 = b.x - 2, y2 = b.y + H / 2, c = Math.max(28, (x2 - x1) / 2);
+          var path = svgEl("path", { d: "M" + x1 + "," + y1 + " C" + (x1 + c) + "," + y1 + " " + (x2 - c) + "," + y2 + " " + x2 + "," + y2, "data-kind": "sequence", "data-from": from, "data-to": to });
+          path.setAttribute("marker-end", "url(#gm-flow-arrow-sequence)"); svg.appendChild(path); paths.push(path);
+        });
+      }
     }
     function renderBrief(chain) {
       brief.textContent = "";
@@ -982,9 +1093,12 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       try { model = ticketFlow(snap, { scope: scope.value, scopes: settings.scopes, completed: completed.checked, deferred: deferred.checked }); }
       catch (error) { root.textContent = "Ticket flow unavailable: " + error.message + ". The full ticket list remains below."; return; }
       scope.value = model.scope;
+      focusSelect.textContent = "";
+      focusSelect.appendChild(el("option", { value: "", text: "Select a ticket" }));
+      (snap.tickets || []).forEach(function (ticket) { focusSelect.appendChild(el("option", { value: ticket.id, text: ticket.id + " · " + ticket.title + " · " + STATES[ticketState(ticket, model.index)] })); });
       notice.textContent = model.fallback ? "That stream has no visible remaining work; showing all remaining work." : model.elsewhere ? model.elsewhere + " unfinished tickets are outside this view. Choose All remaining work to see them." : "";
       notice.hidden = !notice.textContent;
-      summary.textContent = ["ready", "in_progress", "blocked", "decision", "evidence", "backlog", "done", "cancelled"].filter(function (state) { return model.readiness[state] > 0; }).map(function (state) { return model.readiness[state] + " " + words[state].toLowerCase(); }).concat(model.visible.length + " shown").join(" · ") + ". Select a ticket to inspect its dependency path.";
+      summary.textContent = "Current: " + (model.execution.current || "none") + " · Next: " + (model.execution.next || "none") + " · " + ["ready", "in_progress", "blocked", "decision", "evidence", "backlog", "done", "cancelled"].filter(function (state) { return model.readiness[state] > 0; }).map(function (state) { return model.readiness[state] + " " + words[state].toLowerCase(); }).concat(model.visible.length + " shown").join(" · ") + ". Select a ticket to inspect it; switching views keeps that selection.";
       canvas.textContent = ""; list.textContent = ""; buttons = Object.create(null); pos = Object.create(null); critical = Object.create(null); unlocks = Object.create(null);
       delete canvas.dataset.selected; delete canvas.dataset.preview;
       var idx = model.index, inView = Object.create(null), depthOf = Object.create(null);
@@ -1004,7 +1118,19 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       if (chain.length > 1) chain.forEach(function (id) { critical[id] = true; });
       renderBrief(chain);
       if (!model.visible.length) { canvas.style.width = ""; canvas.style.height = ""; canvas.appendChild(el("p", { class: "none", text: "No tickets in this view." })); detail.textContent = ""; return; }
-      var columns = Math.max(1, model.layers.length), byLane = arrangement.value === "workstreams", lanes = byLane ? model.groups : [{ label: null, tickets: model.visible }], y = HEAD;
+      var routeMode = view.value === "route", focusMode = view.value === "focus";
+      var routeRank = Object.create(null), authoredRank = Object.create(null);
+      model.execution.route.forEach(function (id, i) { routeRank[id] = i; });
+      (snap.executionOrder || []).forEach(function (id, i) { authoredRank[id] = i; });
+      routeIds = model.visible.map(function (ticket) { return ticket.id; }).sort(function (a, b) {
+        var ai = routeRank[a], bi = routeRank[b];
+        if (ai !== undefined && bi !== undefined) return ai - bi;
+        return (authoredRank[a] === undefined ? Number.MAX_SAFE_INTEGER : authoredRank[a]) - (authoredRank[b] === undefined ? Number.MAX_SAFE_INTEGER : authoredRank[b]) || byId(model.index[a], model.index[b]);
+      });
+      if (routeMode) routeIds.forEach(function (id, i) { depthOf[id] = i; });
+      if (focusMode && !selected) selected = model.execution.current || model.execution.next || (model.visible[0] && model.visible[0].id) || null;
+      root.dataset.view = view.value;
+      var columns = Math.max(1, routeMode ? routeIds.length : model.layers.length), byLane = !routeMode && arrangement.value === "workstreams", lanes = byLane ? model.groups : [{ label: null, tickets: model.visible }], y = HEAD;
       lanes.forEach(function (lane, laneIndex) {
         if (byLane) { var band = el("div", { class: "flow-band" }, [el("span", { text: lane.label }), el("small", { text: lane.tickets.length + " ticket" + (lane.tickets.length === 1 ? "" : "s") })]); band.style.top = y + "px"; if (laneIndex % 2) band.dataset.alt = "true"; canvas.appendChild(band); y += LANE; }
         var start = y, bottom = y, byColumn = [];
@@ -1022,7 +1148,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       canvas.style.width = width + "px"; canvas.style.height = height + "px"; svg.setAttribute("width", String(width)); svg.setAttribute("height", String(height));
       canvas.appendChild(svg);
       for (var c = 0; c < columns; c++) {
-        var count = model.layers[c] ? model.layers[c].length : 0, head = el("div", { class: "flow-col" }, [document.createTextNode("Step " + (c + 1)), el("small", { text: c ? count + " ticket" + (count === 1 ? "" : "s") : "no prerequisites in view" })]);
+        var count = routeMode ? 1 : model.layers[c] ? model.layers[c].length : 0, head = el("div", { class: "flow-col" }, [document.createTextNode(routeMode ? "Route " + (c + 1) : "Step " + (c + 1)), el("small", { text: routeMode ? "suggested" : c ? count + " ticket" + (count === 1 ? "" : "s") : "no prerequisites in view" })]);
         head.style.left = (PAD + c * (W + GX)) + "px"; head.style.width = W + "px"; canvas.appendChild(head);
       }
       model.visible.slice().sort(function (a, b) { return pos[a.id].x - pos[b.id].x || pos[a.id].y - pos[b.id].y; }).forEach(function (t) {
@@ -1042,10 +1168,14 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
         list.appendChild(el("li", { text: t.id + " · " + t.title + " — " + (deps.length ? "prerequisites " + deps.join(", ") : "no prerequisites") + " · " + words[readiness] + (gate ? " · " + words[gate.kind] + ": " + gate.reason : "") }));
       });
       drawEdges();
-      if (selected && buttons[selected]) choose(selected); else { selected = null; detail.textContent = "Select a ticket above. Its prerequisites and downstream work will be highlighted."; }
+      if (selected && buttons[selected]) choose(selected); else { selected = null; detail.textContent = "Select a ticket above. Its prerequisites and downstream work will be highlighted."; renderViews(); }
     }
-    [scope, completed, deferred, arrangement].forEach(function (control) { control.addEventListener("change", render); });
-    render();
+    focusSelect.addEventListener("change", function () { if (focusSelect.value) reveal(focusSelect.value); });
+    zoomOut.addEventListener("click", function () { setZoom(zoom - 0.1); });
+    zoomIn.addEventListener("click", function () { setZoom(zoom + 0.1); });
+    zoomReset.addEventListener("click", function () { setZoom(1); });
+    [view, scope, completed, deferred, arrangement].forEach(function (control) { control.addEventListener("change", render); });
+    setZoom(1); render();
   }
 
   function ticketRow(t) {

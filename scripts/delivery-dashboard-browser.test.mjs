@@ -11,7 +11,62 @@ test.after(()=>browser.close());
 const ticket=(id,status,blocked_by=[],tags=[])=>({id,title:'Fixture work '+id,status,blocked_by,tags});
 const snap={generated:'2026-10-31T00:00:00Z',frontier:['start','parallel'],tickets:[ticket('base','done',[],['archive']),ticket('start','open',['base'],['build']),ticket('active','in_progress',['start'],['build']),ticket('finish','open',['active'],['build']),ticket('later','backlog',[],['future']),ticket('parallel','open',[],['other'])]};
 function html(config={},snapshot=snap){return template.replace(/(<script type="application\/json" id="gm-config">)[\s\S]*?(<\/script>)/,'$1'+JSON.stringify({project:'Synthetic flow fixture',ticketFlow:{defaultScope:'archive',scopes:[{id:'archive',label:'Completed stream',tags:['archive']},{id:'build',label:'Build stream',tags:['build']}]},...config})+'$2').replace(/(<script type="application\/json" id="gm-tickets">)[\s\S]*?(<\/script>)/,'$1'+JSON.stringify(snapshot)+'$2');}
-async function pageFor(width,config,snapshot){const context=await browser.newContext({viewport:{width,height:1000}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('**/*',route=>route.fulfill({contentType:'text/html',body:html(config,snapshot)}));await page.goto('http://dashboard.invalid/#plan');return {context,page,errors};}
+async function pageFor(width,config,snapshot){const context=await browser.newContext({viewport:{width,height:1000}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.stack||e.message));await page.route('**/*',route=>route.fulfill({contentType:'text/html',body:html(config,snapshot)}));await page.goto('http://dashboard.invalid/#plan');return {context,page,errors};}
+const routeFixture={generated:'2026-11-05T00:00:00Z',frontier:['T1','T5'],executionOrder:['T4','T1','T2','T3','T5','T7','T6','T8'],tickets:[
+ ticket('T1','open'),ticket('T2','open',['T1']),ticket('T3','in_progress',['T2']),ticket('T4','open',['T3']),
+ ticket('T5','open'),ticket('T6','backlog'),ticket('T7','open',['T4']),ticket('T8','open',['T5','T7']),
+]};
+for(const width of [1280,390])test('Focus, Route and DAG retain independent selection at '+width,async()=>{
+ const {context,page,errors}=await pageFor(width,{ticketFlow:{defaultScope:'all',scopes:[],view:'focus'}},routeFixture);
+ try{
+  await page.locator('#flow-content').waitFor({state:'attached'});
+  assert.equal(await page.locator('#flow-content').getAttribute('data-view'),'focus',errors.join('; ')||'view mode did not initialize');
+  assert.equal(await page.locator('.flow-scroll').isHidden(),true);
+  assert.equal(await page.locator('.flow-focus-view').isVisible(),true);
+  assert.equal(await page.locator('.flow-node[data-ticket=T3]').getAttribute('aria-pressed'),'true');
+  await page.locator('#flow-focus-ticket').selectOption('T5');
+  assert.equal(await page.locator('.focus-ticket-card h3').innerText(),'Fixture work T5');
+  assert.deepEqual(await page.locator('.focus-neighbors').allInnerTexts().then(rows=>rows.map(text=>text.includes('T8'))),[false,true]);
+  assert.match(await page.locator('.flow-detail').innerText(),/No dependency path to:/);
+  await page.locator('#flow-view').selectOption('route');
+  await page.locator('#flow-content[data-view=route]').waitFor();
+  assert.equal(await page.locator('.flow-scroll').isHidden(),true);
+  assert.equal(await page.locator('.flow-zoom-tools').isHidden(),true);
+  assert.equal(await page.locator('.route-ticket').count(),8);
+  assert.deepEqual(await page.locator('.route-ticket').evaluateAll(nodes=>nodes.map(n=>n.dataset.ticket)),['T1','T2','T3','T4','T5','T7','T6','T8']);
+  assert.equal(await page.locator('.route-ticket[data-ticket=T5]').getAttribute('aria-pressed'),'true');
+  assert.match(await page.locator('.route-ticket[data-ticket=T8]').innerText(),/Prerequisites: T5, T7/);
+  assert.match(await page.locator('.flow-edge-legend').innerText(),/Prerequisite[\s\S]*Suggested sequence/);
+  await page.locator('#flow-view').selectOption('dag');
+  await page.locator('#flow-content[data-view=dag]').waitFor();
+  assert.equal(await page.locator('.flow-scroll').isVisible(),true);
+  assert.equal(await page.locator('.flow-zoom-tools').isVisible(),true);
+  const baseScroll=await page.locator('.flow-scroll').evaluate(node=>node.scrollWidth);
+  for(let i=0;i<5;i++)await page.getByRole('button',{name:'Zoom in'}).click();
+  assert.equal(await page.locator('.flow-zoom-tools [aria-live=polite]').innerText(),'150%');
+  assert.ok(await page.locator('.flow-scroll').evaluate(node=>node.scrollWidth)>=baseScroll*1.4);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  await page.getByRole('button',{name:'Reset'}).click();
+  assert.equal(await page.locator('.flow-zoom-tools [aria-live=polite]').innerText(),'100%');
+  assert.equal(await page.locator('.flow-links path[data-kind=sequence]').count(),0);
+  const independent=page.locator('.flow-node[data-ticket=T5]');assert.equal(await independent.getAttribute('aria-pressed'),'true');
+  assert.deepEqual((await page.locator('.flow-links path[data-from]').evaluateAll(nodes=>nodes.map(n=>n.dataset.from+'>'+n.dataset.to))).sort(),['T1>T2','T2>T3','T3>T4','T4>T7','T5>T8','T7>T8']);
+  await independent.focus();await page.keyboard.press('Enter');assert.equal(await independent.getAttribute('aria-pressed'),'true');
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);assert.deepEqual(errors,[]);
+ }finally{await context.close();}
+});
+test('Route labels a missing authored order instead of inventing one',async()=>{
+ const oldSnapshot={generated:'2026-11-05T00:00:00Z',frontier:['alpha'],tickets:[ticket('alpha','open'),ticket('bravo','open')]};
+ const {context,page,errors}=await pageFor(390,{ticketFlow:{defaultScope:'all',scopes:[],view:'route'}},oldSnapshot);
+ try{
+  assert.equal(await page.locator('.route-ticket').count(),2);
+  assert.equal(await page.locator('.route-ticket[data-ticket=alpha] .route-order').innerText(),'F1');
+  assert.match(await page.locator('.route-ticket[data-ticket=alpha]').innerText(),/Native frontier/);
+  assert.equal(await page.locator('.route-ticket[data-ticket=bravo] .route-order').innerText(),'—');
+  assert.match(await page.locator('.route-ticket[data-ticket=bravo]').innerText(),/Unsequenced/);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);assert.deepEqual(errors,[]);
+ }finally{await context.close();}
+});
 for (const width of [1280,390]) test('decision choices, notes and clipboard fallback at '+width, async()=>{
  const decision={id:'scope',question:'Which scope?',context:'Sets delivery time.',status:'open',options:[{id:'small',label:'Small',detail:'Ships sooner.'},{id:'large',label:'Large',detail:'More coverage.'}],recommended:'small',reason:'Validate early.'};
  const {context,page,errors}=await pageFor(width,{decisions:[decision,{...decision,id:'old',status:'answered',answer:'Confirmed in chat.'}]});
@@ -87,13 +142,23 @@ if(process.env.DASHBOARD_CONSUMER_SNAPSHOT){
  for(const width of [1280,390])test('actual consumer snapshot remains complete at '+width,async()=>{
   const {context,page,errors}=await pageFor(width,{ticketFlow:{defaultScope:'all',scopes:[]}},consumer);
   try{
-   const expected=consumer.tickets.filter(t=>t.status!=='done');
+   const expected=consumer.tickets.filter(t=>t.status!=='done'&&t.status!=='cancelled');
    assert.deepEqual((await page.locator('.flow-node').evaluateAll(ns=>ns.map(n=>n.dataset.ticket))).sort(),expected.map(t=>t.id).sort());
    const ids=new Set(expected.map(t=>t.id)),edges=expected.flatMap(t=>(t.blocked_by||[]).filter(id=>ids.has(id)).map(id=>id+'>'+t.id)).sort();
    await page.waitForFunction(n=>document.querySelectorAll('.flow-links path[data-from]').length===n,edges.length);
    assert.deepEqual((await page.locator('.flow-links path[data-from]').evaluateAll(ns=>ns.map(n=>n.dataset.from+'>'+n.dataset.to))).sort(),edges);
    assert.match(await page.locator('.flow-counts').innerText(),new RegExp(expected.length+' shown'));
-   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);assert.deepEqual(errors,[]);
+   if(process.env.DASHBOARD_CAPTURE_DIR){mkdirSync(process.env.DASHBOARD_CAPTURE_DIR,{recursive:true});await page.screenshot({path:resolve(process.env.DASHBOARD_CAPTURE_DIR,'consumer-dag-'+width+'.png'),fullPage:true});}
+   await page.locator('#flow-view').selectOption('route');
+   assert.equal(await page.locator('.route-ticket').count(),expected.length);
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+   if(process.env.DASHBOARD_CAPTURE_DIR)await page.screenshot({path:resolve(process.env.DASHBOARD_CAPTURE_DIR,'consumer-route-'+width+'.png'),fullPage:true});
+   await page.locator('#flow-view').selectOption('focus');
+   await page.locator('#flow-focus-ticket').selectOption(expected[expected.length-1].id);
+   assert.equal(await page.locator('.focus-ticket-card').count(),1);
+   if(process.env.DASHBOARD_CAPTURE_DIR)await page.screenshot({path:resolve(process.env.DASHBOARD_CAPTURE_DIR,'consumer-focus-'+width+'.png'),fullPage:true});
+   const overflow=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth,elements:Array.from(document.body.querySelectorAll('*')).filter(node=>node.getBoundingClientRect().right>innerWidth+1).slice(0,8).map(node=>({tag:node.tagName,id:node.id,className:node.className,right:node.getBoundingClientRect().right,width:node.getBoundingClientRect().width}))}));
+   assert.ok(overflow.width<=overflow.viewport,JSON.stringify(overflow));assert.deepEqual(errors,[]);
    if(process.env.DASHBOARD_CAPTURE_DIR)await page.screenshot({path:resolve(process.env.DASHBOARD_CAPTURE_DIR,'consumer-flow-'+width+'.png'),fullPage:true});
   }finally{await context.close();}
  });

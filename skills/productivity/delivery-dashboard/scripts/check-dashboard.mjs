@@ -58,6 +58,7 @@ export function check(path, { strict = false, repo, claim, agent, run = execFile
     if (!flow || typeof flow !== "object" || Array.isArray(flow)) err("ticketFlow must be false or a configuration object");
     else {
       if (flow.enabled !== undefined && typeof flow.enabled !== "boolean") err("ticketFlow.enabled must be boolean");
+      if (flow.view !== undefined && !["focus", "route", "dag"].includes(flow.view)) err("ticketFlow.view must be focus, route or dag");
       if (flow.groupBy !== undefined && !["dependencies", "workstreams"].includes(flow.groupBy)) err("ticketFlow.groupBy must be dependencies or workstreams");
       const scopes = flow.scopes === undefined ? [] : flow.scopes;
       if (!Array.isArray(scopes)) err("ticketFlow.scopes must be a list");
@@ -171,13 +172,35 @@ export function check(path, { strict = false, repo, claim, agent, run = execFile
     });
   });
 
+  const snapshotRowsSafe = Boolean(snap && Array.isArray(snap.tickets) && Array.isArray(snap.frontier)
+    && snap.frontier.every((id) => typeof id === "string" && id)
+    && (snap.executionOrder === undefined || (Array.isArray(snap.executionOrder) && snap.executionOrder.every((id) => typeof id === "string" && id)))
+    && snap.tickets.every((ticket) => ticket && typeof ticket === "object" && !Array.isArray(ticket)
+      && typeof ticket.id === "string" && ticket.id && STATUSES.includes(ticket.status)
+      && (ticket.blocked_by === undefined || (Array.isArray(ticket.blocked_by) && ticket.blocked_by.every((id) => typeof id === "string" && id)))));
+  const snapshotRowsUsable = (() => {
+    if (!snap || !Array.isArray(snap.tickets) || !Array.isArray(snap.frontier)
+      || (snap.executionOrder !== undefined && !Array.isArray(snap.executionOrder))) return false;
+    const rows = snap.tickets, ids = new Set();
+    const rowShapeValid = rows.every((ticket) => {
+      return Boolean(ticket && typeof ticket === "object" && !Array.isArray(ticket)
+        && typeof ticket.id === "string" && ticket.id && STATUSES.includes(ticket.status)
+        && (ticket.blocked_by === undefined || (Array.isArray(ticket.blocked_by) && ticket.blocked_by.every((id) => typeof id === "string" && id))));
+    });
+    if (!rowShapeValid) return false;
+    rows.forEach((ticket) => ids.add(ticket.id));
+    return ids.size === rows.length
+      && rows.every((ticket) => (ticket.blocked_by || []).every((id) => ids.has(id)))
+      && snap.frontier.every((id) => ids.has(id) && rows.find((ticket) => ticket.id === id).status === "open")
+      && (snap.executionOrder === undefined || (new Set(snap.executionOrder).size === snap.executionOrder.length && snap.executionOrder.every((id) => ids.has(id))));
+  })();
   if (snap) {
     const list = snap.tickets, tids = new Set();
     if (!Array.isArray(list) || !Array.isArray(snap.frontier) || !(snap.generated === null || !Number.isNaN(Date.parse(snap.generated)))) err("gm-tickets needs generated (ISO time or null), frontier and tickets arrays; regenerate it with snapshot-tickets.mjs");
     else {
       tickets = list.length;
       if (snap.executionOrder !== undefined && (!Array.isArray(snap.executionOrder) || new Set(snap.executionOrder).size !== snap.executionOrder.length || snap.executionOrder.some((id) => typeof id !== "string" || !id))) err("gm-tickets.executionOrder must be a unique list of ticket ids; regenerate it from docs/plan.md");
-      if ((repo || policy?.mode === "serial" || policy?.mode === "parallel") && !Array.isArray(snap.executionOrder)) err("gm-tickets.executionOrder is required for repository comparison and execution policy; regenerate it from docs/plan.md");
+      if ((policy?.mode === "serial" || policy?.mode === "parallel") && !Array.isArray(snap.executionOrder)) err("gm-tickets.executionOrder is required for execution policy; regenerate it from docs/plan.md");
       list.forEach((t, i) => {
         const at = `ticket ${t && t.id ? t.id : "#" + i}`;
         if (!t || typeof t.id !== "string" || !t.id) return err(`${at}: id required`);
@@ -200,7 +223,7 @@ export function check(path, { strict = false, repo, claim, agent, run = execFile
   }
 
   if (repo) {
-    if (!snap || !Array.isArray(snap.tickets) || !Array.isArray(snap.frontier)) err("full-board comparison requires a valid ticket snapshot");
+    if (!snapshotRowsSafe) err("full-board comparison requires a valid ticket snapshot; malformed ticket row or data");
     else try {
       const board = authoritativeProjection(resolve(repo), run);
       run("tkt", ["sync-plan", "--check", "--strict", "--brief"], { cwd: resolve(repo), encoding: "utf8", env: { ...process.env, TKT_ADVICE: "0" } });
@@ -215,7 +238,7 @@ export function check(path, { strict = false, repo, claim, agent, run = execFile
       }
       if (mismatches.length) err(`dashboard ticket facts differ from the authoritative board (missing, extra or stale rows: ${mismatches.join(", ")})`);
       if (JSON.stringify(snap.frontier) !== JSON.stringify(board.frontier)) err("dashboard frontier differs from the authoritative board");
-      if (JSON.stringify(snap.executionOrder || []) !== JSON.stringify(board.executionOrder)) err("dashboard execution order differs from the maintained docs/plan.md order");
+      if (snap.executionOrder !== undefined && JSON.stringify(snap.executionOrder) !== JSON.stringify(board.executionOrder)) err("dashboard execution order differs from the maintained docs/plan.md order");
     } catch (error) {
       const output = [error.stderr, error.stdout].map((value) => Buffer.isBuffer(value) ? value.toString() : value)
         .filter((value) => typeof value === "string" && value.trim()).join("\n").trim();
@@ -223,7 +246,8 @@ export function check(path, { strict = false, repo, claim, agent, run = execFile
     }
   }
 
-  if (policy && typeof policy === "object" && ["serial", "parallel"].includes(policy.mode) && snap && Array.isArray(snap.tickets) && Array.isArray(snap.executionOrder)) {
+  const policySnapshotUsable = Boolean(snapshotRowsUsable && Array.isArray(snap.executionOrder));
+  if (policy && typeof policy === "object" && ["serial", "parallel"].includes(policy.mode) && policySnapshotUsable) {
     const ticketsById = new Map(snap.tickets.map((ticket) => [ticket.id, ticket]));
     const order = snap.executionOrder;
     const active = snap.tickets.filter((ticket) => ticket.status === "in_progress");
@@ -254,6 +278,8 @@ export function check(path, { strict = false, repo, claim, agent, run = execFile
         }
       }
     }
+  } else if (policy && typeof policy === "object" && ["serial", "parallel"].includes(policy.mode) && snap) {
+    err("execution policy requires a structurally valid ticket snapshot; see ticket validation errors above");
   }
 
   if (custom) {
@@ -268,7 +294,8 @@ export function check(path, { strict = false, repo, claim, agent, run = execFile
     if (!Array.isArray(overview) || overview.length > 5 || !equalIds(overview, ids.slice(0, overview.length))) err("overview may show at most five newest entries, in order");
     if (custom.historySearchable !== true || !equalIds(custom.historyEntryIds, ids)) err("searchable history must include every entry, including the overview entries");
     const plan = custom.plan, tickets = snap && Array.isArray(snap.tickets) ? snap.tickets : [];
-    if (!plan || typeof plan !== "object" || Array.isArray(plan) || !Array.isArray(plan.currentIds) || !Array.isArray(plan.historyIds)) err("custom plan needs currentIds and historyIds lists");
+    if (!snapshotRowsSafe) err("custom plan comparison requires a structurally valid ticket snapshot");
+    else if (!plan || typeof plan !== "object" || Array.isArray(plan) || !Array.isArray(plan.currentIds) || !Array.isArray(plan.historyIds)) err("custom plan needs currentIds and historyIds lists");
     else {
       const expectedCurrent = tickets.filter((ticket) => !["done", "cancelled"].includes(ticket.status)).map((ticket) => ticket.id);
       const expectedHistory = tickets.filter((ticket) => ["done", "cancelled"].includes(ticket.status)).map((ticket) => ticket.id);
@@ -309,7 +336,7 @@ export function check(path, { strict = false, repo, claim, agent, run = execFile
       const shown = (s.latest ? 1 : 0) + s.recent.length;
       logic = { overview: shown, history: shown + s.rest.length, total: entries.length };
       if (shown > n || logic.history !== entries.length) err(`selection logic broken: overview ${shown}, history ${logic.history}, total ${entries.length}`);
-      if (snap && Array.isArray(snap.tickets) && api.planGroups) {
+      if (snapshotRowsSafe && api.planGroups) {
         const g = api.planGroups(snap), grouped = Object.values(g).reduce((s, x) => s + x.length, 0);
         logic.plan = grouped;
         if (grouped !== snap.tickets.length) err(`plan grouping broken: ${grouped} of ${snap.tickets.length} tickets shown`);

@@ -1,61 +1,59 @@
 # #118 execution workflow projection
 
-## Behavior
+## Current implementation
 
-The generated `gm-tickets.executionOrder` is the first-occurrence sequence of ticket IDs in the
-ordered tables in `docs/plan.md`. Repeated rows keep the first position; changing a ticket status
-does not renumber the sequence. All unfinished tickets remain in the dependency diagram and Plan
-list. A ticket missing from the authored sequence is shown in a separate Unscheduled list and is
-never silently appended to the suggested sequence.
+The generated `gm-tickets.executionOrder` contains the first occurrence of each ticket ID in the
+ordered tables in `docs/plan.md`. Repeated rows keep their first position; status changes do not
+renumber the authored order. The Route view projects this order while placing unfinished
+prerequisites first, without changing the plan or inventing `blocked_by` edges. Missing authored
+positions remain labeled unsequenced; an older off-mode snapshot without execution order uses
+native-frontier markers and labels all other tickets unsequenced.
 
-The horizontal numbered rail is a suggested execution sequence. Its arrows are explicitly labeled
-as scheduling preference. The graph's arrows remain actual `blocked_by` edges, so independent work
-is never presented as a prerequisite. Current work, the first native-frontier ticket eligible by
-sequence and real dependencies, deferred status, unresolved planning gates and true blockers are
-shown separately. The graph has keyboard-operable zoom controls and an internal scroll region.
+The Plan flow has three views over one snapshot. Focus shows one selected ticket with immediate
+prerequisites and dependents, with an all-ticket picker. Route is a compact numbered list that
+wraps on narrow screens and labels actual prerequisite IDs. DAG draws only actual dependency
+edges. Selection persists across views, status uses gem-tone accents with text and glyph labels,
+and the DAG has keyboard-accessible zoom controls inside its scroll area. A current/next summary
+remains visible; ticket details and history remain reachable below.
 
-Execution admission is opt-in through `gm-config.executionPolicy.mode` (`off`, `serial` or
+Execution admission remains opt-in through `gm-config.executionPolicy.mode` (`off`, `serial` or
 `parallel`); absent policy means `off`. The full-board read-only checker rejects multiple active
 tickets in serial mode. Parallel mode requires a unique nonempty native `assignee` for each active
-ticket. `--claim ID` checks the full board and maintained plan; parallel preflight also takes
-`--agent OWNER`. It is not an atomic reservation. Run the actual native claim immediately after a
-passing preflight and refresh/recheck after tracker changes. No Git hook, claim mutation, second
-owner registry or new dependency edge was added.
+ticket. Snapshots omit native assignee metadata unless parallel mode is selected. `--claim ID`
+checks the full board and maintained plan; parallel preflight also takes `--agent OWNER`. It is not
+an atomic reservation. Run the native claim immediately after a passing preflight and refresh or
+recheck after tracker changes. No Git hook, claim mutation, second owner registry or new dependency
+edge was added.
+
+The source branch preserves the original #118 commits and merges current main at `b87eeced`; the
+live `docs/status.html` remains parent-owned. Its saved snapshot is currently missing `executionOrder`,
+so parent integration must refresh `gm-tickets` before publishing the updated Route view.
 
 ## Verification
 
-Observed board inventory at implementation time: 252 tickets total, 60 unfinished, and zero
-unfinished tickets absent from the authored plan order. No ticket identities were copied into this
-report.
+The read-only snapshot from current main contained 257 tickets, 61 unfinished tickets, 41 frontier
+IDs and 172 authored plan IDs; no unfinished ticket was absent from the authored order. The saved
+`docs/status.html` projection still has an empty `executionOrder`, so the parent-owned refresh is
+required before publication. No ticket identities were copied into this report.
 
 | Check | Result |
 | --- | --- |
-| `node --test scripts/delivery-dashboard.test.mjs` | Pass, 63/63, including CLI and API regressions for claim preflight with policy off. Raw log SHA-256: `331BFEFFE2E80DB7C8278B428F3735F7170B2A99AD6A9934CC7F5B8955130DB5`. |
-| `node --test scripts/delivery-dashboard-browser.test.mjs` with local Playwright and Chrome | Pass, 7/7 at 1280px and 390px; includes ticket-detail keyboard navigation, offline-after-load state, a 150% graph zoom with internal scrolling, and unscheduled-ticket separation. Raw log SHA-256: `C2C0F73AEE078107E35D760153EBD8C8EAD8129D18E2EE8302A0A9EB4D81AAD`. |
-| `node --check` on both dashboard tests and both dashboard scripts | Pass. |
-| `git diff --check` | Pass. |
-| `node scripts/skill-syntax.test.mjs` | Infrastructure error: the assigned worktree lacks the `yaml` dependency. No dependency install attempted; parent integration can run the repository gate with its dependency tree. |
-| 195px effective CSS viewport comparison | Base: 223px document width with a 207px Plan child. Candidate: 195px document width. This simulates a half-width reflow breakpoint; it is not native browser zoom. Raw comparison SHA-256: `147D958E68357686D09E26B38D51E94CD55896ACBB44D5F4BC0388E6E871EFC4`. |
+| `node --test scripts/delivery-dashboard.test.mjs` | Pass, 64/64. Covers malformed rows and claim preflight returning structured errors, plan order, policy modes, projection and assignee omission outside parallel mode. Raw log `resume-unit-final-4.log`, SHA-256 `0434FA9B91382A0B8F40266C9ED428E4771207A3A6395CEBDC40EEC029DA41D1`. |
+| `node --test scripts/delivery-dashboard-browser.test.mjs` with local Playwright and Chrome | Pass, 11/11 at 1280px and 390px. Exercises Focus, Route, DAG, selection persistence, true dependency labels, unsequenced fallback, keyboard selection, 150% DAG zoom with internal scrolling, and the current 257-ticket snapshot in all views. Raw log `resume-browser-final-4.log`, SHA-256 `8B48F3D33CAD4DA613C3069F3CDEE556BCEE2D3E217F0293E654F930CB861260`. |
+| `node --check` on both dashboard tests and both dashboard scripts; strict checker on template and example | Pass. |
+| `git diff --check` | Pass before commit. |
+| `node scripts/skill-syntax.test.mjs` | Infrastructure error: `yaml` is not installed in the assigned worktree. No dependency install attempted. Raw log `resume-skill-syntax.log`, SHA-256 `F224217CAE7A151EE28ED5BE5BF415D9906D0274AD5E1D2FA3C58B090E6AA6A5`. Parent owns integrated gates. |
 
-Local headless captures use synthetic data. Laptop screenshot SHA-256:
-`75C715BCA9459F322905F97A206B4A5981FA498EDF9F3774E118E49890F1469E`; phone screenshot:
-`BA94E8E254F37D126A597D405277CB97798257CE17204FCDD06D508D5FFECAFD`; 150% zoom laptop:
-`3E0B8BF85452778955BAFCFC4115F1B2BEC678BDE7000C307185C1A7069438EE`; 150% zoom phone:
-`26D645A68037819F14412D2C34A5D7E88694BAD1A01FA9C4EA9F539059D37A63`. These captures prove the renderer against local fixtures, not the deployed Site, actual user data, physical phones or a user-visible app surface. Parent-owned live dashboard integration and pre-merge gate remain separate.
+The 390px actual-board captures are local headless observations against the read-only full snapshot,
+not the published Site or a physical phone. DAG image `consumer-dag-390.png` SHA-256 `88DE720708CD7D5F58D1D531B2E20CBD39A45BA9831E1ECAC1E4E0FBDEE3D2E8`; Route
+`consumer-route-390.png` SHA-256 `9A2CC789C57AAA58722BCAF154AD3949E7004691DF2787762F13E35793F3DFD7`; Focus `consumer-focus-390.png` SHA-256 `F8078A9446B85FC4EF545E626A7B429F29DC2C796ECB6D5715BA30866F6ECD96`. Captures and the
+snapshot stay in the private ticket evidence family, not in Git. The browser passed page-width
+checks for DAG, Route and Focus. No user-visible app surface or physical-device use is claimed.
 
-Earlier failing attempts remain as separate raw logs in the retained ticket-scoped worker evidence family; they exposed and corrected test fixture assumptions, the zoom-control placement, and narrow-width overflow. An intermediate browser run (`browser-9.log`) passed 6/6 before graph zoom controls were added; the final `browser-final-2.log` run passed 7/7 with those controls and supersedes that coverage. The final passing logs above do not erase the earlier records. The 678 KB evidence family includes the attempts, browser captures and small helper scripts; it remains retained under ticket #118 for parent integration and final evidence disposition.
-
-Failure classifications: `unit-1.log` did not parse due to a malformed new test fixture; `unit-2.log`
-and `unit-final.log` each had one fixture expectation failure (missing execution-order metadata,
-then a missing native-frontier fixture value). `browser-1.log` exposed an unsupported `page.setOffline`
-API and an incorrect CSS-zoom simulation; the test now uses `BrowserContext.setOffline` and a
-half-width effective viewport, separately from actual graph zoom controls. `browser-2.log` through
-`browser-9.log` captured the inherited Plan-panel overflow and its narrow-layout iterations;
-`baseline-viewport.log` confirmed the 223px/195px overflow existed at base. `browser-10.log` timed
-out because zoom controls were inside a collapsed details element; `browser-11.log` had a test click
-count that reached 140% while expecting 150%. `claim-bypass-red.log` confirmed the CLI returned exit
-0 and the API returned `ok:true` for a claim with execution policy off; its SHA-256 is
-`1D0DBC8F16B0820EF832F98C46B93C383A1B9A1557A583FD11B7A718D600692E`. The preflight guard now runs
-before mode-specific checks. `claim-bypass-green.log` had one test expectation mismatch after the
-guard correctly reported policy-off; `claim-bypass-green-2.log` is the final 63/63 run, SHA-256
-`331BFEFFE2E80DB7C8278B428F3735F7170B2A99AD6A9934CC7F5B8955130DB5`.
+Earlier failing attempts and the original #118 evidence remain retained separately; this candidate
+does not erase them. The previous candidate's 195px viewport comparison is half-width reflow
+simulation, not native zoom, and is historical. The latest 150% check uses the DAG zoom controls.
+Earlier `claim-bypass-red.log` still records the CLI exit-0/API `ok:true` defect; the repaired
+preflight guard is covered by the current 64/64 suite. The former overflow, zoom-control placement,
+selection and fixture failures remain identifiable by their prior raw log filenames. Current
+passing logs above supersede their checks without rewriting those records.

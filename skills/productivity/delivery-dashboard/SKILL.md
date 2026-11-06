@@ -68,12 +68,17 @@ stays out of the way, under folds and links.
    including deferred tickets; tag-based work-stream views and completed context are optional.
    Configure them through `gm-config.ticketFlow` per the [flow contract](references/dashboard-contract.md#remaining-ticket-flow).
    Set `ticketFlow: false` when a graph does not help the owner's task; keep every ticket in the list.
+   The `focus`, `route` and `dag` views share the same snapshot: Focus reduces the view to one
+   ticket and its immediate neighbors, Route is a compact numbered sequence with real prerequisites
+   labelled separately, and DAG draws only actual dependencies. Selection carries across views.
    If the project has an explicit execution queue, preserve and link to it; the snapshot's frontier
    and dependency graph do not replace that queue or justify adding artificial blockers.
    The snapshot projects ticket IDs from `docs/plan.md`'s ordered tables, keeping each ID's first
    position across status changes. For a project that opts into serial or parallel execution,
    configure `gm-config.executionPolicy.mode` and use the read-only checker gate before a claim
    and after each tracker status change; the default is `off`.
+   The snapshot includes native ticket assignees only for `parallel` mode; off and serial
+   snapshots omit owner metadata.
 
 6. **Let the page roll.** The overview shows up to five newest entries; the "All entries" tab
    keeps every entry, including the overview entries, as a collapsed row with search and filters.

@@ -99,6 +99,7 @@ availability; keep those project facts outside the shared renderer.
   "enabled": true,
   "defaultScope": "all",
   "groupBy": "workstreams",
+  "view": "dag",
   "scopes": [
     {"id": "build", "label": "Build work", "tags": ["build", "verification"]}
   ]
@@ -117,6 +118,18 @@ the configured scope order; a ticket matching several scopes belongs to the firs
 and unmatched tickets remain in Other work. Cross-stream dependency edges remain
 visible. The arrangement control can switch back to dependency depth. These are
 display choices, not ticket sorting or scheduling overrides.
+
+`ticketFlow.view` may select `focus`, `route` or `dag` (default `dag`). All views share one
+snapshot and preserve the selected ticket when switching. **Focus** shows a selected ticket
+with its immediate prerequisites and dependents; its picker reaches every snapshot ticket,
+while the complete searchable list stays below. **Route** shows a compact, responsive numbered
+sequence. It follows the maintained plan order while moving work after its unfinished
+prerequisites in the projection only. Each step names its actual prerequisites; the Route view
+does not create dependency edges or rewrite the plan. **DAG** shows actual prerequisite edges
+only. If an older off-mode snapshot has no authored order, native frontier rows are marked `F`
+and all other rows are labeled unsequenced; the view does not infer a plan queue from IDs. The
+current and next summary stays visible across views. State uses gem-tone accents plus
+text and glyphs, so status and edge meaning do not depend on color alone.
 
 The flow reads left to right. Columns are steps: a ticket sits one step after its deepest
 visible prerequisite. Work-stream mode stacks the streams as horizontal lanes over the
@@ -146,10 +159,10 @@ Selecting a ticket highlights its transitive prerequisites and dependents, lists
 completed prerequisites (including missing snapshot references), and links to its ticket row.
 The readable prerequisite list and glyph/text states supplement arrows and colour. The diagram
 scrolls internally on small screens. Its zoom group has keyboard-accessible in, out and reset
-buttons; zoom changes the graph inside that scroll region. A separate suggested-order rail uses
-numbered links and sequence arrows. Dependency arrows remain actual `blocked_by` edges; independent
-tickets are never joined by invented prerequisites. The document must not overflow. Inspect a
-whole chain at laptop/phone widths; DOM membership alone does not prove that its path is understandable.
+buttons; zoom changes the graph inside that scroll region. Dependency arrows remain actual
+`blocked_by` edges; independent tickets are never joined by invented prerequisites. The document
+must not overflow. Inspect the entire Route at laptop/phone widths; DOM membership alone does not
+prove that its path is understandable.
 
 When changing this renderer, run both the ordinary contract fixtures and the explicit local browser
 gate: `node --test scripts/delivery-dashboard-browser.test.mjs`, with local `PLAYWRIGHT_MODULE` and
@@ -158,10 +171,12 @@ tools are test prerequisites, not dashboard runtime resources; no CDN or network
 
 `gm-tickets` holds `{generated, frontier, executionOrder, tickets}`: the snapshot time, ids `tkt ready`
 returns in order, the first-occurrence ticket ID sequence from ordered `docs/plan.md` tables, and each ticket's
-`id`, `title`, `status`, `priority`, `blocked_by`, `tags` and native `assignee` from `tkt query`, plus optional `gate: {kind, reason}` derived from ticket tags/body and
+`id`, `title`, `status`, `priority`, `blocked_by` and `tags` from `tkt query`, plus optional
+`gate: {kind, reason}` derived from ticket tags/body and
 `body_id`, the Git blob identity computed from the current ticket file bytes, including valid
 uncommitted edits (not the Git HEAD version). This catches body changes without a separate
-receipt or freshness registry.
+receipt or freshness registry. Native `assignee` is included only when the dashboard opts into
+parallel execution; the default-off and serial snapshots omit owner metadata.
 For CLI versions that omit tags in query output, the snapshot helper fills missing
 tags from the same ticket files' inline/block tag lists without changing CLI-provided tags. Regenerate it after every ticket change rather than editing it; the page stays
 offline, so it shows the board as of `generated`. A blocker missing from the snapshot counts as
