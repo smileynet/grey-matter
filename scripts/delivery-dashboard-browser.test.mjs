@@ -148,6 +148,7 @@ if(process.env.DASHBOARD_CONSUMER_SNAPSHOT){
    await page.waitForFunction(n=>document.querySelectorAll('.flow-links path[data-from]').length===n,edges.length);
    assert.deepEqual((await page.locator('.flow-links path[data-from]').evaluateAll(ns=>ns.map(n=>n.dataset.from+'>'+n.dataset.to))).sort(),edges);
    assert.match(await page.locator('.flow-counts').innerText(),new RegExp(expected.length+' shown'));
+   await context.setOffline(true);
    if(process.env.DASHBOARD_CAPTURE_DIR){mkdirSync(process.env.DASHBOARD_CAPTURE_DIR,{recursive:true});await page.screenshot({path:resolve(process.env.DASHBOARD_CAPTURE_DIR,'consumer-dag-'+width+'.png'),fullPage:true});}
    await page.locator('#flow-view').selectOption('route');
    assert.equal(await page.locator('.route-ticket').count(),expected.length);
