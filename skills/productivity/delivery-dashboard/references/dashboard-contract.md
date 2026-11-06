@@ -118,6 +118,19 @@ and unmatched tickets remain in Other work. Cross-stream dependency edges remain
 visible. The arrangement control can switch back to dependency depth. These are
 display choices, not ticket sorting or scheduling overrides.
 
+The flow reads left to right. Columns are steps: a ticket sits one step after its deepest
+visible prerequisite. Work-stream mode stacks the streams as horizontal lanes over the
+same steps. Each line runs from one prerequisite to the ticket it unlocks; there is no
+shared rail, and a ticket is placed level with its prerequisites to keep lines short. A
+compact card shows id, state pill, title (two lines), how many unfinished tickets it
+transitively unlocks and what it still needs. Colour follows state: green can start, cyan
+in progress, amber planning gate, slate waiting (queued work is not drawn as failure),
+dashed deferred. Lines leaving startable work are green; the longest remaining chain of
+unfinished tickets is cyan. Above the graph, "Start here" lists in-progress work and then
+up to four startable tickets ranked by what they unlock, and "Longest remaining chain"
+names that chain; both select and scroll to the ticket. Hover or focus previews a ticket's
+chain; selection highlights it and fades the rest.
+
 For an unresolved planning gate, add one `gate:decision` or `gate:evidence` tag to
 the ticket and explain the specific missing decision or observation under
 `## Planning gate` in its body. The snapshot derives `{kind, reason}` from that
@@ -315,6 +328,7 @@ Pick the visual that answers the person's question fastest:
 | --- | --- |
 | How far along is it? | `progress` (done of total) |
 | Where are we in the journey? | `steps` (done, now, next) |
+| What order should I read these in? | `steps` with `mode: "sequence"`, a caption, and items with labels only |
 | Did the change help? | `metrics` (2 to 4 tiles) or `compare` (before and after) |
 | What does it look like? | `image` of a real capture, labelled with its fidelity |
 

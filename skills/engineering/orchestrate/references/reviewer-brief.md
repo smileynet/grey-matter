@@ -4,6 +4,7 @@
 - Base / candidate SHA / worktree: <fixed revisions and checkout>
 - Assigned scope: <expected files and acceptance criteria>
 - Available tools: <read-only tools; shell only when enforced read-only>
+- Visual review, if assigned: <authorized browser or Playwright lane, image access, target and widths> ([preflight](../../code-review/references/visual-critics.md))
 - Parent/report channel: <native mechanism>
 
 Use one fresh context for this change. Write the risks and expectations from the
@@ -19,7 +20,10 @@ Drop duplicate findings mechanically owned by a freshly green gate on this SHA;
 check whether the gate actually selected that coverage. A blocking finding names
 a concrete trigger and observable wrong outcome tied to acceptance or material risk.
 
-Return PASS or BLOCK plus evidence and remaining unknowns. Send nonblocking
+Return PASS or BLOCK plus evidence and remaining unknowns. For each material
+finding, return the confirmed trigger, recommended mitigation with its source
+and check, or a bounded follow-on spike when the remedy remains uncertain.
+Send nonblocking
 findings to the parent as proposed follow-up tickets. In a read-only review,
 the parent files tickets on the reviewer's behalf; do not mutate source, tracker,
 Git state or external services to satisfy code-review's ticket-filing step.

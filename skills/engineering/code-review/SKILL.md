@@ -14,6 +14,13 @@ Both axes run as **parallel sub-agents** so they don't pollute each other's cont
 
 ### 1. Pin the review target
 
+For repeated review of revised candidates, apply the
+[shared critic round budget and reassessment](../retro/references/convergence.md#critic-review-budget).
+
+For UX, layout, style, or visual changes, use the
+[browser and visual evidence workflow](references/visual-critics.md). Bind the
+critic's Playwright or native browser lane and image access to the review packet.
+
 Resolve an explicit request for staged or uncommitted work from these modes. Ask
 only when the requested target is ambiguous (for example, both staged and unstaged
 changes exist and the user did not select which).
@@ -82,6 +89,16 @@ If the spec is missing, skip the Spec sub-agent and note this in the final repor
 For a high-stakes diff, an optional **cross-family second opinion** runs the Standards brief through a different model family's CLI: [references/cross-family.md](references/cross-family.md).
 
 ### 5. File findings as tickets
+
+Before recommending a fix, confirm the finding on the pinned candidate. Record
+the trigger, observed result, expected result, and effect. Keep hypotheses and
+observations separate when reproduction is unavailable. For external behavior
+or uncertain remedies, consult current primary sources and version-matched
+upstream guidance, including recommended mitigations. Check that the remedy
+fits the project's constraints. Propose the smallest supported repair or
+temporary mitigation and name its verification. If the choice still depends
+on an unobserved behavior, propose a [bounded follow-on spike](../prototype/references/technical-spikes.md)
+with the deciding question, observation, budget, and stop condition.
 
 Protect the review target before running a ticket mutation. Inspect the installed
 tracker's documented commit behavior and verify its ticket-only commit isolation

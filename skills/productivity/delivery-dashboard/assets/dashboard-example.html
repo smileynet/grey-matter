@@ -65,12 +65,12 @@ details.row .body{padding:0 0 14px}
 .compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}.compare figcaption{text-align:center}
 .compare figure{margin:0}
 .tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px}
-.tools input[type=search]{flex:1 1 240px;min-width:0;max-width:100%;font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px}
+.tools input[type=search]{flex:1 1 240px;font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px}
 .tools .on{border-color:var(--blue);background:#1b3256}
 .count{color:var(--muted);font-size:14px;margin:0 0 10px}
 .more{margin-top:10px}
 .stack{display:flex;height:14px;border:1px solid var(--line);border-radius:99px;overflow:hidden;background:var(--bg)}
-.stack i{display:block;height:100%}.s-done{background:var(--blue2)}.s-in_progress{background:var(--cyan)}.s-ready{background:var(--ok)}.s-blocked{background:var(--bad)}.s-backlog{background:#3a4a6a}.s-cancelled{background:#667085}
+.stack i{display:block;height:100%}.s-done{background:var(--blue2)}.s-in_progress{background:var(--cyan)}.s-ready{background:var(--ok)}.s-blocked{background:#7f8fb0}.s-backlog{background:#3a4a6a}.s-cancelled{background:#667085}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted);margin:8px 0 0}
 .lanes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 .lane{border:1px solid var(--line);border-radius:12px;padding:12px;background:#0e1830}
@@ -78,13 +78,51 @@ details.row .body{padding:0 0 14px}
 .lane ol{margin:0;padding-left:20px;font-size:14px}.lane li{margin:4px 0}
 .tid{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
 .legend .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+#tickets .group{text-transform:none;letter-spacing:0;font-size:14px}
+.ticket-section-title{font-size:19px;margin:24px 0 10px;font-weight:650}
+.ticket-row[data-status="in_progress"]{--ticket-tone:#78e1ba}
+.ticket-row[data-status="ready"]{--ticket-tone:#a4c6ff}
+.ticket-row[data-status="blocked"]{--ticket-tone:#d8b5ff}
+.ticket-row[data-status="backlog"]{--ticket-tone:#f0a9c1}
+details.ticket-row{border-inline-start:3px solid var(--ticket-tone,var(--line))}
+details.ticket-row>summary .when{min-width:3ch}
+details.ticket-row>summary .chip{color:var(--ticket-tone,var(--muted));border-color:var(--line)}
 h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;font-weight:600}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:no-preference){.card,details.row{transition:border-color .15s}}
 @media (max-width:560px){.card{padding:16px}details.row .when{min-width:0}}
-@media(max-width:280px){.lanes{grid-template-columns:minmax(0,1fr)}.lane{min-width:0}}
-#ticket-flow{margin-top:0}.flow-options>summary,.flow-readable>summary{cursor:pointer;min-height:44px;padding:8px 0}.flow-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:8px 0}.flow-controls label{display:flex;align-items:center;gap:8px;min-height:44px;max-width:100%;min-width:0}.flow-controls select{font:inherit;padding:10px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;min-width:0;max-width:100%}.flow-counts,.flow-notice{font-size:14px;color:var(--muted)}.flow-notice{border-left:3px solid var(--blue);padding:10px}.flow-scroll{max-height:820px;overflow:auto;border:1px solid var(--line);padding:16px;margin:16px 0}.flow-canvas{position:relative;width:max-content;min-width:100%;padding:12px 24px}.flow-layers{display:flex;flex-direction:column;gap:42px;position:relative;z-index:1}.flow-layer{display:grid;grid-template-columns:repeat(3,240px);gap:16px}.flow-layer h3{grid-column:1/-1;font-size:14px;margin:0;color:var(--muted)}.flow-node{font:14px/1.45 system-ui;text-align:left;white-space:normal;overflow-wrap:anywhere;background:var(--panel);color:var(--text);border:2px solid var(--line);border-radius:8px;padding:12px;min-height:110px;cursor:pointer}.flow-node strong,.flow-node span,.flow-node small{display:block}.flow-node span,.flow-node small{margin-top:7px}.flow-node small{color:var(--muted);font-size:12px}.flow-node[data-state=ready]{border-color:var(--ok)}.flow-node[data-state=in_progress]{border-color:var(--cyan)}.flow-node[data-state=backlog]{border-style:dashed}.flow-node[data-state=blocked]{border-color:var(--bad)}.flow-node[data-related=unrelated]{opacity:.55}.flow-node[data-related=before],.flow-node[data-related=after]{border-color:var(--blue)}.flow-node[aria-pressed=true]{outline:3px solid var(--ask);outline-offset:3px}.flow-links{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:visible}.flow-links path{fill:none;stroke:var(--muted);stroke-width:2}.flow-links .flow-arrow{fill:var(--muted);stroke:none}.flow-links path[data-satisfied=true]{stroke-dasharray:5 5}.flow-links path[data-related=true]{stroke:var(--blue);stroke-width:3}.flow-detail{border-left:3px solid var(--blue);padding:12px 16px;background:var(--panel);margin:16px 0}.flow-detail h3{margin:0 0 8px}.flow-detail p{margin:8px 0}.flow-readable li{margin:8px 0}@media(max-width:560px){.flow-scroll{max-height:620px;padding:10px}.flow-canvas{padding:10px 16px}}
-.flow-node[data-gate=decision],.flow-node[data-gate=evidence]{border-color:var(--ask)}
+#ticket-flow{margin-top:0}.flow-options>summary,.flow-readable>summary{cursor:pointer;min-height:44px;padding:8px 0}.flow-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:8px 0}.flow-controls label{display:flex;align-items:center;gap:8px;min-height:44px;max-width:100%;min-width:0}.flow-controls select{font:inherit;padding:10px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;min-width:0;max-width:100%}
+.flow-counts,.flow-notice{font-size:14px;color:var(--muted)}.flow-notice{border-left:3px solid var(--blue);padding:10px}
+.flow-node,.flow-pick{--c:var(--line)}
+:is(.flow-node,.flow-pick)[data-state=ready],.fl-ready{--c:var(--ok)}:is(.flow-node,.flow-pick)[data-state=in_progress],.fl-in_progress{--c:var(--cyan)}.flow-node[data-state=blocked],.fl-blocked{--c:#7f8fb0}.flow-node[data-state=backlog],.fl-backlog{--c:#56688c}.flow-node[data-state=done],.fl-done{--c:var(--blue2)}.flow-node[data-state=cancelled]{--c:#667085}.flow-node[data-gate=decision],.flow-node[data-gate=evidence],.fl-decision{--c:var(--ask)}
+.flow-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:4px 0 0}.flow-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}.flow-legend .fl-backlog{background:none;border:2px dashed var(--c)}
+.flow-brief{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;margin:14px 0}.flow-brief>div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}.flow-brief h3{margin:0 0 6px;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}.flow-brief .meta{margin:6px 0 0}
+.flow-pick{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;font:inherit;font-size:14px;color:var(--text);background:none;border:0;border-left:3px solid var(--c);border-radius:6px;padding:8px 10px;margin:4px 0;min-height:44px;cursor:pointer}.flow-pick:hover{background:var(--panel2)}.flow-pick b{color:var(--c);font-variant-numeric:tabular-nums;flex:0 0 auto}.flow-pick span{min-width:0;overflow-wrap:anywhere}.flow-pick em{margin-left:auto;font-style:normal;color:var(--muted);font-size:12.5px;white-space:nowrap}
+.flow-chain ol{display:flex;flex-wrap:wrap;gap:6px 4px;list-style:none;margin:6px 0 0;padding:0}.flow-chain li{display:flex;align-items:center;gap:4px}.flow-chain li+li::before{content:"→";color:var(--cyan)}.flow-chain button{font:inherit;font-size:13px;font-variant-numeric:tabular-nums;color:var(--text);background:#0e1830;border:1px solid var(--cyan);border-radius:99px;padding:2px 12px;min-height:32px;cursor:pointer}.flow-chain button:hover{background:var(--panel2)}
+.flow-scroll{max-height:760px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0;background:radial-gradient(circle at 1px 1px,#1a2742 1px,transparent 0) 0 0/22px 22px,var(--bg)}
+.flow-canvas{position:relative;min-width:100%}.flow-links{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.flow-col{position:absolute;top:12px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}.flow-col small{margin-left:8px;text-transform:none;letter-spacing:0;font-weight:400}
+.flow-band{position:absolute;left:0;right:0;height:30px;display:flex;align-items:center;gap:8px;padding:0 18px;border-top:1px solid var(--line);font-size:13.5px;font-weight:600}.flow-band small{color:var(--muted);font-weight:400}
+.flow-node{position:absolute;display:flex;flex-direction:column;gap:4px;font:13px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left;color:var(--text);background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:10px;padding:8px 10px;cursor:pointer;overflow:hidden;z-index:1;transition:opacity .15s,border-color .15s,box-shadow .15s}
+.flow-node[data-state=ready],.flow-node[data-state=in_progress]{background:linear-gradient(90deg,color-mix(in srgb,var(--c) 14%,var(--panel)),var(--panel) 70%)}
+.flow-node[data-state=backlog]{border-style:dashed;border-left-style:solid;opacity:.78}.flow-node[data-state=done],.flow-node[data-state=cancelled]{opacity:.6}
+.flow-node[data-critical=true]{border-color:color-mix(in srgb,var(--cyan) 55%,var(--line));border-left-color:var(--c)}
+.flow-node:hover{border-color:var(--blue);border-left-color:var(--c)}
+.fn-top{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:12px}.fn-id{color:var(--muted);font-variant-numeric:tabular-nums}.fn-state{color:var(--c);white-space:nowrap;font-weight:600}
+.fn-title{font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.fn-foot{margin-top:auto;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fn-foot b{color:var(--text)}
+.flow-links path{fill:none;stroke:#465a80;stroke-width:1.6;transition:opacity .15s}.flow-links .flow-arrow{stroke:none}.fa-base{fill:#465a80}.fa-live{fill:var(--ok)}.fa-critical{fill:var(--cyan)}.fa-related{fill:var(--blue)}
+.flow-links path[data-live=true]{stroke:var(--ok);opacity:.85}.flow-links path[data-critical=true]{stroke:var(--cyan);stroke-width:2.4}.flow-links path[data-satisfied=true]{stroke-dasharray:4 5}.flow-links path[data-related=true]{stroke:var(--blue);stroke-width:3;opacity:1}
+.flow-canvas[data-preview] .flow-node[data-near=false]{opacity:.3}.flow-canvas[data-preview] path[data-near=false]{opacity:.1}
+.flow-canvas[data-selected] path[data-related=false]{opacity:.18}.flow-node[data-related=unrelated]{opacity:.35}.flow-node[data-related=before],.flow-node[data-related=after]{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue);border-left-color:var(--c)}.flow-node[aria-pressed=true]{outline:3px solid var(--ask);outline-offset:2px}
+.history-filters{margin:0 0 14px}.history-filters>summary{min-height:44px}
+.flow-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.flow-heading label{color:var(--muted);font-size:14px}.flow-heading select{max-width:100%}
+.flow-stage{min-width:0}
+@media(min-width:760px){.flow-stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(225px,28%);gap:14px;align-items:start}.flow-stage .flow-detail{grid-column:2;grid-row:1;position:sticky;top:12px}.flow-stage .flow-scroll{grid-column:1;grid-row:1;min-width:0}}
+.flow-detail{border-left:3px solid var(--blue);padding:12px 16px;background:var(--panel);margin:16px 0}.flow-detail h3{margin:0 0 8px}.flow-detail p{margin:8px 0}.flow-readable li{margin:8px 0}
+@media(max-width:560px){.flow-scroll{max-height:620px}}
+@media(prefers-reduced-motion:reduce){.flow-node,.flow-links path{transition:none}}
 .decision-card{margin:0 0 18px;min-width:0}
 .decision-card h3{font-size:20px;line-height:1.35;margin:0 0 8px;font-weight:650;overflow-wrap:anywhere}
 .decision-context{color:var(--muted);margin:0 0 18px}
@@ -99,9 +137,6 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 .decision-option span{min-width:0;overflow-wrap:anywhere}
 .decision-export button{font:inherit;color:var(--bg);background:var(--blue);border:0;border-radius:9px;padding:12px 18px;min-height:44px;cursor:pointer}
 .decision-export button:disabled{opacity:.65;cursor:wait}
-  .execution-order{border:1px solid var(--line);border-radius:8px;padding:12px;margin:14px 0;min-width:0;max-width:100%;box-sizing:border-box;overflow:hidden}.execution-order h3{margin:0 0 6px;font-size:16px}.execution-order p{margin:6px 0 10px;color:var(--muted);font-size:13px}.execution-rail{display:flex;gap:22px;overflow:auto;list-style:none;padding:8px 8px 14px;margin:0;width:100%;min-width:0;max-width:100%;box-sizing:border-box}.execution-rail li{position:relative;flex:0 0 190px}.execution-rail li:not(:last-child)::after{content:"→";position:absolute;right:-19px;top:12px;color:var(--blue);font-size:18px}.execution-rail a{display:block;border:1px solid var(--line);border-radius:7px;padding:9px;background:var(--panel);color:var(--text);min-height:44px}.execution-rail a:focus-visible{outline:3px solid var(--ask);outline-offset:2px}.execution-rail small{display:block;color:var(--muted);margin-top:4px}
-  .flow-zoom{display:flex;flex-wrap:wrap;align-items:center;gap:6px;max-width:100%}.flow-zoom button{font:inherit;min-width:44px;min-height:44px;padding:6px 10px;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:8px;cursor:pointer}.flow-zoom output{min-width:52px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
-  .execution-unscheduled{border-top:1px solid var(--line);margin-top:10px;padding-top:8px}.execution-unscheduled h4{font-size:14px;margin:0 0 4px;color:var(--muted)}.execution-unscheduled ul{margin:0;padding-left:22px}.execution-unscheduled li{margin:6px 0}.execution-unscheduled small{display:block;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -129,18 +164,22 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   <div class="tools">
     <input type="search" id="q" placeholder="Search all entries" aria-label="Search all entries">
     <button type="button" id="f-needs" aria-pressed="false">Needs you</button>
+  </div>
+  <p class="count" id="count" aria-live="polite"></p>
+  <details class="history-filters"><summary>Filters and display options</summary>
+  <div class="tools">
     <button type="button" id="expand">Expand all</button>
     <button type="button" id="collapse">Collapse all</button>
   </div>
   <div class="tools" id="kinds" aria-label="Filter by type"></div>
   <div class="tools" id="streams" aria-label="Filter by area"></div>
-  <p class="count" id="count" aria-live="polite"></p>
+  </details>
   <div id="list"></div>
 </main>
 
 <main id="decisions" role="tabpanel" aria-labelledby="tab-decisions" hidden>
   <h2>Decisions</h2>
-  <p>Recommendations are draft selections. Change a choice or add another answer, then copy your answers into chat. Decisions are recorded only after you submit them in chat.</p>
+  <p id="decision-instructions" hidden>Recommendations are draft selections. Change a choice or add another answer, then copy your answers into chat. Decisions are recorded only after you submit them in chat.</p>
   <div id="decision-list"></div>
   <div id="decision-export" class="card decision-export" hidden>
     <button type="button" id="copy-decisions">Copy answers for chat</button>
@@ -151,10 +190,11 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 </main>
 
 <main id="plan" role="tabpanel" aria-labelledby="tab-plan" hidden>
-  <section id="ticket-flow" aria-labelledby="flow-h"><h2 id="flow-h">Remaining ticket flow</h2><div id="flow-content"></div></section>
+  <p class="more"><a href="#tickets-h">Browse unfinished tickets</a></p>
+  <section id="ticket-flow" aria-labelledby="flow-h"><div class="flow-heading"><h2 id="flow-h">Remaining ticket flow</h2></div><div id="flow-content"></div></section>
   <section aria-labelledby="progress-h"><h2 id="progress-h">Progress</h2><div id="plan-progress"></div></section>
   <section aria-labelledby="order-h"><h2 id="order-h">What comes next</h2><div id="plan-lanes"></div></section>
-  <section aria-labelledby="tickets-h"><h2 id="tickets-h">All tickets</h2>
+  <section aria-labelledby="tickets-h"><h2 id="tickets-h">Ticket list</h2>
     <div class="tools">
       <input type="search" id="tq" placeholder="Search tickets" aria-label="Search tickets">
     </div>
@@ -432,7 +472,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
 
 <!-- Ticket snapshot for the Plan tab. Generated: run scripts/snapshot-tickets.mjs; do not edit by hand. -->
 <script type="application/json" id="gm-tickets">
-{"generated": "2026-10-27T18:00:00.000Z", "frontier": ["05"], "executionOrder": ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"], "tickets": [{"id": "01", "title": "Agree what the first version must do", "status": "done", "priority": "high"}, {"id": "02", "title": "Sketch how planning a trip will work", "status": "done", "blocked_by": ["01"]}, {"id": "03", "title": "Draw a route on a sample map and show its distance", "status": "done", "blocked_by": ["02"]}, {"id": "04", "title": "Add a stop by tapping the map", "status": "done", "blocked_by": ["03"]}, {"id": "05", "title": "Choose a map source that works offline", "status": "open", "priority": "high"}, {"id": "06", "title": "Remember ticked packing-list items", "status": "done", "blocked_by": ["02"]}, {"id": "07", "title": "Show a forecast for each day of the trip", "status": "in_progress", "blocked_by": ["03"]}, {"id": "08", "title": "Download maps for offline use", "status": "open", "blocked_by": ["05"]}, {"id": "09", "title": "Use real forecast data", "status": "open", "blocked_by": ["07"]}, {"id": "10", "title": "Warn when a hike would end after sunset", "status": "open", "blocked_by": ["07"]}, {"id": "11", "title": "Follow your route offline on the trail", "status": "open", "blocked_by": ["08"]}, {"id": "12", "title": "Share a trip with friends", "status": "backlog"}, {"id": "13", "title": "Plan several trips side by side", "status": "backlog"}]}
+{"generated": "2026-10-27T18:00:00.000Z", "frontier": ["05"], "tickets": [{"id": "01", "title": "Agree what the first version must do", "status": "done", "priority": "high"}, {"id": "02", "title": "Sketch how planning a trip will work", "status": "done", "blocked_by": ["01"]}, {"id": "03", "title": "Draw a route on a sample map and show its distance", "status": "done", "blocked_by": ["02"]}, {"id": "04", "title": "Add a stop by tapping the map", "status": "done", "blocked_by": ["03"]}, {"id": "05", "title": "Choose a map source that works offline", "status": "open", "priority": "high"}, {"id": "06", "title": "Remember ticked packing-list items", "status": "done", "blocked_by": ["02"]}, {"id": "07", "title": "Show a forecast for each day of the trip", "status": "in_progress", "blocked_by": ["03"]}, {"id": "08", "title": "Download maps for offline use", "status": "open", "blocked_by": ["05"]}, {"id": "09", "title": "Use real forecast data", "status": "open", "blocked_by": ["07"]}, {"id": "10", "title": "Warn when a hike would end after sunset", "status": "open", "blocked_by": ["07"]}, {"id": "11", "title": "Follow your route offline on the trail", "status": "open", "blocked_by": ["08"]}, {"id": "12", "title": "Share a trip with friends", "status": "backlog"}, {"id": "13", "title": "Plan several trips side by side", "status": "backlog"}]}
 </script>
 
 <script>
@@ -471,9 +511,9 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   }
   function safeHref(h) { return /^(https?:|#|[^:]*$)/i.test(h || "") ? h : "#"; }
 
-  var STATES = { ready: "Ready", in_progress: "In progress", blocked: "Blocked", backlog: "Backlog", done: "Done", cancelled: "Cancelled" };
+  var STATES = { ready: "Open · can start", in_progress: "In progress", blocked: "Open · waiting", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
   var SGLYPH = { ready: "○", in_progress: "◐", blocked: "▲", backlog: "…", done: "●", cancelled: "×" };
-  var ORDER = ["ready", "in_progress", "blocked", "backlog", "done", "cancelled"];
+  var ORDER = ["in_progress", "ready", "blocked", "backlog", "done", "cancelled"];
   function ticketIndex(snap) { var m = Object.create(null); (snap.tickets || []).forEach(function (t) { m[t.id] = t; }); return m; }
   function terminal(t) { return t.status === "done" || t.status === "cancelled"; }
   // A blocker missing from the snapshot counts as unfinished, so a broken edge never hides work.
@@ -481,12 +521,6 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   function ticketState(t, idx) { return t.status === "open" ? (waitingOn(t, idx).length ? "blocked" : "ready") : t.status; }
   function planningGate(t) { return terminal(t) ? null : t.gate || null; }
   function flowState(t, idx) { var state = ticketState(t, idx), gate = planningGate(t); return state === "ready" && gate ? gate.kind : state; }
-  function executionOrder(snap) { return Array.isArray(snap.executionOrder) ? snap.executionOrder : (snap.frontier || []); }
-  function executionSummary(snap) {
-    var idx = ticketIndex(snap), order = executionOrder(snap), frontier = Array.isArray(snap.frontier) ? snap.frontier : order, active = (snap.tickets || []).filter(function (t) { return t.status === "in_progress"; });
-    var next = order.map(function (id) { return idx[id]; }).find(function (t) { return t && frontier.indexOf(t.id) >= 0 && t.status === "open" && !(t.blocked_by || []).some(function (id) { return !idx[id] || idx[id].status !== "done"; }) && !t.gate; });
-    return { current: active.map(function (t) { return t.id; }), next: next ? next.id : null, order: order };
-  }
   function byId(a, b) { return String(a.id).localeCompare(String(b.id), undefined, { numeric: true }); }
   function planGroups(snap) {
     var idx = ticketIndex(snap), g = {}, f = snap.frontier || [];
@@ -544,8 +578,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     }
     var layers = [], counts = { ready: 0, in_progress: 0, blocked: 0, backlog: 0, done: 0, cancelled: 0 };
     visible.forEach(function (t) { var d = depth(t.id); (layers[d] = layers[d] || []).push(t); counts[ticketState(t, idx)]++; });
-    var sequence = executionOrder(snap), position = function (ticket) { var i = sequence.indexOf(ticket.id); return i < 0 ? sequence.length : i; };
-    layers.forEach(function (layer) { layer.sort(function (a, b) { return position(a) - position(b) || byId(a, b); }); });
+    layers.forEach(function (layer) { layer.sort(byId); });
     var edges = [];
     visible.forEach(function (t) { (t.blocked_by || []).forEach(function (id) { if (ids[id]) edges.push({ from: id, to: t.id, satisfied: idx[id].status === "done" }); }); });
     function relations(id) {
@@ -561,9 +594,8 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     visible.forEach(function (t) { var at = scopes.findIndex(function (s) { return s.tags.some(function (tag) { return (t.tags || []).indexOf(tag) >= 0; }); }); (at < 0 ? other : groups[at]).tickets.push(t); });
     groups.push(other); groups = groups.filter(function (g) { return g.tickets.length; });
     var rank = { in_progress: 0, ready: 1, decision: 2, evidence: 3, blocked: 4, backlog: 5, done: 6, cancelled: 7 };
-    var authored = executionOrder(snap), executionRank = function (t) { var i = authored.indexOf(t.id); return i < 0 ? authored.length : i; };
-    groups.forEach(function (g) { g.tickets.sort(function (a, b) { var state = rank[flowState(a, idx)] - rank[flowState(b, idx)]; if (state) return state; return executionRank(a) - executionRank(b) || byId(a, b); }); });
-    return { index: idx, visible: visible, layers: layers, groups: groups, edges: edges, counts: counts, readiness: readiness, scope: scope, fallback: fallback, elsewhere: all.filter(function (t) { return !terminal(t) && !ids[t.id]; }).length, relations: relations, execution: executionSummary(snap) };
+    groups.forEach(function (g) { g.tickets.sort(function (a, b) { var state = rank[flowState(a, idx)] - rank[flowState(b, idx)]; if (state) return state; var f = snap.frontier || [], ai = f.indexOf(a.id), bi = f.indexOf(b.id); return (ai < 0 ? f.length : ai) - (bi < 0 ? f.length : bi) || byId(a, b); }); });
+    return { index: idx, visible: visible, layers: layers, groups: groups, edges: edges, counts: counts, readiness: readiness, scope: scope, fallback: fallback, elsewhere: all.filter(function (t) { return !terminal(t) && !ids[t.id]; }).length, relations: relations };
   }
 
   function ticketMatches(t, f, idx) {
@@ -590,7 +622,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     }).catch(function () { return false; });
   }
 
-  var api = { decisionReply: decisionReply, copyDecisionText: copyDecisionText, sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref, planGroups: planGroups, planLanes: planLanes, ticketMatches: ticketMatches, ticketFlow: ticketFlow, flowState: flowState, executionSummary: executionSummary };
+  var api = { decisionReply: decisionReply, copyDecisionText: copyDecisionText, sortEntries: sortEntries, splitRecent: splitRecent, openAsks: openAsks, matches: matches, safeHref: safeHref, planGroups: planGroups, planLanes: planLanes, ticketMatches: ticketMatches, ticketFlow: ticketFlow, flowState: flowState };
   if (typeof window !== "undefined") window.GMDashboard = api;
   if (typeof document === "undefined" || !document.getElementById("gm-entries")) return;
 
@@ -632,8 +664,10 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       var fill = el("i"); fill.style.width = pct + "%"; bar.appendChild(fill); f.appendChild(bar);
     } else if (v.type === "steps") {
       var ol = el("ol", { class: "steps" });
-      v.items.forEach(function (s) {
-        ol.appendChild(el("li", { class: s.state }, [document.createTextNode(s.label), el("small", { text: { done: "Done", now: "Now", next: "Next" }[s.state] || "" })]));
+      v.items.forEach(function (s, index) {
+        var step = el("li", { class: s.state || "", text: (s.state ? "" : (index + 1) + ". ") + s.label });
+        if (s.state) step.appendChild(el("small", { text: { done: "Done", now: "Now", next: "Next" }[s.state] }));
+        ol.appendChild(step);
       });
       f.appendChild(ol);
     } else if (v.type === "metrics") {
@@ -728,6 +762,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       root.parentNode.appendChild(history);
     }
     $("decisions-count").textContent = decisions.length ? "(" + decisions.length + ")" : "";
+    $("decision-instructions").hidden = !decisions.length;
     if (!decisions.length) { root.appendChild(el("p", { class: "none", text: "No decisions are waiting for your input." })); return; }
     decisions.forEach(function (d) {
       var titleId = "decision-title-" + d.id;
@@ -783,10 +818,10 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
   var filter = { q: "", kind: "", stream: "", needs: false };
   function renderChips(id, values, key, labels) {
     var box = $(id); box.textContent = "";
-    values.forEach(function (v) {
+    values.forEach(function (v, index) {
       var b = el("button", { type: "button", "aria-pressed": String(filter[key] === v), text: labels ? labels[v] : v });
       if (filter[key] === v) b.className = "on";
-      b.addEventListener("click", function () { filter[key] = filter[key] === v ? "" : v; renderHistory(); });
+      b.addEventListener("click", function () { filter[key] = filter[key] === v ? "" : v; renderHistory(); box.children[index].focus({ preventScroll: true }); });
       box.appendChild(b);
     });
   }
@@ -843,32 +878,44 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     var settings = cfg.ticketFlow || {};
     section.hidden = cfg.ticketFlow === false || settings.enabled === false;
     if (section.hidden) return;
-    var root = $("flow-content"), controls = el("details", { class: "flow-options" }, [el("summary", { text: "Filter ticket flow" })]);
+    var root = $("flow-content"), controls = el("details", { class: "flow-options" }, [el("summary", { text: "Graph options and guide" })]);
     root.textContent = "";
     var form = el("div", { class: "flow-controls" }), scope = el("select", { id: "flow-scope", "aria-label": "Ticket flow work stream" });
     scope.appendChild(el("option", { value: "all", text: "All remaining work" }));
     (settings.scopes || []).forEach(function (s) { scope.appendChild(el("option", { value: s.id, text: s.label })); });
     scope.value = settings.defaultScope || "all";
-    form.appendChild(el("label", { text: "Work stream " }, [scope]));
+    $("flow-h").parentNode.appendChild(el("label", { text: "Work stream " }, [scope]));
     var arrangement = el("select", { "aria-label": "Arrange ticket graph" });
     arrangement.appendChild(el("option", { value: "dependencies", text: "Dependency depth" }));
     arrangement.appendChild(el("option", { value: "workstreams", text: "Work streams" }));
     arrangement.value = settings.groupBy || "dependencies";
     form.appendChild(el("label", { text: "Arrange by " }, [arrangement]));
-    var zoomOut = el("button", { type: "button", "aria-label": "Zoom dependency diagram out", text: "−" }), zoomIn = el("button", { type: "button", "aria-label": "Zoom dependency diagram in", text: "+" }), zoomReset = el("button", { type: "button", text: "Reset" }), zoomValue = el("output", { "aria-live": "polite", text: "100%" }), zoomControls = el("div", { class: "flow-zoom", role: "group", "aria-label": "Dependency diagram zoom" }, [zoomOut, zoomValue, zoomIn, zoomReset]);
     var completed = el("input", { type: "checkbox", id: "flow-completed" }), deferred = el("input", { type: "checkbox", id: "flow-deferred" }); deferred.checked = true;
     form.appendChild(el("label", {}, [completed, document.createTextNode("Include done/cancelled context")]));
     form.appendChild(el("label", {}, [deferred, document.createTextNode("Include deferred work")]));
-    controls.appendChild(form); root.appendChild(controls); root.appendChild(zoomControls);
-    root.appendChild(el("p", { class: "meta", text: "Scroll inside the diagram to see every unfinished ticket. Numbers show the maintained plan order; prerequisites take precedence when choosing the next eligible ticket. Arrows show real ticket prerequisites only. Deferred work stays visible and is never selected as next." }));
-    var notice = el("p", { class: "flow-notice", role: "status" }), summary = el("p", { class: "flow-counts" }), scroll = el("div", { class: "flow-scroll", tabindex: "0", role: "region", "aria-label": "Ticket dependency flow; scroll to follow branches" });
-    var canvas = el("div", { class: "flow-canvas" }), layers = el("div", { class: "flow-layers" }), svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "flow-links"); svg.setAttribute("aria-hidden", "true");
-    canvas.appendChild(svg); canvas.appendChild(layers); scroll.appendChild(canvas);
+    controls.appendChild(form);
+    controls.appendChild(el("p", { class: "meta", text: "Read left to right: a ticket sits one step after its last unfinished prerequisite, and lines run from a prerequisite to the work it unlocks. Green lines leave work that can start now; the cyan path is the longest remaining chain. Select a ticket to trace it. Decision and evidence gates come from ticket planning notes; machine and access eligibility remain separate. Deferred work stays deferred." }));
+    var notice = el("p", { class: "flow-notice", role: "status" }), summary = el("p", { class: "flow-counts" });
+    var legend = el("p", { class: "flow-legend", "aria-hidden": "true" });
+    [["ready", "Can start"], ["in_progress", "In progress"], ["decision", "Needs a decision or evidence"], ["blocked", "Waiting on tickets"], ["backlog", "Deferred"], ["done", "Done"]].forEach(function (s) { legend.appendChild(el("span", {}, [el("i", { class: "fl-" + s[0] }), document.createTextNode(s[1])])); });
+    var brief = el("div", { class: "flow-brief" }), scroll = el("div", { class: "flow-scroll", tabindex: "0", role: "region", "aria-label": "Ticket dependency flow; scroll to follow branches" });
+    var canvas = el("div", { class: "flow-canvas" }), svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "flow-links"); svg.setAttribute("aria-hidden", "true");
+    scroll.appendChild(canvas);
     var detail = el("div", { class: "flow-detail", "aria-live": "polite" }), readable = el("details", { class: "flow-readable" }, [el("summary", { text: "Read the visible prerequisite list" })]), list = el("ul"); readable.appendChild(list);
-    var sequenceBox = el("section", { class: "execution-order", "aria-labelledby": "execution-order-heading" }, [el("h3", { id: "execution-order-heading", text: "Suggested execution sequence" }), el("p", { text: "Scroll sideways for later links. Numbered order comes from the maintained plan; arrows here show scheduling preference, while diagram arrows show only actual prerequisites." })]), sequenceRail = el("ol", { class: "execution-rail", "aria-label": "Suggested ticket sequence" }), unscheduledBox = el("div", { class: "execution-unscheduled" }, [el("h4", { text: "Unscheduled unfinished tickets" })]), unscheduledList = el("ul"); unscheduledBox.appendChild(unscheduledList); sequenceBox.appendChild(sequenceRail); sequenceBox.appendChild(unscheduledBox);
-    root.appendChild(sequenceBox); root.appendChild(notice); root.appendChild(summary); root.appendChild(scroll); root.appendChild(detail); root.appendChild(readable);
-    var model, selected = null, zoom = 1, buttons = Object.create(null), words = { ready: "Unblocked", in_progress: "In progress", blocked: "Waiting on tickets", decision: "Decision needed", evidence: "Evidence needed", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
-    function setZoom(value) { zoom = Math.max(0.7, Math.min(2, Math.round(value * 10) / 10)); canvas.style.zoom = String(zoom); zoomValue.textContent = Math.round(zoom * 100) + "%"; requestAnimationFrame(draw); }
+    controls.appendChild(legend);
+    root.appendChild(notice); root.appendChild(brief); root.appendChild(summary);
+    root.appendChild(el("div", { class: "flow-stage" }, [detail, scroll]));
+    root.appendChild(controls); root.appendChild(readable);
+    var model, selected = null, buttons = Object.create(null), paths = [], pos = Object.create(null), critical = Object.create(null), unlocks = Object.create(null);
+    var words = { ready: "Unblocked", in_progress: "In progress", blocked: "Waiting on tickets", decision: "Decision needed", evidence: "Evidence needed", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
+    var short = { ready: "Can start", in_progress: "In progress", blocked: "Waiting", decision: "Decision", evidence: "Evidence", backlog: "Deferred", done: "Done", cancelled: "Cancelled" };
+    var glyph = { ready: "○", in_progress: "◐", blocked: "▲", decision: "◆", evidence: "◆", backlog: "…", done: "●", cancelled: "×" };
+    var rank = { in_progress: 0, ready: 1, decision: 2, evidence: 3, blocked: 4, backlog: 5, done: 6, cancelled: 7 };
+    // Layout in px: node box, column/row gaps, outer padding, column header and lane label heights.
+    var W = 196, H = 96, GX = 48, GY = 14, PAD = 18, HEAD = 44, LANE = 34;
+    function svgEl(tag, attrs) { var n = document.createElementNS(svg.namespaceURI, tag); Object.keys(attrs).forEach(function (k) { n.setAttribute(k, attrs[k]); }); return n; }
+    function frontierAt(t) { var f = snap.frontier || [], i = f.indexOf(t.id); return i < 0 ? f.length : i; }
+    function byState(a, b) { return rank[flowState(a, model.index)] - rank[flowState(b, model.index)] || frontierAt(a) - frontierAt(b) || byId(a, b); }
     function choose(id) {
       selected = id; var t = model.index[id], r = model.relations(id), deps = t.blocked_by || [];
       detail.textContent = ""; detail.appendChild(el("h3", { text: id + " · " + t.title }));
@@ -882,19 +929,54 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       detail.appendChild(el("p", { text: "No dependency path to: " + (model.visible.filter(function (t) { return t.id !== id && r.before.indexOf(t.id) < 0 && r.after.indexOf(t.id) < 0; }).map(function (t) { return t.id; }).join(", ") || "none in this view") + ". Shared files and external access can still constrain parallel work." }));
       detail.appendChild(el("a", { href: "#t-" + id, text: "Open ticket details" }));
       Object.keys(buttons).forEach(function (key) { var b = buttons[key]; b.setAttribute("aria-pressed", String(key === id)); b.dataset.related = key === id ? "selected" : r.before.indexOf(key) >= 0 ? "before" : r.after.indexOf(key) >= 0 ? "after" : "unrelated"; });
-      draw();
+      canvas.dataset.selected = "true"; drawEdges();
     }
-    function draw() {
-      svg.textContent = ""; var box = canvas.getBoundingClientRect(); if (!box.width || !box.height) return;
-      svg.setAttribute("width", String(canvas.scrollWidth)); svg.setAttribute("height", String(canvas.scrollHeight));
-      var defs = document.createElementNS(svg.namespaceURI, "defs"), marker = document.createElementNS(svg.namespaceURI, "marker"), arrow = document.createElementNS(svg.namespaceURI, "path");
-      marker.id = "gm-flow-arrow"; marker.setAttribute("viewBox", "0 0 10 10"); marker.setAttribute("refX", "10"); marker.setAttribute("refY", "5"); marker.setAttribute("markerWidth", "7"); marker.setAttribute("markerHeight", "7"); marker.setAttribute("orient", "auto"); arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 z"); arrow.setAttribute("class", "flow-arrow"); marker.appendChild(arrow); defs.appendChild(marker); svg.appendChild(defs);
-      var related = selected ? model.relations(selected) : null;
-      model.edges.forEach(function (edge, edgeIndex) {
-        var a = buttons[edge.from].getBoundingClientRect(), b = buttons[edge.to].getBoundingClientRect(), x1 = a.left + a.width / 2 - box.left, y1 = a.bottom - box.top, x2 = b.left + b.width / 2 - box.left, y2 = b.top - box.top, path = document.createElementNS(svg.namespaceURI, "path");
-        var lane = 6 + (edgeIndex % 3) * 5;
-        path.setAttribute("d", "M" + x1 + "," + y1 + " L" + x1 + "," + (y1 + 8) + " L" + lane + "," + (y1 + 8) + " L" + lane + "," + (y2 - 8) + " L" + x2 + "," + (y2 - 8) + " L" + x2 + "," + y2); path.setAttribute("marker-end", "url(#gm-flow-arrow)"); path.dataset.from = edge.from; path.dataset.to = edge.to; path.dataset.satisfied = String(edge.satisfied); path.dataset.related = String(Boolean(related && ((related.before.indexOf(edge.from) >= 0 && (related.before.indexOf(edge.to) >= 0 || edge.to === selected)) || ((edge.from === selected || related.after.indexOf(edge.from) >= 0) && related.after.indexOf(edge.to) >= 0)))); svg.appendChild(path);
+    function reveal(id) { var b = buttons[id]; if (!b) return; choose(id); b.scrollIntoView({ block: "nearest", inline: "center" }); b.focus({ preventScroll: true }); }
+    function preview(id) {
+      var near = Object.create(null);
+      if (id) { var r = model.relations(id); near[id] = true; r.before.concat(r.after).forEach(function (k) { near[k] = true; }); canvas.dataset.preview = "true"; } else delete canvas.dataset.preview;
+      Object.keys(buttons).forEach(function (key) { buttons[key].dataset.near = String(!id || Boolean(near[key])); });
+      paths.forEach(function (p) { p.dataset.near = String(!id || Boolean(near[p.dataset.from] && near[p.dataset.to])); });
+    }
+    function drawEdges() {
+      svg.textContent = ""; paths = [];
+      var defs = svgEl("defs", {});
+      ["base", "live", "critical", "related"].forEach(function (kind) {
+        var marker = svgEl("marker", { id: "gm-flow-arrow-" + kind, viewBox: "0 0 10 10", refX: "9", refY: "5", markerWidth: "7", markerHeight: "7", orient: "auto" });
+        marker.appendChild(svgEl("path", { d: "M 0 0 L 10 5 L 0 10 z", class: "flow-arrow fa-" + kind })); defs.appendChild(marker);
       });
+      svg.appendChild(defs);
+      var related = selected ? model.relations(selected) : null;
+      model.edges.forEach(function (edge) {
+        var a = pos[edge.from], b = pos[edge.to], x1 = a.x + W, y1 = a.y + H / 2, x2 = b.x - 2, y2 = b.y + H / 2, c = Math.max(28, (x2 - x1) / 2);
+        var path = svgEl("path", { d: "M" + x1 + "," + y1 + " C" + (x1 + c) + "," + y1 + " " + (x2 - c) + "," + y2 + " " + x2 + "," + y2 });
+        var isRelated = Boolean(related && ((related.before.indexOf(edge.from) >= 0 && (related.before.indexOf(edge.to) >= 0 || edge.to === selected)) || ((edge.from === selected || related.after.indexOf(edge.from) >= 0) && related.after.indexOf(edge.to) >= 0)));
+        var source = flowState(model.index[edge.from], model.index), live = !edge.satisfied && (source === "ready" || source === "in_progress"), onChain = Boolean(critical[edge.from] && critical[edge.to]);
+        path.dataset.from = edge.from; path.dataset.to = edge.to; path.dataset.satisfied = String(edge.satisfied); path.dataset.related = String(isRelated);
+        path.dataset.live = String(live); path.dataset.critical = String(onChain);
+        path.setAttribute("marker-end", "url(#gm-flow-arrow-" + (isRelated ? "related" : onChain ? "critical" : live ? "live" : "base") + ")");
+        svg.appendChild(path); paths.push(path);
+      });
+    }
+    function renderBrief(chain) {
+      brief.textContent = "";
+      var starts = model.visible.filter(function (t) { var s = flowState(t, model.index); return s === "in_progress" || s === "ready"; });
+      starts.sort(function (a, b) { return (flowState(a, model.index) === "in_progress" ? 0 : 1) - (flowState(b, model.index) === "in_progress" ? 0 : 1) || unlocks[b.id] - unlocks[a.id] || frontierAt(a) - frontierAt(b) || byId(a, b); });
+      var next = el("div", { class: "flow-start" }, [el("h3", { text: "Start here" })]);
+      if (!starts.length) next.appendChild(el("p", { class: "meta", text: "Nothing in this view can start yet; follow the chain to its first unfinished prerequisite." }));
+      starts.slice(0, 4).forEach(function (t) {
+        var s = flowState(t, model.index), pick = el("button", { type: "button", class: "flow-pick", "data-state": s }, [el("b", { text: t.id }), el("span", { text: t.title }), el("em", { text: s === "in_progress" ? "in progress" : unlocks[t.id] ? "unlocks " + unlocks[t.id] : "unlocks none" })]);
+        pick.addEventListener("click", function () { reveal(t.id); }); next.appendChild(pick);
+      });
+      if (starts.length > 4) next.appendChild(el("p", { class: "meta", text: "+" + (starts.length - 4) + " more can start" }));
+      var path = el("div", { class: "flow-chain" }, [el("h3", { text: chain.length > 1 ? "Longest remaining chain · " + chain.length + " steps" : "Longest remaining chain" })]);
+      if (chain.length > 1) {
+        var ol = el("ol");
+        chain.forEach(function (id) { var b = el("button", { type: "button", title: model.index[id].title, text: id }); b.addEventListener("click", function () { reveal(id); }); ol.appendChild(el("li", {}, [b])); });
+        path.appendChild(ol);
+        path.appendChild(el("p", { class: "meta", text: "At least " + chain.length + " tickets form this prerequisite chain." }));
+      }
+      brief.appendChild(next); if (chain.length > 1) brief.appendChild(path);
     }
     function render() {
       try { model = ticketFlow(snap, { scope: scope.value, scopes: settings.scopes, completed: completed.checked, deferred: deferred.checked }); }
@@ -902,37 +984,68 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       scope.value = model.scope;
       notice.textContent = model.fallback ? "That stream has no visible remaining work; showing all remaining work." : model.elsewhere ? model.elsewhere + " unfinished tickets are outside this view. Choose All remaining work to see them." : "";
       notice.hidden = !notice.textContent;
-      summary.textContent = "Current: " + (model.execution.current.join(", ") || "none") + " · Suggested next: " + (model.execution.next || "none eligible") + " · " + ["ready", "in_progress", "blocked", "decision", "evidence", "backlog", "done", "cancelled"].map(function (state) { return model.readiness[state] + " " + words[state].toLowerCase(); }).join(" · ") + " · " + model.visible.length + " shown. Select a ticket to inspect its dependency path.";
-      sequenceRail.textContent = "";
-      var sequenced = executionOrder(snap), unfinished = function (t) { return t && !terminal(t); }, railTickets = sequenced.map(function (id) { return model.index[id]; }).filter(unfinished);
-      railTickets.forEach(function (t) { var pos = sequenced.indexOf(t.id), stateText = t.status === "backlog" ? "Deferred" : t.status === "in_progress" ? "In progress" : "Open"; sequenceRail.appendChild(el("li", {}, [el("a", { href: "#t-" + t.id, text: (pos + 1) + ". " + t.id + " · " + t.title }), el("small", { text: stateText + (t.id === model.execution.current[0] ? " · Current" : t.id === model.execution.next ? " · Suggested next" : "") })])); });
-      unscheduledList.textContent = "";
-      var unsequenced = (snap.tickets || []).filter(function (t) { return unfinished(t) && sequenced.indexOf(t.id) < 0; });
-      unscheduledBox.hidden = !unsequenced.length;
-      unsequenced.forEach(function (t) { unscheduledList.appendChild(el("li", {}, [el("a", { href: "#t-" + t.id, text: t.id + " · " + t.title }), el("small", { text: t.status === "backlog" ? "Deferred" : t.status === "in_progress" ? "In progress" : "Open" })])); });
-      layers.textContent = ""; list.textContent = ""; buttons = Object.create(null);
-      var columns = arrangement.value === "workstreams" ? model.groups : model.layers.map(function (items, depth) { return { label: depth ? "Dependency depth " + depth : "No visible ticket prerequisites", tickets: items }; });
-      columns.forEach(function (column) {
-        var layer = el("div", { class: "flow-layer" }, [el("h3", { text: column.label + " · " + column.tickets.length })]);
-        var items = column.tickets;
-        items.forEach(function (t) {
-          var state = ticketState(t, model.index), readiness = flowState(t, model.index), gate = planningGate(t), sequence = executionOrder(snap), position = sequence.indexOf(t.id), button = el("button", { type: "button", class: "flow-node", "aria-pressed": "false" }, [el("strong", { text: t.id + " · " + t.title }), el("span", { text: SGLYPH[state] + " " + words[readiness] }), el("small", { text: position < 0 ? "Unscheduled in maintained plan" : "Execution " + (position + 1) })]); button.dataset.ticket = t.id; button.dataset.state = state; button.dataset.order = position < 0 ? "" : String(position + 1);
-          if (gate) { button.dataset.gate = gate.kind; button.appendChild(el("small", { class: "flow-notice", text: words[gate.kind] + ": " + gate.reason })); }
-          var deps = t.blocked_by || [], done = deps.filter(function (id) { return model.index[id] && model.index[id].status === "done"; }), waiting = waitingOn(t, model.index);
-          if (waiting.length) button.appendChild(el("small", { text: "Needs: " + waiting.join(", ") }));
-          if (done.length) button.appendChild(el("small", { text: "Completed: " + done.join(", ") }));
-          if (!deps.length) button.appendChild(el("small", { text: "No ticket prerequisites" }));
-          button.addEventListener("click", function () { choose(t.id); }); buttons[t.id] = button; layer.appendChild(button);
-          list.appendChild(el("li", { text: t.id + " · " + t.title + " — " + (deps.length ? "prerequisites " + deps.join(", ") : "no prerequisites") + " · " + words[readiness] + (gate ? " · " + words[gate.kind] + ": " + gate.reason : "") }));
-        }); layers.appendChild(layer);
+      summary.textContent = ["ready", "in_progress", "blocked", "decision", "evidence", "backlog", "done", "cancelled"].filter(function (state) { return model.readiness[state] > 0; }).map(function (state) { return model.readiness[state] + " " + words[state].toLowerCase(); }).concat(model.visible.length + " shown").join(" · ") + ". Select a ticket to inspect its dependency path.";
+      canvas.textContent = ""; list.textContent = ""; buttons = Object.create(null); pos = Object.create(null); critical = Object.create(null); unlocks = Object.create(null);
+      delete canvas.dataset.selected; delete canvas.dataset.preview;
+      var idx = model.index, inView = Object.create(null), depthOf = Object.create(null);
+      model.visible.forEach(function (t) { inView[t.id] = true; unlocks[t.id] = model.relations(t.id).after.filter(function (k) { return idx[k] && !terminal(idx[k]); }).length; });
+      model.layers.forEach(function (items, d) { items.forEach(function (t) { depthOf[t.id] = d; }); });
+      function prereqs(id) { return (idx[id].blocked_by || []).filter(function (p) { return inView[p]; }); }
+      var longest = Object.create(null), via = Object.create(null), end = null;
+      function reach(id) {
+        if (longest[id] !== undefined) return longest[id];
+        if (terminal(idx[id])) return (longest[id] = 0);
+        var best = 0; via[id] = null;
+        prereqs(id).forEach(function (p) { var l = reach(p); if (l > best) { best = l; via[id] = p; } });
+        return (longest[id] = best + 1);
+      }
+      model.visible.forEach(function (t) { if (reach(t.id) > (end ? longest[end] : 0)) end = t.id; });
+      var chain = []; for (var at = end; at; at = via[at]) chain.unshift(at);
+      if (chain.length > 1) chain.forEach(function (id) { critical[id] = true; });
+      renderBrief(chain);
+      if (!model.visible.length) { canvas.style.width = ""; canvas.style.height = ""; canvas.appendChild(el("p", { class: "none", text: "No tickets in this view." })); detail.textContent = ""; return; }
+      var columns = Math.max(1, model.layers.length), byLane = arrangement.value === "workstreams", lanes = byLane ? model.groups : [{ label: null, tickets: model.visible }], y = HEAD;
+      lanes.forEach(function (lane, laneIndex) {
+        if (byLane) { var band = el("div", { class: "flow-band" }, [el("span", { text: lane.label }), el("small", { text: lane.tickets.length + " ticket" + (lane.tickets.length === 1 ? "" : "s") })]); band.style.top = y + "px"; if (laneIndex % 2) band.dataset.alt = "true"; canvas.appendChild(band); y += LANE; }
+        var start = y, bottom = y, byColumn = [];
+        lane.tickets.forEach(function (t) { var d = depthOf[t.id]; (byColumn[d] = byColumn[d] || []).push(t); });
+        for (var d = 0; d < columns; d++) {
+          var items = byColumn[d] || [], want = Object.create(null), cursor = start;
+          // Pull each ticket level with the average of its already-placed prerequisites so lines stay short and flat.
+          items.forEach(function (t) { var ys = prereqs(t.id).filter(function (p) { return pos[p]; }).map(function (p) { return pos[p].y; }); want[t.id] = ys.length ? ys.reduce(function (s, v) { return s + v; }, 0) / ys.length : Infinity; });
+          items.sort(function (a, b) { return rank[flowState(a, idx)] - rank[flowState(b, idx)] || want[a.id] - want[b.id] || byState(a, b); });
+          items.forEach(function (t) { var top = Math.max(cursor, isFinite(want[t.id]) ? want[t.id] : cursor); pos[t.id] = { x: PAD + d * (W + GX), y: top }; cursor = top + H + GY; bottom = Math.max(bottom, cursor); });
+        }
+        y = bottom + (byLane ? 10 : 0);
       });
+      var width = PAD * 2 + columns * (W + GX) - GX, height = y - GY + PAD;
+      canvas.style.width = width + "px"; canvas.style.height = height + "px"; svg.setAttribute("width", String(width)); svg.setAttribute("height", String(height));
+      canvas.appendChild(svg);
+      for (var c = 0; c < columns; c++) {
+        var count = model.layers[c] ? model.layers[c].length : 0, head = el("div", { class: "flow-col" }, [document.createTextNode("Step " + (c + 1)), el("small", { text: c ? count + " ticket" + (count === 1 ? "" : "s") : "no prerequisites in view" })]);
+        head.style.left = (PAD + c * (W + GX)) + "px"; head.style.width = W + "px"; canvas.appendChild(head);
+      }
+      model.visible.slice().sort(function (a, b) { return pos[a.id].x - pos[b.id].x || pos[a.id].y - pos[b.id].y; }).forEach(function (t) {
+        var state = ticketState(t, idx), readiness = flowState(t, idx), gate = planningGate(t), deps = t.blocked_by || [], waiting = waitingOn(t, idx), p = pos[t.id];
+        var foot = el("small", { class: "fn-foot" });
+        if (unlocks[t.id]) { foot.appendChild(document.createTextNode("Unlocks ")); foot.appendChild(el("b", { text: String(unlocks[t.id]) })); foot.appendChild(document.createTextNode(" · ")); }
+        foot.appendChild(document.createTextNode(waiting.length ? "Needs " + waiting.join(", ") : deps.length ? "Prerequisites done" : "No prerequisites"));
+        var button = el("button", { type: "button", class: "flow-node", "aria-pressed": "false", title: t.title, "aria-label": t.id + " · " + t.title + ". " + words[readiness] + (waiting.length ? "; needs " + waiting.join(", ") : "") + (unlocks[t.id] ? "; unlocks " + unlocks[t.id] : "") + (critical[t.id] ? "; on the longest remaining chain" : "") }, [
+          el("span", { class: "fn-top" }, [el("b", { class: "fn-id", text: t.id }), el("span", { class: "fn-state", text: glyph[readiness] + " " + short[readiness] })]),
+          el("strong", { class: "fn-title", text: t.title }), foot]);
+        button.dataset.ticket = t.id; button.dataset.state = state; if (gate) button.dataset.gate = gate.kind; if (critical[t.id]) button.dataset.critical = "true";
+        button.style.left = p.x + "px"; button.style.top = p.y + "px"; button.style.width = W + "px"; button.style.height = H + "px";
+        button.addEventListener("click", function () { choose(t.id); });
+        button.addEventListener("mouseenter", function () { preview(t.id); }); button.addEventListener("mouseleave", function () { preview(null); });
+        button.addEventListener("focus", function () { preview(t.id); }); button.addEventListener("blur", function () { preview(null); });
+        buttons[t.id] = button; canvas.appendChild(button);
+        list.appendChild(el("li", { text: t.id + " · " + t.title + " — " + (deps.length ? "prerequisites " + deps.join(", ") : "no prerequisites") + " · " + words[readiness] + (gate ? " · " + words[gate.kind] + ": " + gate.reason : "") }));
+      });
+      drawEdges();
       if (selected && buttons[selected]) choose(selected); else { selected = null; detail.textContent = "Select a ticket above. Its prerequisites and downstream work will be highlighted."; }
-      if (!model.visible.length) layers.appendChild(el("p", { class: "none", text: "No tickets in this view." }));
-      requestAnimationFrame(draw);
     }
-    zoomOut.addEventListener("click", function () { setZoom(zoom - 0.1); }); zoomIn.addEventListener("click", function () { setZoom(zoom + 0.1); }); zoomReset.addEventListener("click", function () { setZoom(1); });
     [scope, completed, deferred, arrangement].forEach(function (control) { control.addEventListener("change", render); });
-    new ResizeObserver(draw).observe(canvas); render();
+    render();
   }
 
   function ticketRow(t) {
@@ -952,7 +1065,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       b.appendChild(p);
     }
     if (!b.childNodes.length) b.appendChild(el("p", { class: "meta", text: "No dependencies or delivery entries." }));
-    return el("details", { class: "row", id: "t-" + t.id }, [s, b]);
+    return el("details", { class: "row ticket-row", "data-status": st, id: "t-" + t.id }, [s, b]);
   }
   var tfilter = { q: "", state: "" };
   function renderTickets() {
@@ -962,20 +1075,24 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
       if (!g[k].length) return;
       var b = el("button", { type: "button", "aria-pressed": String(tfilter.state === k), text: STATES[k] + " " + g[k].length });
       if (tfilter.state === k) b.className = "on";
-      b.addEventListener("click", function () { tfilter.state = tfilter.state === k ? "" : k; renderTickets(); });
+      var index = box.children.length;
+      b.addEventListener("click", function () { tfilter.state = tfilter.state === k ? "" : k; renderTickets(); box.children[index].focus({ preventScroll: true }); });
       box.appendChild(b);
     });
     var L = $("tickets"), shown = 0, narrowed = tfilter.q || tfilter.state;
     L.textContent = "";
+    if (!narrowed && ORDER.slice(0, 4).some(function (k) { return g[k].length; })) {
+      L.appendChild(el("h3", { class: "ticket-section-title", text: "Unfinished work" }));
+    }
     var historyLabel = false;
     ORDER.forEach(function (k) {
       var list = g[k].filter(function (t) { return ticketMatches(t, tfilter, tidx); });
       if (!list.length) return;
       shown += list.length;
       var holder = L;
-      if ((k === "done" || k === "cancelled") && !historyLabel) { L.appendChild(el("h3", { class: "group", text: "Ticket history" })); historyLabel = true; }
+      if ((k === "done" || k === "cancelled") && !historyLabel) { L.appendChild(el("h3", { class: "ticket-section-title", text: "Ticket history" })); historyLabel = true; }
       if ((k === "done" || k === "cancelled") && !narrowed) { holder = el("details", { class: "row", id: k + "-group" }, [el("summary", { text: STATES[k] + " (" + list.length + ")" })]); L.appendChild(holder); }
-      else L.appendChild(el("h3", { class: "group", text: STATES[k] }));
+      else L.appendChild(el("h3", { class: "group", text: STATES[k] + " (" + list.length + ")" }));
       list.forEach(function (t) { holder.appendChild(ticketRow(t)); });
     });
     $("tcount").textContent = shown === total ? total + " tickets" : shown + " of " + total + " tickets";
@@ -1000,6 +1117,7 @@ h3.group{font-size:13px;margin:16px 0 8px;color:var(--muted);letter-spacing:.07e
     var h = decodeURIComponent(location.hash.slice(1));
     if (h.indexOf("decision-") === 0) { show("decisions", h); return; }
     if (h.indexOf("e-") === 0) { show("history", h); return; }
+    if (h === "tickets-h") { show("plan", h); return; }
     if (h.indexOf("t-") === 0) { show("plan", h); return; }
     show(TABS.indexOf(h) >= 0 ? h : "overview");
   }

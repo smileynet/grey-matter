@@ -1,7 +1,28 @@
 # Convergence in review and qualification loops
 
-Use this reference when repeated review-fix or qualification/debugging rounds make it hard
-to tell whether work is converging. It guides reassessment; it does not set a retry limit.
+Use this reference for iterative critic review and when qualification or debugging stalls.
+
+## Critic review budget
+
+Default to four critic rounds unless the user or owning workflow specifies another
+budget. Count one round per candidate verdict, combining parallel critics' findings
+for that candidate. Finish earlier when acceptance is established. At the budget
+boundary, record what changed, which findings remain material, and your decision:
+
+- **Continue** when a material finding has an observable impact and a specific next
+  repair or check can advance acceptance. Name what the next review should resolve.
+- **Finish** when only minor polish remains. Apply justified corrections and run the
+  affected checks. Renew critic review if a correction changes material behavior
+  or required evidence.
+- **Escalate** when a material issue remains and successive rounds have stopped
+  narrowing it. Present the evidence and the decision needed to proceed.
+
+Wrong results, reachable crashes, security failures, data loss, and unmet acceptance
+criteria are material. Cosmetic preferences and wording that preserves meaning are
+minor. The default budget triggers reassessment. Resolve material findings and pass
+applicable gates before acceptance. Honor any explicit cap on further rounds.
+
+## Progress and proportionality
 
 At reassessment, compare each round on three observable dimensions:
 

@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "manifestDigest": "852b639782e9a2b72b50bf1aa81067b66c5beb9d35db2658828dd634e4e8609e",
+  "subject": "Queue delivery t139: current closed work and all remaining work retained",
+  "source": [
+    {
+      "path": "docs/orchestration-findings.json",
+      "projection": null,
+      "bytes": 75371,
+      "sha256": "c076d6dcce501a6595f7ab28b3889f9399faf41651b2ebaecfc552ed44cfe46e"
+    },
+    {
+      "path": "docs/orchestration.html",
+      "projection": null,
+      "bytes": 390155,
+      "sha256": "9a129a5a58a3732f0162988ad918f1c048ef5b7cc7cdfb4654e9b92865e0605f"
+    },
+    {
+      "path": "scripts/assets/orchestration-dashboard.html",
+      "projection": null,
+      "bytes": 14145,
+      "sha256": "fe47a7d9ad8c78c5425925fd712403b013032b7d7f744b0a6d309edf946df76f"
+    },
+    {
+      "path": "scripts/build-orchestration-dashboard.mjs",
+      "projection": null,
+      "bytes": 1762,
+      "sha256": "2e1d9d64cd8c35663ef930d96187cb530fb4f7bb5827faf32a5c82f6b4871c4f"
+    },
+    {
+      "path": "scripts/orchestration-dashboard.test.mjs",
+      "projection": null,
+      "bytes": 5890,
+      "sha256": "16784d51172ccf9f876105e8f473824510e08b58269867c600191e1c9f2b5c03"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t139/findings-1280.png",
+      "bytes": 1190223,
+      "sha256": "aff3e8b53b3ee61d07b38e4582ee1005b9a892f21307cbb2c159c081aa779f3f",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t139/tickets-1280.png",
+      "bytes": 349083,
+      "sha256": "1779cdf4b0368bdc7be4c4b0549fe22dd87c3fd1d15853cfc54a7da05699306a",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t139/findings-390.png",
+      "bytes": 1242639,
+      "sha256": "2cdfbff350501061658742c8a1eec6508fc5c572c5ab809e6c2fde7d2ac59007",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "path": "docs/agents/research/evidence/orchestration-dashboard/t139/tickets-390.png",
+      "bytes": 327899,
+      "sha256": "e30604f8676f11d9e56c3fc6aaf7239c82bc535b6e89842e1ce3fa9deaa68d8e",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "sourceDigest": "dbb8c7865964835fd7fe3ad1f223294dc43693d45830d5a38d9ffbf39d888481",
+  "id": "191a01d2c2eb3c95c0a975954fb39282a70b3f505bfff41b9a7b636ed2ede0d0",
+  "review": {
+    "outcome": "accept",
+    "reviewer": "/root/queue_critic",
+    "note": "Independent review PASS, exact four effort captures unchanged; static layout/content evidence with tall-image viewer limits, parent interaction proof separate. See t139-ui-review-r2.md.",
+    "acceptedAt": "2026-11-04T21:55:37.355Z",
+    "snapshotId": "191a01d2c2eb3c95c0a975954fb39282a70b3f505bfff41b9a7b636ed2ede0d0"
+  }
+}

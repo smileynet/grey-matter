@@ -97,3 +97,17 @@ An unrestricted search of the embedded source dashboard produced roughly3.94 mil
 ## Outcome-driven orchestration coordination
 
 Proposal 19 approved. Retain visual execution-flow behavior ownership; #205 owns publication preflight using existing receipt checks. Remaining/deferred tickets must remain visible; no receipt/schema check substitutes for rendered interaction proof.
+
+## Note — 2026-11-04
+
+By: codex-orchestration-118
+
+<!-- tkt-note:v1 61332-1793831690559079600 -->
+Parent acceptance held after two candidate rounds. Initial ba2c6b8 claim preflight silently passed with off policy, missing repo and nonexistent ticket; revised247c53b fixes that, focused63/63 PASS and unchanged renderer browser7/7 remains scoped. Parent then observed serial policy with snapshot tickets=[null] throws null.id, while base139 returns structured validation errors. Human ruling requested per orchestrate SKILL two-round rule before another fix round. Worker instructed to hold source edits; no118 integration, push, deployment, closure or publication. Parent repro and raw logs retained with synthetic fixture; durable custody record docs/agents/handoffs/orchestration-custody-20261104.md. Worker syntax check remains infrastructure error from missing yaml; parent integrated gates remain pending. Ticket stays in_progress, not falsely done or dependency-blocked.
+
+## Note — 2026-11-05
+
+By: codex-orchestration-118
+
+<!-- tkt-note:v1 43416-1793837613315643600 -->
+Design direction from Sam: include both Focus and Route views plus a DAG-style graph view, rather than choosing only one. Updated the interactive mock with three switchable views over the same8 example tickets. Graph arrows represent prerequisites; selecting a node explains and highlights its prerequisite path. Independent and deferred work stays accessible with explicit counts. Local Chrome check-queue-mock.mjs PASS at1024/390/320 for switching, disclosures,8nodes/4edges, keyboard selection, ancestor highlighting, no overflow/runtime errors. Mock data is illustrative, not native tracker or production evidence. This adds the three-view design requirement; it does not approve another code-fix round or accept/integrate the held118 candidate. Implementation and independent source review remain pending.
