@@ -1,5 +1,5 @@
 ---
-id: "257"
+id: "265"
 title: "Guidance for writing /goal conditions that can end honestly"
 status: open
 blocked_by: []

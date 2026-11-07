@@ -1,5 +1,5 @@
 ---
-id: "260"
+id: "268"
 title: "snapshot-tickets.mjs writes the ticket snapshot as multi-line JSON"
 status: open
 blocked_by: []
