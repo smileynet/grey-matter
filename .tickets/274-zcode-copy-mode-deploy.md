@@ -1,7 +1,7 @@
 ---
 id: "274"
 title: "Add ZCode harness entry to deploy.mjs and install-agents-md"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "deploy.mjs installs grey-matter skills to ~/.zcode/skills; check and audit stay clean with a ZCode home present"
