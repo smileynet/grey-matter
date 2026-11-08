@@ -1,7 +1,7 @@
 ---
 id: "269"
 title: "Build a self-contained Kimi plugin package"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "A Kimi build produces a valid skill-only plugin containing every current grey-matter skill exactly once."
