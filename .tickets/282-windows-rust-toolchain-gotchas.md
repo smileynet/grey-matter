@@ -1,7 +1,7 @@
 ---
 id: "282"
 title: "Record Windows Rust toolchain failure modes and repairs"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "gotchas doc covers rust-std-missing failure with symptom and repair"
