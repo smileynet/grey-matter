@@ -6,7 +6,7 @@
 // Read-only. Exit 0 = consistent, 1 = at least one problem (details on stderr).
 // Run:  node scripts/check-plugin-manifest.mjs
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -34,6 +34,10 @@ if (claude && kimi) {
     }
   }
 }
+const kimiIcon = join(root, ".kimi-plugin", "icon.png");
+const claudeIcon = join(root, ".claude-plugin", "icon.png");
+if (!existsSync(kimiIcon) || !existsSync(claudeIcon)) problems.push("Kimi and Claude catalog icons must both exist");
+else if (!readFileSync(kimiIcon).equals(readFileSync(claudeIcon))) problems.push("Kimi and Claude catalog icons differ");
 if (problems.length) {
   console.error(`Kimi plugin-manifest check FAILED (${problems.length}):`);
   for (const problem of problems) console.error("  - " + problem);

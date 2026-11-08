@@ -9,4 +9,10 @@ validation_criteria:
   - "node --test scripts/kimi-plugin.test.mjs scripts/release-artifacts.test.mjs"
 tags: ["tooling"]
 ---
-Origin: Sam requested a Grey Matter brain or lightbulb-style plugin icon on 2026-11-08.\n\nScope: add a square, readable source PNG for Grey Matter and use it for the Kimi package and Claude catalog metadata. Keep Codex and Antigravity coverage out of scope unless their native catalog support is implemented separately.\n\nContext: .kimi-plugin/kimi.plugin.json has an empty iconUrl; .claude-plugin/plugin.json has no icon. scripts/build-kimi-plugin.mjs packages localization but not an icon, scripts/kimi-plugin.test.mjs has no icon assertion, and scripts/release-artifacts.test.mjs already seeds .kimi-plugin/icon.png in its fixture.\n\nDone: the tracked icon is visually reviewed, packaged byte-for-byte by the Kimi builder, covered by regression tests, validated by the native Kimi validator, committed, pushed, deployed, and reflected on the delivery dashboard.
+Origin: Sam requested a Grey Matter brain or lightbulb-style plugin icon on 2026-11-08.
+
+Scope: add a square, readable source PNG for Grey Matter and use it for the Kimi package and Claude catalog. Keep Codex and Antigravity coverage out of scope unless their native catalog support is implemented separately.
+
+Context: `.kimi-plugin/kimi.plugin.json` has an empty `iconUrl`; Kimi's personal catalog accepts a root `icon.png` by convention. Claude accepts `.claude-plugin/icon.png`. `scripts/build-kimi-plugin.mjs` packages localization but not an icon, `scripts/kimi-plugin.test.mjs` has no icon assertion, and `scripts/release-artifacts.test.mjs` already seeds `.kimi-plugin/icon.png` in its fixture.
+
+Done: the tracked icon is visually reviewed, packaged byte-for-byte by the Kimi builder, covered by regression tests, validated by the native Kimi validator, committed, pushed, deployed, and reflected on the delivery dashboard.

@@ -53,6 +53,7 @@ test("kimi: build writes a self-contained skill-only plugin with every skill and
     assert.ok(existsSync(join(wrap, "../.resources-grey-matter/docs/agents/doc-conventions.md")), "linked resource is packaged");
     assert.ok(existsSync(join(out, "skills/.resources-grey-matter/LICENSES/Apache-2.0.txt")), "Apache license is packaged");
     assert.ok(existsSync(join(out, "locales/zh-CN.json")), "localized interface copy is packaged");
+    assert.ok(readFileSync(join(out, "icon.png")).equals(readFileSync(join(ROOT, ".kimi-plugin/icon.png"))), "catalog icon is packaged byte-for-byte");
     assert.equal(existsSync(join(out, "AGENTS.md")), false, "root guidance must not become active plugin rules");
     assert.ok(existsSync(join(out, "skills/.resources-grey-matter/AGENTS.md")), "root guidance remains inert reference material");
     assert.equal(existsSync(join(out, "skills/.installed-by-grey-matter.json")), false, "installer ownership state is not shipped");

@@ -86,6 +86,7 @@ function build(pack, out) {
   const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
   if (manifest.skills !== "./skills/") throw new Error("Kimi manifest skills must be ./skills/");
   if (!existsSync(join(source, "locales"))) throw new Error("Kimi localization directory is missing");
+  if (!existsSync(join(source, "icon.png"))) throw new Error("Kimi plugin icon is missing");
 
   const parent = dirname(out);
   mkdirSync(parent, { recursive: true });
@@ -98,6 +99,7 @@ function build(pack, out) {
     rmSync(join(skills, `.installed-by-${manifest.name}.json`), { force: true });
     writeCommands(stage, skills);
     cpSync(join(source, "locales"), join(stage, "locales"), { recursive: true });
+    cpSync(join(source, "icon.png"), join(stage, "icon.png"));
     writeFileSync(join(stage, "kimi.plugin.json"), JSON.stringify(manifest, null, 2) + "\n");
 
     if (sameTree(stage, out)) {
