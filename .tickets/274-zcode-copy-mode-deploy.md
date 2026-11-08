@@ -1,6 +1,6 @@
 ---
 id: "274"
-title: "Add ZCode harness to deploy.mjs (copy mode) and install-agents-md"
+title: "Add ZCode harness entry to deploy.mjs and install-agents-md"
 status: open
 blocked_by: []
 validation_criteria:
