@@ -31,7 +31,7 @@ path and does not depend on this spike's outcome.
 
 - [x] `plugins validate` result on the checkout recorded verbatim (pass or exact messages)
 - [x] Install from the local marketplace observed; skill count verified (all 50 appear via `skills list` / Settings → Skills) — proves array-of-bucket-roots semantics
-- [ ] Skill-to-skill references under `plugin:skill` qualified naming checked (compass routes to a sibling by name)
+- [x] Skill-to-skill references under `plugin:skill` qualified naming checked (compass routes to a sibling by name) — validated statically: plugin skills register bare-name aliases (`grey-matter:compass`, alias `compass`), so sibling references by bare name resolve; live model turn deferred (headless `-p` requires a TUI-selected model), user redirected the live test to cheat-sheet and directed proceeding
 - [x] tkt dependency behavior recorded: auto-installed, prompted, or exact blocker
 - [x] Update friction observed: edit one skill description, run `plugins update` (or UI), record whether the cached copy refreshes
 - [x] 92-skill picker watch-item noted (42 personal + 50 plugin skills in one session)
