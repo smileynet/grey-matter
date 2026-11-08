@@ -12,9 +12,13 @@ tags: ["stream:tooling", "kind:enhancement"]
 ---
 ## What to build
 
-Add ZCode Desktop as a supported harness in the distribution pipeline, copy
-mode, per the research verdict in
-[docs/agents/research/zcode-plugin-compat-20261108.md](../../docs/agents/research/zcode-plugin-compat-20261108.md):
+Add ZCode Desktop as a supported harness in the distribution pipeline. The
+spike (ticket 273, results in
+[docs/agents/research/zcode-plugin-compat-20261108.md](../../docs/agents/research/zcode-plugin-compat-20261108.md))
+settled the delivery route as plugin-primary — but the harness-table entry is
+still required either way, because ZCode unconditionally reads
+`~/.agents/skills`: root selection and the duplicate-discovery audit must
+account for it, exactly like the codex entry.
 
 - `scripts/deploy.mjs` `HARNESSES()` entry: own root `~/.zcode/skills`,
   reads `~/.agents/skills`, project dirs `.zcode`/`.agents`; plugin detection
@@ -26,10 +30,10 @@ mode, per the research verdict in
 - `docs/agents/harnesses.md` ZCode section + live-probe script entry.
 - Release contract: new distribution target → minor version bump
   (`.claude-plugin/plugin.json` version authority).
-- Optional (only if the spike ticket confirms low friction): a `refreshZcode`
-  step mirroring `refreshCodex`, via
-  `node /Applications/ZCode.app/Contents/Resources/glm/zcode.cjs plugins update`
-  when the plugin is installed.
+- Companion tickets: **280** owns the `refreshZcode` plugin-refresh step
+  (supersedes the optional bullet this ticket originally carried); **281**
+  documents the ZCode distribution surface. This ticket is the harness-table
+  foundation only.
 
 ## Acceptance criteria
 
