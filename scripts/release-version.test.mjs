@@ -49,3 +49,12 @@ test("malformed TOML and duplicate root lock entries fail version inspection", (
   input = source({ "Cargo.toml": '[package]\nname="example"\nversion="0.1.0"\n', "Cargo.lock": '[[package]]\nname="example"\nversion="0.1.0"\n[[package]]\nname="example"\nversion="0.1.0"\n' });
   assert.throws(() => inspectVersions(input.read, input.has), /Cargo.lock root package/);
 });
+
+test("optional Kimi manifest joins version inspection and candidate edits", () => {
+  const kimi = ".kimi-plugin/kimi.plugin.json";
+  let input = source({ [kimi]: '{"name":"example","version":"0.9.0"}' });
+  assert.throws(() => inspectVersions(input.read, input.has), /source version mismatch.*kimi\.plugin\.json/);
+  input = source({ [kimi]: '{"name":"example","version":"0.1.0"}' });
+  const result = versionEdits(input.read, input.has, "0.2.0", "2026-11-08");
+  assert.equal(JSON.parse(result.files.get(kimi)).version, "0.2.0");
+});

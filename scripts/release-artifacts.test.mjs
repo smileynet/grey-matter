@@ -37,6 +37,9 @@ function seedFixture() {
   put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(pack));
   put(join(repo, ".claude-plugin/marketplace.json"), JSON.stringify({ name: "example", plugins: [{ name: "example", source: "./" }] }));
   put(join(repo, ".codex-plugin/plugin.json"), JSON.stringify({ name: "example", version: "0.2.0", skills: "./skills/" }));
+  put(join(repo, ".kimi-plugin/kimi.plugin.json"), JSON.stringify({ name: "example", version: "0.2.0", skills: "./skills/" }));
+  put(join(repo, ".kimi-plugin/locales/zh-CN.json"), '{"displayName":"Example"}\n');
+  put(join(repo, ".kimi-plugin/icon.png"), "fixture icon\n");
   put(join(repo, "skills/example/SKILL.md"), "---\nname: example\ndescription: Fixture skill\n---\n[Guide](../../docs/guide.md)\n");
   put(join(repo, "skills/example/LICENSE"), "retained standalone MIT notice\n");
   put(join(repo, "docs/guide.md"), "[Runner](../scripts/run.mjs)\n");
@@ -46,6 +49,7 @@ function seedFixture() {
   put(join(repo, "LICENSE"), "retained root MIT notice\n");
   put(join(repo, "NOTICE"), "retained attribution\n");
   cpSync(join(here, "deploy.mjs"), join(repo, "scripts/deploy.mjs"));
+  cpSync(join(here, "build-kimi-plugin.mjs"), join(repo, "scripts/build-kimi-plugin.mjs"));
   for (const file of [".tickets/01.md", ".scratch/result.txt", "target/debug/log", "node_modules/private.txt", ".env", "unrelated.txt"]) put(join(repo, file), "development only\n");
   return { repo, ref: commit(repo) };
 }
@@ -61,15 +65,16 @@ function fixture(fn) {
   finally { rmSync(dir, { recursive: true, force: true }); }
 }
 
-test("three bundles retain resources/notices/modes, exclude unrelated files, and verify after source removal", () => fixture(({ repo, out, build }) => {
+test("four bundles retain resources/notices/modes, exclude unrelated files, and verify after source removal", () => fixture(({ repo, out, build }) => {
   const metadata = build();
-  assert.equal(metadata.assets.length, 3);
+  assert.equal(metadata.assets.length, 4);
   assert.equal(metadata.skills, 1);
   assert.equal(metadata.verification.native, "not-run");
   for (const asset of metadata.assets) {
-    for (const file of ["README.md", "LICENSE", "NOTICE", "skills/example/LICENSE", "docs/guide.md", "scripts/run.mjs", "scripts/command.mjs"]) assert.ok(asset.files[file], file);
+    const prefix = asset.host === "kimi" ? "skills/.resources-example/" : "";
+    for (const file of ["README.md", "skills/example/LICENSE", `${prefix}LICENSE`, `${prefix}NOTICE`, `${prefix}docs/guide.md`, `${prefix}scripts/run.mjs`, `${prefix}scripts/command.mjs`]) assert.ok(asset.files[file], `${asset.host}: ${file}`);
     for (const file of Object.keys(asset.files)) assert.doesNotMatch(file, /\.tickets|\.scratch|node_modules|target|\.env|unrelated\.txt|\.git\//);
-    if (process.platform !== "win32") assert.equal(asset.files["scripts/run.mjs"].executable, 0o111);
+    if (process.platform !== "win32") assert.equal(asset.files[`${prefix}scripts/run.mjs`].executable, 0o111);
   }
   rmSync(repo, { recursive: true });
   assert.equal(verifyArtifacts(out).candidateSha, metadata.candidateSha);
@@ -89,7 +94,10 @@ for (const [kind, guide] of [
     return;
   }
   const metadata = build();
-  for (const asset of metadata.assets) assert.ok(asset.files["docs/evidence.json"], asset.host);
+  for (const asset of metadata.assets) {
+    const path = asset.host === "kimi" ? "skills/.resources-example/docs/evidence.json" : "docs/evidence.json";
+    assert.ok(asset.files[path], asset.host);
+  }
   rmSync(repo, { recursive: true });
   assert.equal(verifyArtifacts(out).candidateSha, metadata.candidateSha);
 }));
@@ -156,7 +164,7 @@ for (const state of ["matching", "wrong-authority", "stale-lock"]) test(`Cargo a
   if (state !== "matching") put(join(repo, "Cargo.toml"), '[package]\nname = "example"\nversion = "0.3.0"\nedition = "2021"\n');
   if (state === "wrong-authority") put(join(repo, "Cargo.lock"), 'version = 4\n[[package]]\nname = "example"\nversion = "0.3.0"\n');
   if (state === "stale-lock") {
-    for (const file of [".claude-plugin/plugin.json", ".codex-plugin/plugin.json"]) {
+    for (const file of [".claude-plugin/plugin.json", ".codex-plugin/plugin.json", ".kimi-plugin/kimi.plugin.json"]) {
       const path = join(repo, file), value = JSON.parse(readFileSync(path)); value.version = "0.3.0"; put(path, JSON.stringify(value));
     }
   }
@@ -213,7 +221,7 @@ for (const change of ["extra", "changed bytes", "missing", "version", "dangling"
     : /unexpected archive entry|missing expected|wrong agy bundle|package resource missing|incomplete agy plugin README/);
 }));
 
-test("sealed runtime includes its dependency manifest and wrapper works in each host layout", (t) => fixture(({ repo, dir, build, commit }) => {
+test("sealed runtime includes its dependency manifest and wrapper works in each non-Kimi host layout", (t) => fixture(({ repo, dir, build, commit }) => {
   const bash = posixBash();
   if (!bash) return t.skip("no Git for Windows bash next to git; the wrapper needs a POSIX bash that reads Windows paths");
   const file = join(repo, ".claude-plugin/plugin.json"), manifest = JSON.parse(readFileSync(file));
@@ -223,6 +231,7 @@ test("sealed runtime includes its dependency manifest and wrapper works in each 
   put(join(repo, "skills/example/references/release.sh"), readFileSync(join(here, "../skills/meta/release/references/release.sh")));
   commit(); const metadata = build();
   for (const asset of metadata.assets) {
+    if (asset.host === "kimi") continue;
     const extracted = join(dir, asset.host); extractArtifact(join(dir, "out", asset.name), extracted, asset.files);
     assert.ok(asset.files["package.json"]); assert.ok(asset.files["package-lock.json"]);
     assert.match(readFileSync(join(extracted, "README.md"), "utf8"), /npm ci --ignore-scripts/);

@@ -34,11 +34,14 @@ async function fixture(fn, cargo = false) {
     put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(manifest, null, 2) + "\n");
     put(join(repo, ".claude-plugin/marketplace.json"), '{"name":"example","plugins":[{"name":"example","source":"./"}]}\n');
     put(join(repo, ".codex-plugin/plugin.json"), '{"name":"example","version":"0.1.0","skills":"./skills/"}\n');
+    put(join(repo, ".kimi-plugin/kimi.plugin.json"), '{"name":"example","version":"0.1.0","skills":"./skills/"}\n');
+    put(join(repo, ".kimi-plugin/locales/zh-CN.json"), '{"displayName":"Example"}\n');
     put(join(repo, "skills/example/SKILL.md"), "---\nname: example\ndescription: Prepare fixture\n---\nFixture workflow.\n");
     put(join(repo, "LICENSE"), "Fixture license\n");
     put(join(repo, "README.md"), "Fixture documentation. ".repeat(50) + "\n");
     put(join(repo, "CHANGELOG.md"), "# Changelog\n\n## [Unreleased]\n\n### Added\n- A complete workflow.\n\n## [0.1.0] - 2026-10-01\n\n- Initial version.\n\n[Unreleased]: https://example.invalid/compare/v0.1.0...HEAD\n[0.1.0]: https://example.invalid/releases/tag/v0.1.0\n");
     cpSync(join(here, "deploy.mjs"), join(repo, "scripts/deploy.mjs"), { recursive: true });
+    cpSync(join(here, "build-kimi-plugin.mjs"), join(repo, "scripts/build-kimi-plugin.mjs"));
     if (cargo) {
       put(join(repo, "Cargo.toml"), '# retained comment\n[package]\nname = "example"\nversion = "0.1.0" # root version\n\n[dependencies]\nother = { version = "7.0.0" }\n');
       put(join(repo, "Cargo.lock"), 'version = 4\n\n[[package]]\nname = "example"\nversion = "0.1.0"\n\n[[package]]\nname = "example"\nversion = "7.0.0"\nsource = "registry+https://example.invalid"\n');

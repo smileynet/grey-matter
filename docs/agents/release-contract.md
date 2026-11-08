@@ -18,8 +18,8 @@ release commit across GitHub and every supported plugin format.
 
 | Product | Authority | Derived surfaces |
 | --- | --- | --- |
-| grey-matter | `.claude-plugin/plugin.json` version | `.codex-plugin/plugin.json`, generated agy plugin.json, `vX.Y.Z` annotated tag, GitHub release and bundle metadata |
-| tkt | Cargo.toml package.version | Cargo.lock root package version, crate/binaries, `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, root plugin.json, generated agy manifest, tag/release and asset metadata |
+| grey-matter | `.claude-plugin/plugin.json` version | `.codex-plugin/plugin.json`, `.kimi-plugin/kimi.plugin.json`, generated agy plugin.json, `vX.Y.Z` annotated tag, GitHub release and bundle metadata |
+| tkt | Cargo.toml package.version | Cargo.lock root package version, crate/binaries, `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `.kimi-plugin/kimi.plugin.json`, root plugin.json, generated agy manifest, tag/release and asset metadata |
 
 Marketplace entries use the pack manifest's version; they carry no competing version.
 The shared deploy engine's internal version is a vendor-compatibility identifier,
@@ -30,10 +30,10 @@ Codex, agy and Kimi do not inherit that Claude dependency; their documented tkt 
 prerequisite remains explicit. Kimi ticket workflows also require the `tkt-core` skill.
 
 Kimi currently uses local personal-market registration, not GitHub marketplace installation.
-Its source manifest must match the grey-matter version, but the automated version and host
-artifact surfaces do not yet include it. Update `.kimi-plugin/kimi.plugin.json` deliberately
-with the candidate, rebuild `dist/kimi-plugin`, and run its package and native checks. A GitHub
-release does not publish or refresh a Kimi personal registration.
+The shared version tools include `.kimi-plugin/kimi.plugin.json`, and the artifact tools build
+and verify its self-contained host archive alongside Codex, Claude and agy. Also rebuild
+`dist/kimi-plugin` and run its package and native checks. A GitHub release does not publish
+or refresh a Kimi personal registration.
 
 Before 1.0, compatible fixes and small skill/guidance corrections bump patch;
 new capability, new distribution targets, substantial batches and breaking changes

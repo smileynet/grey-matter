@@ -42,8 +42,11 @@ async function fixture(fn) {
     put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify({ name: "fixture", version: "0.1.0", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE"] } } }));
     put(join(repo, ".claude-plugin/marketplace.json"), '{"name":"fixture","plugins":[{"name":"fixture","source":"./"}]}');
     put(join(repo, ".codex-plugin/plugin.json"), '{"name":"fixture","version":"0.1.0","skills":"./skills/"}');
+    put(join(repo, ".kimi-plugin/kimi.plugin.json"), '{"name":"fixture","version":"0.1.0","skills":"./skills/"}');
+    put(join(repo, ".kimi-plugin/locales/zh-CN.json"), '{"displayName":"Fixture"}\n');
     put(join(repo, "skills/example/SKILL.md"), "---\nname: example\ndescription: A native fixture\n---\nExample workflow.\n"); put(join(repo, "LICENSE"), "Fixture license\n");
     put(join(repo, "scripts/deploy.mjs"), readFileSync(new URL("./deploy.mjs", import.meta.url)));
+    put(join(repo, "scripts/build-kimi-plugin.mjs"), readFileSync(new URL("./build-kimi-plugin.mjs", import.meta.url)));
     git("add", "."); git("-c", `core.hooksPath=${join(dir, "no hooks")}`, "commit", "-m", "Native fixture");
     buildArtifacts({ repo, ref: git("rev-parse", "HEAD"), out: artifacts });
     await fn({ dir, artifacts, out, run: (extra = {}) => verifyNative({ artifacts, out, ...extra }) });

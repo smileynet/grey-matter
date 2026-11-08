@@ -33,9 +33,11 @@ function template(check, product) {
   mkdirSync(repo); git("init", "-b", "main");
   const manifest = { name: product, version: "0.1.0", description: "Fixture", skills: ["./skills"], metadata: { deploy: { legalFiles: ["LICENSE"] } } };
   put(join(repo, ".claude-plugin/plugin.json"), JSON.stringify(manifest)); put(join(repo, ".codex-plugin/plugin.json"), JSON.stringify({name: product, version: "0.1.0", skills: "./skills/"}));
+  put(join(repo, ".kimi-plugin/kimi.plugin.json"), JSON.stringify({name: product, version: "0.1.0", skills: "./skills/"}));
+  put(join(repo, ".kimi-plugin/locales/zh-CN.json"), '{"displayName":"Fixture"}\n');
   put(join(repo, ".claude-plugin/marketplace.json"), JSON.stringify({name: product, plugins: [{name: product, source: "./"}]}));
   put(join(repo, "skills/example/SKILL.md"), "---\nname: example\ndescription: Candidate fixture\n---\nFixture.\n"); put(join(repo, "LICENSE"), "Fixture notice\n");
-  cpSync(join(scripts, "deploy.mjs"), join(repo, "scripts/deploy.mjs")); put(join(repo, "scripts/gate.mjs"), check);
+  cpSync(join(scripts, "deploy.mjs"), join(repo, "scripts/deploy.mjs")); cpSync(join(scripts, "build-kimi-plugin.mjs"), join(repo, "scripts/build-kimi-plugin.mjs")); put(join(repo, "scripts/gate.mjs"), check);
   git("add", "."); git("commit", "-m", "Fixture");
   const sha = git("rev-parse", "HEAD"); buildArtifacts({ repo, ref: sha, out: artifacts });
   const seed = { repo, artifacts, sha };
@@ -182,7 +184,7 @@ test("staging reader binds a committed index, six receipts, notes and complete a
   const stage = stagingFixture(f), sha = stage.save(), result = stage.read(sha);
   assert.equal(result.product, "grey-matter"); assert.equal(result.candidateSha, f.sha);
   assert.deepEqual(result.gates.pending, []); assert.equal(result.staging.reviewSha, sha);
-  assert.equal(result.assets.length, 5); assert.ok(result.assets.some((a) => a.name === "SHA256SUMS"));
+  assert.equal(result.assets.length, 6); assert.ok(result.assets.some((a) => a.name === "SHA256SUMS"));
   put(join(f.repo, "staging/notes.md"), "Unreviewed changes");
   assert.equal(stage.read(sha).notes, "Reviewed fixture notes\n");
 }));
@@ -357,7 +359,7 @@ test("tkt staging joins pinned plugin and CI bytes, retaining the original stage
   const reviewSha = stage.save();
   const options = { reviewRepo: f.repo, reviewSha, indexFile: "staging/index.json", artifacts: f.artifacts, evidence: f.out, api: ci.api };
   const result = await readStagedTktCandidate(options);
-  assert.equal(result.assets.length, 8);
+  assert.equal(result.assets.length, 9);
   const seal = result.assets.find((asset) => asset.name === "tkt-stage.json");
   assert.equal(hash(seal.bytes), ci.expected.sealSha256);
   assert.equal(seal.bytes.toString(), JSON.stringify(ci.record));
@@ -417,7 +419,7 @@ async function tktCiFixture(f, mutate = () => {}) {
 
 test("tkt CI entry: dry-run validates reviewed build bytes without credentials or ref changes", () => fixture(async (f) => {
   const ci = await tktCiFixture(f), before = tree(f.temp), result = await ci.run();
-  assert.equal(result.mode, "dry-run"); assert.equal(result.assetNames.length, 8); assert.deepEqual(ci.events, []); assert.deepEqual(tree(f.temp), before);
+  assert.equal(result.mode, "dry-run"); assert.equal(result.assetNames.length, 9); assert.deepEqual(ci.events, []); assert.deepEqual(tree(f.temp), before);
 }, undefined, "tkt"));
 
 test("tkt CI entry: reviewed tag, build bytes, intent and delayed transport are connected", () => fixture(async (f) => {
