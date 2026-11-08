@@ -363,12 +363,50 @@ test("Codex plugin removes owned copies, preserves foreign skills, and honors di
   } finally { rmSync(base, { recursive: true, force: true }); }
 });
 
+test("ZCode plugin installed: a --root the harness reads is skipped", () => {
+  const sb = homeSandbox({ harnesses: ["zcode"], zcode: true });
+  try {
+    const root = join(sb.home, ".zcode", "skills");
+    const r = runWithEnv(["--root", root], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.match(r.stdout, /skipped: ZCode plugin grey-matter@grey-matter is installed/);
+    assert.ok(!existsSync(join(root, "orient")), "no skill copied into a root ZCode reads");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("ZCode plugin is the harness's copy in root selection; explicit false means bare copies", () => {
+  const sb = homeSandbox({ harnesses: ["kiro", "zcode"], zcode: true });
+  try {
+    const r = runWithEnv([], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.match(r.stdout, /zcode\s+<- ZCode plugin grey-matter@grey-matter/);
+    assert.ok(sb.has(".kiro/skills"), "kiro keeps its own copies");
+    assert.ok(!sb.has(".zcode/skills"), "nothing copied where the plugin is ZCode's copy");
+    writeFileSync(join(sb.home, ".zcode", "cli", "config.json"),
+      JSON.stringify({ plugins: { enabledPlugins: { "grey-matter@grey-matter": false } } }));
+    const disabled = runWithEnv([], sb.env);
+    assert.equal(disabled.status, 0, disabled.stdout);
+    assert.ok(sb.has(".zcode/skills"), "a disabled plugin means ZCode gets bare copies again");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("audit: counts a ZCode plugin's cached skills when reporting duplicates", () => {
+  const sb = homeSandbox({ harnesses: ["zcode"], zcode: true });
+  try {
+    const shared = join(sb.home, ".agents", "skills");
+    mkdirSync(join(shared, "compass"), { recursive: true });
+    writeFileSync(join(shared, "compass", "SKILL.md"), "---\nname: compass\ndescription: stray duplicate\n---\n");
+    const r = runWithEnv(["audit"], sb.env);
+    assert.match(r.stdout, /zcode sees 1 skill\(s\) twice: compass \(plugin grey-matter@grey-matter/);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
 // --- Root selection with no --root: a fake HOME holding the harness dirs -----------------
 // HOME (and USERPROFILE) point at a temp tree, so the real harness roots are never read or
 // written. Plugin state comes from the fake ~/.claude/plugins and ~/.codex/config.toml.
-function homeSandbox({ harnesses = [], claude = false, codex = false } = {}) {
+function homeSandbox({ harnesses = [], claude = false, codex = false, zcode = false } = {}) {
   const home = mkdtempSync(join(tmpdir(), "gm-home-"));
-  const dirs = { kiro: ".kiro", codex: ".codex", claude: ".claude", opencode: join(".config", "opencode") };
+  const dirs = { kiro: ".kiro", codex: ".codex", claude: ".claude", opencode: join(".config", "opencode"), zcode: ".zcode" };
   for (const h of harnesses) mkdirSync(join(home, dirs[h]), { recursive: true });
   if (claude) {
     mkdirSync(join(home, ".claude", "plugins"), { recursive: true });
@@ -378,6 +416,15 @@ function homeSandbox({ harnesses = [], claude = false, codex = false } = {}) {
   if (codex) {
     mkdirSync(join(home, ".codex"), { recursive: true });
     writeFileSync(join(home, ".codex", "config.toml"), '[plugins."grey-matter@grey-matter"]\nenabled = true\n');
+  }
+  if (zcode) {
+    const cli = join(home, ".zcode", "cli");
+    mkdirSync(cli, { recursive: true });
+    writeFileSync(join(cli, "config.json"), JSON.stringify({ plugins: { enabledPlugins: { "grey-matter@grey-matter": true } } }));
+    const cached = join(cli, "plugins", "cache", "grey-matter", "grey-matter", PACK_VERSION);
+    mkdirSync(join(cached, ".claude-plugin"), { recursive: true });
+    cpSync(join(HERE, "..", "skills"), join(cached, "skills"), { recursive: true });
+    cpSync(join(HERE, "..", ".claude-plugin", "plugin.json"), join(cached, ".claude-plugin", "plugin.json"));
   }
   if (codex) {
   const cached = join(home, ".codex", "plugins", "cache", "grey-matter", "grey-matter", PACK_VERSION);

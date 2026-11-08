@@ -236,6 +236,34 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   so zsh reads only `~/.zshenv`: no `.zshrc` aliases or options, but zsh's `=word`, word-splitting
   and `NOMATCH` rules still apply. The config `shell` key can point it at bash.
 
+### ZCode (ancillary, Z.ai Desktop)
+
+- Z.ai's Electron desktop client with a bundled CLI,
+  `/Applications/ZCode.app/Contents/Resources/glm/zcode.cjs` (0.17.1 observed 2026-11-08,
+  macOS; no global binary — run it under any `node`). Probed live in
+  [zcode-plugin-compat-20261108](./research/zcode-plugin-compat-20261108.md).
+- **Plugin install:** `plugins marketplace add <checkout dir>` (local directory) or
+  `smileynet/grey-matter`, then `plugins install grey-matter@grey-matter`; install `tkt@tkt`
+  separately — dependencies are advisory (nothing blocks, nothing auto-installs). The existing
+  `.claude-plugin/` manifest is read as-is; ZCode probes `.zcode-plugin/`, then
+  `.claude-plugin/`, then `.codex-plugin/`.
+- **Refresh:** `plugins marketplace update grey-matter` then
+  `plugins update grey-matter@grey-matter` re-copies same-version content. Plugin state lives
+  in `~/.zcode/cli/` (`config.json` enable map, `plugins/cache/<marketplace>/<name>/<version>/`);
+  superseded version dirs linger, and version changes print "restart zcode to apply".
+  Skills load at session start — a running session never sees a mid-session install.
+- **Roots**: user `~/.zcode/skills`, `~/.agents/skills` (both verified live); project
+  `.zcode/skills`, `.agents/skills`. User scope shadows plugin scope; first same-named skill
+  wins. **Install**: harness table (`node scripts/deploy.mjs`) — nothing is copied while the
+  pack's ZCode plugin is enabled (`--allow-dual` overrides).
+- **Skills**: plugin skills register as `grey-matter:<skill>` with a bare-name alias, so
+  skill-to-skill references by bare name resolve.
+- **Invocation filter**: none — `disable-model-invocation` is ignored, every skill is
+  model-invocable (same as kiro-cli); user `/skill` invocation works regardless.
+- **Test (non-interactive, no model)**: `node <cli> plugins validate <dir>` and
+  `node <cli> skills list`. Headless `-p` prompts need a model selected in the TUI first
+  ("Select a model before sending a message").
+
 ## Critic model
 
 When reviewing gate changes, apply [tooling proportionality](local-gates.md#changing-a-gate-is-a-reversible-tooling-change)
@@ -322,6 +350,7 @@ harness's global instructions file:
 | codex | `~/.codex/AGENTS.md` | Codex docs: global, merged with repo AGENTS.md |
 | Claude Code | `~/.claude/CLAUDE.md` | Claude Code memory docs (user memory) |
 | OpenCode | `~/.config/opencode/AGENTS.md` | OpenCode rules docs |
+| ZCode | `~/.zcode/AGENTS.md` | ZCode config guide: user instruction file, injected before workspace AGENTS.md |
 | agy, Crush | installed | no verified user-level rules path; project AGENTS.md still applies |
 
 The installer owns only a marked block (`<!-- grey-matter:begin global rev=… -->` to

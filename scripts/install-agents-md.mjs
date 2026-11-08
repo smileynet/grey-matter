@@ -13,6 +13,7 @@
 //   codex       $CODEX_HOME/AGENTS.md (default ~/.codex/AGENTS.md)
 //   claude      ~/.claude/CLAUDE.md
 //   opencode    ~/.config/opencode/AGENTS.md
+//   zcode       ~/.zcode/AGENTS.md
 // --target replaces the whole set (used by tests; never touches real files then).
 //
 // Ownership: grey-matter owns only the text between its begin/end markers, so a user's own
@@ -43,6 +44,7 @@ export const KNOWN = [
   { harness: "codex", dir: CODEX, file: join(CODEX, "AGENTS.md") },
   { harness: "claude", dir: join(H, ".claude"), file: join(H, ".claude", "CLAUDE.md") },
   { harness: "opencode", dir: join(H, ".config", "opencode"), file: join(H, ".config", "opencode", "AGENTS.md") },
+  { harness: "zcode", dir: join(H, ".zcode"), file: join(H, ".zcode", "AGENTS.md") },
 ];
 
 export const revOf = (body) => createHash("sha256").update(body).digest("hex").slice(0, 7);
