@@ -21,7 +21,7 @@ Sam requested a Grey Matter brain/lightbulb icon and follow-up tickets for remai
 
 Project the existing Grey Matter icon into the Antigravity package and declare it in the generated manifest. Add fixtures for manifest metadata, packaged bytes, unchanged rebuilds, and drift repair. Keep unrelated harness manifests unchanged.
 
-# Acceptance criteria
+## Acceptance criteria
 
 - [ ] `dist/agy-plugin/plugin.json` points to an existing packaged icon.
 - [ ] The packaged icon bytes match the tracked source.

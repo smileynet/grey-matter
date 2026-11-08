@@ -25,7 +25,7 @@ Make development integration work with both ordinary npm and the managed Kimi wr
 
 Release publication, changing the managed wrapper, and broad environment-variable passthrough.
 
-# Acceptance criteria
+## Acceptance criteria
 
 - [ ] A fixture reproduces the managed-wrapper requirement and fails before the compatibility fix.
 - [ ] Only the explicitly required runtime values are added to the child environment.

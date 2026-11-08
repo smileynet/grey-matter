@@ -22,7 +22,7 @@ Record the exact client OS and package identity in `docs/agents/research/kimi-pl
 
 Fixing platform defects before reproducing them, release publication, and substituting static package inspection for a real client installation.
 
-# Acceptance criteria
+## Acceptance criteria
 
 - [ ] A real non-macOS installation loads a model-invoked skill and its linked reference from the packaged bytes.
 - [ ] A user-only workflow remains unavailable to autonomous model invocation and available to the owner.
