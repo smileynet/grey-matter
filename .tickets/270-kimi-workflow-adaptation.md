@@ -1,7 +1,7 @@
 ---
 id: "270"
 title: "Adapt grey-matter workflow behavior for Kimi"
-status: open
+status: in_progress
 blocked_by: ["269"]
 validation_criteria:
   - "The Kimi package exposes deliberate entry points for user-invoked workflows without weakening model invocation for skills that other skills call."
