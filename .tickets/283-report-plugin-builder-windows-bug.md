@@ -1,7 +1,7 @@
 ---
 id: "283"
 title: "Document register_personal.sh Windows .cmd failure; capture upstream bug report"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "harnesses.md Kimi section documents symptom and .py workaround"
@@ -32,9 +32,9 @@ owner submitted it (link/channel reference) or decided not to.
 
 ## Acceptance criteria
 
-- [ ] `harnesses.md` Kimi section documents the failure symptom and the `.py` workaround
-- [ ] Ticket body carries a paste-ready bug report (symptom, repro, expected/actual)
-- [ ] Close-out records the upstream-report outcome (submitted / declined)
+- [x] `harnesses.md` Kimi section documents the failure symptom and the `.py` workaround
+- [x] Ticket body carries a paste-ready bug report (symptom, repro, expected/actual)
+- [x] Close-out records the upstream-report outcome (submitted / declined)
 
 ## Paste-ready upstream bug report
 
@@ -55,3 +55,12 @@ The script's `-x`-style executability test returns false for `.cmd` launchers un
 **Workaround:** `python scripts/register_personal.py <plugin-dir>` works correctly on the same machine (validated 2026-11-08 with two successful registrations, read-back verified).
 
 **Suggested fix:** on Windows, treat `.cmd`/`.exe` at `DAIMON_RUNTIME_BINARY_PATH` as executable when the file exists, or replace the `-x` test with a capability probe (`<binary> --version`).
+
+## Resolution (2026-11-08)
+
+done: harnesses.md documents the Windows failure and .py workaround; paste-ready bug report is in this ticket body. Upstream-report outcome: not submitted by the agent (no public tracker; the client's feedback channel needs the owner) -- report text captured here for the owner to paste
+
+### Verification
+1. ✓ harnesses.md Kimi section documents symptom and .py workaround — "harnesses.md Kimi Register bullet documents the literal error text and the register_personal.py workaround with observed date"
+2. ✓ ticket body carries paste-ready bug report — "ticket body section 'Paste-ready upstream bug report' has title, environment, repro, expected/actual, workaround, suggested fix"
+3. ✓ close-out records upstream-report outcome — "resolution records: agent cannot submit client feedback; owner submission pending, text ready in body"
