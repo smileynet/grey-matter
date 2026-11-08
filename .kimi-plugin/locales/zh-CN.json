@@ -1,0 +1,11 @@
+{
+  "displayName": "Grey Matter",
+  "shortDescription": "面向工程、效率与游戏开发的工作流技能",
+  "longDescription": "面向游戏与应用开发的代理技能，涵盖工程、效率与工作流维护，并集成 tkt 工单。",
+  "developerName": "smileynet",
+  "tryPrompts": [
+    "帮我选择合适的 grey-matter 工作流",
+    "把这个想法整理成规格说明和工单",
+    "以测试先行的方式实现下一个无阻塞工单"
+  ]
+}

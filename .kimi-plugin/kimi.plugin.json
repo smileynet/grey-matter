@@ -1,0 +1,33 @@
+{
+  "$schema": "https://catalog.msh.team/misc/kimi.plugin.schema.json",
+  "name": "grey-matter",
+  "version": "0.1.0",
+  "description": "Agent skills for game-centric and app development: engineering, productivity, and workflow maintenance, with tkt ticket integration.",
+  "keywords": [
+    "skills",
+    "agent-skills",
+    "engineering",
+    "productivity",
+    "game-dev",
+    "tkt"
+  ],
+  "author": "smileynet",
+  "license": "MIT AND Apache-2.0",
+  "interface": {
+    "displayName": "Grey Matter",
+    "shortDescription": "Engineering, productivity, and game-development workflow skills",
+    "longDescription": "Agent skills for game-centric and app development: engineering, productivity, and workflow maintenance, with tkt ticket integration.",
+    "developerName": "smileynet",
+    "websiteURL": "https://github.com/smileynet/grey-matter",
+    "iconUrl": "",
+    "category": "PRODUCTIVITY",
+    "defaultLocale": "en-US",
+    "locales": "./locales/",
+    "tryPrompts": [
+      "Help me choose the right grey-matter workflow",
+      "Turn this idea into a spec and tickets",
+      "Implement the next frontier ticket test-first"
+    ]
+  },
+  "skills": "./skills/"
+}

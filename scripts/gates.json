@@ -15,10 +15,19 @@
       "id": "plugin-manifest",
       "stage": "pre-push",
       "catches": "a plugin manifest that no longer matches disk, its sibling or the release tag, so consumer installs fail",
-      "scope": [".claude-plugin/", ".codex-plugin/", ".agents/", ".kiro/", "skill-packs.json", "skills/", "scripts/deploy.mjs", "scripts/check-plugin-manifest.mjs"],
+      "scope": [".claude-plugin/", ".codex-plugin/", ".kimi-plugin/", ".agents/", ".kiro/", "skill-packs.json", "skills/", "scripts/deploy.mjs", "scripts/check-plugin-manifest.mjs"],
       "run": ["node", "scripts/check-plugin-manifest.mjs"],
       "timeout_s": 10,
       "measured": { "s": 1.4, "date": "2026-11-01", "host": "win" }
+    },
+    {
+      "id": "kimi-plugin-package",
+      "stage": "pre-merge",
+      "catches": "a Kimi package that omits skills or resources, ships active root guidance, or rewrites unchanged output",
+      "scope": [".kimi-plugin/", "skills/", "scripts/build-kimi-plugin.mjs", "scripts/kimi-plugin.test.mjs"],
+      "run": ["node", "--test", "scripts/kimi-plugin.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 5.0, "date": "2026-11-08", "host": "mac" }
     },
     {
       "id": "skill-syntax",

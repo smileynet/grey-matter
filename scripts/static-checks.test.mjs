@@ -176,3 +176,12 @@ test("plugin-manifest check FAILS when plugin.json version is behind the latest 
     assert.match(r.out, /behind the latest tag/);
   });
 });
+
+test("plugin-manifest check FAILS when the Kimi identity or version differs", () => {
+  const manifest = join(REPO, ".kimi-plugin", "kimi.plugin.json");
+  withSeededFile(manifest, (s) => s.replace(/"version": "[^"]*"/, '"version": "9.9.9"'), () => {
+    const r = runCheck("check-plugin-manifest.mjs");
+    assert.equal(r.status, 1, "expected nonzero when Kimi and Claude versions differ");
+    assert.match(r.out, /Kimi and Claude plugin identities\/versions differ/);
+  });
+});
