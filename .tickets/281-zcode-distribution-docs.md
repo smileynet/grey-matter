@@ -1,7 +1,7 @@
 ---
 id: "281"
 title: "Document ZCode as a distribution surface (onboarding, refresh, maintenance)"
-status: in_progress
+status: done
 blocked_by: ["274", "280"]
 validation_criteria:
   - "distribution-maintenance.md carries a ZCode section covering onboarding, refresh contract, and maintenance, consistent with spike evidence"
@@ -35,6 +35,15 @@ spike evidence (ticket 273 /
 
 ## Acceptance criteria
 
-- [ ] distribution-maintenance.md carries a ZCode section covering onboarding, refresh contract, and maintenance, consistent with spike evidence
-- [ ] Onboarding decision (scripted vs documented) recorded with rationale
-- [ ] Doc links resolve; `node scripts/gate.mjs pre-merge` passes on the changed docs
+- [x] distribution-maintenance.md carries a ZCode section covering onboarding, refresh contract, and maintenance, consistent with spike evidence
+- [x] Onboarding decision (scripted vs documented) recorded with rationale
+- [x] Doc links resolve; `node scripts/gate.mjs pre-merge` passes on the changed docs
+
+## Resolution (2026-11-08)
+
+done: ZCode is a documented distribution surface covering onboarding, the advisory-dependency rule, the deploy-owned same-version refresh, and maintenance caveats, with the scripted-vs-documented onboarding call recorded
+
+### Verification
+1. ✓ distribution-maintenance.md carries a ZCode section covering onboarding, refresh contract, and maintenance, consistent with spike evidence — "distribution-maintenance.md gains a ZCode plugin section: manifest reuse (no .zcode-plugin), onboarding commands incl. explicit tkt@tkt install, deploy-owned refresh contract, maintenance notes (--force uninstall, TUI model default, session-start loading), cross-links to harnesses.md and the research doc"
+2. ✓ Onboarding decision (scripted vs documented) recorded with rationale — "Onboarding decision recorded with rationale: two documented CLI commands over a script (rare owner-run setup; deploy.mjs already owns refresh and detection; Kimi documented-registration precedent)"
+3. ✓ Doc links resolve; gate.mjs pre-merge passes on the changed docs — "gate.mjs pre-merge ok on the changed docs; intro paragraph updated to name the ZCode refresh; verified line cites tickets 273-281 and the live 0.1.0->0.2.0 refresh"
