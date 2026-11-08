@@ -68,3 +68,27 @@ for the cases where a shell command is genuinely the right tool (git, Node, tkt,
 
 Each of these was low-severity (recovered in one retry) but cross-session and cheap to
 document once.
+
+## Rust toolchain breakage (rustup / mise)
+
+Observed 2026-11-08 while refreshing the tkt CLI; each cost a diagnosis before the fix.
+
+- **`error[E0463]: can't find crate for 'core'` / "the `x86_64-pc-windows-msvc` target may not
+  be installed"** — the toolchain under `~/.rustup/toolchains/<ver>-x86_64-pc-windows-msvc`
+  exists but its `rust-std` component is missing (an interrupted rustup install). Tell:
+  `lib/rustlib/` lists manifests for cargo/clippy/rustc/rustfmt but no `rust-std`. Repair
+  (idempotent): `rustup toolchain install <ver> --component rust-std`. The `help:` text's
+  `rustup target add` suggestion does not fix this form.
+- **Invoking a toolchain's real `cargo.exe` directly fails with "no default toolchain
+  configured"** — the rustup proxies require a default; bypassing them (calling
+  `~/.rustup/toolchains/<ver>/bin/cargo.exe` straight) or a missing default both produce it.
+  Repair: `rustup default <ver>`, then prefer the proxy over the toolchain's real binaries.
+- **mise shims fail with `command not found` (or "mise: not found") although the tool's
+  binary is fine.** Shims in `%LOCALAPPDATA%\mise\shims` are stubs that exec `mise x -- <tool>`;
+  when `mise.exe` itself is not on PATH every shimmed tool breaks at once. The real binaries
+  live under `%LOCALAPPDATA%\mise\installs\<tool>\<ver>\` — invoke them directly to keep
+  working, then repair the mise installation (reinstall/activate mise; verify in a fresh
+  shell with `mise --version`).
+- **Smoke check after any rustup/mise change:** `rustup default <ver> && rustc --print
+  sysroot`, then a trivial `cargo build`. A toolchain that lists in `rustup toolchain list`
+  can still be missing `rust-std`, so existence is not proof of compilability.
