@@ -12,7 +12,8 @@ Skills deploy with `node scripts/deploy.mjs` (proposal 08). It reads the pack fr
 and how to tell whether its plugin is installed). From that table it picks roots so each
 harness on this machine sees each skill exactly once, counting an installed plugin as the copy.
 It copies there, takes back copies it left elsewhere, and packages the Antigravity (`agy`)
-plugin when `~/.gemini` exists, and the Kiro Crew app when `~/.kiro/crew` exists (see below). It is manifest-tracked and idempotent, refuses foreign dirs,
+plugin when `~/.gemini` exists, the Kiro Crew app when `~/.kiro/crew` exists, and refreshes an
+installed ZCode plugin in place (see below). It is manifest-tracked and idempotent, refuses foreign dirs,
 and takes `--dry-run`/`list`/`uninstall`/`--root`/`--project`. It also has `check` (the
 manifests match disk and tags; native manifest/content warnings fail via `--strict`) and `audit` (unowned dirs, and skills a harness sees twice).
 `install-skills.mjs` and `build-agy-plugin.mjs` forward to it.
@@ -72,6 +73,51 @@ Registration and read-back passed on 2026-11-08. Native validation reported zero
 two non-blocking catalog warnings for omitted per-skill display overrides. Owner installation,
 `grey-matter:compass` discovery, linked-resource loading and both sides of the user/model
 invocation policy also passed live checks. Update timing remains unverified.
+
+### ZCode plugin
+
+ZCode (Z.ai Desktop) reads this repo's own `.claude-plugin/` manifest as-is — it probes
+`.zcode-plugin/`, then `.claude-plugin/`, then `.codex-plugin/` — so **no separate ZCode
+manifest is maintained**; a second one would be drift surface, and the version authority
+stays with `.claude-plugin/plugin.json`. Per-harness behavior is in
+[`docs/agents/harnesses.md`](./harnesses.md#zcode-ancillary-zai-desktop); the evidence is in
+[`research/zcode-plugin-compat-20261108.md`](./research/zcode-plugin-compat-20261108.md).
+
+**Onboarding is two documented CLI commands, not a script** (decision, 2026-11-08):
+first-time setup is rare and owner-run, `deploy.mjs` already owns refresh and detection,
+and a setup script would duplicate its knowledge of paths and plugin ids — the same
+reasoning as Kimi's documented registration. The CLI is
+`node /Applications/ZCode.app/Contents/Resources/glm/zcode.cjs …` (no global binary;
+`ZCODE_CLI` overrides):
+
+```sh
+node <cli> plugins marketplace add ~/code/grey-matter   # or smileynet/grey-matter from GitHub
+node <cli> plugins install grey-matter@grey-matter
+node <cli> plugins marketplace add smileynet/tkt && node <cli> plugins install tkt@tkt
+```
+
+Install `tkt@tkt` explicitly: ZCode resolves `dependencies` (object form, cross-marketplace
+gates honored) but treats them as advisory — nothing blocks when absent and nothing
+auto-installs when the marketplace appears.
+
+**Refresh is deploy-owned.** `deploy.mjs` refreshes an installed ZCode plugin on every
+install: `plugins marketplace update grey-matter` re-syncs the snapshot from the directory
+source, then `plugins update grey-matter@grey-matter` re-copies content **at the same
+version** — no version bump per skill edit. Version changes print "restart zcode to apply";
+superseded `<version>` cache dirs under `~/.zcode/cli/plugins/cache/` are pruned to the
+newest. When the CLI is absent the step skips cleanly; a failed invocation prints the exact
+owner-run commands (the Kiro Crew handoff pattern).
+
+**Maintenance notes.** `plugins uninstall` needs `--force` in non-interactive shells.
+Headless `-p` prompts fail with "Select a model" until a model is chosen in the TUI
+(`/model`) — model defaults are TUI state, not files. Skills load at session start, so a
+running session never sees a mid-session refresh. `plugins validate <dir>` and
+`plugins skills list` are non-interactive and model-free; the native validator accepts the
+Claude manifest, and `claude plugin validate --strict` remains the gate for it.
+
+Verified 2026-11-08 (tickets 273-281): validate passed on the checkout as-is; install
+yielded 50 skills with bare-name aliases; the same-version refresh recipe and prune were
+exercised live (plugin moved 0.1.0 → 0.2.0, three stale cache dirs removed).
 
 ### Kiro Crew app
 
