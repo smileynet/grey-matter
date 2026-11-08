@@ -1,6 +1,6 @@
 # Skill frontmatter: the all-up schema
 
-grey-matter skills target three harnesses (Claude Code, Codex, Kiro/kiro-cli) and
+grey-matter skills target four harnesses (Claude Code, Codex, Kiro/kiro-cli, Kimi Work) and
 should stay clean against the Agent Skills open-standard validator. This is the schema
 to author against, and the rule for what belongs in `metadata`.
 
@@ -13,7 +13,7 @@ Every `SKILL.md` carries only:
 - **`description`** (required): max 1024 chars. Model-facing for a model-invoked skill
   (rich "Use when..." triggers), human-facing one-liner for a user-invoked one.
 
-These two are read by all three harnesses and are the only fields the strict standard
+These two are read by all four harnesses and are the only fields the strict standard
 validator requires. Default to just these.
 
 ## Allowed-but-inert standard fields
@@ -32,6 +32,7 @@ each harness reads differs, and a strict validator rejects the Claude one:
 | Claude Code | `disable-model-invocation: true` | `SKILL.md` frontmatter |
 | Codex | `policy.allow_implicit_invocation: false` | sidecar `agents/openai.yaml` |
 | Antigravity 1.4.5 | `disable-model-invocation: true` (observed runtime; omitted by published frontmatter reference) | `SKILL.md` frontmatter |
+| Kimi Work | `disable-model-invocation: true` (verified live 2026-11-08) | `SKILL.md` frontmatter |
 | Kiro | ignores the Claude field (verified: unknown key ignored, skill still loaded) | - |
 
 So a user-invoked skill sets **both** `disable-model-invocation: true` in `SKILL.md`

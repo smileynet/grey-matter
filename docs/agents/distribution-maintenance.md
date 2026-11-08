@@ -69,8 +69,9 @@ register the same output directory for updates. The package intentionally has no
 servers or setup script.
 
 Registration and read-back passed on 2026-11-08. Native validation reported zero errors and
-two non-blocking catalog warnings for omitted per-skill display overrides. Installation,
-discovery, resource loading, invocation and update behavior remain separate live checks.
+two non-blocking catalog warnings for omitted per-skill display overrides. Owner installation,
+`grey-matter:compass` discovery, linked-resource loading and both sides of the user/model
+invocation policy also passed live checks. Update timing remains unverified.
 
 ### Kiro Crew app
 

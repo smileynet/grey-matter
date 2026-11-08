@@ -121,10 +121,11 @@ Native validation, source-documentation audits, and update procedures are descri
 ## Status
 
 The set contains 50 skills, with Claude, Codex, Antigravity and Kimi plugin packaging
-plus deployment for the other supported harnesses. Kimi registration is verified; live
-installation and invocation remain to be probed. Release preparation, verification and
-recovery are implemented; each release still needs its own candidate, install/upgrade
-and final audit evidence. Remaining work is tracked in `.tickets/` (`tkt ready`).
+plus deployment for the other supported harnesses. Kimi installation, discovery, linked
+resources and user/model invocation are verified; update behavior remains unprobed.
+Release preparation, verification and recovery are implemented; each release still needs
+its own candidate, install/upgrade and final audit evidence. Remaining work is tracked in
+`.tickets/` (`tkt ready`).
 
 ## License
 

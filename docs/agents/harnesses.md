@@ -155,10 +155,12 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 - **Verified 2026-11-08:** static validation returned zero errors and two non-blocking catalog
   warnings for omitted per-skill display overrides. Registration returned a clear rights scan,
   `grey-matter` version `0.1.0`, 50 skill names and 19 command names; read-back verification passed.
-- **Still unverified:** installation, live skill discovery, linked-resource loading, user/model
-  invocation behavior and updates. Do not infer these from the registration catalog. After
-  installation, probe `compass`, one linked resource and both explicit and model invocation,
-  then replace this paragraph with the observed results.
+  After owner installation, model invocation of `grey-matter:compass` loaded the packaged skill.
+  Its manifest, skill body and linked `PHASE-BOUNDARIES.md` matched the built package byte for byte.
+  Model invocation of user-only `grey-matter:cheat-sheet` was refused, while explicit user invocation
+  loaded it successfully.
+- **Still unverified:** update behavior. Rebuild and registration are documented, but no live
+  update probe has established when an installed or active session picks up replacement bytes.
 
 ### agy (ancillary, Google Antigravity CLI)
 
