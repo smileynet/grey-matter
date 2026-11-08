@@ -27,6 +27,6 @@ Release publication, changing the managed wrapper, and broad environment-variabl
 
 # Acceptance criteria
 
-- A fixture reproduces the managed-wrapper requirement and fails before the compatibility fix.
-- Only the explicitly required runtime values are added to the child environment.
-- The focused development/product suites and applicable pre-merge gate pass.
+- [ ] A fixture reproduces the managed-wrapper requirement and fails before the compatibility fix.
+- [ ] Only the explicitly required runtime values are added to the child environment.
+- [ ] The focused development/product suites and applicable pre-merge gate pass.

@@ -23,7 +23,7 @@ Project the existing Grey Matter icon into the Antigravity package and declare i
 
 # Acceptance criteria
 
-- `dist/agy-plugin/plugin.json` points to an existing packaged icon.
-- The packaged icon bytes match the tracked source.
-- Deployment validation no longer emits the missing-logo warning.
-- Deployer regression tests and applicable gates pass.
+- [ ] `dist/agy-plugin/plugin.json` points to an existing packaged icon.
+- [ ] The packaged icon bytes match the tracked source.
+- [ ] Deployment validation no longer emits the missing-logo warning.
+- [ ] Deployer regression tests and applicable gates pass.

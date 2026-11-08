@@ -24,7 +24,7 @@ Fixing platform defects before reproducing them, release publication, and substi
 
 # Acceptance criteria
 
-- A real non-macOS installation loads a model-invoked skill and its linked reference from the packaged bytes.
-- A user-only workflow remains unavailable to autonomous model invocation and available to the owner.
-- Evidence names every tested and untested platform.
-- Package tests pass in the applicable maintained environment.
+- [ ] A real non-macOS installation loads a model-invoked skill and its linked reference from the packaged bytes.
+- [ ] A user-only workflow remains unavailable to autonomous model invocation and available to the owner.
+- [ ] Evidence names every tested and untested platform.
+- [ ] Package tests pass in the applicable maintained environment.

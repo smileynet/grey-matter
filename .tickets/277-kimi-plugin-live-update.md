@@ -24,7 +24,7 @@ Add `docs/agents/research/kimi-plugin-live-update.md` with package versions, exa
 
 # Acceptance criteria
 
-- Same-version behavior and the supported changed-version path are measured separately.
-- A live model invocation or equivalent package-load probe proves which bytes the new session loaded.
-- The documentation states the observed timing and does not claim instantaneous updates without evidence.
-- Existing package tests still pass.
+- [ ] Same-version behavior and the supported changed-version path are measured separately.
+- [ ] A live model invocation or equivalent package-load probe proves which bytes the new session loaded.
+- [ ] The documentation states the observed timing and does not claim instantaneous updates without evidence.
+- [ ] Existing package tests still pass.

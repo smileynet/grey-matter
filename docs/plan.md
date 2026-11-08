@@ -672,3 +672,17 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 258 | Make unfinished tickets easier to scan in the Plan | ✅ done |
 | 259 | Address the dashboard UX and visual review | ✅ done |
 | 260 | Apply evidence-first spikes and visual critic guidance | ✅ done |
+| 261 | verify-tkt-usage attributes subcommand flags after a global flag to the global scope | open |
+| 262 | home-path-fixtures writes a filename Windows forbids (quote and newline) and fails the gate | open |
+| 263 | Kiro copies of delivery-dashboard and orchestrate link into a code-review skill the installer refused to write | open |
+| 264 | deploy.mjs cannot run the kirocrew CLI on Windows, so Kiro Crew apps are built but never installed | open |
+| 265 | Guidance for writing /goal conditions that can end honestly | open |
+| 266 | Validate and insert one delivery-dashboard entry before the full check | open |
+| 267 | Triage checks criterion facts when filing tickets from an audit | open |
+| 268 | snapshot-tickets.mjs writes the ticket snapshot as multi-line JSON | open |
+| 273 | Spike: install grey-matter's Claude plugin in ZCode, record runtime behavior | in_progress |
+| 274 | Add ZCode harness to deploy.mjs (copy mode) and install-agents-md | open |
+| 276 | Let release development tests use the managed npm wrapper | open |
+| 277 | Measure Grey Matter Kimi plugin update behavior | open |
+| 278 | Validate Grey Matter Kimi installation beyond macOS | open |
+| 279 | Show the Grey Matter icon in Antigravity | open |
