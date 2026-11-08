@@ -1,7 +1,7 @@
 ---
 id: "280"
 title: "Add refreshZcode step to deploy.mjs for the installed ZCode plugin"
-status: open
+status: in_progress
 blocked_by: ["274"]
 validation_criteria:
   - "Content-only checkout change reaches the ZCode plugin cache after deploy, without a version bump"
