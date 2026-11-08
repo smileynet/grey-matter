@@ -1,7 +1,7 @@
 ---
 id: "272"
 title: "Support Kimi in shared release tooling"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "Shared version preparation includes an optional Kimi manifest and rejects identity or version drift."
