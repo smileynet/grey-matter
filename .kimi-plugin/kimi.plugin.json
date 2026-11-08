@@ -13,6 +13,7 @@
   ],
   "author": "smileynet",
   "license": "MIT AND Apache-2.0",
+  "skillInstructions": "On Kimi, run orchestration and research sequentially in-session unless the user explicitly requests delegated agents. Before any ticket-reading or ticket-changing workflow, verify `tkt --version` succeeds and the `tkt-core` skill is available. If either is missing, stop that tracker-dependent step and tell the user to install both; never hand-edit ticket state as a substitute.",
   "interface": {
     "displayName": "Grey Matter",
     "shortDescription": "Engineering, productivity, and game-development workflow skills",
@@ -29,5 +30,6 @@
       "Implement the next frontier ticket test-first"
     ]
   },
-  "skills": "./skills/"
+  "skills": "./skills/",
+  "commands": "./commands/"
 }

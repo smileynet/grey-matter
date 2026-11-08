@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { existsSync, lstatSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -76,5 +76,38 @@ test("kimi: an unchanged rebuild preserves output and a later build repairs drif
     assert.equal(run(out).status, 0);
     assert.match(readFileSync(skill, "utf8"), /name: orient/);
     assert.equal(existsSync(join(out, "stale.txt")), false);
+  } finally { rmSync(home, { recursive: true, force: true }); }
+});
+
+test("kimi: package preserves deliberate workflows and Kimi authorization boundaries", () => {
+  const home = sandbox();
+  try {
+    const out = join(home, "plugin");
+    const result = run(out);
+    assert.equal(result.status, 0, result.stdout);
+    const userInvoked = readdirSync(join(ROOT, "skills"), { recursive: true, withFileTypes: true })
+      .filter((entry) => entry.isFile() && entry.name === "SKILL.md")
+      .map((entry) => join(entry.parentPath ?? entry.path, entry.name))
+      .filter((file) => /^disable-model-invocation:\s*true\s*$/m.test(readFileSync(file, "utf8")))
+      .map((file) => basename(dirname(file))).sort();
+    const commands = readdirSync(join(out, "commands")).map((file) => file.replace(/\.md$/, "")).sort();
+    assert.deepEqual(commands, userInvoked);
+    assert.ok(!commands.includes("tdd"), "model-invoked skills do not need a user-only command shim");
+    for (const name of commands) {
+      const command = readFileSync(join(out, "commands", `${name}.md`), "utf8");
+      assert.match(command, new RegExp(`name: ${name}(\\r?\\n)`));
+      assert.match(command, /\$ARGUMENTS/);
+    }
+
+    const manifest = JSON.parse(readFileSync(join(out, "kimi.plugin.json"), "utf8"));
+    assert.match(manifest.skillInstructions, /tkt --version/);
+    assert.match(manifest.skillInstructions, /tkt-core/);
+    const orchestrate = readFileSync(join(out, "skills/orchestrate/SKILL.md"), "utf8");
+    assert.match(orchestrate, /harness-kimi\.md/);
+    const kimi = readFileSync(join(out, "skills/orchestrate/references/harness-kimi.md"), "utf8");
+    assert.match(kimi, /sequential/i);
+    assert.match(kimi, /explicitly/i);
+    assert.match(readFileSync(join(out, "skills/research/SKILL.md"), "utf8"), /On Kimi, research in-session/);
+    assert.match(readFileSync(join(out, "skills/research-audit/SKILL.md"), "utf8"), /On Kimi, do not substitute a self-audit/);
   } finally { rmSync(home, { recursive: true, force: true }); }
 });

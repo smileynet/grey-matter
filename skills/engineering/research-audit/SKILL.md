@@ -5,7 +5,7 @@ description: Validate and score a research findings file against its sources. Us
 
 Audit a research findings file produced by the `research` skill (or any cited analysis). You did **not** do the original reading, and that is the point: a fresh-context auditor can't rubber-stamp its own citations.
 
-Run as a **separate background agent** so the audit is independent of the producer.
+Run as a **separate background agent** so the audit is independent of the producer. On Kimi, do not substitute a self-audit: use a separate agent only when the user explicitly requests delegation; otherwise report that the independent audit needs that authorization.
 
 For each claim in the findings file:
 

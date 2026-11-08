@@ -21,7 +21,7 @@ A maintainer can build a self-contained, skill-only Kimi plugin from the current
 
 ## Resolution (2026-11-08)
 
-done: shipped a standalone Kimi build CLI, generated skill-only manifest/locale, resource-preserving package tests, manifest consistency checks, and gate coverage without changing the shared deployer. Kept dist/kimi-plugin and .scratch/kimi-plugin-builder for ticket 271; superseded scaffold remains ignored scratch and is not shipped.
+done: shipped a standalone Kimi build CLI, generated skill-only manifest/locale, resource-preserving package tests, manifest consistency checks, and gate coverage without changing the shared deployer. Kept the generated package and local validation tooling for ticket 271; superseded scaffolding is not shipped.
 
 ### Verification
 1. ✓ A Kimi build produces a valid skill-only plugin containing every current grey-matter skill exactly once. — "node scripts/build-kimi-plugin.mjs built dist/kimi-plugin; scripts/kimi-plugin.test.mjs verified all 50 current skills appear exactly once with a skill-only manifest."

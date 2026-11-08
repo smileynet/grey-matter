@@ -67,6 +67,19 @@ function replacePackage(stage, out) {
   }
 }
 
+function writeCommands(stage, skills) {
+  const commands = join(stage, "commands");
+  mkdirSync(commands, { recursive: true });
+  for (const name of readdirSync(skills)) {
+    const skillPath = join(skills, name, "SKILL.md");
+    if (!existsSync(skillPath)) continue;
+    const skill = readFileSync(skillPath, "utf8");
+    if (!/^disable-model-invocation:\s*true\s*$/m.test(skill)) continue;
+    const description = skill.match(/^description:\s*(.+)$/m)?.[1].trim().replace(/^["']|["']$/g, "") || `Run ${name}`;
+    writeFileSync(join(commands, `${name}.md`), `---\nname: ${name}\ndescription: ${JSON.stringify(description)}\n---\n\nInvoke the \`${name}\` skill now and follow its workflow with these arguments:\n\n$ARGUMENTS\n`);
+  }
+}
+
 function build(pack, out) {
   const source = join(pack, ".kimi-plugin");
   const manifestPath = join(source, "kimi.plugin.json");
@@ -83,6 +96,7 @@ function build(pack, out) {
     const output = execFileSync(process.execPath, [deployer, "--pack", pack, "--root", skills], { encoding: "utf8" });
     process.stdout.write(output);
     rmSync(join(skills, `.installed-by-${manifest.name}.json`), { force: true });
+    writeCommands(stage, skills);
     cpSync(join(source, "locales"), join(stage, "locales"), { recursive: true });
     writeFileSync(join(stage, "kimi.plugin.json"), JSON.stringify(manifest, null, 2) + "\n");
 
