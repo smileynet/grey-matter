@@ -93,6 +93,12 @@ All via the bundled CLI (`node /Applications/ZCode.app/Contents/Resources/glm/zc
 - **Session scale** (residual 5): `skills list` discovers 109 skills (42
   personal + 50 grey-matter + 17 official-plugin). Interactive picker feel
   pending a user glance.
+- **Invocation policy, live confirmation**: the cached `cheat-sheet` SKILL.md
+  carries `disable-model-invocation: true` and ZCode still registers it with
+  full description (model-invocable) — observed behavior matches finding 2
+  (flag ignored; ZCode behaves like kiro-cli). Cache verified byte-identical
+  to HEAD (md5). A session started before install does not see plugin skills
+  (registry frozen at session start); a fresh process enumerates all 50.
 - **Headless single-prompt runs** (`-p`) are blocked in this CLI version:
   "Select a model before sending a message"; no `--model` flag (model default
   is TUI `/model` state). Live invocation check (residual 2's dynamic half)
