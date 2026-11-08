@@ -147,6 +147,11 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   on `dist/kimi-plugin`. It runs a rights scan and native validation, calls Kimi's official
   registration CLI, then reads back the plugin ID, version and source path. A rights hit
   requires the owner's explicit confirmation. Registration alone does not install the plugin.
+  **On Windows, use the Python variant:** `register_personal.sh` aborts with
+  `Error: the kimi-daimon at DAIMON_RUNTIME_BINARY_PATH is not executable: ...\kimi-daimon.cmd`
+  because its executability test rejects the `.cmd` launcher under Git Bash (observed
+  2026-11-08). `python scripts/register_personal.py <plugin-dir>` works correctly on the
+  same machine. Bug report captured in ticket 283 for upstream submission.
 - **Install:** open **Personal** on the plugins page and click **＋** beside **Grey Matter**.
   Install the `tkt` CLI and `tkt-core` skill separately for ticket workflows. The package has
   no hooks, MCP servers or setup script.

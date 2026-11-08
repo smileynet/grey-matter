@@ -35,3 +35,23 @@ owner submitted it (link/channel reference) or decided not to.
 - [ ] `harnesses.md` Kimi section documents the failure symptom and the `.py` workaround
 - [ ] Ticket body carries a paste-ready bug report (symptom, repro, expected/actual)
 - [ ] Close-out records the upstream-report outcome (submitted / declined)
+
+## Paste-ready upstream bug report
+
+**Title:** register_personal.sh fails on Windows: `.cmd` launcher rejected by executability test
+
+**Environment:** Windows 11, Git Bash (MSYS), Kimi desktop client (daimon bundle), plugin-builder skill bundled scripts.
+
+**Repro:**
+1. In a Kimi session on Windows, build any plugin package (e.g. `dist/kimi-plugin` containing `kimi.plugin.json`).
+2. Run `bash scripts/register_personal.sh dist/kimi-plugin`.
+
+**Expected:** the script validates and registers the plugin via the official CLI at `DAIMON_RUNTIME_BINARY_PATH` (`...\daimon-bundle\bin\kimi-daimon.cmd`).
+
+**Actual:** immediate abort —
+`Error: the kimi-daimon at DAIMON_RUNTIME_BINARY_PATH is not executable: C:\Users\<user>\AppData\Roaming\kimi-desktop\daimon-bundle\bin\kimi-daimon.cmd` (exit 1).
+The script's `-x`-style executability test returns false for `.cmd` launchers under Git Bash even though the file exists and runs.
+
+**Workaround:** `python scripts/register_personal.py <plugin-dir>` works correctly on the same machine (validated 2026-11-08 with two successful registrations, read-back verified).
+
+**Suggested fix:** on Windows, treat `.cmd`/`.exe` at `DAIMON_RUNTIME_BINARY_PATH` as executable when the file exists, or replace the `-x` test with a capability probe (`<binary> --version`).
