@@ -1,7 +1,7 @@
 ---
 id: "275"
 title: "Show a Grey Matter brain icon in plugin catalogs"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "test -s .kimi-plugin/icon.png && test -s .claude-plugin/icon.png && cmp .kimi-plugin/icon.png .claude-plugin/icon.png"
