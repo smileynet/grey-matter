@@ -1,7 +1,7 @@
 ---
 id: "273"
 title: "Spike: install grey-matter's Claude plugin in ZCode, record runtime behavior"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "plugins validate result on the checkout recorded verbatim"
