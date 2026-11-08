@@ -1,7 +1,7 @@
 ---
 id: "283"
 title: "Document register_personal.sh Windows .cmd failure; capture upstream bug report"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "harnesses.md Kimi section documents symptom and .py workaround"
