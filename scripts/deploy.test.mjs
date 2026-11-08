@@ -420,6 +420,14 @@ require("node:fs").appendFileSync(${JSON.stringify(log)}, JSON.stringify(process
     assert.deepEqual(readFileSync(log, "utf8").trim().split("\n").map((l) => JSON.parse(l)),
       [["plugins", "marketplace", "update", "grey-matter"], ["plugins", "update", "grey-matter@grey-matter"]]);
     assert.deepEqual(readdirSync(base).sort(), [PACK_VERSION], "only the newest cache dir remains");
+    const fail = join(sb.home, "zcode-cli-fail.cjs");
+    writeFileSync(fail, `#!${process.execPath}
+process.exit(1);
+`);
+    const refused = runWithEnv([], { ...sb.env, ZCODE_CLI: fail });
+    assert.equal(refused.status, 0, refused.stdout);
+    assert.match(refused.stdout, /ZCode plugin refresh did not finish/);
+    assert.match(refused.stdout, /node .*zcode-cli-fail\.cjs plugins marketplace update grey-matter && node .* plugins update grey-matter@grey-matter/);
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
