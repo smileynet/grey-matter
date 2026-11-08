@@ -401,6 +401,28 @@ test("audit: counts a ZCode plugin's cached skills when reporting duplicates", (
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
+test("refreshZcode: marketplace+plugin update via the CLI, superseded cache dirs pruned; absent CLI skips cleanly", () => {
+  const sb = homeSandbox({ harnesses: ["zcode"], zcode: true });
+  try {
+    const skipped = runWithEnv([], sb.env);
+    assert.equal(skipped.status, 0, skipped.stdout);
+    assert.match(skipped.stdout, /zcode CLI not found.*plugin refresh skipped/);
+    const log = join(sb.home, "zcode-calls.jsonl");
+    const cli = join(sb.home, "zcode-cli.cjs");
+    writeFileSync(cli, `#!${process.execPath}
+require("node:fs").appendFileSync(${JSON.stringify(log)}, JSON.stringify(process.argv.slice(2)) + "\\n");
+`);
+    const base = join(sb.home, ".zcode", "cli", "plugins", "cache", "grey-matter", "grey-matter");
+    mkdirSync(join(base, "0.0.1"), { recursive: true });
+    const refreshed = runWithEnv([], { ...sb.env, ZCODE_CLI: cli });
+    assert.equal(refreshed.status, 0, refreshed.stdout);
+    assert.match(refreshed.stdout, /refreshing ZCode plugin grey-matter@grey-matter/);
+    assert.deepEqual(readFileSync(log, "utf8").trim().split("\n").map((l) => JSON.parse(l)),
+      [["plugins", "marketplace", "update", "grey-matter"], ["plugins", "update", "grey-matter@grey-matter"]]);
+    assert.deepEqual(readdirSync(base).sort(), [PACK_VERSION], "only the newest cache dir remains");
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
 // --- Root selection with no --root: a fake HOME holding the harness dirs -----------------
 // HOME (and USERPROFILE) point at a temp tree, so the real harness roots are never read or
 // written. Plugin state comes from the fake ~/.claude/plugins and ~/.codex/config.toml.
@@ -473,6 +495,7 @@ process.exit(0);
   delete env.CODEX_HOME;
   delete env.CLAUDE_CODE_PLUGIN_CACHE_DIR;
   delete env.KIROCREW_HOME; // a Kiro Crew session exports its own; the sandbox HOME decides
+  env.ZCODE_CLI = join(home, "zcode-cli-absent"); // hermetic even on a Mac carrying the real app
   return { home, env, has: (rel) => existsSync(join(home, rel, "orient", "SKILL.md")) };
 }
 

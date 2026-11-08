@@ -248,7 +248,9 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   `.claude-plugin/` manifest is read as-is; ZCode probes `.zcode-plugin/`, then
   `.claude-plugin/`, then `.codex-plugin/`.
 - **Refresh:** `plugins marketplace update grey-matter` then
-  `plugins update grey-matter@grey-matter` re-copies same-version content. Plugin state lives
+  `plugins update grey-matter@grey-matter` re-copies same-version content; `deploy.mjs`
+  runs both automatically while the plugin is installed (`ZCODE_CLI` overrides the CLI
+  path) and prunes superseded cache dirs. Plugin state lives
   in `~/.zcode/cli/` (`config.json` enable map, `plugins/cache/<marketplace>/<name>/<version>/`);
   superseded version dirs linger, and version changes print "restart zcode to apply".
   Skills load at session start — a running session never sees a mid-session install.
