@@ -138,6 +138,28 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   Reload plugins or start a new chat after edits. A failed/foreign/legacy source
   observation stops deploy and preserves copies; see [refresh evidence](research/claude-local-refresh.md).
 
+### Kimi Work (ancillary)
+
+- **Package:** `node scripts/build-kimi-plugin.mjs` writes `dist/kimi-plugin/` with all
+  50 skills, their linked resources and 19 explicit commands. The standalone builder uses
+  the deployer's explicit-root copy mode; the default deploy does not register or install it.
+- **Register:** in a Kimi session, use the plugin-builder's `register_personal.sh` workflow
+  on `dist/kimi-plugin`. It runs a rights scan and native validation, calls Kimi's official
+  registration CLI, then reads back the plugin ID, version and source path. A rights hit
+  requires the owner's explicit confirmation. Registration alone does not install the plugin.
+- **Install:** open **Personal** on the plugins page and click **＋** beside **Grey Matter**.
+  Install the `tkt` CLI and `tkt-core` skill separately for ticket workflows. The package has
+  no hooks, MCP servers or setup script.
+- **Update:** rebuild and register the same output directory again. Start a new chat if an
+  active session still shows old skills; live update behavior has not been probed.
+- **Verified 2026-11-08:** static validation returned zero errors and two non-blocking catalog
+  warnings for omitted per-skill display overrides. Registration returned a clear rights scan,
+  `grey-matter` version `0.1.0`, 50 skill names and 19 command names; read-back verification passed.
+- **Still unverified:** installation, live skill discovery, linked-resource loading, user/model
+  invocation behavior and updates. Do not infer these from the registration catalog. After
+  installation, probe `compass`, one linked resource and both explicit and model invocation,
+  then replace this paragraph with the observed results.
+
 ### agy (ancillary, Google Antigravity CLI)
 
 - The last recorded version is 1.4.12 (`versions.json`, 2026-11-01); it was not re-probed

@@ -55,6 +55,23 @@ claude plugin install grey-matter@grey-matter
 The dependency installs tkt's workflow skills. Install the
 [`tkt` CLI](https://github.com/smileynet/tkt#install) separately. The plugin installs no hooks.
 
+### Kimi plugin
+
+Build the self-contained, skill-only package:
+
+```sh
+node scripts/build-kimi-plugin.mjs
+```
+
+From a Kimi session, use the plugin-builder's personal-registration workflow to register
+`dist/kimi-plugin`, then open **Personal** and click **＋** beside **Grey Matter**.
+Registration does not install the plugin. The package contains all 50 skills and 19
+explicit commands, with no hooks, MCP servers or setup script. Install the `tkt` CLI and
+`tkt-core` skill separately for ticket workflows.
+
+Rebuild and register the same output directory to refresh a local installation. Start a
+new chat if an active session still shows old skills.
+
 ### Codex plugin
 
 Register the marketplace and install the workflow skills:
@@ -103,8 +120,9 @@ Native validation, source-documentation audits, and update procedures are descri
 
 ## Status
 
-The set contains 46 skills, with Claude, Codex and Antigravity plugin packaging plus
-deployment for the other supported harnesses. Release preparation, verification and
+The set contains 50 skills, with Claude, Codex, Antigravity and Kimi plugin packaging
+plus deployment for the other supported harnesses. Kimi registration is verified; live
+installation and invocation remain to be probed. Release preparation, verification and
 recovery are implemented; each release still needs its own candidate, install/upgrade
 and final audit evidence. Remaining work is tracked in `.tickets/` (`tkt ready`).
 

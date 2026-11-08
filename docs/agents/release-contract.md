@@ -26,8 +26,14 @@ The shared deploy engine's internal version is a vendor-compatibility identifier
 not a product release. A tkt skills-only release still bumps tkt and builds its
 normal release assets. Exact tested grey-matter/tkt pairs belong in release metadata;
 Claude's `tkt@tkt` dependency remains unversioned until a separate policy change.
-Codex and agy do not inherit that Claude dependency; their documented tkt CLI
-prerequisite remains explicit.
+Codex, agy and Kimi do not inherit that Claude dependency; their documented tkt CLI
+prerequisite remains explicit. Kimi ticket workflows also require the `tkt-core` skill.
+
+Kimi currently uses local personal-market registration, not GitHub marketplace installation.
+Its source manifest must match the grey-matter version, but the automated version and host
+artifact surfaces do not yet include it. Update `.kimi-plugin/kimi.plugin.json` deliberately
+with the candidate, rebuild `dist/kimi-plugin`, and run its package and native checks. A GitHub
+release does not publish or refresh a Kimi personal registration.
 
 Before 1.0, compatible fixes and small skill/guidance corrections bump patch;
 new capability, new distribution targets, substantial batches and breaking changes

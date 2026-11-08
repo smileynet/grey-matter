@@ -45,6 +45,33 @@ tkt's marketplace, so add both: `/plugin marketplace add smileynet/tkt`,
 (tkt installs with it). The design is in
 [`docs/agents/proposals/07-claude-code-plugin.md`](./proposals/07-claude-code-plugin.md).
 
+### Kimi plugin
+
+`node scripts/build-kimi-plugin.mjs` builds `dist/kimi-plugin/` without changing the default
+deploy targets. It reuses explicit-root deployment to flatten skills and preserve linked
+resources, then adds the `.kimi-plugin/` manifest, localization and explicit commands.
+`node --test scripts/kimi-plugin.test.mjs` covers package completeness, idempotent rebuilds,
+drift repair and command generation. The plugin-manifest check keeps the Kimi name, version
+and license aligned with Claude.
+
+Use Kimi's plugin-builder tools for native validation and personal registration:
+
+```sh
+python3 /path/to/plugin-builder/scripts/validate_plugin.py dist/kimi-plugin
+bash /path/to/plugin-builder/scripts/register_personal.sh dist/kimi-plugin
+```
+
+Run registration inside a Kimi session: the workflow uses the client-provided daemon binary,
+scans rights, requires error-free validation and reads back the registered ID, version and
+source path. Stop for owner confirmation if the rights scan reports a hit. Registration does
+not install the plugin; the owner installs it from **Personal** by clicking **＋**. Rebuild and
+register the same output directory for updates. The package intentionally has no hooks, MCP
+servers or setup script.
+
+Registration and read-back passed on 2026-11-08. Native validation reported zero errors and
+two non-blocking catalog warnings for omitted per-skill display overrides. Installation,
+discovery, resource loading, invocation and update behavior remain separate live checks.
+
 ### Kiro Crew app
 
 Kiro Crew agents load a skill only through a `skill://` entry an enabled app registers; they
