@@ -56,3 +56,52 @@ target → minor version bump per the release contract.
 3. Dependency auto-install vs prompt for `tkt@tkt`.
 4. Update/refresh behavior of a local-directory marketplace install.
 5. Watch-item: 92 skills (42 personal + 50 plugin) in the picker.
+
+## Spike results (ticket 273, 2026-11-08)
+
+All via the bundled CLI (`node /Applications/ZCode.app/Contents/Resources/glm/zcode.cjs …`):
+
+- **Validate**: `Plugin manifest is valid` on the checkout as-is — Claude
+  manifest, array `skills`, object-form `dependencies`, `metadata.deploy` all
+  accepted.
+- **Install** (residual 1): `marketplace add <checkout dir>` then
+  `plugins install grey-matter@grey-matter` → `0.1.0 [enabled]`, **skills:
+  50**. Array-of-bucket-roots proven. Skills register as
+  `grey-matter:<name>` **with a bare-name alias** (`grey-matter:compass …
+  alias compass`), so sibling references by bare name resolve statically.
+- **Dependency** (residual 3): advisory. grey-matter installs cleanly with
+  the tkt marketplace absent (no prompt, no warning). Adding
+  `smileynet/tkt` does not auto-install the dependency; explicit
+  `plugins install tkt@tkt` succeeds (cross-marketplace gate satisfied by
+  grey-matter's existing `allowCrossMarketplaceDependenciesOn`).
+- **Refresh mechanics** (residual 4), marker round-trips through a compass
+  description edit:
+  - Same-version content change + `plugins update` alone = no-op ("already up
+    to date"): update compares versions against the marketplace snapshot
+    taken at `marketplace add` time.
+  - `plugins marketplace update grey-matter` re-syncs the snapshot from the
+    directory source; following it with `plugins update` re-copies content at
+    the **same version** (it prints "already up to date" but still syncs the
+    cache). This pair is the scripted no-bump refresh recipe.
+  - A version bump + `plugins update` also propagates (new
+    `cache/<marketplace>/<name>/<version>/` dir); downgrades are allowed once
+    the marketplace snapshot reflects the lower version.
+  - `plugins uninstall` requires `--force` in a non-interactive shell; old
+    version cache dirs linger after upgrades (manual cleanup).
+  - Version changes print "Restart zcode to apply" — a running Desktop picks
+    content up per new session.
+- **Session scale** (residual 5): `skills list` discovers 109 skills (42
+  personal + 50 grey-matter + 17 official-plugin). Interactive picker feel
+  pending a user glance.
+- **Headless single-prompt runs** (`-p`) are blocked in this CLI version:
+  "Select a model before sending a message"; no `--model` flag (model default
+  is TUI `/model` state). Live invocation check (residual 2's dynamic half)
+  deferred to an interactive session.
+
+Residual status: 1, 3, 4 resolved; 2 static half resolved via aliases (live
+invocation pending); 5 noted (interactive glance pending).
+
+End state: checkout at HEAD; `grey-matter@grey-matter` (0.1.0) and `tkt@tkt`
+(0.4.0) installed and enabled for the user's session-level checks; removable
+with `plugins uninstall --force`.
+

@@ -29,9 +29,23 @@ path and does not depend on this spike's outcome.
 
 ## Acceptance criteria
 
-- [ ] `plugins validate` result on the checkout recorded verbatim (pass or exact messages)
-- [ ] Install from the local marketplace observed; skill count verified (all 50 appear via `skills list` / Settings → Skills) — proves array-of-bucket-roots semantics
+- [x] `plugins validate` result on the checkout recorded verbatim (pass or exact messages)
+- [x] Install from the local marketplace observed; skill count verified (all 50 appear via `skills list` / Settings → Skills) — proves array-of-bucket-roots semantics
 - [ ] Skill-to-skill references under `plugin:skill` qualified naming checked (compass routes to a sibling by name)
-- [ ] tkt dependency behavior recorded: auto-installed, prompted, or exact blocker
-- [ ] Update friction observed: edit one skill description, run `plugins update` (or UI), record whether the cached copy refreshes
-- [ ] 92-skill picker watch-item noted (42 personal + 50 plugin skills in one session)
+- [x] tkt dependency behavior recorded: auto-installed, prompted, or exact blocker
+- [x] Update friction observed: edit one skill description, run `plugins update` (or UI), record whether the cached copy refreshes
+- [x] 92-skill picker watch-item noted (42 personal + 50 plugin skills in one session)
+
+## Observations (2026-11-08, headless CLI run)
+
+Full detail in
+[docs/agents/research/zcode-plugin-compat-20261108.md](../../docs/agents/research/zcode-plugin-compat-20261108.md)
+§ Spike results. Summary: validate passes as-is; install yields 50 skills with
+bare-name aliases (`grey-matter:compass`, alias `compass`); tkt dependency is
+advisory (no block, no auto-install, manual install works); refresh recipe is
+`plugins marketplace update` + `plugins update` (same-version content refresh
+confirmed by marker round-trip); `uninstall` needs `--force`
+non-interactively; headless `-p` needs a TUI-selected model, so the live
+compass-routing check (AC 3) and the picker glance are the two remaining
+session-level observations — both plugins are left installed and clean at HEAD
+for that pass.
