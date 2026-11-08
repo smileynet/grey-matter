@@ -1,7 +1,7 @@
 ---
 id: "282"
 title: "Record Windows Rust toolchain failure modes and repairs"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "gotchas doc covers rust-std-missing failure with symptom and repair"
@@ -39,7 +39,17 @@ rustc --print sysroot` then a trivial `cargo build`.
 
 ## Acceptance criteria
 
-- [ ] Gotchas doc covers the rust-std-missing failure, its symptom, and its repair
-- [ ] Gotchas doc covers missing-default-toolchain and the direct-cargo.exe trap
-- [ ] Gotchas doc covers the mise shim `mise x` failure mode and how to find the real binary
-- [ ] Each entry states the literal error text an agent would grep for
+- [x] Gotchas doc covers the rust-std-missing failure, its symptom, and its repair
+- [x] Gotchas doc covers missing-default-toolchain and the direct-cargo.exe trap
+- [x] Gotchas doc covers the mise shim `mise x` failure mode and how to find the real binary
+- [x] Each entry states the literal error text an agent would grep for
+
+## Resolution (2026-11-08)
+
+done: windows-powershell-gotchas.md gains a Rust toolchain section covering the three observed failure modes with literal error text, repairs, and a smoke check
+
+### Verification
+1. ✓ gotchas doc covers rust-std-missing failure with symptom and repair — "E0463 can't-find-core entry documents symptom, rustlib manifest tell, and idempotent 'rustup toolchain install --component rust-std' repair"
+2. ✓ gotchas doc covers missing-default-toolchain and direct-cargo.exe trap — "missing-default-toolchain and direct-cargo.exe entry documents the symptom and 'rustup default <ver>' repair"
+3. ✓ gotchas doc covers mise shim mise-x failure and locating the real binary — "mise shim entry documents 'mise: not found' failure, the installs/<tool>/<ver> binary location, and mise repair path"
+4. ✓ each entry states literal grep-able error text — "each entry quotes the literal error text (error[E0463], no default toolchain configured, command not found)"
