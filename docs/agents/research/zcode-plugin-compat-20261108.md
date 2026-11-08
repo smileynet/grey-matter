@@ -104,8 +104,10 @@ All via the bundled CLI (`node /Applications/ZCode.app/Contents/Resources/glm/zc
   is TUI `/model` state). Live invocation check (residual 2's dynamic half)
   deferred to an interactive session.
 
-Residual status: 1, 3, 4 resolved; 2 static half resolved via aliases (live
-invocation pending); 5 noted (interactive glance pending).
+Residual status: 1, 3, 4 resolved; 2 fully resolved — live invocation confirmed
+2026-11-08 after restart: a bare `$cheat-sheet` mention and a
+`grey-matter:cheat-sheet` Skill-tool call both loaded from the 0.2.0 plugin
+cache; 5 noted (picker resolution observed via the mention).
 
 End state: checkout at HEAD; `grey-matter@grey-matter` (0.1.0) and `tkt@tkt`
 (0.4.0) installed and enabled for the user's session-level checks; removable
