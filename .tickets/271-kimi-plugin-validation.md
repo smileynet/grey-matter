@@ -1,7 +1,7 @@
 ---
 id: "271"
 title: "Register and validate the grey-matter plugin in Kimi"
-status: open
+status: in_progress
 blocked_by: ["270"]
 validation_criteria:
   - "The validated plugin is registered from its maintained source package and its personal-market registration is read back successfully."
