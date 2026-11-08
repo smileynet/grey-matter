@@ -1,7 +1,7 @@
 ---
 id: "281"
 title: "Document ZCode as a distribution surface (onboarding, refresh, maintenance)"
-status: open
+status: in_progress
 blocked_by: ["274", "280"]
 validation_criteria:
   - "distribution-maintenance.md carries a ZCode section covering onboarding, refresh contract, and maintenance, consistent with spike evidence"
