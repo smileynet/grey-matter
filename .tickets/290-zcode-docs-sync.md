@@ -1,7 +1,7 @@
 ---
 id: "290"
 title: "sync AGENTS.md deploy paragraph and distribution docs with the ZCode plugin route on Windows"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
