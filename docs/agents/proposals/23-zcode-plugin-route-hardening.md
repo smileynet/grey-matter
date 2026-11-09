@@ -99,15 +99,33 @@ machines.
   machines install from one canonical source and `plugins update` converges
   them.
 
-## Decision asks
+## Decision asks (resolved by prior-art research)
 
-1. One route per machine: plugin route or copy route (`own` root), not both —
-   user-scope copies shadow plugin skills and bloat the picker (watch-item 92+
-   skills from the spike). The trial machine now runs the plugin route.
-2. G3: declare the dependency in the marketplace entry, or drop it from the
-   plugin manifest?
-3. G6: prune evidence, relocate it, or exclude it from packed marketplace
-   artifacts only?
+Researched in
+[zcode-marketplace-prior-art-20261108](../research/zcode-marketplace-prior-art-20261108.md);
+recommendations below.
+
+1. **One route per machine: plugin or copy, never both.** The lineage states
+   the rule outright ("pick one per agent, because installing both gives you
+   every skill twice"); user-scope copies shadow plugin skills in ZCode, so
+   dual routes hide staleness. Plugin route for managed machines (this Windows
+   machine), copy route only where `deploy.mjs` owns the checkout; deploy's
+   duplicate guard stays the enforcement.
+2. **Declare the dependency in both places.** Claude binds `dependencies` in
+   plugin.json (a dependency "starts enabled regardless of defaultEnabled");
+   ZCode resolves only the marketplace entry's copy. Keep the manifest
+   declaration and mirror the same object array on the entry — no version
+   pins (plugin.json's version silently wins over an entry's; duplication is
+   warned against).
+3. **Archive source + hygiene sweep, no LFS.** Publish the marketplace with an
+   `archive` plugin source pinned to the release bundle sha256 (both repos'
+   `release-artifacts.mjs` already build closed per-host bundles; the Claude
+   bundle is ZCode-compatible). Local-directory adds remain the dev-machine
+   route. Separately, run the repository-artifact-hygiene lifecycle over
+   `docs/agents/research/evidence/` (715 files, ~107 MB) — findings are
+   promoted into the research notes; superseded evidence deletes, keepers get
+   lifecycle scopes. LFS is ruled out: clones never fetch LFS content,
+   leaving pointer files.
 
 ## Suggested ticket split
 
