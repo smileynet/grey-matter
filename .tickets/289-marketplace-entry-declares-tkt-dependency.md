@@ -1,7 +1,7 @@
 ---
 id: "289"
 title: "mirror the tkt dependency on the marketplace entry so ZCode resolution sees it"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 validation_criteria:
