@@ -95,7 +95,8 @@ and a setup script would duplicate its knowledge of paths and plugin ids — the
 reasoning as Kimi's documented registration. The CLI has no global binary; `ZCODE_CLI`
 overrides, else the platform bundle is probed —
 `/Applications/ZCode.app/Contents/Resources/glm/zcode.cjs` on macOS,
-`%LOCALAPPDATA%\Programs\ZCode\resources\glm\zcode.cjs` on Windows (verified 2026-11-08):
+`%LOCALAPPDATA%\Programs\ZCode\resources\glm\zcode.cjs` on Windows (path verified
+2026-11-08; the Windows command surface is a subset — see the maintenance note below):
 
 ```sh
 node <cli> plugins marketplace add ~/code/grey-matter   # or smileynet/grey-matter from GitHub
@@ -139,6 +140,15 @@ Headless `-p` prompts fail with "Select a model" until a model is chosen in the 
 running session never sees a mid-session refresh. `plugins validate <dir>` and
 `plugins skills list` are non-interactive and model-free; the native validator accepts the
 Claude manifest, and `claude plugin validate --strict` remains the gate for it.
+
+**The Windows CLI build is a subset** (live 2026-11-08, ticket 290): `plugins` offers only
+`list|enable|disable|uninstall` — no `install`, `update`, `marketplace`, or `validate`.
+The onboarding commands above and the CLI refresh recipe are macOS-build surfaces; on
+Windows, onboarding goes through the app (Settings → Plugin Management: add the local
+directory as a marketplace via `+`, then Get) and deploy's refresh step degrades to its
+warning with install state unharmed. Refresh a Windows install by re-running that
+onboarding or by state-level reinstall, and revisit the no-onboarding-script decision
+(above) if Windows plugin installs become routine.
 
 Verified 2026-11-08 (tickets 273-281): validate passed on the checkout as-is; install
 yielded 50 skills with bare-name aliases; the same-version refresh recipe and prune were
