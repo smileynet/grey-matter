@@ -33,3 +33,10 @@ Fix in the fixtures, not the products: create directory links as `junction` on w
 ## Also affected (2026-11-03)
 
 The pre-release `deployer` check fails 2 tests the same way: "install removes dead links into this pack's checkout, in used and unused roots, and keeps every other link" and "agy: without the CLI, a foreign same-named plugin directory or link is refused and kept" (`scripts/deploy.test.mjs`). Details are on ticket 122.
+
+## Note — 2026-11-09
+
+By: anonymous
+
+<!-- tkt-note:v1 60760-1794190038504371800 -->
+2026-11-08 (Kimi session): the parallel tkt-repo repair (tkt#283) split this family into two distinct causes. (1) Fixture CLEANUP EPERM: git's read-only loose objects (mode 444) and dangling junctions break rmSync(recursive) on Windows — fixed in tkt by a shared lstat-based removeTree helper (tools/test-fixtures.mjs), portable to this repo's scripts/*.test.mjs. (2) Symlink CREATION EPERM without Developer Mode (this ticket's named cause) — separate; the junction fallback used by migrate-legacy-skills fixtures is the working pattern. Evidence: tkt gate now 50 pass / 0 fail on this machine.
