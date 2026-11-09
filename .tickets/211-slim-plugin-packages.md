@@ -3,6 +3,8 @@ id: "211"
 title: "Ship only what skills need in the Kiro Crew app and agy plugin (65 MB today)"
 status: open
 blocked_by: []
+tags: ["stream:tooling"]
+priority: medium
 ---
 # Ship only what skills need in the Kiro Crew app and agy plugin
 
