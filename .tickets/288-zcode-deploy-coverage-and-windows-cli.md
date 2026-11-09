@@ -1,7 +1,7 @@
 ---
 id: "288"
 title: "deploy counts a disabled ZCode plugin install as coverage and cannot refresh it on Windows"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
