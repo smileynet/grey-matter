@@ -8,6 +8,7 @@ validation_criteria:
   - "The delivery-dashboard contract defines an optional product map: user jobs, their workflows (steps), and features with status (built, in flight, needs work, planned, deferred), where each was verified, and linked tickets."
   - "The template renders it as a tab with by-job and by-status views, needs work first, with filters and accessible status colours in light and dark."
   - "check-dashboard validates the schema: known statuses, an issue for needs-work rows, and tickets that exist on the board."
+tags: ["stream:tooling"]
 ---
 
 # Add an optional product map (jobs, workflows, feature status) to the delivery dashboard
