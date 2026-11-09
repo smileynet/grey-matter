@@ -92,3 +92,10 @@ Observed 2026-11-08 while refreshing the tkt CLI; each cost a diagnosis before t
 - **Smoke check after any rustup/mise change:** `rustup default <ver> && rustc --print
   sysroot`, then a trivial `cargo build`. A toolchain that lists in `rustup toolchain list`
   can still be missing `rust-std`, so existence is not proof of compilability.
+- **The Kimi session's `node` is the Electron client binary** (`ELECTRON_RUN_AS_NODE=1`,
+  `process.execPath` is `Kimi.exe`). Anything that *copies or re-spawns* `process.execPath`
+  fails — the child expects an inherited ICU data fd and dies with
+  `Invalid file descriptor to ICU data received` (observed 2026-11-08 running tkt's
+  claude-hooks fixtures, which copy node.exe as a fake `tkt.exe`). For Node gates and test
+  suites, use a real Node 22+ (e.g. the mise-managed one at
+  `%LOCALAPPDATA%\mise\installs\node\<ver>\node.exe`) and clear `ELECTRON_RUN_AS_NODE`.
