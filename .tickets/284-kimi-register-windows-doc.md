@@ -1,7 +1,7 @@
 ---
 id: "284"
 title: "Document Windows register_personal.py workaround in distribution-maintenance.md"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "distribution-maintenance.md notes the Windows failure and the .py variant"
