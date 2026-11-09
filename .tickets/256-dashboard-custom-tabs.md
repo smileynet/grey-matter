@@ -4,6 +4,7 @@ title: "Projects can add their own tab to the status dashboard without editing t
 status: open
 blocked_by: []
 priority: medium
+tags: ["stream:tooling"]
 ---
 ## Intent
 
