@@ -11,7 +11,13 @@
     {
       "name": "grey-matter",
       "source": "./",
-      "description": "Agent skills for game-centric and app development. Start with the compass router."
+      "description": "Agent skills for game-centric and app development. Start with the compass router.",
+      "dependencies": [
+        {
+          "name": "tkt",
+          "marketplace": "tkt"
+        }
+      ]
     }
   ]
 }

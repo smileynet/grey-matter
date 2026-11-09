@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, existsSync, readFileSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync, spawnSync } from "node:child_process";
 
 const INSTALLER = join(dirname(fileURLToPath(import.meta.url)), "deploy.mjs");
@@ -71,7 +71,7 @@ test("static checks retain manifest validation without invoking native validator
 const original = cp.spawnSync;
 cp.spawnSync = (command, ...args) => { if (command !== "claude") return original(command, ...args); writeFileSync(${JSON.stringify(marker)}, "called"); return {status: 1, stdout: "", stderr: "fake native rejection"}; };
 syncBuiltinESMExports();\n`);
-  const run = (...args) => spawnSync(process.execPath, ["--import", preload, INSTALLER, "check", "--pack", pack, ...args], { encoding: "utf8" });
+  const run = (...args) => spawnSync(process.execPath, ["--import", pathToFileURL(preload).href, INSTALLER, "check", "--pack", pack, ...args], { encoding: "utf8" });
   const staticResult = run("--static");
   assert.equal(staticResult.status, 0, staticResult.stdout + staticResult.stderr);
   assert.equal(existsSync(marker), false);
@@ -82,4 +82,29 @@ syncBuiltinESMExports();\n`);
   writeFileSync(join(pack, ".claude-plugin/plugin.json"), JSON.stringify({ name: "example", version: "wrong", skills: "./skills/" }));
   assert.equal(run("--static").status, 1);
   assert.equal(run("--static", "--profile", "directory").status, 2);
+});
+
+test("static checks flag a marketplace entry whose dependencies differ from plugin.json", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "deploy-deps-")), pack = join(root, "pack");
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const manifest = { name: "example", version: "1.0.0", skills: "./skills/", dependencies: [{ name: "dep", marketplace: "other" }] };
+  const writePack = (entry) => {
+    rmSync(join(pack, ".claude-plugin"), { recursive: true, force: true });
+    mkdirSync(join(pack, ".claude-plugin"), { recursive: true });
+    mkdirSync(join(pack, "skills/example"), { recursive: true });
+    writeFileSync(join(pack, ".claude-plugin/plugin.json"), JSON.stringify(manifest));
+    writeFileSync(join(pack, ".claude-plugin/marketplace.json"), JSON.stringify({ name: "example-market", plugins: [entry] }));
+    writeFileSync(join(pack, "skills/example/SKILL.md"), "---\nname: example\ndescription: An example fixture\n---\nExample.\n");
+  };
+  const run = () => runInstaller(["check", "--pack", pack, "--static"]);
+  writePack({ name: "example", source: "./", description: "fixture" });
+  const missing = run();
+  assert.equal(missing.status, 1);
+  assert.match(missing.stdout, /dependencies \[\] differ from plugin.json \[dep@other\]/);
+  writePack({ name: "example", source: "./", description: "fixture", dependencies: [{ name: "dep", marketplace: "other" }] });
+  assert.equal(run().status, 0);
+  writePack({ name: "example", source: "./", description: "fixture", dependencies: ["dep@elsewhere"] });
+  const wrongMarket = run();
+  assert.equal(wrongMarket.status, 1);
+  assert.match(wrongMarket.stdout, /dependencies \[dep@elsewhere\] differ from plugin.json \[dep@other\]/);
 });
