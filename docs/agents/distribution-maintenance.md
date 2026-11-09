@@ -92,19 +92,38 @@ stays with `.claude-plugin/plugin.json`. Per-harness behavior is in
 **Onboarding is two documented CLI commands, not a script** (decision, 2026-11-08):
 first-time setup is rare and owner-run, `deploy.mjs` already owns refresh and detection,
 and a setup script would duplicate its knowledge of paths and plugin ids — the same
-reasoning as Kimi's documented registration. The CLI is
-`node /Applications/ZCode.app/Contents/Resources/glm/zcode.cjs …` (no global binary;
-`ZCODE_CLI` overrides):
+reasoning as Kimi's documented registration. The CLI has no global binary; `ZCODE_CLI`
+overrides, else the platform bundle is probed —
+`/Applications/ZCode.app/Contents/Resources/glm/zcode.cjs` on macOS,
+`%LOCALAPPDATA%\Programs\ZCode\resources\glm\zcode.cjs` on Windows (verified 2026-11-08):
 
 ```sh
 node <cli> plugins marketplace add ~/code/grey-matter   # or smileynet/grey-matter from GitHub
 node <cli> plugins install grey-matter@grey-matter
 node <cli> plugins marketplace add smileynet/tkt && node <cli> plugins install tkt@tkt
+node <cli> plugins enable grey-matter@grey-matter       # foreign records list [disabled] until enabled
 ```
 
 Install `tkt@tkt` explicitly: ZCode resolves `dependencies` (object form, cross-marketplace
 gates honored) but treats them as advisory — nothing blocks when absent and nothing
 auto-installs when the marketplace appears.
+
+**One route per machine** (decision, 2026-11-08): the plugin install or deploy's bare
+copies into `~/.zcode/skills` — never both. User-scope copies shadow plugin skills (first
+discovery wins), so dual routes hide staleness; the mattpocock/skills lineage states the
+same rule ("pick one per agent, because installing both gives you every skill twice" —
+prior art consulted). `deploy.mjs` enforces it: an enabled plugin is the harness's
+coverage and the copy step stands down; an explicit `false` or an unverifiable install
+falls back to bare copies.
+
+**Install state (Windows trial, 2026-11-08).** Marketplaces and plugins live under
+`~/.zcode/cli/plugins/`: staged marketplace snapshots in `marketplaces/<name>/`, installed
+content in `cache/<marketplace>/<plugin>/<version>/`, registrations in
+`known_marketplaces.json` and `installed_plugins.json`. Enable entries are written by
+`plugins enable` to `~/.zcode/cli/config.json`
+(`plugins.enabledPlugins["<name>@<marketplace>"]`); an install record with no entry lists
+as `[disabled]` on ZCode 0.17.1 Windows, which is why coverage checks demand an explicit
+true or a CLI verdict. The app itself installs to `%LOCALAPPDATA%\Programs\ZCode`.
 
 **Refresh is deploy-owned.** `deploy.mjs` refreshes an installed ZCode plugin on every
 install: `plugins marketplace update grey-matter` re-syncs the snapshot from the directory
