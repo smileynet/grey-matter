@@ -418,7 +418,7 @@ require("node:fs").appendFileSync(${JSON.stringify(log)}, JSON.stringify(process
     assert.equal(refreshed.status, 0, refreshed.stdout);
     assert.match(refreshed.stdout, /refreshing ZCode plugin grey-matter@grey-matter/);
     assert.deepEqual(readFileSync(log, "utf8").trim().split("\n").map((l) => JSON.parse(l)),
-      [["plugins", "marketplace", "update", "grey-matter"], ["plugins", "update", "grey-matter@grey-matter"]]);
+      [["plugins", "marketplace", "update", "grey-matter"], ["plugins", "update", "grey-matter@grey-matter"], ["plugins", "enable", "grey-matter@grey-matter"]]);
     assert.deepEqual(readdirSync(base).sort(), [PACK_VERSION], "only the newest cache dir remains");
     const fail = join(sb.home, "zcode-cli-fail.cjs");
     writeFileSync(fail, `#!${process.execPath}
@@ -428,6 +428,34 @@ process.exit(1);
     assert.equal(refused.status, 0, refused.stdout);
     assert.match(refused.stdout, /ZCode plugin refresh did not finish/);
     assert.match(refused.stdout, /node .*zcode-cli-fail\.cjs plugins marketplace update grey-matter && node .* plugins update grey-matter@grey-matter/);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("zcodePlugin: a cache hit with no config entry is coverage only when the CLI reports it enabled", () => {
+  const sb = homeSandbox({ harnesses: ["zcode"], zcode: true });
+  try {
+    writeFileSync(join(sb.home, ".zcode", "cli", "config.json"), JSON.stringify({ plugins: { enabledPlugins: {} } }));
+    const absent = runWithEnv([], sb.env); // sandbox ZCODE_CLI points at a missing file
+    assert.equal(absent.status, 0, absent.stdout);
+    assert.ok(sb.has(".zcode/skills"), "no entry and no CLI verdict: bare copies carry the pack");
+
+    const cli = join(sb.home, "zcode-cli.cjs");
+    writeFileSync(cli, `#!${process.execPath}
+console.log("- grey-matter@grey-matter [disabled]");
+`);
+    rmSync(join(sb.home, ".zcode", "skills"), { recursive: true, force: true });
+    const disabled = runWithEnv([], { ...sb.env, ZCODE_CLI: cli });
+    assert.equal(disabled.status, 0, disabled.stdout);
+    assert.ok(sb.has(".zcode/skills"), "CLI reports [disabled]: bare copies carry the pack");
+
+    writeFileSync(cli, `#!${process.execPath}
+console.log("- grey-matter@grey-matter [enabled]");
+`);
+    rmSync(join(sb.home, ".zcode", "skills"), { recursive: true, force: true });
+    const enabled = runWithEnv([], { ...sb.env, ZCODE_CLI: cli });
+    assert.equal(enabled.status, 0, enabled.stdout);
+    assert.match(enabled.stdout, /zcode\s+<- ZCode plugin grey-matter@grey-matter/);
+    assert.ok(!sb.has(".zcode/skills"), "a CLI-verified enabled plugin is the coverage");
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
