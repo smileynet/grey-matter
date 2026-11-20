@@ -21,6 +21,15 @@
       "measured": { "s": 1.4, "date": "2026-11-01", "host": "win" }
     },
     {
+      "id": "crew-app",
+      "stage": "pre-push",
+      "catches": "a Kiro Crew app manifest listing a skill path that no longer exists or a version that drifted from the plugin",
+      "scope": [".kiro-crew/", ".claude-plugin/", "skills/", "scripts/check-crew-app.mjs"],
+      "run": ["node", "scripts/check-crew-app.mjs"],
+      "timeout_s": 10,
+      "measured": { "s": 0.2, "date": "2026-11-20", "host": "win" }
+    },
+    {
       "id": "kimi-plugin-package",
       "stage": "pre-merge",
       "catches": "a Kimi package that omits skills or resources, ships active root guidance, or rewrites unchanged output",
