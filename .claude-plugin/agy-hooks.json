@@ -1,0 +1,10 @@
+{
+  "grey-matter-auto-sync": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "node ./hooks/agy-session-start.mjs"
+      }
+    ]
+  }
+}

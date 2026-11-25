@@ -291,6 +291,15 @@
       "measured": { "s": 91.9, "date": "2026-11-01", "host": "win" }
     },
     {
+      "id": "auto-sync",
+      "stage": "pre-merge",
+      "catches": "periodic auto-sync losing dirty changes during shelving, breaking drop-in pack isolation, or failing SessionStart notices",
+      "scope": ["scripts/auto-sync", ".claude-plugin/claude-hooks.json", ".claude-plugin/agy-hooks.json", ".claude-plugin/hooks/"],
+      "run": ["node", "--test", "--test-timeout=60000", "scripts/auto-sync.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 2.5, "date": "2026-11-25", "host": "linux" }
+    },
+    {
       "id": "release-integration",
       "stage": "pre-release",
       "catches": "the release flow tagging, pushing, verifying or publishing the wrong candidate in a real Git repository",

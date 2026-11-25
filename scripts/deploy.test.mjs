@@ -1446,3 +1446,28 @@ test("kimi-code: default deploy selects ~/.kimi-code/skills without duplicating 
     assert.ok(!JSON.parse(audited.stdout).findings.some((s) => s.includes("kimi-code sees")));
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
+
+test("qwen: build stages claudeFiles when hooks are declared and stays idempotent", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = smallPack(sb.home), out = join(sb.home, "qwen-hooks-out");
+    mkdirSync(join(pack, ".claude-plugin", "hooks"), { recursive: true });
+    writeFileSync(join(pack, ".claude-plugin", "claude-hooks.json"), JSON.stringify({ hooks: { SessionStart: [{ hooks: [{ type: "command", command: "node \"${CLAUDE_PLUGIN_ROOT}/.claude-plugin/hooks/session-start.mjs\"" }] }] } }) + "\n");
+    writeFileSync(join(pack, ".claude-plugin", "hooks", "session-start.mjs"), "#!/usr/bin/env node\n");
+    writeFileSync(join(pack, ".claude-plugin", "plugin.json"), JSON.stringify({
+      name: "example",
+      version: "1.0.0",
+      hooks: "./.claude-plugin/claude-hooks.json",
+      metadata: { deploy: { claudeFiles: [".claude-plugin/claude-hooks.json", ".claude-plugin/hooks/session-start.mjs"] } },
+    }) + "\n");
+    const r1 = runWithEnv(["qwen", "build", "--pack", pack, "--out", out], sb.env);
+    assert.equal(r1.status, 0, r1.stdout + r1.stderr);
+    const manifest = JSON.parse(readFileSync(join(out, "qwen-extension.json"), "utf8"));
+    assert.equal(manifest.hooks, "./.claude-plugin/claude-hooks.json");
+    assert.ok(existsSync(join(out, ".claude-plugin", "claude-hooks.json")));
+    assert.ok(existsSync(join(out, ".claude-plugin", "hooks", "session-start.mjs")));
+    const r2 = runWithEnv(["qwen", "build", "--pack", pack, "--out", out], sb.env);
+    assert.equal(r2.status, 0, r2.stdout + r2.stderr);
+    assert.match(r2.stdout, /build is up to date/);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});

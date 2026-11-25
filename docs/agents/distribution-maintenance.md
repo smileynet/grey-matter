@@ -223,10 +223,7 @@ removal or source-link workaround is required.
 
 ### Keeping the Claude plugin current
 
-The plugin ships no hooks: the Claude push hook was removed on 2026-11-01 because it fired in
-every consumer project ([proposal 18](proposals/18-three-stage-verification.md)). Packaging still
-supports Claude-only files: list them in `metadata.deploy.claudeFiles`, never shared
-`runtimeFiles`; release packaging keeps them out of the Codex archive.
+The plugin ships a read-only `SessionStart` sync-notification hook (Claude/ZCode/Qwen via `metadata.deploy.claudeFiles`, Antigravity via `agyHooks`, DSH via `dshHook` — see [auto-sync](./auto-sync.md)); the old Claude pre-push hook was removed on 2026-11-01 ([proposal 18](proposals/18-three-stage-verification.md)). Keep Claude-only hook files listed in `metadata.deploy.claudeFiles`, never shared `runtimeFiles`; release packaging keeps them out of Codex and Kimi archives.
 
 When a change touches skills, the plugin manifests, or tkt's plugin:
 
