@@ -1,7 +1,6 @@
 ---
 name: orient
 description: "Session-start pickup: get on the frontier and start the top ticket. Reads the board, resumes a live thread or claims the top ready ticket, and only pauses for something genuinely pressing. Use when starting or resuming a session, or asking 'where were we / what's next / pick up where we left off'."
-disable-model-invocation: true
 ---
 
 # Orient

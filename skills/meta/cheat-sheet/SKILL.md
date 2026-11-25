@@ -1,7 +1,6 @@
 ---
 name: cheat-sheet
 description: "List every skill in this set by category with a one-line description. Use when the user wants a quick reference card of available skills, asks \"what skills are there\", or \"list all commands\"."
-disable-model-invocation: true
 ---
 
 # Cheat Sheet
