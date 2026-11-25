@@ -1,7 +1,7 @@
 ---
 id: "295"
 title: "Add orchestrate harness references for Qwen Code, DSH, and OpenCode 2.x, and refresh harness-kimi.md"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "harness-qwen.md, harness-dsh.md, and harness-opencode.md exist under skills/engineering/orchestrate/references/ and are linked from orchestrate/SKILL.md"
