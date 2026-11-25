@@ -103,10 +103,12 @@ These are guardrails, not the agenda. Run them quickly and move on unless one tr
 git log --oneline -8           # does a claimed in_progress ticket have advancing commits?
 tkt validate --brief           # structural health — cycles / broken refs
 node <hygiene-dir>/scripts/inspect-footprint.mjs --repo . --summary
+# if ~/.config/grey-matter/hub.json exists: check unread mobile dashboard answers
+node <dashboard-dir>/scripts/serve-hub.mjs --inbox .
 ```
 
 `<hygiene-dir>` is the installed repository-artifact-hygiene skill. That line prints free space and, under 40 GiB, the three largest uncommitted footprints;
-quote it in the session-start report.
+quote it in the session-start report. `<dashboard-dir>` is the installed delivery-dashboard skill; skip the inbox line if `~/.config/grey-matter/hub.json` does not exist.
 
 Classify any `in_progress` ticket:
 
@@ -125,6 +127,7 @@ only if it flags something pressing or conflicts with the frontier.
 **Pressing enough to preempt ticket work** (the short list — otherwise, just start):
 
 - a `tkt validate` structural error (cycle, dangling dep) that corrupts the frontier;
+- unread mobile dashboard answers in the host hub inbox (`pendingCount > 0`): surface and apply or confirm them before starting unrelated frontier work;
 - a handoff naming a goal that conflicts with the top pick;
 - a stale claim sitting on the ticket you'd otherwise take;
 - free space under 20 GiB: tell the user before adding data, per repository-artifact-hygiene.

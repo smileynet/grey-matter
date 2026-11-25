@@ -3,7 +3,7 @@
 // zero-restart live updates, and method/traversal rejection.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawn } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -241,10 +241,43 @@ test("serve-hub Tailscale inbox enforces loopback, identity, origin, size, and w
       assert.match(inboxRead.projects[0].items[0].content, /submitted_by: "owner@example\.com"/);
       assert.match(inboxRead.projects[0].items[0].content, /Ship mobile inbox\?/);
 
-      const cleared = JSON.parse(execFileSync(process.execPath, [SERVE_HUB, "--inbox", "beta", "--clear", "--config", cfgPath], { encoding: "utf8" }));
+      const cleared = JSON.parse(execFileSync(process.execPath, [SERVE_HUB, "--inbox", join(root, "beta"), "--clear", "--config", cfgPath], { encoding: "utf8" }));
       assert.equal(cleared.cleared, 1);
-      const afterClear = JSON.parse(execFileSync(process.execPath, [SERVE_HUB, "--inbox", "beta", "--config", cfgPath], { encoding: "utf8" }));
+      const afterClear = JSON.parse(execFileSync(process.execPath, [SERVE_HUB, "--inbox", join(root, "beta"), "--config", cfgPath], { encoding: "utf8" }));
       assert.equal(afterClear.projects[0].pendingCount, 0);
+
+      // --wait times out cleanly with exit 124 when nothing arrives.
+      const timeoutExit = await new Promise((resolveDone) => {
+        const child = spawn(process.execPath, [SERVE_HUB, "--wait", join(root, "beta"), "--timeout", "0.2", "--config", cfgPath], { stdio: ["ignore", "pipe", "pipe"] });
+        let out = "";
+        child.stdout.on("data", (d) => { out += d; });
+        child.on("close", (code) => resolveDone({ code, out }));
+      });
+      assert.equal(timeoutExit.code, 124);
+      assert.equal(JSON.parse(timeoutExit.out).timedOut, true);
+
+      // --wait wakes up immediately when a live Tailscale POST arrives.
+      const waitChild = spawn(process.execPath, [SERVE_HUB, "--wait", join(root, "beta"), "--timeout", "5", "--config", cfgPath], { stdio: ["ignore", "pipe", "pipe"] });
+      let waitOut = "";
+      waitChild.stdout.on("data", (d) => { waitOut += d; });
+      const waitDone = new Promise((resolveDone) => waitChild.on("close", (code) => resolveDone(code)));
+      await new Promise((r) => setTimeout(r, 120));
+      const livePost = await fetch(`${base}/api/inbox/beta`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Origin: "https://box.tailnet.ts.net", "Tailscale-User-Login": "owner@example.com" },
+        body: JSON.stringify({ project: "Beta", text: "Decisions for Beta\n\n1. Wake test?\nChoice: Yes" }),
+      });
+      assert.equal(livePost.status, 201);
+      assert.equal(await waitDone, 0);
+      const waitJson = JSON.parse(waitOut);
+      assert.equal(waitJson.ok, true);
+      assert.equal(waitJson.timedOut, false);
+      assert.match(waitJson.items[0].content, /Wake test\?/);
+
+      // --wait also returns immediately if an unread submission is already waiting.
+      const immediateOut = JSON.parse(execFileSync(process.execPath, [SERVE_HUB, "--wait", "beta", "--timeout", "1", "--config", cfgPath], { encoding: "utf8" }));
+      assert.equal(immediateOut.ok, true);
+      assert.equal(immediateOut.items.length, 1);
     } finally {
       await new Promise((ok) => server.close(ok));
     }

@@ -53,8 +53,10 @@ stays out of the way, under folds and links.
    or context. Needs you links to the same decision. The bottom button copies all pending answers
    for the user to paste into chat, with selectable text when copying is unavailable. Selections
    are drafts; record an answer only after the user submits it in chat (or via the hub's
-   Tailscale inbox, picked up with `node <this skill's directory>/scripts/serve-hub.mjs --inbox <slug>`
-   and archived with `--clear` once applied), and retain answered history.
+   Tailscale inbox, picked up with `node <this skill's directory>/scripts/serve-hub.mjs --inbox .`
+   and archived with `--clear` once applied), and retain answered history. When the user plans
+   to answer from mobile over Tailscale, start `node <this skill's directory>/scripts/serve-hub.mjs
+   --wait . --timeout 1800` as a background task so reactive harnesses wake automatically on submit.
 
 4. **Keep the sausage out of sight.** Headline, summary and the three visible changes carry no
    ticket numbers, commit hashes, file paths, tool names, test counts or refactoring talk. Put

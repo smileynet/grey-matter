@@ -31,13 +31,15 @@ Agents read `~/.config/grey-matter/hub.json` (override with `GM_HUB_CONFIG` or `
 
 ```bash
 node <delivery-dashboard-skill>/scripts/serve-hub.mjs --url . --hash decisions
-node <delivery-dashboard-skill>/scripts/serve-hub.mjs --inbox [slug]
-node <delivery-dashboard-skill>/scripts/serve-hub.mjs --inbox <slug> --clear
+node <delivery-dashboard-skill>/scripts/serve-hub.mjs --inbox [dir-or-slug]
+node <delivery-dashboard-skill>/scripts/serve-hub.mjs --inbox <dir-or-slug> --clear
+node <delivery-dashboard-skill>/scripts/serve-hub.mjs --wait <dir-or-slug> [--timeout 1800]
 ```
 
 - `--url`: exits `0` with `{ "configured": true, "slug": "...", "hub": { ... }, "urls": { ... } }` when `hub.json` defines at least one base URL; exits `1` with `{ "configured": false }` otherwise (fall back to opening the local file or giving its `file://` link per [report-format.md](../../../../docs/agents/report-format.md#html-rules)).
-- `--inbox [slug]`: read-only JSON listing of pending mobile submissions saved outside Git in `~/.local/state/grey-matter/inbox/<slug>/`.
-- `--inbox <slug> --clear`: archives processed submissions (and `latest.md`) into `<inboxDir>/<slug>/processed/` after the agent applies them.
+- `--inbox [dir-or-slug]`: read-only JSON listing of pending mobile submissions saved outside Git in `~/.local/state/grey-matter/inbox/<slug>/` (accepts `.`, a repo path, or a bare slug).
+- `--inbox <dir-or-slug> --clear`: archives processed submissions (and `latest.md`) into `<inboxDir>/<slug>/processed/` after the agent applies them.
+- `--wait <dir-or-slug> [--timeout 1800]`: watches `<inboxDir>/<slug>/` with `fs.watch` (returns immediately if an unread submission is already present), prints `{ "ok": true, "timedOut": false, "slug": "...", "items": [...] }` and exits `0` the instant a mobile submission arrives, or exits `124` on timeout. Start it as a background task after posting decisions so reactive harnesses (Antigravity, Claude Code) wake automatically when you tap **Send to hub inbox** on mobile.
 
 ## Serving contract & security boundary
 

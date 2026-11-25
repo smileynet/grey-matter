@@ -9,11 +9,12 @@
 // Usage:
 //   node serve-hub.mjs [--root DIR]... [--registry FILE] [--host 127.0.0.1] [--port 8765] [--config FILE]
 //   node serve-hub.mjs --url DIR_OR_SLUG [--hash decisions|overview|plan] [--config FILE]
-//   node serve-hub.mjs --inbox [SLUG] [--clear] [--config FILE]
+//   node serve-hub.mjs --inbox [DIR_OR_SLUG] [--clear] [--config FILE]
+//   node serve-hub.mjs --wait DIR_OR_SLUG [--timeout SECONDS] [--config FILE]
 
 import { createServer } from "node:http";
 import { randomBytes } from "node:crypto";
-import { existsSync } from "node:fs";
+import { existsSync, watch } from "node:fs";
 import { mkdir, readdir, readFile, realpath, rename, stat, writeFile } from "node:fs/promises";
 import { basename, extname, isAbsolute, join, relative, resolve } from "node:path";
 import { homedir } from "node:os";
@@ -144,6 +145,71 @@ export async function readInbox({ inboxDir, slug = null }) {
     if (items.length || slug) projects.push({ slug: s, pendingCount: items.length, items });
   }
   return { projects };
+}
+
+export function resolveSlugArg(projectOrSlug) {
+  const trimmed = String(projectOrSlug ?? "").trim();
+  if (!trimmed) return null;
+  const candidatePath = resolve(expandHome(trimmed));
+  const slug = existsSync(candidatePath) ? basename(candidatePath) : trimmed;
+  return SLUG_RE.test(slug) ? slug : null;
+}
+
+export async function waitForInbox({ inboxDir, slug, timeoutMs = 1800_000, pollMs = 1500, afterIds = [] }) {
+  if (!slug || !SLUG_RE.test(slug)) throw new Error("Invalid project slug");
+  const seen = new Set(afterIds);
+  const check = async () => {
+    const res = await readInbox({ inboxDir, slug });
+    const items = (res.projects[0]?.items || []).filter((item) => !seen.has(item.id));
+    return items.length ? items : null;
+  };
+
+  const immediate = await check();
+  if (immediate) return { ok: true, timedOut: false, slug, items: immediate };
+
+  const dir = join(resolve(inboxDir), slug);
+  await mkdir(dir, { recursive: true, mode: 0o700 });
+
+  return new Promise((resolveWait) => {
+    let settled = false;
+    let watcher = null;
+    let timer = null;
+    let poller = null;
+    let checking = false;
+
+    const finish = (result) => {
+      if (settled) return;
+      settled = true;
+      if (watcher) { try { watcher.close(); } catch { /* ignore */ } }
+      if (timer) clearTimeout(timer);
+      if (poller) clearInterval(poller);
+      resolveWait(result);
+    };
+
+    const probe = async () => {
+      if (settled || checking) return;
+      checking = true;
+      try {
+        const items = await check();
+        if (items) finish({ ok: true, timedOut: false, slug, items });
+      } finally {
+        checking = false;
+      }
+    };
+
+    try {
+      watcher = watch(dir, (_event, filename) => {
+        if (!filename || (filename.endsWith(".md") && filename !== "latest.md")) void probe();
+      });
+      watcher.on("error", () => { /* rely on poller fallback */ });
+    } catch { /* rely on poller fallback */ }
+
+    poller = setInterval(() => { void probe(); }, Math.max(50, pollMs));
+    if (timeoutMs > 0) {
+      timer = setTimeout(() => finish({ ok: false, timedOut: true, slug, items: [] }), timeoutMs);
+    }
+    void probe();
+  });
 }
 
 export async function clearInbox({ inboxDir, slug }) {
@@ -668,6 +734,8 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       hash: { type: "string" },
       inbox: { type: "boolean" },
       clear: { type: "boolean" },
+      wait: { type: "string" },
+      timeout: { type: "string", default: "1800" },
     },
   });
   const configPath = values.config ? resolve(expandHome(values.config)) : defaultHubConfigPath();
@@ -681,11 +749,25 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     process.exit(0);
   }
   const config = await readHubConfig(configPath);
+  if (values.wait !== undefined) {
+    const inboxDir = resolve(expandHome(config?.inbox?.dir || defaultInboxDir()));
+    const slug = resolveSlugArg(values.wait);
+    if (!slug) { console.error("--wait requires a valid project directory or slug"); process.exit(2); }
+    const timeoutSec = Number(values.timeout);
+    if (!Number.isFinite(timeoutSec) || timeoutSec < 0) {
+      console.error("--timeout must be a non-negative number of seconds");
+      process.exit(2);
+    }
+    const result = await waitForInbox({ inboxDir, slug, timeoutMs: Math.round(timeoutSec * 1000) });
+    console.log(JSON.stringify(result, null, 2));
+    process.exit(result.ok ? 0 : 124);
+  }
   if (values.inbox) {
     const inboxDir = resolve(expandHome(config?.inbox?.dir || defaultInboxDir()));
-    const slug = positionals[0] || null;
+    const slug = positionals[0] ? resolveSlugArg(positionals[0]) : null;
+    if (positionals[0] && !slug) { console.error("Invalid project directory or slug"); process.exit(2); }
     if (values.clear) {
-      if (!slug) { console.error("--clear requires a project slug"); process.exit(2); }
+      if (!slug) { console.error("--clear requires a project directory or slug"); process.exit(2); }
       console.log(JSON.stringify(await clearInbox({ inboxDir, slug }), null, 2));
       process.exit(0);
     }
