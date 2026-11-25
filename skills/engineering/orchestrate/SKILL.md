@@ -104,7 +104,9 @@ Carry the evidence into the worker brief and continue independent tickets.
 2. Load only the running harness's reference:
    [Claude](references/harness-claude.md), [Codex](references/harness-codex.md),
    [Kimi](references/harness-kimi.md), [kiro-cli](references/harness-kiro.md),
-   [Kiro Crew](references/harness-kirocrew.md), or [agy](references/harness-agy.md).
+   [Kiro Crew](references/harness-kirocrew.md), [agy](references/harness-agy.md),
+   [Qwen Code](references/harness-qwen.md), [DSH](references/harness-dsh.md), or
+   [OpenCode](references/harness-opencode.md).
    Inspect its live tools and approvals before
    dispatch. If isolated background workers and event waits are unavailable, run
    sequentially in-session with the same review and reporting steps.
