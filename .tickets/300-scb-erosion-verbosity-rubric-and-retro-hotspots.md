@@ -1,7 +1,7 @@
 ---
 id: "300"
 title: "Add SCBench iterative-erosion and verbosity smells to code-review and concentration check to retro"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "rubric-app.md and rubric-game.md document SCBench iterative-erosion and verbosity smells with flag/skip indicators"
