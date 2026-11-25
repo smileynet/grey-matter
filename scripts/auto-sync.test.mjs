@@ -4,7 +4,7 @@ import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { afterEach, test } from "node:test";
 
 import {
@@ -13,13 +13,14 @@ import {
   registerPack,
   renderLaunchdPlist,
   renderSystemdUnits,
+  renderWindowsTaskScript,
   runAutoSync,
   syncGitRepo,
   unregisterPack,
   writeNotice,
 } from "./auto-sync.mjs";
 
-const REPO_ROOT = resolve(new URL("..", import.meta.url).pathname);
+const REPO_ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const CLAUDE_HOOK = join(REPO_ROOT, ".claude-plugin", "hooks", "session-start.mjs");
 const AGY_HOOK = join(REPO_ROOT, ".claude-plugin", "hooks", "agy-session-start.mjs");
 const DSH_HOOK = join(REPO_ROOT, ".claude-plugin", "hooks", "dsh-session-start.mjs");
@@ -327,4 +328,12 @@ test("scheduler unit and plist templates configure 12-hour cadence", () => {
   const plist = renderLaunchdPlist({ hours: 12, nodeExe: "/usr/bin/node", scriptPath: "/opt/gm/scripts/auto-sync.mjs", workingDir: "/opt/gm", stateDir: "/tmp/state", pathEnv: "/usr/bin" });
   assert.match(plist, /<integer>43200<\/integer>/);
   assert.match(plist, /dev\.smileynet\.agent-sync/);
+
+  const winPs = renderWindowsTaskScript({ hours: 12, nodePath: "C:\\Program Files\\node's\\node.exe", scriptPath: "D:\\code\\grey-matter\\scripts\\auto-sync.mjs" });
+  assert.match(winPs, /Register-ScheduledTask -TaskName 'AgentSync'/);
+  assert.match(winPs, /New-ScheduledTaskAction -Execute 'conhost\.exe'/);
+  assert.match(winPs, /--headless "C:\\Program Files\\node''s\\node\.exe" "D:\\code\\grey-matter\\scripts\\auto-sync\.mjs" run/);
+  assert.match(winPs, /New-TimeSpan -Hours 12/);
+  assert.match(winPs, /-AtLogOn -User "\$env:USERDOMAIN\\\$env:USERNAME"/);
+  assert.match(winPs, /-StartWhenAvailable/);
 });

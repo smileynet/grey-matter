@@ -45,6 +45,12 @@ export function augmentedEnv(baseEnv = process.env) {
   const home = baseEnv.HOME || baseEnv.USERPROFILE || homedir();
   const candidates = [
     join(home, ".local", "share", "mise", "shims"),
+    ...(process.platform === "win32"
+      ? [
+          join(baseEnv.LOCALAPPDATA || join(home, "AppData", "Local"), "mise", "shims"),
+          ...(baseEnv.CARGO_HOME ? [join(baseEnv.CARGO_HOME, "bin")] : []),
+        ]
+      : []),
     join(home, ".local", "bin"),
     join(home, ".cargo", "bin"),
     ...(process.platform === "darwin" ? ["/opt/homebrew/bin"] : []),
@@ -1056,6 +1062,24 @@ export function renderLaunchdPlist({
   ].join("\n");
 }
 
+function psQuote(value) {
+  return `'${String(value).replace(/'/g, "''")}'`;
+}
+
+export function renderWindowsTaskScript({
+  nodePath = process.execPath,
+  scriptPath = fileURLToPath(import.meta.url),
+  hours = 12,
+} = {}) {
+  const argString = `--headless "${nodePath}" "${scriptPath}" run`;
+  return [
+    `$action = New-ScheduledTaskAction -Execute 'conhost.exe' -Argument ${psQuote(argString)}`,
+    `$triggers = @((New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(2) -RepetitionInterval (New-TimeSpan -Hours ${hours})), (New-ScheduledTaskTrigger -AtLogOn -User "$env:USERDOMAIN\\$env:USERNAME"))`,
+    `$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Minutes 30) -MultipleInstances IgnoreNew`,
+    `Register-ScheduledTask -TaskName 'AgentSync' -Action $action -Trigger $triggers -Settings $settings -Force | Out-Null`,
+  ].join("; ");
+}
+
 function getScheduleStatus() {
   const plat = platform();
   if (plat === "linux") {
@@ -1085,7 +1109,33 @@ function getScheduleStatus() {
       loaded: list.status === 0,
     };
   }
-  return { platform: plat, mechanism: "schtasks", installed: false };
+  const ps = [
+    "$t = Get-ScheduledTask -TaskName 'AgentSync' -ErrorAction SilentlyContinue",
+    "if (-not $t) { '{}' ; exit 0 }",
+    "$i = Get-ScheduledTaskInfo -TaskName 'AgentSync' -ErrorAction SilentlyContinue",
+    "$a = $t.Actions | Select-Object -First 1",
+    "$o = [ordered]@{ installed = $true; state = [string]$t.State; lastRunTime = if ($i -and $i.LastRunTime.Year -gt 1999) { $i.LastRunTime.ToString('o') } else { $null }; lastTaskResult = if ($i) { $i.LastTaskResult } else { $null }; nextRunTime = if ($i -and $i.NextRunTime) { $i.NextRunTime.ToString('o') } else { $null }; execute = $a.Execute; arguments = $a.Arguments }",
+    "$o | ConvertTo-Json -Compress",
+  ].join("; ");
+  const res = runCmd("powershell.exe", ["-NoProfile", "-Command", ps], { timeout: 10000 });
+  const parsed = res.status === 0 ? readJsonSafeFromText(res.stdout) : null;
+  if (!parsed || !parsed.installed) {
+    return { platform: plat, mechanism: "schtasks", taskName: "AgentSync", installed: false };
+  }
+  const state = parsed.state || "Unknown";
+  return {
+    platform: plat,
+    mechanism: "schtasks",
+    taskName: "AgentSync",
+    installed: true,
+    state,
+    active: state === "Ready" || state === "Running" ? "active" : state.toLowerCase(),
+    enabled: state !== "Disabled" ? "enabled" : "disabled",
+    lastRunTime: parsed.lastRunTime,
+    lastTaskResult: parsed.lastTaskResult,
+    nextRunTime: parsed.nextRunTime,
+    action: [parsed.execute, parsed.arguments].filter(Boolean).join(" "),
+  };
 }
 
 function installSchedule({ hours = 12, dryRun = false } = {}) {
@@ -1125,11 +1175,10 @@ function installSchedule({ hours = 12, dryRun = false } = {}) {
     return;
   }
   if (plat === "win32") {
-    const scriptPath = fileURLToPath(import.meta.url);
-    const ps = `Register-ScheduledTask -TaskName 'AgentSync' -Action (New-ScheduledTaskAction -Execute '${process.execPath}' -Argument '"${scriptPath}" run') -Trigger @((New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(2) -RepetitionInterval (New-TimeSpan -Hours ${hours})), (New-ScheduledTaskTrigger -AtLogOn)) -Force`;
+    const ps = renderWindowsTaskScript({ hours });
     if (dryRun) { console.log(ps); return; }
     const res = runCmd("powershell.exe", ["-NoProfile", "-Command", ps], { timeout: 15000 });
-    if (res.status !== 0) throw new Error(`Register-ScheduledTask failed: ${res.stderr.trim()}`);
+    if (res.status !== 0) throw new Error(`Register-ScheduledTask failed: ${res.stderr.trim() || res.stdout.trim()}`);
     console.log(`registered Windows Scheduled Task AgentSync (every ${hours}h)`);
   }
 }
@@ -1161,7 +1210,7 @@ function uninstallSchedule({ dryRun = false } = {}) {
   }
   if (plat === "win32") {
     if (dryRun) { console.log("would unregister AgentSync task"); return; }
-    runCmd("powershell.exe", ["-NoProfile", "-Command", "Unregister-ScheduledTask -TaskName 'AgentSync' -Confirm:$false"], { timeout: 10000 });
+    runCmd("powershell.exe", ["-NoProfile", "-Command", "Unregister-ScheduledTask -TaskName 'AgentSync' -Confirm:$false -ErrorAction SilentlyContinue"], { timeout: 10000 });
     console.log("unregistered Windows Scheduled Task AgentSync");
   }
 }
