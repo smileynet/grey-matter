@@ -682,7 +682,7 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 268 | snapshot-tickets.mjs writes the ticket snapshot as multi-line JSON | open |
 | 273 | Spike: install grey-matter's Claude plugin in ZCode, record runtime behavior | ✅ done |
 | 274 | Add ZCode harness to deploy.mjs (copy mode) and install-agents-md | ✅ done |
-| 276 | Let release development tests use the managed npm wrapper | open |
+| 276 | Let release development tests use the managed npm wrapper | in_progress |
 | 277 | Measure Grey Matter Kimi plugin update behavior | open |
 | 278 | Validate Grey Matter Kimi installation beyond macOS | open |
 | 279 | Show the Grey Matter icon in Antigravity | open |

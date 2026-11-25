@@ -1,7 +1,7 @@
 ---
 id: "276"
 title: "Let release development tests use the managed npm wrapper"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
