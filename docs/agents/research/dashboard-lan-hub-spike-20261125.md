@@ -8,8 +8,8 @@ Candidate implementation: [serve-hub.mjs](../../../skills/productivity/delivery-
 
 **Adopt and promote `serve-hub.mjs` as the permanent multi-project hub**, with `systemd --user` lifecycle and Tailscale Serve HTTPS transport (plus optional LAN/mDNS fallback).
 
-- **4 of 5 acceptance criteria verified** on `monolith` (discovery, security boundaries, `systemd --user` restart + zero-restart freshness, and recorded findings/integration plan).
-- **1 acceptance criterion remains pending owner action:** `tailscale serve --bg 8765` requires a one-time operator grant (`sudo tailscale set --operator=$USER`) on `monolith`, after which a second tailnet device (`flamingdragon` / `iphone171`) can verify 1-click **Copy answers for chat** over HTTPS Secure Context.
+- **All 5 acceptance criteria verified** on `monolith` (discovery, security boundaries, `systemd --user` restart + zero-restart freshness, Tailscale Serve HTTPS verified end-to-end with live HTTP/2 TLS checks and owner confirmation from a second device, and recorded findings/integration plan).
+- **Mobile-to-desktop UX finding:** when reviewing on iOS (`iphone171`) while the chat runs on Windows/Linux (`flamingdragon`/`monolith`), iOS lacks native Universal Clipboard to Windows/Linux. Follow-up integration should consider a loopback/Tailscale-only `POST /api/answers` inbox (`~/.local/state/grey-matter/inbox/<slug>.md`, outside Git) plus a Web Share (`navigator.share`) button alongside Copy.
 
 ## Observed Evidence
 
@@ -40,16 +40,12 @@ Candidate implementation: [serve-hub.mjs](../../../skills/productivity/delivery-
 - User unit `~/.config/systemd/user/gm-dashboard-hub.service` (`Restart=always`, `NoNewPrivileges=true`, ~21 MB RSS) enabled cleanly (`default.target.wants`), started immediately, and survived `systemctl --user restart gm-dashboard-hub.service` with immediate `200` responses.
 - Because `loginctl show-user "$USER" -p Linger` is already `Linger=yes`, the hub survives logout and reboot without a logged-in GUI session.
 - **mDNS LAN fallback:** `http://monolith.local:8765/` returned `200` over local `avahi-daemon`.
-- **Tailscale Serve HTTPS finding:** running `tailscale serve --bg 8765` unprivileged exited `1`:
-  > `sending serve config: Access denied: serve config denied`
-  > `Use 'sudo tailscale serve --bg 8765'.`
-  > `To not require root, use 'sudo tailscale set --operator=$USER' once.`
-  Once the machine owner runs:
+- **Tailscale Serve HTTPS finding:** running `tailscale serve --bg 8765` unprivileged initially exited `1` (`Access denied: serve config denied`) until the one-time operator grant:
   ```bash
   sudo tailscale set --operator=$USER
   tailscale serve --bg 8765
   ```
-  Tailscale terminates trusted HTTPS at `https://monolith.taileb70f7.ts.net/` (persisted across reboots), at which point the systemd unit can also be tightened from `--host 0.0.0.0` to `--host 127.0.0.1` if LAN HTTP fallback is no longer wanted.
+  After the owner ran both commands on `monolith`, Tailscale provisioned a Let's Encrypt cert on the first request and served `https://monolith.taileb70f7.ts.net/` over `HTTP/2` (`200` on `/`, `/api/projects.json`, and all 3 dashboards with `cache-control: no-store`; `302` on `/grey-matter`; `404` on `.git/config`, `.env`, `README.md`; `405` on `POST`). Owner confirmed the page works end-to-end on a second device. The systemd unit can optionally be tightened from `--host 0.0.0.0` to `--host 127.0.0.1` if plain LAN HTTP fallback is no longer wanted.
 
 ## Follow-up Integration Plan (once Criterion 4 is confirmed)
 
