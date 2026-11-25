@@ -1,13 +1,15 @@
 #!/usr/bin/env node
-// gate.mjs reference version 5 (grey-matter proposal 18). Projects vendor this file; keep this
+// gate.mjs reference version 6 (grey-matter proposal 18). Projects vendor this file; keep this
 // line so conformance-audit can report drift from the reference.
 //
 // Runs the checks that scripts/gates.json declares for one stage, selected by changed paths.
 // The runner owns every timeout: node:test reports a test blocked in spawnSync past its own
 // timeout as "ok", so only killing the process tree from outside bounds a check.
 //
-// Usage: node scripts/gate.mjs <pre-push|pre-merge|pre-release> [--stdin --remote NAME]
+// Usage: node scripts/gate.mjs [verdict] <pre-push|pre-merge|pre-release> [--stdin --remote NAME]
 //                              [--base REF] [--include ID]... [--manifest PATH] [--record]
+//   verdict   emit a single PASS / NOT-READY verdict; PASS only when >=1 check ran and every
+//             selected check passed (fails, skips, timeouts, infra errors, or 0 selected -> NOT-READY).
 //   --stdin   read Git pre-push lines (<local ref> <local sha> <remote ref> <remote sha>).
 //   --base    pre-merge range start; default: merge-base of HEAD with origin/main.
 //   pre-release runs every check in every stage, whatever changed.
@@ -16,7 +18,7 @@
 // Checks run in a detached worktree of the commit being judged (each pushed tip, else HEAD), so
 // uncommitted files, including another session's in a shared checkout, never pass or block them.
 // GM_GATE_RANGES carries that tip's exact Git revision arguments as JSON; null means unknown.
-// Exit: 0 every selected check passed; 1 a check failed, timed out or could not run; 2 usage.
+// Exit: 0 every selected check passed (and in verdict mode, >=1 ran with no skips); 1 otherwise; 2 usage.
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync, lstatSync, mkdtempSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -31,7 +33,7 @@ if (process.env.ELECTRON_RUN_AS_NODE === "1") {
 }
 
 function usage(message) {
-  console.error(`gate: ${message}\nusage: node scripts/gate.mjs <${STAGES.join("|")}> [--stdin --remote NAME] [--base REF] [--include ID]... [--manifest PATH] [--record]`);
+  console.error(`gate: ${message}\nusage: node scripts/gate.mjs [verdict] <${STAGES.join("|")}> [--stdin --remote NAME] [--base REF] [--include ID]... [--manifest PATH] [--record]`);
   process.exit(2);
 }
 
@@ -39,7 +41,8 @@ const argv = process.argv.slice(2);
 const opts = { include: [] };
 for (let i = 0; i < argv.length; i++) {
   const arg = argv[i];
-  if (STAGES.includes(arg) && !opts.stage) opts.stage = arg;
+  if (arg === "verdict" && !opts.verdict) opts.verdict = true;
+  else if (STAGES.includes(arg) && !opts.stage) opts.stage = arg;
   else if (arg === "--stdin") opts.stdin = true;
   else if (arg === "--record") opts.record = true;
   else if (["--remote", "--base", "--manifest", "--include"].includes(arg)) {
@@ -242,14 +245,19 @@ const selected = checks.filter((c) => opts.include.includes(c.id) || (inStage.in
 const skip = new Set((process.env.SKIP ?? "").split(",").map((s) => s.trim()).filter(Boolean));
 
 if (!opts.stdin) tips.add(git("rev-parse", "HEAD")?.[0] ?? "HEAD");
+const dirtyTree = Boolean(git("status", "--porcelain")?.length);
 console.log(`gate ${opts.stage}: ${selected.length} of ${inStage.length} check(s) selected (${source})`);
-if (!selected.length && git("status", "--porcelain")?.length) {
+if (!selected.length && dirtyTree) {
   console.log("gate: uncommitted changes were not checked; this run judges committed changes only.");
 }
 let failed = 0;
 const measurements = new Map();
+const skippedIds = selected.filter((c) => skip.has(c.id)).map((c) => c.id);
+const failedIds = new Set();
+const timedOutIds = new Set();
+const infraIds = new Set();
 const toRun = selected.filter((c) => !skip.has(c.id));
-for (const check of selected.filter((c) => skip.has(c.id))) console.log(`  [skip]           ${check.id}: skipped (SKIP)`);
+for (const id of skippedIds) console.log(`  [skip]           ${id}: skipped (SKIP)`);
 for (const tip of toRun.length ? tips : []) {
   if (tips.size > 1) console.log(`  at ${tip.slice(0, 12)}`);
   await inSnapshot(tip, async (cwd) => {
@@ -260,7 +268,12 @@ for (const tip of toRun.length ? tips : []) {
         const previous = measurements.get(check.id);
         measurements.set(check.id, !ok || previous === null ? null : Math.max(previous ?? 0, r.seconds));
       }
-      if (!ok) failed++;
+      if (!ok) {
+        failed++;
+        if (r.outcome === "timeout") timedOutIds.add(check.id);
+        else if (r.outcome === "infrastructure error") infraIds.add(check.id);
+        else failedIds.add(check.id);
+      }
       const slow = check.measured?.s && r.seconds > 2 * check.measured.s + 1 ? ` (measured ${check.measured.s}s on ${check.measured.date})` : "";
       console.log(`  [${ok ? "ok  " : "FAIL"}] ${r.seconds.toFixed(1).padStart(6)}s  ${check.id}${ok ? "" : `: ${r.outcome}`}${slow}`);
       if (!ok) console.log(r.output.replace(/^/gm, "      ").trimEnd() || "      (no output)");
@@ -271,6 +284,23 @@ let recordFailed = false;
 if (opts.record) {
   try { console.log(`gate: recorded ${recordMeasurements(manifestFile, manifestSource, measurements)} passed check measurement(s)`); }
   catch (error) { recordFailed = true; console.error(`gate: measurements not recorded (infrastructure error): ${error.message}`); }
+}
+if (opts.verdict) {
+  const reasons = [];
+  if (!selected.length) reasons.push(`0 of ${inStage.length} check(s) selected; nothing ran`);
+  if (!tips.size) reasons.push("no commit tips to judge");
+  if (skippedIds.length) reasons.push(`${skippedIds.length} skipped: ${skippedIds.join(", ")}`);
+  if (failedIds.size) reasons.push(`${failedIds.size} failed: ${[...failedIds].join(", ")}`);
+  if (timedOutIds.size) reasons.push(`${timedOutIds.size} timed out: ${[...timedOutIds].join(", ")}`);
+  if (infraIds.size) reasons.push(`${infraIds.size} infrastructure error: ${[...infraIds].join(", ")}`);
+  if (recordFailed) reasons.push("measurement recording failed");
+  if (!reasons.length) {
+    const scopeNote = dirtyTree ? "; committed HEAD only, uncommitted changes not checked" : "";
+    console.log(`verdict ${opts.stage}: PASS (${toRun.length} of ${selected.length} selected check(s) ran and passed${scopeNote})`);
+    process.exit(0);
+  }
+  console.error(`verdict ${opts.stage}: NOT-READY (${reasons.join("; ")})`);
+  process.exit(1);
 }
 if (failed) console.error(`gate ${opts.stage}: ${failed} check(s) did not pass. Fix them, or skip one knowingly with SKIP=<id>.`);
 process.exit(failed || recordFailed ? 1 : 0);

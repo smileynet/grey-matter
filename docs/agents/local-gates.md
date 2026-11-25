@@ -101,7 +101,10 @@ for merges, the guard scans resolution text newly added against all parents. The
 that let new leaks enter historical evidence files.
 
 Runner version 5 supplies `GM_GATE_RANGES`: JSON arrays of Git revision arguments for
-the exact tip being checked. Push privacy ranges exclude already-published commits on
+the exact tip being checked. Runner version 6 adds `node scripts/gate.mjs verdict <stage>`
+which emits a single `PASS` or `NOT-READY` readiness verdict and exits `0` only when at
+least one selected check ran and every selected check passed (any skip, fail, timeout,
+infrastructure error, or empty selection exits `1` as `NOT-READY`). Push privacy ranges exclude already-published commits on
 the selected remote for both existing and new refs. Remote tracking tips are pinned to
 commit IDs before checks run; existing refs also exclude their advertised remote tip.
 Merging published historical evidence therefore does not introduce a privacy finding.

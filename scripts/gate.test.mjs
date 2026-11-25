@@ -458,3 +458,51 @@ test("gate refuses ELECTRON_RUN_AS_NODE=1 hosts before spawning subprocesses", (
   assert.equal(result.status, 2, result.out);
   assert.match(result.out, /ELECTRON_RUN_AS_NODE=1/);
 }));
+
+test("verdict reports PASS only when every selected check ran and passed", () => fixture([
+  check("a", ["a/"]),
+  check("b", ["a/"]),
+], ({ git, commit, run }) => {
+  commit("a/file.txt");
+  const clean = run(["verdict", "pre-push"]);
+  assert.equal(clean.status, 0, clean.out);
+  assert.match(clean.out, /verdict pre-push: PASS \(2 of 2 selected check\(s\) ran and passed\)/);
+  assert.doesNotMatch(clean.out, /uncommitted/);
+
+  writeFileSync(join(git("rev-parse", "--show-toplevel"), "README.md"), "dirty\n");
+  const dirty = run(["verdict", "pre-push"]);
+  assert.equal(dirty.status, 0, dirty.out);
+  assert.match(dirty.out, /verdict pre-push: PASS \(2 of 2 selected check\(s\) ran and passed; committed HEAD only, uncommitted changes not checked\)/);
+}));
+
+test("verdict reports NOT-READY on fail, skip, timeout, infrastructure error, and empty selection", () => fixture([
+  check("ok", ["a/"]),
+  check("bad", ["bad/"], "process.exit(1)"),
+  check("slow", ["slow/"], "setTimeout(() => {}, 5000)", { timeout_s: 0.2 }),
+  check("broken", ["broken/"], pass, { run: ["nonexistent-command-xyz-223"] }),
+], ({ commit, run }) => {
+  const empty = run(["verdict", "pre-push"]);
+  assert.equal(empty.status, 1, empty.out);
+  assert.match(empty.out, /verdict pre-push: NOT-READY \(0 of 4 check\(s\) selected; nothing ran\)/);
+
+  commit("a/file.txt");
+  const skipped = run(["verdict", "pre-push"], { env: { SKIP: "ok" } });
+  assert.equal(skipped.status, 1, skipped.out);
+  assert.match(skipped.out, /verdict pre-push: NOT-READY \(1 skipped: ok\)/);
+
+  commit("bad/file.txt");
+  const failed = run(["verdict", "pre-push"]);
+  assert.equal(failed.status, 1, failed.out);
+  assert.match(failed.out, /verdict pre-push: NOT-READY \(1 failed: bad\)/);
+
+  const timedOut = run(["verdict", "pre-push", "--include", "slow"], { env: { SKIP: "bad" } });
+  assert.equal(timedOut.status, 1, timedOut.out);
+  assert.match(timedOut.out, /verdict pre-push: NOT-READY \(1 skipped: bad; 1 timed out: slow\)/);
+
+  const infra = run(["verdict", "pre-push", "--include", "broken"], { env: { SKIP: "bad" } });
+  assert.equal(infra.status, 1, infra.out);
+  assert.match(infra.out, /verdict pre-push: NOT-READY \(1 skipped: bad; 1 infrastructure error: broken\)/);
+
+  const noStage = run(["verdict"]);
+  assert.equal(noStage.status, 2, noStage.out);
+}));

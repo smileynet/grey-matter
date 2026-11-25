@@ -162,7 +162,7 @@ Prefer a single highest-value view. You may use several where they each answer a
 
 Concrete evidence that the change works. Show a before and after.
 
-**Capture evidence from a real run; never compose it.** A pasted test block that didn't execute, or a described-but-unrun result, is the single most common agent-PR failure: a description claiming changes that aren't there. Run it, paste the real output.
+**Capture evidence from a real run; never compose it.** A pasted test block that didn't execute, or a described-but-unrun result, is the single most common agent-PR failure: a description claiming changes that aren't there. Run it, paste the real output. When the repo uses `gate.mjs`, include the real `node scripts/gate.mjs verdict <stage>` line (`PASS` or `NOT-READY` with reasons) so reviewers see whether every expected check actually ran and passed.
 
 Screenshots are S-tier **when the change is visual and you can actually capture one**; for a game, a short clip or a deterministic replay is the equivalent proof of behaviour over time. Otherwise execution-based evidence is your top tier: test results, console output. Show the exact test that now fails and passes, using the real output.
 
