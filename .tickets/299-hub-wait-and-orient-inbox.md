@@ -1,7 +1,7 @@
 ---
 id: "299"
 title: "Add serve-hub.mjs --wait reactive mobile wakeup and orient unread-inbox check"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 tags: ["stream:tooling"]
