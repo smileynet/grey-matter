@@ -192,6 +192,15 @@
       "measured": { "s": 1.4, "date": "2026-11-01", "host": "win" }
     },
     {
+      "id": "dashboard-hub",
+      "stage": "pre-merge",
+      "catches": "the multi-project dashboard hub leaking unlinked repo files, allowing mutations, or mis-discovering project status pages (ticket 296)",
+      "scope": ["skills/productivity/delivery-dashboard/scripts/serve-hub"],
+      "run": ["node", "--test", "--test-timeout=60000", "skills/productivity/delivery-dashboard/scripts/serve-hub.test.mjs"],
+      "timeout_s": 60,
+      "measured": { "s": 0.4, "date": "2026-11-25", "host": "linux" }
+    },
+    {
       "id": "review-receipt",
       "stage": "pre-merge",
       "catches": "a review receipt that stays accepted after its source or captures changed",

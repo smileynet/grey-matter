@@ -30,8 +30,12 @@ Can one zero-dependency, allowlisted multi-project Node hub (`serve-hub.mjs`) un
 
 ## Acceptance criteria
 
-- [ ] `serve-hub.mjs` discovers all projects under `~/code` that have `docs/status.html` (`grey-matter`, `tkt`, `catalyst-borrowed-time`) and renders live open-decision / ticket counts on `/`.
-- [ ] Security checks pass: traversal (`../`), `.git/config`, `.env`, and unlinked repo files return `404` for every project route; `POST`/`PUT` return `405`.
-- [ ] `systemd --user` unit survives restart and serves fresh edits immediately (`Cache-Control: no-store`) with zero restart when a project updates `docs/status.html` or a new repo adds one.
+- [x] `serve-hub.mjs` discovers all projects under `~/code` that have `docs/status.html` (`grey-matter`, `tkt`, `catalyst-borrowed-time`) and renders live open-decision / ticket counts on `/`.
+- [x] Security checks pass: traversal (`../`), `.git/config`, `.env`, and unlinked repo files return `404` for every project route; `POST`/`PUT` return `405`.
+- [x] `systemd --user` unit survives restart and serves fresh edits immediately (`Cache-Control: no-store`) with zero restart when a project updates `docs/status.html` or a new repo adds one.
 - [ ] Tailscale Serve HTTPS endpoint verified from a second tailnet device: page loads in dark mode and **Copy answers for chat** succeeds via `navigator.clipboard` without falling back to the manual copy box.
-- [ ] Spike findings and follow-up integration decision recorded before promoting to permanent tooling.
+- [x] Spike findings and follow-up integration decision recorded before promoting to permanent tooling.
+
+## Spike progress (2026-11-25)
+
+Findings recorded in `docs/agents/research/dashboard-lan-hub-spike-20261125.md`. Waiting on one-time owner Tailscale operator authorization (`sudo tailscale set --operator=$USER && tailscale serve --bg 8765`) and second-device clipboard confirmation before closing.
