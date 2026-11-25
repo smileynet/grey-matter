@@ -15,13 +15,17 @@
 import { createHash, randomUUID } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import {
-  existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync,
+  existsSync, mkdirSync, readdirSync, readFileSync, realpathSync, renameSync, rmSync, statSync, writeFileSync,
 } from "node:fs";
 import { homedir, platform } from "node:os";
 import { delimiter, dirname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
+const SCRIPT_PATH = (() => {
+  const p = fileURLToPath(import.meta.url);
+  try { return realpathSync.native(p); } catch { return p; }
+})();
+const HERE = dirname(SCRIPT_PATH);
 const GREY_MATTER_ROOT = resolve(HERE, "..");
 const DEFAULT_PORTFOLIO = join(GREY_MATTER_ROOT, "skill-packs.json");
 const PACK_NAME_RE = /^[a-z0-9][a-z0-9._-]*$/;
@@ -1068,7 +1072,7 @@ function psQuote(value) {
 
 export function renderWindowsTaskScript({
   nodePath = process.execPath,
-  scriptPath = fileURLToPath(import.meta.url),
+  scriptPath = SCRIPT_PATH,
   hours = 12,
 } = {}) {
   const argString = `--headless "${nodePath}" "${scriptPath}" run`;
