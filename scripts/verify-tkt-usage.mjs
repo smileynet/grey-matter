@@ -29,6 +29,7 @@ function collectMarkdown(directory, out = []) {
   }
   return out;
 }
+const BOOLEAN_GLOBAL_FLAGS = new Set(["-q", "--quiet", "--dry-run", "--no-push", "-h", "--help", "-V", "--version"]);
 function collectUsage(pack) {
   const roots = ["skills", join(".kiro", "skills"), join(".claude", "skills")].map((path) => join(pack, path));
   const commands = new Map(), globalRequirements = new Map();
@@ -54,8 +55,10 @@ function collectUsage(pack) {
         const tokens = source.trim().replace(/\s+#.*$/, "").replace(/[.,;:]$/, "").split(/\s+/).slice(1);
         let at = 0;
         while (tokens[at]?.startsWith("-")) {
-          const flag = tokens[at++].split("=", 1)[0]; noteGlobal(flag, file);
-          if (!tokens[at]?.startsWith("-") && tokens[at] !== undefined) at++;
+          const raw = tokens[at++];
+          const flag = raw.split("=", 1)[0];
+          noteGlobal(flag, file);
+          if (!raw.includes("=") && !BOOLEAN_GLOBAL_FLAGS.has(flag) && tokens[at] !== undefined && !tokens[at].startsWith("-")) at++;
         }
         const command = tokens[at]?.match(/^([a-z][a-z0-9-]*)$/i)?.[1];
         if (!command || ["version", "capabilities"].includes(command)) continue;

@@ -95,3 +95,17 @@ test("an explicitly rejected command is a compatibility finding", () => fixture(
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(JSON.parse(result.stdout).findings[0], /command removed is not supported/);
 }));
+
+test("boolean and equals-form global flags do not swallow the following subcommand", () => fixture(({ pack, cache, log, cli }) => {
+  writeFileSync(join(pack, ".kiro/skills/example/SKILL.md"), "Run `tkt --dry-run init --write-nudge both` and `tkt --color=never ready`.\n");
+  let src = readFileSync(cli, "utf8");
+  src = src.replace("  -h, --help\"", "  --dry-run\\n      --color <COLOR>\\n  -h, --help\"");
+  src = src.replace('commands:{new:', 'commands:{init:{inputSchema:{properties:{write_nudge:{type:"string"}}}},new:');
+  src = src.replace('if (args[0] === "new" && args[1] === "--help")', 'if (args[0] === "init" && args[1] === "--help") { console.log("Usage: tkt init [OPTIONS]\\n  --write-nudge <MODE>\\n  -h, --help"); process.exit(0); }\nif (args[0] === "new" && args[1] === "--help")');
+  writeFileSync(cli, src);
+  const result = run({ pack, cache, log, cli });
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  const parsed = JSON.parse(result.stdout);
+  assert.deepEqual(parsed.findings, []);
+  assert.equal(parsed.commandsChecked, 2);
+}));
