@@ -17,7 +17,7 @@ carries a visual; decisions and learnings without a ticket stay plain entries.
 | Latest | The weather entry: outcome headline, two changes, one before-and-after visual, a "Mocked: sample data" label, a try link, and everything technical folded under Details. |
 | Earlier | Four collapsed rows. A row carries date, headline, type and a "Needs you" marker when one of its asks is open. |
 | All entries | Nine rows, including the four older than the overview. Try searching "daylight" or filtering to Blocked. |
-| Plan | Thirteen tickets: one ready, one in progress, four blocked, two in backlog, five done. "What comes next" puts the forecast and the map-source decision first, then the three tickets they unblock, then offline route-following. Open ticket 03 to see what it unblocked and the entry that delivered it. |
+| Plan | Thirteen tickets: one ready, one in progress, four blocked, two in backlog, five done. "What comes next" puts the forecast and the map-source decision first, then the three tickets they unblock, then offline route-following. Open ticket 03 to see what it unblocked and the entry that delivered it. Cancelled tickets, when present on a board, sit in their own collapsed `Cancelled` group under Ticket history, distinct from Done and excluded from "What comes next". |
 
 ## Entry by entry
 

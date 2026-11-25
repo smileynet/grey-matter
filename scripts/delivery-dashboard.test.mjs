@@ -33,6 +33,7 @@ test("cancelled tickets stay distinct terminal context and never satisfy prerequ
   assert.equal(groups.cancelled.length, 1);
   assert.equal(groups.done.length, 0);
   assert.equal(groups.blocked.length, 1);
+  assert.deepEqual(Array.from(api().planLanes(snap), (lane) => Array.from(lane, (ticket) => ticket.id)).flat(), ["child"]);
   const flow = api().ticketFlow(snap);
   assert.deepEqual(Array.from(flow.visible, ticket => ticket.id), ["child"]);
   assert.equal(flow.elsewhere, 0);

@@ -57,7 +57,7 @@ Physical layout:
 - **Done and cancelled are different terminal outcomes.** Use `tkt close` only for
   verified delivery, with `--check-all` and evidence for each validation criterion.
   Never hand-edit status or claim a later checkbox edit as proof of an earlier run.
-  Retire abandoned work through `tkt cancel`, not successful closure. On installed
+  Retire abandoned, superseded, or duplicate work through `tkt cancel`, not successful closure. On installed
   tkt 0.4.0 (`898ceb5`, help checked 2026-11-03), `tkt reopen ID` returns a
   **cancelled** ticket to open and preserves its history; this does not establish
   support for reopening a done ticket. Inspect current `close`, `cancel` and
