@@ -1,7 +1,7 @@
 ---
 id: "298"
 title: "Spike: mobile-to-desktop decision submission via Tailscale Serve inbox"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 tags: ["stream:tooling"]
