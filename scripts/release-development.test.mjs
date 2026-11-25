@@ -1,9 +1,9 @@
 import "./test-git-env.mjs";
 import test, { after } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { delimiter, join } from "node:path";
 import { git } from "./release-git.mjs";
 import { prepareDevelopment } from "./release-development.mjs";
 
@@ -138,4 +138,49 @@ test("development preparation: ambient Git configuration cannot redirect the che
   Object.assign(process.env, { GIT_CONFIG_COUNT: "1", GIT_CONFIG_KEY_0: "core.worktree", GIT_CONFIG_VALUE_0: foreign });
   try { assert.equal(f.run({ execute: true }).developmentSha, f.candidateSha); }
   finally { for (const [index, key] of keys.entries()) { if (previous[index] === undefined) delete process.env[key]; else process.env[key] = previous[index]; } }
+});
+
+test("development preparation: managed npm wrapper receives only required runtime variables", (t) => {
+  const f = fixture(t), bin = join(f.root, "managed-bin"), seenFile = join(f.root, "seen-env.json");
+  mkdirSync(bin);
+  if (process.platform === "win32") {
+    writeFileSync(join(bin, "npm.cmd"), [
+      "@echo off",
+      'if "%KIMI_DESKTOP_RUNTIME_NODE%"=="" exit /b 127',
+      'if "%KIMI_DESKTOP_PROCESS_RUNNER%"=="" exit /b 127',
+      'if not "%KIMI_API_KEY%"=="" exit /b 19',
+      'if not "%RELEASE_CARGO_TOKEN%"=="" exit /b 20',
+      `"${process.execPath}" -e "require('fs').writeFileSync(process.argv[1], JSON.stringify({node:process.env.KIMI_DESKTOP_RUNTIME_NODE,runner:process.env.KIMI_DESKTOP_PROCESS_RUNNER,secret:process.env.KIMI_API_KEY??null}))" "${seenFile}"`,
+    ].join("\r\n") + "\r\n");
+  } else {
+    const wrapper = join(bin, "npm");
+    writeFileSync(wrapper, [
+      "#!/bin/sh",
+      'if [ -z "$KIMI_DESKTOP_RUNTIME_NODE" ] || [ -z "$KIMI_DESKTOP_PROCESS_RUNNER" ]; then echo "exec: : not found" >&2; exit 127; fi',
+      'if [ -n "$KIMI_API_KEY" ]; then echo "unexpected KIMI_API_KEY" >&2; exit 19; fi',
+      'if [ -n "$RELEASE_CARGO_TOKEN" ]; then echo "unexpected RELEASE_CARGO_TOKEN" >&2; exit 20; fi',
+      `"${process.execPath}" -e 'require("fs").writeFileSync(process.argv[1], JSON.stringify({node:process.env.KIMI_DESKTOP_RUNTIME_NODE,runner:process.env.KIMI_DESKTOP_PROCESS_RUNNER,secret:process.env.KIMI_API_KEY??null}))' "${seenFile}"`,
+    ].join("\n") + "\n");
+    chmodSync(wrapper, 0o755);
+  }
+  const envKeys = ["PATH", "KIMI_DESKTOP_RUNTIME_NODE", "KIMI_DESKTOP_PROCESS_RUNNER", "KIMI_API_KEY", "RELEASE_CARGO_TOKEN"];
+  const previous = Object.fromEntries(envKeys.map((k) => [k, process.env[k]]));
+  Object.assign(process.env, {
+    PATH: `${bin}${delimiter}${previous.PATH || ""}`,
+    KIMI_DESKTOP_RUNTIME_NODE: process.execPath,
+    KIMI_DESKTOP_PROCESS_RUNNER: "kimi-runner-fixture",
+    KIMI_API_KEY: "dummy-ambient-secret",
+    RELEASE_CARGO_TOKEN: "dummy-release-secret",
+  });
+  try {
+    const result = f.run({ execute: true });
+    assert.equal(result.status, "pass");
+    const seen = JSON.parse(readFileSync(seenFile, "utf8"));
+    assert.deepEqual(seen, { node: process.execPath, runner: "kimi-runner-fixture", secret: null });
+  } finally {
+    for (const k of envKeys) {
+      if (previous[k] === undefined) delete process.env[k];
+      else process.env[k] = previous[k];
+    }
+  }
 });
