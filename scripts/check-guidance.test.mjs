@@ -152,3 +152,19 @@ test("conflict-pairs.json: unique kebab ids, both sides compile", () => {
     new RegExp(p.a, "i"); new RegExp(p.b, "i");
   }
 });
+
+test("skills installed in ZCode, DSH, Qwen, or Crush roots satisfy dead-skill checks", () => {
+  fixture((f) => {
+    f.put(join(f.home, ".zcode", "skills", "zcode-skill", "SKILL.md"), "---\nname: zcode-skill\n---\n");
+    f.put(join(f.home, ".dsh", "skills", "dsh-skill", "SKILL.md"), "---\nname: dsh-skill\n---\n");
+    f.put(join(f.home, ".qwen", "skills", "qwen-skill", "SKILL.md"), "---\nname: qwen-skill\n---\n");
+    f.put(join(f.home, ".config", "crush", "skills", "crush-skill", "SKILL.md"), "---\nname: crush-skill\n---\n");
+    f.put(join(f.repo, "AGENTS.md"), [
+      "# Agents",
+      "- Use the `zcode-skill`, `dsh-skill`, `qwen-skill`, and `crush-skill` skills.",
+    ].join("\n") + "\n");
+    const r = f.run("--json", "--no-global");
+    assert.equal(r.status, 0, r.stdout + r.stderr);
+    assert.deepEqual(parse(r).filter((x) => x.rule === "dead-skill"), []);
+  });
+});

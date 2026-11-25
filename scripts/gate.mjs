@@ -25,6 +25,11 @@ import { join, resolve } from "node:path";
 const STAGES = ["pre-push", "pre-merge", "pre-release"];
 const ZERO = /^0+$/;
 
+if (process.env.ELECTRON_RUN_AS_NODE === "1") {
+  console.error("gate: ELECTRON_RUN_AS_NODE=1 detected (for example inside Kimi Work). Run with a standalone Node 22+ binary and unset ELECTRON_RUN_AS_NODE so subprocesses do not crash on Electron's ICU descriptor.");
+  process.exit(2);
+}
+
 function usage(message) {
   console.error(`gate: ${message}\nusage: node scripts/gate.mjs <${STAGES.join("|")}> [--stdin --remote NAME] [--base REF] [--include ID]... [--manifest PATH] [--record]`);
   process.exit(2);

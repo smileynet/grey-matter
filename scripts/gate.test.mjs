@@ -452,3 +452,9 @@ test("--record refuses non-UTF-8 input without converting other bytes", () => fi
   assert.match(result.out, /requires a UTF-8 manifest/);
   assert.deepEqual(readFileSync(file), source);
 }));
+
+test("gate refuses ELECTRON_RUN_AS_NODE=1 hosts before spawning subprocesses", () => fixture([check("ok", ["a/"])], ({ run }) => {
+  const result = run(["pre-push"], { env: { ELECTRON_RUN_AS_NODE: "1" } });
+  assert.equal(result.status, 2, result.out);
+  assert.match(result.out, /ELECTRON_RUN_AS_NODE=1/);
+}));

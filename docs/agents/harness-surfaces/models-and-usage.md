@@ -2,59 +2,84 @@
 
 How an agent finds each provider's **current** recommended models, picks one and an effort level for a task, and reads how much of the subscription is left. Model lineups change monthly, so this file records **where to look** first; the lineup tables are a dated snapshot. Re-check before relying on one. For the moving-work rule when a limit runs out, see [provider switching](../provider-switching.md).
 
-**Gathered:** 2026-11-01, by four research subagents reading the local installs and official docs. Marks follow the [README](./README.md#evidence-marks): **L** local, **D** documented, **I** inferred.
+**Gathered:** 2026-11-01 (initial baseline); lineup and provider operational notes refreshed **2026-11-25** from [harness-model-optimization-20261125.md](../research/harness-model-optimization-20261125.md). Marks follow the [README](./README.md#evidence-marks): **L** local, **D** documented, **I** inferred.
 
 ## Where to check the current models
 
 | Provider (harness) | Headless check | In session | Docs |
 |---|---|---|---|
-| Anthropic (Claude Code) | `claude.exe -p … --output-format stream-json`: the `system/init` event names the model (D); statusline JSON has `model`, `effort.level`, `fast_mode` (D) | `/model` picker, `/effort status`; startup header (D) | [model-config](https://code.claude.com/docs/en/model-config), [models overview](https://platform.claude.com/docs/en/about-claude/models/overview) |
-| OpenAI (Codex) | `codex debug models` (live catalog; `--bundled` for built-in) (L); `~/.codex/models_cache.json` with each model's `supported_reasoning_levels` and `default_reasoning_level` (L) | `/model` (only models the account can use) (D) | [learn.chatgpt.com/docs/models](https://learn.chatgpt.com/docs/models) |
+| Anthropic (Claude Code) | `claude.exe -p … --output-format stream-json`: the `system/init` event names the model (D); statusline JSON has `model`, `effort.level`, `fast_mode` (D) | `/model` picker, `/effort status`; startup header (D) | [model-config](https://code.claude.com/docs/en/model-config), [models overview](https://platform.claude.com/docs/en/models/overview) |
+| OpenAI (Codex) | `codex debug models` (live catalog; `--bundled` for built-in) (L); `~/.codex/models_cache.json` with each model's `supported_reasoning_levels` and `default_reasoning_level` (L) | `/model` (only models the account can use) (D) | [latest-model](https://developers.openai.com/api/docs/guides/latest-model.md), [learn.chatgpt.com/docs/models](https://learn.chatgpt.com/docs/models) |
 | Amazon (kiro-cli, Kiro IDE, Kiro Crew) | `kiro-cli chat --list-models -f json`: id, context window, `rate_multiplier`, `default_model` (L); Kiro Crew cache `~/.kiro/crew/provider_models.json` (L) | `/model` (D) | [kiro.dev/docs/models](https://kiro.dev/docs/models/) |
-| Google (agy, Antigravity) | `agy models` (slug and label, tab-separated; no JSON) (L) | `/model`, `/effort` (D) | [antigravity.google/docs/models](https://antigravity.google/docs/models) |
+| Google (agy, Antigravity) | `agy models` (slug and label, tab-separated; no JSON) (L) | `/model`, `/effort` (D) | [antigravity.google/docs/models](https://antigravity.google/docs/models), [aistudio latest-model](https://aistudio.google.com/docs/latest-model.md) |
+| Z.ai (OpenCode / ZCode) | `opencode models zai-coding-plan --verbose` (L) | `/model`, `--variant low\|high\|max` (L/D) | [docs.z.ai/guides/llm/glm-5.4](https://docs.z.ai/guides/llm/glm-5.4) |
+| Moonshot (Kimi Work / Code CLI) | Kimi API models endpoint / plugin session model picker (D) | `/model` (D) | [kimi.ai](https://kimi.ai), [kimi.com/code/docs](https://kimi.com/code/docs) |
+| DeepSeek (DSH / OpenCode) | `opencode models deepseek --verbose` (L); `dsh --profile web --dump-config` (D) | `/model` (D) | [api-docs.deepseek.com/quick_start/pricing](https://api-docs.deepseek.com/quick_start/pricing/) |
+| Alibaba / Qwen (Qwen Code) | Qwen subscription catalog / `qwen` CLI model picker (D) | `/model` (D) | [QwenLM/qwen-code](https://github.com/QwenLM/qwen-code) |
 
 Plan gating is real: on this machine Kiro and agy each list fewer models than their docs, because of the account or plan. Trust the local listing for what this account can run.
 
-## Snapshot lineup (2026-11-01)
+## Snapshot lineup (2026-11-25)
 
-**Anthropic** (D: models overview, model-config):
+**Anthropic** (D: models overview, model-config, 2026-11-25):
 
 | Model | ID | Use for | Default effort (Claude Code) |
 |---|---|---|---|
-| Fable 5.1 | `claude-fable-5-1` | The hardest, longest work: root-cause investigations, architecture. Never the default | high (API) |
+| Fable 5.2 | `claude-fable-5-2` | Demanding reasoning, long-horizon agentic work (replaces Fable 5.1). Never the default | high (API) |
 | Opus 5.5 | `claude-opus-5-5` | Complex reasoning; the Claude Code default on every plan | medium |
-| Sonnet 5.5 | `claude-sonnet-5-5` | Everyday coding; teammates | medium (Claude Code) / high (API): the docs disagree |
-| Haiku 5.5 | `claude-haiku-5-5` | Simple tasks and simple sub-agents | medium |
+| Sonnet 5.5 | `claude-sonnet-5-5` | Everyday coding; teammates (`between_tools` thinking; cannot disable) | medium (Claude Code) / high (API) |
+| Haiku 5.5 | `claude-haiku-5-5` | High-volume classification, extraction, routing | medium |
 
-Aliases: `default`, `best`, `fable`, `opus`, `sonnet`, `haiku`, `opus[1m]`, `sonnet[1m]`, and `opusplan`, which plans on Opus and executes on Sonnet.
+Aliases: `default`, `best`, `fable`, `opus`, `sonnet`, `haiku`, `opus[1m]`, `sonnet[1m]`, and `opusplan`, which plans on Opus and executes on Sonnet. Note: asking 5.5/Fable to print internal reasoning can trigger `reasoning_extraction` refusals; Fable 5.2 rejects mid-conversation prefix edits with HTTP 400.
 
-**OpenAI** (L: `models_cache.json`; D: models page):
+**OpenAI** (L: `codex debug models --bundled` on 0.172.0; D: latest-model, 2026-11-25):
 
-| ID | Use for | Default effort | Levels |
-|---|---|---|---|
-| `gpt-6-astra` | The hardest end-to-end work; start at `low` | medium | low to ultra |
-| `gpt-6.1-sol` | Long-running work, cheaper than Astra (this machine's default) | low | low to ultra |
-| `gpt-6.1-terra` | Writing, vision, computer use | low | low to ultra |
-| `gpt-6-luna` | High-volume summarization, extraction, focused coding; start at `high` | medium | low to max |
+| ID | Use for | Default effort | Levels | Bundled ctx |
+|---|---|---|---|---|
+| `gpt-6.2-sol` | Go-to fast default for coding and everyday work (supersedes `gpt-6.1-sol`) | low | low to ultra | 500K |
+| `gpt-6.2-astra` | Hardest complex coding and professional work (supersedes `gpt-6-astra`) | low | low to ultra | 272K (API up to 1.05M) |
+| `gpt-6.1-terra` | Visual understanding, writing, computer use | low | low to ultra | 500K |
+| `gpt-6-luna` | High-volume summarization, extraction, focused coding | medium | low to max | 272K |
 
-Hidden: `gpt-reserve` ("Fast and affordable") and `codex-auto-review`, which backs `--approve-for-me`. Every model has a Fast (`priority`) tier.
+Hidden: `gpt-daybreak-{blue,red}-latest`, `codex-auto-review` (backs `--approve-for-me`). Every model has a Fast (`priority`) tier. Note: GPT-6.2 drops reasoning items on mid-conversation prefix edits; `ultra` automatically fans out to subagents.
 
-**Amazon / Kiro** (L: `--list-models` on this BuilderId account; D: guidance):
+**Amazon / Kiro** (D: `kiro.dev/docs/models/`, Nov 2026; L: `--list-models` plan-gated subset):
 
 | Model | Credit multiplier | Use for (D) |
 |---|---|---|
-| `auto` (default) | 1.0 | General work |
-| `claude-opus-4.5` | 2.2 | Complex multi-file work |
-| `claude-sonnet-4.6` / `-4.5` | 1.3 | Scoped fixes and reviews |
-| `claude-haiku-4.5` | 0.4 | High-volume, quick responses (ticket 128's workers) |
-| `minimax-m2.5` / `m2.1` | 0.25 / 0.15 | "Near-Opus" quality cheaply |
-| `glm-5` | 0.5 | Long-horizon work |
+| `auto` (default) | 1.0 | Dynamic router (Sonnet-class+ free, Opus-class+ paid; never routes to Experimental) |
+| `claude-opus-5.5` / `4.5` | 2.0–2.2 | Complex multi-file work |
+| `claude-sonnet-5.5` / `4.6` / `4.5` | 1.3 | Scoped fixes and reviews |
+| `claude-haiku-5.5` / `4.5` | 0.06 / 0.4 | High-volume, quick responses |
+| `gpt-5.6-sol` / `terra` / `luna` | 4.4 / 2.2 / 0.6 | Cross-provider OpenAI options (plan-gated) |
+| `kimi-k3` | 2.4 | 1M multimodal long-running coding |
+| `glm-5` | 0.5 | Long-horizon repo migrations |
+| `minimax-m2.5` / `m2.1` | 0.25 / 0.15 | Low-cost UI / general coding |
 | `deepseek-3.2` | 0.25 | Experimental preview |
-| `qwen3-coder-next` | 0.05 | Tight budgets |
+| `qwen3-coder-next` | 0.05 | Tight budgets (non-thinking) |
 
-The docs also list Opus/Sonnet/Haiku 5.5, GPT-5.6 Sol/Terra/Luna and Kimi K3, which aren't offered to this account.
+**Google / Antigravity** (L: `agy models` on 1.5.16; D: aistudio & antigravity docs, 2026-11-25):
+- `gemini-4-carbon-{low,medium,high}`: deepest reasoning & verification (1M unified ctx).
+- `gemini-4-neon-{low,medium,high,xhigh}`: frontier intelligence with fast completion.
+- `gemini-4-argon-{low,medium,high}`: efficient frontier reasoning.
+- `gemini-4-hydrogen-{low,medium,high,xhigh}`: replaces `gemini-3.8-flash` as the fast everyday/agentic default (>5× fewer fabrications).
+- `gemini-pro-orchestrator-{neon,,argon}`: two-phase Planner + Hydrogen executor (fixed effort).
+- Legacy/partner still present on 1.5.16: `gemini-3.8-flash-*`, `claude-opus-5-5-*`, `claude-sonnet-5-5-*`, and `gpt-oss-120b-medium` (still listed locally despite earlier 2026-11-02 removal note). Sub-agents take tiers (`inherit`, `flash_lite`, `flash`, `pro`). `max_output_tokens` caps thinking + output combined (use `>= 65,536`); implicit prefix caching (95% discount) activates at `>= 4,096` tokens.
 
-**Google / Antigravity** (L: `agy models`; D: models page): `gemini-4-argon-{low,medium,high}` (needs Pro, Ultra or Enterprise), `gemini-3.8-flash-{low,medium,high}`, `claude-opus-5-5-*`, `claude-sonnet-5-5-*`. `gpt-oss-120b-medium` and Claude 4.6 are removed on 2026-11-02. Sub-agents take tiers rather than IDs: `inherit`, `flash_lite`, `flash`, `pro`.
+**Z.ai / GLM (OpenCode & ZCode)** (L: `opencode models zai-coding-plan --verbose`; D: `docs.z.ai`, 2026-11-25):
+- `glm-5.4` (1M ctx, multimodal image/video/file, Loop Transformer, released 2026-11-23), `glm-5.3` / `glm-5.3-highspeed` (text-only), `glm-5.3-flash` (1M, multimodal).
+- Thinking is **mandatory** (cannot disable; default `max`). `glm-5.4` tends to enter "marathon thinking" loops: use `--variant low` (or `glm-5.3-flash`) for routine/read-only subagents and always bound headless runs with an outer timeout. Preserve `reasoning_content` verbatim (`clear_thinking: false` default). Off-peak/weekend calls consume 50% Coding Plan points.
+
+**Moonshot / Kimi** (D: `kimi.ai`, Hugging Face, Nov 2026):
+- `Kimi K3.1 Pro` (2026-11-04, 2.8T/104B MoE, 1M ctx, multimodal), `Kimi K3`, `Kimi K2.5`.
+- Thinking mode requires `temperature = 1.0`, `top_p = 0.95`, and unaltered `reasoning_content` echo across tool turns (omitting it returns HTTP 400). Default `reasoning_effort` on K3/K3.1 Pro is `max` (`low|high|max`).
+
+**DeepSeek (DSH / OpenCode)** (D: `api-docs.deepseek.com`, HF, Nov 2026):
+- `deepseek-flash` (`DeepSeek-V4.1-Flash-1017`, 1M ctx, vision, 552B MoE 8B/16B active, DSH default, $0.15/M input / $0.003/M cache hit) and `deepseek-v4-pro` (`DeepSeek-V4-Pro-0813`, text-only; `news260910` notes routing to V4.1-Flash until V4.1-Pro launches).
+- System prompts and mid-conversation system messages are first-class in V4/V4.1; `temperature` is silently ignored in thinking mode; keep prefixes immutable for the 50× disk KV-cache hit rate.
+
+**Alibaba / Qwen (Qwen Code)** (D: `QwenLM/qwen-code` `v1.0.0-preview.2`, HF, 2026-11-25):
+- `Qwen4-Max` (1M ctx, multimodal; `max_tokens` caps thinking + output combined), `Qwen3.8-Max` / `Qwen3.8-2.4T-A95B` (thinking default `xhigh`, `temp=1.0`), `Qwen3-Coder-Next` (256K ctx, **non-thinking only** — benefits from explicit plan/verify steps).
 
 ## Which model for what
 

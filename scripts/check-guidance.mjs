@@ -24,6 +24,9 @@ import { BUDGET_BYTES, GENERATED, KNOWN, findBlock } from "./install-agents-md.m
 const PAIRS = join(dirname(fileURLToPath(import.meta.url)), "..", "global", "conflict-pairs.json");
 const HOME = homedir();
 const CODEX = process.env.CODEX_HOME || join(HOME, ".codex");
+const ZCODE = process.env.ZCODE_HOME || join(HOME, ".zcode");
+const DSH = process.env.DSH_HOME || join(HOME, ".dsh");
+const QWEN = process.env.QWEN_HOME || join(HOME, ".qwen");
 const SHELL_FENCE = /^```(bash|sh|shell|zsh|console)\s*$/;
 const BUILTINS = new Set("cd export source eval set unset alias echo printf exit return read test true false do done then else fi if for while case esac in pushd popd exec trap wait".split(" "));
 const WRAPPERS = new Set(["nohup", "sudo", "env", "time", "exec", "command"]);
@@ -47,8 +50,11 @@ const entries = (dir) => { try { return readdirSync(dir, { withFileTypes: true }
 // The roots deploy.mjs's HARNESSES read skills from, plus the plugin folders harnesses load.
 function installedSkills(repo) {
   const names = new Set();
-  const roots = [join(HOME, ".kiro"), CODEX, join(HOME, ".claude"), join(HOME, ".config", "opencode"), join(HOME, ".agents"),
-    ...[".agents", ".claude", ".codex", ".opencode", ".kiro"].map((d) => join(repo, d))].map((d) => join(d, "skills"));
+  const roots = [
+    join(HOME, ".kiro"), CODEX, join(HOME, ".claude"), join(HOME, ".config", "opencode"),
+    join(HOME, ".config", "crush"), ZCODE, DSH, QWEN, join(HOME, ".agents"),
+    ...[".agents", ".claude", ".codex", ".opencode", ".kiro", ".crush", ".zcode", ".dsh", ".qwen"].map((d) => join(repo, d)),
+  ].map((d) => join(d, "skills"));
   for (const root of roots) for (const e of entries(root)) if (existsSync(join(root, e.name, "SKILL.md"))) names.add(e.name);
   const walk = (dir, depth) => {
     for (const e of entries(dir)) {
@@ -56,7 +62,7 @@ function installedSkills(repo) {
       else if (e.isDirectory() && depth > 0) walk(join(dir, e.name), depth - 1);
     }
   };
-  for (const dir of [join(HOME, ".claude", "plugins"), join(CODEX, "plugins"), join(HOME, ".gemini", "config", "plugins")]) walk(dir, 7);
+  for (const dir of [join(HOME, ".claude", "plugins"), join(CODEX, "plugins"), join(HOME, ".gemini", "config", "plugins"), join(ZCODE, "cli", "plugins", "cache")]) walk(dir, 7);
   return names;
 }
 

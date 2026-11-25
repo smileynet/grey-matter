@@ -84,3 +84,14 @@ sessions; absent tools add no requirements to other harnesses.
 After settlement close worker sessions, inspect/remove merged worktrees and
 local branches, and report any remote branches retained. Unbind fixture chats
 before cleanup; active bindings caused Windows EBUSY in the earlier run.
+
+## Current surface notes (2026-11-25, Kiro Crew 0.13.1)
+
+- **Conductor Mode GA & Mates renamed to Bots:** Conductor Mode (formerly Ultra
+  Mode) is GA/default in 0.13.x. Persistent agents previously called Mates are
+  now **Bots** and can select an ACP backend (`kas`, `kiro`, `claude`, `codex`,
+  `opencode`, `goose`, `deepseek`, `pi`) without a preview flag.
+- **KAS grant-vault fix:** 0.13.1 accepts `kiro-cli` sign-in keys in the grant
+  vault (re-verify against the ticket 186 auth-owner probe before relaxing any
+  host-auth constraint). Crew agents still load skills only through enabled
+  app `skill://` entries, never `~/.kiro/skills`.

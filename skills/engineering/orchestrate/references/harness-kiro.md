@@ -83,3 +83,14 @@ in the recorded runs; reliable graceful shutdown remains unqualified. See the
    known limitation, not a native shutdown fix. Deeper investigation is deferred
    to [the follow-up ticket](../../../../.tickets/201-kiro-acp-shutdown-followup.md)
    until higher-priority work is finished.
+
+## Current surface notes (2026-11-25, kiro-cli 3.6.0)
+
+- **V3 is default (Classic/V1 retired):** Subagent tool calls are evaluated
+  against the strict intersection of parent and child `permissions.yaml`
+  (`deny > ask > allow > evaluate`); a child can never exceed the parent's grant.
+- **New V3 hooks (3.1–3.6):** `PreCompact`/`PostCompact`, `PreToolUse` input
+  rewriting, `PermissionRequest`, and `SubagentStop` (intercepts a completed V3
+  subagent for one final verification instruction before returning to parent).
+  Hook outputs over 3,000 chars are saved to disk with the path returned.
+  Verify served model identity independently; CLI still does not attest it.

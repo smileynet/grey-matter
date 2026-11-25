@@ -42,3 +42,18 @@ observed 2026-10-31 on 1.4.12/Windows. Recheck current tools and account feature
 P3 fallback: interactive approval or verified narrow rules. P6 fallback: keep
 the orchestrator awaiting events through all live workers. P8 limitation:
 requested model only; never claim proof of the served model.
+
+## Current surface notes (2026-11-25, agy 1.5.16 / App 2.35.0)
+
+- **Slash-command collision:** Antigravity ships a built-in `/grill-me` command.
+  Invoke grey-matter's skill explicitly as `/grey-matter:grill-me` when you mean
+  the plugin skill.
+- **Commands & surfaces:** `run_command` supports `NotificationTimeoutSeconds`
+  wakeups (1.5.17+) instead of polling timers. `/generative_ui` interactive HTML
+  widgets exist only in the Antigravity App (not CLI); keep committed
+  `docs/status.html` as the portable dashboard artifact.
+- **Plugin hooks & rules:** Antigravity `hooks.json` uses named top-level hook
+  IDs, camelCase stdin, and `injectSteps` stdout; never inject static context on
+  `PreInvocation` (each injected step persists in history). Plugin `rules/*.md`
+  require snake_case `trigger:` values (`always_on`, `glob`, etc.) or are
+  silently discarded.

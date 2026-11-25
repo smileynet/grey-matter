@@ -46,3 +46,16 @@ P3 fallback: scoped pre-authorization or interactive approval, never automatic
 permission broadening. P5 fallback: fresh worker with ANSWER. P11 fallback:
 valid dashboard visual plus terminal ASCII when a GUI renderer is unavailable.
 Desktop side sessions are for user-visible work, not the default worker transport.
+
+## Current surface notes (2026-11-25, Claude Code 2.1.332)
+
+- **Model behavior (Fable 5.2 / 5.5 family):** Give explicit end-to-end
+  completion bounds (Fable 5.2 and Haiku 5.5 can stop early on long tasks),
+  never ask models to print internal chain-of-thought (`reasoning_extraction`
+  refusal hazard), and avoid blanket delegation instructions in briefs (Fable
+  5.2 at `xhigh`/`max` already spawns review subagents proactively).
+- **Skill & hook surface:** Reserved names (`ship`, `ship-local`, `steward`,
+  and macOS `computer-use`) cannot be shadowed. `PreSkillShellCommand` can
+  refuse inline skill shell commands at load; prefer explicit shell steps over
+  inline `!` injections. Hook handlers support `if:` filters (e.g.
+  `"if": "Edit(.tickets/*)"`) to avoid spawning processes on unrelated calls.

@@ -59,3 +59,19 @@ the correlated record; a spool alone cannot wake the parent.
 If shell calls fail with a missing code-mode-host error, verify the executable
 installation: the spike used the vendored binary with its adjacent helper after
 the Bun shim failed. This is an installation failure, not worker progress.
+
+## Current surface notes (2026-11-25, Codex 0.172.0)
+
+- **Models & multi-agent flags:** Bundled defaults advanced to `gpt-6.2-sol`
+  (500K ctx) and `gpt-6.2-astra` (272K bundled ctx). `multi_agent` is marked
+  deprecated while `multi_agent_v2` is `stable / false`; check the live tool
+  schema before assuming v1 vs v2 tool names. At `ultra` effort, Codex fans out
+  to subagents automatically.
+- **Briefs & budgets:** Codex's built-in prompt treats user instructions as
+  outranking skill guidelines; write hard stop-gates as explicit user-safety
+  invariants. Keep `AGENTS.md` chains comfortably below the 32 KiB
+  `project_doc_max_bytes` cap and avoid assuming `Edit`/`Bash` tool names
+  (Codex models use `apply_patch` and `unified_exec`).
+- **Hooks:** Project `.codex/hooks.json` is stable, while plugin-bundled hooks
+  are ineligible for OpenAI's public plugin directory (`plugin_hooks` lists as
+  `removed / false` in CLI 0.172.0).

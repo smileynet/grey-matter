@@ -47,7 +47,12 @@ test("kimi: build writes a self-contained skill-only plugin with every skill and
       .filter((entry) => entry.isDirectory() && !entry.name.startsWith(".")).map((entry) => entry.name);
     assert.equal(names.length, SKILL_COUNT);
     assert.equal(new Set(names).size, SKILL_COUNT);
-    for (const name of names) assert.ok(existsSync(join(out, "skills", name, "SKILL.md")), `${name}/SKILL.md`);
+    for (const name of names) {
+      assert.ok(existsSync(join(out, "skills", name, "SKILL.md")), `${name}/SKILL.md`);
+      const override = manifest.interface.skillOverrides?.[name];
+      assert.ok(override?.displayName && override?.description, `skillOverrides entry for ${name}`);
+    }
+    assert.deepEqual(Object.keys(manifest.interface.skillOverrides).sort(), [...names].sort());
 
     const wrap = join(out, "skills", "wrap-session");
     assert.ok(existsSync(join(wrap, "../.resources-grey-matter/docs/agents/doc-conventions.md")), "linked resource is packaged");
