@@ -1,7 +1,7 @@
 ---
 id: "276"
 title: "Let release development tests use the managed npm wrapper"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -27,6 +27,14 @@ Release publication, changing the managed wrapper, and broad environment-variabl
 
 ## Acceptance criteria
 
-- [ ] A fixture reproduces the managed-wrapper requirement and fails before the compatibility fix.
-- [ ] Only the explicitly required runtime values are added to the child environment.
-- [ ] The focused development/product suites and applicable pre-merge gate pass.
+- [x] A fixture reproduces the managed-wrapper requirement and fails before the compatibility fix.
+- [x] Only the explicitly required runtime values are added to the child environment.
+- [x] The focused development/product suites and applicable pre-merge gate pass.
+
+## Resolution (2026-11-25)
+
+done: allowlisted KIMI_DESKTOP_RUNTIME_NODE and KIMI_DESKTOP_PROCESS_RUNNER in productEnvironment() while keeping all credentials/ambient secrets stripped; verified RED-to-GREEN managed-wrapper regression fixture and full development/product/pre-merge suites
+
+### Verification
+1. ✓ node --test scripts/release-development.test.mjs scripts/release-product.test.mjs — "node --test scripts/release-development.test.mjs scripts/release-product.test.mjs: 24 pass / 0 fail (managed-wrapper fixture verified RED before fix and GREEN after)"
+2. ✓ node scripts/gate.mjs pre-merge — "node scripts/gate.mjs pre-merge: all selected checks pass (including release-units)"
