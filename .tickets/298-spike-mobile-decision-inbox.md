@@ -1,7 +1,7 @@
 ---
 id: "298"
 title: "Spike: mobile-to-desktop decision submission via Tailscale Serve inbox"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 tags: ["stream:tooling"]
@@ -36,7 +36,11 @@ Follow-up from spike #296 (`docs/agents/research/dashboard-lan-hub-spike-2026112
 
 ## Acceptance criteria
 
-- [ ] Live Tailscale Serve proxy headers (`remoteAddress`, `Tailscale-User-Login`, `X-Forwarded-Proto`) observed and recorded on `monolith`.
-- [ ] Unit + live security tests prove direct LAN `POST` (`192.168.0.168:8765`), spoofed `Tailscale-User-Login`, cross-origin `Origin`, unknown slugs, and oversized bodies are rejected (`403`/`404`/`405`/`413`).
-- [ ] Valid Tailscale HTTPS submission from `iphone171` writes formatted decision markdown to `~/.local/state/grey-matter/inbox/<slug>/` without touching repo files.
-- [ ] Spike findings and integration verdict recorded (including whether to also add `navigator.share` and how agents read/clear the inbox).
+- [x] Live Tailscale Serve proxy headers (`remoteAddress`, `Tailscale-User-Login`, `X-Forwarded-Proto`) observed and recorded on `monolith`.
+- [x] Unit + live security tests prove direct LAN `POST` (`192.168.0.168:8765`), spoofed `Tailscale-User-Login`, cross-origin `Origin`, unknown slugs, and oversized bodies are rejected (`403`/`404`/`405`/`413`).
+- [x] Valid Tailscale HTTPS submission from `iphone171` writes formatted decision markdown to `~/.local/state/grey-matter/inbox/<slug>/` without touching repo files.
+- [x] Spike findings and integration verdict recorded (including whether to also add `navigator.share` and how agents read/clear the inbox).
+
+## Resolution (2026-11-25)
+
+done: verified Tailscale Serve headers and loopback+identity+origin security boundary on monolith, proved 1-tap mobile submission end-to-end from iphone171 (20261125T211017Z-717023), promoted Option A into delivery-dashboard + hub-serving.md + tool-scripts.md, and recorded cross-harness chat-signaling research in docs/agents/research/mobile-decision-inbox-spike-20261125.md
