@@ -1,7 +1,7 @@
 ---
 id: "223"
 title: "Explore a single readiness verdict (gate.mjs verdict) that means every expected check ran and passed"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 validation_criteria:
@@ -33,9 +33,19 @@ This is a **hypothesis from prior art**, not a decided change. Before editing an
 
 ## Acceptance criteria
 
-- [ ] Confirm whether gate.mjs already reports this, partly or fully (read source + tests).
-- [ ] Test-first: fixtures for all-pass, one-fail, one-skip, one-timeout and empty-selection; the verdict is PASS only for all-pass.
-- [ ] Run against the real repo on a clean and a dirty tree; paste real output.
-- [ ] If adopted: implement and pr cite the verdict at close; consequential change, so full code-review.
+- [x] Confirm whether gate.mjs already reports this, partly or fully (read source + tests).
+- [x] Test-first: fixtures for all-pass, one-fail, one-skip, one-timeout and empty-selection; the verdict is PASS only for all-pass.
+- [x] Run against the real repo on a clean and a dirty tree; paste real output.
+- [x] If adopted: implement and pr cite the verdict at close; consequential change, so full code-review.
 
 Related: #152 (scoped commit gates). Prerequisite for #224.
+
+## Resolution (2026-11-25)
+
+done: Kiro Crew rolls checks into one PR Readiness verdict (prior art); grey-matter chose node scripts/gate.mjs verdict <stage> (runner v6) emitting PASS only when >=1 check ran with zero skips/fails/timeouts/infra errors. Full two-axis code review completed, implement/pr/AGENTS.md updated, scratch review patch deleted.
+
+### Verification
+1. ✓ Confirm whether gate.mjs already reports this, partly or fully (read source + tests). — "Confirmed gap directly in scripts/gate.mjs (v5) and scripts/gate.test.mjs: bare stage runs exited 0 on empty selection and SKIP overrides with no single PASS/NOT-READY readiness line"
+2. ✓ Test-first: fixtures for all-pass, one-fail, one-skip, one-timeout and empty-selection; the verdict is PASS only for all-pass. — "TDD RED->GREEN in scripts/gate.test.mjs (35 pass / 0 fail / 1 Win-only skip): isolated fixtures for all-pass, one-fail, one-skip, one-timeout, one-infra, and empty-selection; PASS only on all-pass"
+3. ✓ Run against the real repo on a clean and a dirty tree; paste real output. — "Real-repo probes: clean tree df92e73 -> 'verdict pre-push: PASS (7 of 7 selected check(s) ran and passed)' and 'verdict pre-merge: PASS (3 of 3 selected check(s) ran and passed)'; dirty tree 07fb5ed -> 'verdict pre-push: PASS (8 of 8 selected check(s) ran and passed; committed HEAD only, uncommitted changes not checked)'"
+4. ✓ If adopted: implement and pr cite the verdict at close; consequential change, so full code-review. — "Adopted and cited in implement/SKILL.md, pr/SKILL.md, AGENTS.md, docs/agents/local-gates.md, and tool-scripts.md; parallel Standards + Spec code-review completed and findings resolved in 07fb5ed; .scratch/review-223.patch deleted"

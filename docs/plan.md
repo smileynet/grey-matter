@@ -651,7 +651,7 @@ The test-verification chat's scope and current order are recorded in the dedicat
 | 220 | check-guidance flags conditional and optional paths as dead-path errors | open |
 | 221 | Explore severity tiers and an evidence bar for blocking code-review findings | open |
 | 222 | Explore design / first-principles / UX review lenses for consequential diffs | open |
-| 223 | Explore a single readiness verdict (gate.mjs verdict) that means every expected check ran and passed | in_progress |
+| 223 | Explore a single readiness verdict (gate.mjs verdict) that means every expected check ran and passed | ✅ done |
 | 224 | Explore a bounded drive-to-green loop (prepare-pr equivalent) in implement | open |
 | 225 | Explore an over-engineering convergence check for review-fix loops | ✅ done |
 | 226 | Explore a smallest-change rule for security findings | open |
