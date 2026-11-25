@@ -1,7 +1,7 @@
 ---
 id: "294"
 title: "Add Qwen QWEN.md qualified-name bridge, promote Kimi Code CLI in deploy/install-agents-md, and trim long skill description"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "deploy.mjs qwen build emits QWEN.md bridge with contextFileName in staged qwen-extension.json (unit-tested)"
@@ -22,6 +22,15 @@ Close three distribution and catalog-hygiene gaps for Qwen Code, Kimi Code CLI, 
 
 ## Acceptance criteria
 
-- [ ] `deploy.mjs qwen build` emits `QWEN.md` with `contextFileName: "QWEN.md"` in staged `qwen-extension.json` (`node --test scripts/deploy.test.mjs` passes).
-- [ ] `deploy.mjs` and `install-agents-md.mjs` manage `kimi-code` (`~/.kimi-code/skills` and `~/.kimi-code/AGENTS.md`) with duplicate protection (`node --test scripts/deploy.test.mjs scripts/install-agents-md.test.mjs` passes).
-- [ ] `skills/meta/repository-artifact-hygiene/SKILL.md` description is <= 500 chars with the trigger front-loaded.
+- [x] `deploy.mjs qwen build` emits `QWEN.md` with `contextFileName: "QWEN.md"` in staged `qwen-extension.json` (`node --test scripts/deploy.test.mjs` passes).
+- [x] `deploy.mjs` and `install-agents-md.mjs` manage `kimi-code` (`~/.kimi-code/skills` and `~/.kimi-code/AGENTS.md`) with duplicate protection (`node --test scripts/deploy.test.mjs scripts/install-agents-md.test.mjs` passes).
+- [x] `skills/meta/repository-artifact-hygiene/SKILL.md` description is <= 500 chars with the trigger front-loaded.
+
+## Resolution (2026-11-25)
+
+done: added Qwen QWEN.md bridge, promoted kimi-code in deploy.mjs 1.12.0 and install-agents-md.mjs, and trimmed repository-artifact-hygiene description under 500 chars
+
+### Verification
+1. ✓ deploy.mjs qwen build emits QWEN.md bridge with contextFileName in staged qwen-extension.json (unit-tested) — "node --test scripts/deploy.test.mjs: qwen build test verified QWEN.md bridge + contextFileName: QWEN.md in staged qwen-extension.json (commit 5448e4f)"
+2. ✓ deploy.mjs HARNESSES() and install-agents-md.mjs manage kimi-code (~/.kimi-code/skills and ~/.kimi-code/AGENTS.md) with duplicate protection (unit-tested) — "node --test scripts/deploy.test.mjs scripts/install-agents-md.test.mjs: kimi-code root selection, duplicate audit, and KIMI_CODE_HOME/AGENTS.md passed (commit 5448e4f)"
+3. ✓ repository-artifact-hygiene SKILL.md description is <= 500 chars with trigger front-loaded — "skills/meta/repository-artifact-hygiene/SKILL.md trimmed to 429 chars (<= 500) with primary trigger in first 81 chars; skill-syntax + plugin-manifest gates passed (commit 5448e4f)"
