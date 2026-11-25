@@ -1,7 +1,7 @@
 ---
 id: "297"
 title: "Promote serve-hub.mjs into delivery-dashboard with hub.json URL discovery"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 tags: ["stream:tooling"]
@@ -20,7 +20,11 @@ Follow-up from spike #296 (`docs/agents/research/dashboard-lan-hub-spike-2026112
 
 ## Acceptance criteria
 
-- [ ] `serve-hub.mjs --url <repo-or-slug> [--hash <fragment>]` resolves `baseUrl`, `lanUrl`, and `mdnsUrl` from `hub.json` without binding a port, and degrades cleanly when unconfigured.
-- [ ] `serve-hub.test.mjs` covers URL resolution, `--url` CLI output, missing config degradation, and existing allowlist/security guarantees.
-- [ ] `delivery-dashboard/SKILL.md`, `references/hub-serving.md`, `docs/agents/report-format.md`, and `tool-scripts.md` document `hub.json` URL discovery and pass doc-links / invocation / skill-syntax / pre-push / pre-merge gates.
-- [ ] `~/.config/grey-matter/hub.json` is configured on `monolith` with `--host 0.0.0.0` preserved, and `serve-hub.mjs --url . --hash decisions` prints working Tailscale HTTPS + LAN + mDNS links.
+- [x] `serve-hub.mjs --url <repo-or-slug> [--hash <fragment>]` resolves `baseUrl`, `lanUrl`, and `mdnsUrl` from `hub.json` without binding a port, and degrades cleanly when unconfigured.
+- [x] `serve-hub.test.mjs` covers URL resolution, `--url` CLI output, missing config degradation, and existing allowlist/security guarantees.
+- [x] `delivery-dashboard/SKILL.md`, `references/hub-serving.md`, `docs/agents/report-format.md`, and `tool-scripts.md` document `hub.json` URL discovery and pass doc-links / invocation / skill-syntax / pre-push / pre-merge gates.
+- [x] `~/.config/grey-matter/hub.json` is configured on `monolith` with `--host 0.0.0.0` preserved, and `serve-hub.mjs --url . --hash decisions` prints working Tailscale HTTPS + LAN + mDNS links.
+
+## Resolution (2026-11-25)
+
+done: promoted serve-hub.mjs into delivery-dashboard with ~/.config/grey-matter/hub.json URL discovery (--url/--hash), added references/hub-serving.md, wired report-format.md + SKILL.md + tool-scripts.md, and configured monolith hub.json with --host 0.0.0.0 preserved
