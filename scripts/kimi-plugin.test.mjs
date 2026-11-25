@@ -9,6 +9,7 @@ import { existsSync, lstatSync, mkdtempSync, readFileSync, readdirSync, rmSync, 
 import { tmpdir } from "node:os";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { skillDescription } from "./build-kimi-plugin.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const BUILDER = join(ROOT, "scripts", "build-kimi-plugin.mjs");
@@ -116,4 +117,12 @@ test("kimi: package preserves deliberate workflows and Kimi authorization bounda
     assert.match(readFileSync(join(out, "skills/research/SKILL.md"), "utf8"), /On Kimi, research in-session/);
     assert.match(readFileSync(join(out, "skills/research-audit/SKILL.md"), "utf8"), /On Kimi, do not substitute a self-audit/);
   } finally { rmSync(home, { recursive: true, force: true }); }
+});
+
+test("kimi: skillDescription parses inline, quoted, folded, and literal YAML block scalars", () => {
+  assert.equal(skillDescription("---\nname: a\ndescription: Inline summary.\n---\n", "fb"), "Inline summary.");
+  assert.equal(skillDescription('---\nname: a\ndescription: "Quoted: summary."\n---\n', "fb"), "Quoted: summary.");
+  assert.equal(skillDescription("---\nname: a\ndescription: >\n  First line\n  second line.\nlicense: MIT\n---\n", "fb"), "First line second line.");
+  assert.equal(skillDescription("---\nname: a\ndescription: |-\n  Alpha.\n  Beta.\n---\n", "fb"), "Alpha. Beta.");
+  assert.equal(skillDescription("---\nname: a\n---\n", "fallback"), "fallback");
 });

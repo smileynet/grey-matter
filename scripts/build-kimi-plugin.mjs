@@ -6,7 +6,7 @@
 import { execFileSync } from "node:child_process";
 import {
   cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync,
-  renameSync, rmSync, writeFileSync,
+  realpathSync, renameSync, rmSync, writeFileSync,
 } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -71,8 +71,25 @@ function titleCase(slug) {
   return slug.split("-").filter(Boolean).map((word) => word[0].toUpperCase() + word.slice(1)).join(" ");
 }
 
-function skillDescription(skill, fallback) {
-  const raw = skill.match(/^description:\s*(.+)$/m)?.[1].trim().replace(/^["']|["']$/g, "");
+export function skillDescription(skill, fallback) {
+  const fm = skill.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1];
+  if (!fm) return fallback;
+  const lines = fm.split(/\r?\n/);
+  const idx = lines.findIndex((line) => /^description\s*:/.test(line));
+  if (idx < 0) return fallback;
+  const rest = lines[idx].replace(/^description\s*:\s*/, "").trim();
+  if (/^[>|][+-]?\d*$/.test(rest)) {
+    const block = [];
+    for (let i = idx + 1; i < lines.length; i++) {
+      const line = lines[i];
+      if (!line.trim()) { block.push(""); continue; }
+      if (!/^[ \t]+/.test(line)) break;
+      block.push(line.trim());
+    }
+    const text = block.join(" ").replace(/\s+/g, " ").trim();
+    return text || fallback;
+  }
+  const raw = rest.replace(/^["']|["']$/g, "").trim();
   return raw || fallback;
 }
 
@@ -143,10 +160,12 @@ function build(pack, out) {
   }
 }
 
-try {
-  const args = parseArgs(process.argv.slice(2));
-  build(args.pack, args.out);
-} catch (error) {
-  console.error(`Kimi plugin build failed: ${error.message}`);
-  process.exit(1);
+if (process.argv[1] && existsSync(resolve(process.argv[1])) && realpathSync(fileURLToPath(import.meta.url)) === realpathSync(resolve(process.argv[1]))) {
+  try {
+    const args = parseArgs(process.argv.slice(2));
+    build(args.pack, args.out);
+  } catch (error) {
+    console.error(`Kimi plugin build failed: ${error.message}`);
+    process.exit(1);
+  }
 }

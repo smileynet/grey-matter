@@ -30,6 +30,9 @@ for (const [label, frontmatter, sidecar, diagnostic] of [
   ["quoted policy boolean", core, "policy:\n  allow_implicit_invocation: 'false'", /must be boolean/],
   ["malformed sidecar", core, "policy: [unterminated", /flow sequence/i],
   ["non-mapping frontmatter", "- name\n- description", undefined, /expected a YAML mapping/],
+  ["DSH camelCase disableModelInvocation", core + "\ndisableModelInvocation: true", undefined, /disable-model-invocation/],
+  ["DSH camelCase modelInvocable", core + "\nmodelInvocable: false", undefined, /disable-model-invocation/],
+  ["DSH camelCase userInvocable", core + "\nuserInvocable: true", undefined, /user-invocable/],
 ]) test(`reject ${label}`, () => {
   const result = fixture(frontmatter, sidecar);
   assert.equal(result.status, "fail");

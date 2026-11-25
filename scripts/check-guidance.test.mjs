@@ -22,7 +22,7 @@ const PAIRS = join(HERE, "..", "global", "conflict-pairs.json");
 function fixture(fn) {
   const d = mkdtempSync(join(tmpdir(), "gm-guidance-"));
   const home = join(d, "home"), repo = join(d, "repo");
-  const env = { ...process.env, HOME: home, USERPROFILE: home, CODEX_HOME: "", PATH: dirname(process.execPath) };
+  const env = { ...process.env, HOME: home, USERPROFILE: home, CODEX_HOME: "", ZCODE_HOME: "", KIMI_CODE_HOME: "", DSH_HOME: "", QWEN_HOME: "", PATH: dirname(process.execPath) };
   const put = (path, text) => { mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, text); };
   try { fn({ home, repo, env, put, run: (...args) => spawnSync(process.execPath, [SCRIPT, "--repo", repo, ...args], { encoding: "utf8", env }) }); }
   finally { rmSync(d, { recursive: true, force: true }); }
@@ -162,6 +162,29 @@ test("skills installed in ZCode, DSH, Qwen, or Crush roots satisfy dead-skill ch
     f.put(join(f.repo, "AGENTS.md"), [
       "# Agents",
       "- Use the `zcode-skill`, `dsh-skill`, `qwen-skill`, and `crush-skill` skills.",
+    ].join("\n") + "\n");
+    const r = f.run("--json", "--no-global");
+    assert.equal(r.status, 0, r.stdout + r.stderr);
+    assert.deepEqual(parse(r).filter((x) => x.rule === "dead-skill"), []);
+  });
+});
+
+test("skills in ~/.kimi-code/skills, linked Qwen extensions, and DSH profile bundles satisfy dead-skill checks", () => {
+  fixture((f) => {
+    f.put(join(f.home, ".kimi-code", "skills", "kimi-skill", "SKILL.md"), "---\nname: kimi-skill\n---\n");
+    const qwenTarget = join(f.home, "staged-qwen");
+    f.put(join(qwenTarget, "skills", "qwen-ext-skill", "SKILL.md"), "---\nname: qwen-ext-skill\n---\n");
+    f.put(join(f.home, ".qwen", "extensions", "example", ".qwen-extension-install.json"), JSON.stringify({ type: "link", source: qwenTarget }));
+    const dshTarget = join(f.home, "staged-dsh");
+    f.put(join(dshTarget, "skills", "dsh-bundle-skill", "SKILL.md"), "---\nname: dsh-bundle-skill\n---\n");
+    f.put(join(dshTarget, "skills.json"), JSON.stringify({ provider: "example", skills: [{ name: "dsh-bundle-skill" }] }));
+    const prof = join(f.home, ".dsh", "profiles", "headless");
+    mkdirSync(join(prof, "node_modules", "@smileynet"), { recursive: true });
+    symlinkSync(dshTarget, join(prof, "node_modules", "@smileynet", "dsh-example"), "dir");
+    f.put(join(prof, "package.json"), JSON.stringify({ dsh: { profile: { bundles: ["@smileynet/dsh-example"] } } }));
+    f.put(join(f.repo, "AGENTS.md"), [
+      "# Agents",
+      "- Use the `kimi-skill`, `qwen-ext-skill`, and `dsh-bundle-skill` skills.",
     ].join("\n") + "\n");
     const r = f.run("--json", "--no-global");
     assert.equal(r.status, 0, r.stdout + r.stderr);

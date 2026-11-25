@@ -25,6 +25,7 @@ const PAIRS = join(dirname(fileURLToPath(import.meta.url)), "..", "global", "con
 const HOME = homedir();
 const CODEX = process.env.CODEX_HOME || join(HOME, ".codex");
 const ZCODE = process.env.ZCODE_HOME || join(HOME, ".zcode");
+const KIMI_CODE = process.env.KIMI_CODE_HOME || join(HOME, ".kimi-code");
 const DSH = process.env.DSH_HOME || join(HOME, ".dsh");
 const QWEN = process.env.QWEN_HOME || join(HOME, ".qwen");
 const SHELL_FENCE = /^```(bash|sh|shell|zsh|console)\s*$/;
@@ -50,10 +51,11 @@ const entries = (dir) => { try { return readdirSync(dir, { withFileTypes: true }
 // The roots deploy.mjs's HARNESSES read skills from, plus the plugin folders harnesses load.
 function installedSkills(repo) {
   const names = new Set();
+  const readJson = (p) => { try { return JSON.parse(readFileSync(p, "utf8")); } catch { return null; } };
   const roots = [
     join(HOME, ".kiro"), CODEX, join(HOME, ".claude"), join(HOME, ".config", "opencode"),
-    join(HOME, ".config", "crush"), ZCODE, DSH, QWEN, join(HOME, ".agents"),
-    ...[".agents", ".claude", ".codex", ".opencode", ".kiro", ".crush", ".zcode", ".dsh", ".qwen"].map((d) => join(repo, d)),
+    join(HOME, ".config", "crush"), ZCODE, KIMI_CODE, DSH, QWEN, join(HOME, ".agents"),
+    ...[".agents", ".claude", ".codex", ".opencode", ".kiro", ".crush", ".zcode", ".kimi-code", ".dsh", ".qwen"].map((d) => join(repo, d)),
   ].map((d) => join(d, "skills"));
   for (const root of roots) for (const e of entries(root)) if (existsSync(join(root, e.name, "SKILL.md"))) names.add(e.name);
   const walk = (dir, depth) => {
@@ -63,6 +65,26 @@ function installedSkills(repo) {
     }
   };
   for (const dir of [join(HOME, ".claude", "plugins"), join(CODEX, "plugins"), join(HOME, ".gemini", "config", "plugins"), join(ZCODE, "cli", "plugins", "cache")]) walk(dir, 7);
+  // Qwen Code extensions (copied or linked via .qwen-extension-install.json).
+  for (const e of entries(join(QWEN, "extensions"))) {
+    if (e.name.startsWith(".") || !e.isDirectory()) continue;
+    const extDir = join(QWEN, "extensions", e.name);
+    const meta = readJson(join(extDir, ".qwen-extension-install.json"));
+    const target = meta?.type === "link" && typeof meta.source === "string" ? meta.source : extDir;
+    walk(join(target, "skills"), 2);
+  }
+  // DSH Cordis bundles registered in $DSH_HOME/profiles/<name>/package.json.
+  for (const prof of entries(join(DSH, "profiles"))) {
+    if (prof.name.startsWith(".") || !prof.isDirectory()) continue;
+    const profDir = join(DSH, "profiles", prof.name);
+    const bundles = readJson(join(profDir, "package.json"))?.dsh?.profile?.bundles ?? [];
+    for (const pkg of Array.isArray(bundles) ? bundles : []) {
+      const at = join(profDir, "node_modules", ...pkg.split("/"));
+      const meta = readJson(join(at, "skills.json"));
+      for (const s of meta?.skills ?? []) if (typeof s?.name === "string") names.add(s.name);
+      walk(join(at, "skills"), 2);
+    }
+  }
   return names;
 }
 

@@ -12,7 +12,7 @@ How an agent finds each provider's **current** recommended models, picks one and
 | OpenAI (Codex) | `codex debug models` (live catalog; `--bundled` for built-in) (L); `~/.codex/models_cache.json` with each model's `supported_reasoning_levels` and `default_reasoning_level` (L) | `/model` (only models the account can use) (D) | [latest-model](https://developers.openai.com/api/docs/guides/latest-model.md), [learn.chatgpt.com/docs/models](https://learn.chatgpt.com/docs/models) |
 | Amazon (kiro-cli, Kiro IDE, Kiro Crew) | `kiro-cli chat --list-models -f json`: id, context window, `rate_multiplier`, `default_model` (L); Kiro Crew cache `~/.kiro/crew/provider_models.json` (L) | `/model` (D) | [kiro.dev/docs/models](https://kiro.dev/docs/models/) |
 | Google (agy, Antigravity) | `agy models` (slug and label, tab-separated; no JSON) (L) | `/model`, `/effort` (D) | [antigravity.google/docs/models](https://antigravity.google/docs/models), [aistudio latest-model](https://aistudio.google.com/docs/latest-model.md) |
-| Z.ai (OpenCode / ZCode) | `opencode models zai-coding-plan --verbose` (L) | `/model`, `--variant low\|high\|max` (L/D) | [docs.z.ai/guides/llm/glm-5.4](https://docs.z.ai/guides/llm/glm-5.4) |
+| Z.ai (OpenCode / ZCode) | `opencode models zai-coding-plan --verbose` (L) | `/model`, `-m provider/model#low\|high\|max` (V2; V1 used `--variant`) (L/D) | [docs.z.ai/guides/llm/glm-5.4](https://docs.z.ai/guides/llm/glm-5.4) |
 | Moonshot (Kimi Work / Code CLI) | Kimi API models endpoint / plugin session model picker (D) | `/model` (D) | [kimi.ai](https://kimi.ai), [kimi.com/code/docs](https://kimi.com/code/docs) |
 | DeepSeek (DSH / OpenCode) | `opencode models deepseek --verbose` (L); `dsh --profile web --dump-config` (D) | `/model` (D) | [api-docs.deepseek.com/quick_start/pricing](https://api-docs.deepseek.com/quick_start/pricing/) |
 | Alibaba / Qwen (Qwen Code) | Qwen subscription catalog / `qwen` CLI model picker (D) | `/model` (D) | [QwenLM/qwen-code](https://github.com/QwenLM/qwen-code) |
@@ -68,7 +68,7 @@ Hidden: `gpt-daybreak-{blue,red}-latest`, `codex-auto-review` (backs `--approve-
 
 **Z.ai / GLM (OpenCode & ZCode)** (L: `opencode models zai-coding-plan --verbose`; D: `docs.z.ai`, 2026-11-25):
 - `glm-5.4` (1M ctx, multimodal image/video/file, Loop Transformer, released 2026-11-23), `glm-5.3` / `glm-5.3-highspeed` (text-only), `glm-5.3-flash` (1M, multimodal).
-- Thinking is **mandatory** (cannot disable; default `max`). `glm-5.4` tends to enter "marathon thinking" loops: use `--variant low` (or `glm-5.3-flash`) for routine/read-only subagents and always bound headless runs with an outer timeout. Preserve `reasoning_content` verbatim (`clear_thinking: false` default). Off-peak/weekend calls consume 50% Coding Plan points.
+- Thinking is **mandatory** (cannot disable; default `max`). `glm-5.4` tends to enter "marathon thinking" loops: use `-m zai-coding-plan/glm-5.4#low` (V1: `--variant low`, or `glm-5.3-flash`) for routine/read-only subagents and always bound headless runs with an outer timeout. Preserve `reasoning_content` verbatim (`clear_thinking: false` default). Off-peak/weekend calls consume 50% Coding Plan points.
 
 **Moonshot / Kimi** (D: `kimi.ai`, Hugging Face, Nov 2026):
 - `Kimi K3.1 Pro` (2026-11-04, 2.8T/104B MoE, 1M ctx, multimodal), `Kimi K3`, `Kimi K2.5`.
@@ -87,7 +87,7 @@ grey-matter's working defaults, until the model-tier spikes (tickets 167-172) re
 
 | Task class | Tier | Why |
 |---|---|---|
-| Orchestration, planning, hard diagnosis, architecture | Strongest default (Opus 5.5, `gpt-6.1-sol`/Astra, Kiro `auto`, Argon) | Judgement errors here cost the most |
+| Orchestration, planning, hard diagnosis, architecture | Strongest default (Opus 5.5, `gpt-6.2-sol`/Astra, Kiro `auto`, Carbon/Neon) | Judgement errors here cost the most |
 | Implementation of a well-specified ticket | Keep the configured provider default; validate any cheaper profile with independent checks | The dated #167 trial below separates correct artifacts from unverified agent actions and harness failures; it does not justify changing defaults |
 | Review and spec check | Keep the configured provider default, in a separate context | The #168 trial found defects but did not qualify a cheaper profile across all four strict-output cases |
 | Read-only research and exploration fan-out | Keep the configured provider default | The #169 trial leaves model identity and five review outcomes unverified; no cheaper model is qualified for adoption |
