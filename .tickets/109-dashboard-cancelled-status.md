@@ -1,7 +1,7 @@
 ---
 id: "109"
 title: "delivery-dashboard understands tkt's cancelled status"
-status: in_progress
+status: done
 blocked_by: []
 priority: high
 tags: ["kind:enhancement"]
@@ -26,7 +26,11 @@ same release as tkt 227.
 
 ## Acceptance criteria
 
-- [ ] The checker accepts `cancelled`, and a test covers it
-- [ ] The Plan tab shows cancelled tickets in their own collapsed group, outside progress and lanes
-- [ ] Template and worked example share the renderer; strict checks pass
-- [ ] `tkt-conventions.md` routes superseded and duplicate work to `tkt cancel`
+- [x] The checker accepts `cancelled`, and a test covers it
+- [x] The Plan tab shows cancelled tickets in their own collapsed group, outside progress and lanes
+- [x] Template and worked example share the renderer; strict checks pass
+- [x] `tkt-conventions.md` routes superseded and duplicate work to `tkt cancel`
+
+## Resolution (2026-11-25)
+
+done: verified check-dashboard.mjs, dashboard-template.html, and dashboard-example.html (identical renderer; both pass --strict; 64/64 tests in delivery-dashboard.test.mjs including new planLanes exclusion assertion); updated docs/agents/tkt-conventions.md to route abandoned, superseded, or duplicate work to tkt cancel and noted cancelled history grouping in worked-example.md (per dashboard-contract.md, cancelled remains a distinct muted legend/bar segment outside Done)

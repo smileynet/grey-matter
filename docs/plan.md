@@ -574,7 +574,7 @@ are in the order to take them. Release themes above still say what ships in 0.3.
 | 108 | Wave 2: writing-for-agents ties pruning to observed navigation failures | open |
 | 92 | Wave 3, dashboard checks itself (theme D): fix the gaps the critic model spike found | open |
 | 90 | Wave 3: build the dashboard copy and results critics (after 92) | open |
-| 109 | Wave 3: delivery-dashboard understands tkt's cancelled status (ships with tkt 227) | in_progress |
+| 109 | Wave 3: delivery-dashboard understands tkt's cancelled status (ships with tkt 227) | ✅ done |
 | 118 | Wave 4: show a complete visual execution queue with one active ticket in serial mode | ✅ done |
 | 87 | Owner decision: setup-repo links shadow handoff and grill-me in Kiro | open |
 | 89 | Owner approval per repo: adopt the dashboard template in three other repos | open |
