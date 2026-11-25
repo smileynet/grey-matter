@@ -1,7 +1,7 @@
 ---
 id: "299"
 title: "Add serve-hub.mjs --wait reactive mobile wakeup and orient unread-inbox check"
-status: in_progress
+status: done
 blocked_by: []
 priority: medium
 tags: ["stream:tooling"]
@@ -20,7 +20,11 @@ Implement Tier 1 session signaling from spike #298 (`docs/agents/research/mobile
 
 ## Acceptance criteria
 
-- [ ] `serve-hub.mjs --wait <dir-or-slug> [--timeout SEC]` returns immediately on pre-existing pending items, wakes up cleanly when a new `POST /api/inbox/<slug>` arrives, and exits `124` on timeout.
-- [ ] `serve-hub.test.mjs` verifies pre-existing arrival, live `POST` wakeup, timeout exit `124`, and directory-path `--inbox` resolution.
-- [ ] `orient/SKILL.md`, `delivery-dashboard/SKILL.md`, `hub-serving.md`, and `tool-scripts.md` document `--wait` and passive unread-inbox pickup, and all pre-push / pre-merge gates pass.
-- [ ] Deployed across harnesses via `node scripts/deploy.mjs`.
+- [x] `serve-hub.mjs --wait <dir-or-slug> [--timeout SEC]` returns immediately on pre-existing pending items, wakes up cleanly when a new `POST /api/inbox/<slug>` arrives, and exits `124` on timeout.
+- [x] `serve-hub.test.mjs` verifies pre-existing arrival, live `POST` wakeup, timeout exit `124`, and directory-path `--inbox` resolution.
+- [x] `orient/SKILL.md`, `delivery-dashboard/SKILL.md`, `hub-serving.md`, and `tool-scripts.md` document `--wait` and passive unread-inbox pickup, and all pre-push / pre-merge gates pass.
+- [x] Deployed across harnesses via `node scripts/deploy.mjs`.
+
+## Resolution (2026-11-25)
+
+done: added waitForInbox() and CLI --wait DIR_OR_SLUG [--timeout SEC] (exit 0 on arrival, 124 on timeout) plus directory-path resolution in --inbox, added passive unread-inbox pickup to orient/SKILL.md, documented --wait in delivery-dashboard/SKILL.md + hub-serving.md + tool-scripts.md, verified unit tests + gates, and deployed
