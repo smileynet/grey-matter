@@ -711,7 +711,7 @@ function runPortfolioDeploy({ portfolioPath, tktPack, gmPack, env, dryRun, force
   }
 
   // 3. Portfolio deploy (byte-compares & skips current targets; checks vendored deployer drift)
-  const dep = runCmd(process.execPath, [deployScript, "--portfolio", portfolioPath], { cwd: gmRepo, env, timeout: 120000 });
+  const dep = runCmd(process.execPath, [deployScript, "--portfolio", portfolioPath], { cwd: gmRepo, env, timeout: 300000 });
   if (dep.status !== 0) {
     return { status: "error", action: "deploy-failed", error: (dep.stderr || dep.stdout).trim().slice(-1200) };
   }
