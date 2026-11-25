@@ -166,6 +166,7 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   loaded it successfully.
 - **Still unverified:** update behavior. Rebuild and registration are documented, but no live
   update probe has established when an installed or active session picks up replacement bytes.
+- **Kimi Code CLI (`kimi`, `2.7.3` observed 2026-11-25):** reads `~/.kimi-code/skills` (`$KIMI_CODE_HOME/skills`) and `~/.agents/skills`, plus project `.kimi-code/skills` and `.agents/skills`. Managed directly in `deploy.mjs` (`kimi-code`) and `install-agents-md.mjs` (`~/.kimi-code/AGENTS.md`).
 
 ### agy (ancillary, Google Antigravity CLI)
 
@@ -277,7 +278,7 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 ### Qwen Code (`qwen`, ancillary)
 
 - Binary `qwen` (`@qwen-code/qwen-code`, `0.28.4` observed 2026-11-25; covers CLI, Desktop, Web Shell, VS Code, and Zed). Research: [qwen-code-plugin-compat-20261125](./research/qwen-code-plugin-compat-20261125.md).
-- **Native extension install**: `tkt` ships a zero-build root `qwen-extension.json` (`qwen extensions link <tkt>` or `qwen extensions install smileynet/tkt`, including native `SessionStart` hook). `grey-matter` stages flat `dist/qwen-extension/` via `node scripts/deploy.mjs qwen install` because Qwen `v0.28.4` hardcodes depth-1 `<extRoot>/skills/<name>/SKILL.md` (do not install via the Claude Code converter).
+- **Native extension install**: `tkt` ships a zero-build root `qwen-extension.json` (`qwen extensions link <tkt>` or `qwen extensions install smileynet/tkt`, including native `SessionStart` hook). `grey-matter` stages flat `dist/qwen-extension/` via `node scripts/deploy.mjs qwen install` because Qwen `v0.28.4` hardcodes depth-1 `<extRoot>/skills/<name>/SKILL.md` (do not install via the Claude Code converter), and writes a small `QWEN.md` (`contextFileName: "QWEN.md"`) bridging bare skill references to `<ext>:<skill>` names.
 - **Roots**: user `~/.qwen/skills`, `~/.agents/skills`; project `.qwen/skills`, `.agents/skills` (`~/.claude/skills` is not scanned). Extension skills register as `<ext>:<name>` while `~/.agents/skills` registers bare `<name>`, causing 2x discovery if both exist — `deploy.mjs` avoids `~/.agents/skills` and `~/.qwen/skills` when the Qwen extension is enabled.
 - **Invocation filter**: honors `disable-model-invocation: true` and `user-invocable`.
 - **Global rules**: `~/.qwen/QWEN.md` (`$QWEN_HOME/QWEN.md`), installed by `scripts/install-agents-md.mjs` (never write both `QWEN.md` and `AGENTS.md`, since Qwen loads both by default).
@@ -369,6 +370,7 @@ harness's global instructions file:
 | Claude Code | `~/.claude/CLAUDE.md` | Claude Code memory docs (user memory) |
 | OpenCode | `~/.config/opencode/AGENTS.md` | OpenCode rules docs |
 | ZCode | `~/.zcode/AGENTS.md` | ZCode config guide: user instruction file, injected before workspace AGENTS.md |
+| Kimi Code CLI (`kimi`) | `~/.kimi-code/AGENTS.md` | Kimi Code CLI `$KIMI_CODE_HOME/AGENTS.md` (user rules) |
 | DeepSeek Harness (`dsh`) | `~/.dsh/AGENTS.md` | `@deepseek-ai/dsh-agent-instructions`: `$DSH_HOME/AGENTS.md` (deduped with `~/.agents/AGENTS.md`) |
 | Qwen Code (`qwen`) | `~/.qwen/QWEN.md` | `QwenLM/qwen-code` `memoryDiscovery.ts`: loads `QWEN.md` (and `AGENTS.md`; install one only) |
 | agy, Crush | installed | no verified user-level rules path; project AGENTS.md still applies |

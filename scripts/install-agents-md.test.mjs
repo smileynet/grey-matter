@@ -151,14 +151,15 @@ test("the default codex target follows CODEX_HOME", () => {
   });
 });
 
-test("default dsh and qwen targets follow DSH_HOME and QWEN_HOME without double-loading", () => {
+test("default dsh, qwen, and kimi-code targets follow DSH_HOME, QWEN_HOME, and KIMI_CODE_HOME without double-loading", () => {
   withDir((d) => {
-    const home = join(d, "home"), dshHome = join(d, "custom-dsh"), qwenHome = join(d, "custom-qwen");
-    mkdirSync(home); mkdirSync(dshHome); mkdirSync(qwenHome);
-    const r = spawnSync(process.execPath, [SCRIPT], { encoding: "utf8", env: { ...process.env, HOME: home, USERPROFILE: home, DSH_HOME: dshHome, QWEN_HOME: qwenHome } });
+    const home = join(d, "home"), dshHome = join(d, "custom-dsh"), qwenHome = join(d, "custom-qwen"), kimiHome = join(d, "custom-kimi");
+    mkdirSync(home); mkdirSync(dshHome); mkdirSync(qwenHome); mkdirSync(kimiHome);
+    const r = spawnSync(process.execPath, [SCRIPT], { encoding: "utf8", env: { ...process.env, HOME: home, USERPROFILE: home, DSH_HOME: dshHome, QWEN_HOME: qwenHome, KIMI_CODE_HOME: kimiHome } });
     assert.equal(r.status, 0, r.stdout + r.stderr);
     assert.equal(findBlock(readFileSync(join(dshHome, "AGENTS.md"), "utf8"), "global").body, source());
     assert.equal(findBlock(readFileSync(join(qwenHome, "QWEN.md"), "utf8"), "global").body, source());
+    assert.equal(findBlock(readFileSync(join(kimiHome, "AGENTS.md"), "utf8"), "global").body, source());
     assert.equal(existsSync(join(qwenHome, "AGENTS.md")), false, "Qwen loads both QWEN.md and AGENTS.md; install only QWEN.md");
   });
 });

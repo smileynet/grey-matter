@@ -192,7 +192,9 @@ so rank-400 copies never silently shadow the rank-600 bundle. See
 `node scripts/deploy.mjs qwen [build|install]` handles native `qwen-extension.json` delivery.
 Packs with flat `skills/` and a root `qwen-extension.json` (`tkt`) link directly via
 `qwen extensions link <checkout>`; bucketed packs (`grey-matter`) stage a flat extension under
-`dist/qwen-extension/` because Qwen `v0.28.4` hardcodes depth-1 `<extRoot>/skills/<name>/SKILL.md`.
+`dist/qwen-extension/` with a generated `QWEN.md` (`contextFileName: "QWEN.md"`) that bridges bare
+skill names to `<ext>:<skill>` because Qwen `v0.28.4` hardcodes depth-1
+`<extRoot>/skills/<name>/SKILL.md` and registers no bare aliases for extension skills.
 Do not install through Qwen's Claude Code converter (bucketed skills land at depth 2 and load 0
 skills; hooks trigger a global `.claude/` -> `.qwen/` rewrite across `.md` files). Default
 `deploy.mjs` refreshes `dist/qwen-extension/` when enabled and avoids `~/.agents/skills` /

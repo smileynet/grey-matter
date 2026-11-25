@@ -534,6 +534,7 @@ process.exit(0);
   delete env.KIROCREW_HOME; // a Kiro Crew session exports its own; the sandbox HOME decides
   delete env.DSH_HOME;
   delete env.QWEN_HOME;
+  delete env.KIMI_CODE_HOME;
   env.ZCODE_CLI = join(home, "zcode-cli-absent"); // hermetic even on a Mac carrying the real app
   return { home, env, has: (rel) => existsSync(join(home, rel, "orient", "SKILL.md")) };
 }
@@ -1375,7 +1376,7 @@ test("dsh: build stages a zero-build Cordis bundle and plugin coverage suppresse
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
-test("qwen: build flattens skills and enabled extension prevents ~/.agents/skills duplication", () => {
+test("qwen: build flattens skills, emits QWEN.md bridge, and enabled extension prevents ~/.agents/skills duplication", () => {
   const sb = homeSandbox();
   try {
     const pack = smallPack(sb.home), out = join(sb.home, "qwen-out");
@@ -1383,7 +1384,9 @@ test("qwen: build flattens skills and enabled extension prevents ~/.agents/skill
     assert.equal(r.status, 0, r.stdout);
     const manifest = JSON.parse(readFileSync(join(out, "qwen-extension.json"), "utf8"));
     assert.equal(manifest.name, "example");
+    assert.equal(manifest.contextFileName, "QWEN.md");
     assert.ok(existsSync(join(out, "skills", "example", "SKILL.md")));
+    assert.match(readFileSync(join(out, "QWEN.md"), "utf8"), /example:<skill>/);
     assert.equal(existsSync(join(out, "AGENTS.md")), false);
 
     // Register the linked extension under ~/.qwen/extensions/example; deploy must avoid ~/.qwen/skills and ~/.agents/skills.
@@ -1395,5 +1398,20 @@ test("qwen: build flattens skills and enabled extension prevents ~/.agents/skill
     assert.match(r2.stdout, /qwen\s+<- Qwen extension example/);
     assert.equal(existsSync(join(sb.home, ".qwen", "skills", "example")), false);
     assert.equal(existsSync(join(sb.home, ".agents", "skills", "example")), false);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("kimi-code: default deploy selects ~/.kimi-code/skills without duplicating ~/.agents/skills", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = smallPack(sb.home);
+    mkdirSync(join(sb.home, ".kimi-code"), { recursive: true });
+    const r = runWithEnv(["--pack", pack, "--no-agy"], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    assert.ok(existsSync(join(sb.home, ".kimi-code", "skills", "example", "SKILL.md")));
+    assert.equal(existsSync(join(sb.home, ".agents", "skills", "example")), false);
+    const audited = runWithEnv(["audit", "--json", "--pack", pack], sb.env);
+    assert.equal(audited.status, 0, audited.stdout);
+    assert.ok(!JSON.parse(audited.stdout).findings.some((s) => s.includes("kimi-code sees")));
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });

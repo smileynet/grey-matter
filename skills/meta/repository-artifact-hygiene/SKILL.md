@@ -1,6 +1,6 @@
 ---
 name: repository-artifact-hygiene
-description: "Classify repository artifacts and choose storage, retention and reproducible retrieval. Use when adding source art, generated evidence, screenshots, embedded HTML, datasets or reference bundles; reviewing repository growth; choosing ordinary Git versus LFS; before a build, test run, simulator, download, clone or copy of tracked files grows the disk; or closing a ticket, to promote, keep or delete its scratch and build artifacts. Trigger: artifact hygiene, generated evidence, source assets, repository storage, LFS, report growth, disk footprint, free space, scratch cleanup."
+description: "Classify repository artifacts and choose Git, LFS, retention, or scratch cleanup. Use when adding source art, generated evidence, screenshots, embedded HTML, datasets, or reference bundles; reviewing repo growth or disk footprint before builds, simulators, or clones; or promoting/deleting scratch and build artifacts at ticket close. Trigger: artifact hygiene, LFS, generated evidence, disk footprint, free space, scratch cleanup."
 ---
 
 # Repository Artifact Hygiene
