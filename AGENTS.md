@@ -77,7 +77,7 @@ shared release-tool synchronization, per-host validation and the consistency che
 - Setup: Node 22+, then `npm ci --ignore-scripts` after clone or lockfile changes.
 - Verification phase: stability ([proposal 18](./docs/agents/proposals/18-three-stage-verification.md)). `scripts/gates.json` declares the checks; `node scripts/gate.mjs <stage>` runs them.
   - Pre-push: opt in per clone with `git config core.hooksPath .githooks`; the Git hook runs `gate.mjs pre-push` on the commits being pushed. Without it, run `node scripts/gate.mjs pre-push` before pushing (it checks the commits not yet on `origin/main`).
-  - Pre-merge: before the push that carries a ticket's code, run `node scripts/gate.mjs pre-merge` and cite its output at `tkt close`.
+  - Pre-merge: before the push that carries a ticket's code, run `node scripts/gate.mjs verdict pre-merge` and cite its verdict line at `tkt close`.
   - Pre-release: `node scripts/gate.mjs pre-release` runs every check in every stage; `release-product.mjs` runs it on the candidate.
 - Syntax fixtures: `node --test scripts/skill-syntax.test.mjs` must pass; native validation alone misses malformed YAML.
 

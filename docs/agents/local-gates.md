@@ -101,10 +101,7 @@ for merges, the guard scans resolution text newly added against all parents. The
 that let new leaks enter historical evidence files.
 
 Runner version 5 supplies `GM_GATE_RANGES`: JSON arrays of Git revision arguments for
-the exact tip being checked. Runner version 6 adds `node scripts/gate.mjs verdict <stage>`
-which emits a single `PASS` or `NOT-READY` readiness verdict and exits `0` only when at
-least one selected check ran and every selected check passed (any skip, fail, timeout,
-infrastructure error, or empty selection exits `1` as `NOT-READY`). Push privacy ranges exclude already-published commits on
+the exact tip being checked. Push privacy ranges exclude already-published commits on
 the selected remote for both existing and new refs. Remote tracking tips are pinned to
 commit IDs before checks run; existing refs also exclude their advertised remote tip.
 Merging published historical evidence therefore does not introduce a privacy finding.
@@ -164,6 +161,17 @@ project already using lefthook, husky or pre-commit adds a pre-push job to that 
 `core.hooksPath` replaces the whole Git hook directory; lefthook needs `use_stdin: true` or it hangs.
 `conformance-audit` reports a vendored `gate.mjs` behind the reference version and offers the update;
 nothing applies it automatically.
+
+### Single readiness verdict
+
+Kiro Crew rolls its checks into a single PR Readiness verdict (prior art); grey-matter chose
+`node scripts/gate.mjs verdict <stage>` (runner version 6) so agents and humans share one
+unambiguous outcome line without confusing "nothing ran" or "skipped" with "passed":
+
+- **`PASS` (exit 0)** only when at least one selected check ran, zero checks were skipped, and
+  every run passed (disclosing when uncommitted working-tree changes were not checked).
+- **`NOT-READY` (exit 1)** with explicit reasons when 0 checks were selected, or any check was
+  skipped, failed, timed out, hit an infrastructure error, or failed measurement recording.
 
 A worked example, shaped on ticket 152: tagalog-helper's Git pre-commit hook ran 32 stages on every
 commit, docs and tickets included, for 6 to 8 minutes, about 250 s of it native suites that matter

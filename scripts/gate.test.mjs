@@ -475,34 +475,41 @@ test("verdict reports PASS only when every selected check ran and passed", () =>
   assert.match(dirty.out, /verdict pre-push: PASS \(2 of 2 selected check\(s\) ran and passed; committed HEAD only, uncommitted changes not checked\)/);
 }));
 
-test("verdict reports NOT-READY on fail, skip, timeout, infrastructure error, and empty selection", () => fixture([
-  check("ok", ["a/"]),
-  check("bad", ["bad/"], "process.exit(1)"),
-  check("slow", ["slow/"], "setTimeout(() => {}, 5000)", { timeout_s: 0.2 }),
-  check("broken", ["broken/"], pass, { run: ["nonexistent-command-xyz-223"] }),
-], ({ commit, run }) => {
-  const empty = run(["verdict", "pre-push"]);
-  assert.equal(empty.status, 1, empty.out);
-  assert.match(empty.out, /verdict pre-push: NOT-READY \(0 of 4 check\(s\) selected; nothing ran\)/);
+test("verdict reports NOT-READY on isolated empty-selection, one-skip, one-fail, one-timeout, and infra error", () => {
+  fixture([check("ok", ["a/"])], ({ run }) => {
+    const empty = run(["verdict", "pre-push"]);
+    assert.equal(empty.status, 1, empty.out);
+    assert.match(empty.out, /verdict pre-push: NOT-READY \(0 of 1 check\(s\) selected; nothing ran\)/);
+    const noStage = run(["verdict"]);
+    assert.equal(noStage.status, 2, noStage.out);
+  });
 
-  commit("a/file.txt");
-  const skipped = run(["verdict", "pre-push"], { env: { SKIP: "ok" } });
-  assert.equal(skipped.status, 1, skipped.out);
-  assert.match(skipped.out, /verdict pre-push: NOT-READY \(1 skipped: ok\)/);
+  fixture([check("a", ["a/"]), check("b", ["a/"])], ({ commit, run }) => {
+    commit("a/file.txt");
+    const skipped = run(["verdict", "pre-push"], { env: { SKIP: "b" } });
+    assert.equal(skipped.status, 1, skipped.out);
+    assert.ok(ran(skipped.out, "a"), skipped.out);
+    assert.match(skipped.out, /verdict pre-push: NOT-READY \(1 skipped: b\)/);
+  });
 
-  commit("bad/file.txt");
-  const failed = run(["verdict", "pre-push"]);
-  assert.equal(failed.status, 1, failed.out);
-  assert.match(failed.out, /verdict pre-push: NOT-READY \(1 failed: bad\)/);
+  fixture([check("ok", ["a/"]), check("bad", ["a/"], "process.exit(1)")], ({ commit, run }) => {
+    commit("a/file.txt");
+    const failed = run(["verdict", "pre-push"]);
+    assert.equal(failed.status, 1, failed.out);
+    assert.match(failed.out, /verdict pre-push: NOT-READY \(1 failed: bad\)/);
+  });
 
-  const timedOut = run(["verdict", "pre-push", "--include", "slow"], { env: { SKIP: "bad" } });
-  assert.equal(timedOut.status, 1, timedOut.out);
-  assert.match(timedOut.out, /verdict pre-push: NOT-READY \(1 skipped: bad; 1 timed out: slow\)/);
+  fixture([check("ok", ["a/"]), check("slow", ["a/"], "setTimeout(() => {}, 5000)", { timeout_s: 0.2 })], ({ commit, run }) => {
+    commit("a/file.txt");
+    const timedOut = run(["verdict", "pre-push"]);
+    assert.equal(timedOut.status, 1, timedOut.out);
+    assert.match(timedOut.out, /verdict pre-push: NOT-READY \(1 timed out: slow\)/);
+  });
 
-  const infra = run(["verdict", "pre-push", "--include", "broken"], { env: { SKIP: "bad" } });
-  assert.equal(infra.status, 1, infra.out);
-  assert.match(infra.out, /verdict pre-push: NOT-READY \(1 skipped: bad; 1 infrastructure error: broken\)/);
-
-  const noStage = run(["verdict"]);
-  assert.equal(noStage.status, 2, noStage.out);
-}));
+  fixture([check("ok", ["a/"]), check("broken", ["a/"], pass, { run: ["nonexistent-command-xyz-223"] })], ({ commit, run }) => {
+    commit("a/file.txt");
+    const infra = run(["verdict", "pre-push"]);
+    assert.equal(infra.status, 1, infra.out);
+    assert.match(infra.out, /verdict pre-push: NOT-READY \(1 infrastructure error: broken\)/);
+  });
+});

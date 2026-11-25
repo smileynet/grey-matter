@@ -34,7 +34,9 @@ After each slice, run the applicable typecheck/tests at the leftmost tier that
 observes its behavior. Before the push that carries the ticket's code, run the
 pre-merge check the project's `AGENTS.md` names (when the project uses `gate.mjs`,
 run `node scripts/gate.mjs verdict pre-merge` and cite its `verdict pre-merge: PASS`
-line — or `NOT-READY` reasons — at close; in the speed phase, its `check` command):
+line at close — or, for docs/ticket-only diffs where 0 checks are selected, note the
+explicit `NOT-READY (0 of N check(s) selected)` scope rather than treating it as a pass;
+in the speed phase, its `check` command):
 up to tier 2 of the
 [test-environment ladder](../../../docs/agents/test-environment-ladder.md) for the
 changed areas. Run tier 3 and above only when the ticket's outcome lives there,

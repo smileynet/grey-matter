@@ -137,6 +137,7 @@ function recordMeasurements(file, source, measurements) {
 // every check (unknown history selects more, never less).
 function pushedPaths(input, remote, tips, ranges) {
   const paths = new Set();
+  let unknown = false;
   const published = git("for-each-ref", "--format=%(objectname)", `refs/remotes/${remote ?? "origin"}/`);
   for (const line of input.split(/\r?\n/).filter(Boolean)) {
     const [, localSha, , remoteSha] = line.trim().split(/\s+/);
@@ -149,10 +150,10 @@ function pushedPaths(input, remote, tips, ranges) {
     const privacy = excluded && (excluded.length ? [localSha, "--not", ...excluded] : [localSha]);
     ranges.set(localSha, privacy ? [...(ranges.get(localSha) ?? []), privacy] : null);
     const files = git("log", "--format=", "--name-only", ...range);
-    if (!files) return null;
+    if (!files) { unknown = true; continue; }
     for (const f of files) paths.add(f);
   }
-  return [...paths];
+  return unknown ? null : [...paths];
 }
 
 function branchPaths(base, ranges) {
@@ -245,7 +246,8 @@ const selected = checks.filter((c) => opts.include.includes(c.id) || (inStage.in
 const skip = new Set((process.env.SKIP ?? "").split(",").map((s) => s.trim()).filter(Boolean));
 
 if (!opts.stdin) tips.add(git("rev-parse", "HEAD")?.[0] ?? "HEAD");
-const dirtyTree = Boolean(git("status", "--porcelain")?.length);
+const statusLines = git("status", "--porcelain");
+const dirtyTree = Boolean(statusLines?.length);
 console.log(`gate ${opts.stage}: ${selected.length} of ${inStage.length} check(s) selected (${source})`);
 if (!selected.length && dirtyTree) {
   console.log("gate: uncommitted changes were not checked; this run judges committed changes only.");
@@ -253,9 +255,7 @@ if (!selected.length && dirtyTree) {
 let failed = 0;
 const measurements = new Map();
 const skippedIds = selected.filter((c) => skip.has(c.id)).map((c) => c.id);
-const failedIds = new Set();
-const timedOutIds = new Set();
-const infraIds = new Set();
+const nonPassByOutcome = new Map();
 const toRun = selected.filter((c) => !skip.has(c.id));
 for (const id of skippedIds) console.log(`  [skip]           ${id}: skipped (SKIP)`);
 for (const tip of toRun.length ? tips : []) {
@@ -270,9 +270,8 @@ for (const tip of toRun.length ? tips : []) {
       }
       if (!ok) {
         failed++;
-        if (r.outcome === "timeout") timedOutIds.add(check.id);
-        else if (r.outcome === "infrastructure error") infraIds.add(check.id);
-        else failedIds.add(check.id);
+        if (!nonPassByOutcome.has(r.outcome)) nonPassByOutcome.set(r.outcome, new Set());
+        nonPassByOutcome.get(r.outcome).add(tips.size > 1 ? `${check.id}@${tip.slice(0, 12)}` : check.id);
       }
       const slow = check.measured?.s && r.seconds > 2 * check.measured.s + 1 ? ` (measured ${check.measured.s}s on ${check.measured.date})` : "";
       console.log(`  [${ok ? "ok  " : "FAIL"}] ${r.seconds.toFixed(1).padStart(6)}s  ${check.id}${ok ? "" : `: ${r.outcome}`}${slow}`);
@@ -286,20 +285,26 @@ if (opts.record) {
   catch (error) { recordFailed = true; console.error(`gate: measurements not recorded (infrastructure error): ${error.message}`); }
 }
 if (opts.verdict) {
+  const labels = { fail: "failed", timeout: "timed out", "infrastructure error": "infrastructure error" };
   const reasons = [];
   if (!selected.length) reasons.push(`0 of ${inStage.length} check(s) selected; nothing ran`);
   if (!tips.size) reasons.push("no commit tips to judge");
   if (skippedIds.length) reasons.push(`${skippedIds.length} skipped: ${skippedIds.join(", ")}`);
-  if (failedIds.size) reasons.push(`${failedIds.size} failed: ${[...failedIds].join(", ")}`);
-  if (timedOutIds.size) reasons.push(`${timedOutIds.size} timed out: ${[...timedOutIds].join(", ")}`);
-  if (infraIds.size) reasons.push(`${infraIds.size} infrastructure error: ${[...infraIds].join(", ")}`);
+  for (const [outcome, ids] of nonPassByOutcome) {
+    reasons.push(`${ids.size} ${labels[outcome] ?? outcome}: ${[...ids].join(", ")}`);
+  }
   if (recordFailed) reasons.push("measurement recording failed");
+  const targetLabel = opts.stdin ? "pushed tip(s)" : "HEAD";
+  const treeNote = statusLines === null
+    ? "; working-tree status unavailable"
+    : dirtyTree
+      ? `; committed ${targetLabel} only, uncommitted changes not checked`
+      : "";
   if (!reasons.length) {
-    const scopeNote = dirtyTree ? "; committed HEAD only, uncommitted changes not checked" : "";
-    console.log(`verdict ${opts.stage}: PASS (${toRun.length} of ${selected.length} selected check(s) ran and passed${scopeNote})`);
+    console.log(`verdict ${opts.stage}: PASS (${toRun.length} of ${selected.length} selected check(s) ran and passed${treeNote})`);
     process.exit(0);
   }
-  console.error(`verdict ${opts.stage}: NOT-READY (${reasons.join("; ")})`);
+  console.log(`verdict ${opts.stage}: NOT-READY (${reasons.join("; ")}${treeNote})`);
   process.exit(1);
 }
 if (failed) console.error(`gate ${opts.stage}: ${failed} check(s) did not pass. Fix them, or skip one knowingly with SKIP=<id>.`);
