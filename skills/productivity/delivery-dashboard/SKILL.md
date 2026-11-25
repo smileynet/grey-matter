@@ -115,7 +115,10 @@ stays out of the way, under folds and links.
    [repository-artifact-hygiene](../../meta/repository-artifact-hygiene/SKILL.md) before adding
    media. Open the page using
    [report-format's open/refresh contract](../../../docs/agents/report-format.md#html-rules) and
-   give a direct link. Finish when the page reflects the closed ticket, any ask is visible in
+   give a direct link. When `~/.config/grey-matter/hub.json` is present on the host, run
+   `node <this skill's directory>/scripts/serve-hub.mjs --url . --hash decisions` (or `overview`)
+   and include the hub's HTTPS and LAN links instead of starting a throwaway per-session server;
+   see [hub serving](references/hub-serving.md). Finish when the page reflects the closed ticket, any ask is visible in
    "Needs you", the Plan tab matches the board, and the checker passes. After closure and explicit
    plan sync, run the full comparison before publication:
    node <skill directory>/scripts/check-dashboard.mjs <file> --repo <project-root> --strict.

@@ -3,10 +3,14 @@
 // zero-restart live updates, and method/traversal rejection.
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { createHubServer } from "./serve-hub.mjs";
+import { fileURLToPath } from "node:url";
+import { createHubServer, resolveProjectUrls } from "./serve-hub.mjs";
+
+const SERVE_HUB = fileURLToPath(new URL("./serve-hub.mjs", import.meta.url));
 
 function makeDashboard({ project, decisions = [], entries = [], tickets = [] }) {
   return `<!doctype html><html><body>
@@ -98,4 +102,42 @@ test("serve-hub discovers projects, sorts open decisions first, and serves allow
     const refreshed = await (await fetch(`${base}/api/projects.json`)).json();
     assert.ok(refreshed.projects.some((p) => p.slug === "gamma"), "new project appears without restart");
   });
+});
+
+test("serve-hub resolves project URLs from hub.json and degrades cleanly when missing", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "gm-hub-cfg-"));
+  try {
+    const repo = join(dir, "my-app");
+    mkdirSync(repo, { recursive: true });
+    const cfgPath = join(dir, "hub.json");
+    writeFileSync(cfgPath, JSON.stringify({
+      baseUrl: "https://box.tailnet.ts.net/",
+      lanUrl: "http://192.168.0.10:8765/",
+      mdnsUrl: "http://box.local:8765",
+    }));
+
+    const resolved = await resolveProjectUrls(repo, { hash: "#decisions", configPath: cfgPath });
+    assert.deepEqual(resolved, {
+      configured: true,
+      slug: "my-app",
+      hub: {
+        baseUrl: "https://box.tailnet.ts.net/",
+        lanUrl: "http://192.168.0.10:8765/",
+        mdnsUrl: "http://box.local:8765/",
+      },
+      urls: {
+        baseUrl: "https://box.tailnet.ts.net/my-app/docs/status.html#decisions",
+        lanUrl: "http://192.168.0.10:8765/my-app/docs/status.html#decisions",
+        mdnsUrl: "http://box.local:8765/my-app/docs/status.html#decisions",
+      },
+    });
+
+    const cliOut = JSON.parse(execFileSync(process.execPath, [SERVE_HUB, "--url", repo, "--hash", "overview", "--config", cfgPath], { encoding: "utf8" }));
+    assert.equal(cliOut.urls.baseUrl, "https://box.tailnet.ts.net/my-app/docs/status.html#overview");
+
+    const missing = await resolveProjectUrls("my-app", { configPath: join(dir, "nope.json") });
+    assert.equal(missing, null);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

@@ -35,6 +35,12 @@ template, a short overview over a searchable history, and a checker.
   state that limitation and provide a link or absolute path as a fallback. Use the
   available viewer or application; the contract is tool-independent and does not
   bypass access controls or change permissions.
+- **Prefer a configured multi-project hub over ad-hoc servers.** When
+  `~/.config/grey-matter/hub.json` exists on the host, resolve the project's
+  permanent HTTPS/LAN links via
+  `node <delivery-dashboard-skill>/scripts/serve-hub.mjs --url . [--hash decisions|overview|plan]`
+  (see [hub serving](../../skills/productivity/delivery-dashboard/references/hub-serving.md))
+  and return those links instead of spawning a per-session HTTP server.
 
 - **Offline opening contract.** A portable deliverable may remain one self-contained
   file. An evolving dashboard can ship with separately versioned local assets to

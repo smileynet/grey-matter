@@ -7,14 +7,58 @@
 // unlinked repository files.
 //
 // Usage:
-//   node serve-hub.mjs [--root DIR]... [--registry FILE] [--host 127.0.0.1] [--port 8765]
+//   node serve-hub.mjs [--root DIR]... [--registry FILE] [--host 127.0.0.1] [--port 8765] [--config FILE]
+//   node serve-hub.mjs --url DIR_OR_SLUG [--hash decisions|overview|plan] [--config FILE]
 
 import { createServer } from "node:http";
+import { existsSync } from "node:fs";
 import { readdir, readFile, realpath, stat } from "node:fs/promises";
 import { basename, extname, isAbsolute, join, relative, resolve } from "node:path";
 import { homedir } from "node:os";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
+
+export function defaultHubConfigPath() {
+  return process.env.GM_HUB_CONFIG ? resolve(process.env.GM_HUB_CONFIG) : join(homedir(), ".config", "grey-matter", "hub.json");
+}
+
+function expandHome(value) {
+  if (typeof value !== "string") return value;
+  if (value === "~") return homedir();
+  if (value.startsWith("~/") || value.startsWith("~\\")) return join(homedir(), value.slice(2));
+  return value;
+}
+
+export async function readHubConfig(configPath = defaultHubConfigPath()) {
+  try {
+    const raw = JSON.parse(await readFile(resolve(configPath), "utf8"));
+    return raw && typeof raw === "object" && !Array.isArray(raw) ? raw : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function resolveProjectUrls(projectOrSlug, { hash = "", configPath = defaultHubConfigPath() } = {}) {
+  const config = await readHubConfig(configPath);
+  if (!config) return null;
+  const trimmed = String(projectOrSlug ?? "").trim();
+  if (!trimmed) return null;
+  const candidatePath = resolve(expandHome(trimmed));
+  const slug = existsSync(candidatePath) ? basename(candidatePath) : trimmed;
+  if (!SLUG_RE.test(slug)) return null;
+  const frag = hash ? `#${String(hash).replace(/^#/, "")}` : "";
+  const route = `/${encodeURIComponent(slug)}/docs/status.html${frag}`;
+  const hub = {};
+  const urls = {};
+  for (const key of ["baseUrl", "lanUrl", "mdnsUrl"]) {
+    const raw = typeof config[key] === "string" ? config[key].trim().replace(/\/+$/, "") : "";
+    if (!raw) continue;
+    hub[key] = `${raw}/`;
+    urls[key] = `${raw}${route}`;
+  }
+  if (!Object.keys(urls).length) return null;
+  return { configured: true, slug, hub, urls };
+}
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -287,18 +331,35 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     options: {
       root: { type: "string", multiple: true },
       registry: { type: "string" },
-      host: { type: "string", default: "127.0.0.1" },
-      port: { type: "string", default: "8765" },
+      host: { type: "string" },
+      port: { type: "string" },
+      config: { type: "string" },
+      url: { type: "string" },
+      hash: { type: "string" },
     },
   });
-  const port = Number(values.port);
+  const configPath = values.config ? resolve(expandHome(values.config)) : defaultHubConfigPath();
+  if (values.url !== undefined) {
+    const resolved = await resolveProjectUrls(values.url, { hash: values.hash ?? "", configPath });
+    if (!resolved) {
+      console.log(JSON.stringify({ configured: false }, null, 2));
+      process.exit(1);
+    }
+    console.log(JSON.stringify(resolved, null, 2));
+    process.exit(0);
+  }
+  const config = await readHubConfig(configPath);
+  const host = values.host ?? (typeof config?.host === "string" && config.host.trim() ? config.host.trim() : "127.0.0.1");
+  const port = Number(values.port ?? config?.port ?? 8765);
   if (!Number.isInteger(port) || port < 1 || port > 65535) {
     console.error("--port must be an integer from 1 to 65535");
     process.exit(2);
   }
-  const server = createHubServer({ roots: values.root, registry: values.registry });
+  const roots = (values.root?.length ? values.root : Array.isArray(config?.roots) && config.roots.length ? config.roots : [join(homedir(), "code")]).map((r) => expandHome(r));
+  const registry = values.registry ? expandHome(values.registry) : typeof config?.registry === "string" && config.registry.trim() ? expandHome(config.registry.trim()) : null;
+  const server = createHubServer({ roots, registry });
   server.on("error", (error) => { console.error(error.message); process.exitCode = 1; });
-  server.listen(port, values.host, () => {
-    console.log(`Dashboard hub: http://${values.host}:${port}/`);
+  server.listen(port, host, () => {
+    console.log(`Dashboard hub: http://${host}:${port}/`);
   });
 }
