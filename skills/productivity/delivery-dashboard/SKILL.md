@@ -1,6 +1,6 @@
 ---
 name: delivery-dashboard
-description: "Keep one dark, blue status dashboard current after every closed ticket: what the person can now do, what needs their input, recent entries at a glance, a searchable history and a Plan tab of every ticket. Use after closing a ticket or finishing other work worth surfacing, when asked for a status, progress or plan view, to collect project decisions (including grill-session questions), or to update the dashboard."
+description: "Keep one dark, blue status and decision HTML page current: what the person can now do, interactive multiple-choice decisions with pre-selected recommendations and copy-to-chat export, recent entries, searchable history, and a Plan tab. Use after closing a ticket, for status/plan views, or when creating a dark-mode HTML decision page."
 ---
 
 # Delivery Dashboard
