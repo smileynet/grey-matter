@@ -8,7 +8,7 @@ import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { createHubServer, resolveProjectUrls } from "./serve-hub.mjs";
+import { createHubServer, evaluateTailscaleAuth, resolveProjectUrls } from "./serve-hub.mjs";
 
 const SERVE_HUB = fileURLToPath(new URL("./serve-hub.mjs", import.meta.url));
 
@@ -139,5 +139,117 @@ test("serve-hub resolves project URLs from hub.json and degrades cleanly when mi
     assert.equal(missing, null);
   } finally {
     rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("serve-hub Tailscale inbox enforces loopback, identity, origin, size, and writes outside repo", async () => {
+  // Non-loopback LAN socket cannot spoof Tailscale-User-Login.
+  const spoofedLan = evaluateTailscaleAuth(
+    { socket: { remoteAddress: "192.168.0.50" }, headers: { "tailscale-user-login": "owner@example.com" } },
+    { allowedUsers: ["owner@example.com"] },
+  );
+  assert.equal(spoofedLan.viaTailscale, false);
+  assert.equal(spoofedLan.userAllowed, false);
+
+  const root = mkdtempSync(join(tmpdir(), "gm-hub-inbox-root-"));
+  const inboxDir = mkdtempSync(join(tmpdir(), "gm-hub-inbox-state-"));
+  const cfgPath = join(inboxDir, "hub.json");
+  try {
+    mkdirSync(join(root, "beta", "docs"), { recursive: true });
+    const originalHtml = makeDashboard({
+      project: "Beta",
+      decisions: [{ id: "d1", question: "Ship mobile inbox?", status: "open" }],
+    });
+    writeFileSync(join(root, "beta", "docs", "status.html"), originalHtml);
+    writeFileSync(cfgPath, JSON.stringify({
+      baseUrl: "https://box.tailnet.ts.net",
+      inbox: { enabled: true, dir: inboxDir, allowedUsers: ["owner@example.com"] },
+    }));
+
+    const server = createHubServer({
+      roots: [root],
+      baseUrl: "https://box.tailnet.ts.net",
+      inbox: { enabled: true, dir: inboxDir, allowedUsers: ["owner@example.com"] },
+    });
+    await new Promise((ok) => server.listen(0, "127.0.0.1", ok));
+    const { port } = server.address();
+    const base = `http://127.0.0.1:${port}`;
+    try {
+      // Without Tailscale identity header: status says not writable, HTML not injected, POST rejected 403.
+      const stPlain = await (await fetch(`${base}/api/inbox/status`)).json();
+      assert.equal(stPlain.enabled, true);
+      assert.equal(stPlain.writable, false);
+      const htmlPlain = await (await fetch(`${base}/beta/docs/status.html`)).text();
+      assert.doesNotMatch(htmlPlain, /\/_hub\/inbox\.js/);
+      assert.equal((await fetch(`${base}/api/inbox/beta`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Origin: "https://box.tailnet.ts.net" },
+        body: JSON.stringify({ text: "Decisions for Beta" }),
+      })).status, 403);
+
+      // Disallowed Tailscale login -> 403.
+      assert.equal((await fetch(`${base}/api/inbox/beta`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Origin: "https://box.tailnet.ts.net", "Tailscale-User-Login": "other@example.com" },
+        body: JSON.stringify({ text: "Decisions for Beta" }),
+      })).status, 403);
+
+      // Cross-origin CSRF attempt -> 403.
+      assert.equal((await fetch(`${base}/api/inbox/beta`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Origin: "https://evil.example", "Tailscale-User-Login": "owner@example.com" },
+        body: JSON.stringify({ text: "Decisions for Beta" }),
+      })).status, 403);
+
+      // Non-JSON content-type -> 415; unknown slug -> 404; oversized body -> 413.
+      assert.equal((await fetch(`${base}/api/inbox/beta`, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain", Origin: "https://box.tailnet.ts.net", "Tailscale-User-Login": "owner@example.com" },
+        body: "plain",
+      })).status, 415);
+      assert.equal((await fetch(`${base}/api/inbox/unknown`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Origin: "https://box.tailnet.ts.net", "Tailscale-User-Login": "owner@example.com" },
+        body: JSON.stringify({ text: "Decisions" }),
+      })).status, 404);
+      assert.equal((await fetch(`${base}/api/inbox/beta`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Origin: "https://box.tailnet.ts.net", "Tailscale-User-Login": "owner@example.com" },
+        body: JSON.stringify({ text: "x".repeat(40000) }),
+      })).status, 413);
+
+      // Authenticated Tailscale GET injects progressive client script (without touching disk).
+      const htmlTs = await (await fetch(`${base}/beta/docs/status.html`, {
+        headers: { "Tailscale-User-Login": "owner@example.com" },
+      })).text();
+      assert.match(htmlTs, /<script src="\/_hub\/inbox\.js" defer><\/script><\/body>/);
+      assert.equal((await fetch(`${base}/_hub/inbox.js`)).status, 200);
+
+      // Valid Tailscale POST succeeds -> 201 and CLI reads & archives it.
+      const okRes = await fetch(`${base}/api/inbox/beta`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Origin: "https://box.tailnet.ts.net", "Tailscale-User-Login": "owner@example.com" },
+        body: JSON.stringify({ project: "Beta", text: "Decisions for Beta\n\n1. Ship mobile inbox?\nChoice: Yes" }),
+      });
+      assert.equal(okRes.status, 201);
+      const okBody = await okRes.json();
+      assert.equal(okBody.ok, true);
+      assert.equal(okBody.slug, "beta");
+
+      const inboxRead = JSON.parse(execFileSync(process.execPath, [SERVE_HUB, "--inbox", "beta", "--config", cfgPath], { encoding: "utf8" }));
+      assert.equal(inboxRead.projects[0].pendingCount, 1);
+      assert.match(inboxRead.projects[0].items[0].content, /submitted_by: "owner@example\.com"/);
+      assert.match(inboxRead.projects[0].items[0].content, /Ship mobile inbox\?/);
+
+      const cleared = JSON.parse(execFileSync(process.execPath, [SERVE_HUB, "--inbox", "beta", "--clear", "--config", cfgPath], { encoding: "utf8" }));
+      assert.equal(cleared.cleared, 1);
+      const afterClear = JSON.parse(execFileSync(process.execPath, [SERVE_HUB, "--inbox", "beta", "--config", cfgPath], { encoding: "utf8" }));
+      assert.equal(afterClear.projects[0].pendingCount, 0);
+    } finally {
+      await new Promise((ok) => server.close(ok));
+    }
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+    rmSync(inboxDir, { recursive: true, force: true });
   }
 });

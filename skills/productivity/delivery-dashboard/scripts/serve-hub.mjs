@@ -9,14 +9,244 @@
 // Usage:
 //   node serve-hub.mjs [--root DIR]... [--registry FILE] [--host 127.0.0.1] [--port 8765] [--config FILE]
 //   node serve-hub.mjs --url DIR_OR_SLUG [--hash decisions|overview|plan] [--config FILE]
+//   node serve-hub.mjs --inbox [SLUG] [--clear] [--config FILE]
 
 import { createServer } from "node:http";
+import { randomBytes } from "node:crypto";
 import { existsSync } from "node:fs";
-import { readdir, readFile, realpath, stat } from "node:fs/promises";
+import { mkdir, readdir, readFile, realpath, rename, stat, writeFile } from "node:fs/promises";
 import { basename, extname, isAbsolute, join, relative, resolve } from "node:path";
 import { homedir } from "node:os";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
+
+const MAX_INBOX_BYTES = 32 * 1024;
+const MAX_TEXT_CHARS = 24000;
+
+export function defaultInboxDir() {
+  return join(homedir(), ".local", "state", "grey-matter", "inbox");
+}
+
+export function isLoopbackAddress(addr) {
+  return addr === "127.0.0.1" || addr === "::1" || addr === "::ffff:127.0.0.1";
+}
+
+export function evaluateTailscaleAuth(req, inboxConfig = {}) {
+  const remoteLoopback = isLoopbackAddress(req.socket?.remoteAddress);
+  const login = typeof req.headers?.["tailscale-user-login"] === "string" ? req.headers["tailscale-user-login"].trim() : "";
+  const name = typeof req.headers?.["tailscale-user-name"] === "string" ? req.headers["tailscale-user-name"].trim() : "";
+  const forwardedProto = typeof req.headers?.["x-forwarded-proto"] === "string" ? req.headers["x-forwarded-proto"].trim().toLowerCase() : "";
+  const allowedUsers = Array.isArray(inboxConfig?.allowedUsers)
+    ? inboxConfig.allowedUsers.map((u) => String(u).trim().toLowerCase()).filter(Boolean)
+    : [];
+  const viaTailscale = remoteLoopback && Boolean(login);
+  const userAllowed = viaTailscale && (allowedUsers.length === 0 || allowedUsers.includes(login.toLowerCase()));
+  return { remoteLoopback, viaTailscale, userAllowed, login, name, forwardedProto };
+}
+
+export function isAllowedOrigin(req, expectedOrigin = "") {
+  const fetchSite = typeof req.headers?.["sec-fetch-site"] === "string" ? req.headers["sec-fetch-site"].trim().toLowerCase() : "";
+  if (fetchSite === "cross-site") return false;
+  const origin = typeof req.headers?.origin === "string" ? req.headers.origin.trim() : "";
+  if (!origin) return false;
+  if (expectedOrigin) return origin === expectedOrigin;
+  const host = typeof req.headers?.host === "string" ? req.headers.host.trim() : "";
+  return Boolean(host) && (origin === `https://${host}` || origin === `http://${host}`);
+}
+
+async function readLimitedJson(req, maxBytes = MAX_INBOX_BYTES) {
+  const chunks = [];
+  let total = 0;
+  for await (const chunk of req) {
+    total += chunk.length;
+    if (total > maxBytes) {
+      const err = new Error("Payload too large");
+      err.statusCode = 413;
+      throw err;
+    }
+    chunks.push(chunk);
+  }
+  try {
+    return JSON.parse(Buffer.concat(chunks).toString("utf8"));
+  } catch {
+    const err = new Error("Invalid JSON body");
+    err.statusCode = 400;
+    throw err;
+  }
+}
+
+function yamlStr(value) {
+  return JSON.stringify(String(value ?? "").replace(/[\r\n]+/g, " ").trim());
+}
+
+export async function saveInboxSubmission({ inboxDir, slug, project, text, submittedBy, submittedName = "" }) {
+  const dir = join(resolve(inboxDir), slug);
+  await mkdir(dir, { recursive: true, mode: 0o700 });
+  const now = new Date();
+  const savedAt = now.toISOString();
+  const stamp = savedAt.replace(/[-:]/g, "").replace(/\.\d+Z$/, "Z");
+  const id = `${stamp}-${randomBytes(3).toString("hex")}`;
+  const content = [
+    "---",
+    `id: ${yamlStr(id)}`,
+    `slug: ${yamlStr(slug)}`,
+    `project: ${yamlStr(project || slug)}`,
+    `submitted_at: ${yamlStr(savedAt)}`,
+    `submitted_by: ${yamlStr(submittedBy)}`,
+    ...(submittedName ? [`submitted_name: ${yamlStr(submittedName)}`] : []),
+    `source: "tailscale-serve"`,
+    "---",
+    "",
+    String(text).trim(),
+    "",
+  ].join("\n");
+  const writeAtomic = async (file) => {
+    const tmp = `${file}.${process.pid}.${randomBytes(3).toString("hex")}.tmp`;
+    await writeFile(tmp, content, { encoding: "utf8", mode: 0o600 });
+    await rename(tmp, file);
+  };
+  await writeAtomic(join(dir, `${id}.md`));
+  await writeAtomic(join(dir, "latest.md"));
+  return { ok: true, id, slug, savedAt };
+}
+
+export async function readInbox({ inboxDir, slug = null }) {
+  const base = resolve(inboxDir);
+  const slugs = [];
+  if (slug) {
+    if (!SLUG_RE.test(slug)) return { projects: [] };
+    slugs.push(slug);
+  } else {
+    try {
+      const entries = await readdir(base, { withFileTypes: true });
+      for (const e of entries.sort((a, b) => a.name.localeCompare(b.name))) {
+        if (e.isDirectory() && SLUG_RE.test(e.name)) slugs.push(e.name);
+      }
+    } catch { return { projects: [] }; }
+  }
+  const projects = [];
+  for (const s of slugs) {
+    const dir = join(base, s);
+    let files;
+    try { files = await readdir(dir, { withFileTypes: true }); }
+    catch { continue; }
+    const pending = files
+      .filter((f) => f.isFile() && f.name.endsWith(".md") && f.name !== "latest.md")
+      .map((f) => f.name)
+      .sort()
+      .reverse();
+    const items = [];
+    for (const name of pending) {
+      try {
+        items.push({ id: name.replace(/\.md$/, ""), content: await readFile(join(dir, name), "utf8") });
+      } catch { /* skip unreadable */ }
+    }
+    if (items.length || slug) projects.push({ slug: s, pendingCount: items.length, items });
+  }
+  return { projects };
+}
+
+export async function clearInbox({ inboxDir, slug }) {
+  if (!slug || !SLUG_RE.test(slug)) return { cleared: 0 };
+  const dir = join(resolve(inboxDir), slug);
+  const archived = join(dir, "processed");
+  let files;
+  try { files = await readdir(dir, { withFileTypes: true }); }
+  catch { return { cleared: 0 }; }
+  const targets = files.filter((f) => f.isFile() && f.name.endsWith(".md")).map((f) => f.name);
+  if (!targets.length) return { cleared: 0 };
+  await mkdir(archived, { recursive: true, mode: 0o700 });
+  let cleared = 0;
+  for (const name of targets) {
+    await rename(join(dir, name), join(archived, name));
+    if (name !== "latest.md") cleared++;
+  }
+  return { cleared };
+}
+
+const INBOX_CLIENT_JS = `"use strict";
+(function () {
+  var exportBox = document.getElementById("decision-export");
+  var copyBtn = document.getElementById("copy-decisions");
+  var statusEl = document.getElementById("decision-copy-status");
+  var cfgEl = document.getElementById("gm-config");
+  if (!exportBox || !copyBtn || !cfgEl) return;
+  var cfg;
+  try { cfg = JSON.parse(cfgEl.textContent); } catch (e) { return; }
+  var openDecisions = (cfg.decisions || []).filter(function (d) { return d && d.status !== "answered"; });
+  if (!openDecisions.length) return;
+  var parts = location.pathname.split("/").filter(Boolean);
+  var slug = decodeURIComponent(parts[0] || "");
+  if (!slug) return;
+
+  function collectText() {
+    var answers = Object.create(null);
+    openDecisions.forEach(function (d) {
+      var checked = document.querySelector('input[name="decision-' + d.id + '"]:checked');
+      var notes = document.getElementById("decision-notes-" + d.id);
+      answers[d.id] = { choice: checked ? checked.value : d.recommended, notes: notes ? notes.value : "" };
+    });
+    if (window.GMDashboard && typeof window.GMDashboard.decisionReply === "function") {
+      return { answers: answers, text: window.GMDashboard.decisionReply(cfg.project || slug, openDecisions, answers) };
+    }
+    var lines = ["Decisions for " + (cfg.project || slug)];
+    openDecisions.forEach(function (d, i) {
+      var a = answers[d.id];
+      var opt = (d.options || []).filter(function (o) { return o.id === a.choice; })[0];
+      lines.push("", (i + 1) + ". " + d.question, "Choice: " + (opt ? opt.label : a.choice));
+      if (a.notes.trim()) lines.push("Notes: " + a.notes.trim());
+    });
+    return { answers: answers, text: lines.join("\\n") };
+  }
+
+  var row = document.createElement("div");
+  row.style.cssText = "display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px";
+  copyBtn.parentNode.insertBefore(row, copyBtn);
+
+  var sendBtn = document.createElement("button");
+  sendBtn.type = "button";
+  sendBtn.id = "send-decisions-inbox";
+  sendBtn.className = copyBtn.className || "primary";
+  sendBtn.textContent = "Send to hub inbox";
+  sendBtn.addEventListener("click", function () {
+    var payload = collectText();
+    sendBtn.disabled = true;
+    if (statusEl) statusEl.textContent = "Sending decisions to hub inbox…";
+    fetch("/api/inbox/" + encodeURIComponent(slug), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ project: cfg.project || slug, text: payload.text, answers: payload.answers })
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (data) { return { ok: r.ok, status: r.status, data: data }; });
+    }).then(function (res) {
+      if (res.ok && res.data && res.data.ok) {
+        if (statusEl) statusEl.textContent = "Sent to hub inbox (" + res.data.id + "). In chat, say: pick up my dashboard answers.";
+      } else {
+        if (statusEl) statusEl.textContent = "Could not send (" + (res.data && res.data.error ? res.data.error : "HTTP " + res.status) + "). Use Copy answers for chat instead.";
+      }
+      sendBtn.disabled = false;
+    }).catch(function () {
+      if (statusEl) statusEl.textContent = "Network error sending to hub inbox. Use Copy answers for chat instead.";
+      sendBtn.disabled = false;
+    });
+  });
+
+  row.appendChild(sendBtn);
+  row.appendChild(copyBtn);
+
+  if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+    var shareBtn = document.createElement("button");
+    shareBtn.type = "button";
+    shareBtn.id = "share-decisions";
+    shareBtn.textContent = "Share";
+    shareBtn.addEventListener("click", function () {
+      var payload = collectText();
+      navigator.share({ title: "Decisions for " + (cfg.project || slug), text: payload.text }).catch(function () {});
+    });
+    row.appendChild(shareBtn);
+  }
+})();
+`;
 
 export function defaultHubConfigPath() {
   return process.env.GM_HUB_CONFIG ? resolve(process.env.GM_HUB_CONFIG) : join(homedir(), ".config", "grey-matter", "hub.json");
@@ -263,18 +493,112 @@ ${cards}
 export function createHubServer(options = {}) {
   const roots = (options.roots?.length ? options.roots : [join(homedir(), "code")]).map((r) => resolve(r));
   const registry = options.registry ? resolve(options.registry) : null;
+  const inboxOpt = options.inbox && typeof options.inbox === "object" ? options.inbox : {};
+  const inboxEnabled = inboxOpt.enabled === true;
+  const inboxDir = resolve(expandHome(inboxOpt.dir || defaultInboxDir()));
+  const allowedUsers = Array.isArray(inboxOpt.allowedUsers) ? inboxOpt.allowedUsers : [];
+  let expectedOrigin = "";
+  if (typeof inboxOpt.expectedOrigin === "string" && inboxOpt.expectedOrigin.trim()) {
+    expectedOrigin = inboxOpt.expectedOrigin.trim().replace(/\/+$/, "");
+  } else if (typeof options.baseUrl === "string" && options.baseUrl.trim()) {
+    try { expectedOrigin = new URL(options.baseUrl.trim()).origin; } catch { /* ignore invalid */ }
+  }
 
   return createServer(async (req, res) => {
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("X-Content-Type-Options", "nosniff");
+    let pathname;
+    try { pathname = decodeURIComponent(new URL(req.url, "http://hub.invalid").pathname); }
+    catch { res.writeHead(400); res.end("Invalid URL"); return; }
+
+    const auth = evaluateTailscaleAuth(req, { allowedUsers });
+    const sendJson = (status, data) => {
+      const body = Buffer.from(JSON.stringify(data, null, 2) + "\n");
+      res.writeHead(status, { "Content-Type": MIME[".json"], "Content-Length": body.length });
+      res.end(req.method === "HEAD" ? undefined : body);
+    };
+
+    if (req.method === "POST" && pathname.startsWith("/api/inbox/")) {
+      if (!inboxEnabled) {
+        res.writeHead(405, { Allow: "GET, HEAD" });
+        res.end();
+        return;
+      }
+      if (!auth.userAllowed) {
+        sendJson(403, { ok: false, error: "Tailscale Serve authentication required" });
+        return;
+      }
+      const ctype = String(req.headers["content-type"] || "").toLowerCase();
+      if (!ctype.startsWith("application/json")) {
+        sendJson(415, { ok: false, error: "Content-Type must be application/json" });
+        return;
+      }
+      if (!isAllowedOrigin(req, expectedOrigin)) {
+        sendJson(403, { ok: false, error: "Origin not allowed" });
+        return;
+      }
+      const slug = pathname.slice("/api/inbox/".length);
+      if (!slug || slug.includes("/") || !SLUG_RE.test(slug)) {
+        sendJson(404, { ok: false, error: "Unknown project" });
+        return;
+      }
+      const projects = await discoverProjects({ roots, registry });
+      if (!projects.has(slug)) {
+        sendJson(404, { ok: false, error: "Unknown project" });
+        return;
+      }
+      let body;
+      try { body = await readLimitedJson(req); }
+      catch (err) {
+        sendJson(err.statusCode || 400, { ok: false, error: err.message });
+        return;
+      }
+      const text = typeof body?.text === "string" ? body.text.trim() : "";
+      if (!text || text.length > MAX_TEXT_CHARS) {
+        sendJson(400, { ok: false, error: "Field 'text' must be a non-empty string under 24000 chars" });
+        return;
+      }
+      const project = typeof body?.project === "string" && body.project.trim() ? body.project.trim().slice(0, 120) : slug;
+      try {
+        const saved = await saveInboxSubmission({
+          inboxDir,
+          slug,
+          project,
+          text,
+          submittedBy: auth.login,
+          submittedName: auth.name,
+        });
+        sendJson(201, saved);
+      } catch {
+        sendJson(500, { ok: false, error: "Could not save inbox submission" });
+      }
+      return;
+    }
+
     if (!["GET", "HEAD"].includes(req.method)) {
       res.writeHead(405, { Allow: "GET, HEAD" });
       res.end();
       return;
     }
-    let pathname;
-    try { pathname = decodeURIComponent(new URL(req.url, "http://hub.invalid").pathname); }
-    catch { res.writeHead(400); res.end("Invalid URL"); return; }
+
+    if (pathname === "/api/inbox/status") {
+      sendJson(200, {
+        enabled: inboxEnabled,
+        writable: inboxEnabled && auth.userAllowed,
+        viaTailscale: auth.viaTailscale,
+        remoteLoopback: auth.remoteLoopback,
+        forwardedProto: auth.forwardedProto || null,
+        hasTailscaleLogin: Boolean(auth.login),
+      });
+      return;
+    }
+
+    if (pathname === "/_hub/inbox.js") {
+      const body = Buffer.from(INBOX_CLIENT_JS);
+      res.writeHead(200, { "Content-Type": MIME[".js"], "Content-Length": body.length });
+      res.end(req.method === "HEAD" ? undefined : body);
+      return;
+    }
 
     const projects = await discoverProjects({ roots, registry });
 
@@ -314,7 +638,12 @@ export function createHubServer(options = {}) {
       if (!target) { res.writeHead(404); res.end("Not found"); return; }
       const [realRoot, realTarget] = await Promise.all([realpath(proj.root), realpath(target)]);
       if (!isAllowedPath(realRoot, realTarget)) { res.writeHead(404); res.end("Not found"); return; }
-      const body = await readFile(realTarget);
+      let body = await readFile(realTarget);
+      if (subPath === "/docs/status.html" && inboxEnabled && auth.userAllowed) {
+        const text = body.toString("utf8");
+        const inject = `<script src="/_hub/inbox.js" defer></script></body>`;
+        body = Buffer.from(text.includes("</body>") ? text.replace("</body>", inject) : text + inject);
+      }
       const contentType = MIME[extname(realTarget).toLowerCase()] || "application/octet-stream";
       res.writeHead(200, { "Content-Type": contentType, "Content-Length": body.length });
       res.end(req.method === "HEAD" ? undefined : body);
@@ -327,7 +656,8 @@ export function createHubServer(options = {}) {
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const { values } = parseArgs({
+  const { values, positionals } = parseArgs({
+    allowPositionals: true,
     options: {
       root: { type: "string", multiple: true },
       registry: { type: "string" },
@@ -336,6 +666,8 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       config: { type: "string" },
       url: { type: "string" },
       hash: { type: "string" },
+      inbox: { type: "boolean" },
+      clear: { type: "boolean" },
     },
   });
   const configPath = values.config ? resolve(expandHome(values.config)) : defaultHubConfigPath();
@@ -349,6 +681,17 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     process.exit(0);
   }
   const config = await readHubConfig(configPath);
+  if (values.inbox) {
+    const inboxDir = resolve(expandHome(config?.inbox?.dir || defaultInboxDir()));
+    const slug = positionals[0] || null;
+    if (values.clear) {
+      if (!slug) { console.error("--clear requires a project slug"); process.exit(2); }
+      console.log(JSON.stringify(await clearInbox({ inboxDir, slug }), null, 2));
+      process.exit(0);
+    }
+    console.log(JSON.stringify(await readInbox({ inboxDir, slug }), null, 2));
+    process.exit(0);
+  }
   const host = values.host ?? (typeof config?.host === "string" && config.host.trim() ? config.host.trim() : "127.0.0.1");
   const port = Number(values.port ?? config?.port ?? 8765);
   if (!Number.isInteger(port) || port < 1 || port > 65535) {
@@ -357,7 +700,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   }
   const roots = (values.root?.length ? values.root : Array.isArray(config?.roots) && config.roots.length ? config.roots : [join(homedir(), "code")]).map((r) => expandHome(r));
   const registry = values.registry ? expandHome(values.registry) : typeof config?.registry === "string" && config.registry.trim() ? expandHome(config.registry.trim()) : null;
-  const server = createHubServer({ roots, registry });
+  const server = createHubServer({ roots, registry, baseUrl: config?.baseUrl, inbox: config?.inbox });
   server.on("error", (error) => { console.error(error.message); process.exitCode = 1; });
   server.listen(port, host, () => {
     console.log(`Dashboard hub: http://${host}:${port}/`);
