@@ -1,0 +1,3 @@
+interface:
+  display_name: "Spike Options"
+  short_description: "Compare competing approaches with throwaway builds before deciding"

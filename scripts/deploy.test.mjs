@@ -108,6 +108,37 @@ test("an Antigravity retry skips an already-current owned plugin", () => {
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
+test("agy build packages logo, suggestedPrompts, agyHooks, and agyRules when declared", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = smallPack(sb.home), out = join(sb.home, "package");
+    mkdirSync(join(pack, ".claude-plugin", "hooks"), { recursive: true });
+    mkdirSync(join(pack, ".claude-plugin", "agy-rules"), { recursive: true });
+    writeFileSync(join(pack, ".claude-plugin", "icon.svg"), "<svg xmlns=\"http://www.w3.org/2000/svg\"/>\n");
+    writeFileSync(join(pack, ".claude-plugin", "agy-hooks.json"), JSON.stringify({ "demo-start": { SessionStart: [{ type: "command", command: "node ./hooks/start.mjs" }] } }) + "\n");
+    writeFileSync(join(pack, ".claude-plugin", "hooks", "start.mjs"), "#!/usr/bin/env node\n");
+    writeFileSync(join(pack, ".claude-plugin", "agy-rules", "tickets.md"), "---\ntrigger: glob\nglobs: \".tickets/*.md\"\n---\nUse tkt close.\n");
+    const manifest = JSON.parse(readFileSync(join(pack, ".claude-plugin", "plugin.json"), "utf8"));
+    manifest.metadata = {
+      deploy: {
+        agySuggestedPrompts: ["Show ready tickets"],
+        agyHooks: { manifest: ".claude-plugin/agy-hooks.json", files: [".claude-plugin/hooks/start.mjs"] },
+        agyRules: [".claude-plugin/agy-rules/tickets.md"],
+      },
+    };
+    writeFileSync(join(pack, ".claude-plugin", "plugin.json"), JSON.stringify(manifest, null, 2));
+    const res = runWithEnv(["agy", "build", "--pack", pack, "--out", out], sb.env);
+    assert.equal(res.status, 0, res.stdout);
+    const built = JSON.parse(readFileSync(join(out, "plugin.json"), "utf8"));
+    assert.equal(built.logo, "assets/logo.svg");
+    assert.deepEqual(built.suggestedPrompts, ["Show ready tickets"]);
+    assert.ok(existsSync(join(out, "assets/logo.svg")));
+    assert.ok(existsSync(join(out, "hooks.json")));
+    assert.ok(existsSync(join(out, "hooks/start.mjs")));
+    assert.ok(existsSync(join(out, "rules/tickets.md")));
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
 test("portfolio validates later packages before updating the first pack", { skip: process.platform === "win32" }, () => {
   const sb = homeSandbox({ harnesses: ["kiro"] });
   try {

@@ -1,6 +1,6 @@
 ---
 name: wrap-session
-description: "End-of-session closing bookend: groom the board, groom the environment, and land the cheap mechanical findings now. Runs reconcile-tickets then retro, then writes the guardrail/check/note or project-level skill that a recurring issue calls for instead of only filing it. Use when wrapping up a session, closing out, or asking 'let's wrap this up'."
+description: "End-of-session closing bookend: run reconcile-tickets then retro, and land cheap mechanical checks, guardrails, or notes immediately."
 disable-model-invocation: true
 ---
 

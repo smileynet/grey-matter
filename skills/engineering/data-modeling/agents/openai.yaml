@@ -1,0 +1,3 @@
+interface:
+  display_name: "Data Modeling"
+  short_description: "Design types and schemas so invalid states are unrepresentable"

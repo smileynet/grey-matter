@@ -1,6 +1,6 @@
 ---
 name: line-craft
-description: Line craft for fiction prose and dialogue — feeling written as acts and errands, then the lines checked against a catalog of sentimental shapes. Use when drafting or revising story prose or dialogue, when the author rejects a line as sentimental, portentous or "emo", or when setting up a project's prose shape check.
+description: "Line craft for fiction prose and dialogue: write feeling as acts and errands and check lines against a sentimental-shape catalog. Use when drafting/revising fiction, fixing sentimental/\"emo\" lines, or setting up a prose check."
 ---
 
 Lines that obey a voice guide ("never name the emotion", "warmth without sentimentality") can still

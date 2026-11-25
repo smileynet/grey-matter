@@ -13,7 +13,10 @@ and apply its optional updates after claim/resume, when waiting on the human and
 after a successful close. Other harnesses skip this reference.
 
 Before production edits, route consequential unresolved assumptions through the
-[technical spike decision rule](../prototype/references/technical-spikes.md).
+[technical spike decision rule](../prototype/references/technical-spikes.md). Once the
+ticket's load-bearing premises and affected seams are verified, stop exploring and move
+directly to implementation and verification; finish end-to-end through checks and close
+rather than stopping after partial progress.
 
 For behavior changes, call the Skill tool with "tdd" at the pre-agreed seams when
 test-first implementation fits the work. For research or reversible prose changes,

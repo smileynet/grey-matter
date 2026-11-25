@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "Review a commit range, staged changes or working-tree changes along two axes: Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and files findings as tickets. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\"."
+description: "Review a commit range, staged changes, or working tree on two axes (Standards + Spec) in parallel sub-agents and file findings as tickets. Use to review a branch, PR, WIP changes, or \"review since X\"."
 ---
 
 Two-axis review of the user's selected commit range, index or working tree:

@@ -1,6 +1,6 @@
 ---
 name: adopt-project
-description: "Bring the grey-matter workflow into a repo that already has code and history: characterize the as-is model from the code, reconcile around what exists, seed a triaged board, and wire the plumbing — ending in a fully adopted repo. Use to adopt/onboard an existing (brownfield) project. Trigger: adopt this project, onboard existing repo, bring grey-matter into this codebase, brownfield adoption."
+description: "Adopt a brownfield repo into grey-matter: characterize its as-is model, subsume existing agent config, seed a triaged board, and wire plumbing."
 disable-model-invocation: true
 ---
 

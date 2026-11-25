@@ -19,7 +19,15 @@ function fixture(frontmatter, sidecar) {
 }
 const core = "name: example\ndescription: 'A useful fixture: with details.'";
 test("core, host extension and sidecar policy parse together", () => {
-  assert.deepEqual(fixture(core + "\ndisable-model-invocation: true\nmetadata:\n  owner: toolkit", "interface:\n  display_name: Example\npolicy:\n  allow_implicit_invocation: false\n"), { status: "pass", metrics: { skills: 1, sidecars: 1 }, errors: [] });
+  assert.deepEqual(fixture(core + "\ndisable-model-invocation: true\nmetadata:\n  owner: toolkit", "interface:\n  display_name: Example\npolicy:\n  allow_implicit_invocation: false\n"), { status: "pass", metrics: { skills: 1, sidecars: 1, descriptionChars: 31 }, errors: [], warnings: [] });
+});
+test("long description emits a non-blocking soft budget warning", () => {
+  const longDesc = "Trigger phrase first. " + "x".repeat(290);
+  const result = fixture(`name: example\ndescription: "${longDesc}"`);
+  assert.equal(result.status, "pass");
+  assert.equal(result.errors.length, 0);
+  assert.equal(result.warnings.length, 1);
+  assert.match(result.warnings[0], /soft target <= 300/);
 });
 for (const [label, frontmatter, sidecar, diagnostic] of [
   ["malformed YAML missed by native validator", "name: [unterminated\ndescription: Example", undefined, /flow sequence/i],

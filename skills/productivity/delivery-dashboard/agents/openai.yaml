@@ -1,0 +1,3 @@
+interface:
+  display_name: "Delivery Dashboard"
+  short_description: "Maintain the dark HTML status, decision, and Plan page"

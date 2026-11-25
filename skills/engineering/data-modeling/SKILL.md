@@ -1,6 +1,6 @@
 ---
 name: data-modeling
-description: "Design and review data representations so invalid states are unrepresentable. Use when choosing a type, enum or schema for domain data, adding a field or state, or reviewing types and schemas for invalid states, duplicated sources of truth or drift-prone denormalization. Trigger: invalid states, sum type, enum vs booleans, parse don't validate, source of truth."
+description: "Design and review domain types, enums, and schemas so invalid states are unrepresentable (sum types, parse-don't-validate, single source of truth). Use when modeling state, adding fields, or eliminating drift-prone denormalization."
 metadata:
   origin: "crew-research atomics/skills/data-modeling (eval 2026-08-31), adapted for grey-matter"
 ---

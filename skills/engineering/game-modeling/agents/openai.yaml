@@ -1,0 +1,3 @@
+interface:
+  display_name: "Game Modeling"
+  short_description: "Sharpen game mechanics, systems, core loop, and design ADRs"

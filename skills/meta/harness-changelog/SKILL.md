@@ -1,6 +1,6 @@
 ---
 name: harness-changelog
-description: "Detect harness upgrades (Claude Code, Codex, kiro-cli, Kiro Crew, agy, Crush, OpenCode, and their desktop apps) against a hashed baseline, read what changed, and propose what grey-matter should adapt. Use after a harness updates, when a harness behaves differently than its reference says, before relying on a flag or feature, or as a periodic audit. Trigger: harness changelog, new harness version, did the CLI change, harness upgrade, check harness versions, review new features."
+description: "Detect harness CLI/desktop upgrades (Claude Code, Codex, Kiro, Kiro Crew, agy, Crush, OpenCode, DSH, Qwen) against the hashed baseline, read changelogs, and propose adaptations. Use after upgrades, flag surprises, or periodic audits."
 ---
 
 # Harness Changelog

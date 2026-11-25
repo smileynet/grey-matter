@@ -1,6 +1,6 @@
 ---
 name: delivery-dashboard
-description: "Keep one dark, blue status and decision HTML page current: what the person can now do, interactive multiple-choice decisions with pre-selected recommendations and copy-to-chat export, recent entries, searchable history, and a Plan tab. Use after closing a ticket, for status/plan views, or when creating a dark-mode HTML decision page."
+description: "Keep one dark, blue status and decision HTML page current: interactive multiple-choice decisions (pre-selected recommendations, copy-to-chat export), recent entries, history, and Plan tab. Use after closing tickets, for status/plan views, or to create a dark HTML decision page."
 ---
 
 # Delivery Dashboard
