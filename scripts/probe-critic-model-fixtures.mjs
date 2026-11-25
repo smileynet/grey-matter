@@ -44,11 +44,22 @@ d="$CODEX_HOME/sessions/2026/10/27"; mkdir -p "$d"
 echo '{"type":"turn_context","payload":{"model":"${opts.codexModel ?? "gpt-6.1-sol"}","effort":"high"}}' > "$d/rollout-2026-10-27T00-00-00-$tid.jsonl"
 echo '{"type":"thread.started","thread_id":"'$tid'"}'
 echo '{"type":"item.completed","item":{"type":"agent_message","text":"OK"}}'`);
-  if (only.includes("opencode")) exe(bin, "opencode", `
-[ "$1" = "--version" ] && { echo "1.99.9"; exit 0; }
+  if (only.includes("opencode")) {
+    const ocV2 = opts.opencodeV2 ?? false;
+    exe(bin, "opencode", ocV2 ? `
+[ "$1" = "--version" ] && { echo "opencode ${opts.opencodeVersion ?? "2.4.1"}"; exit 0; }
+if [ "$1" = "session" ] && [ "$2" = "export" ]; then echo '{"info":{"id":"ses_fake"},"messages":[{"type":"assistant","agent":"build","model":{"providerID":"zai-coding-plan","id":"${opts.opencodeModel ?? "glm-5.3"}","variant":"high"},"content":[]}]}'; exit 0; fi
+if [ "$1" = "export" ]; then echo "unknown command export" >&2; exit 1; fi
+case "$*" in *--variant*) echo "unknown flag --variant" >&2; exit 1;; esac
+case "$*" in *--standalone*) ;; *) echo "missing --standalone" >&2; exit 1;; esac
+case "$*" in *no-such-model*) ${opts.accepts ? "" : `echo '{"type":"error","error":{"name":"UnknownError"}}'; exit 1`};; esac
+case "$*" in *#high*) ;; *) echo "missing #high variant" >&2; exit 1;; esac
+echo '{"type":"text","sessionID":"ses_fake","part":{"text":"OK"}}'` : `
+[ "$1" = "--version" ] && { echo "${opts.opencodeVersion ?? "1.99.9"}"; exit 0; }
 if [ "$1" = "export" ]; then echo '{"messages":[{"info":{"role":"assistant","providerID":"zai-coding-plan","modelID":"${opts.opencodeModel ?? "glm-5.3"}","variant":"high"}}]}'; exit 0; fi
 case "$*" in *no-such-model*) ${opts.accepts ? "" : `echo '{"type":"error","error":{"name":"UnknownError"}}'; exit 1`};; esac
 echo '{"type":"text","sessionID":"ses_fake","part":{"text":"OK"}}'`);
+  }
   if (only.includes("kiro-cli")) exe(bin, "kiro-cli", `
 [ "$1" = "--version" ] && { echo "kiro-cli 9.9.9"; exit 0; }
 case "$*" in

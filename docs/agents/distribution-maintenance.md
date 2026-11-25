@@ -174,6 +174,32 @@ left, to run in your own terminal:
   app" off; this app ships only skill files. The app carries no backend, MCP server or hooks; the Claude push
 hook has no Kiro Crew equivalent (`kirocrew app import` reports it as unmappable).
 
+### DeepSeek Harness (`dsh`) bundle
+
+`node scripts/deploy.mjs dsh [build|install] [--profile NAME]` builds a zero-build ESM Cordis
+bundle at `dist/dsh-plugin/` (`@smileynet/dsh-<pack>`), registering a global `SkillProvider` at
+`BUNDLED_SKILL_RANK = 600` (avoiding `dsh-web-app`'s disabled host `skill-filesystem` row) plus
+any pack-declared `metadata.deploy.dshHook` (used by `tkt` for native `agent/created` frontier
+injection). Installing links the bundle into `dsh` profiles via `dsh plugin --profile <name> add <dir>`
+(requires `pnpm` on `PATH` and Node `>= 24.9.0`). Once a profile includes the bundle, default
+`deploy.mjs` refreshes `dist/dsh-plugin/` in place and skips/prunes bare copies in `~/.dsh/skills`
+so rank-400 copies never silently shadow the rank-600 bundle. See
+[dsh-plugin-compat-20261125](research/dsh-plugin-compat-20261125.md) and
+[proposal 25](proposals/25-dsh-and-qwen-plugins.md).
+
+### Qwen Code extension
+
+`node scripts/deploy.mjs qwen [build|install]` handles native `qwen-extension.json` delivery.
+Packs with flat `skills/` and a root `qwen-extension.json` (`tkt`) link directly via
+`qwen extensions link <checkout>`; bucketed packs (`grey-matter`) stage a flat extension under
+`dist/qwen-extension/` because Qwen `v0.28.4` hardcodes depth-1 `<extRoot>/skills/<name>/SKILL.md`.
+Do not install through Qwen's Claude Code converter (bucketed skills land at depth 2 and load 0
+skills; hooks trigger a global `.claude/` -> `.qwen/` rewrite across `.md` files). Default
+`deploy.mjs` refreshes `dist/qwen-extension/` when enabled and avoids `~/.agents/skills` /
+`~/.qwen/skills` to prevent `<ext>:<name>` + bare `<name>` 2x duplication. See
+[qwen-code-plugin-compat-20261125](research/qwen-code-plugin-compat-20261125.md) and
+[proposal 25](proposals/25-dsh-and-qwen-plugins.md).
+
 ### Self-contained copy-mode installs
 
 Bare copy-mode installs include each skill's files plus transitive Markdown-linked

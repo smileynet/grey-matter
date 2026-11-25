@@ -58,6 +58,18 @@ function belowVersion(value, minimum) {
   return Boolean(found.prerelease) && !floor.prerelease;
 }
 
+const isOpenCodeV2 = (version) => Number(/(?:^|\D)(\d+)\./.exec(version ?? "")?.[1]) >= 2;
+function parseOpenCodeExport(raw, v2) {
+  let data; try { data = JSON.parse(raw); } catch { return null; }
+  const msgs = Array.isArray(data?.messages) ? data.messages : [];
+  if (v2) {
+    const msg = msgs.filter((m) => m?.type === "assistant" && m?.model?.id).pop();
+    if (msg) return { recorded: `${msg.model.providerID}/${msg.model.id}`, effort: msg.model.variant, evidence: "opencode session export" };
+  }
+  const legacy = msgs.map((m) => m?.info).filter((i) => i?.role === "assistant" && i?.modelID).pop();
+  return legacy ? { recorded: `${legacy.providerID}/${legacy.modelID}`, effort: legacy.variant, evidence: "opencode export" } : null;
+}
+
 // Each adapter returns { status, recorded, effort, evidence, note } for the pinned call.
 const adapters = {
   claude(model, ctx) {
@@ -83,14 +95,18 @@ const adapters = {
     return tc?.payload?.model ? { status: "ran", recorded: tc.payload.model, effort: tc.payload.effort, evidence: "rollout turn_context" } : { status: "unverified", note: "rollout has no turn_context" };
   },
   opencode(model, ctx) {
-    const r = run("opencode", ["run", "-m", model, "--variant", "high", "--format", "json", PROMPT], ctx);
+    const v2 = isOpenCodeV2(ctx.version);
+    const runArgs = v2
+      ? ["run", "--standalone", "-m", `${model}#high`, "--format", "json", PROMPT]
+      : ["run", "-m", model, "--variant", "high", "--format", "json", PROMPT];
+    const r = run("opencode", runArgs, ctx);
     const ev = lines(r.out);
     const err = ev.find((e) => e.type === "error");
     if (r.code !== 0 || err) return { status: classify({ ...r, out: r.out }), note: JSON.stringify(err?.error ?? r.err).slice(0, 160) };
     const sid = ev.find((e) => e.sessionID)?.sessionID;
-    const x = sid && run("opencode", ["export", sid], ctx);
-    let msg; try { msg = JSON.parse(x.out).messages.map((m) => m.info).filter((i) => i.role === "assistant").pop(); } catch { /* fall through */ }
-    return msg?.modelID ? { status: "ran", recorded: `${msg.providerID}/${msg.modelID}`, effort: msg.variant, evidence: "opencode export" } : { status: "unverified", note: "export has no assistant message" };
+    const x = sid && run("opencode", v2 ? ["session", "export", sid] : ["export", sid], ctx);
+    const parsed = x && x.code === 0 ? parseOpenCodeExport(x.out, v2) : null;
+    return parsed ? { status: "ran", ...parsed } : { status: "unverified", note: "export has no assistant message" };
   },
   kiro(model, ctx) {
     const r = run("kiro-cli", ["chat", "--no-interactive", "--model", model, "--effort", "high", "--trust-tools=fs_read", PROMPT], ctx);
@@ -114,7 +130,9 @@ function refuses(h, ctx) {
   const bogus = "gpt-9-no-such-model";
   const args = { claude: ["-p", PROMPT, "--model", "claude-no-such-model-9", "--output-format", "json", "--no-session-persistence"],
     codex: ["exec", "-m", bogus, "--json", "--skip-git-repo-check", "--ephemeral", "-s", "read-only", PROMPT],
-    opencode: ["run", "-m", "zai-coding-plan/no-such-model-9", "--format", "json", PROMPT],
+    opencode: isOpenCodeV2(ctx.version)
+      ? ["run", "--standalone", "-m", "zai-coding-plan/no-such-model-9", "--format", "json", PROMPT]
+      : ["run", "-m", "zai-coding-plan/no-such-model-9", "--format", "json", PROMPT],
     kiro: ["chat", "--no-interactive", "--model", "no-such-model-9", PROMPT] }[h];
   const cmd = h === "kiro" ? "kiro-cli" : h;
   const r = run(cmd, args, ctx);
@@ -162,7 +180,7 @@ export function probe(harness, { ceilings = CEILINGS, timeout = 60 } = {}) {
     note: `Codex CLI ${v} is below the documented minimum ${minimum} for GPT-6.1 Terra; update Codex CLI to ${minimum} or later.`,
   };
   const dir = mkdtempSync(join(tmpdir(), `gm-critic-${harness}-`));
-  const ctx = { cwd: dir, timeout, deadline };
+  const ctx = { cwd: dir, timeout, deadline, version: v };
   try {
     let picked = null;
     if (harness === "kiro") { picked = kiroPick(ctx); if (!picked.chosen) return { harness, version: v, status: "unavailable", note: "no Claude model in `kiro-cli chat --list-models`" }; requested = picked.chosen; }

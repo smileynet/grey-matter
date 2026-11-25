@@ -33,6 +33,9 @@ each harness reads differs, and a strict validator rejects the Claude one:
 | Codex | `policy.allow_implicit_invocation: false` | sidecar `agents/openai.yaml` |
 | Antigravity 1.4.5 | `disable-model-invocation: true` (observed runtime; omitted by published frontmatter reference) | `SKILL.md` frontmatter |
 | Kimi Work | `disable-model-invocation: true` (verified live 2026-11-08) | `SKILL.md` frontmatter |
+| OpenCode 2.x (`v2.4.1`) | `disable-model-invocation: true` (or `metadata.opencode/autoinvoke: false`, which takes precedence; source-verified 2026-11-25) | `SKILL.md` frontmatter |
+| DeepSeek Harness (`dsh` `0.2.2-rc.5`) | `disable-model-invocation: true` (rejects legacy camelCase `disableModelInvocation`; source-verified 2026-11-25) | `SKILL.md` frontmatter |
+| Qwen Code (`v0.28.4`) | `disable-model-invocation: true` (source-verified 2026-11-25) | `SKILL.md` frontmatter |
 | Kiro | ignores the Claude field (verified: unknown key ignored, skill still loaded) | - |
 
 So a user-invoked skill sets **both** `disable-model-invocation: true` in `SKILL.md`
@@ -60,8 +63,10 @@ that proves tolerance, not invocation enforcement (see `research/harness-behavio
 
 ## metadata: inert data only
 
-`metadata` is a sanctioned free-form field, but **no harness reads it to function**. It
-is inert storage. Therefore:
+`metadata` is a sanctioned free-form field. On Claude Code, Codex, Kiro, Antigravity,
+`dsh`, and Qwen Code it is inert storage; **OpenCode 2.x is the one exception**, reading
+the namespaced key `metadata.opencode/autoinvoke` (we still express user-invoked policy
+via top-level `disable-model-invocation: true`, which OpenCode 2.x also honors). Therefore:
 
 - **Belongs**: credits/attribution, provenance (source repo/commit), a version or
   changeset tag, a docs-page slug. Prefer short **string** values (the standard frames

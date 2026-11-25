@@ -502,6 +502,7 @@ if (process.platform !== "win32" || ["codex.exe", "claude.exe"].includes(path.ba
 const home = process.env.HOME;
 const pack = process.env.TEST_PACK;
 const args = process.platform === "win32" ? [path.basename(process.argv[1]), ...process.argv.slice(2)] : process.argv.slice(2);
+if (args[0] === "--version") process.exit(0);
 const harness = path.basename(process.platform === "win32" ? process.execPath : process.argv[1]).startsWith("claude") ? "claude" : "codex";
 fs.appendFileSync(path.join(home, harness + "-calls.jsonl"), JSON.stringify(args) + "\\n");
 if (harness === "claude") {
@@ -531,6 +532,8 @@ process.exit(0);
   delete env.CODEX_HOME;
   delete env.CLAUDE_CODE_PLUGIN_CACHE_DIR;
   delete env.KIROCREW_HOME; // a Kiro Crew session exports its own; the sandbox HOME decides
+  delete env.DSH_HOME;
+  delete env.QWEN_HOME;
   env.ZCODE_CLI = join(home, "zcode-cli-absent"); // hermetic even on a Mac carrying the real app
   return { home, env, has: (rel) => existsSync(join(home, rel, "orient", "SKILL.md")) };
 }
@@ -1338,5 +1341,59 @@ test("kirocrew: --no-kirocrew skips the app even when ~/.kiro/crew exists", { sk
     assert.equal(r.status, 0, r.stdout);
     assert.doesNotMatch(r.stdout, /kirocrew app/);
     assert.deepEqual(kc.calls(), []);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("dsh: build stages a zero-build Cordis bundle and plugin coverage suppresses bare copies", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = smallPack(sb.home), out = join(sb.home, "dsh-out");
+    const r = runWithEnv(["dsh", "build", "--pack", pack, "--out", out], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    const pkg = JSON.parse(readFileSync(join(out, "package.json"), "utf8"));
+    assert.equal(pkg.name, "@smileynet/dsh-example");
+    assert.equal(pkg.dsh.bundle.patch, "./cordis.patch.yml");
+    const meta = JSON.parse(readFileSync(join(out, "skills.json"), "utf8"));
+    assert.equal(meta.skills.length, 1);
+    assert.equal(meta.skills[0].name, "example");
+    assert.equal(existsSync(join(out, "AGENTS.md")), false, "root AGENTS.md stays under .resources");
+
+    // Without an installed dsh profile bundle, deploy covers ~/.dsh/skills via bare copy.
+    mkdirSync(join(sb.home, ".dsh"), { recursive: true });
+    assert.equal(runWithEnv(["--pack", pack, "--no-agy"], sb.env).status, 0);
+    assert.ok(existsSync(join(sb.home, ".dsh", "skills", "example", "SKILL.md")));
+
+    // Once a profile installs the bundle, deploy prunes owned bare copies to prevent rank-400 shadowing.
+    const prof = join(sb.home, ".dsh", "profiles", "headless");
+    mkdirSync(join(prof, "node_modules", "@smileynet"), { recursive: true });
+    symlinkSync(out, join(prof, "node_modules", "@smileynet", "dsh-example"), "dir");
+    writeFileSync(join(prof, "package.json"), JSON.stringify({ dsh: { profile: { bundles: ["@smileynet/dsh-example"] } } }));
+    const r2 = runWithEnv(["--pack", pack, "--no-agy", "--no-dsh"], sb.env);
+    assert.equal(r2.status, 0, r2.stdout);
+    assert.match(r2.stdout, /dsh\s+<- DSH plugin @smileynet\/dsh-example/);
+    assert.equal(existsSync(join(sb.home, ".dsh", "skills", "example")), false);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
+test("qwen: build flattens skills and enabled extension prevents ~/.agents/skills duplication", () => {
+  const sb = homeSandbox();
+  try {
+    const pack = smallPack(sb.home), out = join(sb.home, "qwen-out");
+    const r = runWithEnv(["qwen", "build", "--pack", pack, "--out", out], sb.env);
+    assert.equal(r.status, 0, r.stdout);
+    const manifest = JSON.parse(readFileSync(join(out, "qwen-extension.json"), "utf8"));
+    assert.equal(manifest.name, "example");
+    assert.ok(existsSync(join(out, "skills", "example", "SKILL.md")));
+    assert.equal(existsSync(join(out, "AGENTS.md")), false);
+
+    // Register the linked extension under ~/.qwen/extensions/example; deploy must avoid ~/.qwen/skills and ~/.agents/skills.
+    const ext = join(sb.home, ".qwen", "extensions", "example");
+    mkdirSync(ext, { recursive: true });
+    writeFileSync(join(ext, ".qwen-extension-install.json"), JSON.stringify({ type: "link", source: out }));
+    const r2 = runWithEnv(["--pack", pack, "--no-agy", "--no-qwen"], sb.env);
+    assert.equal(r2.status, 0, r2.stdout);
+    assert.match(r2.stdout, /qwen\s+<- Qwen extension example/);
+    assert.equal(existsSync(join(sb.home, ".qwen", "skills", "example")), false);
+    assert.equal(existsSync(join(sb.home, ".agents", "skills", "example")), false);
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });

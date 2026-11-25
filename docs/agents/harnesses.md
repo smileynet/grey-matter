@@ -229,17 +229,12 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
 
 ### OpenCode (ancillary)
 
-- Binary `opencode`, probed 1.18.21. Native skills **exposed as a runtime tool, not a
-  top-level command** (so `--help` shows no `skills` command, but skills work, probe live,
-  don't conclude from `--help`).
-- **Roots**: user `~/.config/opencode/skills`, `~/.claude/skills`, `~/.agents/skills`;
-  project `.opencode/skills`, `.claude/skills`, `.agents/skills`. **Install**: `--project`,
-  or `--root ~/.config/opencode/skills`.
-- **Test**: `opencode run "<prompt>"` from the project dir.
-- **Shell** (source-read, not yet probed live): `$SHELL -c` with no login or interactive flag
-  ([source](https://github.com/anomalyco/opencode/blob/dev/packages/core/src/shell/select.ts)),
-  so zsh reads only `~/.zshenv`: no `.zshrc` aliases or options, but zsh's `=word`, word-splitting
-  and `NOMATCH` rules still apply. The config `shell` key can point it at bash.
+- Binary `opencode`, `v2.4.1` observed locally 2026-11-25 (upgraded from V1.18.21; breaking changes documented in [opencode-v2-breaking-changes-20261125](./research/opencode-v2-breaking-changes-20261125.md)). Native skills **exposed as a runtime tool (`skill`), not a top-level command** (`opencode debug skill` was removed in V2).
+- **Roots**: user `~/.config/opencode/skills`, `~/.claude/skills`, `~/.agents/skills`; project `.opencode/skills`, `.claude/skills`, `.agents/skills`. **Install**: default set (`node scripts/deploy.mjs`), `--project`, or `--root ~/.config/opencode/skills`.
+- **Invocation filter (V2)**: honors `disable-model-invocation: true` and `metadata.opencode/autoinvoke: false` (`autoinvoke` takes precedence; verified in `v2.4.1` `skill-file.ts`). User-triggered loading uses `@skill-id`.
+- **Test**: `opencode run --standalone "<prompt>"` from the project dir (`--standalone` ensures caller env vars reach the server instead of a running background daemon).
+- **Shell (V2.4.1, source-read)**: `$SHELL -c` with no login or interactive flag (`packages/core/src/shell/select.ts`); on `zsh`, V2 passes `+o nomatch -c`, so unmatched globs no longer abort (`=word`, word-splitting, and `~/.zshenv` still apply). The config `shell` key can point it at bash.
+- **Instructions fallback**: `~/.config/opencode/AGENTS.md` (unchanged). V2 evaluates `AGENTS.md` vs `CLAUDE.md` **per directory** rather than stopping at the first match up the tree; set `OPENCODE_DISABLE_CLAUDE_CODE_PROMPT=1` to skip every `CLAUDE.md`.
 
 ### ZCode (ancillary, Z.ai Desktop)
 
@@ -271,6 +266,22 @@ Tier reflects the project's priority: primary (kiro-cli), secondary (codex), anc
   `node <cli> skills list`. Headless `-p` prompts need a model selected in the TUI first
   ("Select a model before sending a message").
 
+### DeepSeek Harness (`dsh`, ancillary)
+
+- Binary `dsh` (`@deepseek-ai/dsh`, `0.2.2-rc.5` observed 2026-11-25; requires Node `>= 24.9.0` and `pnpm` for `dsh plugin`). Research: [dsh-plugin-compat-20261125](./research/dsh-plugin-compat-20261125.md).
+- **Cordis bundle install**: `node scripts/deploy.mjs dsh install` (builds zero-build ESM bundle `dist/dsh-plugin/` registering a global `SkillProvider` at `BUNDLED_SKILL_RANK = 600` + `tkt`'s native `agent/created` frontier hook, then runs `dsh plugin --profile <name> add <dir>`). Regular `deploy.mjs` refreshes the staged build automatically when a profile includes the bundle.
+- **Roots**: user `~/.dsh/skills` (`$DSH_HOME/skills`, rank `400`), `~/.agents/skills` (rank `500`); project `.dsh/skills` (rank `100`), `.agents/skills` (rank `200`). Bare copies silently shadow bundled `SkillProvider`s (rank `600`), so `deploy.mjs` skips/prunes bare copies when the `dsh` bundle is installed.
+- **Invocation filter**: honors `disable-model-invocation: true` and `user-invocable` (rejects legacy camelCase `disableModelInvocation`). Catalog descriptions truncate at 500 chars.
+- **Global rules**: `~/.dsh/AGENTS.md` (`$DSH_HOME/AGENTS.md`), installed by `scripts/install-agents-md.mjs`.
+
+### Qwen Code (`qwen`, ancillary)
+
+- Binary `qwen` (`@qwen-code/qwen-code`, `0.28.4` observed 2026-11-25; covers CLI, Desktop, Web Shell, VS Code, and Zed). Research: [qwen-code-plugin-compat-20261125](./research/qwen-code-plugin-compat-20261125.md).
+- **Native extension install**: `tkt` ships a zero-build root `qwen-extension.json` (`qwen extensions link <tkt>` or `qwen extensions install smileynet/tkt`, including native `SessionStart` hook). `grey-matter` stages flat `dist/qwen-extension/` via `node scripts/deploy.mjs qwen install` because Qwen `v0.28.4` hardcodes depth-1 `<extRoot>/skills/<name>/SKILL.md` (do not install via the Claude Code converter).
+- **Roots**: user `~/.qwen/skills`, `~/.agents/skills`; project `.qwen/skills`, `.agents/skills` (`~/.claude/skills` is not scanned). Extension skills register as `<ext>:<name>` while `~/.agents/skills` registers bare `<name>`, causing 2x discovery if both exist — `deploy.mjs` avoids `~/.agents/skills` and `~/.qwen/skills` when the Qwen extension is enabled.
+- **Invocation filter**: honors `disable-model-invocation: true` and `user-invocable`.
+- **Global rules**: `~/.qwen/QWEN.md` (`$QWEN_HOME/QWEN.md`), installed by `scripts/install-agents-md.mjs` (never write both `QWEN.md` and `AGENTS.md`, since Qwen loads both by default).
+
 ## Critic model
 
 When reviewing gate changes, apply [tooling proportionality](local-gates.md#changing-a-gate-is-a-reversible-tooling-change)
@@ -291,7 +302,7 @@ not deployment gaps. Its deterministic fake-CLI tests remain scoped regression c
 | Claude Code | `opus` (Claude Opus 5.5) | Subagent: the `Agent` tool's `model` parameter. CLI: `--model opus` and `--agents` JSON with `model:` | `effort` parameter or `--effort high` (Opus defaults to `medium`) | In-session: the subagent transcript's `model` and `effort`. CLI: `modelUsage` in `--output-format json` | Logged in (`claude.exe auth login`) |
 | Codex | `gpt-6.1-sol` | `codex exec -m gpt-6.1-sol -c model_reasoning_effort=high -s read-only` with the whole packet in the prompt, or a `~/.codex/agents/*.toml` file with `model` and `model_reasoning_effort` | `high` | The rollout's `turn_context` (`model`, `effort`); not written with `--ephemeral`. A spawned agent has its own rollout | Logged in; model availability depends on plan, client and workspace |
 | Kiro CLI | Strongest Claude in `--list-models` (Opus 4.5 on 2.16.0) | `--model <id>` on a top-level `kiro-cli chat --no-interactive` call. Subagents cannot take a model | `--effort high` | None. Record "requested, unverified" | Logged in |
-| opencode | `zai-coding-plan/glm-5.3` (owner's z.ai subscription) | `-m provider/model --variant high`, or `model:` in an agent file; a `-m` flag outranks the file | `--variant` | `opencode export <sessionID>`: `providerID`, `modelID`, `variant` per message; a subagent's model in the `task` tool metadata | A provider with a live key |
+| opencode | `zai-coding-plan/glm-5.3` (owner's z.ai subscription) | V2: `-m provider/model#high` (with `--standalone` in scripts), or `model:` in an agent file (V1 used `--variant high`) | `#high` suffix (V2) / `--variant` (V1) | V2: `opencode session export <sessionID>`: `messages[].{type: "assistant", model: {providerID, id, variant}}` (V1: `opencode export` + `info.{providerID, modelID, variant}`); subagent tool renamed `task` -> `subagent` | A provider with a live key |
 
 Rules, with the evidence for each in the spike results:
 
@@ -315,7 +326,7 @@ Rules, with the evidence for each in the spike results:
 - **A missing model fails loudly everywhere tested.** Kiro lists the available models; Claude Code
   and Codex name the model; opencode says only "Unexpected server error".
 - **Read-only.** Use the harness's own restriction (Claude Code `--tools Read,Grep,Glob`, an
-  opencode agent with write, edit and bash off and `permission.edit: deny`, Kiro's narrowly scoped
+  opencode V2 agent with `permissions: [{ action: "edit", resource: "*", effect: "deny" }, { action: "shell", resource: "*", effect: "deny" }, { action: "external_directory", resource: "*", effect: "deny" }]` (V2 allows `external_directory` by default; V1 used `permission.edit: deny`), Kiro's narrowly scoped
   `--trust-tools` option, or Codex `-s read-only`). In the recorded Codex environment, shell
   commands could not start under the read-only sandbox (Ubuntu 24.04 blocks unprivileged user
   namespaces; the attempted shell write failed with `RTM_NEWADDR: Operation not permitted`. A
@@ -358,6 +369,8 @@ harness's global instructions file:
 | Claude Code | `~/.claude/CLAUDE.md` | Claude Code memory docs (user memory) |
 | OpenCode | `~/.config/opencode/AGENTS.md` | OpenCode rules docs |
 | ZCode | `~/.zcode/AGENTS.md` | ZCode config guide: user instruction file, injected before workspace AGENTS.md |
+| DeepSeek Harness (`dsh`) | `~/.dsh/AGENTS.md` | `@deepseek-ai/dsh-agent-instructions`: `$DSH_HOME/AGENTS.md` (deduped with `~/.agents/AGENTS.md`) |
+| Qwen Code (`qwen`) | `~/.qwen/QWEN.md` | `QwenLM/qwen-code` `memoryDiscovery.ts`: loads `QWEN.md` (and `AGENTS.md`; install one only) |
 | agy, Crush | installed | no verified user-level rules path; project AGENTS.md still applies |
 
 The installer owns only a marked block (`<!-- grey-matter:begin global rev=… -->` to

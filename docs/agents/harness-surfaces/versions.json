@@ -486,12 +486,12 @@
         ]
       ],
       "recorded": {
-        "version": "1.18.21",
-        "date": "2026-11-01",
+        "version": "2.4.1",
+        "date": "2026-11-25",
         "hashes": {
-          "--help": "b594ad32674b",
-          "run --help": "d62299ebc267",
-          "serve --help": "6855794f108c"
+          "--help": "7c06c5fe79ca",
+          "run --help": "3d1a1381cf05",
+          "serve --help": "d96a692cc439"
         }
       }
     }

@@ -15,6 +15,9 @@ test("each harness records the model it ran on, from its own record", { skip: po
   assert.equal(codex.status, "ok"); assert.equal(codex.recorded, "gpt-6.1-sol"); assert.equal(codex.effort, "high"); assert.equal(codex.evidence, "rollout turn_context");
   const oc = await probeWith(env, "opencode");
   assert.equal(oc.status, "ok"); assert.equal(oc.recorded, "zai-coding-plan/glm-5.3"); assert.equal(oc.evidence, "opencode export");
+  const ocV2 = await probeWith(sandbox(t, { only: ["opencode"], opencodeV2: true }), "opencode");
+  assert.equal(ocV2.status, "ok"); assert.equal(ocV2.recorded, "zai-coding-plan/glm-5.3"); assert.equal(ocV2.effort, "high"); assert.equal(ocV2.evidence, "opencode session export");
+  assert.equal(ocV2.refusesMissingModel, "pass");
 });
 
 test("Codex reaches a .cmd shim through a path with spaces and metacharacters", { skip: process.platform !== "win32" }, async (t) => {
