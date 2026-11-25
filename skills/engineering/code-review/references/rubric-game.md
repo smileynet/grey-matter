@@ -16,7 +16,8 @@ system reaching into component data is the intended design, not Feature Envy, an
 composition over inheritance makes Refused Bequest largely moot. On data-oriented /
 frame-loop code, **suppress those four**; the rest of the app smells (Mysterious Name,
 Duplicated Code, Data Clumps, Primitive Obsession, Repeated Switches, Shotgun Surgery,
-Divergent Change, Speculative Generality) still apply.
+Divergent Change, Speculative Generality) and all **Iterative erosion and verbosity smells**
+from [rubric-app.md](rubric-app.md#iterative-erosion-and-verbosity-smells) still apply.
 
 ## Web-ism smells
 
