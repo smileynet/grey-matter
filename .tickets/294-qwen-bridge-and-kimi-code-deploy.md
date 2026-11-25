@@ -1,7 +1,7 @@
 ---
 id: "294"
 title: "Add Qwen QWEN.md qualified-name bridge, promote Kimi Code CLI in deploy/install-agents-md, and trim long skill description"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "deploy.mjs qwen build emits QWEN.md bridge with contextFileName in staged qwen-extension.json (unit-tested)"
