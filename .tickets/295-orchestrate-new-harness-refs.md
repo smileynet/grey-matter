@@ -1,7 +1,7 @@
 ---
 id: "295"
 title: "Add orchestrate harness references for Qwen Code, DSH, and OpenCode 2.x, and refresh harness-kimi.md"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "harness-qwen.md, harness-dsh.md, and harness-opencode.md exist under skills/engineering/orchestrate/references/ and are linked from orchestrate/SKILL.md"
@@ -24,6 +24,15 @@ Extend `skills/engineering/orchestrate/` so operators running on our newly built
 
 ## Acceptance criteria
 
-- [ ] `harness-qwen.md`, `harness-dsh.md`, and `harness-opencode.md` exist under `skills/engineering/orchestrate/references/` and are linked from `skills/engineering/orchestrate/SKILL.md`.
-- [ ] `harness-kimi.md` includes `2026-11-25` surface notes for Kimi Code CLI `2.7.3` and Kimi K3.1 Pro.
-- [ ] `node scripts/check-docs-consistency.mjs` passes with zero broken links.
+- [x] `harness-qwen.md`, `harness-dsh.md`, and `harness-opencode.md` exist under `skills/engineering/orchestrate/references/` and are linked from `skills/engineering/orchestrate/SKILL.md`.
+- [x] `harness-kimi.md` includes `2026-11-25` surface notes for Kimi Code CLI `2.7.3` and Kimi K3.1 Pro.
+- [x] `node scripts/check-docs-consistency.mjs` passes with zero broken links.
+
+## Resolution (2026-11-25)
+
+done: added Qwen Code, DSH, and OpenCode V2 harness references to orchestrate and refreshed harness-kimi.md
+
+### Verification
+1. ✓ harness-qwen.md, harness-dsh.md, and harness-opencode.md exist under skills/engineering/orchestrate/references/ and are linked from orchestrate/SKILL.md — "Added harness-qwen.md, harness-dsh.md, and harness-opencode.md under skills/engineering/orchestrate/references/ and linked all three in orchestrate/SKILL.md (commit b91c5d9)"
+2. ✓ harness-kimi.md includes 2026-11-25 surface notes for Kimi Code CLI 2.7.3 and Kimi K3.1 Pro — "Updated skills/engineering/orchestrate/references/harness-kimi.md with 2026-11-25 surface notes for Kimi Code CLI 2.7.3 and Kimi K3.1 Pro (commit b91c5d9)"
+3. ✓ node scripts/check-docs-consistency.mjs passes with zero broken links — "node scripts/check-docs-consistency.mjs and gate pre-push doc-links passed with zero broken links across all 50 skills (commit b91c5d9)"
