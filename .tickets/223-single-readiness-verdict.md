@@ -1,7 +1,7 @@
 ---
 id: "223"
 title: "Explore a single readiness verdict (gate.mjs verdict) that means every expected check ran and passed"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 validation_criteria:
