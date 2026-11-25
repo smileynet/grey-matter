@@ -52,7 +52,9 @@ stays out of the way, under folds and links.
    options with the recommendation selected, its reason, and an open text box for another answer
    or context. Needs you links to the same decision. The bottom button copies all pending answers
    for the user to paste into chat, with selectable text when copying is unavailable. Selections
-   are drafts; record an answer only after the user submits it in chat, and retain answered history.
+   are drafts; record an answer only after the user submits it in chat (or via the hub's
+   Tailscale inbox, picked up with `node <this skill's directory>/scripts/serve-hub.mjs --inbox <slug>`
+   and archived with `--clear` once applied), and retain answered history.
 
 4. **Keep the sausage out of sight.** Headline, summary and the three visible changes carry no
    ticket numbers, commit hashes, file paths, tool names, test counts or refactoring talk. Put
