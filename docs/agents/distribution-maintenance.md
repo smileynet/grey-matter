@@ -143,12 +143,12 @@ Claude manifest, and `claude plugin validate --strict` remains the gate for it.
 
 **The Windows CLI build is a subset** (live 2026-11-08, ticket 290): `plugins` offers only
 `list|enable|disable|uninstall` — no `install`, `update`, `marketplace`, or `validate`.
-The onboarding commands above and the CLI refresh recipe are macOS-build surfaces; on
-Windows, onboarding goes through the app (Settings → Plugin Management: add the local
-directory as a marketplace via `+`, then Get) and deploy's refresh step degrades to its
-warning with install state unharmed. Refresh a Windows install by re-running that
-onboarding or by state-level reinstall, and revisit the no-onboarding-script decision
-(above) if Windows plugin installs become routine.
+The onboarding commands above are macOS-build CLI surfaces; on Windows, initial onboarding
+goes through the app (Settings → Plugin Management: add the local directory as a marketplace
+via `+`, then Get), while `deploy.mjs` handles refreshes automatically by falling back to
+`zcode.cjs app-server --stdio` (`plugins/marketplace/update` and `plugins/update`) when the
+CLI rejects `plugins marketplace`, followed by `plugins enable`. If the `app-server` fallback
+also fails, deploy degrades cleanly to its warning with install state unharmed.
 
 Verified 2026-11-08 (tickets 273-281): validate passed on the checkout as-is; install
 yielded 50 skills with bare-name aliases; the same-version refresh recipe and prune were

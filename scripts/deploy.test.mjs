@@ -462,6 +462,61 @@ process.exit(1);
   } finally { rmSync(sb.home, { recursive: true, force: true }); }
 });
 
+test("refreshZcode: falls back to app-server --stdio when CLI rejects plugins marketplace", () => {
+  const sb = homeSandbox({ harnesses: ["zcode"], zcode: true });
+  try {
+    const log = join(sb.home, "zcode-rpc-calls.jsonl");
+    const cli = join(sb.home, "zcode-cli-subset.cjs");
+    writeFileSync(cli, `#!${process.execPath}
+const fs = require("node:fs");
+const args = process.argv.slice(2);
+if (args[0] === "plugins" && args[1] === "marketplace") {
+  process.stderr.write("Unknown plugins command: marketplace\\n");
+  process.exit(1);
+}
+if (args[0] === "app-server" && args[1] === "--stdio") {
+  const msg = JSON.parse(fs.readFileSync(0, "utf8").trim());
+  fs.appendFileSync(${JSON.stringify(log)}, JSON.stringify({ method: msg.method, params: msg.params }) + "\\n");
+  process.stdout.write(JSON.stringify({ id: msg.id, result: { diagnostics: [] } }) + "\\n");
+  process.exit(0);
+}
+fs.appendFileSync(${JSON.stringify(log)}, JSON.stringify(args) + "\\n");
+`);
+    const base = join(sb.home, ".zcode", "cli", "plugins", "cache", "grey-matter", "grey-matter");
+    mkdirSync(join(base, "0.0.1"), { recursive: true });
+    const refreshed = runWithEnv([], { ...sb.env, ZCODE_CLI: cli });
+    assert.equal(refreshed.status, 0, refreshed.stdout);
+    assert.match(refreshed.stdout, /refreshing ZCode plugin grey-matter@grey-matter/);
+    assert.doesNotMatch(refreshed.stdout, /ZCode plugin refresh did not finish/);
+    const calls = readFileSync(log, "utf8").trim().split("\n").map((l) => JSON.parse(l));
+    const packDir = dirname(HERE);
+    assert.deepEqual(calls, [
+      { method: "plugins/marketplace/update", params: { workspace: { workspacePath: packDir, workspaceKey: packDir }, marketplace: "grey-matter" } },
+      { method: "plugins/update", params: { workspace: { workspacePath: packDir, workspaceKey: packDir }, pluginId: "grey-matter@grey-matter" } },
+      ["plugins", "enable", "grey-matter@grey-matter"],
+    ]);
+    assert.deepEqual(readdirSync(base).sort(), [PACK_VERSION], "only the newest cache dir remains");
+
+    const cliErr = join(sb.home, "zcode-cli-rpc-err.cjs");
+    writeFileSync(cliErr, `#!${process.execPath}
+const fs = require("node:fs");
+const args = process.argv.slice(2);
+if (args[0] === "plugins" && args[1] === "marketplace") {
+  process.stderr.write("Unknown plugins command: marketplace\\n");
+  process.exit(1);
+}
+if (args[0] === "app-server" && args[1] === "--stdio") {
+  const msg = JSON.parse(fs.readFileSync(0, "utf8").trim());
+  process.stdout.write(JSON.stringify({ id: msg.id, error: { code: -32000, message: "boom" } }) + "\\n");
+  process.exit(0);
+}
+`);
+    const failed = runWithEnv([], { ...sb.env, ZCODE_CLI: cliErr });
+    assert.equal(failed.status, 0, failed.stdout);
+    assert.match(failed.stdout, /ZCode plugin refresh did not finish \(boom\)/);
+  } finally { rmSync(sb.home, { recursive: true, force: true }); }
+});
+
 test("zcodePlugin: a cache hit with no config entry is coverage only when the CLI reports it enabled", () => {
   const sb = homeSandbox({ harnesses: ["zcode"], zcode: true });
   try {
