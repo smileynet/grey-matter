@@ -1,7 +1,7 @@
 ---
 id: "296"
 title: "Spike: multi-project LAN dashboard hub (serve-hub + systemd --user + Tailscale Serve)"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 ---
