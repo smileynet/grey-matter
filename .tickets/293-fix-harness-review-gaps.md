@@ -1,7 +1,7 @@
 ---
 id: "293"
 title: "Fix check-guidance plugin roots, Kimi multiline description, DSH syntax keys, and model/research drift"
-status: open
+status: in_progress
 blocked_by: []
 validation_criteria:
   - "check-guidance discovers ~/.kimi-code/skills, linked Qwen extensions, and installed DSH bundles (unit-tested)"
