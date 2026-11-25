@@ -1,7 +1,7 @@
 ---
 id: "109"
 title: "delivery-dashboard understands tkt's cancelled status"
-status: open
+status: in_progress
 blocked_by: []
 priority: high
 tags: ["kind:enhancement"]
