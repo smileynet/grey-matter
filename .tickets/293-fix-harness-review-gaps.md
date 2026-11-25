@@ -1,7 +1,7 @@
 ---
 id: "293"
 title: "Fix check-guidance plugin roots, Kimi multiline description, DSH syntax keys, and model/research drift"
-status: in_progress
+status: done
 blocked_by: []
 validation_criteria:
   - "check-guidance discovers ~/.kimi-code/skills, linked Qwen extensions, and installed DSH bundles (unit-tested)"
@@ -24,7 +24,17 @@ Address four review gaps discovered after comparing the AI Harness & Plugin Rese
 
 ## Acceptance criteria
 
-- [ ] `check-guidance.mjs` discovers `~/.kimi-code/skills`, linked Qwen extensions, and installed DSH bundles (`node --test scripts/check-guidance.test.mjs` passes).
-- [ ] `build-kimi-plugin.mjs` parses folded/literal YAML block-scalar descriptions cleanly (`node --test scripts/kimi-plugin.test.mjs` passes).
-- [ ] `check-skill-syntax.mjs` rejects DSH-forbidden camelCase invocation keys (`node --test scripts/skill-syntax.test.mjs` passes).
-- [ ] `models-and-usage.md` and `harness-model-optimization-20261125.md` match OpenCode `v2.4.1`, GPT-6.2/Gemini 4, and the DSH bundle object schema (`node scripts/check-docs-consistency.mjs` passes).
+- [x] `check-guidance.mjs` discovers `~/.kimi-code/skills`, linked Qwen extensions, and installed DSH bundles (`node --test scripts/check-guidance.test.mjs` passes).
+- [x] `build-kimi-plugin.mjs` parses folded/literal YAML block-scalar descriptions cleanly (`node --test scripts/kimi-plugin.test.mjs` passes).
+- [x] `check-skill-syntax.mjs` rejects DSH-forbidden camelCase invocation keys (`node --test scripts/skill-syntax.test.mjs` passes).
+- [x] `models-and-usage.md` and `harness-model-optimization-20261125.md` match OpenCode `v2.4.1`, GPT-6.2/Gemini 4, and the DSH bundle object schema (`node scripts/check-docs-consistency.mjs` passes).
+
+## Resolution (2026-11-25)
+
+done: fixed check-guidance plugin roots, build-kimi-plugin multiline description parsing, check-skill-syntax DSH camelCase rejection, and OpenCode V2/GPT-6.2/Gemini 4/DSH doc drift
+
+### Verification
+1. ✓ check-guidance discovers ~/.kimi-code/skills, linked Qwen extensions, and installed DSH bundles (unit-tested) — "node --test scripts/check-guidance.test.mjs: 9/9 passed incl. ~/.kimi-code/skills, linked Qwen extensions, and DSH profile bundles (commit 2abcf71)"
+2. ✓ build-kimi-plugin handles YAML block-scalar descriptions without returning literal > or | — "node --test scripts/kimi-plugin.test.mjs: 4/4 passed incl. folded/literal YAML block-scalar skillDescription unit test (commit 2abcf71)"
+3. ✓ check-skill-syntax rejects DSH-forbidden camelCase invocation keys (unit-tested) — "node --test scripts/skill-syntax.test.mjs: 13/13 passed rejecting disableModelInvocation, modelInvocable, and userInvocable (commit 2abcf71)"
+4. ✓ models-and-usage.md and harness-model-optimization-20261125.md match OpenCode v2.4.1, GPT-6.2/Gemini 4, and DSH bundle object schema — "gate pre-merge (4/4) and pre-push (6/6) incl. doc-links passed after reconciling models-and-usage.md and harness-model-optimization-20261125.md (commit 2abcf71)"
