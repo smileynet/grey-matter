@@ -1,7 +1,7 @@
 ---
 id: "297"
 title: "Promote serve-hub.mjs into delivery-dashboard with hub.json URL discovery"
-status: open
+status: in_progress
 blocked_by: []
 priority: medium
 tags: ["stream:tooling"]
